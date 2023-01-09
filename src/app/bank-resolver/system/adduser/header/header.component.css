@@ -1,0 +1,80 @@
+a{
+  cursor: pointer!important;
+}
+a:hover{
+  text-decoration: none !important;
+}
+.header_class{background-color: #0167a8; border:none; padding:5px 0; border-radius: 0; color: #fff; width: 100%; border-bottom: #6dacca solid 1px;}
+ul.header_top{margin:0; padding:4px 15px; list-style-type: none;}
+ul.header_top li{display: inline-block;  margin-right: 15px; line-height:16px; color: #fff;}
+ul.header_top li.date{float: right; margin: 0;}
+.logo_sec_main{position: relative;}
+.logo_sec{padding:4px 15px 2px 15px;
+background: #fff;
+/*border-radius: 0 0 50px 50px;*/
+display: inline-block;
+box-shadow: 0 5px 4px -2px #d0cece;
+position: absolute;
+left: 15px;
+top: 0;}
+.logo_sec img{max-width: 60px; height: auto;}
+
+nav{font-family: 'Roboto', sans-serif; color: #fff!important;background-color: #228ed3 !important;
+font-size: small;
+}
+.navbarSectio{text-align: right; padding-top:3px;}
+.navbar-brand {padding: 7px 7px 7px 0; font-size: 13px; height: inherit;}
+.dropbtn {color:#fff; padding: 7px; font-size: 13px;}
+.dropdown-content{text-align:left;}
+
+.navigation{text-align: left;}
+.navigation ul{list-style-type:none;}
+.navigation ul li{display: inline-block; padding:7px 7px;}
+.navigation ul li:first-child{padding-left: 0;}
+.navigation ul li:last-child{padding-right: 0;}
+.navigation ul li a{color: #fff; font-size: 13px;}
+nav{font-family: 'Roboto', sans-serif;}
+.drpdwn-prnt{
+  font-size: 13px;
+}
+.dropdown-menu-right {
+  font-size: 13px;
+  position: absolute;
+  margin-right: -200px;
+  margin-top: -20%;
+  min-width: 200px!important;
+}
+.dropdown-divider{
+  height:0;
+  margin:0px !important;
+  overflow:hidden;
+  border-top:1px solid #e9ecef
+}
+.example-spacer {
+  flex: 1 1 auto;
+}
+mat-icon{
+  font-size:20px;
+}
+.mat-menu-item{
+  line-height: 35px !important;
+    height: 35px !important;
+}
+.topBody{
+  
+  font-size: 15px !important;
+  border-top:1px solid #060707;
+}
+
+mat-icon.hm{
+  font-size: 13px;
+}
+mat-icon.lo{
+  font-size: 13px;
+}
+.vertical {
+  border-right: 1px solid rgb(255, 255, 255);
+  height: 20px;
+  position: absolute;
+  margin-top: 7px;
+}

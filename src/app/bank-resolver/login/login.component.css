@@ -1,0 +1,138 @@
+
+/* custom scrollbar */
+::-webkit-scrollbar {
+  width: 20px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #d6dee1;
+  /* border-radius: 20px; */
+  border: 6px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #1facc9;
+}
+option:hover{
+  background-color: green !important;
+  color: white !important;
+}
+.green:hover {background: green;}
+select {
+  
+  
+    /* color: #000000; */
+    font-size: 16px;
+    font-weight:400;
+    padding: 2px 10px;
+    width: 100%;
+    *width: 100%;
+    /* *background: #58B14C; */
+  }
+  
+  input{
+    border: 1px solid rgb(185, 184, 184);
+    /* color: #000000; */
+    
+    font-size: 16px;
+    font-weight: 400;
+    padding: 2px 10px;
+    width: 100%;
+    *width: 100%;
+  }
+ 
+  .log1{
+    position: absolute;
+    z-index: 999;
+    width: 20%;
+    height: 17%;
+    top: 6px;
+    margin-left: 37%;
+  }
+  .log2{
+    height: 100%;
+    width: 40%;
+    margin-top: 70px;
+    margin-left: 30%;
+   
+  }
+  .log3{
+    position: absolute;
+    height: 587px;
+    width: 53%;
+    top: 80px;
+}
+  .clr-btn {
+    background-color: rgb(255, 255, 255);
+    background-repeat: no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+    font-size: 1.1em;
+    color: #34723A;
+  }
+  .clr-btn:hover {
+    background-color: #34723A;
+    background-repeat: no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+    font-size: 1.1em;
+    color: #ffffff;
+  }
+
+  
+  /* .clr-btn:hover {
+    background-color: rgb(0, 119, 255);
+    background-repeat: no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+    font-size: 1.1em;
+    color: rgb(255, 0, 0);
+  } */
+
+  .log-btn {
+    background-color: #34723A;
+    background-repeat: no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+    font-size: 1.1em;
+  }
+  
+  /* .log-btn:hover {
+    background-color: rgb(0, 119, 255);
+    background-repeat: no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+    color:rgb(83, 253, 49);
+    font-size: 1.1em;
+  } */
+  /* bg1{background-image: url("../../../assets/images/bg1.jpg") no-repeat center top !important; background-size: cover !important;align-items: center;} */
+  
+  
+  /* #mainselection {
+    overflow: hidden;
+    width: 350px;
+    -moz-border-radius: 9px 9px 9px 9px;
+    -webkit-border-radius: 9px 9px 9px 9px;
+    border-radius: 9px 9px 9px 9px;
+    box-shadow: 1px 1px 11px #330033;
+  } */
+
+
+body{
+  background-color: #34723A!important;
+}
