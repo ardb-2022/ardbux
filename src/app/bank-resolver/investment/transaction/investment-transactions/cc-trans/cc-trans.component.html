@@ -126,11 +126,15 @@
             id="trans_type">
         </div>
         <!-- *ngIf="showTransModeForR||showtransmodeforC" -->
-          <div class="form-group col-2"
-           >
-            <small for="trans_mode">Trans Mode</small>
+          <div class="form-group col-2">
+            <small for="trans_mode1">Trans Mode</small>
             <input type="text" disabled [value]="showTranDtlRe? 'Renewal':'Close'"
               class="form-control form-control-sm" formControlName="trans_mode1" id="trans_mode1">
+          </div>
+          <div class="form-group col-2" hidden>
+            <small for="trans_mode">Trans Mode</small>
+            <input type="text" disabled [value]="showTranDtlRe? 'R':'C'"
+              class="form-control form-control-sm" formControlName="trans_mode" id="trans_mode">
           </div>
           
           <!-- (change)="onTransTypeChange()" -->
@@ -145,8 +149,8 @@
         </div>
         <!-- (focusout)="onAmtChngDuringRenewal(); processInterest()" -->
         <div class="form-group col-3">
-          <small for="rpamount">Principal Amt<span class="text-danger">*</span> </small>
-          <input  type="text" class="form-control form-control-sm" formControlName="rpamount" id="rpamount"
+          <small for="amount">Principal Amt<span class="text-danger">*</span> </small>
+          <input  type="text" class="form-control form-control-sm" formControlName="amount" id="amount"
           (focusout)="onAmtChngDuringRenewal(); processInterest()" >
         </div>
       <div class="form-row" >
@@ -265,15 +269,15 @@
         </div>
         <!-- (focusout)="onAmtChngDuringRenewal(); processInterest()" -->
         <div class="form-group col-3">
-          <small for="cpamount">Principal Amt<span class="text-danger">*</span> </small>
-          <input  type="text" class="form-control form-control-sm" disabled formControlName="cpamount" id="cpamount"
+          <small for="amount">Principal Amt<span class="text-danger">*</span> </small>
+          <input  type="text" class="form-control form-control-sm" disabled formControlName="amount" id="amount"
             >
         </div>
         <div class="form-group col-2" >
           <small for="curr_intt_recov">Interest</small>
           <!-- (change)="inttCalOnClose()" -->
           <input type="text"   class="form-control form-control-sm"(change)="inttCalOnClose()"
-            formControlName="curr_intt_recov_c" id="curr_intt_recov_c">
+            formControlName="curr_intt_recov" id="curr_intt_recov">
         </div>
         <div class="form-group col-2">
           <small for="ovd_intt_recov">Default Penalty</small>
@@ -304,7 +308,7 @@
               <div class="form-group col-2">
                 <small for="credit_ac">Account Type</small>
                 <select id="credit_ac" class="form-control form-control-sm" [(ngModel)]="l.cust_acc_type"
-                  [disabled]="undefined !== l.gl_acc_code && l.gl_acc_code.length > 0"
+                 disabled
                   (focusout)="checkAndSetDebitAccType('cust_acc', l)">
                   <option *ngIf="accountTypeList" disabled>Choose</option>
                   <option *ngFor="let acctType of accountTypeList" [value]="acctType.acc_type_cd">
@@ -315,8 +319,8 @@
               <div class="form-group col-3">
                 <small for="credit_ac_name">Acc Holder Name</small>
                 <div class="input-group">
-                  <input type="text" class="form-control form-control-sm "
-                    [disabled]="undefined !== l.gl_acc_code && l.gl_acc_code.length > 0" [(ngModel)]="l.cust_name"
+                  <input type="text" class="form-control form-control-sm " disabled
+                    [(ngModel)]="l.cust_name"
                     type="text" placeholder="Enter Acc# / Customer Name / Phone number" (input)="onChangeTrf(i)"
                     name="x-field-1" autocomplete="new-field-1">
                   <div class="input-group-append">
@@ -359,7 +363,7 @@
               <div class="form-group col-3">
                 <small for="debit_ac_no">Account Number</small>
                 <input type="text" [(ngModel)]="l.cust_acc_number" disabled (change)="setDebitAccDtls(l)"
-                  [disabled]="undefined !== l.gl_acc_code && l.gl_acc_code.length > 0"
+                  
                   class="form-control form-control-sm text-capitalize" id="debit_ac_no">
               </div>
 

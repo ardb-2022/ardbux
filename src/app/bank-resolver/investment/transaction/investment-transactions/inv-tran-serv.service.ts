@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AccOpenDM } from '../../../Models/deposit/AccOpenDM';
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
@@ -33,12 +33,13 @@ import { CcTransComponent } from './cc-trans/cc-trans.component';
 
 export class InvTranServService {
   // get td() { return this.ccComp.tdDefTransFrm.controls; }
-  
+  callSave = new EventEmitter();    
+  subsVar: Subscription; 
   isLoading: boolean;
   accDtlsFrm: FormGroup;
   constitutionList: mm_constitution[] = [];
   operationalInstrList: mm_oprational_intr[] = [];
-  
+  operations: mm_operation[];
   interestPeriod=0
   sys = new SystemValues();
   bankData=[]
@@ -61,6 +62,9 @@ export class InvTranServService {
     private frmBldr: FormBuilder, public datepipe: DatePipe, private router: Router,
     private modalService: BsModalService) { }
     
+    SaveButtonClick() {    
+      this.callSave.emit();    
+    }
     public getConstitutionList() {
       debugger
       if (this.constitutionList.length > 0) {
@@ -141,6 +145,7 @@ export class InvTranServService {
            })
       
       }
+      
       
     
  

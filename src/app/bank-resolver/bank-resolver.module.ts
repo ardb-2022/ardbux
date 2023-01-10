@@ -153,6 +153,7 @@ import { MisTransComponent } from './investment/transaction/investment-transacti
 import { RdTransComponent } from './investment/transaction/investment-transactions/rd-trans/rd-trans.component';
 import { InvTranServService } from './investment/transaction/investment-transactions/inv-tran-serv.service';
 import { HttpClientModule } from '@angular/common/http';
+import { CreateGLHeadComponent } from './finance/create-glhead/create-glhead.component';
 
 
 @NgModule({
@@ -191,7 +192,7 @@ import { HttpClientModule } from '@angular/common/http';
       ConsolidatedCashCumTrialComponent, ConsolidatedTrialBalanceComponent, 
       StandingInsActiveSIListComponent, StandingInsTodaySIExecutedComponent, WeeklyReturnComponent, 
       RecovInterestComponent, BankEntryComponent, BranchEntryComponent, VewInvestmentDtlsComponent, 
-      InvTransactionApprovalComponent, InvestmentTransactionsComponent, FdTransComponent, CcTransComponent, MisTransComponent, RdTransComponent
+      InvTransactionApprovalComponent, InvestmentTransactionsComponent, FdTransComponent, CcTransComponent, MisTransComponent, RdTransComponent, CreateGLHeadComponent
   ],
   imports: [
     NgxPrintModule, MatTableModule, MatFormFieldModule,  MatInputModule, MatSlideToggleModule,MatButtonModule,

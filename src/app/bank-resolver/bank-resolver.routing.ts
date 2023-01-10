@@ -110,6 +110,7 @@ import { OpenInvestComponent } from './investment/transaction/open-invest/open-i
 import { VewInvestmentDtlsComponent } from './investment/transaction/vew-investment-dtls/vew-investment-dtls.component';
 import { InvTransactionApprovalComponent } from './investment/transaction/inv-transaction-approval/inv-transaction-approval.component';
 import { InvestmentTransactionsComponent } from './investment/transaction/investment-transactions/investment-transactions.component';
+import { CreateGLHeadComponent } from './finance/create-glhead/create-glhead.component';
 const routes: Routes = [
   { path: 'Admin', component: AdminPanelComponent },
   { path: 'admin', component: AdminPanelComponent },
@@ -145,6 +146,7 @@ const routes: Routes = [
       { path: 'FT_YearlyVoucher', component:YearlyadjustmentvoucherComponent, canActivate: [AuthGuard] },
       { path: 'FT_BackdateVoucher', component: BakdatevoucherComponent, canActivate: [AuthGuard] },
       { path: 'FR_DayBook', component: DailybookComponent, canActivate: [AuthGuard] },
+      { path: 'FT_CreateGlHead', component: CreateGLHeadComponent, canActivate: [AuthGuard] },
       { path: 'FR_CashAccount', component: CashaccountComponent, canActivate: [AuthGuard] },
       { path: 'FR_CdDayBook', component: ConsolidatedDayBookComponent, canActivate: [AuthGuard] },
       { path: 'FR_CdCashAccount', component: ConsolidatedCashAccComponent, canActivate: [AuthGuard] },

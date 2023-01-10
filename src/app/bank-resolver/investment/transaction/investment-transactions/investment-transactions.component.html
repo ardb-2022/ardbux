@@ -1,7 +1,7 @@
 <div class="col-xs-12 col-sm-12  shadow bg-white" style="min-height: 70vh;">
 <div class="mt-1 col-xs-12 col-sm-12  d-flex justify-content-center align-items-center">
     
-    <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" #saveBtn (click)="onSaveClick()">Save</button>
+    <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" #saveBtn (click)="callSaveFunction()">Save</button>
     <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onDeleteClick()"
       *ngIf="editDeleteMode">Delete</button>
     <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onResetClick()">Reset</button>
@@ -119,5 +119,16 @@
 </div>
 <div *ngIf="sel_rd">
   <app-rd-trans></app-rd-trans>
+</div>
+<hr>
+<div class="mt-1 col-xs-12 col-sm-12  d-flex justify-content-center align-items-center">
+    
+  <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" #saveBtn (click)="callSaveFunction()">Save</button>
+  <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onDeleteClick()"
+    *ngIf="editDeleteMode">Delete</button>
+  <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onResetClick()">Reset</button>
+  
+  <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onBackClick()">Back</button>
+  
 </div>
 </div>
