@@ -30,11 +30,11 @@
         <div class="col-6">
           <small for="fromDate" >From Date</small>
           <div class="input-group">
-            <input type="text" placeholder="dd/mm/yyyy" class="form-control" [ngModel]="fromdate" disabled bsDatepicker
+            <input type="text" placeholder="dd/mm/yyyy" class="form-control" [ngModel]="fromdate"  bsDatepicker
             formControlName="fromDate" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }"
             [isOpen]="isOpenFromDp">
           <div class="input-group-append">
-            <button mat-raised-button class="btn btn-outline-secondary" type="button" disabled (click)="isOpenFromDp = !isOpenFromDp">
+            <button mat-raised-button class="btn btn-outline-secondary" type="button"  (click)="isOpenFromDp = !isOpenFromDp">
               <i class="fa fa-calendar" aria-hidden="true"></i>
             </button>
           </div>
@@ -43,11 +43,11 @@
         <div class="col-6">
           <small for="toDate" >To Date</small>
           <div class="input-group">
-            <input type="text" placeholder="dd/mm/yyyy" class="form-control" [ngModel]="toDate" disabled bsDatepicker
+            <input type="text" placeholder="dd/mm/yyyy" class="form-control" [ngModel]="toDate"  bsDatepicker
             formControlName="toDate" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }"
             [isOpen]="isOpenToDp">
           <div class="input-group-append">
-            <button mat-raised-button class="btn btn-outline-secondary" type="button" disabled (click)="isOpenToDp = !isOpenToDp">
+            <button mat-raised-button class="btn btn-outline-secondary" type="button"  (click)="isOpenToDp = !isOpenToDp">
               <i class="fa fa-calendar" aria-hidden="true"></i>
             </button>
           </div>

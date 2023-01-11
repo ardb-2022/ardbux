@@ -255,8 +255,8 @@ export class InvestmentTransactionsComponent implements OnInit {
             this.HandleMessage(true, MessageType.Warning, 'No record found!!');
          
           }
-          else if(this.masterModel.tddeftrans.approval_status=='U'){
-            this.HandleMessage(true, MessageType.Warning, 'Account dose not approved!');
+          else if(this.masterModel.tddeftrans.approval_status=='A'){
+            this.HandleMessage(true, MessageType.Warning, 'Transactions already approved!');
             this.f.acct_num = null;
              return;
           } if (this.masterModel.tmdepositInv.acc_num !== null) {

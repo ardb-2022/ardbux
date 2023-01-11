@@ -38,6 +38,7 @@ export class InvTranServService {
   isLoading: boolean;
   accDtlsFrm: FormGroup;
   constitutionList: mm_constitution[] = [];
+  selectedconstitution:mm_constitution[] = [];
   operationalInstrList: mm_oprational_intr[] = [];
   operations: mm_operation[];
   interestPeriod=0
@@ -80,10 +81,10 @@ export class InvTranServService {
           console.log(res)
           // //////////////debugger;
           this.constitutionList = res;
-          let selectedconstitution = this.constitutionList.filter(e => e.constitution_cd == this.masterModel.tmdepositInv.constitution_cd);
-          this.constitutionDes=selectedconstitution[0].constitution_desc
-          this.constitutionCd=selectedconstitution[0].constitution_cd
-          console.log(selectedconstitution[0].constitution_desc);
+          this.selectedconstitution = this.constitutionList.filter(e => e.constitution_cd == this.masterModel.tmdepositInv.constitution_cd);
+          this.constitutionDes=this.selectedconstitution[0].constitution_desc
+          this.constitutionCd=this.selectedconstitution[0].constitution_cd
+          console.log(this.selectedconstitution[0].constitution_desc);
   
         },
         err => { // ;
