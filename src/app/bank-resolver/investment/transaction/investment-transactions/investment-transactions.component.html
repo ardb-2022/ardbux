@@ -1,9 +1,9 @@
 <div class="col-xs-12 col-sm-12  shadow bg-white" style="min-height: 70vh;">
-<div class="mt-1 col-xs-12 col-sm-12  d-flex justify-content-center align-items-center">
+<div class="mt-1 col-xs-12 col-sm-12  d-flex justify-content-center align-items-center" style="margin-top: 20px">
     
     <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" #saveBtn (click)="callSaveFunction()">Save</button>
     <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onDeleteClick()"
-      *ngIf="editDeleteMode">Delete</button>
+    *ngIf="editDeleteMode">Delete</button>
     <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onResetClick()">Reset</button>
     
     <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onBackClick()">Back</button>
@@ -107,7 +107,7 @@
   </div>
   <hr>
 
-
+<div [hidden]="resetClick">
 <div *ngIf="sel_cc">
   <app-cc-trans [showTranDtlRe]="showTransactionDtlR" [showTranDtlCl]="showTransactionDtlC" ></app-cc-trans>
 </div>
@@ -120,8 +120,9 @@
 <div *ngIf="sel_rd">
   <app-rd-trans></app-rd-trans>
 </div>
+</div>
 <hr>
-<div class="mt-1 col-xs-12 col-sm-12  d-flex justify-content-center align-items-center">
+<div class="mt-1 col-xs-12 col-sm-12  d-flex justify-content-center align-items-center" style="margin-bottom: 20px">
     
   <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" #saveBtn (click)="callSaveFunction()">Save</button>
   <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onDeleteClick()"
@@ -132,3 +133,57 @@
   
 </div>
 </div>
+<ng-template #unappconfirm>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Wish to edit or delete Unapproved Transaction?
+    </h4>
+    <!-- <button mat-raised-button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button> -->
+  </div>
+  <div class="modal-body">
+    <div>
+      <div class="col-12 scroll-when-long">
+        <div class="table-responsive" *ngIf="unApprovedTransactionLst.length > 0">
+          <h4 class="customHeader">List of Unapproved Transaction for Acc# {{unApprovedTransactionLstOfAcc[0].acc_num}}.</h4>
+          <table class="table table-sm table-hover " id="customers2">
+            <!-- <thead> -->
+              <tr>
+                <th scope="col">Trans Code</th>
+                <th scope="col">Trans Dt</th>
+                <th scope="col">Account Number</th>
+                <th scope="col">Amount</th>
+                <th scope="col" *ngIf="unApprovedTransactionLstOfAcc.length > 1"></th>
+              </tr>
+            <!-- </thead> -->
+            <tbody>
+              <tr *ngFor="let tran of unApprovedTransactionLstOfAcc,let i=index">
+                <td>{{tran.trans_cd}}</td>
+                <td>{{tran.trans_dt}}</td>
+                <td>{{tran.acc_num}}</td>
+                <td *ngIf="tran.trans_mode=='R'; then rMode; else notrMode">
+
+                </td>
+                <ng-template #rMode>
+                  {{tran.ovd_prn_recov | INRCurrency}}
+                </ng-template>
+                <ng-template #notrMode>
+                  {{tran.amount | INRCurrency}}
+                </ng-template>
+
+                <td *ngIf="unApprovedTransactionLstOfAcc.length > 1"><button mat-raised-button type="button"
+                    class="btn btn-primary float-right" (click)="onUpapprovedConfirm(tran)">Confirm</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="customHeader" *ngIf="unApprovedTransactionLst.length <= 0">
+                  No Data found
+        </div>
+      </div>
+    </div>
+    <button mat-raised-button type="button" class="btn btn-default" (click)="onUpapprovedCancel()">Cancel</button> &nbsp;
+    <button mat-raised-button type="button" *ngIf="unApprovedTransactionLstOfAcc.length === 1" class="btn btn-primary float-right"
+      (click)="onUpapprovedConfirm(unApprovedTransactionLstOfAcc[0])">View/Edit</button>
+  </div>
+</ng-template>

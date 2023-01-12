@@ -66,6 +66,7 @@ export class InvTransactionApprovalComponent implements OnInit {
   accnum:any;
   typeCd:any;
   tm_Inv:any
+  intAmount:any;
   // cust: mm_customer;
   // tdDepTransRet: td_def_trans_trf[] = [];
 
@@ -340,7 +341,12 @@ export class InvTransactionApprovalComponent implements OnInit {
         },
         err => { }
       );
-    } else {
+    }
+    else if(this.masterModel.tddeftrans.trans_mode=='O'){
+      this.transactionDtlsFrm.controls.curr_intt_recov.setValue(this.tm_Inv.intt_amt);
+      this.transactionDtlsFrm.controls.tot_amount.setValue(Number(this.tm_Inv.prn_amt)+Number(this.transactionDtlsFrm.controls.curr_intt_recov.value))
+    }
+    else {
       const tdDefTranTransfr = new td_def_trans_trf();
       tdDefTranTransfr.brn_cd = this.sys.BranchCode;
       tdDefTranTransfr.trans_cd = transactionDtl.trans_cd;
@@ -361,6 +367,7 @@ export class InvTransactionApprovalComponent implements OnInit {
             //   this.totalOfDenomination += element.total;
             // });
           }
+          
         },
         err => { }
       );
@@ -669,8 +676,12 @@ export class InvTransactionApprovalComponent implements OnInit {
         // this.msg.sendCommonAccountNum(acc.acc_num);
         this.getAdditionalInformationForAccount( this.tm_Inv);
         this.refresh = true;
-        this.isLoading = false;
+        
         // this.getCustInfo( this.tm_Inv.cust_cd);
+        if(this.masterModel.tddeftrans.trans_mode=='O'){
+          this.transactionDtlsFrm.controls.curr_intt_recov.setValue(this.tm_Inv.intt_amt);
+        }
+        this.isLoading = false;
       },
       err => { this.isLoading = false; }
     );

@@ -79,7 +79,7 @@ export class CcTransComponent implements OnInit {
   operations: mm_operation[];
   resBrnCd: any;
   remarks: any;
-
+  ShowHide:boolean=false;
   constructor(private invComServ:InvTranServService ,private svc: RestService, private msg: InAppMessageService,
     private frmBldr: FormBuilder, public datepipe: DatePipe, private router: Router,
     private modalService: BsModalService, private http:HttpClientModule) {
@@ -93,6 +93,7 @@ export class CcTransComponent implements OnInit {
       callSave.subscribe((name:string) => {
         debugger    
         this.onSaveClick();    
+
       });    
     } 
     // this.showTranDtlRe=this.invComServ.showTransactionDtlR;
@@ -981,8 +982,7 @@ debugger
     );
   }
   onSaveClick(): void {
-    console.log(this.td_deftranstrfList);
-
+    debugger
     const accTypeCd = this.accNoEnteredForTransaction.acc_type_cd;
     if(this.td.trans_mode1.value=='Renewal' && (this.td.amount.value) <= 0){
       this.HandleMessage(true, MessageType.Error, 'Amount can not be blank');
@@ -1036,6 +1036,7 @@ debugger
       
       debugger
       if (this.showTranDtlRe==true) {
+        
         this.tdDefTransFrm.patchValue({ 
         trans_mode1:this.showTranDtlRe?'Renewal':'Close',
         trans_mode:this.showTranDtlRe?'R':'C',
@@ -1277,12 +1278,12 @@ debugger
     toReturn.renew_id = this.accNoEnteredForTransaction.renew_id + 1;
     toReturn.cust_cd = this.accNoEnteredForTransaction.cust_cd;
     toReturn.intt_trf_type = this.td.intt_trf_type.value;
-    toReturn.constitution_cd = (+this.td.constitution_cd.value);
+    toReturn.constitution_cd = this.td.constitution_cd.value;
     toReturn.oprn_instr_cd = this.accNoEnteredForTransaction.oprn_instr_cd;
     toReturn.opening_dt = Utils.convertStringToDt(this.td.opening_dt.value);
     // toReturn.prn_amt = (+this.td.amount.value);
-    toReturn.prn_amt = (this.td.amount.value) + (this.td.curr_intt_recov.value); 
-    toReturn.intt_amt = (this.td.interest.value);
+    toReturn.prn_amt = Number(this.td.amount.value) ;//+ Number(this.td.curr_intt_recov.value); 
+    toReturn.intt_amt = this.td.interest.value;
     toReturn.dep_period = depPrd;
     // toReturn.instl_amt = this.accNoEnteredForTransaction.instl_amt;
     // toReturn.instl_no = this.accNoEnteredForTransaction.instl_no;

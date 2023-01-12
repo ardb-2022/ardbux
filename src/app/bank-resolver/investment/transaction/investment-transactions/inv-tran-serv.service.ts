@@ -57,11 +57,13 @@ export class InvTranServService {
   
 
 
-  // accNoEnteredForTransaction:any=this.masterModel.tmdepositInv;
+   accNoEnteredForTransaction:any=this.masterModel.tmdepositInv;
+   
 
   constructor(private svc: RestService, private msg: InAppMessageService,private comservice:InvTranServService,
     private frmBldr: FormBuilder, public datepipe: DatePipe, private router: Router,
-    private modalService: BsModalService) { }
+    private modalService: BsModalService) {console.log(this.masterModel.tmdepositInv);
+     }
     
     SaveButtonClick() {    
       this.callSave.emit();    

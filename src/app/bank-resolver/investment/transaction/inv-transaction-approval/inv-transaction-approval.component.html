@@ -75,7 +75,9 @@
                     [class.table-active]="unApprovedTran.td_def_trans_trf.trans_cd === selectedTransactionCd">
                     <td>{{unApprovedTran.td_def_trans_trf.trans_cd}}</td>
                     <td>{{unApprovedTran.td_def_trans_trf.acc_num}}</td>
-                    <td>{{unApprovedTran.td_def_trans_trf.amount? (unApprovedTran.td_def_trans_trf.trans_mode=='R'?(unApprovedTran.td_def_trans_trf.ovd_prn_recov+unApprovedTran.td_def_trans_trf.amount):unApprovedTran.td_def_trans_trf.amount):''  | number: '.2-2'}}</td>
+                    <td>{{unApprovedTran.td_def_trans_trf.amount==0?unApprovedTran.td_def_trans_trf.ovd_prn_recov:unApprovedTran.td_def_trans_trf.amount}}</td>
+                    <!-- <td>{{unApprovedTran.td_def_trans_trf.amount? (unApprovedTran.td_def_trans_trf.trans_mode=='R'?(unApprovedTran.td_def_trans_trf.ovd_prn_recov+unApprovedTran.td_def_trans_trf.amount):unApprovedTran.td_def_trans_trf.amount):''  | number: '.2-2'}}</td> -->
+                    <!-- <td>{{unApprovedTran.td_def_trans_trf.amount? (unApprovedTran.td_def_trans_trf.trans_mode=='R'?(unApprovedTran.td_def_trans_trf.amount==0?unApprovedTran.td_def_trans_trf.ovd_prn_recov:unApprovedTran.td_def_trans_trf.ovd_prn_recov+unApprovedTran.td_def_trans_trf.amount):unApprovedTran.td_def_trans_trf.amount):''  | number: '.2-2'}}</td> -->
                     <td>{{unApprovedTran.mm_acc_type.acc_type_desc}}</td>
                     <td *ngIf="unApprovedTran.td_def_trans_trf.trf_type=='C'">Cash</td>
                     <td *ngIf="unApprovedTran.td_def_trans_trf.trf_type=='T'">Transfer</td>

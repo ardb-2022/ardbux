@@ -8,7 +8,7 @@
     </button>
   </div>
 </div>
-<div class="row">
+<div class="row" [hidden]="ShowHide">
 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 ">
     <form [formGroup]="accDtlsFrm">
       <h4 class="customHeader mt-2">Account Details</h4>
@@ -198,7 +198,7 @@
         <div class="form-group col-3">
           <small for="intt_trf_type">Interest Type</small>
           <!-- (change)="processInterest()" -->
-          <select class="form-control form-control-sm" formControlName="intt_trf_type"  (change)="processInterest()">
+          <select class="form-control form-control-sm" disabled formControlName="intt_trf_type"  (change)="processInterest()">
             <option disabled>Choose</option>
             <option value="M">Monthly</option>
             <option value="Q">Quarterly</option>

@@ -1175,7 +1175,7 @@ debugger
       debugger
     this.masterModel.tmdepositInv.acc_num=this.tm_deposit.acc_num
     console.log(this.masterModel.tmdepositInv.acc_num);
-    
+    this.masterModel.tmdepositInv.approval_status = 'U';
     this.masterModel.tmtransfer[0].trf_dt=this.sys.CurrentDate;
     this.masterModel.tmtransfer[0].created_by = this.createUser;
     this.masterModel.tmtransfer[0].created_dt = this.createDate;

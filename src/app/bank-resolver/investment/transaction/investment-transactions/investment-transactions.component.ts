@@ -153,8 +153,9 @@ export class InvestmentTransactionsComponent implements OnInit {
   sel_rd:boolean=false;
   showTransactionDtlR:boolean=false;
   showTransactionDtlC:boolean=false;
+  resetClick:boolean=false
   ngOnInit(): void {
-    
+    this.resetClick=false
     this.isLoading = false;
     setTimeout(() => {
       this.getOperationMaster();
@@ -175,12 +176,30 @@ export class InvestmentTransactionsComponent implements OnInit {
     this.invComServ.SaveButtonClick();    
   } 
   onOperationTypeChange(){
+    this.accNoEnteredForTransaction=this.masterModel.tmdepositInv;
     console.log(typeof(Number(this.f.oprn_cd.value)));
     console.log(Number(this.f.oprn_cd.value));
+    this.onUpapprovedConfirm(this.unApprovedTransactionLstOfAcc[0])
     //for renewal
     if(Number(this.f.oprn_cd.value)===38){
-      this.showTransactionDtlC = false;
-      this.showTransactionDtlR = true;
+      const m = Utils.convertStringToDt(this.accNoEnteredForTransaction.mat_dt.toString());
+      const c = this.sys.CurrentDate;
+      const diffDays = Math.ceil((m.getTime() - c.getTime()) / (1000 * 3600 * 24)); 
+     
+      console.log(c);
+      console.log(m);
+      console.log(diffDays);
+      if(diffDays>0){
+        this.HandleMessage(true, MessageType.Error, 'Pre-Mature Renewal is not possible');
+        this.showTransactionDtlC = false;
+        this.showTransactionDtlR = false;
+       }
+      else{
+        this.showTransactionDtlC = false;
+        this.showTransactionDtlR = true;
+      }
+      
+        
 
     }
     //for close
@@ -255,10 +274,13 @@ export class InvestmentTransactionsComponent implements OnInit {
             this.HandleMessage(true, MessageType.Warning, 'No record found!!');
          
           }
-          else if(this.masterModel.tddeftrans.approval_status=='A'){
-            this.HandleMessage(true, MessageType.Warning, 'Transactions already approved!');
+          else if(this.masterModel.tmdepositInv.approval_status=='U'){
+            this.HandleMessage(true, MessageType.Warning, 'Account still not approved!');
             this.f.acct_num = null;
-             return;
+           return;}
+          else if(this.masterModel.tddeftrans.approval_status=='U'){
+            this.getUnapprovedDepTransAskViewEditOption()
+            
           } if (this.masterModel.tmdepositInv.acc_num !== null) {
 
             this.invComServ.getBankName();
@@ -277,6 +299,8 @@ export class InvestmentTransactionsComponent implements OnInit {
       );
   }
   getAccountOpeningTempData() {
+
+    this.resetClick=false
     console.log(this.invComServ.bankName,this.invComServ.branchName,this.invComServ.constitutionDes,this.invComServ.operInsDESC);
     
       console.log(this.f.acct_num.value);
@@ -1265,10 +1289,8 @@ export class InvestmentTransactionsComponent implements OnInit {
     );
   }
   onResetClick(): void {
-      this.sel_cc=true;
-      this.sel_fd=true;
-      this.sel_mis=true;
-      this.sel_rd=true;
+      this.resetClick=true
+
 
 
     // this.HandleMessage(false);
@@ -1302,5 +1324,73 @@ export class InvestmentTransactionsComponent implements OnInit {
   onBackClick() {
     this.router.navigate([this.sys.BankName + '/la']);
   }
+  private getUnapprovedDepTransAskViewEditOption(): void {
+    console.log('getUnapprovedDepTransAskViewEditOption')
+    this.isLoading = true;
+    const tdDepTrans = new td_def_trans_trf();
+    tdDepTrans.trans_type='I'
+    tdDepTrans.brn_cd = this.sys.BranchCode; // localStorage.getItem('__brnCd');
+    this.svc.addUpdDel<any>('Common/GetUnapprovedDepTrans', tdDepTrans).subscribe(
+      res => {
+        console.log(res)
+        //////////////debugger;
+        this.isLoading = false;
+        if (res.length > 0) {
+          this.unApprovedTransactionLst = res;
+          this.unApprovedTransactionLstOfAcc = this.unApprovedTransactionLst.filter(e => e.acc_num
+            === this.f.acct_num.value.toString());
+          if (undefined !== this.unApprovedTransactionLstOfAcc &&
+            null !== this.unApprovedTransactionLstOfAcc &&
+            this.unApprovedTransactionLstOfAcc.length > 0) {
+            this.modalRef = this.modalService.show(this.unappconfirm,
+              { class: 'modal-lg', keyboard: false, backdrop: true, ignoreBackdropClick: false });
+          }
+        }
+      },
+      err => { this.isLoading = false; }
+    );
+  }
+  public onUpapprovedConfirm(selectedTransactionToEdit: td_def_trans_trf): void {
+    console.log(selectedTransactionToEdit)
+    this.remarks = selectedTransactionToEdit.remarks
+    this.disableOperation = true;
+    this.editDeleteMode = true;
+    this.selectedUnapprovedTransactionToEdit = selectedTransactionToEdit;
+    this.modalRef.hide();
+    // this.showTransactionDtlR = true;
+    this.getDepTrans(selectedTransactionToEdit);
+    // this.getDenominationOrTransferDtl(selectedTransactionToEdit);
+  }
 
+  private getDepTrans(depTras: td_def_trans_trf): void {
+    this.isLoading = true;
+
+    // this.showCust = false; // this is done to forcibly rebind the screen
+    // const defTransaction = new td_def_trans_trf();
+    // defTransaction.trans_cd = this.selectedTransactionCd;
+    // defTransaction.brn_cd = localStorage.getItem('__brnCd');
+    console.log(depTras)
+    this.svc.addUpdDel<td_def_trans_trf>('Common/GetDepTrans', depTras).subscribe(
+      res => {
+        console.log('deptrans', res)
+        // this.deptransData=res[0]
+        // console.log(this.deptransData.trans_mode)
+        // this.selectedVm.td_def_trans_trf = res[0];
+        // this.msg.sendCommonTransactionInfo(res[0]); // show transaction details
+        // this.setTransactionDtl(res[0]);
+        this.isLoading = false;
+      },
+      err => { this.isLoading = false; }
+    );
+    // console.log(this.deptransData)
+
+  }
+  public onUpapprovedCancel(): void {
+    console.log("close modal")
+    this.editDeleteMode = false;
+    this.selectedUnapprovedTransactionToEdit = null;
+    this.modalRef.hide();
+    // this.showTransactionDtlR = false;
+    // this.showTransactionDtlC = false;
+  }
 }
