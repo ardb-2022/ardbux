@@ -26,6 +26,7 @@ import { Observable } from 'rxjs/internal/Observable';
 import { Subscription } from 'rxjs';
 import { setTime } from 'ngx-bootstrap/chronos/utils/date-setters';
 import { CcTransComponent } from './cc-trans/cc-trans.component';
+import { InvOpenDM } from 'src/app/bank-resolver/Models/deposit/InvOpenDM';
 
 @Injectable({
   providedIn: 'root'
@@ -33,8 +34,12 @@ import { CcTransComponent } from './cc-trans/cc-trans.component';
 
 export class InvTranServService {
   // get td() { return this.ccComp.tdDefTransFrm.controls; }
-  callSave = new EventEmitter();    
-  subsVar: Subscription; 
+  callSave = new EventEmitter();  
+  callDelete = new EventEmitter();    
+  callReset = new EventEmitter();
+  resetVar:Subscription;     
+  saveVar: Subscription; 
+  deleteVar: Subscription; 
   isLoading: boolean;
   accDtlsFrm: FormGroup;
   constitutionList: mm_constitution[] = [];
@@ -46,7 +51,7 @@ export class InvTranServService {
   bankData=[]
   branch:any=[];
   branch1:any=[];
-  masterModel = new AccOpenDM();
+  masterModel = new InvOpenDM();
   tm_deposit = new tm_deposit();
   public bankName:any;
   public branchName:any;
@@ -54,12 +59,10 @@ export class InvTranServService {
   public constitutionCd:any;
   public operInsDESC:any;
   public operInsCD:any;
-  
-
-
-   accNoEnteredForTransaction:any=this.masterModel.tmdepositInv;
-   
-
+  accNoEnteredForTransaction2= new td_def_trans_trf();
+  accNoEnteredForTransaction:any;
+  acc_master: m_acc_master[] = [];
+  acc_master1: m_acc_master[] = [];
   constructor(private svc: RestService, private msg: InAppMessageService,private comservice:InvTranServService,
     private frmBldr: FormBuilder, public datepipe: DatePipe, private router: Router,
     private modalService: BsModalService) {console.log(this.masterModel.tmdepositInv);
@@ -68,6 +71,12 @@ export class InvTranServService {
     SaveButtonClick() {    
       this.callSave.emit();    
     }
+    DeleteButtonClick() {    
+      this.callDelete.emit();    
+    }
+    // ResetButtonClick() {    
+    //   this.callReset.emit();    
+    // }
     public getConstitutionList() {
       debugger
       if (this.constitutionList.length > 0) {
@@ -147,6 +156,21 @@ export class InvTranServService {
              
            })
       
+      }
+      getAllGL(){
+        var dt={"ardb_cd":this.sys.ardbCD}
+        this.isLoading=true;
+        this.svc.addUpdDel<any>('Mst/GetAccountMaster', dt).subscribe(
+          res => {
+             this.acc_master = res;
+              console.log(res)
+              this.isLoading = false;
+          },
+          err => {
+            console.log(err);
+            this.isLoading = false;
+          }
+        );
       }
       
       

@@ -4,6 +4,7 @@ import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { SystemValues, p_report_param, mm_customer } from 'src/app/bank-resolver/Models';
+import { p_gen_param } from 'src/app/bank-resolver/Models/p_gen_param';
 import { tt_trial_balance } from 'src/app/bank-resolver/Models/tt_trial_balance';
 import { RestService } from 'src/app/_service';
 import Utils from 'src/app/_utility/utils';
@@ -14,19 +15,20 @@ import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import { CommonServiceService } from 'src/app/bank-resolver/common-service.service';
 @Component({
-  selector: 'app-open-closing-register',
-  templateUrl: './open-closing-register.component.html',
-  styleUrls: ['./open-closing-register.component.css'],
+  selector: 'app-near-maturity',
+  templateUrl: './near-maturity.component.html',
+  styleUrls: ['./near-maturity.component.css'],
   providers:[ExportAsService]
 
 })
-export class OpenClosingRegisterComponent implements OnInit ,AfterViewInit{
+export class INearMaturityComponent implements OnInit,AfterViewInit  {
   @ViewChild('content', { static: true }) content: TemplateRef<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource = new MatTableDataSource()
-  displayedColumns: string[] = ['SLNO','acc_type_cd', 'acc_num', 'cust_name', 'prn_amt','intt_amt','intt_rt','opn_cls_dt'];
-
+  displayedColumns: string[] = ['bank','branch','acc_type_desc', 'acc_num', 'const_name','opening_dt','mat_dt', 'prn_amt','intt_amt','intt_rt'];
+  notvalidate:boolean=false;
+  date_msg:any;
   modalRef: BsModalRef;
   isOpenFromDp = false;
   isOpenToDp = false;
@@ -36,8 +38,6 @@ export class OpenClosingRegisterComponent implements OnInit ,AfterViewInit{
     backdrop: true, // enable backdrop shaded color
     ignoreBackdropClick: true // disable backdrop click to close the modal
   };
-  notvalidate:boolean=false;
-  date_msg:any;
   trailbalance: tt_trial_balance[] = [];
   prp = new p_report_param();
   reportcriteria: FormGroup;
@@ -54,6 +54,7 @@ export class OpenClosingRegisterComponent implements OnInit ,AfterViewInit{
   fromdate: Date;
   toDate: Date;
   counter=0
+  suggestedCustomer: mm_customer[];
   exportAsConfig:ExportAsConfig;
   itemsPerPage = 50;
   currentPage = 1;
@@ -61,19 +62,11 @@ export class OpenClosingRegisterComponent implements OnInit ,AfterViewInit{
   reportData:any=[]
   ardbName=localStorage.getItem('ardb_name')
   branchName=this.sys.BranchName
-  sumPrn=0
-  sumIntt=0
-  pageChange: any;
-  opdrSum=0;
-  opcrSum=0;
-  drSum=0;
-  crSum=0;
-  clsdrSum=0;
-  clscrSum=0;
+
   lastAccCD:any;
   today:any
-  showWait=false;
-  suggestedCustomer: mm_customer[];
+  prnSum=0;
+  inttSum=0
   filteredArray:any=[]
   constructor(private svc: RestService, private formBuilder: FormBuilder,
     private modalService: BsModalService, private _domSanitizer: DomSanitizer,private exportAsService: ExportAsService, private cd: ChangeDetectorRef,
@@ -83,8 +76,7 @@ export class OpenClosingRegisterComponent implements OnInit ,AfterViewInit{
     this.toDate = this.sys.CurrentDate;
     this.reportcriteria = this.formBuilder.group({
       fromDate: [null, Validators.required],
-      toDate: [null, Validators.required],
-      OpenClose: [null, Validators.required]
+      toDate: [null, Validators.required]
     });
     this.onLoadScreen(this.content);
     var date = new Date();
@@ -103,7 +95,6 @@ export class OpenClosingRegisterComponent implements OnInit ,AfterViewInit{
     this.currentPage = page;
     this.cd.detectChanges();
   }
-  
   public SubmitReport() {
     this.comser.getDay(this.reportcriteria.controls.fromDate.value,this.reportcriteria.controls.toDate.value)
     if (this.reportcriteria.invalid) {
@@ -115,40 +106,41 @@ export class OpenClosingRegisterComponent implements OnInit ,AfterViewInit{
       this.date_msg= this.comser.date_msg
       this.notvalidate=true
     }
-
     else {
-      this.sumPrn=0;
-      this.sumIntt=0
-      this.reportData.length=0
-      this.modalRef.hide();
-      this.reportData.length=0;
-      this.pagedItems.length=0;
-      this.isLoading=true
+      this.prnSum=0;
+      this.inttSum=0
       this.fromdate = this.reportcriteria.controls.fromDate.value;
       this.toDate = this.reportcriteria.controls.toDate.value;
+      this.reportData.length=0;
+      this.pagedItems.length=0;
+      this.modalRef.hide();
+      this.isLoading=true;
       var dt={
-        "ardb_cd": this.sys.ardbCD,
-        "from_dt": this.fromdate.toISOString(),
-        "to_dt":this.toDate.toISOString(),
-        "brn_cd":this.sys.BranchCode,
-        "flag":this.reportcriteria.controls.OpenClose.value
-        
+       "ardb_cd": this.sys.ardbCD,
+       "brn_cd":  this.sys.BranchCode,
+       "from_dt" : this.fromdate.toISOString(),
+       "to_dt" : this.toDate.toISOString()
       }
-      this.svc.addUpdDel('Deposit/PopulateOpenCloseRegister',dt).subscribe(data=>{console.log(data)
+      this.svc.addUpdDel('Investment/PopulateNearInvReport',dt).subscribe(data=>{console.log(data)
         this.reportData=data;
-        this.dataSource.data=this.reportData
         if(this.reportData.length==0){
           this.comser.SnackBar_Nodata()
         } 
+        this.dataSource.data=this.reportData
+        this.itemsPerPage=this.reportData.length % 50 <=0 ? this.reportData.length: this.reportData.length % 50
+    
         this.isLoading=false
-        this.pageChange=document.getElementById('chngPage');
-        this.pageChange.click()
+        // if(this.reportData.length<50){
+        //   this.pagedItems=this.reportData
+        // }
+        // this.pageChange=document.getElementById('chngPage');
+        // // this.pageChange.click()
         this.setPage(2);
-        this.setPage(1)
+        this.setPage(1);
         this.modalRef.hide();
         this.reportData.forEach(e=>{
-          this.sumPrn+=e.prn_amt;
-          this.sumIntt=e.intt_amt;
+          this.prnSum+=e.prN_AMT;
+          this.inttSum+=e.proV_INTT_AMT
         })
         },
         err => {
@@ -160,12 +152,11 @@ export class OpenClosingRegisterComponent implements OnInit ,AfterViewInit{
       // this.fromdate = this.reportcriteria.controls.fromDate.value;
       // this.toDate = this.reportcriteria.controls.toDate.value;
       // this.UrlString = this.svc.getReportUrl();
-      // this.UrlString = this.UrlString + 'WebForm/Deposit/opencloseregister?'
+      // this.UrlString = this.UrlString + 'WebForm/Deposit/nearmatdetails?'
       //   + 'ardb_cd='+this.sys.ardbCD
       //   + '&from_dt=' + Utils.convertDtToString(this.fromdate)
       //   + '&to_dt=' + Utils.convertDtToString(this.toDate)
-      //   + '&brn_cd=' + this.sys.BranchCode
-      //   + '&flag=' + this.reportcriteria.controls.OpenClose.value; // todo opn/close    O / C.
+      //   + '&brn_cd=' + this.sys.BranchCode;
 
       // this.isLoading = true;
       // this.ReportUrl = this._domSanitizer.bypassSecurityTrustResourceUrl(this.UrlString);
@@ -220,31 +211,25 @@ export class OpenClosingRegisterComponent implements OnInit ,AfterViewInit{
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    console.log(filterValue);
-    
     this.dataSource.filter = filterValue.trim().toLowerCase();
-    console.log(this.dataSource.filter);
 
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
-      this.getTotal()
     }
     this.getTotal()
   }
   getTotal(){
-    this.sumPrn=0
-    this.sumIntt=0
-    console.log(this.dataSource.filteredData);
-    
+    this.prnSum=0;
+    this.inttSum=0
+    console.log(this.dataSource.filteredData)
     this.filteredArray=this.dataSource.filteredData
     for(let i=0;i<this.filteredArray.length;i++){
-      this.sumPrn+=this.filteredArray[i].prn_amt;
-      this.sumIntt+=this.filteredArray[i].intt_amt
-      console.log(this.filteredArray[i]);
+      
+      this.prnSum+=this.filteredArray[i].prN_AMT;
+      this.inttSum+=this.filteredArray[i].proV_INTT_AMT
+      // console.log(this.filteredArray[i].dr_amt)
     
       // this.crSum+=this.filteredArray[i].cr_amount
     }
-    
-    
   }
 }

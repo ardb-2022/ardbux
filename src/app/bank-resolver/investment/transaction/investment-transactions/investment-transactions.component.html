@@ -2,7 +2,7 @@
 <div class="mt-1 col-xs-12 col-sm-12  d-flex justify-content-center align-items-center" style="margin-top: 20px">
     
     <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" #saveBtn (click)="callSaveFunction()">Save</button>
-    <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onDeleteClick()"
+    <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="callDeleteFunction()"
     *ngIf="editDeleteMode">Delete</button>
     <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onResetClick()">Reset</button>
     
@@ -107,9 +107,9 @@
   </div>
   <hr>
 
-<div [hidden]="resetClick">
+<div>
 <div *ngIf="sel_cc">
-  <app-cc-trans [showTranDtlRe]="showTransactionDtlR" [showTranDtlCl]="showTransactionDtlC" ></app-cc-trans>
+  <app-cc-trans [showTranDtlRe]="showTransactionDtlR" [showTranDtlCl]="showTransactionDtlC" [editDeleteMode]="editDeleteMode" ></app-cc-trans>
 </div>
 <div *ngIf="sel_fd">
   <app-fd-trans></app-fd-trans>
@@ -125,7 +125,7 @@
 <div class="mt-1 col-xs-12 col-sm-12  d-flex justify-content-center align-items-center" style="margin-bottom: 20px">
     
   <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" #saveBtn (click)="callSaveFunction()">Save</button>
-  <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onDeleteClick()"
+  <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="callDeleteFunction()"
     *ngIf="editDeleteMode">Delete</button>
   <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onResetClick()">Reset</button>
   

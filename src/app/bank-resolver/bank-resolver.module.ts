@@ -154,6 +154,9 @@ import { RdTransComponent } from './investment/transaction/investment-transactio
 import { InvTranServService } from './investment/transaction/investment-transactions/inv-tran-serv.service';
 import { HttpClientModule } from '@angular/common/http';
 import { CreateGLHeadComponent } from './finance/create-glhead/create-glhead.component';
+import { DetailListFdmisConstWiseComponent } from './deposit/report/detail-list-fdmis-const-wise/detail-list-fdmis-const-wise.component';
+import { INearMaturityComponent } from './investment/report/near-maturity/near-maturity.component';
+import { IDetailListComponent } from './investment/report/detail-list/detail-list.component';
 
 
 @NgModule({
@@ -192,7 +195,8 @@ import { CreateGLHeadComponent } from './finance/create-glhead/create-glhead.com
       ConsolidatedCashCumTrialComponent, ConsolidatedTrialBalanceComponent, 
       StandingInsActiveSIListComponent, StandingInsTodaySIExecutedComponent, WeeklyReturnComponent, 
       RecovInterestComponent, BankEntryComponent, BranchEntryComponent, VewInvestmentDtlsComponent, 
-      InvTransactionApprovalComponent, InvestmentTransactionsComponent, FdTransComponent, CcTransComponent, MisTransComponent, RdTransComponent, CreateGLHeadComponent
+      InvTransactionApprovalComponent, InvestmentTransactionsComponent, FdTransComponent, CcTransComponent, MisTransComponent,
+       RdTransComponent, CreateGLHeadComponent, DetailListFdmisConstWiseComponent, INearMaturityComponent,IDetailListComponent
   ],
   imports: [
     NgxPrintModule, MatTableModule, MatFormFieldModule,  MatInputModule, MatSlideToggleModule,MatButtonModule,

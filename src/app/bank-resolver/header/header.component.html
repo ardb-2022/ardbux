@@ -278,6 +278,10 @@
         <mat-icon>data_exploration</mat-icon>
         <span>Detail List DDS</span>
       </button>
+      <button mat-menu-item routerLink="DR_DLF_CONST"> 
+        <mat-icon>model_training</mat-icon>
+        <span>Detail List Constitution-Wise</span>
+      </button>
     </mat-menu>
     <mat-menu #acc_stat="matMenu">
       <button mat-menu-item routerLink="DR_ASS">
@@ -557,6 +561,10 @@
         <mat-icon>currency_exchange</mat-icon>
         <span>Transaction</span>
       </button>
+      <button mat-menu-item [matMenuTriggerFor]="iReport">
+        <mat-icon>receipt_long</mat-icon>
+        <span>Report</span>
+      </button>
       <mat-menu #investMaster="matMenu">
         <button mat-menu-item routerLink="I_BankEntry">
           <mat-icon>account_balance</mat-icon>
@@ -585,6 +593,16 @@
           <span>Investment Transaction</span>
         </button>
         
+      </mat-menu>
+      <mat-menu #iReport="matMenu">
+        <button mat-menu-item routerLink="IR_Detail_list">
+          <mat-icon>content_paste_search</mat-icon>
+          <span>Detail List</span>
+        </button>
+        <button mat-menu-item routerLink="IR_Near_maturity">
+          <mat-icon>pending_actions</mat-icon>
+          <span>Near Maturity</span>
+        </button>
       </mat-menu>
     
     </mat-menu>

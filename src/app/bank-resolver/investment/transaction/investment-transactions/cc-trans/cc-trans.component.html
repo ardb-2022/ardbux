@@ -107,6 +107,10 @@
     <form [formGroup]="tdDefTransFrm" *ngIf="showTranDtlRe">
       <h4 class="customHeader mt-2">Transaction Details</h4>
       <div class="form-row">
+        <div class="form-group col-2" [hidden]="editDeleteMode==false">
+          <small for="trans_cd">Tran Cd</small>
+          <input type="text" class="form-control form-control-sm" disabled formControlName="trans_cd" id="trans_cd">
+        </div>
         <div class="form-group col-3">
           <small for="acc_type_cd">Account Type</small>
           <input type="text" hidden class="form-control form-control-sm" disabled formControlName="acc_type_cd"
@@ -152,6 +156,10 @@
           <small for="amount">Principal Amt<span class="text-danger">*</span> </small>
           <input  type="text" class="form-control form-control-sm" formControlName="amount" id="amount"
           (focusout)="onAmtChngDuringRenewal(); processInterest()" >
+        </div>
+        <div class="form-group col-3" [hidden]="!showBalance">
+          <small for="amount">Balance</small>
+          <input  type="text" class="form-control form-control-sm" disabled formControlName="balance" id="balance" >
         </div>
       <div class="form-row" >
         <div class="form-group col-3">
@@ -219,7 +227,7 @@
         </div>
         <div class="form-group col-3 bg-light" >
           <small for="matVal">Mature value</small>
-          <input type="text" class="form-control form-control-sm" [value]="mat_val" disabled id="matVal">
+          <input type="text" class="form-control form-control-sm" [value]="mat_val" formControlName="mat_val" disabled id="matVal">
         </div>
       </div>
 
@@ -228,7 +236,7 @@
       </div>
     </form>
     <!-- for close -->
-    <form [formGroup]="tdDefTransFrm" *ngIf="showTranDtlCl">
+    <form [formGroup]="tdDefTransFrmC" *ngIf="showTranDtlCl">
       <h4 class="customHeader mt-2">Transaction Details</h4>
       <div class="form-row">
         <div class="form-group col-3">
@@ -256,6 +264,11 @@
             <input type="text" disabled [value]="showTranDtlRe? 'Renewal':'Close'"
               class="form-control form-control-sm" formControlName="trans_mode1" id="trans_mode1">
           </div>
+          <div class="form-group col-2" hidden>
+            <small for="trans_mode">Trans Mode</small>
+            <input type="text" disabled [value]="showTranDtlRe? 'R':'C'"
+              class="form-control form-control-sm" formControlName="trans_mode" id="trans_mode">
+          </div>
           
           <!-- (change)="onTransTypeChange()" -->
         <div class="form-group col-2" >
@@ -268,11 +281,11 @@
           </select>
         </div>
         <!-- (focusout)="onAmtChngDuringRenewal(); processInterest()" -->
-        <!-- <div class="form-group col-3">
+        <div class="form-group col-3">
           <small for="amount">Principal Amt<span class="text-danger">*</span> </small>
           <input  type="text" class="form-control form-control-sm" disabled formControlName="amount" id="amount"
             >
-        </div> -->
+        </div>
         <div class="form-group col-2" >
           <small for="curr_intt_recov">Interest</small>
           <!-- (change)="inttCalOnClose()" -->
@@ -293,12 +306,21 @@
         </div>
         <div class="form-group col-3 bg-light" >
           <small for="matVal">Mature value</small>
-          <input type="text" class="form-control form-control-sm" [value]="this.accDtlsFrm.controls.mat_amt.value" disabled id="matVal">
+          <input type="text" class="form-control form-control-sm"  disabled formControlName="matVal" id="matVal">
+        </div>
+        <div class="form-group col-2" *ngIf=" !isMat ">
+          <small for="penal_rt">Penal Intt. Rate</small>
+          <input type="text" class="form-control form-control-sm" formControlName="penal_rt" id="penal_rt">
+        </div>
+        <div class="form-group col-2 mksml" *ngIf="!isMat && effInt">
+          <small for="eff_intt">Effective Intt. Rate</small>
+          <input type="text" formControlName="eff_intt" #effint (change)="inttCalOnClose()" [value]="effInt"
+            class="form-control form-control-sm mksml" id="eff_intt">
         </div>
       
     </div>
     </form>
-    <div class="row" *ngIf="td.trf_type.value !== ''">
+    <div class="row" *ngIf="td.trf_type.value !== ''||this.tdDefTransFrmC.controls.trf_type.value!== ''">
       <div class="col-12 col-sm-6 col-md-12 mt-2">
        
         <div *ngIf="showtransdetails">
@@ -463,3 +485,22 @@
     </button>
   </div>
 </div>
+<ng-template #preClose>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left customHeader">It will be a premature closing for {{diff}} days with interest accrued :
+      &#8377;{{closeInt}}
+    </h4>
+    <!-- <button mat-raised-button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button> -->
+  </div>
+  <div class="modal-body">
+    <div>
+      <div class="col-12 scroll-when-long">
+
+      </div>
+    </div>
+    <button mat-raised-button type="button" class="btn btn-default" (click)="hideModalForClose()">Cancel</button> &nbsp;
+    <button mat-raised-button type="button" class="btn btn-primary float-right" (click)="hideModalForClose()">OK</button>
+  </div>
+</ng-template>

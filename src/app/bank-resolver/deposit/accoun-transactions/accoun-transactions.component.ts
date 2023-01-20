@@ -2096,7 +2096,8 @@ getjoinholder(){
       //   });
       this.hideOnClose = true;
       this.showAmtDrpDn = true;
-    } else if (selectedOperation.oprn_desc.toLocaleLowerCase() === 'close') {
+    }
+     else if (selectedOperation.oprn_desc.toLocaleLowerCase() === 'close') {
       this.showtransmodeforC = true; //marker
       this.counter = 0;
       this.counter1 = 0;

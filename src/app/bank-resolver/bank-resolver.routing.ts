@@ -111,6 +111,9 @@ import { VewInvestmentDtlsComponent } from './investment/transaction/vew-investm
 import { InvTransactionApprovalComponent } from './investment/transaction/inv-transaction-approval/inv-transaction-approval.component';
 import { InvestmentTransactionsComponent } from './investment/transaction/investment-transactions/investment-transactions.component';
 import { CreateGLHeadComponent } from './finance/create-glhead/create-glhead.component';
+import { DetailListFdmisConstWiseComponent } from './deposit/report/detail-list-fdmis-const-wise/detail-list-fdmis-const-wise.component';
+import { IDetailListComponent } from './investment/report/detail-list/detail-list.component';
+import { INearMaturityComponent } from './investment/report/near-maturity/near-maturity.component';
 const routes: Routes = [
   { path: 'Admin', component: AdminPanelComponent },
   { path: 'admin', component: AdminPanelComponent },
@@ -178,6 +181,7 @@ const routes: Routes = [
       { path: 'DR_DLS', component: DetailListSBCAComponent, canActivate: [AuthGuard] },
       { path: 'DR_DLR', component: DetailListRDComponent, canActivate: [AuthGuard] },
       { path: 'DR_DLF', component: DetailListFDMISComponent, canActivate: [AuthGuard] },
+      { path: 'DR_DLF_CONST', component: DetailListFdmisConstWiseComponent, canActivate: [AuthGuard] },
       { path: 'DR_ASS', component: AccStmtSBCAComponent, canActivate: [AuthGuard] },
       { path: 'DR_ASR', component: AccStmtRDComponent, canActivate: [AuthGuard] },
       { path: 'DR_ASF', component: AccStmtTDComponent, canActivate: [AuthGuard] },
@@ -236,9 +240,9 @@ const routes: Routes = [
       { path: 'I_ViewDtls', component: VewInvestmentDtlsComponent, canActivate: [AuthGuard] },
       { path: 'I_TrnsApprov', component: InvTransactionApprovalComponent, canActivate: [AuthGuard] },
       { path: 'I_Trns', component: InvestmentTransactionsComponent, canActivate: [AuthGuard] },
-
-
-
+      { path: 'IR_Detail_list', component: IDetailListComponent, canActivate: [AuthGuard] },
+      { path: 'IR_Near_maturity', component: INearMaturityComponent, canActivate: [AuthGuard] },
+      
       {
         path: 'finance', component: FinanceComponent,
         children: [

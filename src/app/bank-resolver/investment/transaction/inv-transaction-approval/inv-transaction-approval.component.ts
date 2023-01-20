@@ -16,6 +16,7 @@ import { mm_constitution } from '../../../Models/deposit/mm_constitution';
 import { mm_oprational_intr } from '../../../Models/deposit/mm_oprational_intr';
 import { tm_denomination_trans } from '../../../Models/deposit/tm_denomination_trans';
 import { AccOpenDM } from '../../../Models/deposit/AccOpenDM';
+import { InvOpenDM } from 'src/app/bank-resolver/Models/deposit/InvOpenDM';
 
 
 @Component({
@@ -33,7 +34,9 @@ export class InvTransactionApprovalComponent implements OnInit {
   @ViewChild('kycContent', { static: true }) kycContent: TemplateRef<any>;
   selectedAccountType: number;
   selectedTransactionMode: string;
-  masterModel = new AccOpenDM();
+  // masterModel = new AccOpenDM();
+  masterModel = new InvOpenDM();
+
   vm: TranApprovalVM[] = [];
   filteredVm: TranApprovalVM[] = [];
   selectedVm: TranApprovalVM;
@@ -60,7 +63,9 @@ export class InvTransactionApprovalComponent implements OnInit {
   totalOfDenomination = 0;
   tranferDetails: td_def_trans_trf[] = [];
   tmDenominationTransLst: tm_denomination_trans[] = [];
-  additionalInformation: AccOpenDM;
+  // additionalInformation: AccOpenDM;
+  additionalInformation: InvOpenDM;
+
   fetchingAddInf = false;
   acctypcd:any;
   accnum:any;
@@ -241,6 +246,9 @@ export class InvTransactionApprovalComponent implements OnInit {
   }
 
   private setTransactionDtl(transactionDtl: td_def_trans_trf): void {
+    console.log(this.masterModel);
+    console.log(transactionDtl);
+    
     this.showDenominationDtl = false;
     // this.showTransferDtl = false;
     this.totalOfDenomination = 0;
@@ -264,7 +272,7 @@ export class InvTransactionApprovalComponent implements OnInit {
                     transactionDtl.trans_mode === 'V' ? 'Voucher' :
                       transactionDtl.trans_mode === 'O' ? 'Open' :
                         transactionDtl.trans_mode === 'Q' ? 'Cheque' : null,
-            amount: transactionDtl.trans_mode!='R'?(transactionDtl.amount?transactionDtl.amount:transactionDtl.ovd_prn_recov):transactionDtl.ovd_prn_recov+transactionDtl.curr_intt_recov,
+            amount: transactionDtl.trans_mode!='R'?(transactionDtl.amount?transactionDtl.amount:transactionDtl.ovd_prn_recov):(transactionDtl.amount>0?transactionDtl.ovd_prn_recov:transactionDtl.ovd_prn_recov+transactionDtl.curr_intt_recov),
             instrument_dt: transactionDtl.instrument_dt.toString() === '01/01/0001 00:00' ? '' :
               transactionDtl.instrument_dt.toString().substr(0, 10),
             instrument_num: transactionDtl.instrument_num === 0 ? null :
@@ -291,7 +299,7 @@ export class InvTransactionApprovalComponent implements OnInit {
             ovd_prn_recov: transactionDtl.ovd_prn_recov,
             curr_numbert_recov: transactionDtl.curr_intt_recov,
             tot_amount:transactionDtl.trans_mode!='R'?(transactionDtl.curr_intt_recov!=null && transactionDtl.curr_intt_recov!=undefined? (transactionDtl.amount?transactionDtl.amount+transactionDtl.curr_intt_recov:(transactionDtl.curr_intt_recov?transactionDtl.curr_intt_recov:transactionDtl.ovd_prn_recov)):transactionDtl.amount):(transactionDtl.curr_prn_recov- transactionDtl.ovd_prn_recov-transactionDtl.curr_intt_recov+transactionDtl.ovd_prn_recov+transactionDtl.curr_intt_recov),
-            curr_intt_recov: transactionDtl.trans_mode=='R'? transactionDtl.curr_prn_recov- transactionDtl.ovd_prn_recov-transactionDtl.curr_intt_recov : transactionDtl.curr_intt_recov,
+            curr_intt_recov: transactionDtl.trans_mode=='R'? this.masterModel.tmdepositrenewInv.intt_amt : transactionDtl.curr_intt_recov,
             ovd_numbert_recov: transactionDtl.ovd_intt_recov,
             remarks: transactionDtl.remarks,
             crop_cd: transactionDtl.crop_cd,
@@ -586,7 +594,7 @@ export class InvTransactionApprovalComponent implements OnInit {
     k.acc_type_cd=vm.td_def_trans_trf.acc_type_cd;
     k.acc_num=vm.td_def_trans_trf.acc_num;
     this.msg.sendCommonAcctInfo(k)
-    this.additionalInformation = new AccOpenDM();
+    this.additionalInformation = new InvOpenDM();
     this.selectedVm = vm;
     this.selectedTransactionCd = vm.td_def_trans_trf.trans_cd;
     this.selectedAccountType = vm.td_def_trans_trf.acc_type_cd;
@@ -616,7 +624,7 @@ export class InvTransactionApprovalComponent implements OnInit {
           }
         }
       },
-      err => { this.additionalInformation = new AccOpenDM(); this.fetchingAddInf = false; }
+      err => { this.additionalInformation = new InvOpenDM(); this.fetchingAddInf = false; }
     );
   }
 
@@ -653,7 +661,7 @@ export class InvTransactionApprovalComponent implements OnInit {
 
   private getTranAcctInfo(forAcc: string): void {
     this.isLoading = false;
-    this.masterModel = new AccOpenDM();
+    this.masterModel = new InvOpenDM();
     let acc = new tm_deposit();
     acc.acc_num = forAcc;
      acc.brn_cd = this.sys.BranchCode;
