@@ -239,6 +239,10 @@
     <form [formGroup]="tdDefTransFrmC" *ngIf="showTranDtlCl">
       <h4 class="customHeader mt-2">Transaction Details</h4>
       <div class="form-row">
+        <div class="form-group col-2" [hidden]="editDeleteMode==false">
+          <small for="trans_cd">Tran Cd</small>
+          <input type="text" class="form-control form-control-sm" disabled formControlName="trans_cd" id="trans_cd">
+        </div>
         <div class="form-group col-3">
           <small for="acc_type_cd">Account Type</small>
           <input type="text" hidden class="form-control form-control-sm" disabled formControlName="acc_type_cd"

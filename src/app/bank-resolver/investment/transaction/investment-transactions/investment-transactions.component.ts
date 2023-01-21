@@ -204,8 +204,9 @@ export class InvestmentTransactionsComponent implements OnInit {
         this.showTransactionDtlR = false;
        }
       else{
-        this.showTransactionDtlC = false;
+        this.cc_comp.onRenewalSelect();
         this.showTransactionDtlR = true;
+        this.showTransactionDtlC = false;
       }
       
         
@@ -645,13 +646,13 @@ export class InvestmentTransactionsComponent implements OnInit {
               this.sel_fd=false;
               this.sel_cc=false;
               }
-      
-
+     }
+    if(this.masterModel.tddeftrans.trans_mode=='R'){
+      this.showTransactionDtlR==true;
     }
-    // this.getDepTrans(selectedTransactionToEdit);......MARKAR
-    this.showTransactionDtlR = true;
-
-    // this.getDenominationOrTransferDtl(selectedTransactionToEdit);
+    else{
+      this.showTransactionDtlR==false;
+      }
   }
 
   private getDepTrans(depTras: td_def_trans_trf): void {

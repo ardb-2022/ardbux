@@ -78,7 +78,6 @@ export class CcTransComponent implements OnInit {
   showBalance:boolean=false;
   // public accNoEnteredForTransaction2:any=this.invComServ.accNoEnteredForTransaction2;......MARKAR
   public accNoEnteredForTransaction2:any=this.invComServ.masterModel.tddeftrans
-  
   public accNoEnteredForTransaction:any;
   public accNoEnteredForTransaction3:any=this.invComServ.masterModel.tmdepositInv;
   showTransModeForR:boolean
@@ -102,9 +101,10 @@ export class CcTransComponent implements OnInit {
 
   ngOnInit(): void {
     this.masterModel=this.invComServ.masterModel
-    if(this.editDeleteMode==true){
+    if(this.editDeleteMode==true && this.accNoEnteredForTransaction2.trans_mode=='R'){
       this.accNoEnteredForTransaction=this.masterModel.tmdepositrenewInv;
     }
+   
     else{
       this.accNoEnteredForTransaction=this.masterModel.tmdepositInv;
 
@@ -226,12 +226,21 @@ export class CcTransComponent implements OnInit {
     this.showMsg = null;
      this.getOperationMaster();
     this.setAccDtlsFrmForm();
-    this.setTrnsDtlsFrmForm();
-
-   }
- 
-    
-    public setAccDtlsFrmForm() {
+    if(this.editDeleteMode && this.accNoEnteredForTransaction2.trans_mode=='R'){
+      this.setTrnsDtlsFrmForm();
+      this.showTranDtlRe=true;
+      this.showTranDtlCl=false;
+      debugger
+    }
+    if(this.editDeleteMode && this.accNoEnteredForTransaction2.trans_mode=='C'){
+      // this.setTrnsDtlsCloseFrm()
+      this.onCloseSelect()
+      this.showTranDtlRe=false;
+      this.showTranDtlCl=true;
+      // this.showtransdetails=true;
+      debugger}
+    }
+ public setAccDtlsFrmForm() {
       this.isLoading = false;
     
     console.log(this.invComServ.bankName,this.invComServ.branchName,this.invComServ.constitutionDes);
@@ -268,9 +277,9 @@ export class CcTransComponent implements OnInit {
       // console.log(this.accNoEnteredForTransaction.intt_trf_type=='H' || this.accNoEnteredForTransaction.intt_trf_type=='Q'? this.td.amount.value :this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt)
       
       console.log(this.accDtlsFrm);
-      console.log(this.accNoEnteredForTransaction3);
-      console.log(this.accNoEnteredForTransaction2);
       console.log(this.accNoEnteredForTransaction);
+      console.log(this.accNoEnteredForTransaction2);
+      console.log(this.accNoEnteredForTransaction3);
       debugger
       this.accDtlsFrm.patchValue({
         
@@ -459,6 +468,85 @@ export class CcTransComponent implements OnInit {
     
   } 
 }
+public setTrnsDtlsCloseFrm(){
+  console.log(this.editDeleteMode);
+
+  this.isLoading = true;
+  debugger;
+
+if (undefined !== this.accNoEnteredForTransaction && Object.keys(this.accNoEnteredForTransaction).length !== 0) {
+  
+  if (this.accNoEnteredForTransaction.acc_type_cd === 23) {
+    this.accNoEnteredForTransaction.ShowClose = true;
+  }
+  const OprnInstrDesc = CcTransComponent.operationalInstrList.filter(e => e.oprn_cd
+    === this.accNoEnteredForTransaction.oprn_instr_cd)[0];
+
+  let acc_desc=''
+  if (this.accNoEnteredForTransaction.acc_type_cd ==23) {
+    acc_desc = 'Cash Certificate';
+    
+  }
+  // console.log(this.td.amount.value)
+  // console.log(this.accNoEnteredForTransaction.intt_trf_type=='H' || this.accNoEnteredForTransaction.intt_trf_type=='Q'? this.td.amount.value :this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt)
+  
+  console.log(this.accDtlsFrm);
+  console.log(this.accNoEnteredForTransaction);
+  console.log(this.accNoEnteredForTransaction2);//
+  console.log(this.masterModel);
+  console.log(this.showTranDtlRe);
+  console.log(this.editDeleteMode);
+  
+  debugger
+  this.tdDefTransFrmC.patchValue({
+    trans_dt: this.accNoEnteredForTransaction.trans_dt,
+    trans_cd:this.editDeleteMode?this.accNoEnteredForTransaction2.trans_cd:'',
+    acc_type_desc: acc_desc,
+    acc_type_cd: this.accNoEnteredForTransaction.acc_type_cd,
+    acc_num: this.accNoEnteredForTransaction.acc_num,
+    amount:this.accNoEnteredForTransaction.prn_amt,
+    // amount:this.accNoEnteredForTransaction.prn_amt+this.accNoEnteredForTransaction.intt_amt,
+    // trans_type_key:'D',
+    // trans_type:this.editDeleteMode?'Deposit',
+
+    trf_type:this.editDeleteMode? this.accNoEnteredForTransaction2.trf_type:'',
+    intt_trf_type: this.accNoEnteredForTransaction.intt_trf_type,
+    curr_intt_recov:this.accNoEnteredForTransaction.intt_amt,
+    opening_dt:this.accNoEnteredForTransaction.opening_dt.toString().substr(0, 10), 
+    constitution_cd_desc:this.invComServ.constitutionDes,
+    constitution_cd:this.invComServ.constitutionCd,
+    ovd_intt_recov:0,
+    curr_prn_recov:0,
+      trans_mode1:'Close',
+      trans_mode: 'C',
+      trans_type: 'withdrawal',
+      trans_type_key: 'W',
+      penal_rt:0,
+      matVal:this.accNoEnteredForTransaction.prn_amt+this.accNoEnteredForTransaction.intt_amt,
+      approval_status: this.accNoEnteredForTransaction.approval_status,
+      bank_nm:this.invComServ.bankName,
+      branch_nm:this.invComServ.branchName
+  });
+  if(this.editDeleteMode==true){
+    if(this.accNoEnteredForTransaction2.trf_type=='T' && this.accNoEnteredForTransaction2.trans_type=='W'){
+      debugger
+      this.acc_master= this.invComServ.acc_master
+      this.showtransdetails=true;
+      this.addTransfer();
+      console.log(this.invComServ.acc_master);
+      console.log(this.acc_master);
+      this.td_deftranstrfList=this.masterModel.tddeftranstrf;
+      this.td_deftranstrfList[0].gl_acc_code = this.masterModel.tddeftranstrf[0].acc_cd;
+      this.acc_master1= this.acc_master.filter(x => x.acc_cd.toString().includes(this.td_deftranstrfList[0].gl_acc_code));
+      this.td_deftranstrfList[0].gl_acc_desc=this.acc_master1[0].acc_name;
+      console.log(this.acc_master1);
+      this.sumTransfer()
+      console.log(this.td_deftranstrfList);
+    }
+    
+  }
+ } this.isLoading =false;
+}
 onTransTypeChange(){
   debugger
   if(Number(this.accDtlsFrm.controls.mat_amt.value)===Number(this.tdDefTransFrm.controls.amount.value)){
@@ -600,6 +688,7 @@ public inttCalOnClose(): void {
       return
     }
     else{
+      
     let param = new p_gen_param();
     param.ad_acc_type_cd = this.accNoEnteredForTransaction.acc_type_cd;
     param.ad_prn_amt = this.accNoEnteredForTransaction.prn_amt;
@@ -634,6 +723,9 @@ public inttCalOnClose(): void {
               curr_prn_recov: 0,
               penal_rt: 0
             })
+            if(this.editDeleteMode&&this.tdDefTransFrmC.controls.trf_type.value=='T'){
+              this.td_deftranstrfList.forEach(e =>e.amount=this.tdDefTransFrmC.controls.matVal.value)
+            }
           }
           else{
             this.tdDefTransFrm.patchValue({
@@ -1174,7 +1266,101 @@ debugger
     console.log(this.editDeleteMode);
   
     const accTypeCd = this.accNoEnteredForTransaction.acc_type_cd;
-    debugger
+    
+    debugger;
+    if (this.editDeleteMode==false) {
+      debugger
+    if(this.showTranDtlCl==true){
+        //for Close
+        
+        debugger
+        if (undefined === this.tdDefTransFrmC.controls.trf_type.value
+            || null === this.tdDefTransFrmC.controls.trf_type.value
+            || this.tdDefTransFrmC.controls.trf_type.value === '') {
+            this.HandleMessage(true, MessageType.Error, 'Please choose transfer type.');
+            return;
+          }
+        this.isLoading = true; 
+      const saveTransaction = new InvOpenDM();
+      
+      debugger
+      const tdDefTrans = this.mappTddefTransFrClose();
+      console.log(tdDefTrans);
+      saveTransaction.tddeftrans = tdDefTrans;
+      if (this.tdDefTransFrmC.controls.trf_type.value === 'C') {
+        // saveTransaction.tmdenominationtrans = this.tm_denominationList;  
+        //for denomination somnath comment
+      } else if (this.tdDefTransFrmC.controls.trf_type.value === 'T') {
+        let i = 0;
+
+        this.td_deftranstrfList.forEach(e => {
+          if (e.amount != null) {
+            const tdDefTransAndTranfer = this.mappTddefTransAndTransFrClose();
+            console.log(tdDefTransAndTranfer)
+              tdDefTransAndTranfer.acc_type_cd = e.gl_acc_code;
+              tdDefTransAndTranfer.acc_num = '0000';
+              tdDefTransAndTranfer.acc_name = e.gl_acc_desc;
+              tdDefTransAndTranfer.instrument_num = e.instrument_num;
+              tdDefTransAndTranfer.acc_cd = e.gl_acc_code;
+              // tdDefTransAndTranfer.remarks = 'X';
+              tdDefTransAndTranfer.remarks = 'Renewal';
+              tdDefTransAndTranfer.disb_id = ++i;
+              if (this.showTranDtlRe==true || this.showTranDtlCl==true) {
+                const desc =this.accNoEnteredForTransaction.acc_type_cd.value == 23 ? 'Cash Certificate ' : '';
+                console.log(this.accNoEnteredForTransaction.acc_type_cd.value + " " + desc)
+                tdDefTransAndTranfer.particulars = 'By Transfer from ' + desc + 'A/C: ' + this.tdDefTransFrmC.controls.acc_num.value //marker
+              }
+            
+            
+            // if (selectedOperation.oprn_desc.toLocaleLowerCase() === 'close') {
+            //   if (accTypeCd == 23) {
+            //     for (let i = 0; i < CcTransComponent.constitutionList.length; i++) {
+            //       if (CcTransComponent.constitutionList[i].constitution_cd == this.constCd && CcTransComponent.constitutionList[i].acc_type_cd == this.tddefAccTypCd) {
+            //         tdDefTransAndTranfer.acc_cd = CcTransComponent.constitutionList[i].acc_cd
+            //         console.log(tdDefTransAndTranfer.acc_cd)
+            //       }
+            //     }
+            //   }
+            // } //marker
+            tdDefTransAndTranfer.amount = e.amount;
+            console.log(tdDefTransAndTranfer);
+            tdDefTransAndTranfer.home_brn_cd = tdDefTransAndTranfer.acc_num.substring(0, 3);
+            tdDefTransAndTranfer.intra_branch_trn = tdDefTransAndTranfer.acc_num.substring(0, 3) != this.sys.BranchCode ? 'Y' : 'N'
+            // toReturn.home_brn_cd=toReturn.acc_num.substring(0,3);
+            // toReturn.intra_branch_trn=toReturn.acc_num.substring(0,3)!=this.sys.BranchCode?'Y':'N'
+            saveTransaction.tddeftranstrf.push(tdDefTransAndTranfer);
+          }
+          else {
+            this.HandleMessage(true, MessageType.Error, 'Amount can not be null');
+            return
+          }
+        });
+        const tmTrnsfr = new tm_transfer();
+        tmTrnsfr.brn_cd = this.sys.BranchCode;
+        tmTrnsfr.trf_dt = this.sys.CurrentDate;
+        tmTrnsfr.created_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+        tmTrnsfr.approval_status = 'U';
+
+        if (this.showtransdetails)
+          saveTransaction.tmtransfer.push(tmTrnsfr);
+
+      }
+      console.log(saveTransaction)
+      debugger;
+      this.svc.addUpdDel<InvOpenDM>('INVESTMENT/InsertInvOpeningData', saveTransaction).subscribe(
+        res => {
+          this.HandleMessage(true, MessageType.Sucess, 'Saved sucessfully, your transaction code is :' + res);
+          this.tdDefTransFrm.reset();
+          this.accDtlsFrm.reset();
+          this.td_deftranstrfList=[]
+          this.isLoading = false;
+        },
+        err => { this.isLoading = false; console.error('Error on onSaveClick' + JSON.stringify(err)); }
+      );
+    }
+      //for renewal
+    else{
+      debugger
     if(this.td.intt_rate.value<=0){
       this.HandleMessage(true, MessageType.Error, 'Interest rate should be greater than ZERO');
       this.td.intt_rate.setValue('');
@@ -1197,8 +1383,6 @@ debugger
         this.HandleMessage(true, MessageType.Error, 'Please choose transfer type.');
         return;
       }
-    debugger;
-    if (this.editDeleteMode==false) {
       this.isLoading = true; 
       const saveTransaction = new InvOpenDM();
       
@@ -1218,6 +1402,7 @@ debugger
         debugger
         saveTransaction.tmdepositrenewInv = this.mapRenewData();
       }
+      
       const tdDefTrans = this.mappTddefTransFrom();
       console.log(tdDefTrans);
       saveTransaction.tddeftrans = tdDefTrans;
@@ -1312,9 +1497,89 @@ debugger
         err => { this.isLoading = false; console.error('Error on onSaveClick' + JSON.stringify(err)); }
       );
     } 
-    
+  }
     else {
+      //for close Update
+    if(this.showTranDtlCl==true){
+      debugger
       this.isLoading = true;
+
+      const updateTransaction = new InvOpenDM();
+      const tdDefTrans = this.mappTddefTransFrClose();
+      console.log(tdDefTrans);
+      updateTransaction.tddeftrans = tdDefTrans;
+     
+      console.log(updateTransaction.tddeftrans);
+      
+      if (this.tdDefTransFrmC.controls.trf_type.value === 'T') {
+        debugger
+        let i = 0;
+      
+        this.td_deftranstrfList.forEach(e => {console.log(e);
+        
+          if (e.amount != null) {
+            debugger
+            const tdDefTransAndTranfer = this.mappTddefTransAndTransFrClose();
+            console.log(tdDefTransAndTranfer);
+            if (( accTypeCd == 23 ) && ( this.tdDefTransFrmC.controls.trans_mode.value == 'C')) { 
+                  const desc = 'Cash Certificate '
+                  tdDefTransAndTranfer.particulars = 'By Transfer from ' + desc + 'A/C:' + this.tdDefTransFrmC.controls.acc_num.value
+           }
+            else{ tdDefTransAndTranfer.particulars = this.tdDefTransFrmC.controls.particulars.value}
+                 
+
+            console.log(tdDefTransAndTranfer.particulars)
+            
+              tdDefTransAndTranfer.trans_cd = this.tdDefTransFrmC.controls.trans_cd.value;
+              tdDefTransAndTranfer.acc_type_cd = +e.gl_acc_code;
+              tdDefTransAndTranfer.acc_num = '0000';
+              tdDefTransAndTranfer.acc_name = e.gl_acc_desc;
+              tdDefTransAndTranfer.acc_cd = +e.gl_acc_code;
+              tdDefTransAndTranfer.remarks = 'Close';
+              
+              tdDefTransAndTranfer.disb_id = ++i;
+              
+              console.log("else" + " " + tdDefTransAndTranfer.acc_cd)
+            
+            tdDefTransAndTranfer.amount = e.amount;
+            tdDefTransAndTranfer.home_brn_cd = tdDefTransAndTranfer.acc_num.substring(0, 3);
+            tdDefTransAndTranfer.intra_branch_trn = tdDefTransAndTranfer.acc_num.substring(0, 3) != this.sys.BranchCode ? 'Y' : 'N'
+            console.log(tdDefTransAndTranfer.particulars)
+            
+            updateTransaction.tddeftranstrf.push(tdDefTransAndTranfer);
+          }
+          else {
+            this.HandleMessage(true, MessageType.Error, 'Amount can not be null');
+            return
+          }
+
+        });
+      }
+      console.log(updateTransaction);
+      debugger
+      this.svc.addUpdDel<InvOpenDM>('INVESTMENT/UpdateInvOpeningData', updateTransaction).subscribe(
+        res => {
+          console.log(this.td_deftranstrfList)
+          
+          const accNum = this.tdDefTransFrmC.controls.acc_num.value;
+          if ((+res) === -1) {
+            this.HandleMessage(true, MessageType.Error, `Transaction for Acc# ${accNum},
+            Not updated sucessfully.`);
+          } else {
+            this.HandleMessage(true, MessageType.Sucess, `Transaction for Acc# ${accNum},
+            updated sucessfully.`);
+            this.tdDefTransFrmC.reset();
+            this.accDtlsFrm.reset();
+            this.td_deftranstrfList=[];
+            this.showtransdetails=false;
+            this.isLoading = false;
+          }
+          this.isLoading = false;
+        },
+        err => { this.isLoading = false; console.error('Error on Update Transaction' + JSON.stringify(err)); }
+      );
+    }
+    else{this.isLoading = true;
 
       const updateTransaction = new InvOpenDM();
       const tdDefTrans = this.mappTddefTransFrom();
@@ -1425,6 +1690,7 @@ debugger
         err => { this.isLoading = false; console.error('Error on Update Transaction' + JSON.stringify(err)); }
       );
     }
+    }
   }
   onDeleteClick(): void {
     if (!(confirm('Are you sure you want to Delete Transaction of Acc '
@@ -1452,6 +1718,7 @@ debugger
             + ' is deleted.');
           this.accDtlsFrm.reset();
           this.tdDefTransFrm.reset();
+          this.tdDefTransFrmC.reset();
           this.td_deftranstrfList=[]
           this.showtransdetails=false;
 
@@ -1576,7 +1843,7 @@ debugger
       // toReturn.token_num = this.td.token_num.value;
       toReturn.trf_type = this.td.trf_type.value;
       toReturn.home_brn_cd = this.resBrnCd != this.sys.BranchCode ? this.resBrnCd : this.sys.BranchCode;
-      toReturn.remarks = selectedOperation.oprn_desc.toLocaleLowerCase()
+      toReturn.remarks = selectedOperation.oprn_desc.toLocaleLowerCase()=='renewal'?'renewal':'close'
       toReturn.intra_branch_trn = this.resBrnCd != this.sys.BranchCode ? 'Y' : 'N'
       debugger
         console.log(toReturn)
@@ -1591,10 +1858,11 @@ debugger
         console.log( toReturn.amount);
         debugger
 
-        // if (this.td.trans_mode.value == 'C') {
-        //   toReturn.amount = this.accNoEnteredForTransaction.prn_amt;
-        //   toReturn.curr_intt_recov = this.accNoEnteredForTransaction.intt_amt;
-        // } else {
+        if (this.tdDefTransFrmC.controls.trans_mode.value == 'C') {
+          toReturn.amount = this.tdDefTransFrmC.controls.amount.value;
+          toReturn.curr_intt_recov = this.tdDefTransFrmC.controls.curr_intt_recov.value;
+        } 
+        // else {
           
         //   if (this.td.trans_mode.value == 'R') {
         //     debugger
@@ -1642,9 +1910,10 @@ debugger
               }
             }
           
-        } else {
+        } 
+        else {
           debugger
-          if (this.td.trf_type.value === 'C') {
+          if (this.tdDefTransFrmC.controls.trf_type.value === 'C') {
             if (selectedOperation.oprn_desc.toLocaleLowerCase() === 'withdraw') {
               toReturn.particulars = 'TO CASH ';
             } else if (selectedOperation.oprn_desc.toLocaleLowerCase() === 'deposit') {
@@ -1654,9 +1923,9 @@ debugger
           } else {
             if (selectedOperation.oprn_desc.toLocaleLowerCase() === 'withdraw') {
               // console.log('2831')
-              toReturn.particulars = 'TO TRANSFER :' + this.td.acc_num.value;
+              toReturn.particulars = 'TO TRANSFER :' + this.tdDefTransFrmC.controls.acc_num.value;
             } else if (selectedOperation.oprn_desc.toLocaleLowerCase() === 'deposit' || selectedOperation.oprn_desc.toLocaleLowerCase() === 'renewal') {
-              toReturn.particulars = 'BY TRANSFER :' + this.td.acc_num.value;
+              toReturn.particulars = 'BY TRANSFER :' + this.tdDefTransFrmC.controls.acc_num.value;
             }
           }
         }
@@ -1957,6 +2226,225 @@ debugger
     console.log(toReturn)
     return toReturn;
   }
+  mappTddefTransFrClose(): td_def_trans_trf {
+    debugger;
+    const toReturn = new td_def_trans_trf();
+    // const accTypeCd = this.accNoEnteredForTransaction.acc_type_cd;
+
+    // if (!this.editDeleteMode) {
+      const selectedOperation = CcTransComponent.operations.filter(e => e.oprn_cd === (this.showTranDtlRe==true?38:39))[0];
+      console.log(selectedOperation)
+        debugger
+      const accTypeCd = this.accNoEnteredForTransaction.acc_type_cd;
+      // toReturn.trans_dt = new Date(this.convertDate(localStorage.getItem('__currentDate')) + ' UTC');
+      toReturn.trans_dt = this.sys.CurrentDate;
+      toReturn.acc_type_cd = this.tdDefTransFrmC.controls.acc_type_cd.value;
+      toReturn.acc_num = this.tdDefTransFrmC.controls.acc_num.value;
+      toReturn.trans_type = this.tdDefTransFrmC.controls.trans_type_key.value;
+      toReturn.trans_mode = this.tdDefTransFrmC.controls.trans_mode.value;
+      // toReturn.paid_to = this.td.paid_to.value;
+      // toReturn.token_num = this.td.token_num.value;
+      toReturn.trf_type = this.tdDefTransFrmC.controls.trf_type.value;
+      toReturn.home_brn_cd = this.resBrnCd != this.sys.BranchCode ? this.resBrnCd : this.sys.BranchCode;
+      toReturn.remarks = selectedOperation.oprn_desc.toLocaleLowerCase()=='renewal'?'renewal':'close'
+      toReturn.intra_branch_trn = this.resBrnCd != this.sys.BranchCode ? 'Y' : 'N'
+      debugger
+        console.log(toReturn)
+        toReturn.curr_prn_recov =this.tdDefTransFrmC.controls.amount.value;
+        toReturn.ovd_prn_recov = this.accNoEnteredForTransaction3.prn_amt;
+        // toReturn.curr_intt_recov = Number(this.accDtlsFrm.controls.mat_amt.value)==Number(this.td.amount)?this.accDtlsFrm.controls.intt_amt.value:'';
+        toReturn.curr_intt_recov = this.tdDefTransFrmC.controls.curr_intt_recov.value;
+        toReturn.ovd_intt_recov = 0;
+        console.log(this.tdDefTransFrmC.controls.amount.value,this.accDtlsFrm.controls.mat_amt.value);
+        toReturn.curr_intt_rate=this.editDeleteMode?this.tdDefTransFrmC.controls.eff_intt.value:this.accNoEnteredForTransaction3.intt_rt;
+        toReturn.amount =  Number(this.tdDefTransFrmC.controls.amount.value) + Number(this.tdDefTransFrmC.controls.curr_intt_recov.value);
+        console.log( toReturn.amount);
+        debugger
+
+        if (this.tdDefTransFrmC.controls.particulars.value === null ||
+        this.tdDefTransFrmC.controls.particulars.value === ''|| this.tdDefTransFrmC.controls.particulars.value === undefined) {
+        
+          debugger
+          if (this.tdDefTransFrmC.controls.trf_type.value === 'C') {
+            if (selectedOperation.oprn_desc.toLocaleLowerCase() === 'withdraw') {
+              toReturn.particulars = 'TO CASH ';
+            } else if (selectedOperation.oprn_desc.toLocaleLowerCase() === 'deposit') {
+              toReturn.particulars = 'BY CASH ';
+            }
+
+          } else {
+            if (selectedOperation.oprn_desc.toLocaleLowerCase() === 'withdraw') {
+              // console.log('2831')
+              toReturn.particulars = 'TO TRANSFER :' + this.tdDefTransFrmC.controls.acc_num.value;
+            }
+          }
+        
+      } else {
+        debugger
+        toReturn.particulars = this.tdDefTransFrmC.controls.particulars.value;
+        console.log(this.tdDefTransFrmC.controls.particulars.value)
+
+        //   if(accTypeCd==5) //marker
+        // toReturn.particulars = this.td.particulars.value.split(' ')[0]==="BY"?  this.td.particulars.value.replace("BY","TO"):this.td.particulars.value.replace("TO","BY");
+        ////////////debugger;
+        console.log({ "toReturn.remarks": toReturn.remarks, " this.tdDefTransFrmC.controls.particulars.value": this.tdDefTransFrmC.controls.particulars.value })
+        debugger
+      }
+      if (selectedOperation.oprn_desc.toLocaleLowerCase() === 'close'
+        && this.tdDefTransFrmC.controls.trf_type.value === '') {
+        toReturn.trans_type = 'T';
+      }
+      toReturn.approval_status = 'U';
+      toReturn.brn_cd = this.sys.BranchCode;
+
+      if (this.tdDefTransFrmC.controls.trf_type.value === 'T') {
+        toReturn.tr_acc_cd = 10000;
+        debugger
+      } else if (this.tdDefTransFrmC.controls.trf_type.value === 'C') {
+        toReturn.tr_acc_cd = 21101;
+      }
+      debugger;
+      console.log(toReturn)
+      debugger;
+    if(this.editDeleteMode==true){
+      toReturn.modified_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+      toReturn.modified_dt = this.sys.CurrentDate;
+      toReturn.trans_cd=this.tdDefTransFrmC.controls.trans_cd.value;
+
+    }
+    
+    // if (selectedOperation.oprn_desc.toLocaleLowerCase() === 'interest payment')
+     //marker1
+     toReturn.acc_cd = this.invComServ.selectedconstitution[0].acc_cd
+     console.log(toReturn.acc_cd)
+     debugger
+    toReturn.disb_id = 1;
+    toReturn.home_brn_cd = this.resBrnCd != this.sys.BranchCode ? this.resBrnCd : this.sys.BranchCode;
+    toReturn.intra_branch_trn = this.resBrnCd != this.sys.BranchCode ? 'Y' : 'N'
+    ////////////debugger;
+    // console.log({"ss":toReturn.particulars,"sss":this.td.particulars.value.split(' ')[0],"replace":this.td.particulars.value})
+    console.log(toReturn)
+    return toReturn;
+    // return;
+  }
+  mappTddefTransAndTransFrClose(): td_def_trans_trf {
+    debugger;
+    // debugger;
+    // if(!this.editDeleteMode){
+    // selectedOperation = this.operations.filter(e => e.oprn_cd === +this.f.oprn_cd.value)[0];
+    // selectedOperation=selectedOperation.oprn_cd
+    // }
+    // else{
+    // const selectedOperation =this.f.trans_type;
+
+    // }
+    let k = this.operations.filter(e => e.oprn_cd === (this.showTranDtlRe==true?38:39))[0]
+    console.log(k);
+    this.remarks=this.accNoEnteredForTransaction2.remarks;
+    const selectedOperation = this.editDeleteMode ? this.remarks : k.oprn_desc;
+    console.log(selectedOperation);
+    debugger
+    const toReturn = new td_def_trans_trf();
+    const accTypeCd = this.accNoEnteredForTransaction.acc_type_cd;
+    // toReturn.trans_dt = new Date(this.convertDate(localStorage.getItem('__currentDate')) + ' UTC');
+    toReturn.trans_dt = this.sys.CurrentDate;
+    toReturn.acc_type_cd = this.tdDefTransFrmC.controls.acc_type_cd.value;
+    // toReturn.home_brn_cd=toReturn.acc_num.substring(0,3);
+    // toReturn.intra_branch_trn=toReturn.acc_num.substring(0,3)!=this.sys.BranchCode?'Y':'N'
+    // console.log(toReturn.home_brn_cd+" "+toReturn.intra_branch_trn)
+    toReturn.acc_num = this.tdDefTransFrmC.controls.acc_num.value;
+    //////////debugger;
+    // toReturn.trans_mode = this.td.trans_mode.value;
+    // toReturn.paid_to = this.td.paid_to.value;
+    // toReturn.token_num = this.td.token_num.value;
+    toReturn.trf_type = this.tdDefTransFrmC.controls.trf_type.value;
+
+    
+    // switch (selectedOperation.oprn_desc.toLocaleLowerCase()) {
+    switch (selectedOperation.toLocaleLowerCase()) {
+      case 'close':
+      case 'withdraw':
+        toReturn.trans_type = 'D';
+        break;
+      case 'renewal':
+      case 'deposit':
+        toReturn.trans_type = 'W';
+        break;
+
+      
+    }
+
+    if (selectedOperation.toLocaleLowerCase() === 'close' && (accTypeCd === 23)) {
+      toReturn.amount = this.accNoEnteredForTransaction.prn_amt;
+      toReturn.curr_intt_recov = this.accNoEnteredForTransaction.intt_amt;
+    }
+    // toReturn.instrument_num = this.td.instrument_num.value === '' ? 0 : +this.td.instrument_num.value;
+    // toReturn.instrument_dt = this.td.instrument_dt.value === '' ? null : this.td.instrument_dt.value;
+    if (this.tdDefTransFrmC.controls.particulars.value === null ||
+      this.tdDefTransFrmC.controls.particulars.value === ''|| this.tdDefTransFrmC.controls.particulars.value === undefined) 
+      
+      // console.log("2706")
+      //debugger;
+      console.log(toReturn.particulars + " " + selectedOperation.toLocaleLowerCase() + " " + toReturn.trf_type)
+      debugger;
+       if(selectedOperation.toLocaleLowerCase()=='close' && toReturn.trf_type=='T'){
+        toReturn.particulars='To Closing'
+       }
+      //  else
+      //     { console.log('3148')
+      if (!this.editDeleteMode && this.tdDefTransFrmC.controls.trans_mode.value != 'C')
+        toReturn.particulars = this.tdDefTransFrmC.controls.particulars.value.split(' ')[0] === "BY" ? this.tdDefTransFrmC.controls.particulars.value.replace("BY", "TO") : this.tdDefTransFrmC.controls.particulars.value.replace("TO", "BY");
+    
+    // toReturn.particulars = this.td.particulars.value.split(' ')[1]==="BY"?  this.td.particulars.value.replace("BY","TO"):this.td.particulars.value.replace("TO","BY");
+    console.log(toReturn.particulars + " " + selectedOperation.toLocaleLowerCase() + " " + toReturn.trf_type)
+
+    //  }
+
+    if (selectedOperation.toLocaleLowerCase() === 'close' && this.tdDefTransFrmC.controls.trf_type.value === '') {
+      toReturn.trans_type = 'T';
+    }
+    toReturn.approval_status = 'U';
+    toReturn.brn_cd = this.sys.BranchCode;
+    // && this.invComServ.selectedconstitution[0].acc_type_cd == accTypeCd
+      if (this.invComServ.selectedconstitution[0].constitution_cd == this.accNoEnteredForTransaction.constitution_cd ) {
+        toReturn.acc_cd = this.invComServ.selectedconstitution[0].acc_cd
+        console.log(toReturn.acc_cd)
+        debugger
+      }
+    
+      debugger
+    if (this.tdDefTransFrmC.controls.trf_type.value === 'T') {
+      toReturn.tr_acc_cd = 10000;
+      
+    } else if (this.tdDefTransFrmC.controls.trf_type.value === 'C') {
+      toReturn.tr_acc_cd = 21101;
+    }
+    // if ((+this.f.acc_type_cd.value) === 2) {
+    //   toReturn.acc_cd = 14301;
+    // }
+    // if ((+this.f.acc_type_cd.value) === 6) {
+    //   toReturn.acc_cd = 14302;
+    // }
+    
+      toReturn.acc_cd = this.accNoEnteredForTransaction.acc_cd;
+
+      //to be removed in case the other acc type cd gets interchanged
+      // for(let i=0;i<CcTransComponent.constitutionList.length;i++){
+      //   if(CcTransComponent.constitutionList[i].constitution_cd==this.constCd && CcTransComponent.constitutionList[i].acc_type_cd==6)
+      //  { toReturn.acc_cd=CcTransComponent.constitutionList[i].intt_acc_cd
+      //   console.log(toReturn.acc_cd)
+      // }
+      // }
+     //marker
+    toReturn.disb_id = 1;
+    toReturn.created_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+    toReturn.acc_cd = this.invComServ.selectedconstitution[0].acc_cd
+    console.log(toReturn.acc_cd)
+    debugger
+    // console.log( {"toReturn.particulars":toReturn.particulars," this.td.particulars.value": this.td.particulars.value})
+    console.log(toReturn)
+    return toReturn;
+  }
 //   onResetClick(): void {
 //   debugger
 //   this.showtransdetails = false;
@@ -1969,7 +2457,13 @@ debugger
 //   this.td_deftranstrfList = [];
 //   this.mat_val = 0 
 // }
+  onRenewalSelect(){
+    debugger
+    this.setTrnsDtlsFrmForm();
+    this.showTranDtlRe=true;
+  }
   onCloseSelect(){
+    
     this.counter = 0;
     this.counter1 = 0;
     let isMatured = false;
@@ -1987,114 +2481,121 @@ debugger
       isMatured = false;
       this.isMat = isMatured
 
-      // this.processInterest();
       console.log(isMatured)
-      // const temp_gen_param = new p_gen_param();
-      // this.modalRefClose = this.modalService.show(this.preClose,
-      //   { class: 'modal-lg', keyboard: false, backdrop: true, ignoreBackdropClick: true })
-
-
-    }
-    let acc_desc=''
-                if (this.accNoEnteredForTransaction.acc_type_cd ==23) {
-                  acc_desc = 'Cash Certificate';
-    }
-    console.log(Number(this.accNoEnteredForTransaction.prn_amt),Number(this.closeInt));
-    
-    debugger
-    this.tdDefTransFrmC.patchValue({
-      trans_dt: this.accNoEnteredForTransaction.trans_dt,
-      trans_cd:this.editDeleteMode?this.accNoEnteredForTransaction2.trans_cd:'',
-      acc_type_desc: acc_desc,
-      acc_type_cd: this.accNoEnteredForTransaction.acc_type_cd,
-      acc_num: this.accNoEnteredForTransaction.acc_num,
-      trans_mode1:'Close',
-      trans_mode: 'C',
-      trans_type: 'withdrawal',
-      trans_type_key: 'W',
-      penal_rt:0
-    });
-
-      console.log("inside cc Close")
-      
-      console.log(this.accNoEnteredForTransaction.intt_rt + " " + this.sys.PenalInttRtFrAccPreMatureClosing)
-      const cDtC = this.sys.CurrentDate.getTime();
-      const opDt = Utils.convertStringToDt(this.accNoEnteredForTransaction.opening_dt.toString()).getTime();
-      // const o = Utils.convertStringToDt(this.td.opening_dt.value);
-
-      const diffDays = Math.ceil((Math.abs(cDtC - opDt)) / (1000 * 3600 * 24));
-      this.diff = diffDays
-      console.log(cDtC + " " + opDt + " " + diffDays)
-      console.log(this.accNoEnteredForTransaction)
-      const temp_gen_param = new p_gen_param();
-
-      temp_gen_param.ad_acc_type_cd = this.accNoEnteredForTransaction.acc_type_cd;
-      temp_gen_param.ad_prn_amt = this.accNoEnteredForTransaction.prn_amt;
-      temp_gen_param.adt_temp_dt = this.accNoEnteredForTransaction.opening_dt;
-      temp_gen_param.ai_period = diffDays;
-      temp_gen_param.ad_intt_rt = this.accNoEnteredForTransaction.intt_rt - this.sys.PenalInttRtFrAccPreMatureClosing
-      this.effInt = temp_gen_param.ad_intt_rt > 0 ? temp_gen_param.ad_intt_rt : 0
-      console.log(this.effInt)
-      // this.isLoading = true;
-      if (isMatured == false ) {
-        this.modalRefClose = this.modalService.show(this.preClose,
-          { class: 'modal-lg', keyboard: false, backdrop: true, ignoreBackdropClick: true })
       }
-     
-      // console.log("here")
-      // var dt = {
-      //   acc_type_cd: temp_gen_param.ad_acc_type_cd,
-      //   catg_cd: this.resBrnCatgCd,
-      //   no_of_days: this.diff,
-      //   ardb_cd:this.sys.ardbCD
-      // }
-      // console.log(dt)
-      // this.svc.addUpdDel<any>('Deposit/GetInttRate', dt).subscribe(
-      //   resrt => {
-          // console.log(resrt)
-          this.effInt = 3.5
-          temp_gen_param.ad_intt_rt = this.effInt
+      let acc_desc=''
+            if (this.accNoEnteredForTransaction.acc_type_cd ==23) {
+                acc_desc = 'Cash Certificate';
+            }
+    if( this.isMat==false){
+        
+            console.log(Number(this.accNoEnteredForTransaction.prn_amt),Number(this.closeInt));
+            
+            debugger
+            this.tdDefTransFrmC.patchValue({
+                  trans_dt: this.accNoEnteredForTransaction.trans_dt,
+                  trans_cd:this.editDeleteMode?this.accNoEnteredForTransaction2.trans_cd:'',
+                  acc_type_desc: acc_desc,
+                  acc_type_cd: this.accNoEnteredForTransaction.acc_type_cd,
+                  acc_num: this.accNoEnteredForTransaction.acc_num,
+                  trf_type:this.accNoEnteredForTransaction2.trf_type,
+                  trans_mode1:this.accNoEnteredForTransaction2.trans_mode=='C'?'Close':'Renewal',
+                  trans_mode: this.accNoEnteredForTransaction2.trans_mode,
+                  trans_type: this.accNoEnteredForTransaction2.trans_type=='W'?'withdrawal':'Deposit',
+                  trans_type_key: this.accNoEnteredForTransaction2.trans_type,
+              penal_rt:0
+            });
+            
+              console.log("inside cc Close")
+              
+              console.log(this.accNoEnteredForTransaction.intt_rt + " " + this.sys.PenalInttRtFrAccPreMatureClosing)
+              const cDtC = this.sys.CurrentDate.getTime();
+              const opDt = Utils.convertStringToDt(this.accNoEnteredForTransaction.opening_dt.toString()).getTime();
+              const diffDays = Math.ceil((Math.abs(cDtC - opDt)) / (1000 * 3600 * 24));
+              this.diff = diffDays
+              console.log(cDtC + " " + opDt + " " + diffDays)
+              console.log(this.accNoEnteredForTransaction)
+              const temp_gen_param = new p_gen_param();
 
-          this.svc.addUpdDel<any>('INVESTMENT/F_CALCTDINTT_INV_REG', temp_gen_param).subscribe(
-            res => {
-              console.log(res)
-              this.closeInt = res;
+              temp_gen_param.ad_acc_type_cd = this.accNoEnteredForTransaction.acc_type_cd;
+              temp_gen_param.ad_prn_amt = this.accNoEnteredForTransaction.prn_amt;
+              temp_gen_param.adt_temp_dt = this.accNoEnteredForTransaction.opening_dt;
+              temp_gen_param.ai_period = diffDays;
+              temp_gen_param.ad_intt_rt = this.accNoEnteredForTransaction.intt_rt - this.sys.PenalInttRtFrAccPreMatureClosing
+              this.effInt = temp_gen_param.ad_intt_rt > 0 ? temp_gen_param.ad_intt_rt : 0
+              console.log(this.effInt)
+              
+              if (isMatured == false ) {
+                this.modalRefClose = this.modalService.show(this.preClose,
+                  { class: 'modal-lg', keyboard: false, backdrop: true, ignoreBackdropClick: true })
+              }
+            
+              this.effInt = this.editDeleteMode?this.accNoEnteredForTransaction2.curr_intt_rate: 3.5
+                  temp_gen_param.ad_intt_rt = this.effInt
 
-                console.log("hello")
+                  this.svc.addUpdDel<any>('INVESTMENT/F_CALCTDINTT_INV_REG', temp_gen_param).subscribe(
+                    res => {
+                      console.log(res)
+                      this.closeInt = res;
+
+                        console.log("hello")
+                        
+
+                        this.tdDefTransFrmC.patchValue({
+                        amount: (this.accNoEnteredForTransaction.prn_amt),
+                        matVal:!isMatured?Number(this.accNoEnteredForTransaction.prn_amt)+Number(this.closeInt):Number(this.accNoEnteredForTransaction.prn_amt)+Number(this.accNoEnteredForTransaction.intt_amt),
+                          curr_intt_recov: isMatured ? this.accNoEnteredForTransaction.intt_amt : this.closeInt,
+                          ovd_intt_recov: 0,
+                          bonus_amt: 0,
+                          curr_prn_recov: 0,
+                        });
+
+                    })
                 
-
-                this.tdDefTransFrmC.patchValue({
-                  // amount: (this.accNoEnteredForTransaction.prn_amt +
-                  //   (this.accNoEnteredForTransaction.intt_amt > 0 ?
-                  //   this.accNoEnteredForTransaction.intt_amt :
-                  //   (0.015 * this.accNoEnteredForTransaction.prn_amt))).toFixed(2),
-                  amount: (this.accNoEnteredForTransaction.prn_amt),
-                  // curr_intt_recov: (this.accNoEnteredForTransaction.intt_amt > 0 ?
-                  //   this.accNoEnteredForTransaction.intt_amt :
-      //   (0.015 * this.accNoEnteredForTransaction.prn_amt)).toFixed(2),
-                  matVal:!isMatured?Number(this.accNoEnteredForTransaction.prn_amt)+Number(this.closeInt):Number(this.accNoEnteredForTransaction.prn_amt)+Number(this.accNoEnteredForTransaction.intt_amt),
-                  curr_intt_recov: isMatured ? this.accNoEnteredForTransaction.intt_amt : this.closeInt,
-
-        //           curr_intt_recov:
-        //           this.closeInt
-        // ,
-                  // ovd_intt_recov: isMatured? '':this.sys.PenalInttRtFrAccPreMatureClosing,
+              this.tdDefTransFrmC.controls.amount.disable();
+              console.log(this.tdDefTransFrmC.controls.amount.value, this.closeInt, this.accNoEnteredForTransaction.prn_amt, this.accNoEnteredForTransaction.intt_amt)
+              this.showTranDtlCl=true;
+             }
+            else{
+              this.setTrnsDtlsCloseFrm();
+              // this.showTranDtlCl=true;
+            }
+            if(this.editDeleteMode==true){
+              this.tdDefTransFrmC.patchValue({
+                  trans_dt: this.accNoEnteredForTransaction.trans_dt,
+                  trans_cd:this.editDeleteMode?this.accNoEnteredForTransaction2.trans_cd:'',
+                  acc_type_desc: acc_desc,
+                  acc_type_cd: this.accNoEnteredForTransaction.acc_type_cd,
+                  acc_num: this.accNoEnteredForTransaction.acc_num,
+                  amount: this.accNoEnteredForTransaction2.curr_prn_recov,
+                  matVal:Number(this.accNoEnteredForTransaction2.amount) + Number(this.accNoEnteredForTransaction2.curr_intt_recov),
+                  curr_intt_recov: this.accNoEnteredForTransaction2.curr_intt_recov,
                   ovd_intt_recov: 0,
                   bonus_amt: 0,
-                  // curr_prn_recov: isMatured ? (this.sys.DepositBonusRate *
-                  //   this.accNoEnteredForTransaction.prn_amt).toFixed(2) : '',
                   curr_prn_recov: 0,
-                  // td_def_mat_amt: isMatured ? this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt : this.accNoEnteredForTransaction.prn_amt + this.closeInt
-                 
-                  // td_def_mat_amt: this.accNoEnteredForTransaction.prn_amt + this.closeInt
-
+                  trf_type:this.accNoEnteredForTransaction2.trf_type,
+                  trans_mode1:this.accNoEnteredForTransaction2.trans_mode=='C'?'Close':'Renewal',
+                  trans_mode: this.accNoEnteredForTransaction2.trans_mode,
+                  trans_type: this.accNoEnteredForTransaction2.trans_type=='W'?'withdrawal':'Deposit',
+                  trans_type_key: this.accNoEnteredForTransaction2.trans_type,
                 });
-
-            })
-        
-      this.tdDefTransFrmC.controls.amount.disable();
-      console.log(this.tdDefTransFrmC.controls.amount.value, this.closeInt, this.accNoEnteredForTransaction.prn_amt, this.accNoEnteredForTransaction.intt_amt)
-
+              if(this.accNoEnteredForTransaction2.trf_type=='T' && this.accNoEnteredForTransaction2.trans_type=='W'){
+                debugger
+                this.acc_master= this.invComServ.acc_master
+                this.addTransfer();
+                console.log(this.invComServ.acc_master);
+                console.log(this.acc_master);
+                this.td_deftranstrfList=this.masterModel.tddeftranstrf;
+                this.td_deftranstrfList[0].gl_acc_code = this.masterModel.tddeftranstrf[0].acc_cd;
+                this.acc_master1= this.acc_master.filter(x => x.acc_cd.toString().includes(this.td_deftranstrfList[0].gl_acc_code));
+                this.td_deftranstrfList[0].gl_acc_desc=this.acc_master1[0].acc_name;
+                console.log(this.acc_master1);
+                this.sumTransfer()
+                console.log(this.td_deftranstrfList);
+                this.showtransdetails=true;
+              }
+             }
+    
     }
     
   private HandleMessage(show: boolean, type: MessageType = null, message: string = null) {
@@ -2102,9 +2603,6 @@ debugger
     this.showMsg.Show = show;
     this.showMsg.Type = type;
     this.showMsg.Message = message;
-    // setTimeout(() => {
-    //   this.showMsg = new ShowMessage();
-    // }, 3000);
   }
   hideModalForClose() {
     this.modalRefClose.hide()
