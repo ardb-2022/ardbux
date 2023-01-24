@@ -358,8 +358,9 @@ export class AccounTransactionsComponent implements OnInit {
       // this.tm_deposit.mat_dt.setMonth(this.tm_deposit.mat_dt.getMonth() + this.tm_deposit.month);
       // this.tm_deposit.mat_dt.setDate(this.tm_deposit.mat_dt.getDate() + this.tm_deposit.day);
 
+console.log(this.td.amount.value,this.td.curr_intt_recov.value);
 
-
+debugger
       // var temp_gen_param = new p_gen_param();
       temp_gen_param.ad_acc_type_cd = +this.td.acc_type_cd.value;
       // temp_gen_param.ad_prn_amt = this.td.intt_trf_type.value!='O'? +this.td.amount.value:this.td.td_def_mat_amt.value;

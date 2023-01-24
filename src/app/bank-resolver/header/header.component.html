@@ -95,7 +95,7 @@
         <mat-icon>free_cancellation</mat-icon>
         <span>Yearly Adjustment Voucher Entry</span>
       </button>
-      <button mat-menu-item routerLink="FT_CreateGlHead">
+      <button mat-menu-item routerLink="FT_CreateGlHead" *ngIf="userType=='A'">
         <mat-icon>loupe</mat-icon>
         <span>Create Gl Head</span>
       </button>
@@ -156,6 +156,10 @@
       <button mat-menu-item routerLink="FR_CdTrialBalance" *ngIf="userType=='A'">
         <mat-icon>margin</mat-icon>
         <span>Consolidated Trial Balance</span>
+      </button>
+      <button mat-menu-item routerLink="FR_allGLHead" *ngIf="userType=='A'">
+        <mat-icon>list_alt</mat-icon>
+        <span>Account Master Details</span>
       </button>
       
     </mat-menu>

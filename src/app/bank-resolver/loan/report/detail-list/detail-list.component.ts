@@ -79,7 +79,7 @@ export class DetailListComponent implements OnInit {
   ovdInttSum=0
   ovdPrnSum=0
   currPrnSum=0
-  totPrn=0;
+  totOutStanding=0;
   totPenal=0
   bName=''
   selectedValue=''
@@ -90,7 +90,7 @@ export class DetailListComponent implements OnInit {
   dummyovdInttSum=0
   dummyovdPrnSum=0
   dummycurrPrnSum=0
-  dummytotPrn=0;
+  dummytotOutStanding=0;
   dummytotPenal=0
   loanNm:any;
   inputEl:any
@@ -152,7 +152,7 @@ export class DetailListComponent implements OnInit {
     }
   ]
   // displayedColumns: string[] = ['block_name','acc_name','party_name', 'acc_num', 'list_dt', 'curr_intt_rate','ovd_intt_rate','curr_prn','ovd_prn','plus','curr_intt','ovd_intt','computed_till_dt'];
-  displayedColumns: string[] = ['block_name','acc_name','party_name', 'acc_num', 'list_dt','curr_prn','ovd_prn','plus','curr_intt','ovd_intt','pnl_intt','computed_till_dt'];
+  displayedColumns: string[] = ['block_name','acc_name','party_name', 'acc_num', 'list_dt','plus','curr_prn','ovd_prn','curr_intt','ovd_intt','pnl_intt','computed_till_dt'];
   dataSource = new MatTableDataSource()
   searchfilter= new MatTableDataSource()
 
@@ -228,7 +228,7 @@ export class DetailListComponent implements OnInit {
       this.currInttSum=0
       this.currPrnSum=0
       this.ovdPrnSum=0
-      this.totPrn=0
+      this.totOutStanding=0
       this.totPenal=0
       this.loanNm=this.AcctTypes.filter(e=>e.acc_type_cd==this.reportcriteria.controls.acc_type_cd.value)[0].acc_type_desc
       console.log(this.loanNm)
@@ -266,7 +266,7 @@ export class DetailListComponent implements OnInit {
           this.currInttSum+=e.curr_intt
           this.currPrnSum+=e.curr_prn
           this.ovdPrnSum+=e.ovd_prn
-          this.totPrn+=e.ovd_prn+e.curr_prn
+          this.totOutStanding+=e.ovd_prn+e.curr_prn+e.curr_intt+e.ovd_intt+e.ovd_intt
           this.totPenal+=e.penal_intt
 
 
@@ -274,7 +274,7 @@ export class DetailListComponent implements OnInit {
           this.dummycurrInttSum+=e.curr_intt
           this.dummycurrPrnSum+=e.curr_prn
           this.dummyovdPrnSum+=e.ovd_prn
-          this.dummytotPrn+=e.ovd_prn+e.curr_prn
+          this.dummytotOutStanding+=e.ovd_prn+e.curr_prn+e.curr_intt+e.ovd_intt+e.ovd_intt
           this.dummytotPenal+=e.penal_intt
         });
       },err => {
@@ -568,7 +568,7 @@ debugger
       this.currInttSum=0
       this.currPrnSum=0
       this.ovdPrnSum=0
-      this.totPrn=0
+      this.totOutStanding=0
       this.totPenal=0
     
     console.log(this.dataSource.filteredData)
@@ -578,7 +578,7 @@ debugger
       this.currInttSum+=e.curr_intt
       this.currPrnSum+=e.curr_prn
       this.ovdPrnSum+=e.ovd_prn
-      this.totPrn+=e.ovd_prn+e.curr_prn
+      this.totOutStanding+=e.ovd_prn+e.curr_prn+e.curr_intt+e.ovd_intt+e.ovd_intt
       this.totPenal+=e.penal_intt
     });
   }
@@ -597,7 +597,7 @@ debugger
     this.currInttSum=this.dummycurrInttSum
     this.currPrnSum=this.dummycurrPrnSum
     this.ovdPrnSum=this.dummyovdPrnSum
-   this.totPrn=this.dummytotPrn
+   this.totOutStanding=this.dummytotOutStanding
    this.totPenal=this.dummytotPenal
    this.selectedValue='';
    this.selectedValue1='';

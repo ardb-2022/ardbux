@@ -272,7 +272,7 @@ export class InvTransactionApprovalComponent implements OnInit {
                     transactionDtl.trans_mode === 'V' ? 'Voucher' :
                       transactionDtl.trans_mode === 'O' ? 'Open' :
                         transactionDtl.trans_mode === 'Q' ? 'Cheque' : null,
-            amount: transactionDtl.trans_mode!='R'?(transactionDtl.amount?transactionDtl.amount:transactionDtl.ovd_prn_recov):(transactionDtl.amount>0?transactionDtl.ovd_prn_recov:transactionDtl.ovd_prn_recov+transactionDtl.curr_intt_recov),
+            amount: transactionDtl.trans_mode!='R'?transactionDtl.ovd_prn_recov:(transactionDtl.amount>0?transactionDtl.ovd_prn_recov:transactionDtl.ovd_prn_recov+transactionDtl.curr_intt_recov),
             instrument_dt: transactionDtl.instrument_dt.toString() === '01/01/0001 00:00' ? '' :
               transactionDtl.instrument_dt.toString().substr(0, 10),
             instrument_num: transactionDtl.instrument_num === 0 ? null :
@@ -298,7 +298,7 @@ export class InvTransactionApprovalComponent implements OnInit {
             curr_prn_recov: transactionDtl.curr_prn_recov,
             ovd_prn_recov: transactionDtl.ovd_prn_recov,
             curr_numbert_recov: transactionDtl.curr_intt_recov,
-            tot_amount:transactionDtl.trans_mode!='R'?(transactionDtl.curr_intt_recov!=null && transactionDtl.curr_intt_recov!=undefined? (transactionDtl.amount?transactionDtl.amount+transactionDtl.curr_intt_recov:(transactionDtl.curr_intt_recov?transactionDtl.curr_intt_recov:transactionDtl.ovd_prn_recov)):transactionDtl.amount):(transactionDtl.curr_prn_recov- transactionDtl.ovd_prn_recov-transactionDtl.curr_intt_recov+transactionDtl.ovd_prn_recov+transactionDtl.curr_intt_recov),
+            tot_amount:transactionDtl.trans_mode!='R'?(transactionDtl.curr_intt_recov!=null && transactionDtl.curr_intt_recov!=undefined? (transactionDtl.ovd_prn_recov?transactionDtl.ovd_prn_recov+transactionDtl.curr_intt_recov:(transactionDtl.curr_intt_recov?transactionDtl.curr_intt_recov:transactionDtl.ovd_prn_recov)):transactionDtl.amount):(transactionDtl.curr_prn_recov- transactionDtl.ovd_prn_recov-transactionDtl.curr_intt_recov+transactionDtl.ovd_prn_recov+transactionDtl.curr_intt_recov),
             curr_intt_recov: transactionDtl.trans_mode=='R'? this.masterModel.tmdepositrenewInv.intt_amt : transactionDtl.curr_intt_recov,
             ovd_numbert_recov: transactionDtl.ovd_intt_recov,
             remarks: transactionDtl.remarks,

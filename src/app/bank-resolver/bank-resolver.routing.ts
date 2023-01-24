@@ -114,6 +114,7 @@ import { CreateGLHeadComponent } from './finance/create-glhead/create-glhead.com
 import { DetailListFdmisConstWiseComponent } from './deposit/report/detail-list-fdmis-const-wise/detail-list-fdmis-const-wise.component';
 import { IDetailListComponent } from './investment/report/detail-list/detail-list.component';
 import { INearMaturityComponent } from './investment/report/near-maturity/near-maturity.component';
+import { AllGLDetailsComponent } from './finance/report/all-gldetails/all-gldetails.component';
 const routes: Routes = [
   { path: 'Admin', component: AdminPanelComponent },
   { path: 'admin', component: AdminPanelComponent },
@@ -159,6 +160,9 @@ const routes: Routes = [
       { path: 'FR_TrialBalance', component: TrialbalanceComponent, canActivate: [AuthGuard] },
       { path: 'FR_GeneralLadger', component: GenLedgerComponent, canActivate: [AuthGuard] },
       { path: 'FR_DayScrollBook', component: ScrollbookComponent, canActivate: [AuthGuard] },
+      { path: 'FR_allGLHead', component: AllGLDetailsComponent, canActivate: [AuthGuard] },
+
+      
       { path: 'FR_GLTD', component: GenLedger2Component, canActivate: [AuthGuard] },
       { path: 'DT_ApproveTran', component: TransactionapprovalComponent, canActivate: [AuthGuard] },
       { path: 'DT_AccTrans', component: AccounTransactionsComponent, canActivate: [AuthGuard] },

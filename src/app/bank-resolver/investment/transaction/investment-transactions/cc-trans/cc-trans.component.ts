@@ -1280,6 +1280,7 @@ debugger
             this.HandleMessage(true, MessageType.Error, 'Please choose transfer type.');
             return;
           }
+          else{
         this.isLoading = true; 
       const saveTransaction = new InvOpenDM();
       
@@ -1303,7 +1304,7 @@ debugger
               tdDefTransAndTranfer.instrument_num = e.instrument_num;
               tdDefTransAndTranfer.acc_cd = e.gl_acc_code;
               // tdDefTransAndTranfer.remarks = 'X';
-              tdDefTransAndTranfer.remarks = 'Renewal';
+              tdDefTransAndTranfer.remarks = 'Close';
               tdDefTransAndTranfer.disb_id = ++i;
               if (this.showTranDtlRe==true || this.showTranDtlCl==true) {
                 const desc =this.accNoEnteredForTransaction.acc_type_cd.value == 23 ? 'Cash Certificate ' : '';
@@ -1350,13 +1351,15 @@ debugger
       this.svc.addUpdDel<InvOpenDM>('INVESTMENT/InsertInvOpeningData', saveTransaction).subscribe(
         res => {
           this.HandleMessage(true, MessageType.Sucess, 'Saved sucessfully, your transaction code is :' + res);
-          this.tdDefTransFrm.reset();
+          this.tdDefTransFrmC.reset();
           this.accDtlsFrm.reset();
-          this.td_deftranstrfList=[]
+          this.td_deftranstrfList=[];
+          this.showtransdetails=false;
           this.isLoading = false;
         },
         err => { this.isLoading = false; console.error('Error on onSaveClick' + JSON.stringify(err)); }
       );
+    }
     }
       //for renewal
     else{
@@ -2257,7 +2260,9 @@ debugger
         toReturn.ovd_intt_recov = 0;
         console.log(this.tdDefTransFrmC.controls.amount.value,this.accDtlsFrm.controls.mat_amt.value);
         toReturn.curr_intt_rate=this.editDeleteMode?this.tdDefTransFrmC.controls.eff_intt.value:this.accNoEnteredForTransaction3.intt_rt;
-        toReturn.amount =  Number(this.tdDefTransFrmC.controls.amount.value) + Number(this.tdDefTransFrmC.controls.curr_intt_recov.value);
+        // toReturn.amount =  Number(this.tdDefTransFrmC.controls.amount.value) + Number(this.tdDefTransFrmC.controls.curr_intt_recov.value);
+        toReturn.amount = this.tdDefTransFrmC.controls.amount.value;
+        
         console.log( toReturn.amount);
         debugger
 
@@ -2498,11 +2503,11 @@ debugger
                   acc_type_desc: acc_desc,
                   acc_type_cd: this.accNoEnteredForTransaction.acc_type_cd,
                   acc_num: this.accNoEnteredForTransaction.acc_num,
-                  trf_type:this.accNoEnteredForTransaction2.trf_type,
-                  trans_mode1:this.accNoEnteredForTransaction2.trans_mode=='C'?'Close':'Renewal',
-                  trans_mode: this.accNoEnteredForTransaction2.trans_mode,
-                  trans_type: this.accNoEnteredForTransaction2.trans_type=='W'?'withdrawal':'Deposit',
-                  trans_type_key: this.accNoEnteredForTransaction2.trans_type,
+                  trf_type:this.editDeleteMode?this.accNoEnteredForTransaction2.trf_type:'',
+                  trans_mode1:this.editDeleteMode?(this.accNoEnteredForTransaction2.trans_mode=='C'?'Close':'Renewal'):'Close',
+                  trans_mode: this.editDeleteMode?this.accNoEnteredForTransaction2.trans_mode:'C',
+                  trans_type: this.editDeleteMode?(this.accNoEnteredForTransaction2.trans_type=='W'?'withdrawal':'Deposit'):'withdrawal',
+                  trans_type_key:this.editDeleteMode? this.accNoEnteredForTransaction2.trans_type:'W',
               penal_rt:0
             });
             
