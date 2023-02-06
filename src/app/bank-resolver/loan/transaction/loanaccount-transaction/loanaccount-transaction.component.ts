@@ -176,6 +176,7 @@ export class LoanaccountTransactionComponent implements OnInit {
   fdOvdprn=0
   fdOvdIntt=0
   fdPenalIntt=0
+  joinHold:any=[];
   // editDeleteMode=false
   // showInstrumentDtl = false;
   ngOnInit(): void {
@@ -654,6 +655,7 @@ export class LoanaccountTransactionComponent implements OnInit {
             this.onResetClick();
             return;
           }
+          
           const oprn_cd_temp = this.operations.filter(e => e.acc_type_cd === acc.tddeftrans.acc_type_cd
             && e.oprn_desc.toLocaleLowerCase() === (acc.tddeftrans.trans_type.toLocaleUpperCase() === 'B'
               ? 'disbursement' : 'recovery') && e.module_type.toLocaleUpperCase() === 'LOAN')[0].oprn_cd;
@@ -1169,6 +1171,13 @@ export class LoanaccountTransactionComponent implements OnInit {
               this.onResetClick();
               return;
             }
+            this.joinHold=[];
+          for (let i = 0; i <= res.tdaccholder.length-1; i++) {
+          console.log(res.tdaccholder);
+          
+        this.joinHold.push(res.tdaccholder.length==0?'':res.tdaccholder[i].acc_holder)
+        console.log(this.joinHold);
+        }
             this.accTransFrm.patchValue({
               oprn_cd: '',
               instl_start_dt: acc.tmloanall.instl_start_dt

@@ -27,12 +27,12 @@
             <div class="form-group col-4">
               <small for="date_of_payment">As on Date<span class="text-danger">*</span></small>
                 <div class="input-group">
-                <input type="text" style="height:30px;" placeholder="dd/mm/yyyy" class="form-control" 
+                <input type="text" placeholder="dd/mm/yyyy" class="form-control" 
                 [(ngModel)]="asOnDate"  bsDatepicker
                 [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }"
                 [isOpen]="isOpenFromDp">
                 <div class="input-group-append">
-                  <button mat-raised-button class="btn btn-outline-secondary" style="height:30px;"  type="button" (click)="isOpenFromDp = !isOpenFromDp">
+                  <button mat-raised-button class="btn btn-outline-secondary" type="button" (click)="isOpenFromDp = !isOpenFromDp">
                     <i class="fa fa-calendar" aria-hidden="true"></i>
                   </button>
                 </div>

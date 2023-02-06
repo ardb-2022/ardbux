@@ -45,6 +45,7 @@ export class VoucherprintComponent implements OnInit {
   isLoading = false;
   crSum=0;
   drSum=0;
+  nullVD:number;
   RedVoucher:any;
   constructor(private svc: RestService,private formBuilder: FormBuilder,
      private modalService: BsModalService,
@@ -118,9 +119,25 @@ export class VoucherprintComponent implements OnInit {
         this.tvn = res;
         this.tvn1 = res;
         console.log(this.tvn)
+        
+        for (let x = 0; x < this.tvn.length; x++) {
+          
+         this.tvn[x].vd= this.tvn[x].vd.sort((a, b) => (a.debit_credit_flag < b.debit_credit_flag ? 1 : -1))//(a.acc_cd < b.acc_cd ? -1 : 1))
+         if(this.tvn[x].vd.length==0){
+          this.nullVD=x
+          debugger
+          // this.nullVD=this.tvn.length
+          this.tvn.splice(this.nullVD, 1)
+          }
+        }
+        console.log(this.nullVD);
+        
+        
+        
         for (let x = 0; x < this.tvn.length; x++) {
           this.tvn[x].voucher_dt= this.convertDate(this.tvn[x].voucher_dt.toString());
           this.tvn[x].narration= this.tvn[x].narration.replace('/','');
+          
         }
         for (let x = 0; x < this.tvn.length; x++) {
           this.crSum=0;

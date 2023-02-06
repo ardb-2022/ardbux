@@ -158,6 +158,7 @@ import { DetailListFdmisConstWiseComponent } from './deposit/report/detail-list-
 import { INearMaturityComponent } from './investment/report/near-maturity/near-maturity.component';
 import { IDetailListComponent } from './investment/report/detail-list/detail-list.component';
 import { AllGLDetailsComponent } from './finance/report/all-gldetails/all-gldetails.component';
+import { UpdatePassbookComponent } from './deposit/report/update-passbook/update-passbook.component';
 
 
 @NgModule({
@@ -197,7 +198,7 @@ import { AllGLDetailsComponent } from './finance/report/all-gldetails/all-gldeta
       StandingInsActiveSIListComponent, StandingInsTodaySIExecutedComponent, WeeklyReturnComponent, 
       RecovInterestComponent, BankEntryComponent, BranchEntryComponent, VewInvestmentDtlsComponent, 
       InvTransactionApprovalComponent, InvestmentTransactionsComponent, FdTransComponent, CcTransComponent, MisTransComponent,
-       RdTransComponent, CreateGLHeadComponent, DetailListFdmisConstWiseComponent, INearMaturityComponent,IDetailListComponent, AllGLDetailsComponent
+       RdTransComponent, CreateGLHeadComponent, DetailListFdmisConstWiseComponent, INearMaturityComponent,IDetailListComponent, AllGLDetailsComponent, UpdatePassbookComponent
   ],
   imports: [
     NgxPrintModule, MatTableModule, MatFormFieldModule,  MatInputModule, MatSlideToggleModule,MatButtonModule,

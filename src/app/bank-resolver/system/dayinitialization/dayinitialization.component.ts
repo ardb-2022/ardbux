@@ -49,10 +49,12 @@ export class DayinitializationComponent implements OnInit {
   this.currDt= new Date().toString().substring(0,15) 
     // this.sys.CurrentDate.toString().replace(this.)
     this.currDt=this.sys.CurrentDate
+    this.currDt=this.currDt.setDate( this.currDt.getDate() + 1);
+
     // console.log((+this.currDt.toString().substring(8,11))+1)
     // console.log(this.currDt.toString().substring(8,10))
     // this.currDt.toString().replace(this.currDt.toString().substring(8,10),((+this.currDt.toString().substring(8,11))+1).toString())
-    this.currDt=this.currDt.toString().replace(this.currDt.toString().substring(8,10),(+this.currDt.toString().substring(8,11))+1)
+    // this.currDt=this.currDt.toString().replace(this.currDt.toString().substring(8,10),(+this.currDt.toString().substring(8,11))+1)
     // this.fromdate=this.convertDate(localStorage.getItem('__currentDate'));
     console.log(this.currDt)
     this.fromdate=this.datePipe.transform(this.currDt, 'yyyy-MM-dd','es-ES');

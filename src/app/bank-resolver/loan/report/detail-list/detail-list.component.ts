@@ -266,7 +266,7 @@ export class DetailListComponent implements OnInit {
           this.currInttSum+=e.curr_intt
           this.currPrnSum+=e.curr_prn
           this.ovdPrnSum+=e.ovd_prn
-          this.totOutStanding+=e.ovd_prn+e.curr_prn+e.curr_intt+e.ovd_intt+e.ovd_intt
+          this.totOutStanding+=e.ovd_prn+e.curr_prn
           this.totPenal+=e.penal_intt
 
 
@@ -274,7 +274,7 @@ export class DetailListComponent implements OnInit {
           this.dummycurrInttSum+=e.curr_intt
           this.dummycurrPrnSum+=e.curr_prn
           this.dummyovdPrnSum+=e.ovd_prn
-          this.dummytotOutStanding+=e.ovd_prn+e.curr_prn+e.curr_intt+e.ovd_intt+e.ovd_intt
+          this.dummytotOutStanding+=e.ovd_prn+e.curr_prn
           this.dummytotPenal+=e.penal_intt
         });
       },err => {
@@ -578,7 +578,7 @@ debugger
       this.currInttSum+=e.curr_intt
       this.currPrnSum+=e.curr_prn
       this.ovdPrnSum+=e.ovd_prn
-      this.totOutStanding+=e.ovd_prn+e.curr_prn+e.curr_intt+e.ovd_intt+e.ovd_intt
+      this.totOutStanding+=e.ovd_prn+e.curr_prn
       this.totPenal+=e.penal_intt
     });
   }

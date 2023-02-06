@@ -237,6 +237,7 @@ export class TransactionapprovalComponent implements OnInit {
   }
 
   private setTransactionDtl(transactionDtl: td_def_trans_trf): void {
+    console.log(transactionDtl);
     this.showDenominationDtl = false;
     // this.showTransferDtl = false;
     this.totalOfDenomination = 0;
@@ -260,7 +261,12 @@ export class TransactionapprovalComponent implements OnInit {
                     transactionDtl.trans_mode === 'V' ? 'Voucher' :
                       transactionDtl.trans_mode === 'O' ? 'Open' :
                         transactionDtl.trans_mode === 'Q' ? 'Cheque' : null,
-            amount: transactionDtl.trans_mode!='R'?(transactionDtl.amount?transactionDtl.amount:transactionDtl.ovd_prn_recov):transactionDtl.ovd_prn_recov+transactionDtl.curr_intt_recov,
+            amount: transactionDtl.trans_mode!='R'?(transactionDtl.amount?transactionDtl.amount:transactionDtl.ovd_prn_recov):
+            transactionDtl.acc_type_cd==4?transactionDtl.ovd_prn_recov:
+            transactionDtl.acc_type_cd==2?transactionDtl.ovd_prn_recov:
+            transactionDtl.acc_type_cd==5?transactionDtl.ovd_prn_recov:
+            transactionDtl.ovd_prn_recov+transactionDtl.curr_intt_recov,//PARTHA
+
             instrument_dt: transactionDtl.instrument_dt.toString() === '01/01/0001 00:00' ? '' :
               transactionDtl.instrument_dt.toString().substr(0, 10),
             instrument_num: transactionDtl.instrument_num === 0 ? null :
@@ -286,8 +292,18 @@ export class TransactionapprovalComponent implements OnInit {
             curr_prn_recov: transactionDtl.curr_prn_recov,
             ovd_prn_recov: transactionDtl.ovd_prn_recov,
             curr_numbert_recov: transactionDtl.curr_intt_recov,
-            tot_amount:transactionDtl.trans_mode!='R'?(transactionDtl.curr_intt_recov!=null && transactionDtl.curr_intt_recov!=undefined? (transactionDtl.amount?transactionDtl.amount+transactionDtl.curr_intt_recov:(transactionDtl.curr_intt_recov?transactionDtl.curr_intt_recov:transactionDtl.ovd_prn_recov)):transactionDtl.amount):(transactionDtl.curr_prn_recov- transactionDtl.ovd_prn_recov-transactionDtl.curr_intt_recov+transactionDtl.ovd_prn_recov+transactionDtl.curr_intt_recov),
-            curr_intt_recov: transactionDtl.trans_mode=='R'? transactionDtl.curr_prn_recov- transactionDtl.ovd_prn_recov-transactionDtl.curr_intt_recov : transactionDtl.curr_intt_recov,
+            tot_amount:transactionDtl.trans_mode!='R'?(transactionDtl.curr_intt_recov!=null && transactionDtl.curr_intt_recov!=undefined? (transactionDtl.amount?transactionDtl.amount+transactionDtl.curr_intt_recov:(transactionDtl.curr_intt_recov?transactionDtl.curr_intt_recov:transactionDtl.ovd_prn_recov)):transactionDtl.amount):
+              (transactionDtl.acc_type_cd==2?(transactionDtl.trans_type=='D'? transactionDtl.ovd_prn_recov+transactionDtl.curr_intt_recov:transactionDtl.ovd_prn_recov):
+              (transactionDtl.acc_type_cd==4?(transactionDtl.trans_type=='D'?transactionDtl.ovd_prn_recov+transactionDtl.curr_intt_recov:transactionDtl.ovd_prn_recov):
+              (transactionDtl.acc_type_cd==5?(transactionDtl.trans_type=='D'?transactionDtl.ovd_prn_recov+transactionDtl.curr_intt_recov:transactionDtl.ovd_prn_recov):
+              transactionDtl.curr_prn_recov- transactionDtl.ovd_prn_recov-transactionDtl.curr_intt_recov+transactionDtl.ovd_prn_recov+transactionDtl.curr_intt_recov))),
+            
+            curr_intt_recov: transactionDtl.trans_mode=='R'? transactionDtl.acc_type_cd==4?transactionDtl.curr_intt_recov:
+            transactionDtl.acc_type_cd==2?transactionDtl.curr_intt_recov:
+            transactionDtl.acc_type_cd==5?transactionDtl.curr_intt_recov:
+            transactionDtl.curr_prn_recov- transactionDtl.ovd_prn_recov-transactionDtl.curr_intt_recov :
+             transactionDtl.curr_intt_recov,//PARTHA
+
             ovd_numbert_recov: transactionDtl.ovd_intt_recov,
             remarks: transactionDtl.remarks,
             crop_cd: transactionDtl.crop_cd,

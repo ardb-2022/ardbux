@@ -115,6 +115,7 @@ import { DetailListFdmisConstWiseComponent } from './deposit/report/detail-list-
 import { IDetailListComponent } from './investment/report/detail-list/detail-list.component';
 import { INearMaturityComponent } from './investment/report/near-maturity/near-maturity.component';
 import { AllGLDetailsComponent } from './finance/report/all-gldetails/all-gldetails.component';
+import { UpdatePassbookComponent } from './deposit/report/update-passbook/update-passbook.component';
 const routes: Routes = [
   { path: 'Admin', component: AdminPanelComponent },
   { path: 'admin', component: AdminPanelComponent },
@@ -223,6 +224,7 @@ const routes: Routes = [
       { path: 'DR_NeftIn', component: NeftInwardReportComponent, canActivate: [AuthGuard] },
       { path: 'DR_NeftOut', component: NeftOutwardReportComponent, canActivate: [AuthGuard] },
       { path: 'DR_PbkPrn', component: PassBookPrintingComponent, canActivate: [AuthGuard] },
+      { path: 'DR_UpbkPrnSts', component: UpdatePassbookComponent, canActivate: [AuthGuard] },
       { path: 'DR_Act_SI_List', component: StandingInsActiveSIListComponent, canActivate: [AuthGuard] },
       { path: 'DR_Today_SI_Exec', component: StandingInsTodaySIExecutedComponent, canActivate: [AuthGuard] },
       { path: 'DR_DDS', component: DetailDDSComponent, canActivate: [AuthGuard] },

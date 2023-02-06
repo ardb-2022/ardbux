@@ -515,7 +515,7 @@
                 </div>
 
                 <div *ngIf="rec.param_type=='CHAR'" class="form-group col-6">
-                  <input class="form-control form-control-sm text-capitalize" style="height:25px; text-align: left;"
+                  <input class="form-control form-control-sm text-capitalize" style="height:25px; text-align: left;" (change)="getAccountData()"
                   [(ngModel)]="rec.param_value" [disabled]="disableAll == 'Y' " type="text" id="sec_val" placeholder="Enter Text">
                 </div>
 
@@ -539,7 +539,7 @@
           </section>
         </div>
 
-
+        
         <div class="text-right mb-3">
           <button  type="button" style="height:22px; padding-top: 0px;"  [disabled]="disableAll == 'Y' "
            class="btn btn-primary btn-sm " (click)="createSecurityDtlList()">
@@ -551,6 +551,139 @@
             <i class="fa fa-minus-circle" aria-hidden="true"></i>
            </button>
        </div>
+        <h4 class="customHeader">Account Details</h4>
+        <div class="scroll-style">
+          <!-- <section *ngFor="let set of td_loan_sanc_set_list; let i=index">-->
+
+            <div *ngIf="SecaccCD">
+
+              <div class="form-row">
+    
+                <!-- <div class="form-group col-4">
+                  <small for="trans_type">Constitution</small> <br>
+                  <select [disabled]='disableAll'
+                    style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
+                    id="trans_type" [(ngModel)]="newtm_deposit.constitution_cd" class="form-control form-control-sm"
+                    >
+                    <option [value]="newtm_deposit.constitution_cd" disabled selected>
+                      {{newtm_deposit.constitution_cd}}-{{newtm_deposit.constitution_desc}}</option>
+                    <option *ngFor="let l of selectedConstitutionList" [value]="l.constitution_cd">
+                      {{l.constitution_cd}}-{{l.constitution_desc}}</option>
+                  </select>
+                </div> -->
+    
+                <!-- <div class="form-group col-3">
+                  <small for="dep_oprn_instr">Operational Instr</small> <br>
+                  <select
+                    style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
+                    id="acc_oprn_instr" [(ngModel)]="newtm_deposit.oprn_instr_cd" [disabled]='disableAll'
+                    class="form-control form-control-sm">
+                    <option [value]="newtm_deposit.oprn_instr_cd" selected>
+                      {{newtm_deposit.oprn_instr_cd}}-{{newtm_deposit.oprn_instr_desc}}</option>
+                    <option *ngFor="let l of operationalInstrList" [value]="l.oprn_cd">{{l.oprn_cd}}-{{l.oprn_desc}}
+                    </option>
+                  </select>
+                </div> -->
+    
+                <div class="form-group col-12">
+                  <div class="container border">
+                    <div class="form-row">
+                      <div class="form-group col-7">
+                        <small for="dep_yr">Deposit Period</small>
+                        <input [disabled]='disableAll' [(ngModel)]="newtm_deposit.dep_period" style="height:20px" type="text"
+                         class="form-control form-control-sm text-capitalize" id="dep_pr">
+                      </div>
+                      <div class="form-group col-5">
+                        <small for="dbs_acc_open_dt">Maturity Date</small>
+                        <input disabled style="height:20px;" type="text" placeholder="dd/mm/yyyy" class="form-control"
+                          [(ngModel)]="newtm_deposit.mat_dt" disabled >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+    
+              <div class="form-row">
+                <!-- <div class="form-group col-4">
+                  <small for="trans_type">Intt Transfer Type</small> <br>
+                  <select [disabled]='disableAll'
+                    style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
+                    id="intt_trans_type" [(ngModel)]="newtm_deposit.intt_trf_type" class="form-control form-control-sm"
+                     >
+                    <option [value]="newtm_deposit.intt_trf_type" disabled selected>{{newtm_deposit.intt_tfr_type_dscr}}</option>
+                    <option *ngFor="let l of intTransferType ; let i= index" [hidden]="i== 0 && newtm_deposit.acc_type_cd == 2" [value]="l.tfr_type">{{l.tfr_desc}}</option>
+                  </select>
+                </div> -->
+    
+                <div class="form-group col-3">
+                  <small for="dep_intt_rate">Intt Rate</small>
+                  <input [disabled]='disableAll' [(ngModel)]="newtm_deposit.intt_rt"
+                    style="height:20px; text-align-last: right;" type="number" min="0" step='any'
+                    class="form-control form-control-sm text-capitalize" id="intrate">
+                </div>
+    
+                <div class="form-group col-5">
+                  <small for="dep_principal">Principal</small>
+                  <input [disabled]='disableAll' [(ngModel)]="newtm_deposit.prn_amt"
+                    style="height:20px; text-align-last: right;" type="number" min="0" value='.00' step='any'
+                    class="form-control form-control-sm text-capitalize" id="principal">
+                </div>
+    
+                <div class="form-group col-4">
+                  <small for="dep_interest">Interest</small>
+                  <input disabled [(ngModel)]="newtm_deposit.intt_amt" style="height:20px; text-align-last: right;"
+                    type="number" min="0" step='any' class="form-control form-control-sm text-capitalize" id="dep_interest">
+                </div>
+              </div>
+    
+    
+    
+              <div class="form-row">
+                
+    
+                <div class="form-group col-3">
+                  <small for="dep_cert_no">Cert. No.</small>
+                  <input [disabled]='disableAll' [(ngModel)]="newtm_deposit.cert_no" style="height:20px" type="text"
+                    class="form-control form-control-sm text-capitalize" id="dep_cert_no">
+                </div>
+    
+                <!-- <div class="form-group col-2">
+                  
+                  <small for="stand_ins_after_matu">After Maturity Instr</small> <br>
+                  <select [disabled]='disableAll'
+                    style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
+                    id="stand_ins_after_matu" [(ngModel)]="newtm_deposit.standing_instr_flag"
+                    class="form-control form-control-sm">
+                   
+                    <option *ngFor="let l of standingInstrAfterMaturity"
+                      [selected]="newtm_deposit.standing_instr_flag==l.instr_code" [value]="l.instr_code">{{l.instr_dscr}}
+                
+                    </option>
+                  </select>
+                </div> -->
+                <div class="form-group col-3">
+                  <small for="dep_cert_no">S/B Account No</small>
+                  <input [disabled]='disableAll' [(ngModel)]="newtm_deposit.user_acc_num" style="height:20px" type="text"
+                    class="form-control form-control-sm"  id="dep_sb_ac_no">
+                </div>
+    
+                <div class="form-group col-3">
+                  <br>
+                  <!-- <div class="container border"> -->
+                  <label class="form-check-label">
+                    <input
+                      [disabled]='disableAll || newtm_deposit.intt_trf_type == undefined || newtm_deposit.intt_trf_type == null || newtm_deposit.intt_trf_type == "O"'
+                      type="checkbox" value="false" [checked]="newtm_deposit.cheque_facility_flag == 'Y'"
+                      (change)="newtm_deposit.cheque_facility_flag = $event.target.checked ? 'Y' : 'N' "><small> Standing
+                      Instr</small>
+                  </label>
+                </div>
+                <!-- </div> -->
+    
+              </div>
+            </div>
+          <!-- </section> -->
+        </div>
 
       </div>
     </div>

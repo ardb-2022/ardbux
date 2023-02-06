@@ -367,14 +367,14 @@
             <div class="form-group col-3" *ngIf="showOnRenewal || showOnClose">
               <small for="amount">Principal Amt<span class="text-danger">*</span> </small>
               <input [disabled]="this.f.acc_type_cd.value == 11" type="text" class="form-control form-control-sm" formControlName="amount" id="amount"
-                (focusout)="onAmtChngDuringRenewal(); processInterest()">
+                (focusout)="onAmtChngDuringRenewal()">
             </div>
             <!-- {{showBalance}} -->
             <div class="form-group col-2" *ngIf="showBalance && this.f.acc_type_cd.value != 11">
               <small for="balance">Balance</small>
               <input type="text" disabled class="form-control form-control-sm" formControlName="balance" id="balance">
             </div>
-            <div class="form-group col-2" *ngIf="showOnClose">
+            <div class="form-group col-2" *ngIf="showOnClose && this.f.acc_type_cd.value != 2">
               <small for="curr_intt_recov">Interest</small>
               <input type="text" (change)="inttCalOnClose()"  class="form-control form-control-sm"
                 formControlName="curr_intt_recov" id="curr_intt_recov">
@@ -391,7 +391,7 @@
               <input type="text" (change)="inttCalOnClose()" class="form-control form-control-sm"
                 formControlName="curr_prn_recov" id="curr_prn_recov">
             </div>
-            <div class="form-group col-2" *ngIf="showOnClose  && this.f.acc_type_cd.value != 11">
+            <div class="form-group col-2" *ngIf="showOnClose  && (this.f.acc_type_cd.value != 11||this.f.acc_type_cd.value != 5)">
               <small for="td_def_mat_amt">Maturity Value</small>
               <input type="text" disabled class="form-control form-control-sm" formControlName="td_def_mat_amt"
                 id="td_def_mat_amt">
@@ -437,6 +437,7 @@
               </div>
               <div class="form-group col-4">
                 <small for="dep_period_y">Year</small>
+                <!-- (focusout)="processInterest()" -->
                 <input type="text" (change)="onDepositePeriodChange()" (focusout)="processInterest()"
                   class="form-control form-control-sm" formControlName="dep_period_y">
               </div>
@@ -453,7 +454,7 @@
             </div>
             <div class="form-group col-3">
               <small for="intt_trf_type">Interest Type</small>
-              <select class="form-control form-control-sm" formControlName="intt_trf_type" (change)="processInterest()">
+              <select class="form-control form-control-sm" formControlName="intt_trf_type" (change)="processInterest()" >
                 <option disabled>Choose</option>
                 <option value="M">Monthly</option>
                 <option value="Q">Quarterly</option>
@@ -498,7 +499,7 @@
             </div>
           </div>
           <!-- {{hideOnClose}} -->
-          <div class="form-row" *ngIf="!hideOnClose">
+          <div class="form-row" *ngIf="!hideOnClose ||  this.f.acc_type_cd.value ==1 ||this.f.acc_type_cd.value == 8">
             <!-- <div class="form-row"> -->
             <div class="form-group col-12">
               <small for="particulars">Particulars</small>
@@ -801,7 +802,7 @@
                 <td>{{installement.due_dt}}</td>
                 <td>{{installement.instl_dt === '01/01/0001 00:00' ? null : installement.instl_dt}}</td>
                 <td>
-                  <i *ngIf="installement.status === 'P'" class="fa fa-check text-success" aria-hidden="true"></i>
+                 <i *ngIf="installement.status === 'P'" class="fa fa-check text-success" aria-hidden="true"></i>
                   <i *ngIf="installement.status === 'U'" class="fa fa-times text-danger" aria-hidden="true"></i>
                 </td>
               </tr>
@@ -841,8 +842,11 @@
                 <td>{{installement.paid_dt === '01/01/0001 00:00' ? null : installement.paid_dt.substr(0,10)}}</td>
                 <td>{{installement.intt_amt | currency : "INR"}}</td>
                 <td>
-                  <i *ngIf="installement.paid_status === 'P'" class="fa fa-check text-success" aria-hidden="true"></i>
-                  <i *ngIf="installement.paid_status === 'B'" class="fa fa-times text-danger" aria-hidden="true"></i>
+                  <!-- {{installement.paid_status}} -->
+                  <ng-container *ngIf="installement.paid_status === 'P'" ><b style="color: darkgreen;">PAID</b></ng-container>
+                  <ng-container *ngIf="installement.paid_status === 'B'"><b style="color: rgb(145, 3, 3);">PAYABLE</b></ng-container>
+                  <ng-container *ngIf="installement.paid_status === 'U'" ><b style="color: rgb(145, 3, 3);">UN-PAID</b></ng-container>
+                  
                 </td>
               </tr>
             </tbody>
@@ -880,13 +884,13 @@
             <!-- </thead> -->
             <tbody>
               <tr *ngFor="let tran of preTransactionDtlForSelectedAcc,let i=index">
-                <td>{{tran.TransDtAsString}}</td>
+                <td>{{tran.trans_dt.substring(0, 10)}}</td>
                 <td>{{tran.remarks}}</td>
                 <td>{{tran.instrument_num}}</td>
                 <td *ngIf="tran.trans_type === 'D'">Cr</td>
                 <td *ngIf="tran.trans_type !== 'D'">Dr</td>
                 <td>{{tran.amount | INRCurrency}}</td>
-                <td>{{tran.Balance| INRCurrency}}</td>
+                <td>{{tran.balance|currency:'INR'}}</td>
               </tr>
             </tbody>
           </table>
@@ -1015,6 +1019,7 @@
     <button mat-raised-button type="button" class="btn btn-primary float-right" (click)="hideModalForClose()">OK</button>
   </div>
 </ng-template>
+
 <ng-template #preCloseDbs>
   <div class="modal-header">
     <h4 class="modal-title pull-left customHeader">Can't close a DBS account prematurely
@@ -1053,6 +1058,25 @@
       </div>
     </div>
     <!-- <button mat-raised-button type="button" class="btn btn-default" (click)="hideModalForClose();onResetClick();">Cancel</button> -->
+    <button mat-raised-button type="button" class="btn btn-primary float-right" (click)="hideModalForClose()">OK</button>
+  </div>
+</ng-template>
+<ng-template #afterMatRenewal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left customHeader">It was a mature renewal for {{diff1}} days with interest accrued :
+      &#8377;{{matInt}}
+    </h4>
+    <!-- <button mat-raised-button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button> -->
+  </div>
+  <div class="modal-body">
+    <div>
+      <div class="col-12 scroll-when-long">
+
+      </div>
+    </div>
+    <button mat-raised-button type="button" class="btn btn-default" (click)="hideModalForClose();onResetClick();">Cancel</button> &nbsp;
     <button mat-raised-button type="button" class="btn btn-primary float-right" (click)="hideModalForClose()">OK</button>
   </div>
 </ng-template>

@@ -219,7 +219,7 @@
       </button>
     </mat-menu>
     <mat-menu #dreport="matMenu">
-      <button mat-menu-item routerLink="DR_SubCashBook">
+      <button mat-menu-item routerLink="/DR_SubCashBook">
         <mat-icon>request_quote</mat-icon>
         <span>Sub Cash Book</span>
       </button>
@@ -254,6 +254,10 @@
       <button mat-menu-item [matMenuTriggerFor]="Standing_Instruction">
         <mat-icon>query_stats</mat-icon>
         <span>Standing Instruction</span>
+      </button>
+      <button mat-menu-item routerLink="DR_UpbkPrnSts">
+        <mat-icon>print</mat-icon>
+        <span>Update Passbook Print Status</span>
       </button>
     </mat-menu>
     <mat-menu #Standing_Instruction="matMenu">
