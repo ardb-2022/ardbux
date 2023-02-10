@@ -124,7 +124,7 @@
           <div class="form-row">
             <div class="form-group col-6">
               <small for="auth_sig">Name of Authorised Signatory</small>
-              <!-- <input [disabled]="i==0 || disableAll" [(ngModel)]="l.signatory_name" type="text" style="height:25px"
+              <input [disabled]="i==0 || disableAll" [(ngModel)]="l.signatory_name" type="text" style="height:25px"
                 class="form-control form-control-sm text-capitalize" id="auth_sig" (ngModelChange)="l.signatory_name"
                 (input)="suggestCustomerSignatories(i)" placeholder="Name of Authorised Signatories">
                  <div class="suggestions border p-2"
@@ -136,28 +136,29 @@
                   + ((null === cust.phone) ? '' : cust.phone) +'] '
                   + cust.cust_name}}
                 </p>
-              </div> -->
+              </div>
 
-              <input disabled [(ngModel)]="l.signatory_name" type="text" style="height:25px"
+              <!-- <input  [(ngModel)]="l.signatory_name" type="text" style="height:25px"
                 class="form-control form-control-sm text-capitalize" id="auth_sig" 
-                placeholder="Name of Authorised Signatories">
+                placeholder="Name of Authorised Signatories"> -->
 
 
+            </div>
+            <div class="text-right mb-3">
+              <button mat-raised-button type="button" style="margin-top:20px;margin-right: 10px;margin-left: 10px;" class="btn btn-primary btn-sm"
+                (click)="addSignatory()" [disabled]='disableAll'>
+                <i class="fa fa-plus-circle" aria-hidden="true"></i>
+              </button>
+    
+              <button mat-raised-button type="button"  class="btn btn-primary btn-sm"
+                (click)="removeSignatory()" [disabled]='disableAll'>
+                <i class="fa fa-minus-circle" aria-hidden="true"></i>
+              </button>
             </div>
           </div>
         </section>
 
-        <!-- <div class="text-right mb-3">
-          <button mat-raised-button type="button" style="height:22px; padding-top: 0px;" class="btn btn-primary btn-sm"
-            (click)="addSignatory()" [disabled]='disableAll'>
-            <i class="fa fa-plus-circle" aria-hidden="true"></i>
-          </button>
-
-          <button mat-raised-button type="button" style="height:22px; padding-top: 0px;" class="btn btn-primary btn-sm"
-            (click)="removeSignatory()" [disabled]='disableAll'>
-            <i class="fa fa-minus-circle" aria-hidden="true"></i>
-          </button>
-        </div> -->
+        
         <!-- -------------------------------------- -->
 
 
@@ -170,10 +171,10 @@
               <!-- <input type="text" [disabled]='disableAll' [(ngModel)]="t1.cust_cd" style="height:25px" class="form-control form-control-sm text-capitalize"
                 (change)="getSetJointHolderName(i)" id="joint_cust_code" placeholder="Cust Code"> -->
 
-                <input type="text" [disabled]='disableAll' [(ngModel)]="t1.cust_cd" style="height:25px" class="form-control form-control-sm text-capitalize"
-                (input)="suggestCustomerJointHolder(i)" id="joint_cust_code" placeholder="Cust Code">
+                <input type="text" disabled [(ngModel)]="t1.cust_cd" style="height:25px" class="form-control form-control-sm text-capitalize"
+                 id="joint_cust_code" placeholder="Cust Code">
 
-                <div  class="suggestions border p-2" *ngIf="suggestedCustomerJointHolder && i==suggestedCustomerJointHolderIdx">
+                <!-- <div  class="suggestions border p-2" *ngIf="suggestedCustomerJointHolder && i==suggestedCustomerJointHolderIdx"> -->
                   <!-- <strong> [ Customer Cd / Phone ] Name / Gurdian Name </strong>
                   <p style="margin-bottom:.2rem; cursor: pointer;" *ngFor="let cust of suggestedCustomerJointHolder"
                   (click)="setCustDtlsJointHolder(cust.cust_cd, i)">
@@ -181,6 +182,41 @@
                   + ((null === cust.phone) ? '' : cust.phone) +'] '
                   + cust.cust_name  +'/'+ cust.guardian_name}}
                 </p> -->
+                <!-- <table id="joinholder" >
+                  <tr>
+                    <th> Customer Code / Phone</th>
+                    <th> Name / Gurdian Name</th>
+                  </tr>
+                  <tbody *ngFor="let cust of suggestedCustomerJointHolder" >
+                    <tr  (click)="setCustDtlsJointHolder(cust.cust_cd,i)">
+                      <td>
+                        {{cust.cust_cd}}  {{((null === cust.phone) ? '' : ' / '+ cust.phone)}}
+                      </td>
+                      <td>
+                        {{cust.cust_name +'/'+ cust.guardian_name}}
+            
+                      </td>
+                    </tr>
+                   
+                  </tbody>
+                  
+                </table> -->
+                <!-- </div> -->
+
+            </div>
+
+            <div class="form-group col-6">
+              <small for="joint_cust_name">Account Holder</small>
+              <div class="input-group">
+              <input [disabled]='disableAll' type="text" [(ngModel)]="t1.acc_holder" style="height:25px" class="form-control form-control-sm text-capitalize"
+              (input)="enableSearch(i)" id="joint_cust_name" placeholder="Search Name/Cust Cd">
+                <div class="input-group-append">
+                <button class="btn btn-primary btn-sm" [disabled]="disablejoinholder" style="font-size:x-small" (click)="suggestCustomerJointHolder(i)"><i class="fa fa-search"></i></button>
+              </div>
+            </div>
+            <div class="suggestions border p-2" [hidden]="hidejoin"
+                *ngIf="suggestedCustomerJointHolder && i==suggestedCustomerJointHolderIdx">
+                
                 <table id="joinholder" >
                   <tr>
                     <th> Customer Code / Phone</th>
@@ -200,16 +236,9 @@
                   </tbody>
                   
                 </table>
-                </div>
-
-            </div>
-
-            <div class="form-group col-6">
-              <small for="joint_cust_name">Account Holder</small>
-              <input disabled type="text" [(ngModel)]="t1.acc_holder" style="height:25px" class="form-control form-control-sm text-capitalize"
-                id="joint_cust_name" placeholder="Account Holder">
-            </div>
-
+              </div>
+              
+          </div>
             <div class="form-group col-3">
               <small for="trans_type">Relation</small> <br>
               <select [disabled]='disableAll' style="height:25px; font-size: small; padding-top: 0px; background-color: whitesmoke;" id="trans_type"
@@ -219,16 +248,16 @@
               </select>
             </div>
 
-          </div>
+        </div>
         </section>
 
         <div class="text-right mb-3">
-          <button type="button" style="height:22px; padding-top: 0px;" class="btn btn-primary btn-sm"
+          <button type="button" style=" margin-right: 10px;" class="btn btn-primary btn-sm"
             (click)="addJointHolder()" [disabled]='disableAll'>
             <i class="fa fa-plus-circle" aria-hidden="true"></i>
           </button>
 
-          <button type="button" style="height:22px; padding-top: 0px;" class="btn btn-primary btn-sm"
+          <button type="button" class="btn btn-primary btn-sm"
             (click)="removeJointHolder()" [disabled]='disableAll'>
             <i class="fa fa-minus-circle" aria-hidden="true"></i>
           </button>
@@ -958,7 +987,7 @@
               [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }">
             </div>
 
-            <div class="form-group col-2">
+            <div class="form-group col-3">
               <small for="mis_cert_no">Cert. No. / Ledger Folio No.</small>
               <input [(ngModel)]="tm_deposit.cert_no" disabled style="height:25px" type="text"
                 class="form-control form-control-sm text-capitalize" id="mis_cert_no">
@@ -976,7 +1005,7 @@
               </select>
             </div>
 
-            <div class="form-group col-3">
+            <div class="form-group col-2">
               <small for="mis_cert_no">S/B Account No</small>
               <input [disabled]='disableAll' [(ngModel)]="tm_deposit.user_acc_num"
                 style="height:25px" type="text" class="form-control form-control-sm text-capitalize" id="mis_cert_no">

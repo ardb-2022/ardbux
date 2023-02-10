@@ -27,6 +27,7 @@ import { td_loan_sanc } from 'src/app/bank-resolver/Models/loan/td_loan_sanc';
 import { td_loan_sanc_set } from 'src/app/bank-resolver/Models/loan/td_loan_sanc_set';
 import Utils from 'src/app/_utility/utils';
 import { MessageType, mm_category, mm_customer, m_acc_master, ShowMessage, td_def_trans_trf } from 'src/app/bank-resolver/Models';
+import { CommonServiceService } from 'src/app/bank-resolver/common-service.service';
 
 
 
@@ -42,6 +43,7 @@ export class OpenLoanAccountComponent implements OnInit {
               private modalService: BsModalService,
               private router: Router,
               private msg: InAppMessageService,
+              private comserv:CommonServiceService,
 
   ) { }
 
@@ -55,7 +57,7 @@ export class OpenLoanAccountComponent implements OnInit {
   operationType = '';
   disableAll = 'N';
   // disablePersonal ='Y';
-
+  custNameForAcc:any;
   createDate: Date;
   updateDate: Date;
   newtm_deposit:any;
@@ -68,7 +70,6 @@ export class OpenLoanAccountComponent implements OnInit {
   disabledOnNull=true;
   disableLoanId:boolean=true;
   disabledJointOnNull=true;
-  customerList: mm_customer[] = [];
   accountTypeList: mm_acc_type[] = [];
   instalmentTypeList: mm_instalment_type[] = [];
   fundTypeList = [
@@ -96,6 +97,8 @@ export class OpenLoanAccountComponent implements OnInit {
   // showAlert = false;
   // alertMsg: string;
   // alertMsgType: string;
+  accName:boolean
+  CustomerName:any;
   suggestedCustomer: mm_customer[];
   suggestedJointCustomer: mm_customer[];
   suggestedCustomerJointHolderIdx: number;
@@ -144,7 +147,7 @@ export class OpenLoanAccountComponent implements OnInit {
     this.updateUser = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
     this.updateDate = this.sys.CurrentDate;
     setTimeout(() => {
-      this.getCustomerList();
+      // this.getCustomerList();
       this.getAccountTypeList();
       this.getInstalmentTypeList();
 
@@ -288,28 +291,27 @@ export class OpenLoanAccountComponent implements OnInit {
     }
   }
 
-  getCustomerList() {
+  // getCustomerList() {
 
-    const cust = new mm_customer();
-    cust.cust_cd = 0;
-    cust.brn_cd = this.branchCode;
+  //   const cust = new mm_customer();
+  //   cust.cust_cd = 0;
+  //   cust.brn_cd = this.branchCode;
 
-    // this.isLoading = true;
-    if (this.customerList === undefined || this.customerList === null || this.customerList.length === 0) {
-      this.svc.addUpdDel<any>('UCIC/GetCustomerDtls', cust).subscribe(
-        res => {
-          console.log(res)
-          this.isLoading = false;
-          this.customerList = res;
-        },
-        err => {
-          this.isLoading = false;
+  //   if (this.customerList === undefined || this.customerList === null || this.customerList.length === 0) {
+  //     this.svc.addUpdDel<any>('UCIC/GetCustomerDtls', cust).subscribe(
+  //       res => {
+  //         console.log(res)
+  //         this.isLoading = false;
+  //         this.customerList = res;
+  //       },
+  //       err => {
+  //         this.isLoading = false;
 
-        }
-      );
-    }
-    else { this.isLoading = false; }
-  }
+  //       }
+  //     );
+  //   }
+  //   else { this.isLoading = false; }
+  // }
 
 
   getAccountTypeList() {
@@ -568,7 +570,7 @@ removeSecurityDtlList()
   populateCustDtls(cust_cd: number) {
     // debugger;
     let temp_mm_cust = new mm_customer();
-    temp_mm_cust = this.customerList.filter(c => c.cust_cd.toString() === cust_cd.toString())[0];
+    temp_mm_cust = this.comserv.customerList.filter(c => c.cust_cd.toString() === cust_cd.toString())[0];
     this.tm_loan_all.cust_name = temp_mm_cust.cust_name;
   }
 
@@ -621,11 +623,11 @@ removeSecurityDtlList()
 
   populateJointCustDtls(cust_cd: number, idx: number) {
     console.log(cust_cd)
-    console.log(this.customerList)
+    console.log(this.comserv.customerList)
     
     debugger;
     let temp_mm_cust = new mm_customer();
-    temp_mm_cust = this.customerList.filter(c => c.cust_cd.toString() === cust_cd.toString())[0];
+    temp_mm_cust = this.comserv.customerList.filter(c => c.cust_cd.toString() === cust_cd.toString())[0];
     console.log(temp_mm_cust);
     debugger;
     this.td_accholder[idx].acc_holder = temp_mm_cust.cust_name;
@@ -812,7 +814,7 @@ removeSecurityDtlList()
     // this.disablePersonal = 'N';
     // this.isLoading = true;
 
-    this.getCustomerList();
+    // this.getCustomerList();
 
   }
 
@@ -824,7 +826,7 @@ removeSecurityDtlList()
     // this.disablePersonal = 'Y';
 
     // this.isLoading = true;
-    this.getCustomerList();
+    // this.getCustomerList();
   }
 
   clearData() {
@@ -1285,7 +1287,9 @@ removeSecurityDtlList()
     //   this.tm_loan_all.ovd_intt_rate === 0) {
     //   this.tm_loan_all.ovd_intt_rate = this.tm_loan_all.curr_intt_rate + 2;
     // }
-    this.tm_loan_all.ovd_intt_rate = this.tm_loan_all.curr_intt_rate + 2;
+    if(this.sys.ardbCD=='26'){this.tm_loan_all.ovd_intt_rate = this.tm_loan_all.curr_intt_rate}
+    else{this.tm_loan_all.ovd_intt_rate = this.tm_loan_all.curr_intt_rate + 2;}
+    
 
   }
 
@@ -1344,9 +1348,9 @@ removeSecurityDtlList()
       res => {
       console.log(res);
       this.newtm_deposit = new tm_deposit();
-      this.newtm_deposit=res.tmdeposit
-      console.log(this.newtm_deposit);
-
+      //  this.custNameForAcc=this.comserv.customerList.forEach(element =>element.cust_cd===Number(res.tm_deposit.cust_cd))
+      // console.log(this.comserv.customerList);
+      
         debugger;
         this.isLoading = false;
 
@@ -1356,8 +1360,9 @@ removeSecurityDtlList()
         }
         else {
           if (res.tmdeposit.acc_num !== null) {
-            
-
+              this.newtm_deposit=res.tmdeposit;
+              console.log(this.newtm_deposit);
+              this.getCustomer();
           }
           else {
             // this.showAlertMsg('WARNING', 'No record found!!!');
@@ -1375,5 +1380,29 @@ removeSecurityDtlList()
       }
 
     );
+  }
+  public getCustomer() {
+    debugger
+    this.isLoading=true;
+    const prm = new p_gen_param();
+      // prm.ad_acc_type_cd = +this.f.acc_type_cd.value;
+      prm.as_cust_name = this.newtm_deposit.cust_cd.toString();
+      this.svc.addUpdDel<any>('Deposit/GetCustDtls', prm).subscribe(
+        res => {
+          debugger
+          this.isLoading=false;
+          if (undefined !== res && null !== res && res.length > 0) {
+            this.CustomerName = res[0];
+            this.accName=false;
+            debugger
+            this.isLoading = false;
+          } 
+        },
+        err => {
+
+           this.isLoading = false; }
+      );
+   
+
   }
 }

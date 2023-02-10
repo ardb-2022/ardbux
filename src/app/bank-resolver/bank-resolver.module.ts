@@ -159,10 +159,10 @@ import { INearMaturityComponent } from './investment/report/near-maturity/near-m
 import { IDetailListComponent } from './investment/report/detail-list/detail-list.component';
 import { AllGLDetailsComponent } from './finance/report/all-gldetails/all-gldetails.component';
 import { UpdatePassbookComponent } from './deposit/report/update-passbook/update-passbook.component';
-
+import { BMLoanStatementComponent } from './loan/report/bmloan-statement/bmloan-statement.component';
 
 @NgModule({
-  declarations: [
+  declarations: [ 
     AmountToWordPipe,UserLoginStatusComponent,OpenInvestComponent,
     BankResolverComponent, LoginComponent, HeaderComponent, LandingComponent, LoadingComponent,
     UTCustomerProfileComponent, UTSelfHelpComponent, DailybookComponent, CashaccountComponent,
@@ -198,7 +198,7 @@ import { UpdatePassbookComponent } from './deposit/report/update-passbook/update
       StandingInsActiveSIListComponent, StandingInsTodaySIExecutedComponent, WeeklyReturnComponent, 
       RecovInterestComponent, BankEntryComponent, BranchEntryComponent, VewInvestmentDtlsComponent, 
       InvTransactionApprovalComponent, InvestmentTransactionsComponent, FdTransComponent, CcTransComponent, MisTransComponent,
-       RdTransComponent, CreateGLHeadComponent, DetailListFdmisConstWiseComponent, INearMaturityComponent,IDetailListComponent, AllGLDetailsComponent, UpdatePassbookComponent
+       RdTransComponent, CreateGLHeadComponent, DetailListFdmisConstWiseComponent, INearMaturityComponent,IDetailListComponent, AllGLDetailsComponent, UpdatePassbookComponent, BMLoanStatementComponent,
   ],
   imports: [
     NgxPrintModule, MatTableModule, MatFormFieldModule,  MatInputModule, MatSlideToggleModule,MatButtonModule,

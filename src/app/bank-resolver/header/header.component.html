@@ -219,7 +219,7 @@
       </button>
     </mat-menu>
     <mat-menu #dreport="matMenu">
-      <button mat-menu-item routerLink="/DR_SubCashBook">
+      <button mat-menu-item routerLink="DR_SubCashBook">
         <mat-icon>request_quote</mat-icon>
         <span>Sub Cash Book</span>
       </button>
@@ -355,7 +355,7 @@
       <mat-icon>receipt_long</mat-icon>
       <span>Loan Ledger</span>
     </button>
-    <button mat-menu-item routerLink="LR_LoanStmt">
+    <button mat-menu-item routerLink="{{dynamicLink}}">
       <mat-icon>topic</mat-icon>
       <span>Loan Statement</span>
     </button>

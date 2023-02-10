@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
 import { AccOpenDM } from './../../Models/deposit/AccOpenDM';
-import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, TemplateRef, ViewChild,Inject,LOCALE_ID } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { RestService, InAppMessageService } from 'src/app/_service';
 import {
@@ -24,14 +24,16 @@ import { debounceTime, distinctUntilChanged, map, pluck, switchMap, takeWhile } 
 import { Observable } from 'rxjs/internal/Observable';
 import { Subscription } from 'rxjs';
 import { setTime } from 'ngx-bootstrap/chronos/utils/date-setters';
+
+import { DecimalPipe } from '@angular/common';  
 @Component({
   selector: 'app-accoun-transactions',
   templateUrl: './accoun-transactions.component.html',
   styleUrls: ['./accoun-transactions.component.css'],
-  providers: [DatePipe]
+  providers: [DatePipe,DecimalPipe]
 })
 export class AccounTransactionsComponent implements OnInit {
-  constructor(private svc: RestService, private msg: InAppMessageService,
+  constructor(private _decimalPipe: DecimalPipe,private svc: RestService, private msg: InAppMessageService,
     private frmBldr: FormBuilder, public datepipe: DatePipe, private router: Router,
     private modalService: BsModalService) { }
   get f() { return this.accTransFrm.controls; }
@@ -60,7 +62,7 @@ export class AccounTransactionsComponent implements OnInit {
   resetClicked = false;
   closeInt: any;
   matInt: any;
-
+  Formatamount:any
   sys = new SystemValues();
   accTransFrm: FormGroup;
   tdDefTransFrm: FormGroup;
@@ -154,9 +156,16 @@ export class AccounTransactionsComponent implements OnInit {
   joinHold:any=[];
   joinHolddtls:any;
   forB:number;
+  
+  config = {
+    keyboard: false,
+    backdrop: true,
+    ignoreBackdropClick: true,
+    class: 'modal-lg'
+  };
   // disableIntt:boolean=false;
   openModal(template: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(template, { class: 'modal-lg' });
+    this.modalRef = this.modalService.show(template, this.config);
   }
   ngOnInit(): void {
     
@@ -956,6 +965,8 @@ getjoinholder(){
     this.svc.addUpdDel<any>('Deposit/getAccountOpeningData', acc).subscribe(
       res => {
         console.log(res);
+        this.msg.sendcustomerCodeForKyc(res.tmdeposit.cust_cd);
+
         this.joinHold=[];
         for (let i = 0; i <= res.tdaccholder.length; i++) {
           console.log(res);
@@ -2902,7 +2913,7 @@ getjoinholder(){
         this.afMat = afterMatured
 
         console.log(afterMatured)
-
+        this.sys.ardbCD=='26'?this.tdDefTransFrm.controls.opening_dt.setValue(this.datepipe.transform(this.sys.CurrentDate,"dd/MM/yyyy")):this.tdDefTransFrm.controls.opening_dt.setValue(this.accNoEnteredForTransaction.mat_dt.toString().substr(0, 10))
       }
       else{
         this.sys.ardbCD=='26'?this.tdDefTransFrm.controls.opening_dt.setValue(this.accNoEnteredForTransaction.mat_dt.toString().substr(0, 10),):this.tdDefTransFrm.controls.opening_dt.setValue(this.datepipe.transform(this.sys.CurrentDate,"dd/MM/yyyy"))
@@ -3017,7 +3028,7 @@ getjoinholder(){
 
   public inttCalOnClose(): void {
     if (this.f.acc_type_cd.value != 5 && this.f.acc_type_cd.value != 6) {
-      // debugger;
+     debugger;
       const temp_gen_param = new p_gen_param();
       temp_gen_param.ad_acc_type_cd = this.accNoEnteredForTransaction.acc_type_cd;
       temp_gen_param.ad_prn_amt = this.accNoEnteredForTransaction.prn_amt;
@@ -3045,14 +3056,14 @@ getjoinholder(){
       this.effInt = temp_gen_param.ad_intt_rt > 0 ? temp_gen_param.ad_intt_rt : 0
      //marker to change the interest on calculation 
      
-      // this.svc.addUpdDel<any>('Deposit/F_CALCTDINTT_REG', temp_gen_param).subscribe(
-      //   res => {
-      //     console.log(res)
-      //     this.closeInt = res;
-      //     console.log(res)
-      //     this.td.td_def_mat_amt.setValue(this.accNoEnteredForTransaction.prn_amt + this.closeInt);
-      //     this.td.curr_intt_recov.setValue(this.closeInt)
-      //   })
+      this.svc.addUpdDel<any>('Deposit/F_CALCTDINTT_REG', temp_gen_param).subscribe(
+        res => {
+          console.log(res)
+          this.closeInt = res;
+          console.log(res)
+          this.td.td_def_mat_amt.setValue(this.accNoEnteredForTransaction.prn_amt + this.closeInt);
+          this.td.curr_intt_recov.setValue(this.closeInt)
+        })
 
     // marker to change the interest on calculation ends here
     }
@@ -3118,6 +3129,7 @@ getjoinholder(){
         })
     }
     else {
+      debugger
       let param = new p_gen_param();
       param.as_acc_num = this.accNoEnteredForTransaction.acc_num;
       param.ad_instl_amt = this.accNoEnteredForTransaction.instl_amt;
@@ -4662,7 +4674,8 @@ getjoinholder(){
     this.tm_denominationList = [];
     this.td_deftranstrfList = [];
     this.mat_val = 0
-    this.showCloseInterest = false;  //marker
+    this.showCloseInterest = false;
+    this.TrfTotAmt = 0;  //marker
   }
 
   addDenomination() {
@@ -5044,6 +5057,20 @@ getjoinholder(){
       return;
     }
     else {
+      if(this.td.trans_mode.value == 'R' && (this.f.acc_type_cd.value == 4 || this.f.acc_type_cd.value == 5) && tdDefTransTrnsfr.amount!=Number(this.td.balance.value)){
+        debugger
+        this.HandleMessage(true, MessageType.Warning, 'You should be transfer your Balance amount only');
+        tdDefTransTrnsfr.amount=null;
+        return;
+      } 
+      
+      else if(this.td.trans_mode.value == 'C' && tdDefTransTrnsfr.amount!=Number(this.td.td_def_mat_amt.value)){//PARTHA
+        debugger
+        this.HandleMessage(true, MessageType.Warning, 'You should be transfer your Mature amount only');
+        tdDefTransTrnsfr.amount=null;
+        return;
+      }
+      this.sumTransfer();
       // this.saveBtn.nativeElement.disabled= false;
     }
   }
@@ -5056,12 +5083,13 @@ getjoinholder(){
     tdDefTransTrnsfr.amount=null;
     return;
   } 
-  // else if(this.f.oprn_cd.value == 5 && tdDefTransTrnsfr.amount!=Number(this.td.balance.value)){//PARTHA
-  //   debugger
-  //   this.HandleMessage(true, MessageType.Warning, 'You should be transfer your Balance amount only');
-  //   tdDefTransTrnsfr.amount=null;
-  //   return;
-  // }
+  
+  else if(this.td.trans_mode.value == 'C' && tdDefTransTrnsfr.amount!=Number(this.td.td_def_mat_amt.value)){//PARTHA
+    debugger
+    this.HandleMessage(true, MessageType.Warning, 'You should be transfer your Mature amount only');
+    tdDefTransTrnsfr.amount=null;
+    return;
+  }
   
     this.sumTransfer();
   }
@@ -5138,6 +5166,16 @@ getjoinholder(){
   onBackClick() {
     this.router.navigate([this.sys.BankName + '/la']);
   }
+  onAmtformat(e:any){//PARTHA
+    console.log(e.target.value);
+    
+    console.log(this.Formatamount)
+    if(e.target.value.length>1 && e.target.value.length%2==0)
+     {this.Formatamount+=','}
+     console.log(this.Formatamount)
+    
+    //  this.Formatamount=this._decimalPipe.transform(e.target.value, '1.0-2')
+  }
 
   chkAmount() {
 
@@ -5166,6 +5204,8 @@ getjoinholder(){
     }
   
   }
+
+  
 }
 export class DynamicSelect {
   key: any;

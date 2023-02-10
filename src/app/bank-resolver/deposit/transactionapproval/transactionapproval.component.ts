@@ -592,6 +592,7 @@ export class TransactionapprovalComponent implements OnInit {
     k.acc_type_cd=vm.td_def_trans_trf.acc_type_cd;
     k.acc_num=vm.td_def_trans_trf.acc_num;
     this.msg.sendCommonAcctInfo(k)
+    this.msg.sendcustomerCodeForKyc(k.cust_cd);
     this.additionalInformation = new AccOpenDM();
     this.selectedVm = vm;
     this.selectedTransactionCd = vm.td_def_trans_trf.trans_cd;
@@ -734,6 +735,7 @@ export class TransactionapprovalComponent implements OnInit {
         }
       }
     }
+    
     this.isLoading = true;
     const param = new p_gen_param();
     param.brn_cd = this.sys.BranchCode; // localStorage.getItem('__brnCd');
@@ -747,7 +749,6 @@ export class TransactionapprovalComponent implements OnInit {
     param.ardb_cd = this.sys.ardbCD
     this.svc.addUpdDel<any>('Deposit/ApproveAccountTranaction', param).subscribe(
       res => {
-        this.isLoading = false;
         if (res === 0) {
           this.selectedVm.td_def_trans_trf.approval_status = 'A';
           this.HandleMessage(true, MessageType.Sucess, this.selectedVm.tm_deposit.acc_num
@@ -755,6 +756,8 @@ export class TransactionapprovalComponent implements OnInit {
             + ' is approved successfully.');
           setTimeout(() => {
             this.onClickRefreshList();
+            this.isLoading = false;
+            
           }, 3000);
         } else {
           this.HandleMessage(true, MessageType.Error, JSON.stringify(res));

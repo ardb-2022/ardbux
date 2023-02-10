@@ -548,7 +548,7 @@
                   <tr>
                     <th scope="col">Acc#</th>
                     <th scope="col">Name</th>
-                    <th scope="col">Phone</th>
+                    <th scope="col">{{name}}</th>
                     <th scope="col">Guardian Name</th>
                     <th scope="col">Address</th>
                   </tr>
@@ -557,7 +557,7 @@
                   <tr *ngFor="let cust of suggestedCustomer" (click)="SelectCustomer(cust)">
                     <td scope="row">{{cust.loan_id}}</td>
                     <td>{{cust.cust_name}}</td>
-                    <td>{{((null === cust.phone) ? '' : cust.phone)}}</td>
+                    <td style="text-align: center;">{{((null === cust.phone) ? '' : cust.phone)}}</td>
                     <td>{{cust.guardian_name}}</td>
                     <td>{{cust.present_address}}</td>
                   </tr>
@@ -612,6 +612,15 @@
                    </span>
                   <input type="text" class="form-control form-control-sm" formControlName="cust_name" id="cust_name"
                     placeholder="Name" disabled>
+                  <span class="badge badge-warning" *ngIf="acc_lfNo!=null"> 
+                    L/F No:-{{acc_lfNo}}
+                  </span>
+                  <span class="badge badge-warning" *ngIf="acc_block!=null"> 
+                    Block:-{{acc_block}}
+                 </span>
+                 <span class="badge badge-warning" *ngIf="acc_phone!=null"> 
+                  PH No:-{{acc_phone}}
+               </span>
                 </div>
                 <div class="form-group col-6">
                   <small for="intt_recev">Intt Receivable</small>
@@ -877,7 +886,7 @@
                 <input type="text" class="form-control form-control-sm" formControlName="penal_intt_recov"
                   id="penal_intt_recov" (focusout)="checkValidity(6)">
               </div>
-              <div class="form-group col-12" *ngIf="isRecovery && showRemarks">
+              <div class="form-group col-12" *ngIf="isRecovery ">
                 <small for="remarks_on_manual">Remarks</small>
                 <textarea type="text" cols="2" class="form-control form-control-sm" formControlName="remarks_on_manual"
                   id="remarks_on_manual"></textarea>

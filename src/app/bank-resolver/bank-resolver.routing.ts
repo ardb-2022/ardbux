@@ -116,6 +116,7 @@ import { IDetailListComponent } from './investment/report/detail-list/detail-lis
 import { INearMaturityComponent } from './investment/report/near-maturity/near-maturity.component';
 import { AllGLDetailsComponent } from './finance/report/all-gldetails/all-gldetails.component';
 import { UpdatePassbookComponent } from './deposit/report/update-passbook/update-passbook.component';
+import { BMLoanStatementComponent } from './loan/report/bmloan-statement/bmloan-statement.component';
 const routes: Routes = [
   { path: 'Admin', component: AdminPanelComponent },
   { path: 'admin', component: AdminPanelComponent },
@@ -193,6 +194,7 @@ const routes: Routes = [
       { path: 'DR_NearMatReport', component: NearMaturityReportComponent, canActivate: [AuthGuard] },
       { path: 'DR_OpenCloseReg', component: OpenClosingRegisterComponent, canActivate: [AuthGuard] },
       { path: 'DR_ACCSTMTDDS', component: DdsAccStmtComponent, canActivate: [AuthGuard] },
+      { path: 'LR_BMLoanStmt', component: BMLoanStatementComponent, canActivate: [AuthGuard] },
       { path: 'LR_LoanStmt', component: LoanStatementComponent, canActivate: [AuthGuard] },
       { path: 'LR_DtlLst', component: DetailListComponent, canActivate: [AuthGuard] },
       { path: 'LR_DflLst', component: DefaulterListComponent, canActivate: [AuthGuard] },

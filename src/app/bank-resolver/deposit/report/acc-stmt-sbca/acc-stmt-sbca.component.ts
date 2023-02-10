@@ -27,7 +27,7 @@ export class AccStmtSBCAComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource = new MatTableDataSource()
-  displayedColumns: string[] = ['trans_dt','instrument_num', 'particulars','dr_amt','cr_amt'];
+  displayedColumns: string[] = ['trans_dt', 'particulars','dr_amt','cr_amt','balance'];
 
   modalRef: BsModalRef;
   isOpenFromDp = false;

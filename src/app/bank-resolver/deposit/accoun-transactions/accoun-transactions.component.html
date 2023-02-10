@@ -369,7 +369,12 @@
               <input [disabled]="this.f.acc_type_cd.value == 11" type="text" class="form-control form-control-sm" formControlName="amount" id="amount"
                 (focusout)="onAmtChngDuringRenewal()">
             </div>
-            <!-- {{showBalance}} -->
+            <!-- <div class="form-group col-3">
+              <small for="amount">Amt TEST<span class="text-danger">*</span> </small>
+              <input type="text" class="form-control form-control-sm" [(ngModel)]="Formatamount" formControlName="amount" id="amount"
+              (keyup)="onAmtformat($event)">
+            </div>  -->
+            <!-- {{showBalance}}
             <div class="form-group col-2" *ngIf="showBalance && this.f.acc_type_cd.value != 11">
               <small for="balance">Balance</small>
               <input type="text" disabled class="form-control form-control-sm" formControlName="balance" id="balance">
@@ -401,7 +406,7 @@
               <input type="text" class="form-control form-control-sm" formControlName="penal_rt" id="penal_rt">
             </div>
             <div class="form-group col-2 mksml" *ngIf="showOnClose && !isMat && effInt">
-              <small for="eff_intt">Effective Intt. Rate</small>
+              <small for="eff_intt">Eff.Intt. Rate</small>
               <input type="text" formControlName="eff_int" #effint (change)="inttCalOnClose()" [value]="effInt"
                 class="form-control form-control-sm mksml" id="eff_intt">
             </div>

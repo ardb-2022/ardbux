@@ -224,10 +224,7 @@
                 <input type="text"  disabled [(ngModel)]="t1.cust_cd" style="height:25px"
                 class="form-control form-control-sm text-capitalize" 
                 id="joint_cust_code" placeholder="Cust Code">
-
-              
-
-            </div>
+              </div>
 
             <div class="form-group col-6">
               <small for="joint_cust_name">Account Holder</small>
@@ -1792,10 +1789,15 @@
               </div>
               <div class="form-group col-3">
                 <small for="credit_ac_name">Acc Holder Name</small>
+                <div class="input-group">
                 <input type="text" class="form-control form-control-sm "
                   [disabled]="undefined !== l.gl_acc_code && l.gl_acc_code.length > 0" [(ngModel)]="l.cust_name"
-                  type="text" placeholder="Enter Acc# / Customer Name / Phone number" (input)="suggestCustomerCr(i)"
+                  type="text" placeholder="Enter Acc# / Customer Name / Phone number" 
                   name="x-field-1" autocomplete="new-field-1">
+                  <div class="input-group-append">
+                    <button  class="btn btn-primary btn-sm"  (click)="suggestCustomerCr(i)"><i class="fa fa-search"></i></button>
+                  </div>
+                </div>
                 <div class="suggestions"
                   *ngIf="suggestedCustomerCr && suggestedCustomerCr.length > 0 && indxsuggestedCustomerCr==i ">
                   <table class="table table-hover table-bordered table-sm w-auto small" id="customers1">

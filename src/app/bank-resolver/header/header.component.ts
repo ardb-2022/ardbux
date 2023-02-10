@@ -60,6 +60,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
   modalRef?:BsModalRef
   sdoRet:any=[]
   sdo:any
+  dynamicLink:any;
   // menuConfigs=[
   //       {
   //       menu_name: 'UCIC',
@@ -584,6 +585,12 @@ export class HeaderComponent implements OnInit,OnDestroy {
     
   // ]
   ngOnInit(): void {
+    if(this.sys.ardbCD=='26'){
+      this.dynamicLink='LR_BMLoanStmt'
+    }
+    else{
+      this.dynamicLink='LR_LoanStmt'
+      }
   this.getLogdUser()
    console.log(localStorage.getItem('__currentDate')==localStorage.getItem('__prevDate'))
    

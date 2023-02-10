@@ -283,11 +283,13 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('__dpstBnsRt', this.systemParam.find(x => x.param_cd === '805').param_value);
           localStorage.setItem('__pnlIntRtFrAccPreMatClos', this.systemParam.find(x => x.param_cd === '802').param_value);
           localStorage.setItem('__curFinyr', this.systemParam.find(x => x.param_cd === '207').param_value);
-          localStorage.setItem('__neftPayDrAcc', this.systemParam.find(x => x.param_cd === '820').param_value);
+          // localStorage.setItem('__neftPayDrAcc', this.systemParam.find(x => x.param_cd === '820').param_value);
           localStorage.setItem('__sbInttCalTilDt', this.systemParam.find(x => x.param_cd === '799').param_value);
           localStorage.setItem('__lastDt', this.systemParam.find(x => x.param_cd === '210').param_value);
           localStorage.setItem('__PrevStatus', this.systemParam.find(x => x.param_cd === '215').param_value);
-        
+          
+          ;
+          this.sys.ardbCD=='26'?localStorage.setItem('__neftPayDrAcc','401101000283' ):localStorage.setItem('__neftPayDrAcc','0' )
         //  console.log(this.dtData.sys_date)
         //  console.log(localStorage.getItem('__currentDate'))
           this.msg.sendisLoggedInShowHeader(true);

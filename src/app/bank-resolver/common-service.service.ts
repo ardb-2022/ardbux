@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, from } from 'rxjs';
 import { first, tap } from 'rxjs/operators';
 import { ConfigurationService } from '../_service/configuration.service';
-import { BankConfig, BankConfiguration } from '../bank-resolver/Models';
+import { BankConfig, BankConfiguration, mm_customer } from '../bank-resolver/Models';
 import { Router } from '@angular/router';
 import {
   MatSnackBar,
@@ -20,6 +20,7 @@ import {
 export class CommonServiceService {
   static bankconfigurationList: BankConfig[] = [];
   static serverIp = '36.255.3.143';
+  customerList: mm_customer[] = [];
   
   diff:any;
   date_msg="FROM-DATE should be lower than TO-DATE"
@@ -102,5 +103,6 @@ export class CommonServiceService {
   public addUpdDelMaster<T>(ofwhat: string, data: T): Observable<T> {
     return this.http.post<T>((this.getMasterUrl() + ofwhat), data);
   }
+ 
 
 }

@@ -58,7 +58,8 @@ export class AccOpeningViewComponent implements OnInit {
     backdrop: true, // enable backdrop shaded color
     ignoreBackdropClick: true // disable backdrop click to close the modal
   };
-
+  disablejoinholder:boolean=true;
+  hidejoin:boolean=false;
 
   showNoResult=false
   createUser = '';
@@ -88,6 +89,8 @@ export class AccOpeningViewComponent implements OnInit {
   // Declaration of model for each Div
   masterModel = new AccOpenDM();
   tm_deposit = new tm_deposit();
+  masterModel2 = new AccOpenDM();//PARTHA
+
   td_nomineeList: td_nominee[] = [];
   td_signatoryList: td_signatory[] = [];
   td_accholderList: td_accholder[] = [];
@@ -337,6 +340,7 @@ export class AccOpeningViewComponent implements OnInit {
 
     this.tm_deposit = this.masterModel.tmdeposit;
     this.td_signatoryList = this.masterModel.tdsignatory;
+    console.log(this.td_signatoryList);
 
     this.setCustDtls(this.tm_deposit.cust_cd);
     this.setAccountType(this.tm_deposit.acc_type_cd);
@@ -513,7 +517,9 @@ export class AccOpeningViewComponent implements OnInit {
         //debugger;
         this.isLoading = false;
         this.masterModel = res;
-
+        this.masterModel2=res//PARTHA
+        console.log(this.masterModel2);
+        
         if (this.masterModel === undefined || this.masterModel === null) {
           // this.showAlertMsg('WARNING', 'No record found!!');
           this.HandleMessage(true, MessageType.Warning, 'No record found!!');
@@ -790,13 +796,17 @@ export class AccOpeningViewComponent implements OnInit {
   
 
   setRelationship(relation: string, idx: number) {
-
-    relation = relation.trim();
-    this.td_accholderList[idx].cust_cd = Number(this.td_accholderList[idx].cust_cd);
-    this.td_accholderList[idx].relation = relation;
-    this.td_accholderList[idx].relationId = this.relationship.filter(x => x.val.toLocaleLowerCase() === relation.toLocaleLowerCase())[0].id;
-    this.td_signatoryList[idx+1].cust_cd = Number(this.td_accholderList[idx].cust_cd); 
-  }
+    if(relation==null||relation==undefined||relation==''){
+      return;
+    }
+    else{
+      relation = relation.trim();
+      this.td_accholderList[idx].cust_cd = Number(this.td_accholderList[idx].cust_cd);
+      this.td_accholderList[idx].relation = relation;
+      this.td_accholderList[idx].relationId = this.relationship.filter(x => x.val.toLocaleLowerCase() === relation.toLocaleLowerCase())[0].id;
+      // this.td_signatoryList[idx+1].cust_cd = Number(this.td_accholderList[idx].cust_cd); 
+      }
+    }
 
   setIntTfrType(tfr_type: string) {
     if (tfr_type == null) {
@@ -916,21 +926,51 @@ export class AccOpeningViewComponent implements OnInit {
   }
 
 
+  // public suggestCustomerJointHolder(idx: number): void {
+  //   this.suggestedCustomerJointHolderIdx = idx;
+
+  //   if (this.td_accholderList[idx].acc_holder.toString().length > 2) {
+  //     const prm = new p_gen_param();
+  //     prm.as_cust_name = this.td_accholderList[idx].acc_holder.toString().toLowerCase();
+  //     this.isLoading = true;
+  //     this.svc.addUpdDel<any>('Deposit/GetCustDtls', prm).subscribe(
+  //       res => {
+
+  //         this.isLoading = false;
+  //         if (undefined !== res && null !== res && res.length > 0) {
+  //           this.suggestedCustomerJointHolder = res
+  //           this.hidejoin=false;
+  //         } else {
+  //           this.suggestedCustomerJointHolder = null;
+  //           this.hidejoin=true;
+  //         }
+  //       },
+  //       err => { this.isLoading = false; }
+  //     );
+  //   } else {
+  //     this.suggestedCustomerJointHolder = null;
+  //   }
+  // }
   public suggestCustomerJointHolder(idx: number): void {
     this.suggestedCustomerJointHolderIdx = idx;
 
-    if (this.td_accholderList[idx].cust_cd.toString().length > 2) {
+    if (this.td_accholderList[idx].acc_holder.toString().length > 2) {
       const prm = new p_gen_param();
-      prm.as_cust_name = this.td_accholderList[idx].cust_cd.toString().toLowerCase();
-      this.isLoading = true;
+      prm.as_cust_name = this.td_accholderList[idx].acc_holder.toString().toLowerCase();
+      prm.ardb_cd=this.sys.ardbCD
+       this.isLoading = true;
       this.svc.addUpdDel<any>('Deposit/GetCustDtls', prm).subscribe(
         res => {
-
+          console.log(res);
+          
+          //debugger;
           this.isLoading = false;
           if (undefined !== res && null !== res && res.length > 0) {
             this.suggestedCustomerJointHolder = res
+            this.hidejoin=false;
           } else {
             this.suggestedCustomerJointHolder = null;
+            this.hidejoin=true;
           }
         },
         err => { this.isLoading = false; }
@@ -941,28 +981,59 @@ export class AccOpeningViewComponent implements OnInit {
   }
 
 
-  public setCustDtlsJointHolder(cust_cd: number, idx: number): void {
+  // public setCustDtlsJointHolder(cust_cd: number, idx: number): void {
      
     
+  //   this.td_accholderList[idx].cust_cd = cust_cd;
+  //   this.getSetJointHolderName(idx);
+  //   this.hidejoin=true;
+  //   this.suggestedCustomerJointHolder = null;
+  //   if(this._len != this.td_accholderList.length){
+  //   this.addSignatory();this._len =  this.td_accholderList.length}
+  //   this.td_signatoryList[idx+1].signatory_name =  this.td_accholderList[idx].acc_holder;
+  //   this.td_signatoryList[idx+1].ardb_cd = this.sys.ardbCD;
+  //   this.td_signatoryList[idx+1].brn_cd = this.branchCode;
+  //   this.td_signatoryList[idx+1].cust_cd = cust_cd;
+  //   console.log({"Cust_id":cust_cd,"Index":idx,"Name":this.td_signatoryList});
+  // }
+  public setCustDtlsJointHolder(cust_cd: number, idx: number): void {
+    console.log({"Cust_id":cust_cd,"Index":idx,"Name":this.td_accholderList[idx].acc_holder});
     this.td_accholderList[idx].cust_cd = cust_cd;
     this.getSetJointHolderName(idx);
-    this.suggestedCustomerJointHolder = null;
-    if(this._len != this.td_accholderList.length){
-    this.addSignatory();this._len =  this.td_accholderList.length}
+    this.hidejoin=true;
+    this.suggestedCustomerJointHolder = [];
+
+    this.addSignatory();
     this.td_signatoryList[idx+1].signatory_name =  this.td_accholderList[idx].acc_holder;
     this.td_signatoryList[idx+1].ardb_cd = this.sys.ardbCD;
     this.td_signatoryList[idx+1].brn_cd = this.branchCode;
     this.td_signatoryList[idx+1].cust_cd = cust_cd;
-    console.log({"Cust_id":cust_cd,"Index":idx,"Name":this.td_signatoryList});
+    console.log({"jointHolderLength": this.td_accholderList.length, "signatoryLength":this.td_signatoryList});
+    
   }
 
+  enableSearch(idx: number){
+    if(this.td_accholderList[idx].acc_holder.toString().length>2){
+      this.disablejoinholder=false
 
+    }
+    else if(this.td_accholderList[idx].acc_holder.toString().length==0){
+      this.suggestedCustomerJointHolder = null;
+      this.disablejoinholder=true
+      this.hidejoin=true;
+    }
+    else{
+      this.disablejoinholder=true
+
+    }
+  }
   getSetJointHolderName(idx: number) {
     let temp_mm_cust = new mm_customer();
 
     if (this.suggestedCustomerJointHolder !== undefined
       && this.suggestedCustomerJointHolder !== null
       && this.suggestedCustomerJointHolder.length > 0) {
+        this.hidejoin=false;
       temp_mm_cust = this.suggestedCustomerJointHolder
       .filter(c => c.cust_cd.toString() === this.td_accholderList[idx].cust_cd.toString())[0];
     }
@@ -970,12 +1041,14 @@ export class AccOpeningViewComponent implements OnInit {
     if (!temp_mm_cust) {
       this.td_accholderList[idx].cust_cd = null;
       this.td_accholderList[idx].acc_holder = null;
+      this.hidejoin=true;
       // this.showAlertMsg('ERROR', 'Joint Holder Customer Not Found');
       this.HandleMessage(true, MessageType.Error, 'Joint Holder Customer Not Found');
       return;
     }
 
     if (temp_mm_cust.cust_cd === this.tm_deposit.cust_cd) {
+      this.hidejoin=true;
       this.td_accholderList[idx].cust_cd = null;
       this.td_accholderList[idx].acc_holder = null;
       // this.showAlertMsg('ERROR', 'First Holder and Joint Holder can not be same');
@@ -985,6 +1058,7 @@ export class AccOpeningViewComponent implements OnInit {
 
     this.td_accholderList[idx].cust_cd = Number(this.td_accholderList[idx].cust_cd);
     this.td_accholderList[idx].acc_holder = temp_mm_cust.cust_name;
+    this.hidejoin=true;
   }
 
 
@@ -1019,6 +1093,29 @@ export class AccOpeningViewComponent implements OnInit {
             temp_mm_cust = this.suggestedCustomer.filter(c => c.cust_cd.toString() === cust_cd.toString())[0];
             this.suggestedCustomer = null;
             this.populateCustDtls(temp_mm_cust);
+            console.log(temp_mm_cust);
+            console.log(this.masterModel);
+            // for(let i=0;i=this.td_signatoryList.length;){
+            //   debugger
+            //   this.td_signatoryList.pop()
+            // }
+            // console.log(this.masterModel2.tdsignatory.length);
+            // console.log(this.masterModel2.tdsignatory);
+            // console.log(this.masterModel2);
+            
+            // for(let i=0;i<this.masterModel2.tdsignatory.length;i++){
+            //   debugger
+            //   if (this.masterModel2.tdsignatory[i].signatory_name.toLocaleLowerCase() == temp_mm_cust.cust_name.toLocaleLowerCase())
+            // {
+            //    this.td_signatoryList.push()
+            // }
+            // else{
+            //    this.td_signatoryList.push()
+            // }
+            // }
+            // console.log(this.td_signatoryList);
+            
+            
           }
           this.isLoading = false;
         },
@@ -1086,6 +1183,8 @@ export class AccOpeningViewComponent implements OnInit {
   addSignatory() {
     const temp_td_signatory = new td_signatory();
     this.td_signatoryList.push(temp_td_signatory);
+    console.log(this.td_signatoryList);
+    
   }
 
   removeSignatory() {
@@ -1100,15 +1199,15 @@ export class AccOpeningViewComponent implements OnInit {
   }
 
   removeJointHolder() {
-    // if (this.td_accholderList.length > 1) {
-    //   this.td_accholderList.pop();
-    // }
     if (this.td_accholderList.length > 1) {
-      console.log({"td_signatory":  this.td_signatoryList});
-      this.removeSignatoryByIndex(this.td_accholderList[(this.td_accholderList.length-1)].cust_cd);
       this.td_accholderList.pop();
-      this._len = this.td_accholderList.length
     }
+    // if (this.td_accholderList.length > 1) {
+    //   console.log({"td_signatory":  this.td_signatoryList});
+    //   this.removeSignatoryByIndex(this.td_accholderList[(this.td_accholderList.length-1)].cust_cd);
+    //   this.td_accholderList.pop();
+    //   this._len = this.td_accholderList.length
+    // }
   }
   removeSignatoryByIndex(cust_cd:Number){
     console.log({"cust_cd": cust_cd,"td_signatory":  this.td_signatoryList,"joint_holder":this.td_accholderList});
@@ -1120,6 +1219,7 @@ export class AccOpeningViewComponent implements OnInit {
   }
 
   checkSignatory(name: string, idx: number) {
+    debugger
     const x = this.td_accholderList.filter(c => c.acc_holder.toString() === name.toString())[0].cust_cd;
 
 
