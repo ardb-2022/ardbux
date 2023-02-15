@@ -25,8 +25,8 @@ export class DetailDDSComponent implements OnInit,AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource = new MatTableDataSource()
-  displayedColumns: string[] = ['acc_num','cust_name', 'opening_dt', 'mat_dt','prN_AMT'];
-
+  // displayedColumns: string[] = ['acc_num','cust_name', 'opening_dt', 'mat_dt','prN_AMT'];
+  displayedColumns: string[] = ['constitution'];
   modalRef: BsModalRef;
   isOpenFromDp = false;
   isOpenToDp = false;
@@ -175,20 +175,10 @@ public onAccountTypeChange(): void {
         } 
         this.pageLength=this.reportData.length
         this.dataSource.data=this.reportData
-        this.itemsPerPage=this.reportData.length % 50 <=0 ? this.reportData.length: this.reportData.length % 50
         this.isLoading=false
-        if(this.reportData.length<50){
-          this.pagedItems=this.reportData
-        }
-        this.pageChange=document.getElementById('chngPage');
-        this.pageChange.click()
-        this.setPage(2);
-        this.setPage(1)
         this.modalRef.hide();
         this.reportData.forEach(e=>{
-          this.opdrSum+=e.balance;
-          this.prnamt+=e.prN_AMT;
-          this.prvamt+=e.proV_INTT_AMT
+          this.prvamt+=e.tot_prn
         })
         this.lastAccCD=this.reportData[this.reportData.length-1].acc_num
       }),err => {

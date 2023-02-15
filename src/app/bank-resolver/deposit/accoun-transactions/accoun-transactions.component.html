@@ -370,9 +370,9 @@
                 (focusout)="onAmtChngDuringRenewal()">
             </div>
             <!-- <div class="form-group col-3">
-              <small for="amount">Amt TEST<span class="text-danger">*</span> </small>
-              <input type="text" class="form-control form-control-sm" [(ngModel)]="Formatamount" formControlName="amount" id="amount"
-              (keyup)="onAmtformat($event)">
+              <small for="amount0">Amt TEST<span class="text-danger">*</span> </small>
+              <input type="text" class="form-control form-control-sm"  formControlName="amount0" id="amount0"
+             >
             </div>  -->
             <!-- {{showBalance}}
             <div class="form-group col-2" *ngIf="showBalance && this.f.acc_type_cd.value != 11">
@@ -384,13 +384,13 @@
               <input type="text" (change)="inttCalOnClose()"  class="form-control form-control-sm"
                 formControlName="curr_intt_recov" id="curr_intt_recov">
             </div>
-            <div class="form-group col-2" *ngIf="showOnClose && this.f.acc_type_cd.value != 11">
+            
+             marker -->
+             <div class="form-group col-2" *ngIf="showOnClose && this.f.acc_type_cd.value != 11">
               <small for="ovd_intt_recov">Default Penalty</small>
               <input type="text" (change)="inttCalOnClose()" class="form-control form-control-sm"
                 formControlName="ovd_intt_recov" id="ovd_intt_recov">
             </div>
-            <!-- marker -->
-
             <div class="form-group col-2" *ngIf="showOnClose  && this.f.acc_type_cd.value != 11">
               <small for="curr_prn_recov">Bonus</small>
               <input type="text" (change)="inttCalOnClose()" class="form-control form-control-sm"
@@ -730,7 +730,7 @@
                   <input type="text" disabled [(ngModel)]="TrfTotAmt"
                     class="form-control form-control-sm text-capitalize" id="trf_total_amt">
                 </div>
-                <button type="button" style="height:22px; padding-top: 0px;" class="btn btn-primary btn-sm mr-1 mt-4"
+                <button type="button" style=" padding-top: 0px;" class="btn btn-primary btn-sm mr-1 mt-4"
                   (click)="addTransfer()" title="Add transfer">
                   <i class="fa fa-plus-circle" aria-hidden="true"></i>
                 </button>

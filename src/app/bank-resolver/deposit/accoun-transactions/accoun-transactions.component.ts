@@ -9,7 +9,7 @@ import {
   td_def_trans_trf, td_intt_dtls, td_rd_installment, tm_deposit, tm_depositall
 } from '../../Models';
 import { tm_denomination_trans } from '../../Models/deposit/tm_denomination_trans';
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { tm_transfer } from '../../Models/deposit/tm_transfer';
 import { tt_denomination } from '../../Models/deposit/tt_denomination';
 import { mm_constitution } from '../../Models/deposit/mm_constitution';
@@ -24,17 +24,18 @@ import { debounceTime, distinctUntilChanged, map, pluck, switchMap, takeWhile } 
 import { Observable } from 'rxjs/internal/Observable';
 import { Subscription } from 'rxjs';
 import { setTime } from 'ngx-bootstrap/chronos/utils/date-setters';
+import { INRCurrencyPipe } from'src/app/_utility/filter';
 
-import { DecimalPipe } from '@angular/common';  
+ 
 @Component({
   selector: 'app-accoun-transactions',
   templateUrl: './accoun-transactions.component.html',
   styleUrls: ['./accoun-transactions.component.css'],
-  providers: [DatePipe,DecimalPipe]
+  providers: [DatePipe, INRCurrencyPipe]
 })
 export class AccounTransactionsComponent implements OnInit {
-  constructor(private _decimalPipe: DecimalPipe,private svc: RestService, private msg: InAppMessageService,
-    private frmBldr: FormBuilder, public datepipe: DatePipe, private router: Router,
+  constructor(private INRCurrency: INRCurrencyPipe,private svc: RestService, private msg: InAppMessageService,
+    private frmBldr: FormBuilder, public datepipe: DatePipe, private router: Router,private  dcml:DecimalPipe,
     private modalService: BsModalService) { }
   get f() { return this.accTransFrm.controls; }
   get td() { return this.tdDefTransFrm.controls; }
@@ -156,7 +157,7 @@ export class AccounTransactionsComponent implements OnInit {
   joinHold:any=[];
   joinHolddtls:any;
   forB:number;
-  
+  args:any
   config = {
     keyboard: false,
     backdrop: true,
@@ -196,6 +197,7 @@ export class AccounTransactionsComponent implements OnInit {
       trans_mode: [''],
       trans_mode1: [''],
       amount: [''],
+      amount0: [''],
       instrument_dt: [''],
       instrument_num: [''],
       paid_to: [''],
@@ -259,6 +261,64 @@ export class AccounTransactionsComponent implements OnInit {
     });
     this.resetTransfer();
     this.resetAccDtlsFrmFormData();
+
+    this.tdDefTransFrm.valueChanges.subscribe(e=>{
+      if(e.amount0){
+
+        // e.amount = +e.amount;
+        // e.amount = e.amount.toFixed(2);
+        // console.log(e.amount);
+        // const result = e.amount.toString().split('.');
+        // let lastThree = result[0].substring(result[0].length - 3);
+        // const otherNumbers = result[0].substring(0, result[0].length - 3);
+        // if (otherNumbers !== '' && otherNumbers !== '-') {
+        //   lastThree = ',' + lastThree;
+        // }
+        // let output = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + lastThree;
+        //  console.log(result);
+        // if (result.length > 1) {
+        //   output += '.' + result[1];
+        // }
+
+
+
+        const _num = e.amount0.toString().split(".");
+        let lastThree = _num[0].replace(/,/g, '').substring(_num[0].replace(/,/g, '').length - 3);
+        const otherNumbers = _num[0].replace(/,/g, '').substring(0, _num[0].replace(/,/g, '').length - 3);
+        if (otherNumbers !== '' && otherNumbers !== '-') {
+            lastThree = ',' + lastThree;
+          }
+        console.log(_num);
+        console.log(lastThree);
+        console.log(otherNumbers);
+        console.log(_num[0].length);
+        // console.log();
+
+        
+         if(_num[0].replace(/,/g, '').length>1 ){
+          _num[0] = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ',')+lastThree;
+        }
+        
+        // _num[0] = this.dcml.transform(_num[0].replace(/\B(?=(\d{2})+(?!\d))/g, ','));
+
+        // _num[0] = this.dcml.transform(_num[0].replace(/,/g, ''));
+
+        let final_num=_num.join('.')
+        console.log(final_num);
+        console.log(_num);
+        
+        this.tdDefTransFrm.patchValue({
+           amount0:final_num,
+           amount:parseFloat(e.amount0.replace(/,/g, ''))
+        // amount:output
+        },{emitEvent:false})
+        console.log(parseFloat(e.amount0.replace(/,/g, '')))
+        console.log(this.tdDefTransFrm.controls.amount0.value);
+
+      }
+      
+    })
+
   }
 
   // private getAllCustomer(): void {
@@ -2926,9 +2986,9 @@ getjoinholder(){
         
         
         const temp_gen_param = new p_gen_param();
-            temp_gen_param.ad_acc_type_cd=accTypCode;
+            temp_gen_param.ad_acc_type_cd=2;//for simple interest calculation like FD //PARTHA
             temp_gen_param.ad_prn_amt=this.accNoEnteredForTransaction.prn_amt+this.accNoEnteredForTransaction.intt_amt;
-            temp_gen_param.ai_period=this.diff1-1;//for subtract current date
+            temp_gen_param.ai_period=this.diff1-1;//for subtract current date //PARTHA
             temp_gen_param.ad_intt_rt = 4
 
             this.svc.addUpdDel<any>('Deposit/F_CALCTDINTT_REG', temp_gen_param).subscribe(
@@ -4021,7 +4081,7 @@ getjoinholder(){
           // console.log(toReturn.amount)
           // toReturn.amount = this.tdDefTransFrm.controls.balance.value>0?;
         } else {
-          toReturn.amount = +this.td.amount.value;
+          toReturn.amount = +this.td.amount.value.trim();
         }
       }
 

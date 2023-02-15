@@ -22,7 +22,7 @@
             <option disabled>Choose</option>
             <option [value]="2">2 - Fixed Deposit</option>
             <option [value]="3">3 - DBS</option>
-            <option [value]="4">4 - Term Deposit</option>
+            <option [value]="4">4 - Cash Certificate</option>
             <option [value]="5">5 - MIS</option>
           </select>
         </div>
@@ -109,7 +109,8 @@ style="background-color: #78c2ad21; min-height: 20vh;">
                       </tr>
                       <tr mat-cell>
                         <td mat-cell colspan="2"><b>Total Account of ({{row.constype.constitution_desc}}) No.{{row.constype.tot_cons_count}}</b> </td>
-                        <td mat-cell colspan="4" style="text-align:center!important;"><b>Total {{row.constype.constitution_desc}} Balance</b> </td>
+                        <td mat-cell colspan="3" style="text-align:center!important;"><b>Total {{row.constype.constitution_desc}} Balance</b> </td>
+                        <td mat-cell  style="text-align:center!important;"><b>{{row.constype.tot_cons_intt_balance|currency:'INR'}}</b> </td>
                         <td mat-cell style="text-align:right!important;"><b>{{row.constype.tot_cons_balance|currency:'INR'}}</b></td>
                         
                        

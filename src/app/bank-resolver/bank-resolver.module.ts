@@ -5,7 +5,7 @@ import {MatTableModule} from '@angular/material/table';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatDialogModule} from '@angular/material/dialog';
 import { BankResolverRouting } from './bank-resolver.routing';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HeaderComponent } from './header/header.component';
 import { LandingComponent } from './landing/landing.component';
@@ -49,6 +49,7 @@ import { LoanTransactionApprovalComponent } from './loan/transaction/loan-transa
 import { LoanTransactionDetailsComponent } from './Common/loan-transaction-details/loan-transaction-details.component';
 import { LoanAccwiseinttcalcComponent } from './loan/transaction/loan-accwiseinttcalc/loan-accwiseinttcalc.component';
 import { INRCurrencyPipe } from '../_utility/filter';
+import { CurrencyPipe } from '@angular/common';
 import { LienAccLockUnlockComponent } from './deposit/acc-lock-unlock/lien-acc-lock-unlock/lien-acc-lock-unlock.component';
 import { NetworthStatementComponent } from './UCIC/Report/networth-statement/networth-statement.component';
 import { SubCashBookComponent } from './deposit/report/sub-cash-book/sub-cash-book.component';
@@ -212,7 +213,7 @@ import { BMLoanStatementComponent } from './loan/report/bmloan-statement/bmloan-
   providers: [
     PaginationConfig,
     CommonServiceService,
-    
+    CurrencyPipe,DecimalPipe,
     // { provide: ErrorHandler, useClass: GlobalErrorHandler },
     // { provide: HTTP_INTERCEPTORS, useClass: ServerErrorInterceptor, multi: true  }
   ],

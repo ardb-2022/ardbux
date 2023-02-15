@@ -557,21 +557,26 @@ removeSecurityDtlList()
   }
 
   public setCustDtls(cust_cd: number): void {
-    this.suggestedCustomer = null;
+    // this.suggestedCustomer = null;
     this.showNoName=false;
     this.kycEnable = false;
     this.tm_loan_all.party_cd = cust_cd;
     this.msg.sendcustomerCodeForKyc(cust_cd);
     this.kycEnable = true;
+    debugger
     this.populateCustDtls(cust_cd);
 
   }
 
   populateCustDtls(cust_cd: number) {
-    // debugger;
+     debugger;
     let temp_mm_cust = new mm_customer();
-    temp_mm_cust = this.comserv.customerList.filter(c => c.cust_cd.toString() === cust_cd.toString())[0];
+    temp_mm_cust = this.suggestedCustomer.filter(c => c.cust_cd.toString() === cust_cd.toString())[0];
     this.tm_loan_all.cust_name = temp_mm_cust.cust_name;
+    this.suggestedCustomer = [];
+    this.suggestedCustomer = null;
+
+    debugger
   }
 
   noJointOnNull(idx: number){
@@ -623,11 +628,11 @@ removeSecurityDtlList()
 
   populateJointCustDtls(cust_cd: number, idx: number) {
     console.log(cust_cd)
-    console.log(this.comserv.customerList)
+    console.log(this.suggestedJointCustomer)
     
     debugger;
     let temp_mm_cust = new mm_customer();
-    temp_mm_cust = this.comserv.customerList.filter(c => c.cust_cd.toString() === cust_cd.toString())[0];
+    temp_mm_cust = this.suggestedJointCustomer.filter(c => c.cust_cd.toString() === cust_cd.toString())[0];
     console.log(temp_mm_cust);
     debugger;
     this.td_accholder[idx].acc_holder = temp_mm_cust.cust_name;

@@ -73,47 +73,47 @@
     </div>
 
   <div class="col-xs-12 col-sm-12 shadow-lg mb-4 bg-white p-3 mkScroll">
-    
-   <mat-form-field appearance="outline">
-    <mat-label>Search Detail List</mat-label>
-    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
-  </mat-form-field>
+   
   
   <div class="mat-elevation-z8" id="trial111">
     
     <table mat-table [dataSource]="dataSource" matSort >
-      
+      <ng-container matColumnDef="constitution">
+        <td *matCellDef="let row"style="padding-top:20px;">  <b style="font-size:16px; padding-left:6%;"><u>Agent Name:- {{row.agentname}}</u></b>
+          <table > 
+            <ng-container>
+              <tr mat-cell style="height: 40px;">
+                <th mat-header-cell style="text-align:center!important;">A/c No.</th>
+                <th mat-header-cell style="text-align:left!important;">Customer Name</th> 
+                <th mat-header-cell style="text-align:center!important;">Opening DT</th>
+                <th mat-header-cell style="text-align:center!important;">Maturity Dt</th>
+                <th mat-header-cell style="text-align:right!important;">Prn Amt</th>
+              </tr>
+                    <tbody>
+                        <tr *ngFor="let dds of row.ttsbcadtllist">
+                          <td mat-cell style="text-align:center!important;">{{dds.acc_num}} </td>
+                          <td mat-cell style="text-align:left!important;">{{dds.cust_name}}</td>
+                          <td mat-cell style="text-align:center!important;">{{dds.opening_dt .substr(0,10)}} </td>
+                          <td mat-cell style="text-align:center!important;">{{dds.mat_dt.substr(0,10)}} </td>
+                          <td mat-cell style="text-align:right!important;">{{dds.prN_AMT |currency:'INR'}} </td>
+                          
+                        </tr>
+                        <tr mat-cell>
+                          <td mat-cell colspan="2" style="padding-left:6%!important;"><b>Total Account Count.{{row.tot_count}}</b> </td>
+                          <td mat-cell colspan="2" style="text-align:right!important;"><b>Total Balance</b> </td>
+                          
+                          <td mat-cell style="text-align:right!important;"><b>{{row.tot_prn|currency:'INR'}}</b></td>
+                        </tr>
+                        
+                    </tbody>
+            </ng-container>
+          </table>
+      </td>
+      </ng-container>
+
+
+
     
-      <!-- Fruit Column -->
-      <ng-container matColumnDef="acc_num" >
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> A/c No. </th>
-        <td mat-cell *matCellDef="let row"> {{row.acc_num}}</td>
-      </ng-container>
-      <!-- Fruit Column -->
-      <ng-container matColumnDef="cust_name" >
-        <th mat-header-cell *matHeaderCellDef mat-sort-header >Name</th>
-        <td mat-cell *matCellDef="let row" >{{row.cust_name}}</td>
-      </ng-container>
-      
-      <!-- Progress Column -->
-      <ng-container matColumnDef="opening_dt" >
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Opening DT</th>
-        <td mat-cell *matCellDef="let row" > {{row.opening_dt.substr(0,10)}} </td>
-      </ng-container>
-      <!-- ID Column -->
-      <ng-container matColumnDef="mat_dt" >
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Maturity Dt</th>
-        <td mat-cell *matCellDef="let row">{{row.mat_dt.substr(0,10) }}</td>
-      </ng-container>
-  
-        <!-- ID Column -->
-      <ng-container matColumnDef="prN_AMT" >
-        <th mat-header-cell *matHeaderCellDef mat-sort-header >Prn Amt</th>
-        <td mat-cell *matCellDef="let row">{{row.prN_AMT| currency:"INR" }}</td>
-      </ng-container>
-  
-  
-      <!-- Header column -->
       <ng-container matColumnDef="Header">
         <th mat-header-cell *matHeaderCellDef colspan="12">
           <div class="justify-content-center" style="text-align:center">
@@ -173,9 +173,9 @@
     <table>
       <tr>
         <td style="text-align: right;"><b>Overall Total Prn Amt</b></td>
-        <td style="width:400px;" ></td>
+        <td style="width:18%;text-align: right;" ><b>{{prvamt|currency:'INR'}}</b></td>
         
-        <td style="text-align: right;"><b>{{opdrSum | currency:"INR"}}</b></td>
+        <td style="text-align: right;"></td>
         
         </tr>
     </table>
@@ -185,151 +185,6 @@
   </div>
   <mat-paginator showFirstLastButtons [pageSizeOptions]="[20, 30, 50, 100,pageLength]" aria-label="Select page of users"></mat-paginator>
   
-   
-
-  <!-- <pagination style="float:right;"
-  [totalItems]="reportData?.length"  
-  [itemsPerPage]="itemsPerPage"
-  [boundaryLinks]="true"
-  [directionLinks]="true"
-  [maxSize]="5"
-  [(ngModel)]="currentPage"
-  name="currentPage"
-  (pageChanged)="pageChanged($event)"
-  (pageBoundsCorrection)="pageChanged($event)"></pagination> -->
-   <table class="p-3" id="trial" hidden>
-    <tr *ngIf="reportData">
-      <!-- <th></th> -->
-      <!-- <th>Constitution</th> -->
-      <th >A/c No.</th>
-      <!-- <th >Cust Code</th> -->
-      <th >Name</th>
-      <th style="text-align:center">Opening DT</th>
-      <th style="text-align:center">Maturity Dt</th>
-      <!-- <th style="text-align:right">Instl Amt</th>
-      <th style="text-align:right">Intt Rt</th> -->
-      <th style="text-align:right"> Prn Amt</th>
-      <!-- <th style="text-align:right"> Prov Intt Amt</th> -->
-      
-     </tr>
-     <tbody *ngFor="let i of pagedItems; let itr=index;" >
-      <tr>
-        <!-- <td>{{i.constitution_cd}}</td> -->
-        <td>{{i.acc_num}}</td>
-        <!-- <td >{{i.cust_cd}}</td> -->
-        <td >{{i.cust_name}}</td>
-        <td style="text-align:center">{{i.opening_dt.substr(0,10)}}</td>
-        <td style="text-align:center">{{i.mat_dt.substr(0,10)}}</td>
-        <!-- <td  style="text-align:right">{{i.instL_AMT| number : '1.2-2'}}</td>
-        <td  style="text-align:right">{{i.intT_RT| number : '1.2-2'}}</td> -->
-        <td  style="text-align:right">{{i.prN_AMT| number : '1.2-2'}}</td>
-        <!-- <td  style="text-align:right">{{i.proV_INTT_AMT| number : '1.2-2'}}</td> -->
-        
-        <!-- <td style="text-align:right">{{i.balance | number : '1.2-2'}}</td> -->
-      </tr>
-      <tr *ngIf="i.acc_num==lastAccCD">
-        <td colspan="4" style="text-align:right;font-weight: 700;">Total</td>
-        <td  style="text-align:right;font-weight: 700;">{{prnamt| number : '1.2-2'}}</td>
-        <!-- <td  style="text-align:right;font-weight: 700;">{{prvamt| number : '1.2-2'}}</td> -->
-  
-      </tr>
-      <!-- <tr style="font-weight:700;" *ngIf="lastAccCD == i.acc_cd">
-     
-        <td colspan="2">Grand total: </td>
-        <td style="text-align: right;">{{opdrSum | number : '1.2-2'}}</td>
-        <td style="text-align: right;">{{opcrSum | number : '1.2-2'}}</td>
-        <td style="text-align: right;">{{crSum | number : '1.2-2'}}</td>
-        <td style="text-align: right;">{{drSum | number : '1.2-2'}}</td>
-        <td style="text-align: right;">{{clsdrSum | number : '1.2-2'}}</td>
-        <td style="text-align: right;">{{clscrSum | number : '1.2-2'}}</td>
-      </tr>
-    -->
-    
-    </tbody>
-    <tfoot>
-      <tr>
-        <td colspan="8"> <small>
-          This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions, Kolkata
-         </small> </td>
-      </tr></tfoot>
-   </table>
-   <div hidden id="hiddenTab">
-    <div class="justify-content-center" style="text-align:center">
-      <h4>{{ardbName}} {{branchName}}</h4>
-  
-      <h4>Run Date & Time : {{today}} </h4> <br>
-      <h4> <u> Detail List DDS as on {{fromdate.toDateString()| date: 'dd/MM/yyyy'}} </u></h4>
-      <h4> <u> Account Type: {{accType}} </u></h4>
-      <h4> <u> Constitution: {{constType}} </u></h4>
-  
-   </div>
-   <table class="p-3" id="trial1" class="mkSmall">
-    <thead>
-      <tr *ngIf="reportData">
-        <!-- <th></th> -->
-        <!-- <th>Constitution</th> -->
-        <th >A/c No.</th>
-        <!-- <th >Cust Code</th> -->
-        <th >Name</th>
-        <th style="text-align:center">Opening DT</th>
-        <th style="text-align:center">Maturity Dt</th>
-        <!-- <th style="text-align:right">Instl Amt</th>
-        <th style="text-align:right">Intt Rt</th> -->
-        <th style="text-align:right"> Prn Amt</th>
-        <!-- <th style="text-align:right"> Prov Intt Amt</th> -->
-        
-       </tr>
-    </thead>
-   
-    <tbody *ngFor="let i of reportData; let itr=index;" >
-      <tr>
-        <!-- <td>{{i.constitution_cd}}</td> -->
-        <td>{{i.acc_num}}</td>
-        <!-- <td >{{i.cust_cd}}</td> -->
-        <td >{{i.cust_name}}</td>
-        <td style="text-align:center">{{i.opening_dt.substr(0,10)}}</td>
-        <td style="text-align:center">{{i.mat_dt.substr(0,10)}}</td>
-        <!-- <td  style="text-align:right">{{i.instL_AMT| number : '1.2-2'}}</td>
-        <td  style="text-align:right">{{i.intT_RT| number : '1.2-2'}}</td> -->
-        <td  style="text-align:right">{{i.prN_AMT| number : '1.2-2'}}</td>
-        <!-- <td  style="text-align:right">{{i.proV_INTT_AMT| number : '1.2-2'}}</td> -->
-        
-        <!-- <td style="text-align:right">{{i.balance | number : '1.2-2'}}</td> -->
-      </tr>
-      <tr *ngIf="i.acc_num==lastAccCD">
-        <td colspan="4" style="text-align:right;font-weight: 700;">Total</td>
-        <td  style="text-align:right;font-weight: 700;">{{prnamt| number : '1.2-2'}}</td>
-        <!-- <td  style="text-align:right;font-weight: 700;">{{prvamt| number : '1.2-2'}}</td> -->
-  
-      </tr>
-      <!-- <tr *ngIf="i.cust_cd==lastcustcd">
-       <td colspan="8" style="text-align:right;font-weight:800">Total</td>
-       <td colspan="8" style="text-align:right;font-weight:800">{{opdrSum | number : '1.2-2'}}</td>
-      </tr> -->
-   
-   </tbody>
-   <tfoot>
-    <tr>
-     <td>&nbsp;</td>
-     <td>&nbsp;</td>
-    </tr>
-    <tr>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-     </tr>
-   
-  </tfoot>
-  
-  </table>
-  <footer>
-    <small>
-      This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions, Kolkata
-     </small> 
-   </footer>
-  <!-- <br><br><br><br>
-  <small>This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions, Kolkata</small> -->
-   </div>
-  <button mat-raised-button hidden id="chngPage" (click)="setPage(1)"></button>
   </div>
   
   <div  class="col-xs-12 col-sm-12 col-md-8 col-lg-8 shadow-sm mb-4 bg-white p-3">

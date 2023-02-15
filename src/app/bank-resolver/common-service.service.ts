@@ -103,6 +103,26 @@ export class CommonServiceService {
   public addUpdDelMaster<T>(ofwhat: string, data: T): Observable<T> {
     return this.http.post<T>((this.getMasterUrl() + ofwhat), data);
   }
- 
+  // getCustomerList() {
+
+  //   const cust = new mm_customer();
+  //   cust.cust_cd = 0;
+  //   cust.brn_cd = this.branchCode;
+
+  //   if (this.customerList === undefined || this.customerList === null || this.customerList.length === 0) {
+  //     this.svc.addUpdDel<any>('UCIC/GetCustomerDtls', cust).subscribe(
+  //       res => {
+  //         console.log(res)
+  //         this.isLoading = false;
+  //         this.customerList = res;
+  //       },
+  //       err => {
+  //         this.isLoading = false;
+
+  //       }
+  //     );
+  //   }
+  //   else { this.isLoading = false; }
+  // }
 
 }

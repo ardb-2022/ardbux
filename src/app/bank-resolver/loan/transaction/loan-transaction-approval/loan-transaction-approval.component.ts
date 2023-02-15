@@ -581,7 +581,6 @@ export class LoanTransactionApprovalComponent implements OnInit {
     trnParam.ardb_cd = this.sys.ardbCD
     this.svc.addUpdDel<any>('Loan/ApproveLoanAccountTranaction', trnParam).subscribe(
       res => {
-        this.isLoading = false;
         if (res === 0) {
           this.selectedVm.td_def_trans_trf.approval_status = 'A';
           this.HandleMessage(true, MessageType.Sucess,
@@ -591,6 +590,8 @@ export class LoanTransactionApprovalComponent implements OnInit {
             this.transactionDtlsFrm.reset();
             this.showDenominationDtl = false;
             if (this.tranferDetails.length > 0) { this.tranferDetails = null; }
+            this.isLoading = false;
+
           }, 3000);
         } else {
           this.HandleMessage(true, MessageType.Error, JSON.stringify(res));
