@@ -127,6 +127,10 @@
               <input type="text" class="form-control form-control-sm" formControlName="acc_close_dt" id="acc_close_dt"
                 disabled>
             </div>
+            <div class="form-group col-6" >
+              <small for="Category">Category</small>
+              <input type="text" class="form-control form-control-sm" formControlName="category" disabled>
+            </div>
             <div class="form-group col-6">
               <small for="constitution_cd">Constitution</small>
               <input type="text" class="form-control form-control-sm" formControlName="constitution_cd"
@@ -161,6 +165,7 @@
             </div>
           </div>
           <div class="form-row">
+            
             <div class="form-group col-6" *ngIf="showInterestDtls || showRdInstalment">
               <small for="intt_rt">Interest Rate</small>
               <input type="text" class="form-control form-control-sm" formControlName="intt_rt" disabled>
@@ -504,7 +509,7 @@
             </div>
           </div>
           <!-- {{hideOnClose}} -->
-          <div class="form-row" *ngIf="!hideOnClose ||  this.f.acc_type_cd.value ==1 ||this.f.acc_type_cd.value == 8">
+          <div class="form-row" *ngIf="!hideOnClose ||  this.f.acc_type_cd.value ==1 ||this.f.acc_type_cd.value == 8||this.f.acc_type_cd.value == 7||this.f.acc_type_cd.value == 9">
             <!-- <div class="form-row"> -->
             <div class="form-group col-12">
               <small for="particulars">Particulars</small>

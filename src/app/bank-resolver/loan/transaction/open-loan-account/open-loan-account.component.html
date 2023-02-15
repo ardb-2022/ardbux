@@ -407,7 +407,17 @@
                 </div>
               </div>
             </section>
-
+            <div class="text-right mb-3">
+              <button type="button" style=" max-height: 27px;" class="btn btn-primary btn-sm mr-2"
+                (click)="addJointHolder()">
+                <i class="fa fa-plus-circle" aria-hidden="true"></i>
+              </button>
+    
+              <button  type="button" style="max-height: 27px;" class="btn btn-primary btn-sm"
+                (click)="removeJointHolder()">
+                <i class="fa fa-minus-circle" aria-hidden="true"></i>
+              </button>
+            </div>
             <!-- <div class="text-right mb-3">
             <button mat-raised-button type="button" style="height:22px; padding-top: 0px;"  class="btn btn-primary btn-sm" (click)="addJointHolder()">
               <i class="fa fa-plus-circle" aria-hidden="true"></i>
@@ -432,9 +442,10 @@
               <select
                 style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
                 [disabled]="disableAll == 'Y' || ls.approval_status == 'A'" [(ngModel)]="ls.sector_cd"
-                (change)="setSectorType($event.target.value , i)" id="sec_type" class="form-control form-control-sm">
-                <option [value]="ls.sector_cd" disabled selected>{{ls.sector_cd}}-{{ls.sector_desc}}</option>
-                <option *ngFor="let t of sectorList" [value]="t.sector_cd">{{t.sector_cd}}-{{t.sector_desc}}</option>
+                (change)="setSectorType($event.target.value , i)" id="sec_type" 
+                class="form-control form-control-sm">
+                <!-- <option [value]="ls.sector_cd" disabled selected>{{ls.sector_desc}}</option> -->
+                <option *ngFor="let t of sectorList" [value]="t.sector_cd">{{t.sector_desc}}</option>
               </select>
             </div>
 
@@ -444,9 +455,9 @@
                 style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
                 [disabled]="disableAll == 'Y' || ls.approval_status == 'A'" [(ngModel)]="ls.activity_cd"
                 (change)="setActivityType($event.target.value , i)" id="act_type" class="form-control form-control-sm">
-                <option [value]="ls.activity_cd" disabled selected>{{ls.activity_cd}}-{{ls.activity_desc}}</option>
+                <!-- <option [value]="ls.activity_cd" disabled selected>{{ls.activity_desc}}</option> -->
                 <option *ngFor="let t of selectedActivityList" [value]="t.activity_cd">
-                  {{t.activity_cd}}-{{t.activity_desc}}</option>
+                  {{t.activity_desc}}</option>
               </select>
             </div>
 
@@ -542,7 +553,7 @@
         
         <div class="text-right mb-3">
           <button  type="button" style="height:22px; padding-top: 0px;"  [disabled]="disableAll == 'Y' "
-           class="btn btn-primary btn-sm " (click)="createSecurityDtlList()">
+           class="btn btn-primary btn-sm" (click)="createSecurityDtlList()">
             <i class="fa fa-plus-circle" aria-hidden="true"></i>
            </button>
 

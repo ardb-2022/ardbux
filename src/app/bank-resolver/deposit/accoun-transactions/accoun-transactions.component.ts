@@ -4,7 +4,7 @@ import { Component, ElementRef, OnInit, TemplateRef, ViewChild,Inject,LOCALE_ID 
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { RestService, InAppMessageService } from 'src/app/_service';
 import {
-  MessageType, mm_acc_type, mm_customer,
+  MessageType, mm_acc_type, mm_category, mm_customer,
   mm_operation, m_acc_master, ShowMessage, SystemValues,
   td_def_trans_trf, td_intt_dtls, td_rd_installment, tm_deposit, tm_depositall
 } from '../../Models';
@@ -158,6 +158,8 @@ export class AccounTransactionsComponent implements OnInit {
   joinHolddtls:any;
   forB:number;
   args:any
+  categories:any;
+  allcategories:any;
   config = {
     keyboard: false,
     backdrop: true,
@@ -337,7 +339,20 @@ export class AccounTransactionsComponent implements OnInit {
   //     );
   //   }
   // }
-
+  private getCategoryMaster(): void {
+    this.svc.addUpdDel<mm_category[]>('Mst/GetCategoryMaster', null).subscribe(
+      res => {
+        this.allcategories = res;
+        this.allcategories=this.allcategories.filter(e=>e.catg_cd==this.categories)
+        console.log(this.allcategories);
+        this.categories=this.allcategories[0].catg_desc
+        console.log(this.categories);
+        debugger
+        this.accDtlsFrm.controls.category.setValue(this.categories);
+      },
+      err => { }
+    );
+  }
   public suggestCustomer(): Observable<mm_customer> {
     this.resetClicked = false;
     this.isLoading = true;
@@ -570,6 +585,7 @@ debugger
       acc_num: [''],
       renew_id: [''],
       cust_cd: [''],
+      category:[''],
       intt_trf_type: [''],
       constitution_cd: [''],
       constitution_cd_desc: [''],
@@ -963,6 +979,8 @@ getjoinholder(){
 
     this.svc.addUpdDel<any>('Deposit/GetDepositWithChild', acc).subscribe(
       res => {
+        this.categories=res[0].catg_cd
+        this.getCategoryMaster();
         debugger
         console.log(res, this.rdInstallamentOption)
         this.resBrnCd = res;
