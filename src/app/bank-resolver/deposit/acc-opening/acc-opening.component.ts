@@ -632,8 +632,7 @@ export class AccOpeningComponent implements OnInit {
 
   saveData() {
     
-   
-    console.log(this.tm_deposit);
+   console.log(this.tm_deposit);
     
     if (this.operationType !== 'I' && this.operationType !== 'U') {
       // this.showAlertMsg('WARNING', 'Record not Created or Updated to Save');
@@ -789,7 +788,9 @@ export class AccOpeningComponent implements OnInit {
     this.td_deftrans.trans_type = 'D';
     this.td_deftrans.trans_mode = 'O';
     this.td_deftrans.tr_acc_num = 'N';
-
+    // if (this.tm_deposit.acc_type_cd === 11) {
+    //   this.masterModel.tmdeposit.prn_amt=this.tm_deposit.prn_amt;
+    // }
     if (this.tm_deposit.acc_type_cd === 6) {
       this.td_deftrans.amount = this.tm_deposit.instl_amt;
     }
@@ -1119,13 +1120,17 @@ export class AccOpeningComponent implements OnInit {
 
     if (this.operationType === 'I' && this.tm_deposit.acc_type_cd === 11) {
       this.tm_deposit.month = this.savingsDepoSpclPeriod;
-      this.tm_deposit.prn_amt=0
+      this.tm_deposit.prn_amt=null //PARTHA
       // this.tm_deposit.mat_dt = this.DateFormatting(this.openDate); // this.tm_deposit.opening_dt;
       this.tm_deposit.mat_dt = this.sys.CurrentDate;
 
 
       this.tm_deposit.mat_dt.setMonth(this.tm_deposit.mat_dt.getMonth() + this.tm_deposit.month);
     }
+    if (this.operationType === 'I' && this.tm_deposit.acc_type_cd === 11 && this.sys.ardbCD=='26') {//PARTHA
+      this.tm_deposit.intt_rt=1.5;
+    }
+
 
     if (this.operationType === 'I' &&
       (this.tm_deposit.acc_type_cd === 2 ||

@@ -117,7 +117,7 @@ export class DetailListFDMISComponent implements OnInit,AfterViewInit {
   }
   sendData(){
     console.log(this.accType)
-    this.accType=this.reportcriteria.controls.acc_type_cd.value == '2'?'Fixed Deposit':(this.reportcriteria.controls.acc_type_cd.value == '3'?'DBS':this.reportcriteria.controls.acc_type_cd.value == '4'?'Term Deposit':'MIS')
+    this.accType=this.reportcriteria.controls.acc_type_cd.value == '2'?'Fixed Deposit':(this.reportcriteria.controls.acc_type_cd.value == '3'?'DBS':this.reportcriteria.controls.acc_type_cd.value == '4'?'Cash Certificate':'MIS')
    }
   getConstitutionList() {
     if (undefined !== this.constitutionList &&

@@ -76,9 +76,9 @@
    
   
   <div class="mat-elevation-z8" id="trial111">
-    
-    <table mat-table [dataSource]="dataSource" matSort >
+    <table mat-table [dataSource]="dataSource" >
       <ng-container matColumnDef="constitution">
+        <th mat-header-cell *matHeaderCellDef ></th>
         <td *matCellDef="let row"style="padding-top:20px;">  <b style="font-size:16px; padding-left:6%;"><u>Agent Name:- {{row.agentname}}</u></b>
           <table > 
             <ng-container>
@@ -115,7 +115,7 @@
 
     
       <ng-container matColumnDef="Header">
-        <th mat-header-cell *matHeaderCellDef colspan="12">
+        <th mat-header-cell *matHeaderCellDef >
           <div class="justify-content-center" style="text-align:center">
             <br><h4>{{ardbName}} ({{branchName}})</h4>
             

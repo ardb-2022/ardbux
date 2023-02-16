@@ -137,7 +137,7 @@ export class DetailListSBCAComponent implements OnInit,AfterViewInit {
   }
  sendData(){
   console.log(this.accType)
-  this.accType=this.reportcriteria.controls.acc_type_cd.value == '1'?'Savings Deposit':(this.reportcriteria.controls.acc_type_cd.value == '8'?'Flexi Account':'Share')
+  this.accType=this.reportcriteria.controls.acc_type_cd.value == '1'?'Savings Deposit':(this.reportcriteria.controls.acc_type_cd.value == '8'?'Flexi Account':(this.reportcriteria.controls.acc_type_cd.value == '9'?'Loan Suspense':'Share'))
   // this.constType=this.constitutionList.filter(e=>e.constitution_cd==this.reportcriteria.controls.constitution_cd.value)[0].constitution_desc
   // console.log(this.reportcriteria.controls.constitution_cd.value+' '+this.reportcriteria.controls.acc_type_cd.value)
  }

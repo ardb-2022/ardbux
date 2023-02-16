@@ -83,7 +83,7 @@ style="background-color: #78c2ad21; min-height: 20vh;">
   
     <!-- Fruit Column -->
     <ng-container matColumnDef="constitution"  >
-      <th mat-header-cell *matHeaderCellDef>Constitution Details</th>
+      <th mat-header-cell *matHeaderCellDef ></th>
       <td *matCellDef="let row"style="padding-top:20px;">  <b style="font-size:16px; padding-left:10px;">Constitution:- {{row.constype.constitution_desc}}</b>
         <table > 
           <ng-container>
@@ -171,7 +171,7 @@ style="background-color: #78c2ad21; min-height: 20vh;">
           <br><h4>{{ardbName}} ({{branchName}})</h4>
           
           <h4>Run Date & Time : {{today}} </h4>
-          <h4> <u>  Detail List FD / MIS / TD as on {{fromdate.toDateString()| date: 'dd/MM/yyyy'}}</u></h4>
+          <h4> <u>  Detail List FD / MIS / CC as on {{fromdate.toDateString()| date: 'dd/MM/yyyy'}}</u></h4>
           <h4> <u> Account Type: {{accType}} </u></h4>
         </div>
       </th>

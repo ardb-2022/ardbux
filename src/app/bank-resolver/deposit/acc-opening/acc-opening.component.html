@@ -1499,15 +1499,15 @@
           <div class="form-row">
             <div class="form-group col-4">
               <small for="rec_dep_intt_rate">Interest Rate</small>
-              <input [ngModel]="tm_deposit.intt_rt" [disabled]='disableAll' style="height:25px; text-align-last: right;"
+              <input [(ngModel)]="tm_deposit.intt_rt" [disabled]='disableAll' style="height:25px; text-align-last: right;"
                 type="number" min="0" value='.00' (focusout)="processInterest()" step='any'
                 class="form-control form-control-sm text-capitalize" id="rec_dep_intt_rate">
             </div>
 
             <div class="form-group col-4">
               <small for="rec_dep_principal">Principal</small>
-              <input [ngModel]="tm_deposit.prn_amt" [disabled]='disableAll' style="height:25px; text-align-last: right;"
-                type="text" disabled class="form-control form-control-sm text-capitalize"
+              <input [(ngModel)]="tm_deposit.prn_amt" [disabled]='disableAll' style="height:25px; text-align-last: right;"
+                type="text"  class="form-control form-control-sm text-capitalize"
                 id="rec_dep_principal">
             </div>
 

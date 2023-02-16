@@ -23,7 +23,7 @@ import { CommonServiceService } from 'src/app/bank-resolver/common-service.servi
 export class DetailDDSComponent implements OnInit,AfterViewInit {
   @ViewChild('content', { static: true }) content: TemplateRef<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  // @ViewChild(MatSort) sort: MatSort;
   dataSource = new MatTableDataSource()
   // displayedColumns: string[] = ['acc_num','cust_name', 'opening_dt', 'mat_dt','prN_AMT'];
   displayedColumns: string[] = ['constitution'];
@@ -152,8 +152,6 @@ public onAccountTypeChange(): void {
       return false;
     }
     else {
-      this.opdrSum=0;
-      this.prnamt=0;
       this.prvamt=0;
       this.reportData.length=0;
       this.pagedItems.length=0;
@@ -180,7 +178,6 @@ public onAccountTypeChange(): void {
         this.reportData.forEach(e=>{
           this.prvamt+=e.tot_prn
         })
-        this.lastAccCD=this.reportData[this.reportData.length-1].acc_num
       }),err => {
         this.isLoading = false;
         this.comSer.SnackBar_Error(); 
@@ -227,31 +224,10 @@ public onAccountTypeChange(): void {
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    // this.dataSource.sort = this.sort;
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-    this.getTotal()
-  }
-  getTotal(){
-    this.opdrSum=0;
-      this.prnamt=0;
-      this.prvamt=0;
-    this.filteredArray=this.dataSource.filteredData
-    for(let i=0;i<this.filteredArray.length;i++){
-      this.opdrSum+=this.filteredArray[i].balance;
-      this.prnamt+=this.filteredArray[i].prN_AMT;
-      this.prvamt+=this.filteredArray[i].proV_INTT_AMT
-      // console.log(this.filteredArray[i].dr_amt)
-    
-      // this.crSum+=this.filteredArray[i].cr_amount
-    }
-  }
+ 
+  
   
 }
