@@ -384,14 +384,15 @@
               <small for="balance">Balance</small>
               <input type="text" disabled class="form-control form-control-sm" formControlName="balance" id="balance">
             </div>
-            <div class="form-group col-2" *ngIf="showOnClose && this.f.acc_type_cd.value != 2">
+            
+            
+             marker -->
+             <div class="form-group col-2" *ngIf="showOnClose && this.f.acc_type_cd.value == 11">
               <small for="curr_intt_recov">Interest</small>
               <input type="text" (change)="inttCalOnClose()"  class="form-control form-control-sm"
                 formControlName="curr_intt_recov" id="curr_intt_recov">
             </div>
-            
-             marker -->
-             <div class="form-group col-2" *ngIf="showOnClose && this.f.acc_type_cd.value != 11">
+             <div class="form-group col-2" *ngIf="showOnClose ">
               <small for="ovd_intt_recov">Default Penalty</small>
               <input type="text" (change)="inttCalOnClose()" class="form-control form-control-sm"
                 formControlName="ovd_intt_recov" id="ovd_intt_recov">

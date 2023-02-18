@@ -20,7 +20,7 @@ import { MasterMenuConfigComponent } from './master-menu-config/master-menu-conf
 import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { AdminLoginComponent } from './admin-login/admin-login.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { DatePipe } from '@angular/common'
+import { DatePipe } from '@angular/common';
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,7 +32,7 @@ import { DatePipe } from '@angular/common'
     TestComponent,
     ConfigNewBankComponent,
     MasterMenuConfigComponent,
-    AdminLoginComponent,
+    AdminLoginComponent
   ],
   imports: [
     MatSnackBarModule,

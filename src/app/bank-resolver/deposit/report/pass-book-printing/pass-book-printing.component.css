@@ -102,15 +102,12 @@ thead {
   display: table-header-group;
 }
 
-tfoot {
-  display: table-footer-group; border: 0px white;
-}
+
 .mkSmall{
-  font-size: x-small;
+  font-size: large;
+  width: 100%;
 }
-footer{
-   position: fixed; bottom: 0;text-align: center; 
-}
+
 
 /* @page 
 {
@@ -121,8 +118,6 @@ footer{
   mso-header: header;
   mso-footer: footer;
 }*/
-/* @page table{width:95%; margin: 10px;} */
-@page footer{
-margin-top:100cm; 
-flex: 0 0 50px;
-} 
+@media print {
+ html,table{font-size: large;} 
+}

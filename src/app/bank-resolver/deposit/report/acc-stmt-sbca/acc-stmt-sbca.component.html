@@ -22,7 +22,8 @@
             <option disabled>Choose</option>
             <option [value]="1">1 - Saving Deposit</option>
             <option [value]="7">7 - Share</option>
-            <option [value]="8">8 - Current</option>
+            <option [value]="8">8 - Current</option> 
+            <option [value]="9">9 - Loan Suspense</option>
           </select>
         </div>
         <div class="col-9">
@@ -78,7 +79,7 @@
             formControlName="fromDate" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }"
             [isOpen]="isOpenFromDp">
           <div class="input-group-append">
-            <button mat-raised-button class="btn btn-outline-secondary" type="button" disabled (click)="isOpenFromDp = !isOpenFromDp">
+            <button mat-raised-button class="btn btn-outline-secondary" type="button"  (click)="isOpenFromDp = !isOpenFromDp">
               <i class="fa fa-calendar" aria-hidden="true"></i>
             </button>
           </div>
@@ -91,7 +92,7 @@
             formControlName="toDate" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }"
             [isOpen]="isOpenToDp">
           <div class="input-group-append">
-            <button mat-raised-button class="btn btn-outline-secondary" type="button" disabled (click)="isOpenToDp = !isOpenToDp">
+            <button mat-raised-button class="btn btn-outline-secondary" type="button" (click)="isOpenToDp = !isOpenToDp">
               <i class="fa fa-calendar" aria-hidden="true"></i>
             </button>
           </div>
@@ -189,9 +190,9 @@ style="background-color: #78c2ad21; min-height: 20vh;">
       <th mat-header-cell *matHeaderCellDef colspan="12">
         <div class="justify-content-center" style="text-align:center">
           <br><h4>{{ardbName}} ({{branchName}})</h4>
-          
+          <div style="max-width: 40%;margin-left: 30%;" *ngIf="ardbCD=='26'"><h4>{{ardbAddress}}</h4> </div>
           <h4>Run Date & Time : {{today}} </h4>
-          <h4> <u>  Account Statement SB/CA from {{reportcriteria.controls.fromDate.value?.toDateString() | date: 'dd/MM/yyyy'}} to {{ this.reportcriteria.controls.toDate.value?.toDateString() | date: 'dd/MM/yyyy'}}</u></h4>
+          <h4> <u>  Account Statement Flexi Deposit from {{reportcriteria.controls.fromDate.value?.toDateString() | date: 'dd/MM/yyyy'}} to {{ this.reportcriteria.controls.toDate.value?.toDateString() | date: 'dd/MM/yyyy'}}</u></h4>
           <h5> A/C No. {{cAcc}} / Name: {{cName}}/Present Address:  {{cAddress}}</h5>
         </div>
       </th>
@@ -246,7 +247,7 @@ style="background-color: #78c2ad21; min-height: 20vh;">
     This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions Pvt.Ltd. Kolkata
    </small></footer>
 </div>
-<mat-paginator showFirstLastButtons [pageSizeOptions]="[5, 10, 25, 100, this.reportData.length]" aria-label="Select page of users"></mat-paginator>
+<mat-paginator showFirstLastButtons [pageSizeOptions]="[20, 30, 50, 100, this.reportData.length]" aria-label="Select page of users"></mat-paginator>
 
  
 

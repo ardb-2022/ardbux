@@ -12,34 +12,20 @@ table{
 }
 /* th,td{
     padding: 1%;
+    
 }  */
-
-
-.mat-row {
-  height: auto;
-}
-
-.mat-cell {
-  padding: 8px 8px 8px 0;
-}
 .mat-header-cell{
-  padding: 5px;
-  font-size: 14px;
-  color: black;
-}
-table{
-  width:100%;
-}
-
-.mat-column-Total2{
+  font-size:18px;
   text-align: center;
-  padding-right: 70px;
 }
-
-.mat-column-prN_AMT{
- padding-right: 100%;
- 
- }
+.mat-column-constitution{
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 10px;
+  border-top: 1px solid rgb(172, 170, 170);
+  border-right: 1px solid rgb(172, 170, 170);
+  border-left: 1px solid rgb(172, 170, 170);
+}
 #trial {
     font-family: Arial, Helvetica, sans-serif;
     border-collapse: collapse;
@@ -68,8 +54,11 @@ table{
   border-top:1px solid black
 
   }
-  /* Hidden Table */
-#trial1 {
+
+
+  
+ /* Hidden Table */
+ #trial1 {
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
   width: 100%;
@@ -120,9 +109,27 @@ header  { position: fixed; top: 0;text-align: center; } */
 /* tfoot {
   display: table-footer-group; border: 0px white;
 } */
+.mat-row {
+  height: auto;
+}
 
+.mat-cell {
+  padding: 8px 8px 8px 8px;
+}
+.mat-header-cell{
+  font-size: 14px;
+  color: black;
+}
+table{
+  
+  width:100%;
+}
+.mat-column-balance{
+  width: 32px;
+  padding-left: 50px;
+ }
 
-footer{
+ footer{
   margin-left: 25px ; 
   position:relative; 
   bottom: 0px;

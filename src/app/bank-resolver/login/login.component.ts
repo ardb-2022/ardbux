@@ -162,7 +162,21 @@ export class LoginComponent implements OnInit {
     login.password = this.f.password.value;
     login.brn_cd = this.f.branch.value;
     this.nm = this.ardbBrnMst.find(x => x.ardB_CD == this.f.ardbbrMst.value)
+    debugger
+    this.nm.name = this.nm.name.substr(0,this.nm.name.length-10)
+    this.nm.name = this.nm.name +' Co-op. Agriculture & Rural Development Bank Ltd.'
     localStorage.setItem('ardb_name', this.nm.name)
+   
+    if( this.f.ardbbrMst.value=='26'){
+      let ardb_addrs=` H.O.: Old Court Compound, PO+PS- Burdwan, Purba Bardhaman- 713101 
+      Contact No: (0342) 2662390/ 9800960007`
+      localStorage.setItem('ardb_addr', ardb_addrs)
+    }
+    else{
+      let ardb_addrs=''
+      localStorage.setItem('ardb_addr', ardb_addrs)
+    }
+    
     localStorage.setItem('itemUX', this.f.username.value)
     localStorage.setItem('BUX', this.f.branch.value)
     this.rstSvc.addUpdDel<any>('Mst/GetUserDtls', login).subscribe(
@@ -269,6 +283,8 @@ export class LoginComponent implements OnInit {
 
 
             })
+            
+      // 
           // console.log(localStorage.getItem('ipAddress'))
           localStorage.setItem('__ardb_cd', this.f.ardbbrMst.value);
           localStorage.setItem('__dist_cd', this.ardbBrnMst.find(x=>x.ardB_CD == this.f.ardbbrMst.value).dist_code)
@@ -319,6 +335,8 @@ export class LoginComponent implements OnInit {
     localStorage.removeItem('__userId');
     localStorage.removeItem('ardb_name');
     localStorage.removeItem('__ardb_cd');
+    localStorage.removeItem('ardb_addr');
+
     this.brnDtls.length = 0;
     this.loginForm.reset();
     this.loginForm.enable();

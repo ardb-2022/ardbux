@@ -53,7 +53,7 @@ export class PassBookPrintingComponent implements OnInit {
   reportData:any=[]
   ardbName=localStorage.getItem('ardb_name')
   branchName=this.sys.BranchName
-
+  shoFastPage:boolean=false;
   pageChange: any;
   opdrSum=0;
   opcrSum=0;
@@ -89,6 +89,10 @@ export class PassBookPrintingComponent implements OnInit {
   onLoadScreen(content) {
     this.modalRef = this.modalService.show(content, this.config);
   }
+  FastpageScreen() {
+    this.shoFastPage=true;
+  }
+  
   setPage(page: number) {
     this.currentPage = page;
     this.cd.detectChanges();

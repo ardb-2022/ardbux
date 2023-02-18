@@ -851,6 +851,7 @@ removeSecurityDtlList()
 
 
   modifyData() {
+    debugger
     console.log(this.operationType)
     if (this.operationType !== 'Q') {
       // this.showAlertMsg('WARNING', 'Record not retrived to modify');

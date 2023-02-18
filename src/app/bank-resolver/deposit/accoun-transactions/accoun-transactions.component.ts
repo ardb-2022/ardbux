@@ -410,6 +410,42 @@ export class AccounTransactionsComponent implements OnInit {
 
 
   }
+  calculateInterestRate() {
+    const temp_gen_param2 = new p_gen_param();
+    temp_gen_param2.ardb_cd=this.sys.ardbCD;
+    temp_gen_param2.acc_cd = this.f.acc_type_cd.value;
+    temp_gen_param2.from_dt = this.sys.CurrentDate;
+    temp_gen_param2.ls_catg_cd = this.allcategories[0].catg_cd;
+    const o = Utils.convertStringToDt(this.td.opening_dt.value);
+      const m = Utils.convertStringToDt(this.td.mat_dt.value);
+      const diffDays = Math.ceil((Math.abs(m.getTime() - o.getTime())) / (1000 * 3600 * 24));
+      temp_gen_param2.ai_period = diffDays;
+    // temp_gen_param2.ai_period = Math.floor((Date.UTC(this.td.mat_dt.getFullYear(),
+    //   this.td.mat_dt.getMonth(), this.td.mat_dt.getDate()) -
+    //   (Date.UTC(this.td.dep_period_y.value.getFullYear(), this.td.dep_period_m.value.getMonth(),
+    //   this.td.dep_period_d.value.getDate()))) / (1000 * 60 * 60 * 24)) - 1;
+    this.svc.addUpdDel<any>('Deposit/GET_INT_RATE', temp_gen_param2).subscribe(
+      // var dt = {
+      //   "ardb_cd": this.sys.ardbCD,
+      //   "acc_type_cd": 2,
+      //   "catg_cd":this.tm_deposit.category_cd,
+      //   "no_of_days":Math.floor((Date.UTC(this.tm_deposit.mat_dt.getFullYear(),
+      //      this.tm_deposit.mat_dt.getMonth(), this.tm_deposit.mat_dt.getDate()) -
+      //   (Date.UTC(this.tm_deposit.opening_dt.getFullYear(), this.tm_deposit.opening_dt.getMonth(),
+      //   this.tm_deposit.opening_dt.getDate()))) / (1000 * 60 * 60 * 24)) - 1
+      // }
+    //  this.svc.addUpdDel<any>('Deposit/GetInttRate', dt).subscribe(
+
+      res => {
+        //debugger;
+        this.td.intt_rate.setValue(Number(res));
+      },
+      err => {
+        console.log(err);
+      }
+    );
+
+  }
   processInterest(): void {
     debugger
     const temp_gen_param = new p_gen_param();
@@ -2647,6 +2683,11 @@ getjoinholder(){
         console.log(this.tdDefTransFrm)
       }
       if (accTypCode === 11) {
+       debugger 
+      this.inttCalOnClose();
+      console.log(this.rdInClose);
+      
+      debugger
       this.accNoEnteredForTransaction.ShowClose = true;
       this.tdDefTransFrm.controls.amount.disable()
         // this.tdDefTransFrm.patchValue({
@@ -2660,15 +2701,18 @@ getjoinholder(){
           // let diff=Math.abs(crDt.getTime() - matuDt.getTime())
           const diff = Math.ceil((Math.abs(crDt.getTime() - matuDt.getTime())) / (1000 * 3600 * 24));
           const msg = "It will be a Premature Closing for " + diff + " Days with Interest Accrued : Rs. " + this.rdInClose
-          this.HandleMessage(true, MessageType.Warning, msg);
-          alert(msg);
+          debugger
+          // this.HandleMessage(true, MessageType.Warning, msg);//..........PARTHA
+          // alert(msg);
         }
           this.showOnClose = true;
           this.tdDefTransFrm.patchValue({
             amount: this.accNoEnteredForTransaction.prn_amt,
-            curr_intt_recov: 0
+            curr_intt_recov: this.rdInClose,
+            td_def_mat_amt:Number(this.accNoEnteredForTransaction.prn_amt)+Number(this.rdInClose)//tobe change
 
           })
+          debugger
           // this.showCloseInterest=true;
         }
       } else if (selectedOperation.oprn_desc.toLocaleLowerCase() === 'renewal') {
@@ -3049,6 +3093,8 @@ getjoinholder(){
                 }
               })
             }
+            
+    this.calculateInterestRate();//PARTHA
         }
       } else if (selectedOperation.oprn_desc.toLocaleLowerCase() === 'interest payment') {
         this.showTransModeForR = false;
@@ -3105,7 +3151,7 @@ getjoinholder(){
 
 
   public inttCalOnClose(): void {
-    if (this.f.acc_type_cd.value != 5 && this.f.acc_type_cd.value != 6) {
+    if (this.f.acc_type_cd.value != 5 && this.f.acc_type_cd.value != 6 && this.f.acc_type_cd.value != 11) {
      debugger;
       const temp_gen_param = new p_gen_param();
       temp_gen_param.ad_acc_type_cd = this.accNoEnteredForTransaction.acc_type_cd;
@@ -3208,6 +3254,31 @@ getjoinholder(){
     }
     else {
       debugger
+      if(this.f.acc_type_cd.value==11){
+        this.isLoading=true;
+        var dt={
+          "acc_num":this.accNoEnteredForTransaction.acc_num,
+          "ardb_cd":this.sys.ardbCD,
+          "from_dt":this.sys.CurrentDate
+        }
+                this.svc.addUpdDel<any>('Deposit/GetDdsInterest', dt).subscribe(
+                  res => {
+                    console.log(res)
+                    if (undefined !== res
+                      && null !== res
+                      && res > 0) {
+                        this.isLoading=false
+                        this.rdInClose=res
+                      this.tdDefTransFrm.patchValue({
+                        ovd_intt_recov: this.td.ovd_intt_recov.value,
+                        curr_intt_recov: res.toFixed(2),
+                      });
+                    }
+                  },
+                  err => { console.log(err); }
+                );
+      }
+      else{
       let param = new p_gen_param();
       param.as_acc_num = this.accNoEnteredForTransaction.acc_num;
       param.ad_instl_amt = this.accNoEnteredForTransaction.instl_amt;
@@ -3265,6 +3336,7 @@ getjoinholder(){
         (+this.td.curr_intt_recov.value) - (+this.td.ovd_intt_recov.value)
         + (+this.td.curr_prn_recov.value)).toFixed(2));
     }
+  }
     this.td.td_def_mat_amt.setValue((this.td.amount.value +
       (+this.td.curr_intt_recov.value) - (+this.td.ovd_intt_recov.value)
       + (+this.td.curr_prn_recov.value)).toFixed(2));
@@ -3318,6 +3390,7 @@ getjoinholder(){
         mat_dt: Utils.convertDtToString(new Date(matDt))
       });
     }
+    this.calculateInterestRate();
   }
   onInterestChange(){
     console.log(this.tdDefTransFrm.controls.amount.value +" "+this.tdDefTransFrm.controls.closeIntrest.value)

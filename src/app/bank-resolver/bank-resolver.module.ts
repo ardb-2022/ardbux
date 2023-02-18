@@ -161,6 +161,8 @@ import { IDetailListComponent } from './investment/report/detail-list/detail-lis
 import { AllGLDetailsComponent } from './finance/report/all-gldetails/all-gldetails.component';
 import { UpdatePassbookComponent } from './deposit/report/update-passbook/update-passbook.component';
 import { BMLoanStatementComponent } from './loan/report/bmloan-statement/bmloan-statement.component';
+import { SlabwiseDepositComponent } from './deposit/report/slabwise-deposit/slabwise-deposit.component';
+import { PassBookFastPageComponent } from './deposit/report/pass-book-printing/pass-book-fast-page/pass-book-fast-page.component';
 
 @NgModule({
   declarations: [ 
@@ -199,7 +201,8 @@ import { BMLoanStatementComponent } from './loan/report/bmloan-statement/bmloan-
       StandingInsActiveSIListComponent, StandingInsTodaySIExecutedComponent, WeeklyReturnComponent, 
       RecovInterestComponent, BankEntryComponent, BranchEntryComponent, VewInvestmentDtlsComponent, 
       InvTransactionApprovalComponent, InvestmentTransactionsComponent, FdTransComponent, CcTransComponent, MisTransComponent,
-       RdTransComponent, CreateGLHeadComponent, DetailListFdmisConstWiseComponent, INearMaturityComponent,IDetailListComponent, AllGLDetailsComponent, UpdatePassbookComponent, BMLoanStatementComponent,
+       RdTransComponent, CreateGLHeadComponent, DetailListFdmisConstWiseComponent, INearMaturityComponent,
+       IDetailListComponent, AllGLDetailsComponent, UpdatePassbookComponent, BMLoanStatementComponent, SlabwiseDepositComponent, PassBookFastPageComponent,
   ],
   imports: [
     NgxPrintModule, MatTableModule, MatFormFieldModule,  MatInputModule, MatSlideToggleModule,MatButtonModule,

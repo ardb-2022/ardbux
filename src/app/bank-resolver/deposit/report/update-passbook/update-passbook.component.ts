@@ -192,7 +192,6 @@ export class UpdatePassbookComponent implements OnInit {
         this.passBookData.push(prTrans[length]);
         for (let i = prTrans.length-1; i >= 0; i--) {
           if (i !=0) {
-            debugger
             if (prTrans[i - 1].trans_type === 'D') { // deposit
               tot -= +(prTrans[i - 1].amount);
             } else {

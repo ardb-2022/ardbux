@@ -19,7 +19,7 @@ import { VoucherprintComponent } from './finance/voucherprint/voucherprint.compo
 import { GenLedger2Component } from './finance/report/gen-ledger2/gen-ledger2.component';
 import { TransactionapprovalComponent } from './deposit/transactionapproval/transactionapproval.component';
 import { AccOpeningComponent } from './deposit/acc-opening/acc-opening.component';
-import { TestComponent } from '../test/test/test.component';
+import { TestComponent } from '../bank-resolver/test/test.component';
 import { ScrollbookComponent } from './finance/report/scrollbook/scrollbook.component';
 import { VoucherapprovalComponent } from './finance/voucherapproval/voucherapproval.component';
 import { DayinitializationComponent } from './system/dayinitialization/dayinitialization.component';
@@ -117,6 +117,8 @@ import { INearMaturityComponent } from './investment/report/near-maturity/near-m
 import { AllGLDetailsComponent } from './finance/report/all-gldetails/all-gldetails.component';
 import { UpdatePassbookComponent } from './deposit/report/update-passbook/update-passbook.component';
 import { BMLoanStatementComponent } from './loan/report/bmloan-statement/bmloan-statement.component';
+import { SlabwiseDepositComponent } from './deposit/report/slabwise-deposit/slabwise-deposit.component';
+import { PassBookFastPageComponent } from './deposit/report/pass-book-printing/pass-book-fast-page/pass-book-fast-page.component';
 const routes: Routes = [
   { path: 'Admin', component: AdminPanelComponent },
   { path: 'admin', component: AdminPanelComponent },
@@ -225,11 +227,15 @@ const routes: Routes = [
       { path: 'DT_DDINDPOST', component: DdsIndividualPostingComponent, canActivate: [AuthGuard] },
       { path: 'DR_NeftIn', component: NeftInwardReportComponent, canActivate: [AuthGuard] },
       { path: 'DR_NeftOut', component: NeftOutwardReportComponent, canActivate: [AuthGuard] },
-      { path: 'DR_PbkPrn', component: PassBookPrintingComponent, canActivate: [AuthGuard] },
-      { path: 'DR_UpbkPrnSts', component: UpdatePassbookComponent, canActivate: [AuthGuard] },
+      { path: 'DR_PbkPrn', component: PassBookPrintingComponent,
+      children: [
+      { path: 'DR_PassBookFastPage', component: PassBookFastPageComponent},
+        ], canActivate: [AuthGuard] },
+      { path: 'DR_UpbkPrnSts', component: UpdatePassbookComponent, canActivate: [AuthGuard]},
       { path: 'DR_Act_SI_List', component: StandingInsActiveSIListComponent, canActivate: [AuthGuard] },
       { path: 'DR_Today_SI_Exec', component: StandingInsTodaySIExecutedComponent, canActivate: [AuthGuard] },
       { path: 'DR_DDS', component: DetailDDSComponent, canActivate: [AuthGuard] },
+      { path: 'DR_SlbWisDeposit', component: SlabwiseDepositComponent, canActivate: [AuthGuard] },
       { path: 'SP_Update', component: SystemParameterUpdateComponent, canActivate: [AuthGuard] },
       { path: 'DA_YearOpn', component: YearopenComponent, canActivate: [AuthGuard] },
       { path: 'DA_YearCls', component: YearcloseComponent, canActivate: [AuthGuard] },

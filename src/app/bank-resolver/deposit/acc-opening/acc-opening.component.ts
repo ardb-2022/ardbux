@@ -353,7 +353,7 @@ export class AccOpeningComponent implements OnInit {
     this.setAccountType(this.tm_deposit.acc_type_cd);
     this.setIntTfrType(this.tm_deposit.intt_trf_type);
     this.setConstitutionType(this.tm_deposit.constitution_cd);
-    this.setOperationalInstr(this.tm_deposit.oprn_instr_cd);
+    this.setOperationalInstr(this.masterModel.tmdeposit.oprn_instr_cd);
 
     this.td_introducerlist = this.masterModel.tdintroducer;
 
@@ -492,7 +492,7 @@ export class AccOpeningComponent implements OnInit {
   }
 
   getOperationalInstr() {
-
+    debugger
     if (this.operationalInstrList.length > 0) {
       return;
     }
@@ -532,13 +532,16 @@ export class AccOpeningComponent implements OnInit {
 
 
   clearData() {
+    this.operationalInstrList=[];
     this.operationType = '';
     this.disabledOnNull=true;
-    this.suggestedCustomer=null
+    this.suggestedCustomer=null;
     this.showNoResult=false
     this.initializeMasterDataAndFlags();
     this.initializeModels();
     this.closeAlertMsg();
+    // this.setOperationalInstr(null);
+
   }
 
   retrieveData() {
@@ -626,7 +629,7 @@ export class AccOpeningComponent implements OnInit {
     this.disableCustomerName = false;
     this.disableAll = false;
     this.disableAccountTypeAndNo = false;
-
+    // this.operationalInstrList=null;
 
   }
 
@@ -1299,9 +1302,15 @@ export class AccOpeningComponent implements OnInit {
   }
 
   setOperationalInstr(val: number) {
-    this.tm_deposit.oprn_instr_cd = Number(val);
-    this.tm_deposit.oprn_instr_desc = this.operationalInstrList.filter(x => x.oprn_cd.toString() === val.toString())[0].oprn_desc;
-  }
+    debugger
+    if(val>0){
+      this.tm_deposit.oprn_instr_cd = Number(val);
+      this.tm_deposit.oprn_instr_desc = this.operationalInstrList.filter(x => x.oprn_cd.toString() === val.toString())[0].oprn_desc;
+    }
+    else {return;}
+    
+    debugger
+    }
 
 
   getCategoryList() {

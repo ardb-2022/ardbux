@@ -80,22 +80,24 @@
       <ng-container matColumnDef="constitution">
         <th mat-header-cell *matHeaderCellDef ></th>
         <td *matCellDef="let row"style="padding-top:20px;">  <b style="font-size:16px; padding-left:6%;"><u>Agent Name:- {{row.agentname}}</u></b>
-          <table > 
+          <table >
             <ng-container>
-              <tr mat-cell style="height: 40px;">
-                <th mat-header-cell style="text-align:center!important;">A/c No.</th>
-                <th mat-header-cell style="text-align:left!important;">Customer Name</th> 
-                <th mat-header-cell style="text-align:center!important;">Opening DT</th>
-                <th mat-header-cell style="text-align:center!important;">Maturity Dt</th>
-                <th mat-header-cell style="text-align:right!important;">Prn Amt</th>
-              </tr>
-                    <tbody>
+              <thead>
+                <tr mat-cell style="height: 40px;">
+                  <th mat-header-cell style="text-align:center!important;">A/c No.</th>
+                  <th mat-header-cell style="text-align:left!important; width: 20%!important;">Customer Name</th> 
+                  <th mat-header-cell style="text-align:center!important;">Opening DT</th>
+                  <th mat-header-cell style="text-align:center!important;">Maturity Dt</th>
+                  <th mat-header-cell style="text-align:right!important;">Prn Amt</th>
+                </tr>
+              </thead>
+              <tbody>
                         <tr *ngFor="let dds of row.ttsbcadtllist">
-                          <td mat-cell style="text-align:center!important;">{{dds.acc_num}} </td>
-                          <td mat-cell style="text-align:left!important;">{{dds.cust_name}}</td>
-                          <td mat-cell style="text-align:center!important;">{{dds.opening_dt .substr(0,10)}} </td>
-                          <td mat-cell style="text-align:center!important;">{{dds.mat_dt.substr(0,10)}} </td>
-                          <td mat-cell style="text-align:right!important;">{{dds.prN_AMT |currency:'INR'}} </td>
+                          <th mat-header-cell style="text-align:center!important;">{{dds.acc_num}} </th>
+                          <th mat-header-cell style="text-align:left!important;width: 20%!important;">{{dds.cust_name}}</th>
+                          <th mat-header-cell style="text-align:center!important;">{{dds.opening_dt .substr(0,10)}} </th>
+                          <th mat-header-cell style="text-align:center!important;">{{dds.mat_dt.substr(0,10)}} </th>
+                          <th mat-header-cell style="text-align:right!important;">{{dds.prN_AMT |currency:'INR'}} </th>
                           
                         </tr>
                         <tr mat-cell>
@@ -104,13 +106,11 @@
                           
                           <td mat-cell style="text-align:right!important;"><b>{{row.tot_prn|currency:'INR'}}</b></td>
                         </tr>
-                        
-                    </tbody>
+           </tbody>
             </ng-container>
           </table>
       </td>
       </ng-container>
-
 
 
     
@@ -172,6 +172,7 @@
     </table>
     <table>
       <tr>
+        <td style="text-align: left;padding-left: 6%;"><b>Overall Total Account Count.{{counter}}</b> </td>
         <td style="text-align: right;"><b>Overall Total Prn Amt</b></td>
         <td style="width:18%;text-align: right;" ><b>{{prvamt|currency:'INR'}}</b></td>
         

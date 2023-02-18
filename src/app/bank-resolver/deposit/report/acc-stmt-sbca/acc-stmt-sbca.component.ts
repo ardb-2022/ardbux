@@ -65,7 +65,9 @@ export class AccStmtSBCAComponent implements OnInit {
   reportData:any=[]
   ardbName=localStorage.getItem('ardb_name')
   branchName=this.sys.BranchName
-
+  ardbAddress=localStorage.getItem('ardb_addr')
+  ardbCD=localStorage.getItem('__ardb_cd')
+  
   pageChange: any;
   opdrSum=0;
   opcrSum=0;

@@ -1,0 +1,66 @@
+<ng-template #content2 let-modal data-keyboard="false" data-backdrop="false">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Report Criteria</h4>
+      <button type="button" class="close text-danger" aria-label="Close" data-dismiss="modal" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div *ngIf="showAlert" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Error! </strong> {{alertMsg}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="closeAlert()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+  
+      <form [formGroup]="reportcriteria">
+        <div class="form-row">
+          <h3>Print fast page with header?&nbsp;&nbsp;&nbsp;
+            <input type="radio" id="html" name="fav_language" formControlName="yes" value="yes">
+            <label for="html">YES</label>
+            <input type="radio" id="html" name="fav_language" formControlName="no" value="no">
+            <label for="html">NO</label>
+          </h3>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button mat-raised-button class="btn btn-primary" (click)="showFastPage()">Submit</button> &nbsp;
+      <button mat-raised-button class="btn btn-light" (click)="modalRef.hide()">Close</button>
+    </div>
+  </ng-template>
+
+<div>
+
+    <h2 style="text-align: center;">Savings Deposit</h2><br>
+    <div class="form-row">
+        <div style="text-align: left;">Customer Name:...................</div>
+        <div style="text-align: right;">Customer Id:....................</div>
+    </div>
+    <div class="form-row">
+        <div style="text-align: left;">Joint Holder:....................</div>
+        <div style="text-align: right;">Socity Ref. No:....................</div>
+    </div>
+    <div class="form-row">
+        <div style="text-align: left;">Guardian Name:....................</div>
+        <div style="text-align: right;">Opening Date:....................</div>
+    </div>
+    <div class="form-row">
+        <div style="text-align: left; max-width: 200px;">Address:....................</div>
+        <div style="text-align: right;">Operated By:....................</div>
+    </div>
+    <div class="form-row">
+        <div style="text-align: left; max-width: 200px;">Phone:....................</div>
+        <div style="text-align: right;">Nominee Details:....................</div>
+    </div>
+    <div style="border:1px solid grey; padding: 2px;">
+        <p>FOR NEFT/RTGS Details:....................</p>
+        <p>Bank Account Number:....................</p>
+        <p>Bank Name:....................</p>
+        <p>Branch Name:....................</p>
+
+    </div>
+    ________________________<br>
+
+</div>
+
