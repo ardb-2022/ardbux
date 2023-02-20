@@ -10,6 +10,7 @@ import { RestService } from 'src/app/_service';
 import Utils from 'src/app/_utility/utils';
 import { PageChangedEvent } from "ngx-bootstrap/pagination/public_api";
 import { ExportAsService, ExportAsConfig } from 'ngx-export-as'
+import { sm_parameter } from 'src/app/bank-resolver/Models/sm_parameter';
 @Component({
   selector: 'app-pass-book-printing',
   templateUrl: './pass-book-printing.component.html',
@@ -51,6 +52,9 @@ export class PassBookPrintingComponent implements OnInit {
   currentPage = 1;
   pagedItems = [];
   reportData:any=[]
+  passBookData:any=[]
+  systemParam: sm_parameter[] = [];
+  lastRowNo:any;
   ardbName=localStorage.getItem('ardb_name')
   branchName=this.sys.BranchName
   shoFastPage:boolean=false;
@@ -71,6 +75,7 @@ export class PassBookPrintingComponent implements OnInit {
     private modalService: BsModalService, private _domSanitizer: DomSanitizer,private exportAsService: ExportAsService, private cd: ChangeDetectorRef,
     private router: Router) { }
   ngOnInit(): void {
+    this.getSMParameter();
     // this.fromdate = this.sys.CurrentDate;
     this.reportcriteria = this.formBuilder.group({
       fromDate: [null, Validators.required],
@@ -127,6 +132,8 @@ export class PassBookPrintingComponent implements OnInit {
           }
           this.showWait=false
         },
+        
+
         err => { this.isLoading = false; }
       );
     } else {
@@ -170,6 +177,50 @@ export class PassBookPrintingComponent implements OnInit {
         console.log(data);
         this.reportData=data
         
+        debugger;
+        let prTrans = [];
+        prTrans = Utils.ChkArrNotEmptyRetrnEmptyArr(data);
+        this.passBookData = [];
+        let tot1 = data[0].balance_amt;
+        let tot = data[0].balance_amt;
+
+        console.log(tot);
+         prTrans[prTrans.length-1].balance=tot1
+        console.log( prTrans);
+        debugger
+        for (let i = prTrans.length-1; i >= 0; i--) {
+          if (i > 0) {
+            if(i==prTrans.length-1){
+              prTrans[i].balance = tot1
+             this.passBookData.push(prTrans[i]);
+            }
+            else{
+               if (prTrans[i+1].trans_type === 'D') { // deposit
+                tot -= Number(prTrans[i+1].amount);
+              } else {
+                tot += Number(prTrans[i+1].amount);
+              }
+            }
+            
+             prTrans[i].balance = tot
+             this.passBookData.push(prTrans[i]);
+          }
+          else{
+            if (prTrans[i].trans_type === 'D') { // deposit
+              tot -= Number(prTrans[i+1].amount);
+            } else {
+              tot += Number(prTrans[i+1].amount);
+            }
+             prTrans[i].balance = tot;
+             this.passBookData.push(prTrans[i]);
+          }
+        }
+        
+        //  this.passBookData.splice(0,this.passBookData.length-1)
+         console.log(this.passBookData);
+         this.passBookData.reverse();
+         this.passBookData.pop();
+
         this.itemsPerPage=this.reportData.length % 50 <=0 ? this.reportData.length: this.reportData.length % 50
         this.isLoading=false
         if(this.reportData.length<50){
@@ -199,6 +250,21 @@ export class PassBookPrintingComponent implements OnInit {
       //   this.isLoading = false;
       // }, 10000);
     }
+  }
+  getSMParameter(){
+    this.svc.addUpdDel('Mst/GetSystemParameter', null).subscribe(
+      sysRes => {console.log(sysRes);
+        this.systemParam = sysRes;})
+  }
+  passBookPrint(){
+    var dt={
+      "ardb_cd":this.sys.ardbCD,
+      "acc_num":this.reportcriteria.controls.acct_num.value,
+      "acc_type_cd":this.reportcriteria.controls.acc_type_cd.value,
+     }
+    this.svc.addUpdDel('Deposit/GetPassbookline',dt).subscribe(lastRowNo=>{
+      this.lastRowNo = lastRowNo;
+    })
   }
   public oniframeLoad(): void {
     this.counter++;

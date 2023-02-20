@@ -164,7 +164,7 @@ export class LoginComponent implements OnInit {
     this.nm = this.ardbBrnMst.find(x => x.ardB_CD == this.f.ardbbrMst.value)
     debugger
     this.nm.name = this.nm.name.substr(0,this.nm.name.length-10)
-    this.nm.name = this.nm.name +' Co-op. Agriculture & Rural Development Bank Ltd.'
+    this.nm.name = this.nm.name +' Co-Operative Agriculture & Rural Development Bank Ltd.'
     localStorage.setItem('ardb_name', this.nm.name)
    
     if( this.f.ardbbrMst.value=='26'){
