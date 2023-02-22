@@ -209,7 +209,8 @@ export class UTCustomerProfileComponent implements OnInit {
       // this.onRetrieveClick();
       this.f.status.setValue('A');
       this.f.state.disable()
-      this.f.dist.disable()
+      this.sys.ardbCD=='26'?this.f.dist.setValue(20):this.sys.dist_cd//set Purba Burdwan dist
+      // this.f.dist.disable()
     }, 150);
   }
 
@@ -229,6 +230,7 @@ export class UTCustomerProfileComponent implements OnInit {
     this.svc.addUpdDel<mm_title[]>('Mst/GetTitleMaster', null).subscribe(
       res => {
         this.titles = res;
+      
       },
       err => { }
     );
@@ -537,7 +539,7 @@ export class UTCustomerProfileComponent implements OnInit {
     });
     this.retrieveClicked = false
     this.f.state.disable();
-    this.f.dist.disable()
+    // this.f.dist.disable()
   }
 
   public onSaveClick(): void {
@@ -772,7 +774,7 @@ export class UTCustomerProfileComponent implements OnInit {
     this.f.state.setValue(19);
     this.f.state.disable()
     this.f.dist.setValue(this.sys.dist_cd);
-    this.f.dist.disable()
+    // this.f.dist.disable()
   }
 
   mapFormGrpToCustMaster(): mm_customer {

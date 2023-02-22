@@ -92,7 +92,7 @@
     <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
   </mat-form-field> -->
 
-  <mat-accordion>
+  <mat-accordion style="width: 130%;">
     <mat-expansion-panel hideToggle>
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -173,7 +173,7 @@
   
   <div class="mat-elevation-z8" id="mattable">
     
-    <table mat-table [dataSource]="dataSource" matSort >
+    <table mat-table [dataSource]="dataSource" matSort style="width: 130%;">
       
      <!-- ID Column -->
       <ng-container matColumnDef="loan_id" style="text-align:center;" >

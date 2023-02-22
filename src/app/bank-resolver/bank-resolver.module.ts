@@ -163,6 +163,7 @@ import { UpdatePassbookComponent } from './deposit/report/update-passbook/update
 import { BMLoanStatementComponent } from './loan/report/bmloan-statement/bmloan-statement.component';
 import { SlabwiseDepositComponent } from './deposit/report/slabwise-deposit/slabwise-deposit.component';
 import { PassBookFastPageComponent } from './deposit/report/pass-book-printing/pass-book-fast-page/pass-book-fast-page.component';
+import { DetaillistAllComponent } from './loan/report/detaillist-all/detaillist-all.component';
 
 @NgModule({
   declarations: [ 
@@ -202,7 +203,7 @@ import { PassBookFastPageComponent } from './deposit/report/pass-book-printing/p
       RecovInterestComponent, BankEntryComponent, BranchEntryComponent, VewInvestmentDtlsComponent, 
       InvTransactionApprovalComponent, InvestmentTransactionsComponent, FdTransComponent, CcTransComponent, MisTransComponent,
        RdTransComponent, CreateGLHeadComponent, DetailListFdmisConstWiseComponent, INearMaturityComponent,
-       IDetailListComponent, AllGLDetailsComponent, UpdatePassbookComponent, BMLoanStatementComponent, SlabwiseDepositComponent, PassBookFastPageComponent,
+       IDetailListComponent, AllGLDetailsComponent, UpdatePassbookComponent, BMLoanStatementComponent, SlabwiseDepositComponent, PassBookFastPageComponent, DetaillistAllComponent,
   ],
   imports: [
     NgxPrintModule, MatTableModule, MatFormFieldModule,  MatInputModule, MatSlideToggleModule,MatButtonModule,

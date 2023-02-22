@@ -152,6 +152,7 @@
 
       </tr>
       <tbody *ngFor="let i of passBookData; let itr=index;">
+        <br>
         <tr>
           <td>{{i.trans_dt.substr(0,10)}}</td>
           <td>{{i.instrument_num}}</td>
@@ -186,41 +187,22 @@
        </tfoot>
     </table>
     <div id="hiddenTab">
-      <br>
-      <br>
-      <br>
+      <br><br><br>
       <table  class="mkSmall">
-        <thead>
-          <tr *ngIf="reportData">
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-
-            <!-- <th>Trans Dt</th>
-            <th>Instrument</th>
-            <th>Particulars</th>
-            <th style="text-align:right;">Withdrawal</th>
-            <th style="text-align:right;">Deposit</th>
-            <th style="text-align:right;">Balance</th> -->
-
-
+        <tbody *ngFor="let i of printData; let itr=index;">
+          <tr *ngIf="i.trans_type==null">
+           <td style="margin-top: 30px;">&nbsp;</td>
           </tr>
-        </thead>
-
-        <tbody *ngFor="let i of passBookData; let itr=index;">
-          <tr [ngClass]="lastRowNo > 10 ? 'red' : 'green'"></tr>
-          <tr>
-            <td style="width:16%;">{{i.trans_dt.substr(0,10)}}</td>
+          <tr *ngIf="i.trans_type!==null">
+            <td style="width:16%;">{{i.trans_dt==null?'':i.trans_dt.substr(0,10)}}</td>
             <td style="width:42%;">{{i.particulars}}</td>
             <!-- <td style="width:16%;">{{i.instrument_num}}</td> -->
-            <td></td>
-            <td>
-              {{i.trans_type=='W'?i.amount:0 | number : '1.2-2'}}
+            <td  style="width: 10%;"></td>
+            <td  style="width: 12%;">
+              {{i.trans_type=='W'?i.amount:i.trans_type==null?'':0 | number : '1.2-2'}}
              </td>
              <td>
-             {{i.trans_type=='D'?i.amount:0 | number : '1.2-2'}}
+             {{i.trans_type=='D'?i.amount:i.trans_type==null?'':0 | number : '1.2-2'}}
              </td>
             <!-- <td style="text-align: right;">{{i.withdrawal | number : '1.2-2'}}</td>
             <td style="text-align: right;width: 12%;">{{i.deposit | number : '1.2-2'}}</td> -->
@@ -259,11 +241,26 @@
     <div>
       <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="closeScreen()">Close</button>
       <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" [useExistingCss]="true"
-        printSectionId="hiddenTab" ngxPrint (click)="passBookPrint()">Print</button>
+        printSectionId="hiddenTab" useExistingCss="true" ngxPrint (click)="printCall()">Print</button>
  <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
 
     </div>
   </div>
 </div>
+<ng-template #nextpage let-modal data-keyboard="false" data-backdrop="false">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Print Next-Page</h4>
+    <button type="button" class="close text-danger" aria-label="Close" data-dismiss="modal" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>Previous page print successfully! Click on next for print rest transaction,</p>
+  </div>
+  <div class="modal-footer">
+    <button mat-raised-button class="btn btn-primary" (click)="PrintNext()">Next</button> &nbsp;
+    <button mat-raised-button class="btn btn-light" (click)="modalRef.hide()">Close</button>
+  </div>
+</ng-template>
 <loading *ngIf="isLoading"></loading>
 

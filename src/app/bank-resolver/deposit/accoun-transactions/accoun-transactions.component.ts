@@ -3603,7 +3603,7 @@ getjoinholder(){
     const accTypeCd = +this.f.acc_type_cd.value;
     // For Term Deposit operation close
     // check amount can not be greater than maturity amount.
-    if ((accTypeCd === 4 || accTypeCd === 2 || accTypeCd === 7)
+    if ((accTypeCd === 4 || accTypeCd === 2 )
       && this.td.trans_type_key.value === 'W') {
       const matAmt = this.accNoEnteredForTransaction.prn_amt
         + this.accNoEnteredForTransaction.intt_amt;

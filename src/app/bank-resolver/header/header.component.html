@@ -363,7 +363,7 @@
       <mat-icon>topic</mat-icon>
       <span>Loan Statement</span>
     </button>
-    <button mat-menu-item routerLink="LR_DtlLst">
+    <button  mat-menu-item [matMenuTriggerFor]="dList">
       <mat-icon>subject</mat-icon>
       <span>Detail List</span>
     </button>
@@ -420,6 +420,17 @@
       <mat-icon>local_library</mat-icon>
       <span>NPA List</span>
     </button>
+  </mat-menu>
+  <mat-menu #dList="matMenu">
+    <button mat-menu-item routerLink="LR_DtlLst">
+      <mat-icon>list</mat-icon>
+      <span>Account Wise Detail List</span>
+    </button>
+    <button mat-menu-item routerLink="LR_DlistAll">
+      <mat-icon>groups</mat-icon>
+      <span>Detail List All</span>
+    </button>
+    
   </mat-menu>
   <mat-menu #lmaster="matMenu">
     <button mat-menu-item routerLink="LM_Kccmember">

@@ -19,6 +19,7 @@ import { sm_parameter } from 'src/app/bank-resolver/Models/sm_parameter';
 })
 export class PassBookPrintingComponent implements OnInit {
   @ViewChild('content', { static: true }) content: TemplateRef<any>;
+  @ViewChild('nextpage', { static: true }) nextpage: TemplateRef<any>;
   modalRef: BsModalRef;
   isOpenFromDp = false;
   isOpenToDp = false;
@@ -45,18 +46,20 @@ export class PassBookPrintingComponent implements OnInit {
   fromdate: Date;
   toDate: Date;
   suggestedCustomer: mm_customer[];
-  disabledOnNull=true
-  counter=0
+  disabledOnNull=true;
+  counter=0;
   exportAsConfig:ExportAsConfig;
   itemsPerPage = 50;
   currentPage = 1;
   pagedItems = [];
-  reportData:any=[]
-  passBookData:any=[]
+  reportData:any=[];
+  passBookData:any=[];
+  printData:any=[];
+  afterPrint:any=[];
   systemParam: sm_parameter[] = [];
   lastRowNo:any;
-  ardbName=localStorage.getItem('ardb_name')
-  branchName=this.sys.BranchName
+  ardbName=localStorage.getItem('ardb_name');
+  branchName=this.sys.BranchName;
   shoFastPage:boolean=false;
   pageChange: any;
   opdrSum=0;
@@ -220,7 +223,10 @@ export class PassBookPrintingComponent implements OnInit {
          console.log(this.passBookData);
          this.passBookData.reverse();
          this.passBookData.pop();
-
+         this.passBookData.filter(element => {
+          return element !== null && element !== undefined;
+        });
+        this.passBookPrint();
         this.itemsPerPage=this.reportData.length % 50 <=0 ? this.reportData.length: this.reportData.length % 50
         this.isLoading=false
         if(this.reportData.length<50){
@@ -257,6 +263,14 @@ export class PassBookPrintingComponent implements OnInit {
         this.systemParam = sysRes;})
   }
   passBookPrint(){
+    var o = {
+      trans_dt  : null,
+      particulars   : null,
+      balance : null,
+      amount : null,
+      trans_type : null,
+      instrument_num : null,
+  }
     var dt={
       "ardb_cd":this.sys.ardbCD,
       "acc_num":this.reportcriteria.controls.acct_num.value,
@@ -264,7 +278,44 @@ export class PassBookPrintingComponent implements OnInit {
      }
     this.svc.addUpdDel('Deposit/GetPassbookline',dt).subscribe(lastRowNo=>{
       this.lastRowNo = lastRowNo;
+      this.printData=this.passBookData.slice();
+      for (let index = 0; index <= this.lastRowNo-1; index++) {
+        this.printData.unshift(o);
+      } 
+      console.log( this.printData);
+      if(this.printData.length>16){
+        this.printData.splice(14, 0, o);
+        this.printData.splice(15, 0, o);
+        this.printData.splice(16, 0, o);
+        console.log( this.printData);
+      }
+      for(let i = 0; i< this.printData.length ; i ++) 
+      {
+        if(i >32) {
+          this.afterPrint.push(this.printData[i]);
+          }
+      }
+      
+        if(this.printData.length>32) {
+        this.printData.splice(33,this.printData.length-33);
+        }
+      
+      console.log(this.printData);
+      
+      
     })
+  }
+  printCall(){
+    if(this.printData.length>32){
+      this.isLoading=true;
+      setTimeout(() => {
+      this.modalRef = this.modalService.show(this.nextpage, this.config);
+      this.isLoading = false;
+      }, 3000);
+    }
+  }
+  PrintNext(){
+    this.printData=[]
   }
   public oniframeLoad(): void {
     this.counter++;

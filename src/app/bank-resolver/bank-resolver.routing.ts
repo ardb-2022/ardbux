@@ -119,6 +119,7 @@ import { UpdatePassbookComponent } from './deposit/report/update-passbook/update
 import { BMLoanStatementComponent } from './loan/report/bmloan-statement/bmloan-statement.component';
 import { SlabwiseDepositComponent } from './deposit/report/slabwise-deposit/slabwise-deposit.component';
 import { PassBookFastPageComponent } from './deposit/report/pass-book-printing/pass-book-fast-page/pass-book-fast-page.component';
+import { DetaillistAllComponent } from './loan/report/detaillist-all/detaillist-all.component';
 const routes: Routes = [
   { path: 'Admin', component: AdminPanelComponent },
   { path: 'admin', component: AdminPanelComponent },
@@ -199,6 +200,7 @@ const routes: Routes = [
       { path: 'LR_BMLoanStmt', component: BMLoanStatementComponent, canActivate: [AuthGuard] },
       { path: 'LR_LoanStmt', component: LoanStatementComponent, canActivate: [AuthGuard] },
       { path: 'LR_DtlLst', component: DetailListComponent, canActivate: [AuthGuard] },
+      { path: 'LR_DlistAll', component: DetaillistAllComponent, canActivate: [AuthGuard] },
       { path: 'LR_DflLst', component: DefaulterListComponent, canActivate: [AuthGuard] },
       { path: 'LR_DMLst', component: DemandListComponent, canActivate: [AuthGuard] },
       { path: 'LR_AMLst', component: ActwiseLstComponent, canActivate: [AuthGuard] },
