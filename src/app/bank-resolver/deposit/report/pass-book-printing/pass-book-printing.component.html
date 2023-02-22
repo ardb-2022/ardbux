@@ -240,7 +240,7 @@
   <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 shadow-sm mb-4 bg-white p-3">
     <div>
       <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="closeScreen()">Close</button>
-      <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" [useExistingCss]="true"
+      <button #print mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" [useExistingCss]="true"
         printSectionId="hiddenTab" useExistingCss="true" ngxPrint (click)="printCall()">Print</button>
  <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
 
@@ -248,12 +248,12 @@
   </div>
 </div>
 <ng-template #nextpage let-modal data-keyboard="false" data-backdrop="false">
-  <div class="modal-header">
+  <!-- <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">Print Next-Page</h4>
     <button type="button" class="close text-danger" aria-label="Close" data-dismiss="modal" (click)="modalRef.hide()">
       <span aria-hidden="true">&times;</span>
     </button>
-  </div>
+  </div> -->
   <div class="modal-body">
     <p>Previous page print successfully! Click on next for print rest transaction,</p>
   </div>

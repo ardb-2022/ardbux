@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
@@ -20,6 +20,7 @@ import { sm_parameter } from 'src/app/bank-resolver/Models/sm_parameter';
 export class PassBookPrintingComponent implements OnInit {
   @ViewChild('content', { static: true }) content: TemplateRef<any>;
   @ViewChild('nextpage', { static: true }) nextpage: TemplateRef<any>;
+  @ViewChild("print") print!: ElementRef;
   modalRef: BsModalRef;
   isOpenFromDp = false;
   isOpenToDp = false;
@@ -95,6 +96,9 @@ export class PassBookPrintingComponent implements OnInit {
        this.today= n + " "+ time
   }
   onLoadScreen(content) {
+    this.passBookData=[];
+    this.printData=[];
+    this.afterPrint=[];
     this.modalRef = this.modalService.show(content, this.config);
   }
   FastpageScreen() {
@@ -262,6 +266,21 @@ export class PassBookPrintingComponent implements OnInit {
       sysRes => {console.log(sysRes);
         this.systemParam = sysRes;})
   }
+  updateLineNo(){
+        var dt={
+          "ardb_cd":this.sys.ardbCD,
+          "acc_num":this.reportcriteria.controls.acct_num.value,
+          "acc_type_cd":this.reportcriteria.controls.acc_type_cd.value,
+          "lines_printed":this.lastRowNo
+         }
+        this.svc.addUpdDel('Deposit/UpdatePassbookline',dt).subscribe(res=>{console.log(res);
+        })
+
+  }
+  updatePassbookStatus(){
+    this.svc.addUpdDel<any>('Deposit/UpdatePassbookData', this.reportData).subscribe(
+    res => {console.log(res);})
+  }
   passBookPrint(){
     var o = {
       trans_dt  : null,
@@ -270,7 +289,7 @@ export class PassBookPrintingComponent implements OnInit {
       amount : null,
       trans_type : null,
       instrument_num : null,
-  }
+      }
     var dt={
       "ardb_cd":this.sys.ardbCD,
       "acc_num":this.reportcriteria.controls.acct_num.value,
@@ -283,25 +302,32 @@ export class PassBookPrintingComponent implements OnInit {
         this.printData.unshift(o);
       } 
       console.log( this.printData);
-      if(this.printData.length>16){
+      if(this.printData.length>13){
         this.printData.splice(14, 0, o);
         this.printData.splice(15, 0, o);
         this.printData.splice(16, 0, o);
         console.log( this.printData);
       }
-      for(let i = 0; i< this.printData.length ; i ++) 
-      {
-        if(i >32) {
+      if(this.printData.length >32) {
+        for(let i = 0; i< this.printData.length ; i ++) 
+        {if(i>32){
           this.afterPrint.push(this.printData[i]);
           }
+        }
+          this.printData.splice(33,this.printData.length-33);
+          debugger;
       }
       
-        if(this.printData.length>32) {
-        this.printData.splice(33,this.printData.length-33);
-        }
+      else{
+        this.lastRowNo=this.printData.length-3
+        this.updateLineNo();
+        this.updatePassbookStatus();
+      }
+      console.log(this.lastRowNo);
+      
       
       console.log(this.printData);
-      
+      debugger;
       
     })
   }
@@ -311,11 +337,51 @@ export class PassBookPrintingComponent implements OnInit {
       setTimeout(() => {
       this.modalRef = this.modalService.show(this.nextpage, this.config);
       this.isLoading = false;
-      }, 3000);
+      }, 5000);
     }
+    
   }
   PrintNext(){
-    this.printData=[]
+    var o = {
+      trans_dt  : null,
+      particulars   : null,
+      balance : null,
+      amount : null,
+      trans_type : null,
+      instrument_num : null,
+      }
+    this.modalRef.hide();
+    this.printData=[];
+    for(let i = 0; i< this.afterPrint.length ; i ++) 
+      {
+        this.printData.push(this.afterPrint[i]);
+      }
+      console.log( this.printData);
+      if(this.printData.length>13){
+        this.printData.splice(14, 0, o);
+        this.printData.splice(15, 0, o);
+        this.printData.splice(16, 0, o);
+        console.log( this.printData);
+      }
+      if(this.printData.length >32) {
+          for(let i = 0; i< this.printData.length ; i ++) 
+          { if(i>32){
+            this.afterPrint.push(this.printData[i]);}
+          }
+          this.printData.splice(33,this.printData.length-33);
+          debugger;
+      }
+      else{
+        this.lastRowNo=this.printData.length-3
+        this.updateLineNo();
+        this.updatePassbookStatus();
+      }
+      console.log(this.lastRowNo);
+      debugger;
+      
+      console.log(this.printData);
+      let el: HTMLElement = this.print.nativeElement;
+      el.click();
   }
   public oniframeLoad(): void {
     this.counter++;
