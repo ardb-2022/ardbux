@@ -11,19 +11,23 @@ import Utils from 'src/app/_utility/utils';
 import { PageChangedEvent } from "ngx-bootstrap/pagination/public_api";
 import { ExportAsService, ExportAsConfig } from 'ngx-export-as'
 import { sm_parameter } from 'src/app/bank-resolver/Models/sm_parameter';
+import { CommonServiceService } from 'src/app/bank-resolver/common-service.service';
+import { tm_loan_all } from 'src/app/bank-resolver/Models/loan/tm_loan_all';
+import { LoanOpenDM } from 'src/app/bank-resolver/Models/loan/LoanOpenDM';
 @Component({
   selector: 'app-pass-book-printing',
   templateUrl: './pass-book-printing.component.html',
   styleUrls: ['./pass-book-printing.component.css'],
   providers:[ExportAsService]
 })
-export class PassBookPrintingComponent implements OnInit {
+export class LoanPassBookPrintingComponent implements OnInit {
   @ViewChild('content', { static: true }) content: TemplateRef<any>;
   @ViewChild('nextpage', { static: true }) nextpage: TemplateRef<any>;
   @ViewChild('fullpageUpdate', { static: true }) fullpageUpdate: TemplateRef<any>;
   @ViewChild('UpdateSuccess', { static: true }) UpdateSuccess: TemplateRef<any>;
-  accNum: string;
-  accType: string;
+  loanId: string;
+  tm_loan_all = new tm_loan_all();
+  masterModel = new LoanOpenDM();
   modalRef: BsModalRef;
   isOpenFromDp = false;
   isOpenToDp = false;
@@ -34,6 +38,7 @@ export class PassBookPrintingComponent implements OnInit {
     ignoreBackdropClick: true, // disable backdrop click to close the modal
     class: 'modal-lg'
   };
+  date_msg:any;
   trailbalance: tt_trial_balance[] = [];
   prp = new p_report_param();
   reportcriteria: FormGroup;
@@ -79,8 +84,10 @@ export class PassBookPrintingComponent implements OnInit {
   cAcc:any
   showWait=false
   restItem:any
-  
-  constructor(private svc: RestService, private formBuilder: FormBuilder,
+  notvalidate:boolean=false;
+  custNm:any;
+  addr:any;
+  constructor(private svc: RestService, private formBuilder: FormBuilder,private comser: CommonServiceService,
     private modalService: BsModalService, private _domSanitizer: DomSanitizer,private exportAsService: ExportAsService, private cd: ChangeDetectorRef,
     private router: Router) { }
   ngOnInit(): void {
@@ -89,8 +96,7 @@ export class PassBookPrintingComponent implements OnInit {
     this.reportcriteria = this.formBuilder.group({
       fromDate: [null, Validators.required],
       toDate: [null, Validators.required],
-      acct_num: [{ value: '', disabled: true }, Validators.required],
-      acc_type_cd: [null, Validators.required]
+      acct_num: [null, Validators.required]
     });
     this.onLoadScreen(this.content);
     var date = new Date();
@@ -101,6 +107,7 @@ export class PassBookPrintingComponent implements OnInit {
        this.today= n + " "+ time
   }
   onLoadScreen(content) {
+    this.notvalidate=false
     this.passBookData=[];
     this.printData=[];
     this.afterPrint=[];
@@ -121,6 +128,15 @@ export class PassBookPrintingComponent implements OnInit {
       this.reportcriteria.controls.acct_num.enable();
     }
   }
+  cancelOnNull() {
+    this.suggestedCustomer = null;
+    if (this.reportcriteria.controls.acct_num.value.length > 0) {
+      this.disabledOnNull = false;
+    }
+    else {
+      this.disabledOnNull = true
+    }
+  }
   onChangeNull(){
     this.suggestedCustomer = null
 
@@ -130,37 +146,78 @@ export class PassBookPrintingComponent implements OnInit {
       this.disabledOnNull=true
   }
   public suggestCustomer(): void {
-    this.showWait=true;
+    // debugger;
+    this.showWait=true
+    this.isLoading = true;
     if (this.reportcriteria.controls.acct_num.value.length > 0) {
       const prm = new p_gen_param();
-      prm.ad_acc_type_cd = (+this.reportcriteria.controls.acc_type_cd.value);
       prm.as_cust_name = this.reportcriteria.controls.acct_num.value.toLowerCase();
-      this.svc.addUpdDel<any>('Deposit/GetAccDtls', prm).subscribe(
+      prm.ardb_cd = this.sys.ardbCD
+      this.svc.addUpdDel<any>('Loan/GetLoanDtlsByID', prm).subscribe(
         res => {
+          this.isLoading = false
+          console.log(res)
           if (undefined !== res && null !== res && res.length > 0) {
-            this.suggestedCustomer = res.slice(0, 10);
+            this.suggestedCustomer = res;
           } else {
+            this.isLoading = false
             this.suggestedCustomer = [];
           }
-          this.showWait=false
+          this.showWait=false;
         },
-        
-
         err => { this.isLoading = false; }
       );
     } else {
+      this.isLoading = false;
       this.suggestedCustomer = null;
     }
   }
-
   public SelectCustomer(cust: any): void {
-    this.cName=cust.cust_name
-    this.cAddress=cust.present_address
-    this.cAcc=cust.acc_num
-    this.reportcriteria.controls.acct_num.setValue(cust.acc_num);
-    this.fromdate = Utils.convertStringToDt(cust.opening_dt);
-    this.toDate = this.sys.CurrentDate;
+    console.log(cust)
+    const date = Utils.convertStringToDt(cust.disb_dt);
+    this.fromdate = date
+    this.toDate=this.sys.CurrentDate
+    // this.loanId=cust.loan_id
+    this.custNm=cust.cust_name
+    this.addr=cust.present_address 
+    this.reportcriteria.controls.acct_num.setValue(cust.loan_id);
     this.suggestedCustomer = null;
+    this.getLoanAccountData();
+  }
+    getLoanAccountData() {
+
+    this.isLoading = true;
+    this.tm_loan_all.loan_id = this.reportcriteria.controls.acct_num.value;
+    this.tm_loan_all.brn_cd = this.sys.BranchCode;
+    this.tm_loan_all.ardb_cd=this.sys.ardbCD;
+    this.svc.addUpdDel<any>('Loan/GetLoanData', this.tm_loan_all).subscribe(
+      res => {
+
+        this.isLoading = false;
+        this.masterModel = res;
+        console.log(res)
+        if (this.masterModel === undefined || this.masterModel === null) {
+          this.showAlert = true;
+          this.alertMsg = 'No record found!!!';
+          
+        }
+        // else {
+        //   if (this.masterModel.tmloanall.loan_id !== null) {
+        //   alert('hiiiiii'+this.masterModel.tmloanall.loan_id);
+        //   }
+         
+
+        // }
+
+      },
+      err => {
+        this.isLoading = false;
+        this.showAlert = true;
+          this.alertMsg = 'Unable to find record!!';
+       
+      }
+
+    );
   }
 
   public SubmitReport() {
@@ -169,27 +226,34 @@ export class PassBookPrintingComponent implements OnInit {
       this.alertMsg = 'Invalid Input.';
       return false;
     }
+    else if(this.reportcriteria.controls.fromDate.value>this.reportcriteria.controls.toDate.value){
+      this.date_msg= this.comser.date_msg
+      this.notvalidate=true
+    }
 
     else {
+      
       this.modalRef.hide();
       this.reportData.length=0
       this.pagedItems.length=0;
       this.isLoading=true
       this.fromdate = this.reportcriteria.controls.fromDate.value;
       this.toDate = this.reportcriteria.controls.toDate.value;
-      this.accNum=this.reportcriteria.controls.acct_num.value;
-      this.accType=this.reportcriteria.controls.acc_type_cd.value;
+      this.loanId=this.reportcriteria.controls.acct_num.value;
+      // this.accType=this.reportcriteria.controls.acc_type_cd.value;
       var dt={
         "ardb_cd":this.sys.ardbCD,
         "brn_cd":this.sys.BranchCode,
-        "acc_num":this.reportcriteria.controls.acct_num.value,
-        "acc_type_cd":this.reportcriteria.controls.acc_type_cd.value,
+        "loan_id": this.reportcriteria.controls.acct_num.value,
+        // "acc_num":this.reportcriteria.controls.acct_num.value,
+        // "acc_type_cd":this.reportcriteria.controls.acc_type_cd.value,
         "from_dt":this.fromdate.toISOString(),
         "to_dt":this.toDate.toISOString()
       }
-      this.svc.addUpdDel('Deposit/PassBookPrint',dt).subscribe(data=>{
+      this.svc.addUpdDel('Loan/LoanPassBookPrint',dt).subscribe(data=>{
         console.log(data);
         this.reportData=data
+        debugger
         if(this.reportData.length==0){
           this.isLoading=false
           this.showAlert = true;
@@ -197,66 +261,67 @@ export class PassBookPrintingComponent implements OnInit {
 
           return;
         }
-        else if(this.reportData.length==1){
-          debugger
-          this.isLoading=false
-          let prTrans = [];
-          prTrans = Utils.ChkArrNotEmptyRetrnEmptyArr(data);
-          this.passBookData = [];
-          let tot1 = data[0].balance_amt;
-          let tot = data[0].balance_amt;
+        // else if(this.reportData.length==1){
+        //   debugger
+        //   this.isLoading=false
+        //   let prTrans = [];
+        //   prTrans = Utils.ChkArrNotEmptyRetrnEmptyArr(data);
+        //   this.passBookData = [];
+        //   let tot1 = data[0].balance_amt;
+        //   let tot = data[0].balance_amt;
   
-          console.log(tot);
-           prTrans[0].balance=tot1
-          console.log( prTrans);
-          this.passBookData.push(prTrans[0]);
-          debugger
+        //   console.log(tot);
+        //    prTrans[0].balance=tot1
+        //   console.log( prTrans);
+        //   this.passBookData.push(prTrans[0]);
+        //   debugger
         
-        }
+        // }
         else{
-          debugger;
-          let prTrans = [];
-          prTrans = Utils.ChkArrNotEmptyRetrnEmptyArr(data);
+          // let prTrans = [];
+          // prTrans = Utils.ChkArrNotEmptyRetrnEmptyArr(data);
           this.passBookData = [];
-          let tot1 = data[0].balance_amt;
-          let tot = data[0].balance_amt;
-  
-          console.log(tot);
-           prTrans[prTrans.length-1].balance=tot1
-          console.log( prTrans);
+          this.passBookData=this.reportData;
           debugger
-          for (let i = prTrans.length-1; i >= 0; i--) {
-            if (i > 0) {
-              if(i==prTrans.length-1){
-                prTrans[i].balance = tot1
-               this.passBookData.push(prTrans[i]);
-              }
-              else{
-                 if (prTrans[i+1].trans_type === 'D') { // deposit
-                  tot -= Number(prTrans[i+1].amount);
-                } else {
-                  tot += Number(prTrans[i+1].amount);
-                }
-              }
+          // let tot1 = data[0].balance_amt;
+          // let tot = data[0].balance_amt;
+  
+          // console.log(tot);
+          //  prTrans[prTrans.length-1].balance=tot1
+          // console.log( prTrans);
+          // debugger
+          // for (let i = prTrans.length-1; i >= 0; i--) {
+          //   if (i > 0) {
+          //     if(i==prTrans.length-1){
+          //       prTrans[i].balance = tot1
+          //      this.passBookData.push(prTrans[i]);
+          //     }
+          //     else{
+          //        if (prTrans[i+1].trans_type === 'D') { 
+          //         tot -= Number(prTrans[i+1].amount);
+          //       } else {
+          //         tot += Number(prTrans[i+1].amount);
+          //       }
+          //     }
               
-               prTrans[i].balance = tot
-               this.passBookData.push(prTrans[i]);
-            }
-            else{
-              if (prTrans[i].trans_type === 'D') { // deposit
-                tot -= Number(prTrans[i+1].amount);
-              } else {
-                tot += Number(prTrans[i+1].amount);
-              }
-               prTrans[i].balance = tot;
-               this.passBookData.push(prTrans[i]);
-            }
-          }
+          //      prTrans[i].balance = tot
+          //      this.passBookData.push(prTrans[i]);
+          //   }
+            // else{
+            //   if (prTrans[i].trans_type === 'D') { 
+            //     tot -= Number(prTrans[i+1].amount);
+            //   } else {
+            //     tot += Number(prTrans[i+1].amount);
+            //   }
+            //    prTrans[i].balance = tot;
+            //    this.passBookData.push(prTrans[i]);
+            // }
+          // }
           
-          //  this.passBookData.splice(0,this.passBookData.length-1)
-           console.log(this.passBookData);
-           this.passBookData.reverse();
-           this.passBookData.pop();
+          debugger
+          //  console.log(this.passBookData);
+          //  this.passBookData.reverse();
+          //  this.passBookData.pop();
            this.passBookData.filter(element => {
             return element !== null && element !== undefined;
           });
@@ -301,24 +366,23 @@ export class PassBookPrintingComponent implements OnInit {
   updateLineNo(){
         var dt={
           "ardb_cd":this.sys.ardbCD,
-          "acc_num":this.reportcriteria.controls.acct_num.value,
-          "acc_type_cd":this.reportcriteria.controls.acc_type_cd.value,
+          "loan_id":this.reportcriteria.controls.acct_num.value,
+          "acc_cd":this.masterModel.tmloanall.acc_cd,
           "lines_printed":this.lastRowNo
          }
-        this.svc.addUpdDel('Deposit/UpdatePassbookline',dt).subscribe(res=>{console.log(res);
+        this.svc.addUpdDel('Loan/LoanUpdatePassbookline',dt).subscribe(res=>{console.log(res);
         })
 
   }
   updatePassbookStatus(){
     debugger
-    let ardbCD=this.sys.ardbCD;
     for (let i = 0; i < this.reportData.length; i++) {
         this.reportData[i].printed_flag = 'Y';
-        this.reportData[i].ardb_cd= ardbCD;
-        this.reportData[i].acc_type_cd=this.reportcriteria.controls.acc_type_cd.value;// Push 'Y' into data array
+        this.reportData[i].ardb_cd= this.sys.ardbCD;
+        this.reportData[i].acc_cd=this.masterModel.tmloanall.acc_cd;// Push 'Y' into data array
     }
     debugger
-    this.svc.addUpdDel<any>('Deposit/UpdatePassbookData', this.reportData).subscribe(
+    this.svc.addUpdDel<any>('Loan/LoanUpdatePassbookData', this.reportData).subscribe(
     res => {console.log(res);
       setTimeout(() => {
         this.modalRef = this.modalService.show(this.UpdateSuccess, this.config);
@@ -332,21 +396,27 @@ export class PassBookPrintingComponent implements OnInit {
     var o = {
       trans_dt  : null,
       particulars   : null,
-      balance : null,
-      amount : null,
-      trans_type : null,
-      instrument_num : null,
+      issue_amt : null,
+      curr_prn_recov : null,
+      curr_intt_recov : null,
+      curr_prn_bal : null,
+      curr_intt_bal : null,
+      ovd_prn_bal : null,
+
       }
     var dt={
       "ardb_cd":this.sys.ardbCD,
-      "acc_num":this.reportcriteria.controls.acct_num.value,
-      "acc_type_cd":this.reportcriteria.controls.acc_type_cd.value,
+      "loan_id":this.reportcriteria.controls.acct_num.value,
+      "acc_cd":this.masterModel.tmloanall.acc_cd,
      }
-    this.svc.addUpdDel('Deposit/GetPassbookline',dt).subscribe(lRowNo=>{
+     debugger
+    this.svc.addUpdDel('Loan/LoanGetPassbookline',dt).subscribe(lRowNo=>{
       this.lastRowNo = lRowNo;
+      for(let i = 0; i< this.passBookData.length ; i ++) 
+      {this.printData.push(this.passBookData[i]);}
       debugger
-      this.printData=this.passBookData.length>1?this.passBookData.slice():this.passBookData;
-      // this.printData=this.passBookData.slice();
+      // this.printData=this.passBookData.length>1?this.passBookData.slice():this.passBookData;
+      // this.printData=this.passBookData;
       if(this.lastRowNo == 30){
         this.modalRef = this.modalService.show(this.fullpageUpdate, this.config);
         console.log( this.printData);

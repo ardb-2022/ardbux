@@ -14,7 +14,7 @@ import Utils from 'src/app/_utility/utils';
   templateUrl: './update-passbook.component.html',
   styleUrls: ['./update-passbook.component.css']
 })
-export class UpdatePassbookComponent implements OnInit {
+export class LoanUpdatePassbookComponent implements OnInit {
   @ViewChild('content', { static: true }) content: TemplateRef<any>;
   modalRef: BsModalRef;
   isOpenFromDp = false;
@@ -61,7 +61,10 @@ export class UpdatePassbookComponent implements OnInit {
   cName:any
   cAddress:any
   cAcc:any
-  showWait=false
+  showWait=false;
+  notvalidate:boolean=false;
+  date_msg:any;
+
   constructor(private svc: RestService, private elementRef: ElementRef,private formBuilder: FormBuilder,
     private msg: InAppMessageService, private modalService: BsModalService,
     private router: Router, private comser:CommonServiceService) { }
@@ -79,9 +82,9 @@ export class UpdatePassbookComponent implements OnInit {
     this.reportcriteria = this.formBuilder.group({
       fromDate: [null, Validators.required],
       toDate: [null, Validators.required],
-      acct_num: [{ value: '', disabled: true }, Validators.required],
-      acc_type_cd: [null, Validators.required],
-      cust_name: [null, Validators.required]
+      acct_num: [null, Validators.required],
+      // acc_type_cd: [null, Validators.required],
+      // cust_name: [null, Validators.required]
       
     });
     this.onLoadScreen(this.content);
@@ -93,7 +96,18 @@ export class UpdatePassbookComponent implements OnInit {
        this.today= n + " "+ time
   }
   onLoadScreen(content) {
+    this.notvalidate=false
+
     this.modalRef = this.modalService.show(content, this.config);
+  }
+  cancelOnNull() {
+    this.suggestedCustomer = null;
+    if (this.reportcriteria.controls.acct_num.value.length > 0) {
+      this.disabledOnNull = false;
+    }
+    else {
+      this.disabledOnNull = true
+    }
   }
   onBackClick() {
     this.router.navigate([this.sys.BankName + '/la']);
@@ -118,37 +132,41 @@ export class UpdatePassbookComponent implements OnInit {
   }
 
   public suggestCustomer(): void {
-    this.showWait=true;
+    // debugger;
+    this.showWait=true
+    this.isLoading = true;
     if (this.reportcriteria.controls.acct_num.value.length > 0) {
       const prm = new p_gen_param();
-      prm.ad_acc_type_cd = (+this.reportcriteria.controls.acc_type_cd.value);
       prm.as_cust_name = this.reportcriteria.controls.acct_num.value.toLowerCase();
-      this.svc.addUpdDel<any>('Deposit/GetAccDtls', prm).subscribe(
-        res => {console.log(res);
-        
+      prm.ardb_cd = this.sys.ardbCD
+      this.svc.addUpdDel<any>('Loan/GetLoanDtlsByID', prm).subscribe(
+        res => {
+          this.isLoading = false
+          console.log(res)
           if (undefined !== res && null !== res && res.length > 0) {
-            this.suggestedCustomer = res.slice(0, 10);
+            this.suggestedCustomer = res;
           } else {
+            this.isLoading = false
             this.suggestedCustomer = [];
           }
-          this.showWait=false
+          this.showWait=false;
         },
         err => { this.isLoading = false; }
       );
     } else {
+      this.isLoading = false;
       this.suggestedCustomer = null;
     }
   }
-
   public SelectCustomer(cust: any): void {
-    this.cName=cust.cust_name
-    this.cAddress=cust.present_address
-    this.cAcc=cust.acc_num
-    this.reportcriteria.controls.acct_num.setValue(cust.acc_num);
-    this.reportcriteria.controls.cust_name.setValue(cust.cust_name);
-    // this.reportcriteria.controls.cust_cd.setValue(cust.acc_num);
-    this.fromdate = Utils.convertStringToDt(cust.opening_dt);
-    this.toDate = this.sys.CurrentDate;
+    console.log(cust)
+    const date = Utils.convertStringToDt(cust.disb_dt);
+    this.fromdate = date
+    this.toDate=this.sys.CurrentDate
+    // this.loanId=cust.loan_id
+    // this.custNm=cust.cust_name
+    // this.addr=cust.present_address 1014007857
+    this.reportcriteria.controls.acct_num.setValue(cust.loan_id);
     this.suggestedCustomer = null;
   }
 
@@ -157,6 +175,10 @@ export class UpdatePassbookComponent implements OnInit {
       this.showAlert = true;
       this.alertMsg = 'Invalid Input.';
       return false;
+    }
+    else if(this.reportcriteria.controls.fromDate.value>this.reportcriteria.controls.toDate.value){
+      this.date_msg= this.comser.date_msg
+      this.notvalidate=true
     }
 
     else {
@@ -169,27 +191,27 @@ export class UpdatePassbookComponent implements OnInit {
       var dt={
         "ardb_cd":this.sys.ardbCD,
         "brn_cd":this.sys.BranchCode,
-        "acc_num":this.reportcriteria.controls.acct_num.value,
-        "acc_type_cd":this.reportcriteria.controls.acc_type_cd.value,
+        "loan_id":this.reportcriteria.controls.acct_num.value,
+        // "acc_type_cd":this.reportcriteria.controls.acc_type_cd.value,
         "from_dt":this.fromdate.toISOString(),
         "to_dt":this.toDate.toISOString()
       }
-      this.svc.addUpdDel('Deposit/GetUpdatePassbookData',dt).subscribe(data=>{
+      this.svc.addUpdDel('Loan/LoanGetUpdatePassbookData',dt).subscribe(data=>{
         console.log(data);
         this.reportData=data
         if(this.reportData.length==0){
           this.comser.SnackBar_Nodata()
         } 
         this.isLoading=false
-        let prTrans = [];
+        // let prTrans = [];
         // prTrans = Utils.ChkArrNotEmptyRetrnEmptyArr(data);
-        prTrans = Utils.ChkArrNotEmptyRetrnEmptyArr(data);
+        // prTrans = Utils.ChkArrNotEmptyRetrnEmptyArr(data);
         this.passBookData = [];
-        let tot = data[0].balance_amt;
-        console.log(tot);
-        prTrans[length].balance= data[0].balance_amt
-        console.log( prTrans);
-        this.passBookData.push(prTrans[length]);
+        // let tot = data[0].balance_amt;
+        // console.log(tot);
+        // prTrans[length].balance= data[0].balance_amt
+        // console.log( prTrans);
+        // this.passBookData.push(prTrans[length]);
         // for (let i = prTrans.length-1; i >= 0; i--) {
         //   if (i !=0) {
         //     if (prTrans[i - 1].trans_type === 'D') { // deposit
@@ -201,46 +223,46 @@ export class UpdatePassbookComponent implements OnInit {
         //      this.passBookData.push(prTrans[i]);
         //   }
         // }
-        for (let i = prTrans.length-1; i >= 0; i--) {
-          if (i > 0) {
-            if(i==prTrans.length-1){
-              prTrans[i].balance = tot
-             this.passBookData.push(prTrans[i]);
-            }
-            else{
-               if (prTrans[i+1].trans_type === 'D') { // deposit
-                tot -= Number(prTrans[i+1].amount);
-              } else {
-                tot += Number(prTrans[i+1].amount);
-              }
-            }
+        // for (let i = prTrans.length-1; i >= 0; i--) {
+        //   if (i > 0) {
+        //     if(i==prTrans.length-1){
+        //       prTrans[i].balance = tot
+        //      this.passBookData.push(prTrans[i]);
+        //     }
+        //     else{
+        //        if (prTrans[i+1].trans_type === 'D') { 
+        //         tot -= Number(prTrans[i+1].amount);
+        //       } else {
+        //         tot += Number(prTrans[i+1].amount);
+        //       }
+        //     }
             
-             prTrans[i].balance = tot
-             this.passBookData.push(prTrans[i]);
-          }
-          else{
-            if (prTrans[i].trans_type === 'D') { // deposit
-              tot -= Number(prTrans[i+1].amount);
-            } else {
-              tot += Number(prTrans[i+1].amount);
-            }
-             prTrans[i].balance = tot;
-             this.passBookData.push(prTrans[i]);
-          }
-        }
-        
+        //      prTrans[i].balance = tot
+        //      this.passBookData.push(prTrans[i]);
+        //   }
+          // else{
+          //   if (prTrans[i].trans_type === 'D') { 
+          //     tot -= Number(prTrans[i+1].amount);
+          //   } else {
+          //     tot += Number(prTrans[i+1].amount);
+          //   }
+          //    prTrans[i].balance = tot;
+          //    this.passBookData.push(prTrans[i]);
+          // }
+        // }
+        this.passBookData=this.reportData
         //  this.passBookData.splice(0,this.passBookData.length-1)
          console.log(this.passBookData);
          debugger
-         this.passBookData.reverse();
-         this.passBookData.pop();
-         this.passBookData.pop();
+        //  this.passBookData.reverse();
+        //  this.passBookData.pop();
+        //  this.passBookData.pop();
 
-         debugger
-         this.passBookData.reverse();
-         console.log(this.passBookData[length-1]);
+        //  debugger
+        //  this.passBookData.reverse();
+        //  console.log(this.passBookData[length-1]);
         
-          console.log(this.passBookData);
+          // console.log(this.passBookData);
        
         this.itemsPerPage=this.reportData.length % 50 <=0 ? this.reportData.length: this.reportData.length % 50
         this.isLoading=false
@@ -316,11 +338,11 @@ export class UpdatePassbookComponent implements OnInit {
   {
     this.passBookData.forEach(element => {
       element.ardb_cd=this.sys.ardbCD
-      element.acc_type_cd=Number(this.reportcriteria.controls.acc_type_cd.value)
+      // element.acc_type_cd=Number(this.reportcriteria.controls.acc_type_cd.value)
       
     });
       this.isLoading=true;
-      this.svc.addUpdDel<any>('Deposit/UpdatePassbookData', this.passBookData).subscribe(
+      this.svc.addUpdDel<any>('Loan/LoanUpdatePassbookData', this.passBookData).subscribe(
         res => {
           ;
           this.isLoading=false;

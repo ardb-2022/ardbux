@@ -803,6 +803,7 @@ debugger
         transfer_dt: this.accNoEnteredForTransaction.transfer_dt,
         agent_cd: this.accNoEnteredForTransaction.agent_cd,
       });
+      // 
 console.log(this.accDtlsFrm.controls.mat_amt.value);
 
       if(this.accNoEnteredForTransaction.acc_type_cd==6){
@@ -1870,6 +1871,12 @@ getjoinholder(){
   }
 
   private setTransactionDtl(tdDefTransTrf: any): void {
+    if(this.sys.ardbCD=='26'){
+      debugger//PARTHA
+      this.accDtlsFrm.controls.mat_amt.setValue(tdDefTransTrf.curr_prn_recov+tdDefTransTrf.curr_intt_recov)
+      this.accDtlsFrm.controls.intt_amt.setValue(tdDefTransTrf.curr_intt_recov)
+                  
+    }
     console.log(tdDefTransTrf)
     // debugger;deftransfrmData
     // this.selOprn.oprn_desc=tdDefTransTrf.remarks;
@@ -2673,7 +2680,8 @@ getjoinholder(){
         this.F_CALC_SB_INTT();
         console.log(this.accNoEnteredForTransaction.curr_bal)
         this.tdDefTransFrm.patchValue({
-          amount: this.accNoEnteredForTransaction.curr_bal
+          amount: this.accNoEnteredForTransaction.curr_bal,
+         
         })
         this.tdDefTransFrm.patchValue({
           paid_to: 'SELF',
@@ -3022,22 +3030,24 @@ getjoinholder(){
               })
           }
           ///
+          debugger
           this.onDepositePeriodChange();
       let afterMatured = false;
       this.afMat = afterMatured
       const cDt1 = this.sys.CurrentDate.getTime();
       const matDt1 = Utils.convertStringToDt(this.accNoEnteredForTransaction.mat_dt.toString()).getTime();
       this.diff1=Math.ceil((Math.abs(cDt1 - matDt1)) / (1000 * 3600 * 24));
-      
+      this.diff1=this.diff1+1
       console.log(cDt1,matDt1,this.diff1);
       if (this.diff1>15) {
         afterMatured = true;
         this.afMat = afterMatured
-
+        debugger
         console.log(afterMatured)
         this.sys.ardbCD=='26'?this.tdDefTransFrm.controls.opening_dt.setValue(this.datepipe.transform(this.sys.CurrentDate,"dd/MM/yyyy")):this.tdDefTransFrm.controls.opening_dt.setValue(this.accNoEnteredForTransaction.mat_dt.toString().substr(0, 10))
       }
       else{
+        debugger
         this.sys.ardbCD=='26'?this.tdDefTransFrm.controls.opening_dt.setValue(this.accNoEnteredForTransaction.mat_dt.toString().substr(0, 10),):this.tdDefTransFrm.controls.opening_dt.setValue(this.datepipe.transform(this.sys.CurrentDate,"dd/MM/yyyy"))
       }
         if((this.sys.ardbCD=='26') && (afterMatured == true && (accTypCode === 2 || accTypCode == 4))) {
@@ -3149,7 +3159,13 @@ getjoinholder(){
       this.patchtdDefTransFrm();
     }
 
-
+    CloseDPenalty(){
+      if(this.f.acc_type_cd.value==11){
+        this.tdDefTransFrm.patchValue({
+          td_def_mat_amt: ((this.accNoEnteredForTransaction.prn_amt+Number(this.td.curr_intt_recov.value))-(+this.td.ovd_intt_recov.value?+this.td.ovd_intt_recov.value:0)),
+        });
+      }
+    }
   public inttCalOnClose(): void {
     if (this.f.acc_type_cd.value != 5 && this.f.acc_type_cd.value != 6 && this.f.acc_type_cd.value != 11) {
      debugger;
@@ -3272,6 +3288,7 @@ getjoinholder(){
                       this.tdDefTransFrm.patchValue({
                         ovd_intt_recov: this.td.ovd_intt_recov.value,
                         curr_intt_recov: res.toFixed(2),
+                        td_def_mat_amt: ((this.accNoEnteredForTransaction.prn_amt+res)-(+this.td.ovd_intt_recov.value?+this.td.ovd_intt_recov.value:0)),
                       });
                     }
                   },
@@ -3396,7 +3413,8 @@ getjoinholder(){
     console.log(this.tdDefTransFrm.controls.amount.value +" "+this.tdDefTransFrm.controls.closeIntrest.value)
     if(this.f.acc_type_cd.value==1 || this.f.acc_type_cd.value==8){
     this.tdDefTransFrm.patchValue({
-      amount:(+this.accDtlsFrm.controls.clr_bal.value) + (+this.tdDefTransFrm.controls.closeIntrest.value)
+      amount:(+this.accDtlsFrm.controls.clr_bal.value) + (+this.tdDefTransFrm.controls.closeIntrest.value),
+      td_def_mat_amt:(+this.accDtlsFrm.controls.clr_bal.value) + (+this.tdDefTransFrm.controls.closeIntrest.value)
     })
   }
   }
@@ -4172,7 +4190,9 @@ getjoinholder(){
           // console.log(toReturn.amount)
           // toReturn.amount = this.tdDefTransFrm.controls.balance.value>0?;
         } else {
-          toReturn.amount = +this.td.amount.value.trim();
+          // toReturn.amount = +this.td.amount.value.trim(); PARTHA
+          toReturn.amount = +this.td.amount.value;
+
         }
       }
 
@@ -4346,7 +4366,7 @@ getjoinholder(){
         if(accTypeCd===5){
           toReturn.amount=this.td.trans_type_key.value=='D'?this.misSum:0
         }
-        if(this.sys.ardbCD=='26' && accTypeCd === 4 &&  this.afMat==true){
+        if((this.sys.ardbCD=='26') && (accTypeCd === 4 &&  this.afMat==true)){
           toReturn.curr_prn_recov =  this.td.amount.value ;
           toReturn.curr_intt_recov =  this.accDtlsFrm.controls.intt_amt.value;
         
@@ -5215,7 +5235,7 @@ getjoinholder(){
         return;
       } 
       
-      else if(this.td.trans_mode.value == 'C' && tdDefTransTrnsfr.amount!=Number(this.td.td_def_mat_amt.value)){//PARTHA
+      else if(this.td.trans_mode.value == 'C' && this.f.acc_type_cd.value !=1 && tdDefTransTrnsfr.amount!=Number(this.td.td_def_mat_amt.value)){//PARTHA
         debugger
         this.HandleMessage(true, MessageType.Warning, 'You should be transfer your Mature amount only');
         tdDefTransTrnsfr.amount=null;
@@ -5235,7 +5255,7 @@ getjoinholder(){
     return;
   } 
   
-  else if(this.td.trans_mode.value == 'C' && tdDefTransTrnsfr.amount!=Number(this.td.td_def_mat_amt.value)){//PARTHA
+  else if(this.td.trans_mode.value == 'C' && this.f.acc_type_cd.value !=1  && tdDefTransTrnsfr.amount!=Number(this.td.td_def_mat_amt.value)){//PARTHA
     debugger
     this.HandleMessage(true, MessageType.Warning, 'You should be transfer your Mature amount only');
     tdDefTransTrnsfr.amount=null;

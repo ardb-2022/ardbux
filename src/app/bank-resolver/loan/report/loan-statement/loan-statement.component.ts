@@ -175,7 +175,8 @@ export class LoanStatementComponent implements OnInit {
 
   public SelectCustomer(cust: any): void {
     console.log(cust)
-    this.fromdate=cust.disb_dt
+    const date = Utils.convertStringToDt(cust.disb_dt);
+    this.fromdate = date
     this.toDate=this.sys.CurrentDate
     this.loanId=cust.loan_id
     this.custNm=cust.cust_name

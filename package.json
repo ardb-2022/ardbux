@@ -11,7 +11,7 @@
     "e2e": "ng e2e"
   },
   "private": true,
-   "dependencies": {
+  "dependencies": {
     "@angular/animations": "^9.1.13",
     "@angular/cdk": "^9.2.4",
     "@angular/common": "^9.1.13",
@@ -34,7 +34,6 @@
     "ngx-bootstrap": "^6.2.0",
     "ngx-export-as": "^1.12.0",
     "ngx-json-viewer": "^2.4.0",
-    "ngx-print": "^1.2.1",
     "rxjs": "~6.5.4",
     "tslib": "^1.14.1",
     "webdatarocks": "^1.4.4",

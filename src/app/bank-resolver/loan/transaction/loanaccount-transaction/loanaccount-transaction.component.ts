@@ -48,6 +48,8 @@ export class LoanaccountTransactionComponent implements OnInit {
   @ViewChild('contentbatch', { static: true }) contentbatch: TemplateRef<any>;
   @ViewChild('contentLoanRep', { static: true }) contentLoanRep: TemplateRef<any>;
   @ViewChild('contentLoanStmt', { static: true }) contentLoanStmt: TemplateRef<any>;
+  @ViewChild('custDtls', { static: true }) custDtls: TemplateRef<any>;
+
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   cust_acc_type:any;
@@ -183,9 +185,12 @@ export class LoanaccountTransactionComponent implements OnInit {
   fdOvdIntt=0
   fdPenalIntt=0
   joinHold:any=[];
+  member_id:string;
   acc_block:string;
   acc_lfNo:string;
   acc_phone:string;
+  guardian_name:string;
+  present_address:string;
   // editDeleteMode=false
   // showInstrumentDtl = false;
   ngOnInit(): void {
@@ -2610,6 +2615,10 @@ debugger;
       this.acc_block=null;
       this.acc_lfNo=null;
       this.acc_phone=null;
+      this.present_address=null;
+      this.member_id=null;
+      this.guardian_name=null;
+
     // 
 
   }
@@ -3032,6 +3041,11 @@ debugger;
 
     // this.PopulateLoanRepSch(template);
   }
+  customerDtls(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, { class: 'modal-xl' });
+
+
+  }
   public SubmitReport(template: TemplateRef<any>) {
     ////////debugger;
     // this.UrlString = this.svc.getReportUrl();
@@ -3200,6 +3214,9 @@ debugger;
               // console.log(this.acc2.tmloanall.loan_acc_no);
               this.acc_block=this.selectedBlock[0].block_name;
               this.acc_phone=this.suggestedCustomer1[0].phone;
+              this.present_address=this.suggestedCustomer1[0].present_address;
+              this.member_id=this.suggestedCustomer1[0].old_cust_cd;
+              this.guardian_name=this.suggestedCustomer1[0].guardian_name;
               this.acc_lfNo=this.acc2.tmloanall.loan_acc_no;
               
             } else {

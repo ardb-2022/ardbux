@@ -199,6 +199,14 @@
         <mat-icon>currency_rupee</mat-icon>
         <span>NEFT/RTGS/IMPS Payment</span>
       </button>
+      <button mat-menu-item routerLink="DT_SavingInttPost" *ngIf="userType=='A'">
+        <mat-icon>volunteer_activism</mat-icon>
+        <span>Savings Interest Posting</span>
+      </button>
+      <button mat-menu-item routerLink="DT_AgentComPost" *ngIf="userType=='A' || userType=='S'">
+        <mat-icon>done_outline</mat-icon>
+        <span>Agent Commission Posting</span>
+      </button>
       <button mat-menu-item [matMenuTriggerFor]="dds_imp_exp">
         <mat-icon>upgrade</mat-icon>
         <span>DDS Import/Export</span>
@@ -247,10 +255,7 @@
         <mat-icon>undo</mat-icon>
         <span>NEFT Outward Report</span>
       </button>
-      <button mat-menu-item routerLink="DR_PbkPrn">
-        <mat-icon>print</mat-icon>
-        <span>Pass book Printing</span>
-      </button>
+      
       <button mat-menu-item [matMenuTriggerFor]="Standing_Instruction">
         <mat-icon>query_stats</mat-icon>
         <span>Standing Instruction</span>
@@ -259,8 +264,16 @@
         <mat-icon>layers</mat-icon>
         <span>Slabwise Deposit</span>
       </button>
-      <button mat-menu-item routerLink="DR_UpbkPrnSts">
+      <button mat-menu-item routerLink="DR_PCertificate">
+        <mat-icon>workspace_premium</mat-icon>
+        <span>Certificate Printing</span>
+      </button>
+      <button mat-menu-item routerLink="DR_PbkPrn">
         <mat-icon>print</mat-icon>
+        <span>Pass book Printing</span>
+      </button>
+      <button mat-menu-item routerLink="DR_UpbkPrnSts">
+        <mat-icon>published_with_changes</mat-icon>
         <span>Update Passbook Print Status</span>
       </button>
     </mat-menu>
@@ -419,6 +432,14 @@
     <button mat-menu-item routerLink="LR_NPA">
       <mat-icon>local_library</mat-icon>
       <span>NPA List</span>
+    </button>
+    <button mat-menu-item routerLink="DR_LoanPbkPrn">
+      <mat-icon>print</mat-icon>
+      <span>Pass book Printing</span>
+    </button>
+    <button mat-menu-item routerLink="DR_LoanUpbkPrnSts">
+      <mat-icon>published_with_changes</mat-icon>
+      <span>Update Passbook Print Status</span>
     </button>
   </mat-menu>
   <mat-menu #dList="matMenu">
@@ -603,18 +624,18 @@
          <mat-icon>lock_open</mat-icon>
           <span>Investment Opening</span>
         </button>
-        <button mat-menu-item routerLink="I_ViewDtls">
-          <mat-icon>view_in_ar</mat-icon>
-           <span>View Investment Details</span>
-         </button>
-        <button mat-menu-item routerLink="I_TrnsApprov">
-          <mat-icon>verified</mat-icon>
-          <span>Investment Approval</span>
-        </button>
         <button mat-menu-item routerLink="I_Trns">
           <mat-icon>currency_exchange</mat-icon>
           <span>Investment Transaction</span>
         </button>
+        <button mat-menu-item routerLink="I_TrnsApprov">
+          <mat-icon>verified</mat-icon>
+          <span>Investment Approval</span>
+        </button>
+        <button mat-menu-item routerLink="I_ViewDtls">
+          <mat-icon>view_in_ar</mat-icon>
+           <span>View Investment Details</span>
+         </button>
         
       </mat-menu>
       <mat-menu #iReport="matMenu">

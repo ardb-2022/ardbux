@@ -48,7 +48,7 @@ export class OpenLoanAccountComponent implements OnInit {
   ) { }
 
   @ViewChild('kycContent', { static: true }) kycContent: TemplateRef<any>;
-
+  actDesc:any;
   SecaccNum:any;
   SecaccCD:any;
   branchCode = '0';
@@ -209,7 +209,7 @@ export class OpenLoanAccountComponent implements OnInit {
     this.setLoanAccountType(this.tm_loan_all.acc_cd);
     this.setInstalPeriod(this.tm_loan_all.piriodicity);
     this.setRepaymentFormula(this.tm_loan_all.emi_formula_no);
-
+    this.setActivity()
 
     const guar = new tm_guaranter();
     this.tm_guaranter = guar;
@@ -234,7 +234,21 @@ export class OpenLoanAccountComponent implements OnInit {
     this.parseSecurityDetailsRecord();
 
   }
-
+setActivity(){//PARTHA
+  debugger;
+  console.log( this.tm_loan_sanction_dtls);
+  
+  this.tm_loan_sanction_dtls[0].activity_cd=this.masterModel.tmlaonsanctiondtls[0].activity_cd
+  this.tm_loan_sanction_dtls[0].activity_desc=this.masterModel.tmlaonsanctiondtls[0].activity_desc
+  this.tm_loan_sanction_dtls[0].sector_cd=this.masterModel.tmlaonsanctiondtls[0].sector_cd
+  this.selectedActivityList=[];
+  this.selectedActivityList = this.activityList.filter(x => x.sector_cd.toString() === this.tm_loan_sanction_dtls[0].sector_cd.toString());
+  // const actDtls: tm_loan_sanction_dtls[] = [];
+  // this.actDesc=this.activityList.filter(x => x.activity_cd.toString() === 
+  // this.masterModel.tmlaonsanctiondtls[0].activity_cd.toString())[0].activity_desc;
+  debugger;
+  // actDtls[0].activity_cd=this.masterModel.tmlaonsanctiondtls[0].activity_cd
+}
   associateChildRecordsWithHeader() {
 
     if (this.masterModel.tdaccholder.length === 0) {
@@ -732,7 +746,7 @@ removeSecurityDtlList()
     this.tm_loan_sanction_dtls[idx].activity_desc =
       this.activityList.filter(x => x.activity_cd.toString() === 
         act.toString())[0].activity_desc;
-
+    debugger
     this.tm_loan_sanction_dtls[idx].crop_cd = null;
     this.tm_loan_sanction_dtls[idx].crop_desc = null;
 

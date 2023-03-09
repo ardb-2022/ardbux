@@ -10,15 +10,16 @@ import { RestService } from 'src/app/_service';
 import Utils from 'src/app/_utility/utils';
 import { PageChangedEvent } from "ngx-bootstrap/pagination/public_api";
 import { ExportAsService, ExportAsConfig } from 'ngx-export-as'
-import { AccOpenDM } from 'src/app/bank-resolver/Models/deposit/AccOpenDM';
 import { mm_oprational_intr } from 'src/app/bank-resolver/Models/deposit/mm_oprational_intr';
 import { DatePipe } from '@angular/common';
+import { LoanOpenDM } from 'src/app/bank-resolver/Models/loan/LoanOpenDM';
+import { mm_acc_type } from 'src/app/bank-resolver/Models/deposit/mm_acc_type';
 @Component({
-  selector: 'app-pass-book-fast-page',
+  selector: 'app-pass-book-fast-page-loan',
   templateUrl: './pass-book-fast-page.component.html',
   styleUrls: ['./pass-book-fast-page.component.css']
 })
-export class PassBookFastPageComponent implements OnInit {
+export class LoanPassBookFastPageComponent implements OnInit {
   @ViewChild('content2', { static: true }) content2: TemplateRef<any>;
   modalRef: BsModalRef;
   isOpenFromDp = false;
@@ -31,7 +32,7 @@ export class PassBookFastPageComponent implements OnInit {
     class: 'modal-lg'
   };
   @Input() accNum: string;
-  @Input() accType: string;
+  // @Input() accType: string;
   operationalInstrList: mm_oprational_intr[] = [];
   trailbalance: tt_trial_balance[] = [];
   prp = new p_report_param();
@@ -80,7 +81,11 @@ export class PassBookFastPageComponent implements OnInit {
   custDtls:any;
   custCD:any;
   oprn_instr_desc:any;
-  curDay:any
+  curDay:any;
+  acc_cd:any;
+  accountTypeList: mm_acc_type[] = [];
+  loan_case_dtls:any;
+  loan_case_no:any;
   constructor(private svc: RestService, private formBuilder: FormBuilder,
     private modalService: BsModalService,public datepipe: DatePipe, private _domSanitizer: DomSanitizer,private exportAsService: ExportAsService, private cd: ChangeDetectorRef,
     private router: Router) { }
@@ -90,7 +95,8 @@ export class PassBookFastPageComponent implements OnInit {
       yes: [''],
       no: ['']
     });
-    this.getOperationalInstr();
+    this.getAccountTypeList()
+    // this.getOperationalInstr();
     this.onLoadScreen(this.content2);
     var date = new Date();
     // get the date as a string
@@ -117,18 +123,28 @@ export class PassBookFastPageComponent implements OnInit {
   }
   loadFastPageData(){
     this.joinHold=[];
-    this.masterModel = new AccOpenDM();
+    this.masterModel = new LoanOpenDM();
     var dt={
       "ardb_cd":this.sys.ardbCD,
       "brn_cd":this.sys.BranchCode,
-      "acc_num":this.accNum,
-      "acc_type_cd":this.accType,
+      "loan_id":this.accNum,
+      // "acc_type_cd":this.accType,
       
     }
-    this.svc.addUpdDel('Deposit/getAccountOpeningData',dt).subscribe(data=>{
+    this.svc.addUpdDel('Loan/GetLoanData',dt).subscribe(data=>{
       console.log(data);
       this.masterModel = data;
-      this.custCD=this.masterModel.tmdeposit.cust_cd
+      this.custCD=this.masterModel.tmloanall.party_cd
+      this.acc_cd=this.masterModel.tmloanall.acc_cd
+      if(this.acc_cd===20411){
+        this.loan_case_dtls=this.masterModel.tdloansancsetlist[0].tdloansancset.filter(x => x.param_cd=='117')
+        this.loan_case_no=this.loan_case_dtls[0].param_value
+      }
+      else{
+        this.loan_case_dtls=null
+        this.loan_case_no=null
+      }
+
       debugger
       this.getCustomer()
      
@@ -142,22 +158,45 @@ export class PassBookFastPageComponent implements OnInit {
         }
         
     })
-    this.suggestedCustomer=[]
-    var dc={
-      "ardb_cd":this.sys.ardbCD,
-      "brn_cd":this.sys.BranchCode,
-      "as_cust_name":this.accNum,
-      "ad_acc_type_cd":this.accType,
+    this.accountTypeList=this.accountTypeList.filter(c => c.acc_type_cd == this.acc_cd)
+    
+    // this.suggestedCustomer=[]
+    // var dc={
+    //   "ardb_cd":this.sys.ardbCD,
+    //   "brn_cd":this.sys.BranchCode,
+    //   "as_cust_name":this.accNum,
+    //   "ad_acc_type_cd":this.accType,
       
+    // }
+    // this.svc.addUpdDel('Deposit/GetCustDtls',dc).subscribe(res=>{
+    //   console.log(res);
+    //   this.suggestedCustomer=res;
+    //   console.log(this.suggestedCustomer);
+      
+    // })
+    
+    
+  }
+  getAccountTypeList() {
+
+    if (this.accountTypeList.length > 0) {
+      return;
     }
-    this.svc.addUpdDel('Deposit/GetAccDtls',dc).subscribe(res=>{
-      console.log(res);
-      this.suggestedCustomer=res;
-      console.log(this.suggestedCustomer);
-      
-    })
-    
-    
+    this.accountTypeList = [];
+
+    this.isLoading = true;
+    this.svc.addUpdDel<any>('Mst/GetAccountTypeMaster', null).subscribe(
+      res => {
+
+        this.isLoading = false;
+        this.accountTypeList = res;
+        this.accountTypeList = this.accountTypeList.filter(c => c.dep_loan_flag === 'L');
+        this.accountTypeList = this.accountTypeList.sort((a, b) => (a.acc_type_cd > b.acc_type_cd) ? 1 : -1);
+      },
+      err => {
+        this.isLoading = false;
+      }
+    );
   }
   getCustomer(){
     debugger

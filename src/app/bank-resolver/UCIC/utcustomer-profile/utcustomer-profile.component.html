@@ -114,7 +114,7 @@
           <strong class="text-danger">" {{this.f.cust_name.value}} " does not match with any customer</strong>
           </div> -->
         </div>
-        <div class="form-group col-2">
+        <div class="form-group col-1">
           <small for="cust_type">Customer Type <span class="text-danger">*</span></small>
           <select id="cust_type" class="form-control form-control-sm" formControlName="cust_type">
             <option selected disabled>Choose...</option>
@@ -144,6 +144,11 @@
           <small for="last_name">Last Name <span class="text-danger">*</span></small>
           <input type="text" class="form-control form-control-sm mkUpper" formControlName="last_name"
             id="last_name" placeholder="Last Name" (input)="onNameChange()" autocomplete="chrome-off">
+        </div>
+        <div class="form-group col-1">
+          <small for="old_cust_cd">Member ID </small>
+          <input type="text" class="form-control form-control-sm mkUpper" formControlName="old_cust_cd"
+            id="old_cust_cd"  autocomplete="chrome-off">
         </div>
       </div> <!-- form group row end -->
       <div class="form-row">

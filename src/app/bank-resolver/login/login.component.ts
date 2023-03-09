@@ -162,7 +162,7 @@ export class LoginComponent implements OnInit {
     login.password = this.f.password.value;
     login.brn_cd = this.f.branch.value;
     this.nm = this.ardbBrnMst.find(x => x.ardB_CD == this.f.ardbbrMst.value)
-    debugger
+    
     this.nm.name = this.nm.name.substr(0,this.nm.name.length-10)
     this.nm.name = this.nm.name +' Co-Operative Agriculture & Rural Development Bank Ltd.'
     localStorage.setItem('ardb_name', this.nm.name)

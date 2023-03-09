@@ -22,7 +22,7 @@
             <option disabled>Choose</option>
             <option [value]="1">1 - Saving Deposit</option>
             <option [value]="7">7 - Share</option>
-            <option [value]="8">8 - Current</option>
+            <option [value]="8">8 - Flexi</option>
           </select>
         </div>
         <div class="col-9">
@@ -110,20 +110,25 @@
     <div>
       <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="closeScreen()">Close</button>
       <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" [useExistingCss]="true"
-        printSectionId="hiddenTab" ngxPrint>Print</button>
+        printSectionId="hiddenTab" ngxPrint (click)="printCall()">Print</button>
  <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
  <button mat-raised-button type="button" (click)="FastpageScreen()" class="btn btn-rounded btn-primary m-1"[routerLink]="['DR_PassBookFastPage']" >Print Fast Page</button>
 
     </div>
   </div>
-  
+  <div *ngIf="showAlert" class="alert alert-success alert-dismissible fade show" role="alert" style="width: 67%;">
+    <strong>Msg,</strong> {{alertMsg}}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="closeAlert()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
   <div class="col-xs-12 col-sm-12 shadow-lg mb-4 bg-white p-3 mkScroll">
     <div class="justify-content-center" style="text-align:center" *ngIf="reportData">
-      <h6>{{ardbName}} {{branchName}}</h6>
+      <h4>{{ardbName}} {{branchName}}</h4>
 
-      <h6>Run Date & Time : {{today}} </h6> <br>
-      <h6> <u> Passbook from {{reportcriteria.controls.fromDate.value?.toDateString()| date: 'dd/MM/yyyy'}} to {{
-          this.reportcriteria.controls.toDate.value?.toDateString()| date: 'dd/MM/yyyy'}}</u></h6>
+      <h4>Run Date & Time : {{today}} </h4> <br>
+      <h4> <u> Passbook from {{reportcriteria.controls.fromDate.value?.toDateString()| date: 'dd/MM/yyyy'}} to {{
+          this.reportcriteria.controls.toDate.value?.toDateString()| date: 'dd/MM/yyyy'}}</u></h4>
     </div>
     <table style="text-align:left;margin-left: 30%;" *ngIf="reportData">
       <tr>
@@ -136,27 +141,27 @@
         <th>Present Address: {{cAddress}}</th>
       </tr>
     </table>
-    <pagination style="float:right;" [totalItems]="reportData?.length" [itemsPerPage]="itemsPerPage"
+    <!-- <pagination style="float:right;" [totalItems]="reportData?.length" [itemsPerPage]="itemsPerPage"
       [boundaryLinks]="true" [directionLinks]="true" [maxSize]="5" [(ngModel)]="currentPage" name="currentPage"
-      (pageChanged)="pageChanged($event)" (pageBoundsCorrection)="pageChanged($event)"></pagination>
+      (pageChanged)="pageChanged($event)" (pageBoundsCorrection)="pageChanged($event)"></pagination> -->
     <table class="p-3" id="trial">
       <tr *ngIf="reportData">
         <!-- <th></th> -->
         <th>Trans Dt</th>
-        <th>Instrument</th>
         <th>Particulars</th>
+        <th>Instrument</th>
         <th style="text-align:right;">Withdrawal</th>
         <th style="text-align:right;">Deposit</th>
         <th style="text-align:right;">Balance</th>
 
 
       </tr>
-      <tbody *ngFor="let i of passBookData; let itr=index;">
-        <br>
+      <tbody *ngFor="let i of reportData; let itr=index;">
+        
         <tr>
           <td>{{i.trans_dt.substr(0,10)}}</td>
-          <td>{{i.instrument_num}}</td>
           <td>{{i.particulars}}</td>
+          <td>{{i.instrument_num}}</td>
           <td>
             {{i.trans_type=='W'?i.amount:0 | number : '1.2-2'}}
            </td>
@@ -186,8 +191,8 @@
         
        </tfoot>
     </table>
-    <div id="hiddenTab">
-      <br><br><br>
+    <div id="hiddenTab" hidden>
+      <br><br>
       <table  class="mkSmall">
         <tbody *ngFor="let i of printData; let itr=index;">
           <tr *ngIf="i.trans_type==null">
@@ -195,18 +200,18 @@
           </tr>
           <tr *ngIf="i.trans_type!==null">
             <td style="width:16%;">{{i.trans_dt==null?'':i.trans_dt.substr(0,10)}}</td>
-            <td style="width:42%;">{{i.particulars}}</td>
+            <td style="max-width: 170px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{i.particulars}}</td>
             <!-- <td style="width:16%;">{{i.instrument_num}}</td> -->
-            <td  style="width: 10%;"></td>
-            <td  style="width: 12%;">
-              {{i.trans_type=='W'?i.amount:i.trans_type==null?'':0 | number : '1.2-2'}}
+            <!-- <td  style="width: 10%;"></td> -->
+            <td  style="width: 12%; text-align: right; padding-right:3%;">
+              {{(i.trans_type=='W'?i.amount:i.trans_type==null?'':'') | number : '1.2-2'}}
              </td>
-             <td>
-             {{i.trans_type=='D'?i.amount:i.trans_type==null?'':0 | number : '1.2-2'}}
+             <td style="text-align: right;">
+             {{(i.trans_type=='D'?i.amount:i.trans_type==null?'':'')| number : '1.2-2'}}
              </td>
             <!-- <td style="text-align: right;">{{i.withdrawal | number : '1.2-2'}}</td>
             <td style="text-align: right;width: 12%;">{{i.deposit | number : '1.2-2'}}</td> -->
-            <td style="text-align: right;">{{i.balance | number : '1.2-2'}}</td>
+            <td style="text-align: right; padding-right: 2%;">{{i.balance | number : '1.2-2'}}</td>
 
 
             <!-- <td style="text-align:right">{{i.balance | number : '1.2-2'}}</td> -->
@@ -233,7 +238,7 @@
     <button mat-raised-button hidden id="chngPage" (click)="setPage(1)"></button>
   </div>
   <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 shadow-sm mb-4 bg-white p-3" *ngIf="shoFastPage">
-    <router-outlet></router-outlet>
+    <app-pass-book-fast-page [accNum]="accNum" [accType]="accType"></app-pass-book-fast-page>
   </div>
 
 
@@ -241,24 +246,37 @@
     <div>
       <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="closeScreen()">Close</button>
       <button #print mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" [useExistingCss]="true"
-        printSectionId="hiddenTab" useExistingCss="true" ngxPrint (click)="printCall()">Print</button>
+      printSectionId="hiddenTab" ngxPrint (click)="printCall()">Print</button>
  <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
+ <button mat-raised-button type="button" (click)="FastpageScreen()" class="btn btn-rounded btn-primary m-1"[routerLink]="['DR_PassBookFastPage']" >Print Fast Page</button>
 
     </div>
   </div>
 </div>
 <ng-template #nextpage let-modal data-keyboard="false" data-backdrop="false">
-  <!-- <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Print Next-Page</h4>
-    <button type="button" class="close text-danger" aria-label="Close" data-dismiss="modal" (click)="modalRef.hide()">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div> -->
+ 
   <div class="modal-body">
-    <p>Previous page print successfully! Click on next for print rest transaction,</p>
+    <p>Previous page print successfully! Click on <b>'Print'</b> button for print rest <b>{{restItem}} </b>transaction,</p>
   </div>
   <div class="modal-footer">
-    <button mat-raised-button class="btn btn-primary" (click)="PrintNext()">Next</button> &nbsp;
+    <button mat-raised-button class="btn btn-light" (click)="modalRef.hide()">Close</button>
+  </div>
+</ng-template>
+<ng-template #fullpageUpdate let-modal data-keyboard="false" data-backdrop="false">
+ 
+  <div class="modal-body">
+    <p>Last update in this passbook complated with full page, Insert new blank page and click <b>'Print'</b> </p>
+  </div>
+  <div class="modal-footer">
+    <button mat-raised-button class="btn btn-light" (click)="modalRef.hide()">Close</button>
+  </div>
+</ng-template>
+<ng-template #UpdateSuccess let-modal data-keyboard="false" data-backdrop="false">
+ 
+  <div class="modal-body">
+    <h4 style="color: darkgreen;"><b>{{cName}}</b> Passbook updated successfully....</h4>
+  </div>
+  <div class="modal-footer">
     <button mat-raised-button class="btn btn-light" (click)="modalRef.hide()">Close</button>
   </div>
 </ng-template>

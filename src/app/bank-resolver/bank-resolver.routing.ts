@@ -120,6 +120,12 @@ import { BMLoanStatementComponent } from './loan/report/bmloan-statement/bmloan-
 import { SlabwiseDepositComponent } from './deposit/report/slabwise-deposit/slabwise-deposit.component';
 import { PassBookFastPageComponent } from './deposit/report/pass-book-printing/pass-book-fast-page/pass-book-fast-page.component';
 import { DetaillistAllComponent } from './loan/report/detaillist-all/detaillist-all.component';
+import { SavingIntPostComponent } from './deposit/saving-int-post/saving-int-post.component';
+import { AgentCommissionComponent } from './deposit/agent-commission/agent-commission.component';
+import { LoanPassBookFastPageComponent } from './loan/report/pass-book-printing/pass-book-fast-page/pass-book-fast-page.component';
+import { LoanPassBookPrintingComponent } from './loan/report/pass-book-printing/pass-book-printing.component';
+import { LoanUpdatePassbookComponent } from './loan/report/update-passbook/update-passbook.component';
+import { PrintCertificateComponent } from './deposit/report/print-certificate/print-certificate.component';
 const routes: Routes = [
   { path: 'Admin', component: AdminPanelComponent },
   { path: 'admin', component: AdminPanelComponent },
@@ -227,13 +233,24 @@ const routes: Routes = [
       { path: 'DT_DDEXPORT', component: DdsExportComponent, canActivate: [AuthGuard] },
       { path: 'DT_DDIMPORT', component: DdsImportComponent, canActivate: [AuthGuard] },
       { path: 'DT_DDINDPOST', component: DdsIndividualPostingComponent, canActivate: [AuthGuard] },
+      { path: 'DT_SavingInttPost', component: SavingIntPostComponent, canActivate: [AuthGuard] },
+      { path: 'DT_AgentComPost', component: AgentCommissionComponent, canActivate: [AuthGuard] },
       { path: 'DR_NeftIn', component: NeftInwardReportComponent, canActivate: [AuthGuard] },
       { path: 'DR_NeftOut', component: NeftOutwardReportComponent, canActivate: [AuthGuard] },
+      { path: 'DR_PCertificate', component: PrintCertificateComponent, canActivate: [AuthGuard] },
       { path: 'DR_PbkPrn', component: PassBookPrintingComponent,
       children: [
       { path: 'DR_PassBookFastPage', component: PassBookFastPageComponent},
         ], canActivate: [AuthGuard] },
       { path: 'DR_UpbkPrnSts', component: UpdatePassbookComponent, canActivate: [AuthGuard]},
+
+
+      { path: 'DR_LoanPbkPrn', component: LoanPassBookPrintingComponent,
+      children: [
+      { path: 'DR_LoanPassBookFastPage', component: LoanPassBookFastPageComponent},], canActivate: [AuthGuard] },
+
+      { path: 'DR_LoanUpbkPrnSts', component: LoanUpdatePassbookComponent, canActivate: [AuthGuard]},
+
       { path: 'DR_Act_SI_List', component: StandingInsActiveSIListComponent, canActivate: [AuthGuard] },
       { path: 'DR_Today_SI_Exec', component: StandingInsTodaySIExecutedComponent, canActivate: [AuthGuard] },
       { path: 'DR_DDS', component: DetailDDSComponent, canActivate: [AuthGuard] },

@@ -88,7 +88,7 @@ import { OnetimesettlementComponent } from './loan/transaction/onetimesettlement
 import { DdsImportComponent } from './deposit/ddsExportImport/dds-import/dds-import.component';
 import { DdsExportComponent } from './deposit/ddsExportImport/dds-export/dds-export.component';
 import { DdsIndividualPostingComponent } from './deposit/ddsExportImport/dds-individual-posting/dds-individual-posting.component';
-import { NgxPrintModule } from 'ngx-print';
+import { NgxPrintModule} from 'ngx-print';
 import { ExportAsModule } from 'ngx-export-as';
 import { DefaulterListComponent } from './loan/report/defaulter-list/defaulter-list.component';
 import { DemandListComponent } from './loan/report/demand-list/demand-list.component';
@@ -164,6 +164,12 @@ import { BMLoanStatementComponent } from './loan/report/bmloan-statement/bmloan-
 import { SlabwiseDepositComponent } from './deposit/report/slabwise-deposit/slabwise-deposit.component';
 import { PassBookFastPageComponent } from './deposit/report/pass-book-printing/pass-book-fast-page/pass-book-fast-page.component';
 import { DetaillistAllComponent } from './loan/report/detaillist-all/detaillist-all.component';
+import { SavingIntPostComponent } from './deposit/saving-int-post/saving-int-post.component';
+import { AgentCommissionComponent } from './deposit/agent-commission/agent-commission.component';
+import { LoanUpdatePassbookComponent } from './loan/report/update-passbook/update-passbook.component';
+import { LoanPassBookFastPageComponent } from './loan/report/pass-book-printing/pass-book-fast-page/pass-book-fast-page.component';
+import { LoanPassBookPrintingComponent } from './loan/report/pass-book-printing/pass-book-printing.component';
+import { PrintCertificateComponent } from './deposit/report/print-certificate/print-certificate.component';
 
 @NgModule({
   declarations: [ 
@@ -203,7 +209,9 @@ import { DetaillistAllComponent } from './loan/report/detaillist-all/detaillist-
       RecovInterestComponent, BankEntryComponent, BranchEntryComponent, VewInvestmentDtlsComponent, 
       InvTransactionApprovalComponent, InvestmentTransactionsComponent, FdTransComponent, CcTransComponent, MisTransComponent,
        RdTransComponent, CreateGLHeadComponent, DetailListFdmisConstWiseComponent, INearMaturityComponent,
-       IDetailListComponent, AllGLDetailsComponent, UpdatePassbookComponent, BMLoanStatementComponent, SlabwiseDepositComponent, PassBookFastPageComponent, DetaillistAllComponent,
+       IDetailListComponent, AllGLDetailsComponent, UpdatePassbookComponent, BMLoanStatementComponent, SlabwiseDepositComponent, 
+       PassBookFastPageComponent, DetaillistAllComponent, SavingIntPostComponent, AgentCommissionComponent,
+       LoanUpdatePassbookComponent,LoanPassBookFastPageComponent,LoanPassBookPrintingComponent, PrintCertificateComponent
   ],
   imports: [
     NgxPrintModule, MatTableModule, MatFormFieldModule,  MatInputModule, MatSlideToggleModule,MatButtonModule,
@@ -212,12 +220,12 @@ import { DetaillistAllComponent } from './loan/report/detaillist-all/detaillist-
     ReactiveFormsModule, FormsModule, AutocompleteLibModule, MatExpansionModule, MatSelectModule,
     BsDatepickerModule.forRoot(), AccordionModule.forRoot(), MatSnackBarModule, MatTooltipModule,
     TypeaheadModule.forRoot(),
-    ExportAsModule,HttpClientModule
+    ExportAsModule,HttpClientModule,
   ],
   providers: [
     PaginationConfig,
     CommonServiceService,
-    CurrencyPipe,DecimalPipe,
+    CurrencyPipe,DecimalPipe
     // { provide: ErrorHandler, useClass: GlobalErrorHandler },
     // { provide: HTTP_INTERCEPTORS, useClass: ServerErrorInterceptor, multi: true  }
   ],

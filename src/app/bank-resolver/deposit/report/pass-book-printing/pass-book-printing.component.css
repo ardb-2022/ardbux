@@ -119,5 +119,5 @@ thead {
   mso-footer: footer;
 }*/
 @media print {
- html,table{font-size: large;} 
+ html,table{font-size: large;font-family:Arial, Helvetica, ui-sans-serif} 
 }

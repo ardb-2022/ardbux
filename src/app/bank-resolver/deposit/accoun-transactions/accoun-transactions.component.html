@@ -327,8 +327,9 @@
                 <option value="Q">Cheque/Draft</option>
               </select>
             </div>
-            <!-- {{this.f.acc_type_cd.value}} {{accNoEnteredForTransaction.ShowClose}} -->
-            <div class="form-group col-2" *ngIf="showTransfrTyp">
+            <!-- {{this.f.acc_type_cd.value}} {{accNoEnteredForTransaction.ShowClose}}
+            *ngIf="showTransfrTyp" -->
+            <div class="form-group col-2" >
               <small for="trf_type">Transfer Type <span class="text-danger">*</span></small>
               <select id="trf_type" class="form-control form-control-sm" formControlName="trf_type"
                 (change)="onTransTypeChange()">
@@ -366,6 +367,11 @@
               <!-- <input type="text" class="form-control form-control-sm" formControlName="closeIntrest" disabled> -->
               <input type="text" class="form-control form-control-sm" formControlName="closeIntrest"  (keyup)="onInterestChange()">
             </div>
+            <div class="form-group col-2" *ngIf="showCloseInterest  && this.f.acc_type_cd.value == 1">
+              <small for="td_def_mat_amt">Maturity Value</small>
+              <input type="text" disabled class="form-control form-control-sm" formControlName="td_def_mat_amt"
+                id="td_def_mat_amt">
+            </div>
             <!-- <div class="col-6" *ngIf=" this.f.acc_type_cd.value ==1 || this.f.acc_type_cd.value == 7 || this.f.acc_type_cd.value == 8">
               <p class="amountToWord">{{td.amount.value | amountToWord}}</p>
             </div> -->
@@ -379,22 +385,22 @@
               <input type="text" class="form-control form-control-sm"  formControlName="amount0" id="amount0"
              >
             </div>  -->
-            <!-- {{showBalance}}
+            <!-- {{showBalance}} -->
             <div class="form-group col-2" *ngIf="showBalance && this.f.acc_type_cd.value != 11">
               <small for="balance">Balance</small>
               <input type="text" disabled class="form-control form-control-sm" formControlName="balance" id="balance">
             </div>
             
             
-             marker -->
+             <!-- marker -->
              <div class="form-group col-2" *ngIf="showOnClose && this.f.acc_type_cd.value == 11">
               <small for="curr_intt_recov">Interest</small>
-              <input type="text" (change)="inttCalOnClose()"  class="form-control form-control-sm"
+              <input type="text" (change)="CloseDPenalty()"  class="form-control form-control-sm"
                 formControlName="curr_intt_recov" id="curr_intt_recov">
             </div>
              <div class="form-group col-2" *ngIf="showOnClose ">
               <small for="ovd_intt_recov">Default Penalty</small>
-              <input type="text" (change)="inttCalOnClose()" class="form-control form-control-sm"
+              <input type="text" (change)="CloseDPenalty()" class="form-control form-control-sm"
                 formControlName="ovd_intt_recov" id="ovd_intt_recov">
             </div>
             <div class="form-group col-2" *ngIf="showOnClose  && this.f.acc_type_cd.value != 11">

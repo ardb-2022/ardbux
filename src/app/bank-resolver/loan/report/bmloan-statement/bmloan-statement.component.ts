@@ -186,14 +186,18 @@ export class BMLoanStatementComponent implements OnInit {
   }
 
   public SelectCustomer(cust: any): void {
+    debugger;
     console.log(cust)
-    this.fromdate=cust.disb_dt
+    const date = Utils.convertStringToDt(cust.disb_dt);
+    this.fromdate = date
+    debugger
     this.toDate=this.sys.CurrentDate
     this.loanId=cust.loan_id
     this.custNm=cust.cust_name
     this.addr=cust.present_address
     this.reportcriteria.controls.acct_num.setValue(cust.loan_id);
     this.suggestedCustomer = null;
+    debugger
   }
 
   public SubmitReport() {
