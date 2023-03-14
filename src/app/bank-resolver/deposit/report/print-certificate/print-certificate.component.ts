@@ -13,6 +13,7 @@ import { ExportAsService, ExportAsConfig } from 'ngx-export-as'
 import { sm_parameter } from 'src/app/bank-resolver/Models/sm_parameter';
 import { AccOpenDM } from 'src/app/bank-resolver/Models/deposit/AccOpenDM';
 import { mm_oprational_intr } from 'src/app/bank-resolver/Models/deposit/mm_oprational_intr';
+import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-print-certificate',
   templateUrl: './print-certificate.component.html',
@@ -92,7 +93,13 @@ export class PrintCertificateComponent implements OnInit {
   ShowCC:boolean=false;
   printFlag:any;
   disablePrint:boolean=false;
-  constructor(private svc: RestService, private formBuilder: FormBuilder,
+  renew_id:any;
+  Deposit_Period:any;
+  year:number;
+  month:number;
+  day:number;
+  sbAcc:any;
+  constructor(private svc: RestService, private formBuilder: FormBuilder,private http: HttpClient,
     private modalService: BsModalService, private _domSanitizer: DomSanitizer,private exportAsService: ExportAsService, private cd: ChangeDetectorRef,
     private router: Router) { }
   ngOnInit(): void {
@@ -191,20 +198,11 @@ export class PrintCertificateComponent implements OnInit {
     // this.fromdate = Utils.convertStringToDt(cust.opening_dt);
     // this.toDate = this.sys.CurrentDate;
     this.suggestedCustomer = null;
-   
+    
   }
 
   public SubmitReport() {
-    debugger
-    this.getPrintFlag()
-    debugger
-    if(this.printFlag=='Y'){
-      debugger
-      this.modalRef = this.modalService.show(this.alreadyUpdate, this.config);
-      this.disablePrint;
-    }
-    else{
-    if(this.reportcriteria.controls.acc_type_cd.value=='5'){
+   if(this.reportcriteria.controls.acc_type_cd.value=='5'){
       this.ShowMIS=true;
       this.ShowCC=false;
       this.Header="MIS CERTIFICATE";
@@ -229,6 +227,25 @@ export class PrintCertificateComponent implements OnInit {
           //debugger;
           this.isLoading = false;
           this.masterModel = res;
+          let y=this.masterModel.tmdeposit.dep_period.split(";")[0]
+          let m=this.masterModel.tmdeposit.dep_period.split(";")[1]
+          let d=this.masterModel.tmdeposit.dep_period.split(";")[2]
+          d=d.substr(4-d.length)
+          console.log(d);
+          m=m.substr(6-m.length)
+          console.log(m);
+          y=y.substr(5-y.length)
+          console.log(y);
+          if(+y>0){ this.Deposit_Period =y+' -Year'}
+          else if(+m>0){this.Deposit_Period = m+' -Months'}
+          else if(+d>0){ this.Deposit_Period = d+' -Days'}
+        if(this.masterModel.tmdeposit.cheque_facility_flag=='Y'){
+          this.sbAcc='Flexi A/C -'+this.masterModel.tmdeposit.user_acc_num
+        }
+        else{this.sbAcc=''}
+        debugger
+
+          this.renew_id=this.masterModel.tmdeposit.renew_id
           this.oprn_instr_desc = this.operationalInstrList.filter(x => x.oprn_cd.toString() === this.masterModel.tmdeposit.oprn_instr_cd.toString())[0].oprn_desc;
           for (let i = 0; i <=  this.masterModel.tdaccholder.length; i++) {
             console.log( this.masterModel);
@@ -255,7 +272,13 @@ export class PrintCertificateComponent implements OnInit {
       //   this.isLoading = false;
       // }, 10000);
     }
-  }
+    this.getPrintFlag();
+    // if(this.printFlag=='Y'){
+    //   debugger
+    //   this.modalRef = this.modalService.show(this.alreadyUpdate, this.config);
+    //   this.disablePrint=true;
+    // }
+    // debugger
 }
   getSMParameter(){
     this.svc.addUpdDel('Mst/GetSystemParameter', null).subscribe(
@@ -267,10 +290,12 @@ export class PrintCertificateComponent implements OnInit {
           "ardb_cd":this.sys.ardbCD,
           "acc_num":this.reportcriteria.controls.acct_num.value,
           "acc_type_cd":this.reportcriteria.controls.acc_type_cd.value,
-          "print_status":'Y'
+          "print_status":"Y",
+          "renew_id":this.renew_id
          }
         this.svc.addUpdDel('Deposit/UpdateCertificateStatus',dt).subscribe(res=>{
           console.log(res);
+          this.disablePrint=true;
           setTimeout(() => {
             this.modalRef = this.modalService.show(this.UpdateSuccess, this.config);
           }, 5000);
@@ -278,20 +303,51 @@ export class PrintCertificateComponent implements OnInit {
 
   }
   getPrintFlag(){
-    var dt={
+    debugger
+    var dc={
       "ardb_cd":this.sys.ardbCD,
+      "renew_id":this.renew_id,
       "acc_num":this.reportcriteria.controls.acct_num.value,
       "acc_type_cd":this.reportcriteria.controls.acc_type_cd.value
      }
-    this.svc.addUpdDel('Deposit/GetCertificateStatus',dt).subscribe(res=>{
-      console.log(res);
-      debugger
-      this.printFlag=res;
-    })
+     debugger
+     this.svc.addUpdDel<any>('Deposit/GetCertificateStatus',dc).subscribe(
+        res=>{
+        console.log(res);
+        debugger
+        this.printFlag=res;
+        if(this.printFlag=='Y'){
+          debugger
+          this.modalRef = this.modalService.show(this.alreadyUpdate, this.config);
+          this.disablePrint=true;
+        }
+        else{this.disablePrint=false;}
+      },
+      err=>{
+        this.printFlag=err.error.text
+        debugger
+        console.log(err.error.text);
+        if(this.printFlag=='Y'){
+          debugger
+          this.modalRef = this.modalService.show(this.alreadyUpdate, this.config);
+          this.disablePrint=true;
+        }
+        else{this.disablePrint=false;}
+        
+      })
+     
+    
 
 }
   printCall(){
-    this.updateStatus();
+    debugger
+    if(this.printFlag=='Y'){
+      debugger
+      this.disablePrint=true;
+    }
+    else{
+      this.updateStatus();
+    }
     
      
   }

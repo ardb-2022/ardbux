@@ -3037,7 +3037,7 @@ getjoinholder(){
       const cDt1 = this.sys.CurrentDate.getTime();
       const matDt1 = Utils.convertStringToDt(this.accNoEnteredForTransaction.mat_dt.toString()).getTime();
       this.diff1=Math.ceil((Math.abs(cDt1 - matDt1)) / (1000 * 3600 * 24));
-      this.diff1=this.diff1+1
+      this.diff1=this.diff1
       console.log(cDt1,matDt1,this.diff1);
       if (this.diff1>15) {
         afterMatured = true;
@@ -3045,10 +3045,13 @@ getjoinholder(){
         debugger
         console.log(afterMatured)
         this.sys.ardbCD=='26'?this.tdDefTransFrm.controls.opening_dt.setValue(this.datepipe.transform(this.sys.CurrentDate,"dd/MM/yyyy")):this.tdDefTransFrm.controls.opening_dt.setValue(this.accNoEnteredForTransaction.mat_dt.toString().substr(0, 10))
+        this.onDepositePeriodChange()
       }
       else{
         debugger
         this.sys.ardbCD=='26'?this.tdDefTransFrm.controls.opening_dt.setValue(this.accNoEnteredForTransaction.mat_dt.toString().substr(0, 10),):this.tdDefTransFrm.controls.opening_dt.setValue(this.datepipe.transform(this.sys.CurrentDate,"dd/MM/yyyy"))
+        this.onDepositePeriodChange()
+      
       }
         if((this.sys.ardbCD=='26') && (afterMatured == true && (accTypCode === 2 || accTypCode == 4))) {
 
@@ -3651,13 +3654,23 @@ getjoinholder(){
       return;
     }
     if (this.td.trans_type_key.value === 'D' || this.td.trans_type_key.value === 'W') {
+      if(this.matInt==undefined){
+        this.matInt=0
+      }
       const mat_amt = (accTypeCd==2)?this.accNoEnteredForTransaction.prn_amt+this.fdSum:(accTypeCd==5)?this.accNoEnteredForTransaction.prn_amt+this.forB:(this.sys.ardbCD=='26' && accTypeCd==4)?this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt+this.matInt
       :this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt;
+      const balance=mat_amt-Number(this.td.amount.value)
+      console.log(mat_amt,this.td.amount.value);
+      debugger
     if(this.td.amount.value!=mat_amt){
       this.tdDefTransFrm.patchValue({
         trans_type: 'Withdraw',
-        trans_type_key: 'W'
+        trans_type_key: 'W',
+        balance:balance
+
       })
+      this.showBalance = true;//PARTHA
+        this.showTransfrTyp = this.f.acc_type_cd.value!=11? false:true;
       if(accTypeCd==5){
         this.mat_val=this.accNoEnteredForTransaction.prn_amt
       }
@@ -3680,16 +3693,18 @@ getjoinholder(){
       //  this.mat_val=this.tdDefTransFrm.controls.interest.value? (this.f.prn_amt.value+this.tdDefTransFrm.controls.interest.value):'';
       //  console.log(this.mat_val)
       if ((mat_amt - (+this.td.amount.value)) > 0) {
+        debugger
         this.showBalance = true;
         this.showTransfrTyp = true;
         this.td.balance.setValue((mat_amt - (+this.td.amount.value)));
       } else if ((mat_amt - (+this.td.amount.value)) === 0) {
+        debugger
         this.showBalance = false;
         this.showTransfrTyp = this.f.acc_type_cd.value!=11? false:true;
         this.td.balance.setValue((mat_amt - (+this.td.amount.value)));
       } else if (((+this.td.amount.value) - mat_amt) > 0) {
+        debugger
         if (accTypeCd !== 2) {
-        // close transfer area
         this.HandleMessage(true, MessageType.Error, 'Amount can not be greater than maturity amount.');
         this.td.amount.setValue('');
         this.showBalance = false;

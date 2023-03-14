@@ -104,7 +104,7 @@
   
   
   .mkSmall{
-    font-size: 15px;
+    font-size: 16px;
     width: 100%;
   }
   
@@ -119,5 +119,5 @@
     mso-footer: footer;
   }*/
   @media print {
-   html,table{font-size: 15px;font-family:Arial, Helvetica, ui-sans-serif} 
+   html,table{font-size: 16px;font-family:Arial, Helvetica, ui-sans-serif} 
   }

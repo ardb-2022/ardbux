@@ -126,6 +126,7 @@ import { LoanPassBookFastPageComponent } from './loan/report/pass-book-printing/
 import { LoanPassBookPrintingComponent } from './loan/report/pass-book-printing/pass-book-printing.component';
 import { LoanUpdatePassbookComponent } from './loan/report/update-passbook/update-passbook.component';
 import { PrintCertificateComponent } from './deposit/report/print-certificate/print-certificate.component';
+import { NpaALLComponent } from './loan/report/npa-all/npa-all.component';
 const routes: Routes = [
   { path: 'Admin', component: AdminPanelComponent },
   { path: 'admin', component: AdminPanelComponent },
@@ -222,6 +223,7 @@ const routes: Routes = [
       { path: 'Service_Area', component: ServiceareamasterComponent, canActivate: [AuthGuard] },
       { path: 'LM_Villentry', component: VillageMasterComponent, canActivate: [AuthGuard] },
       { path: 'LR_NPA', component: NpaComponent, canActivate: [AuthGuard] },
+      { path: 'LR_NPA_ALL', component: NpaALLComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecReg', component: RecoveryRegisterComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecRegFund', component: RecovFundComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecRegNorm', component: RecovNormalComponent, canActivate: [AuthGuard] },

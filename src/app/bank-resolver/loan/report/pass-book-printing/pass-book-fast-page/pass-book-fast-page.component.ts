@@ -14,6 +14,7 @@ import { mm_oprational_intr } from 'src/app/bank-resolver/Models/deposit/mm_opra
 import { DatePipe } from '@angular/common';
 import { LoanOpenDM } from 'src/app/bank-resolver/Models/loan/LoanOpenDM';
 import { mm_acc_type } from 'src/app/bank-resolver/Models/deposit/mm_acc_type';
+import { PrintServiceService } from '../print-service.service';
 @Component({
   selector: 'app-pass-book-fast-page-loan',
   templateUrl: './pass-book-fast-page.component.html',
@@ -31,7 +32,8 @@ export class LoanPassBookFastPageComponent implements OnInit {
     ignoreBackdropClick: true, // disable backdrop click to close the modal
     class: 'modal-lg'
   };
-  @Input() accNum: string;
+  accNum: string;
+  joinHoldAll:string
   // @Input() accType: string;
   operationalInstrList: mm_oprational_intr[] = [];
   trailbalance: tt_trial_balance[] = [];
@@ -73,7 +75,7 @@ export class LoanPassBookFastPageComponent implements OnInit {
   cAddress:any
   cAcc:any
   showWait=false
-  joinHold:any;
+  // joinHold:any;
   cstName:any;
   gdName:any;
   phNo:any;
@@ -86,10 +88,14 @@ export class LoanPassBookFastPageComponent implements OnInit {
   accountTypeList: mm_acc_type[] = [];
   loan_case_dtls:any;
   loan_case_no:any;
-  constructor(private svc: RestService, private formBuilder: FormBuilder,
+  constructor(public pServ: PrintServiceService,private svc: RestService, private formBuilder: FormBuilder,
     private modalService: BsModalService,public datepipe: DatePipe, private _domSanitizer: DomSanitizer,private exportAsService: ExportAsService, private cd: ChangeDetectorRef,
     private router: Router) { }
   ngOnInit(): void {
+
+    this.joinHoldAll=this.pServ.joinHold;
+    this.accNum=this.pServ.accNum;
+    debugger
     // this.branchName = localStorage.getItem('__bName');
     this.reportcriteria = this.formBuilder.group({
       yes: [''],
@@ -122,7 +128,7 @@ export class LoanPassBookFastPageComponent implements OnInit {
     );
   }
   loadFastPageData(){
-    this.joinHold=[];
+    // this.joinHold=[];
     this.masterModel = new LoanOpenDM();
     var dt={
       "ardb_cd":this.sys.ardbCD,
@@ -131,9 +137,17 @@ export class LoanPassBookFastPageComponent implements OnInit {
       // "acc_type_cd":this.accType,
       
     }
+    debugger
     this.svc.addUpdDel('Loan/GetLoanData',dt).subscribe(data=>{
       console.log(data);
       this.masterModel = data;
+      // debugger
+      //  for (let i = 0; i <=  this.masterModel.tdaccholder.length; i++) {
+      //    console.log( this.masterModel);
+      //   debugger 
+      //  this.joinHold+=( this.masterModel.tdaccholder.length==0?'': this.masterModel.tdaccholder[i].acc_holder+',')
+      //  console.log(this.joinHold);
+      //  }
       this.custCD=this.masterModel.tmloanall.party_cd
       this.acc_cd=this.masterModel.tmloanall.acc_cd
       if(this.acc_cd===20411){
@@ -145,17 +159,12 @@ export class LoanPassBookFastPageComponent implements OnInit {
         this.loan_case_no=null
       }
 
+      
       debugger
       this.getCustomer()
-     
-        this.oprn_instr_desc = this.operationalInstrList.filter(x => x.oprn_cd.toString() === this.masterModel.tmdeposit.oprn_instr_cd.toString())[0].oprn_desc;
-      
-        for (let i = 0; i <=  this.masterModel.tdaccholder.length; i++) {
-          console.log( this.masterModel);
-          
-        this.joinHold+=( this.masterModel.tdaccholder.length==0?'': this.masterModel.tdaccholder[i].acc_holder+',')
-        console.log(this.joinHold);
-        }
+       this.oprn_instr_desc = this.operationalInstrList.filter(x => x.oprn_cd.toString() === this.masterModel.tmdeposit.oprn_instr_cd.toString())[0].oprn_desc;
+       
+        
         
     })
     this.accountTypeList=this.accountTypeList.filter(c => c.acc_type_cd == this.acc_cd)

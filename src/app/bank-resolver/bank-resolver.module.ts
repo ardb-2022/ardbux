@@ -170,6 +170,8 @@ import { LoanUpdatePassbookComponent } from './loan/report/update-passbook/updat
 import { LoanPassBookFastPageComponent } from './loan/report/pass-book-printing/pass-book-fast-page/pass-book-fast-page.component';
 import { LoanPassBookPrintingComponent } from './loan/report/pass-book-printing/pass-book-printing.component';
 import { PrintCertificateComponent } from './deposit/report/print-certificate/print-certificate.component';
+import { NpaALLComponent } from './loan/report/npa-all/npa-all.component';
+import { PrintServiceService } from './loan/report/pass-book-printing/print-service.service';
 
 @NgModule({
   declarations: [ 
@@ -211,7 +213,7 @@ import { PrintCertificateComponent } from './deposit/report/print-certificate/pr
        RdTransComponent, CreateGLHeadComponent, DetailListFdmisConstWiseComponent, INearMaturityComponent,
        IDetailListComponent, AllGLDetailsComponent, UpdatePassbookComponent, BMLoanStatementComponent, SlabwiseDepositComponent, 
        PassBookFastPageComponent, DetaillistAllComponent, SavingIntPostComponent, AgentCommissionComponent,
-       LoanUpdatePassbookComponent,LoanPassBookFastPageComponent,LoanPassBookPrintingComponent, PrintCertificateComponent
+       LoanUpdatePassbookComponent,LoanPassBookFastPageComponent,LoanPassBookPrintingComponent, PrintCertificateComponent, NpaALLComponent
   ],
   imports: [
     NgxPrintModule, MatTableModule, MatFormFieldModule,  MatInputModule, MatSlideToggleModule,MatButtonModule,
@@ -225,7 +227,7 @@ import { PrintCertificateComponent } from './deposit/report/print-certificate/pr
   providers: [
     PaginationConfig,
     CommonServiceService,
-    CurrencyPipe,DecimalPipe
+    CurrencyPipe,DecimalPipe,PrintServiceService
     // { provide: ErrorHandler, useClass: GlobalErrorHandler },
     // { provide: HTTP_INTERCEPTORS, useClass: ServerErrorInterceptor, multi: true  }
   ],

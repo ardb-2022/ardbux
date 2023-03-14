@@ -226,12 +226,16 @@ export class PassBookPrintingComponent implements OnInit {
           console.log( prTrans);
           debugger
           for (let i = prTrans.length-1; i >= 0; i--) {
+            
             if (i > 0) {
+              debugger
               if(i==prTrans.length-1){
                 prTrans[i].balance = tot1
                this.passBookData.push(prTrans[i]);
+               debugger
               }
               else{
+                debugger
                  if (prTrans[i+1].trans_type === 'D') { // deposit
                   tot -= Number(prTrans[i+1].amount);
                 } else {
@@ -243,13 +247,14 @@ export class PassBookPrintingComponent implements OnInit {
                this.passBookData.push(prTrans[i]);
             }
             else{
-              if (prTrans[i].trans_type === 'D') { // deposit
-                tot -= Number(prTrans[i+1].amount);
-              } else {
-                tot += Number(prTrans[i+1].amount);
+              if (prTrans[i+1].trans_type === 'D') { debugger// deposit
+                tot1 -= Number(prTrans[i+1].amount);
+              } else {debugger
+                tot1 += Number(prTrans[i+1].amount);
               }
-               prTrans[i].balance = tot;
+               prTrans[i].balance = tot1;
                this.passBookData.push(prTrans[i]);
+               debugger
             }
           }
           

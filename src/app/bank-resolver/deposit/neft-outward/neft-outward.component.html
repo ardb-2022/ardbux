@@ -75,10 +75,11 @@
       </div>
       <div class="form-group col-4">
         <small for="trns_cd">Trans Code</small> <small style="display: inline;" class="form-text text-muted">
-          Press tab.
+        
         </small>
-        <input  [disabled]="isRetrieve" [(ngModel)]="neftPayRet.trans_cd" type="text" (keydown.Tab)="GetNeftOutDtls()"
+        <input  [disabled]="isRetrieve" [(ngModel)]="neftPayRet.trans_cd" type="text" 
           class="form-control form-control-sm text-capitalize" id="trns_cd" >
+          <!-- (keydown.Tab)="GetNeftOutDtls()" -->
       </div>
       <div class="form-group col-4">
         <small for="trans_type">Payment Type<span class="text-danger">*</span></small> <br>
@@ -102,12 +103,12 @@
       </div>
       <div class="form-group col-4">
         <small for="amount">Amount<span class="text-danger">*</span></small>
-        <input   [(ngModel)]="neftPayRet.amount" type="number"  [disabled]="!isRetrieve"
+        <input   [(ngModel)]="neftPayRet.amount" type="text"  [disabled]="!isRetrieve"
         (focusout)="setCharge($event.target.value)"  class="form-control form-control-sm text-capitalize" id="trns_cd" >
       </div>
       <div class="form-group col-4">
         <small for="charge_ded">Charges</small>
-        <input  [(ngModel)]="neftPayRet.charge_ded" type="number"  [disabled]="!isRetrieve"
+        <input  [(ngModel)]="neftPayRet.charge_ded" type="text"  [disabled]="!isRetrieve"
           class="form-control form-control-sm text-capitalize" id="charge_ded" >
       </div>
       <div class="form-group col-4">
@@ -189,7 +190,7 @@
       <div class="form-group col-4">
         <small for="bank_dr_acc_type">Bank A/C Type or (GL-CODE)<span class="text-danger">*</span></small>
         <div class="input-group">
-        <input  [(ngModel)]="neftPayRet.bank_dr_acc_type" type="number"  [disabled]="!isRetrieve"
+        <input  [(ngModel)]="neftPayRet.bank_dr_acc_type" type="text"  [disabled]="!isRetrieve"
         (focusout)="checkAndSetDebitAccType($event.target.value)" (input)="clearFields('bank_dr_acc_type')"
           class="form-control form-control-sm text-capitalize" id="bank_dr_acc_type" >
           <!-- <div class="input-group-append" [hidden]="neftPayRet.bank_dr_acc_type<1000000 ||neftPayRet.bank_dr_acc_type==null">
@@ -290,7 +291,7 @@
   
 <ng-template #content let-modal data-keyboard="false" data-backdrop="false">
   <div class="modal-header">
-    <h5 class="modal-title" id="modal-basic-title">Report Criteria</h5>
+    <h3 class="modal-title" id="modal-basic-title">ALL UNAPPROVED NEFT / RTGS</h3>
     <button type="button"  class="close text-danger" aria-label="Close" data-dismiss="modal" (click)="modalRef.hide()">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -302,8 +303,22 @@
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
+    <table class="table table-hover table-bordered table-sm small" id="customers1">
+      <tr>
+        <th>Trans ID</th>
+        <th>Amount</th>
+        <th>Beneficiary Name</th>
+        <th>Beneficiary A/c No</th>
+      </tr>
+      <tr *ngFor="let item of allNEFT; let i = index;"title="Click to Select"  (click)="GetNeftOutDtls(item)" style="cursor: pointer;">
+        <td>{{item.trans_cd}}</td>
+        <td>{{item.amount|currency:"INR"}}</td>
+        <td>{{item.bene_name}}</td>
+        <td>{{item.bene_acc_no}}</td>
+      </tr>
+    </table>
 
-    <form [formGroup]="reportCriteria" (ngSubmit)="GetNeftOutDtls()">
+    <!-- <form [formGroup]="reportCriteria" (ngSubmit)="GetNeftOutDtls()">
       <div class="form-row">
         <label for="neftID">Enter ID</label>
         <input [(ngModel)]="this.neftPayRet.trans_cd" type="text" id="neftID" class="form-control" formControlName="neftID">
@@ -317,6 +332,6 @@
     <button mat-raised-button class="btn btn-light btn-sm float-right" (click)="modalRef.hide();reportCriteria.reset()">Close</button>
 
   </div>
-</form>
+</form> -->
 </div>
 </ng-template>

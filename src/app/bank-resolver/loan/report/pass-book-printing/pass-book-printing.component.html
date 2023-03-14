@@ -158,12 +158,12 @@
           
           <tr>
             <td>{{i.trans_dt.substr(0,10)}}</td>
-            <td>{{i.particulars}}</td>
+            <td style="text-transform: uppercase;">{{i.particulars}}</td>
             <td style="text-align: right;">{{i.issue_amt| number : '1.2-2'}}</td>
-            <td style="text-align: right;">{{i.curr_prn_recov | number : '1.2-2'}}</td>
-             <td style="text-align: right;">{{i.curr_intt_recov | number : '1.2-2'}}</td>
-             <td style="text-align: right;">{{i.curr_prn_bal | number : '1.2-2'}}</td>
-             <td style="text-align: right;">{{i.curr_intt_bal | number : '1.2-2'}}</td>
+            <td style="text-align: right;">{{i.recPrn | number : '1.2-2'}}</td>
+             <td style="text-align: right;">{{i.recIntt | number : '1.2-2'}}</td>
+             <td style="text-align: right;">{{i.balPrn| number : '1.2-2'}}</td>
+             <td style="text-align: right;">{{i.balIntt| number : '1.2-2'}}</td>
              <td style="text-align: right;">{{i.ovd_prn_bal | number : '1.2-2'}}</td>
   
             <!-- <td style="text-align:right">{{i.balance | number : '1.2-2'}}</td> -->
@@ -188,23 +188,23 @@
          </tfoot>
       </table>
       <div id="hiddenTab" >
-        <br><br><br><br><br>
+        <br><br><br><br>
         <table  class="mkSmall">
-          <tbody *ngFor="let i of printData; let itr=index;">
+          <tbody *ngFor="let i of printData; let itr=index;" >
             <tr *ngIf="i.particulars==null">
              <td style="margin-top: 30px;">&nbsp;</td>
             </tr>
-            <tr *ngIf="i.particulars!==null">
-              <td style="max-width:10%;">{{i.trans_dt==null?'':i.trans_dt.substr(0,10)}}</td>
-              <td style="max-width: 170px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{i.particulars}}</td>
+            <tr *ngIf="i.particulars!==null" >
+              <td style="width:10%;padding-bottom: 5px">{{i.trans_dt==null?'':i.trans_dt.substr(0,10)}}</td>
+              <td style="max-width: 170px; text-transform: uppercase;padding-bottom: 5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{i.particulars}}</td>
               <!-- <td style="width:16%;">{{i.instrument_num}}</td> -->
               <!-- <td  style="width: 10%;"></td> -->
-              <td style="text-align: right;">{{i.issue_amt| number : '1.2-2'}}</td>
-              <td style="text-align: right;">{{i.curr_prn_recov | number : '1.2-2'}}</td>
-              <td style="text-align: right;">{{i.curr_intt_recov | number : '1.2-2'}}</td>
-             <td style="text-align: right;">{{i.curr_prn_bal | number : '1.2-2'}}</td>
-             <td style="text-align: right;">{{i.curr_intt_bal | number : '1.2-2'}}</td>
-             <td style="text-align: right; width: 7%;">{{i.ovd_prn_bal | number : '1.2-2'}}</td>
+              <td style="text-align: center;width: 15%;padding-bottom: 5px">{{i.issue_amt==0?'':i.issue_amt}}</td>
+              <td style="text-align: center;width: 7%;padding-bottom: 5px">{{i.recPrn==0?'':i.recPrn}}</td>
+              <td style="text-align: center;width: 7%;padding-bottom: 5px">{{i.recIntt==0?'':i.recIntt}}</td>
+             <td style="text-align: center;width: 15%;padding-bottom: 5px">{{i.balPrn | number : '1.2-2'}}</td>
+             <td style="text-align: right;width: 7%;padding-right:2%;padding-bottom: 5px">{{i.balIntt | number : '1.2-2'}}</td>
+             <td style="text-align: right; width: 7%; padding-right:2%;padding-bottom: 5px">{{i.ovd_prn_bal | number : '1.2-2'}}</td>
   
               <!-- <td style="text-align:right">{{i.balance | number : '1.2-2'}}</td> -->
             </tr>
@@ -230,7 +230,8 @@
       <button mat-raised-button hidden id="chngPage" (click)="setPage(1)"></button>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 shadow-sm mb-4 bg-white p-3" *ngIf="shoFastPage">
-      <app-pass-book-fast-page-loan [accNum]="loanId" ></app-pass-book-fast-page-loan>
+      <!-- <app-pass-book-fast-page-loan [accNum]="loanId" [joinHold]="joinHold" ></app-pass-book-fast-page-loan> -->
+    <router-outlet ></router-outlet>
     </div>
   
   
@@ -240,7 +241,7 @@
         <button #print mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" [useExistingCss]="true"
         printSectionId="hiddenTab" ngxPrint (click)="printCall()">Print</button>
    <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
-   <button mat-raised-button type="button" (click)="FastpageScreen()" class="btn btn-rounded btn-primary m-1"[routerLink]="['DR_LoanPassBookFastPage']" >Print Fast Page</button>
+   <button mat-raised-button type="button"  routerLink="DR_LoanPassBookFastPage" (click)="FastpageScreen()" class="btn btn-rounded btn-primary m-1"[routerLink]="['DR_LoanPassBookFastPage']" >Print Fast Page</button>
   
       </div>
     </div>

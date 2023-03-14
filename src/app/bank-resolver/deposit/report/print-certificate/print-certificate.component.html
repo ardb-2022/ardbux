@@ -113,7 +113,7 @@
         <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" [disabled]="disablePrint" [useExistingCss]="true"
           printSectionId="hiddenTab" ngxPrint (click)="printCall()">Print</button>
    <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
-   <button mat-raised-button type="button" (click)="FastpageScreen()" class="btn btn-rounded btn-primary m-1"[routerLink]="['DR_PassBookFastPage']" >Print Fast Page</button>
+   <!-- <button mat-raised-button type="button" (click)="FastpageScreen()" class="btn btn-rounded btn-primary m-1"[routerLink]="['DR_PassBookFastPage']" >Print Fast Page</button> -->
   
       </div>
     </div>
@@ -161,9 +161,9 @@
     
           </tr>
           <tbody>
-           <tr *ngIf="showTable" style="margin-top: 3%;">
+           <tr *ngIf="showTable" style="font-weight: 800;">
               <td style="text-align:center;">{{masterModel.tmdeposit.prn_amt|currency:'INR'}}</td>
-              <td style="text-align:center;">{{masterModel.tmdeposit.dep_period}}</td>
+              <td style="text-align:center;">{{Deposit_Period}}</td>
               <td style="text-align:center;">{{masterModel.tmdeposit.intt_rt}}%</td>
               <td style="text-align:center;">{{masterModel.tmdeposit.opening_dt.toString().substr(0,10)}}</td>
               <td style="text-align:center;">{{masterModel.tmdeposit.mat_dt.toString().substr(0,10)}}</td>
@@ -182,7 +182,7 @@
             <div *ngIf="ShowMIS" ><b>Mode of Operation:  </b>{{oprn_instr_desc}}</div>
           </div>
           <div class="form-row"style="margin-left: 5%;padding-top: 1%;"> 
-            <div *ngIf="showTable && ShowMIS" ><b>SI Credited To:  </b><div *ngIf="masterModel.tmdeposit.cheque_facility_flag=='Y'">Flexi A/C -{{masterModel.tmdeposit.user_acc_num}}</div></div>
+            <div *ngIf="showTable && ShowMIS" ><b>SI Credited To:  </b>{{this.sbAcc}}</div>
           </div>
           <div class="form-row"style="margin-left: 5%;padding-top: 1%;"> 
             <div *ngIf="showTable && ShowCC"><b>Issue Amount in Words:  </b>{{masterModel.tmdeposit.prn_amt|amountToWord}}</div>
@@ -205,7 +205,7 @@
         <button #print mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" [disabled]="disablePrint" [useExistingCss]="true"
         printSectionId="hiddenTab" ngxPrint (click)="printCall()">Print</button>
    <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
-   <button mat-raised-button type="button" (click)="FastpageScreen()" class="btn btn-rounded btn-primary m-1"[routerLink]="['DR_PassBookFastPage']" >Print Fast Page</button>
+   <!-- <button mat-raised-button type="button" (click)="FastpageScreen()" class="btn btn-rounded btn-primary m-1"[routerLink]="['DR_PassBookFastPage']" >Print Fast Page</button> -->
   
       </div>
     </div>

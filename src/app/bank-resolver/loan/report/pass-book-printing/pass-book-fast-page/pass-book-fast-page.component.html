@@ -32,43 +32,43 @@
   </ng-template>
 
 <div id="fastPage" style="font-family:Arial, Helvetica, ui-sans-serif;font-size:14px;">
-    <div style="margin-top: 53%; ">&nbsp;</div>
+    <div style="margin-top: 52%; ">&nbsp;</div>
     <div class="form-row" style="padding-left: 10%;">
-        <div style="width: 30%;"><b>Loan Id:  </b>{{accNum}}</div>
+        <div style="width: 30%;"><b>Loan Id:  </b>{{pServ.accNum}}</div>
         <div style="text-align: right;width: 30%;"><b>Branch:  </b> {{branchName}}</div>
         <div style="text-align: right;width: 30%;"><b>CIF:  </b>{{custCD}}</div>
     </div>
       <div class="form-row" style="padding-left: 10%;padding-top: 5px;">
-          <div style="width: 60%;"><b>Name:  </b>{{this.custDtls.cust_name}}</div>
-          <div style="width: 30%;text-align: right;"><b>Membership No:  </b>{{this.custDtls.old_cust_cd}}</div>
+          <div style="width: 60%;"><b>Name:  </b>{{this.custDtls?.cust_name}}</div>
+          <div style="width: 30%;text-align: right;"><b>Membership No:  </b>{{this.custDtls?.old_cust_cd}}</div>
      </div>
       <div class="form-row" style="padding-left: 10%;padding-top: 5px;" >
-      <div><b>Guardian Name:  </b>{{this.custDtls.guardian_name}}</div>
+      <div><b>Guardian Name:  </b>{{this.custDtls?.guardian_name}}</div>
     </div>
     
     <div class="form-row"style="padding-left: 10%;padding-top: 5px;"> 
-      <div><b>Address:  </b>{{this.custDtls.present_address}}</div>
+      <div><b>Address:  </b>{{this.custDtls?.present_address}}</div>
     </div>
     
     <div class="form-row" style="padding-left: 10%;padding-top: 5px;">
-      <div style="width:90%;"><b>Phone No:  </b>{{this.custDtls.phone}}</div>
+      <div style="width:90%;"><b>Phone No:  </b>{{this.custDtls?.phone}}</div>
     </div>
     <div class="form-row" style="padding-left: 10%;padding-top: 5px;">
-     <div style="width: 50%;"><b>Loan Type:  </b> {{this.accountTypeList[0].acc_type_desc}}</div>
-     <div style="width: 40%;"><b>Porpuse:  </b>{{this.masterModel.tmlaonsanctiondtls[0].activity_desc}}</div>
+     <div style="width: 50%;"><b>Loan Type:  </b> {{this.accountTypeList[0]?.acc_type_desc}}</div>
+     <div style="width: 40%;"><b>Porpuse:  </b>{{this.masterModel.tmlaonsanctiondtls[0]?.activity_desc}}</div>
     </div>
     <div class="form-row" style="padding-left: 10%;padding-top: 5px;">
-      <div style="width: 20%;"><b>Sanc Amt:  </b> {{this.masterModel.tmlaonsanctiondtls[0].sanc_amt|number}}</div>
-      <div style="width: 30%;"><b>Int Rate:  </b>{{this.masterModel.tmloanall.curr_intt_rate}}%</div>
-      <div style="width: 40%;"><b>L/F:  </b>{{this.masterModel.tmloanall.loan_acc_no}}</div>
+      <div style="width: 20%;"><b>Sanc Amt:  </b> {{this.masterModel.tmlaonsanctiondtls[0]?.sanc_amt|number}}</div>
+      <div style="width: 30%;"><b>Int Rate:  </b>{{this.masterModel.tmloanall?.curr_intt_rate}}%</div>
+      <div style="width: 40%;"><b>L/F:  </b>{{this.masterModel.tmloanall?.loan_acc_no}}</div>
     </div>
     <div class="form-row" style="padding-left: 10%;padding-top: 5px;">
-      <div style="width: 20%;"><b>Repayment No:  </b>{{this.masterModel.tmloanall.instl_no}}</div>
-      <div style="width: 30%;"><b>Rep Start Date:  </b>{{this.masterModel.tmloanall.instl_start_dt.substr(0,10)}}</div>
+      <div style="width: 20%;"><b>Repayment No:  </b>{{this.masterModel.tmloanall?.instl_no}}</div>
+      <div style="width: 30%;"><b>Rep Start Date:  </b>{{this.masterModel.tmloanall?.instl_start_dt.substr(0,10)}}</div>
      <div style="width: 40%;"><b>Loan Case No:  </b>{{this.loan_case_no}} </div>
     </div>
     <div class="form-row" style="padding-left: 10%;padding-top: 5px;">
-      <div style="width: 30%;"><b>Joint Holder's Name:  </b>{{joinHold}}</div>
+      <div style="width: 70%;"><b>Joint Holder's Name:  </b>{{this.joinHoldAll}}</div>
     </div>
     <div class="form-row"style="margin-left: 70%;padding-top: 15px;"> 
       <div><b>Manager / Authorised Signatory</b></div>

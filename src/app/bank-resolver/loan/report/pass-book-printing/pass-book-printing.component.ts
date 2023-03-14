@@ -14,6 +14,8 @@ import { sm_parameter } from 'src/app/bank-resolver/Models/sm_parameter';
 import { CommonServiceService } from 'src/app/bank-resolver/common-service.service';
 import { tm_loan_all } from 'src/app/bank-resolver/Models/loan/tm_loan_all';
 import { LoanOpenDM } from 'src/app/bank-resolver/Models/loan/LoanOpenDM';
+import { PrintServiceService } from './print-service.service';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-pass-book-printing',
   templateUrl: './pass-book-printing.component.html',
@@ -87,7 +89,13 @@ export class LoanPassBookPrintingComponent implements OnInit {
   notvalidate:boolean=false;
   custNm:any;
   addr:any;
-  constructor(private svc: RestService, private formBuilder: FormBuilder,private comser: CommonServiceService,
+  joinHold:any=[]
+  subscription: Subscription;
+  recPrn=0;
+  recIntt=0;
+  balPrn=0;
+  balIntt=0;
+  constructor(public pServ: PrintServiceService,private svc: RestService, private formBuilder: FormBuilder,private comser: CommonServiceService,
     private modalService: BsModalService, private _domSanitizer: DomSanitizer,private exportAsService: ExportAsService, private cd: ChangeDetectorRef,
     private router: Router) { }
   ngOnInit(): void {
@@ -106,7 +114,9 @@ export class LoanPassBookPrintingComponent implements OnInit {
        var time = date.toLocaleTimeString();
        this.today= n + " "+ time
   }
+  
   onLoadScreen(content) {
+    this.shoFastPage=false;
     this.notvalidate=false
     this.passBookData=[];
     this.printData=[];
@@ -201,13 +211,19 @@ export class LoanPassBookPrintingComponent implements OnInit {
           this.alertMsg = 'No record found!!!';
           
         }
-        // else {
-        //   if (this.masterModel.tmloanall.loan_id !== null) {
-        //   alert('hiiiiii'+this.masterModel.tmloanall.loan_id);
-        //   }
-         
+        else {
+          debugger
+        this.joinHold=[];
+       for (let i = 0; i <=  this.masterModel.tdaccholder.length; i++) {
+         console.log( this.masterModel);
+        debugger 
+       this.joinHold+=( this.masterModel.tdaccholder.length==0?'': this.masterModel.tdaccholder[i].acc_holder+',')
+       console.log(this.joinHold);
+       }
+      
+        debugger 
 
-        // }
+        }
 
       },
       err => {
@@ -252,7 +268,27 @@ export class LoanPassBookPrintingComponent implements OnInit {
       }
       this.svc.addUpdDel('Loan/LoanPassBookPrint',dt).subscribe(data=>{
         console.log(data);
-        this.reportData=data
+        this.reportData=[];
+        debugger
+        let Trans = [];
+        Trans = Utils.ChkArrNotEmptyRetrnEmptyArr(data)
+        for(let i = 0; i<Trans.length ; i ++) {
+        this.recPrn= Trans[i].curr_prn_recov+Trans[i].ovd_prn_recov+Trans[i].adv_prn_recov
+        this.recIntt=Trans[i].curr_intt_recov+Trans[i].ovd_intt_recov+Trans[i].penal_intt_recov
+        this.balPrn=Trans[i].curr_prn_bal+Trans[i].ovd_prn_bal
+        this.balIntt=Trans[i].curr_intt_bal+Trans[i].ovd_intt_bal+Trans[i].penal_intt_bal
+        
+        debugger
+        Trans[i].recPrn=this.recPrn
+        Trans[i].recIntt=this.recIntt
+        Trans[i].balPrn=this.balPrn
+        Trans[i].balIntt=this.balIntt
+        
+        this.reportData.push(Trans[i]);
+        
+        
+
+      }
         debugger
         if(this.reportData.length==0){
           this.isLoading=false
@@ -356,6 +392,10 @@ export class LoanPassBookPrintingComponent implements OnInit {
       // setTimeout(() => {
       //   this.isLoading = false;
       // }, 10000);
+      debugger
+      this.pServ.accNum=this.loanId;
+      this.pServ.joinHold=this.joinHold;
+      debugger
     }
   }
   getSMParameter(){

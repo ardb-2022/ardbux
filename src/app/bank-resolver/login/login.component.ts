@@ -304,9 +304,11 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('__lastDt', this.systemParam.find(x => x.param_cd === '210').param_value);
           localStorage.setItem('__PrevStatus', this.systemParam.find(x => x.param_cd === '215').param_value);
           
-          ;
-          this.sys.ardbCD=='26'?localStorage.setItem('__neftPayDrAcc','401101000283' ):localStorage.setItem('__neftPayDrAcc','0' )
-        //  console.log(this.dtData.sys_date)
+          
+          
+          this.f.ardbbrMst.value=='26'?localStorage.setItem('__neftPayDrAcc','401101000283' ):localStorage.setItem('__neftPayDrAcc','0' )
+        
+        debugger  //  console.log(this.dtData.sys_date)
         //  console.log(localStorage.getItem('__currentDate'))
           this.msg.sendisLoggedInShowHeader(true);
           this.loginForm.disable();

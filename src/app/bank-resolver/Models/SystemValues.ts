@@ -41,6 +41,7 @@ export class SystemValues {
       this.__isLoggedIn = true;
     } 
     else { this.__isLoggedIn = false; }
+    this.__ardbCd = localStorage.getItem('__ardb_cd');
     this.__bName = localStorage.getItem('__bName');
     this.__minBalWdChq = localStorage.getItem('__minBalWdChq');
     this.__minBalNoChq = localStorage.getItem('__minBalNoChq');
@@ -49,7 +50,6 @@ export class SystemValues {
     this.__curFinyr = localStorage.getItem('__curFinyr');
     this.__neftPayDrAcc = localStorage.getItem('__neftPayDrAcc');
     this.__sbInttCalTilDt = localStorage.getItem('__sbInttCalTilDt');
-    this.__ardbCd = localStorage.getItem('__ardb_cd');
     this.__dist_cd=localStorage.getItem('__dist_cd')
   }
 

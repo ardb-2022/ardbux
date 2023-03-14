@@ -40,7 +40,7 @@ export class NeftOutwardComponent implements OnInit {
   neftPayRet = new td_outward_payment();
   acc_master: m_acc_master[] = [];
   acc_master2: any = [];
-
+  allNEFT:any;
   accountTypeList: mm_acc_type[] = [];
   __ifsc = '';
   __ifscbank = '';
@@ -64,9 +64,9 @@ export class NeftOutwardComponent implements OnInit {
     this.neftPayRet.ardb_cd=this.sys.ardbCD
     this.getAccountTypeList();
     this.clearData();
-    this.reportCriteria=this.formBuilder.group({
-         neftID:['',Validators.required]
-    })
+    // this.reportCriteria=this.formBuilder.group({
+    //      neftID:['',Validators.required]
+    // })
   }
   setCharge(amt : number){
    let param = new p_gen_param();
@@ -75,7 +75,13 @@ export class NeftOutwardComponent implements OnInit {
   this.isLoading = true;
     this.svc.addUpdDel<any>('Deposit/GetNeftCharge', param).subscribe(
       res => {
+        if(this.sys.ardbCD=="26"){
+          this.neftPayRet.charge_ded = 0;
+        }
+        else{
           this.neftPayRet.charge_ded = res;
+        }
+          
           this.isLoading = false;
           if(this.neftPayRet.bank_dr_acc_no.length>0 && this.clearBalance-(this.neftPayRet.amount+this.neftPayRet.charge_ded)<0){
             this.HandleMessage(true, MessageType.Error, 'Enter Amount Should be Lower than Account Balance !!!!');
@@ -101,17 +107,16 @@ export class NeftOutwardComponent implements OnInit {
     );
 
   }
-  
-  GetNeftOutDtls() {
-    this.isLoading = true;
+  getAllNeftBach(){
+    this.allNEFT=[]
     this.neftPay.brn_cd = this.sys.BranchCode;
     this.neftPayRet.trans_dt = this.sys.CurrentDate;
-    this.neftPay.trans_cd = this.neftPayRet.trans_cd;
+    // this.neftPay.trans_cd = this.neftPayRet.trans_cd;
     this.neftPay.ardb_cd=this.sys.ardbCD
+    debugger
     this.svc.addUpdDel<any>('Deposit/GetNeftOutDtls', this.neftPay).subscribe(
       res => {
         console.log(res)
-        this.modalRef.hide()
         if (res.length === 0) {
           this.neftPayRet.trans_cd = null;
           this.isLoading = false;
@@ -119,20 +124,34 @@ export class NeftOutwardComponent implements OnInit {
           this.HandleMessage(true, MessageType.Error, 'No Data Found!!!!');
           return;
         }
-        else {
-          if(res[0].bank_dr_acc_no=='0000'){
+        else{this.allNEFT=res}
+        debugger
+      }),
+      err => {
+        this.isLoading = false;
+        this.isRetrieve = true;
+        this.HandleMessage(true, MessageType.Error, err+'  From Server No Data Found!!!!');
+      }
+  }
+  GetNeftOutDtls(i) {
+    console.log(i);
+    this.modalRef.hide();
+    debugger
+    this.isLoading = true;
+    
+          if(i.bank_dr_acc_no=='0000'){
             this.isLoading=false
             this.HandleMessage(true, MessageType.Error, 'Transaction with GL-CODE could not retrieve!!!');
             this.clearData()
           }
           else{
-            this.neftPayRet = res[0];
+            this.neftPayRet = i;
           this.isLoading = false;
           this.isRetrieve = true;
           const temp_deposit = new tm_deposit();
-          console.log(res[0].bank_dr_acc_no);
+          console.log(i.bank_dr_acc_no);
           temp_deposit.brn_cd = this.branchCode;
-          temp_deposit.acc_num = res[0].bank_dr_acc_no;
+          temp_deposit.acc_num = i.bank_dr_acc_no;
           temp_deposit.acc_type_cd =  this.neftPayRet.bank_dr_acc_type;
           temp_deposit.ardb_cd=this.sys.ardbCD
           // //debugger;
@@ -167,15 +186,9 @@ export class NeftOutwardComponent implements OnInit {
         }  
         )
         }
-        }
+        
 
-      },
-      err => {
-        this.isLoading = false;
-        this.isRetrieve = true;
-        this.HandleMessage(true, MessageType.Error, 'No Data Found!!!!');
-      }
-    );
+      
   }
 
 
@@ -229,6 +242,7 @@ export class NeftOutwardComponent implements OnInit {
     this.__ifsccity='';
     //this.neftPayRet=null;
     this.neftPayRet.bene_ifsc_code='';
+    this.getAllNeftBach();
     this.onLoadScreen(this.content);
     
 
