@@ -64,9 +64,7 @@
        <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="closeScreen()" >Close</button>
        <button mat-raised-button type="button" 
        class="btn btn-rounded btn-primary m-1" 
-       [useExistingCss]="true"
-       printSectionId="mattable" 
-       ngxPrint>Print</button>
+       (click)="openPDF()">Print</button>
         <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
       
       </div>
@@ -91,8 +89,8 @@
     <mat-label>Search sub cash book</mat-label>
     <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
   </mat-form-field> -->
-<!-- 
-  <mat-accordion style="width: 130%;">
+
+  <mat-accordion>
     <mat-expansion-panel hideToggle>
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -123,8 +121,8 @@
       <div class="row">
         <div class="col-3">
           <mat-form-field appearance="outline" style="width:100%">
-            <mat-label>Search field </mat-label>
-            <mat-select name="fieldName" [(ngModel)]="selectedValue1">
+            <mat-label>Search {{selectedValue1}} </mat-label>
+            <mat-select name="fieldName" [(ngModel)]="selectedValue1" (selectionChange)="showFirstGroup()">
               <mat-option *ngFor="let selectedItem1 of selectItems1" [value]="selectedItem1.value">
                 {{selectedItem1.name}}
               </mat-option>
@@ -134,14 +132,21 @@
         </div>
         <div class="col-3">
          <mat-form-field appearance="outline" style="width:100%">
-           <mat-label>Search {{selectedValue1}}</mat-label>
-           <input matInput id="myInput2" (keyup)="applyFilter($event)" placeholder="{{selectedValue1}}">
+           <mat-label>Search {{selectedValue1}} {{bName}}</mat-label>
+           <!-- <input matInput id="myInput2" (keyup)="applyFilter($event)" placeholder="Block Name"> -->
+           <!-- <mat-select name="fieldName" [(ngModel)]="selectedValue1" (selectionChange)="showFirstGroup()"> -->
+            <mat-select name="fieldName" [(ngModel)]="bName"  (selectionChange)="searchFirstGroup()">
+            <mat-option *ngFor="let first of firstGroup" [value]="first">
+              {{first}}
+            </mat-option>
+           
+          </mat-select>
          </mat-form-field> &nbsp;
         </div>
         <div class="col-3">
           <mat-form-field appearance="outline" style="width:100%">
-            <mat-label>Search field under {{bName}}</mat-label>
-            <mat-select name="fieldName" [(ngModel)]="selectedValue">
+            <mat-label>Search {{selectedValue}} under {{bName}} </mat-label>
+            <mat-select name="fieldName" [disabled]="!bName" [(ngModel)]="selectedValue" (selectionChange)="showSecondGroup()">
               <mat-option *ngFor="let selectedItem of selectItems" [value]="selectedItem.value">
                 {{selectedItem.name}}
               </mat-option>
@@ -152,8 +157,14 @@
       
         <div class="col-3">
          <mat-form-field appearance="outline" style="width:100%">
-           <mat-label>Search {{selectedValue}}</mat-label>
-           <input matInput id="myInput1" (keyup)="applyFilter1($event)" placeholder="Search {{selectedValue}}">
+           <mat-label>Search {{bName1}} in {{selectedValue}} </mat-label>
+           <!-- <input matInput id="myInput1" (keyup)="applyFilter1($event)" placeholder="Activity"> -->
+           <mat-select name="fieldName" [disabled]="!selectedValue" [(ngModel)]="bName1" (selectionChange)="searchSecondGroup()">
+            <mat-option *ngFor="let second of secondGroup" [value]="second">
+              {{second}}
+            </mat-option>
+           
+          </mat-select>
          </mat-form-field> &nbsp;
         </div>
         
@@ -169,12 +180,19 @@
          
        </div>
     </mat-expansion-panel>
-    </mat-accordion> <br> -->
+    </mat-accordion> <br>
   
   <div class="mat-elevation-z8" id="mattable">
     
-    <table mat-table [dataSource]="dataSource" matSort style="width: 130%;">
+    <table mat-table [dataSource]="dataSource" matSort style="width: 100%;">
       
+      <ng-container matColumnDef="block_name" style="text-align:center;" >
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Block</th>
+        <td mat-cell *matCellDef="let row">{{row.block_name}}</td>
+      </ng-container> <ng-container matColumnDef="acc_desc" style="text-align:center;" >
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Loan Type </th>
+        <td mat-cell *matCellDef="let row">{{row.acc_desc}}</td>
+      </ng-container>
      <!-- ID Column -->
       <ng-container matColumnDef="loan_id" style="text-align:center;" >
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Loan ID </th>
@@ -280,7 +298,7 @@
       </ng-container>
      
       <ng-container matColumnDef="space1">
-        <th mat-header-cell *matHeaderCellDef colspan="4"><b></b></th>
+        <th mat-header-cell *matHeaderCellDef colspan="6"><b></b></th>
       </ng-container>
       <ng-container matColumnDef="Outstanding">
         <th mat-header-cell *matHeaderCellDef colspan="3"><b>Outstanding</b></th>
@@ -301,7 +319,7 @@
       
       <!-- Footer column -->
       <ng-container matColumnDef="Total">
-        <td mat-footer-cell *matFooterCellDef colspan="3" style="text-align:center;">
+        <td mat-footer-cell *matFooterCellDef colspan="5" style="text-align:center;">
           <b>Total</b>
         </td>
       </ng-container>

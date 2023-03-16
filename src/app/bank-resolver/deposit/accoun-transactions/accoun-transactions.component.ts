@@ -164,7 +164,7 @@ export class AccounTransactionsComponent implements OnInit {
     keyboard: false,
     backdrop: true,
     ignoreBackdropClick: true,
-    class: 'modal-lg'
+    class: 'modal-xl'
   };
   // disableIntt:boolean=false;
   openModal(template: TemplateRef<any>) {
@@ -2257,6 +2257,13 @@ getjoinholder(){
       this.showAmtDrpDn = true;
     }
      else if (selectedOperation.oprn_desc.toLocaleLowerCase() === 'close') {
+      if (this.selectedCust.substring(0, 3) != this.sys.BranchCode) {
+        this.HandleMessage(true, MessageType.Error, 'Account CLOSE will only be possible on Home Branch.');
+        this.onResetClick();
+
+        return;
+      }
+      else{
       this.showtransmodeforC = true; //marker
       this.counter = 0;
       this.counter1 = 0;
@@ -2723,7 +2730,8 @@ getjoinholder(){
           debugger
           // this.showCloseInterest=true;
         }
-      } else if (selectedOperation.oprn_desc.toLocaleLowerCase() === 'renewal') {
+      }
+     } else if (selectedOperation.oprn_desc.toLocaleLowerCase() === 'renewal') {
         this.showTransMode = false; //marker
         this.showTransModeForR = true; //marker
         // this.showTransModeForR=false //marker

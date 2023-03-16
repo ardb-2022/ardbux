@@ -15,6 +15,8 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import { CommonServiceService } from 'src/app/bank-resolver/common-service.service';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 @Component({
   selector: 'app-npa-all',
   templateUrl: './npa-all.component.html',
@@ -27,7 +29,7 @@ export class NpaALLComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource = new MatTableDataSource()
-  displayedColumns: string[] = ['loan_id','party_name','disb_dt','disb_amt', 'prn_due', 'intt_due','penal_intt','npa_dt','ovd_prn','ovd_intt','stan_prn','substan_prn','d1_prn','d2_prn','d3_prn','totalNPA','provision'];
+  displayedColumns: string[] = ['block_name','acc_desc','loan_id','party_name','disb_dt','disb_amt', 'prn_due', 'intt_due','penal_intt','npa_dt','ovd_prn','ovd_intt','stan_prn','substan_prn','d1_prn','d2_prn','d3_prn','totalNPA','provision'];
   modalRef: BsModalRef;
   isOpenFromDp = false;
   isOpenToDp = false;
@@ -86,7 +88,8 @@ export class NpaALLComponent implements OnInit {
   totNpaSum=0;
   totProvSum=0
   loanNm:any;
-  bName='';
+  bName=''
+  bName1=''
   inputEl:any;
   selectedValue='';
   selectedValue1='';
@@ -103,7 +106,18 @@ export class NpaALLComponent implements OnInit {
  dummytotD3=0
  dummytotNpaSum=0
  dummytotProvSum=0
+ filteredArray1:any=[]
+ firstGroup:any=[]
+ secondGroup:any=[]
  selectItems=[
+  {
+    value:'Block',
+    name:'Block'
+  },
+  {
+    value:'Loan Type',
+    name:'Loan Type'
+  },
   {
     value:'Loan ID',
     name:'Loan ID'
@@ -114,6 +128,14 @@ export class NpaALLComponent implements OnInit {
   }
 ]
 selectItems1=[
+  {
+    value:'Block',
+    name:'Block'
+  },
+  {
+    value:'Loan Type',
+    name:'Loan Type'
+  },
   {
     value:'Loan ID',
     name:'Loan ID'
@@ -145,6 +167,7 @@ selectItems1=[
  onLoadScreen(content) {
     this.modalRef = this.modalService.show(content, this.config);
   }
+  
   setPage(page: number) {
     this.currentPage = page;
     this.cd.detectChanges();
@@ -225,10 +248,10 @@ selectItems1=[
         this.isLoading=false
        
         
-        this.pageChange=document.getElementById('chngPage');
-        this.pageChange.click()
-        this.setPage(2);
-        this.setPage(1)
+        // this.pageChange=document.getElementById('chngPage');
+        // this.pageChange.click()
+        // this.setPage(2);
+        // this.setPage(1)
         this.modalRef.hide();
         this.lastAccNum=this.reportData[this.reportData.length-1].loan_id
         console.log(this.lastAccNum)
@@ -327,27 +350,166 @@ selectItems1=[
     }
     this.getTotal()
   }
-  // applyFilter1(event: Event) {
-  //   const filterValue = (event.target as HTMLInputElement).value;
-  //   this.searchfilter.filter = filterValue.trim().toLowerCase();
-  //   this.dataSource.data=this.searchfilter.filteredData
-  //   if (this.dataSource.paginator) {
-  //     this.dataSource.paginator.firstPage();
-  //   }
-  //   this.getTotal()
-  // }
+  showFirstGroup(){
+    this.dataSource.data=this.reportData
+    this.bName=''
+    this.bName1=''
+    this.selectedValue=''
+    this.firstGroup.length=0
+    switch(this.selectedValue1){
+     case "Block": 
+      for(let i=0;i<this.reportData.length;i++){
+        this.firstGroup[i]=this.reportData[i].block_name
+     }
+      //  console.log(this.blockNames)
+     
+        break;
+      case "Loan Type": 
+      for(let i=0;i<this.reportData.length;i++){
+        this.firstGroup[i]=this.reportData[i].acc_desc
+     }
+    // this.filteredArray=this.reportData.filter(e=>e.activity_cd?.toLowerCase().includes(filterValue.toLowerCase())==true)
+      break;
+      case "Party Name":
+        for(let i=0;i<this.reportData.length;i++){
+          this.firstGroup[i]=this.reportData[i].party_name
+       }
+    // this.filteredArray=this.reportData.filter(e=>e.party_name?.toLowerCase().includes(filterValue.toLowerCase())==true)
+     break;
+       case "Loan ID":
+        for(let i=0;i<this.reportData.length;i++){
+          this.firstGroup[i]=this.reportData[i].loan_id
+       }
+        // this.filteredArray=this.reportData.filter(e=>e.loan_id?.toLowerCase().includes(filterValue.toLowerCase())==true)
+         break;
+        
+
+    }
+    this.firstGroup=Array.from(new Set(this.firstGroup))
+    this.firstGroup=this.firstGroup.sort()
+  }
+  searchFirstGroup(){
+    this.isLoading=true
+    // this.bName=''
+    this.bName1=''
+    this.selectedValue=''
+    setTimeout(()=>{this.isLoading=false},500)
+    switch(this.selectedValue1){
+      case "Block": 
+      this.filteredArray=this.reportData.filter(e=>e.block_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
+        break;
+      case "Loan Type": 
+    this.filteredArray=this.reportData.filter(e=>e.acc_desc?.toLowerCase().includes(this.bName.toLowerCase())==true)
+      break;
+      case "Party Name":
+    this.filteredArray=this.reportData.filter(e=>e.party_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
+     break;
+     case "Interest Upto":
+      this.filteredArray=this.reportData.filter(e=>e.computed_till_dt.includes(this.bName)==true)
+       break;
+       case "Issue DT":
+        this.filteredArray=this.reportData.filter(e=>e.disb_dt.includes(this.bName)==true)
+         break;
+       case "Loan ID":
+        this.filteredArray=this.reportData.filter(e=>e.loan_id?.toLowerCase().includes(this.bName.toLowerCase())==true)
+         break;
+
+    }
+    this.dataSource.data=this.filteredArray
+    this.filteredArray1=this.filteredArray
+    this.getTotal()
+  }
+  showSecondGroup(){
+    this.dataSource.data=this.filteredArray1
+    this.secondGroup.length=0;
+    this.bName1=''
+    switch(this.selectedValue){
+       case "Block": 
+      for(let i=0;i<this.filteredArray1.length;i++){
+        this.secondGroup[i]=this.filteredArray1[i].block_name
+     }
+      //  console.log(this.blockNames)
+     
+        break;
+      case "Loan Type": 
+      for(let i=0;i<this.filteredArray1.length;i++){
+        this.secondGroup[i]=this.filteredArray1[i].acc_desc
+     }
+    // this.filteredArray=this.reportData.filter(e=>e.activity_cd?.toLowerCase().includes(filterValue.toLowerCase())==true)
+      break;
+      case "Party Name":
+        for(let i=0;i<this.filteredArray1.length;i++){
+          this.secondGroup[i]=this.filteredArray1[i].party_name
+       }
+    // this.filteredArray=this.reportData.filter(e=>e.party_name?.toLowerCase().includes(filterValue.toLowerCase())==true)
+     break;
+     
+       case "Loan ID":
+        for(let i=0;i<this.filteredArray1.length;i++){
+          this.secondGroup[i]=this.filteredArray1[i].loan_id
+       }
+        // this.filteredArray=this.reportData.filter(e=>e.loan_id?.toLowerCase().includes(filterValue.toLowerCase())==true)
+         break;
+         case "Issue DT":
+          for(let i=0;i<this.filteredArray1.length;i++){
+            this.secondGroup[i]=this.filteredArray1[i].disb_dt
+         }
+          // this.filteredArray=this.reportData.filter(e=>e.loan_id?.toLowerCase().includes(filterValue.toLowerCase())==true)
+           break;
+
+    }
+    this.secondGroup=Array.from(new Set(this.secondGroup))
+    this.secondGroup=this.secondGroup.sort()
+    this.getTotal()
+  }
+  searchSecondGroup(){
+    this.isLoading=true
+    setTimeout(()=>{this.isLoading=false},500)
+    console.log(this.filteredArray1)
+debugger
+    switch(this.selectedValue){
+      case "Block": 
+      this.filteredArray=this.filteredArray1.filter(e=>e.block_name?.toLowerCase().includes(this.bName1.toLowerCase())==true)
+        break;
+      case "Loan Type": 
+    this.filteredArray=this.filteredArray1.filter(e=>e.acc_desc?.toLowerCase().includes(this.bName1.toLowerCase())==true)
+      break;
+      case "Party Name":
+    this.filteredArray=this.filteredArray1.filter(e=>e.party_name?.toLowerCase().includes(this.bName1.toLowerCase())==true)
+     break;
+    
+       case "Issue DT":
+        this.filteredArray=this.filteredArray1.filter(e=>e.disb_dt.includes(this.bName1)==true)
+         break;
+       case "Loan ID":
+        this.filteredArray=this.filteredArray1.filter(e=>e.loan_id?.toLowerCase().includes(this.bName1.toLowerCase())==true)
+         break;
+
+    }
+    debugger;
+    console.log(this.filteredArray1)
+    this.dataSource.data=this.filteredArray
+    this.getTotal()
+  }
   applyFilter(event:Event){
     const filterValue=(event.target as HTMLInputElement).value
     this.bName=(event.target as HTMLInputElement).value
     this.filteredArray=this.dataSource.data
     switch(this.selectedValue1){
-    
+      case "Block": 
+      this.filteredArray=this.reportData.filter(e=>e.block_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
+          break;
+      case "Loan Type": 
+      this.filteredArray=this.reportData.filter(e=>e.acc_desc?.toLowerCase().includes(this.bName.toLowerCase())==true)
+          break;
       case "Party Name":
-    this.filteredArray=this.reportData.filter(e=>e.party_name.toLowerCase().includes(filterValue.toLowerCase())==true)
-     break;
-    
-       case "Loan ID":
-        this.filteredArray=this.reportData.filter(e=>e.loan_id.toLowerCase().includes(filterValue.toLowerCase())==true)
+      this.filteredArray=this.reportData.filter(e=>e.party_name.toLowerCase().includes(this.bName.toLowerCase())==true)
+         break;
+      case "Loan ID":
+      this.filteredArray=this.reportData.filter(e=>e.loan_id.toLowerCase().includes(this.bName.toLowerCase())==true)
+         break;
+         case "Issue DT":
+        this.filteredArray=this.filteredArray1.filter(e=>e.disb_dt.includes(this.bName1)==true)
          break;
 
     }
@@ -367,13 +529,18 @@ selectItems1=[
     const filterValue=(event.target as HTMLInputElement).value
     this.filteredArray=this.dataSource.data
     switch(this.selectedValue){
-     
+      case "Block": 
+      this.filteredArray=this.reportData.filter(e=>e.block_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
+        break;
+      case "Loan Type": 
+      this.filteredArray=this.reportData.filter(e=>e.acc_desc?.toLowerCase().includes(this.bName.toLowerCase())==true)
+      break;
       case "Party Name":
-    this.filteredArray=this.filteredArray.filter(e=>e.party_name.toLowerCase().includes(filterValue.toLowerCase())==true)
-     break;
+      this.filteredArray=this.filteredArray.filter(e=>e.party_name.toLowerCase().includes(this.bName.toLowerCase())==true)
+      break;
     
        case "Loan ID":
-        this.filteredArray=this.filteredArray.filter(e=>e.loan_id.toLowerCase().includes(filterValue.toLowerCase())==true)
+        this.filteredArray=this.filteredArray.filter(e=>e.loan_id.toLowerCase().includes(this.bName.toLowerCase())==true)
          break;
 
     }
@@ -390,10 +557,10 @@ selectItems1=[
     // this.SubmitReport()
     this.inputEl=document.getElementById('myInput');
     this.inputEl.value=''
-    this.inputEl=document.getElementById('myInput2');
-    this.inputEl.value=''
-    this.inputEl=document.getElementById('myInput1');
-    this.inputEl.value=''
+    // this.inputEl=document.getElementById('myInput2');
+    // this.inputEl.value=''
+    // this.inputEl=document.getElementById('myInput1');
+    // this.inputEl.value=''
     this.totIssueSum=this.dummytotIssueSum
       this.totPrnDue=this.dummytotPrnDue
       this.totInttDue=this.dummytotInttDue
@@ -411,6 +578,7 @@ selectItems1=[
     this.selectedValue=''
     this.selectedValue1=''
     this.bName=''
+   this.bName1=''
     
     
   }
@@ -447,5 +615,24 @@ selectItems1=[
 
     }
   }
+  openPDF(): void {
+  //   const element = document.getElementById('mattable');
+  // html2canvas(element).then((canvas) => {
+  //   const imgData = canvas.toDataURL('image/png');
+  //   const pdf = new jsPDF('l', 'pt', 'a4');
+  //   pdf.addImage(imgData, 'PNG', 0, 0);
+  //   pdf.setPageOrientation('landscape');
+  //   pdf.save('myPDF.pdf');
+  // });
+    // const element = document.getElementById('mattable');
+    // const pdf = new jsPDF('l', 'pt', 'a4');
+    // pdf.html(element, {
+    //   callback: (pdf) => {
+    //     pdf.setPageOrientation('landscape');
+    //     pdf.save('myPDF.pdf');
+    //   }
+    // });
+  }
+
 
 }

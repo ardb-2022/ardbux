@@ -788,11 +788,7 @@
                 <option *ngIf="operations" value="T">Transfer</option>
               </select>
             </div>
-            <div class="form-group col-2">
-              <small for="amount">Amount <span class="text-danger">*</span> </small>
-              <input type="text" class="form-control form-control-sm" formControlName="amount" id="amount"
-                (change)="onAmtChng()">
-            </div>
+            
             <div class="form-group col-4" *ngIf="isRecovery">
               <small for="intt_recov_dt">Intt. Recovery Till <span class="text-danger">*</span></small>
               <div class="input-group">
@@ -806,6 +802,11 @@
                   </button>
                 </div>
               </div>
+            </div>
+            <div class="form-group col-2">
+              <small for="amount">Amount <span class="text-danger">*</span> </small>
+              <input type="text" class="form-control form-control-sm" formControlName="amount" id="amount"
+                (change)="onAmtChng()">
             </div>
             <div class="form-group col-2" *ngIf="isDisburs && showInstrumentDtl">
               <small for="instrument_num">Instrument</small>

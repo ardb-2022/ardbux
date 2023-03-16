@@ -617,6 +617,7 @@ export class UTCustomerProfileComponent implements OnInit {
 
 
   validateControls(): boolean {
+    debugger
     this.showMsgs = [];
     let trReturn = true;
     if (null !== this.f.pan.value && this.f.pan.value.length > 0) {
@@ -661,9 +662,11 @@ export class UTCustomerProfileComponent implements OnInit {
       this.HandleMessage(true, MessageType.Error, 'Phone number is mandatory');
       trReturn = false;
     }
-
+debugger
     for (const name in this.custMstrFrm.controls) {
+      debugger
       if (this.custMstrFrm.controls[name].invalid) {
+        debugger
         switch (name) {
           case 'dt_of_birth':
             this.HandleMessage(true, MessageType.Error, 'Date of Birth is Mandatory');
@@ -707,6 +710,12 @@ export class UTCustomerProfileComponent implements OnInit {
         }
       }
     }
+    if(this.custMstrFrm.controls.catg_cd.value==null){
+      debugger
+      this.HandleMessage(true, MessageType.Error, 'Category of customer is Mandatory');
+      trReturn = true;
+    }
+    
     if (this.showMsgs.length > 0) {
       trReturn = false;
     }

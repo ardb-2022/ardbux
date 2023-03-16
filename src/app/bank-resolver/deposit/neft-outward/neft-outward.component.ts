@@ -83,7 +83,8 @@ export class NeftOutwardComponent implements OnInit {
         }
           
           this.isLoading = false;
-          if(this.neftPayRet.bank_dr_acc_no.length>0 && this.clearBalance-(this.neftPayRet.amount+this.neftPayRet.charge_ded)<0){
+          if(this.neftPayRet.bank_dr_acc_no.length>0 && this.clearBalance-(Number(this.neftPayRet.amount)+Number(this.neftPayRet.charge_ded))<0){
+            debugger
             this.HandleMessage(true, MessageType.Error, 'Enter Amount Should be Lower than Account Balance !!!!');
             this.disableSave=true;
           }
@@ -152,7 +153,7 @@ export class NeftOutwardComponent implements OnInit {
           console.log(i.bank_dr_acc_no);
           temp_deposit.brn_cd = this.branchCode;
           temp_deposit.acc_num = i.bank_dr_acc_no;
-          temp_deposit.acc_type_cd =  this.neftPayRet.bank_dr_acc_type;
+          temp_deposit.acc_type_cd =  +this.neftPayRet.bank_dr_acc_type;
           temp_deposit.ardb_cd=this.sys.ardbCD
           // //debugger;
           this.isLoading = true;
@@ -163,7 +164,7 @@ export class NeftOutwardComponent implements OnInit {
               this.clearBalance=res[0].clr_bal;
               console.log(this.clearBalance);
               this.isLoading=false
-              console.log(this.clearBalance-(this.neftPayRet.amount+this.neftPayRet.charge_ded));
+              console.log(this.clearBalance-(Number(this.neftPayRet.amount)+Number(this.neftPayRet.charge_ded)));
               
 
               // if(res=[]){
@@ -397,7 +398,7 @@ export class NeftOutwardComponent implements OnInit {
       this.HandleMessage(true, MessageType.Error, 'Beneficiary Name Can not be Blank');
       return;
     }
-    else if (this.neftPayRet.amount == null || this.neftPayRet.amount === 0) {
+    else if (this.neftPayRet.amount == null || this.neftPayRet.amount == 0) {
       this.HandleMessage(true, MessageType.Error, 'Amount Can not be Blank');
       return;
     }
@@ -413,7 +414,7 @@ export class NeftOutwardComponent implements OnInit {
       this.HandleMessage(true, MessageType.Error, 'Beneficiary IFSC Can not be Blank');
       return;
     }
-    else if (this.neftPayRet.dr_acc_no == null || this.neftPayRet.dr_acc_no === 0) {
+    else if (this.neftPayRet.dr_acc_no == null || this.neftPayRet.dr_acc_no == 0) {
       this.HandleMessage(true, MessageType.Error, 'Dr. A/C No Can not be Blank');
       return;
     }
@@ -720,11 +721,11 @@ debugger;
   }
 
   public suggestCustomer(): void {
-    if (this.neftPayRet.bank_dr_acc_type == null || this.neftPayRet.bank_dr_acc_type === 0) {
+    if (Number(this.neftPayRet.bank_dr_acc_type) == null || Number(this.neftPayRet.bank_dr_acc_type) == 0) {
       this.HandleMessage(true, MessageType.Error, 'Beneficiary A/C Type can not be Blank');
       return;
     }
-    if (this.neftPayRet.bank_dr_acc_type > 1000) {
+    if (Number(this.neftPayRet.bank_dr_acc_type) > 1000) {
       this.neftPayRet.bank_dr_acc_no = '0000';
       this.HandleMessage(true, MessageType.Error, 'Please change Bene A/C Type First!!!');
       return;
@@ -764,7 +765,7 @@ debugger;
 
     temp_deposit.brn_cd = this.branchCode;
     temp_deposit.acc_num = cust.acc_num;
-    temp_deposit.acc_type_cd =  this.neftPayRet.bank_dr_acc_type;
+    temp_deposit.acc_type_cd =  +this.neftPayRet.bank_dr_acc_type;
     temp_deposit.ardb_cd=this.sys.ardbCD
     // //debugger;
     this.isLoading = true;
@@ -772,7 +773,8 @@ debugger;
       res => {
         console.log(res)
         this.clearBalance=res[0].clr_bal;
-        if(this.clearBalance-(this.neftPayRet.amount+this.neftPayRet.charge_ded)<0){
+        if(this.clearBalance-(Number(this.neftPayRet.amount)+Number(this.neftPayRet.charge_ded))<0){
+          debugger
           this.HandleMessage(true, MessageType.Error, 'Enter Amount Should be Lower than Account Balance !!!!');
           this.disableSave=true;
         }

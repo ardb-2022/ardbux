@@ -59,6 +59,7 @@ export class LoginComponent implements OnInit {
      }
 
   ngOnInit(): void {
+    localStorage.removeItem('ardb_name');
 
     if (this.router.url.includes('/login')) {
       this.getLogdUser();
@@ -205,11 +206,13 @@ export class LoginComponent implements OnInit {
             var dt = this.brnDtls.find(x => x.brn_cd == this.f.branch.value)
             // this.getPrivateIP()
             this.getBranchIp(dt).then(response => {
+              debugger
               if (response == true) {
                 res[0].login_status = 'Y';
                 res[0].ip = localStorage.getItem('getIPAddress');
                 this.updateUsrStatus(res[0]);
                 this.getSystemParam();
+                debugger
               }
               
               else {
@@ -278,7 +281,8 @@ export class LoginComponent implements OnInit {
           this.http.get<{ ip: string }>('https://jsonip.com').subscribe(
             data => {
               // console.log(data)
-             localStorage.setItem('getIPAddress', data.ip); // feather
+              const getIP =  data.ip.split(",");
+             localStorage.setItem('getIPAddress', getIP[0]); // feather
           // localStorage.setItem('__userId', this.f.username.value +'/'+data.ip); // "101"
 
 
@@ -338,7 +342,6 @@ export class LoginComponent implements OnInit {
     localStorage.removeItem('ardb_name');
     localStorage.removeItem('__ardb_cd');
     localStorage.removeItem('ardb_addr');
-
     this.brnDtls.length = 0;
     this.loginForm.reset();
     this.loginForm.enable();
@@ -417,14 +420,17 @@ export class LoginComponent implements OnInit {
       this.http.get<{ ip: string }>('https://jsonip.com').subscribe(
         data => {
           console.log(data)
-          this.ipAddress = data;
-          localStorage.setItem('ipAddress',this.ipAddress)
+          this.ipAddress = data.ip;
+          const myIP =  this.ipAddress.split(",");
+          localStorage.setItem('ipAddress',myIP[0])
           this.isLoading = false;
-          
           // this.loginForm.enable();
           //   resolve(true);
           let ipMatched = false;
-          if (e.ip_address.indexOf(this.ipAddress.ip) !== -1) { ipMatched = true; }
+          if (e.ip_address.indexOf(myIP[0]) !== -1) {
+             ipMatched = true; 
+            }
+            debugger
           if (!ipMatched) {
             this.showAlert = true;
             this.alertMsg = 'IP not allowed to access, contact support.';

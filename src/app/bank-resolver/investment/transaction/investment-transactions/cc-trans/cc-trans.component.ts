@@ -92,6 +92,7 @@ export class CcTransComponent implements OnInit {
   remarks: any;
   ShowHide:boolean=false;
   closeInt: any;
+  showOnTDS:boolean=false;
   
   constructor(public invComServ:InvTranServService ,private svc: RestService, private msg: InAppMessageService,
     private frmBldr: FormBuilder, public datepipe: DatePipe, private router: Router,
@@ -468,6 +469,9 @@ export class CcTransComponent implements OnInit {
     
   } 
 }
+applyTDS(){
+
+}
 public setTrnsDtlsCloseFrm(){
   console.log(this.editDeleteMode);
 
@@ -508,7 +512,6 @@ if (undefined !== this.accNoEnteredForTransaction && Object.keys(this.accNoEnter
     // amount:this.accNoEnteredForTransaction.prn_amt+this.accNoEnteredForTransaction.intt_amt,
     // trans_type_key:'D',
     // trans_type:this.editDeleteMode?'Deposit',
-
     trf_type:this.editDeleteMode? this.accNoEnteredForTransaction2.trf_type:'',
     intt_trf_type: this.accNoEnteredForTransaction.intt_trf_type,
     curr_intt_recov:this.accNoEnteredForTransaction.intt_amt,

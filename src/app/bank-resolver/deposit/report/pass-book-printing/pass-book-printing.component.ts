@@ -222,7 +222,7 @@ export class PassBookPrintingComponent implements OnInit {
           let tot = data[0].balance_amt;
   
           console.log(tot);
-           prTrans[prTrans.length-1].balance=tot1
+           prTrans[prTrans.length-1].balance=tot
           console.log( prTrans);
           debugger
           for (let i = prTrans.length-1; i >= 0; i--) {
@@ -230,7 +230,7 @@ export class PassBookPrintingComponent implements OnInit {
             if (i > 0) {
               debugger
               if(i==prTrans.length-1){
-                prTrans[i].balance = tot1
+                prTrans[i].balance = tot
                this.passBookData.push(prTrans[i]);
                debugger
               }
@@ -244,9 +244,13 @@ export class PassBookPrintingComponent implements OnInit {
               }
               
                prTrans[i].balance = tot
+               if(i==1){
+               tot1=prTrans[i].balance;
+               }
                this.passBookData.push(prTrans[i]);
             }
             else{
+              debugger
               if (prTrans[i+1].trans_type === 'D') { debugger// deposit
                 tot1 -= Number(prTrans[i+1].amount);
               } else {debugger
