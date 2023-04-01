@@ -203,6 +203,10 @@
         <mat-icon>volunteer_activism</mat-icon>
         <span>Savings Interest Posting</span>
       </button>
+      <button mat-menu-item routerLink="DT_SMSchargeDed" *ngIf="userType=='A'">
+        <mat-icon>mark_email_read</mat-icon>
+        <span>SMS Charge Deduction</span>
+      </button>
       <button mat-menu-item routerLink="DT_AgentComPost" *ngIf="userType=='A' || userType=='S'">
         <mat-icon>done_outline</mat-icon>
         <span>Agent Commission Posting</span>
@@ -227,9 +231,18 @@
       </button>
     </mat-menu>
     <mat-menu #dreport="matMenu">
+      
       <button mat-menu-item routerLink="DR_SubCashBook">
         <mat-icon>request_quote</mat-icon>
         <span>Sub Cash Book</span>
+      </button>
+      <button mat-menu-item routerLink="DR_InttCertificate">
+        <mat-icon>privacy_tip</mat-icon>
+        <span>Interest Certificate</span>
+      </button>
+      <button mat-menu-item routerLink="DR_PbkPrn">
+        <mat-icon>print</mat-icon>
+        <span>Pass book Printing</span>
       </button>
       <button mat-menu-item [matMenuTriggerFor]="detail_list">
         <mat-icon>list_alt</mat-icon>
@@ -268,10 +281,7 @@
         <mat-icon>workspace_premium</mat-icon>
         <span>Certificate Printing</span>
       </button>
-      <button mat-menu-item routerLink="DR_PbkPrn">
-        <mat-icon>print</mat-icon>
-        <span>Pass book Printing</span>
-      </button>
+      
       <button mat-menu-item routerLink="DR_UpbkPrnSts">
         <mat-icon>published_with_changes</mat-icon>
         <span>Update Passbook Print Status</span>
@@ -368,6 +378,10 @@
     </button>
   </mat-menu>
   <mat-menu #lreport="matMenu">
+    <button mat-menu-item routerLink="DR_LoanPbkPrn">
+      <mat-icon>print</mat-icon>
+      <span>Pass book Printing</span>
+    </button>
     <button mat-menu-item routerLink="LR_LoanStmt">
       <mat-icon>receipt_long</mat-icon>
       <span>Loan Ledger</span>
@@ -436,10 +450,6 @@
     <button mat-menu-item routerLink="LR_NPA_ALL">
       <mat-icon>local_library</mat-icon>
       <span>NPA List ALL</span>
-    </button>
-    <button mat-menu-item routerLink="DR_LoanPbkPrn">
-      <mat-icon>print</mat-icon>
-      <span>Pass book Printing</span>
     </button>
     <button mat-menu-item routerLink="DR_LoanUpbkPrnSts">
       <mat-icon>published_with_changes</mat-icon>
@@ -515,6 +525,10 @@
     <button mat-menu-item routerLink="LR_RecRegFund">
       <mat-icon>swipe_right</mat-icon>
       <span>Fund-wise</span>
+    </button>
+    <button mat-menu-item routerLink="LR_RecRegBlock">
+      <mat-icon>recent_actors</mat-icon>
+      <span>Block-wise</span>
     </button>
     <button mat-menu-item routerLink="LR_RecInterest">
       <mat-icon>real_estate_agent</mat-icon>
@@ -662,10 +676,11 @@
     </mat-menu> -->
   </div>
   
-    <ul class="navbar-nav mr-auto"  *ngIf="hideMenuOnComplete && userType=='A'">
+    <ul class="navbar-nav mr-auto"  *ngIf="hideMenuOnComplete && userType=='A' && brnCD=='101' ">
       <li>
         <label>&nbsp;&nbsp; Day has been closed, please initialize the day to start operation -> &nbsp;&nbsp;&nbsp;&nbsp;</label>
         <a routerLink="DA_DayInit"> <b>  Day Initialization </b></a>
+         <a routerLink="DA_YearOpn"   *ngIf="showOpenYear && userType=='A'"> <b>|  Year Open </b></a>
       </li>
     </ul>
     <span class="example-spacer"></span>

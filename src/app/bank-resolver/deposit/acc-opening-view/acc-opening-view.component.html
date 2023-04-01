@@ -351,11 +351,13 @@
           <div class="form-row">
             <div class="form-group col-6">
               <small for="trans_type">Constitution</small> <br>
-              <select disabled
+              <select [disabled]="disableConst" [(ngModel)]="tm_deposit.constitution_cd"
                 style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
                 id="trans_type" class="form-control form-control-sm">
-                <option [value]="tm_deposit.constitution_cd" disabled selected>
-                  {{tm_deposit.constitution_cd}}-{{tm_deposit.constitution_desc}}</option>
+                <!-- <option [value]="tm_deposit.constitution_cd" [disabled]="tm_deposit.constitution_cd!=101" selected>
+                  {{tm_deposit.constitution_cd}}-{{tm_deposit.constitution_desc}}</option> -->
+                  <option *ngFor="let l of selectedConstitutionList"  [disabled]="l.constitution_cd!=101" [value]="l.constitution_cd">
+                    {{l.constitution_cd}}-{{l.constitution_desc}}</option>
               </select>
 
               </div>
@@ -426,7 +428,10 @@
                 <small for="mis_cert_no">Cert. No. / Ledger Folio No.</small>
                 <input [(ngModel)]="tm_deposit.cert_no" [disabled]='disableAll' style="height:25px" type="text" placeholder="Cert. No. / Ledger Folio No."
                   class="form-control form-control-sm text-capitalize" id="mis_cert_no">
-           
+                  <small for="ext_instl_tot">Set Minimum A/C Balance</small>
+                  <input [disabled]='disableAll' [(ngModel)]="tm_deposit.ext_instl_tot" style="height:25px; text-align-last: right;" type="number" min="0" step='any'
+                  class="form-control form-control-sm text-capitalize" id="ext_instl_tot" placeholder="Minimum A/C Balance">
+          
               </div>
           </div>
         </div>
@@ -743,6 +748,7 @@
                 id="trans_type" class="form-control form-control-sm">
                 <option [value]="tm_deposit.constitution_cd" disabled selected>
                   {{tm_deposit.constitution_cd}}-{{tm_deposit.constitution_desc}}</option>
+                  
               </select>
             </div>
 

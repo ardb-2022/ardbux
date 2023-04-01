@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild ,AfterViewInit} from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild ,AfterViewInit, ElementRef} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
@@ -25,6 +25,7 @@ import jsPDF from 'jspdf';
 export class NpaALLComponent implements OnInit {
 
   public static operations: mm_operation[] = [];
+  @ViewChild('mattable') htmlData:ElementRef;
   @ViewChild('content', { static: true }) content: TemplateRef<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -624,15 +625,23 @@ debugger
   //   pdf.setPageOrientation('landscape');
   //   pdf.save('myPDF.pdf');
   // });
-    // const element = document.getElementById('mattable');
-    // const pdf = new jsPDF('l', 'pt', 'a4');
-    // pdf.html(element, {
-    //   callback: (pdf) => {
-    //     pdf.setPageOrientation('landscape');
-    //     pdf.save('myPDF.pdf');
-    //   }
-    // });
+  // const doc = new jsPDF();
+//  const content = document.getElementById('mattable');
+//  let data = this.htmlData.nativeElement;
+//     let options : any = {
+//       orientation: 'p',
+//       unit: 'px',
+//       format: 'a0',
+//       };
+//     let doc = new jsPDF(options);
+//      doc.fromHTML(data.innerHTML{
+//       callback: function (doc) {
+//             doc.save("angular-demo.pdf");
+//           },
+//       margin:15,
+//       x: 10,
+//       y: 10
+//     });
   }
-
 
 }

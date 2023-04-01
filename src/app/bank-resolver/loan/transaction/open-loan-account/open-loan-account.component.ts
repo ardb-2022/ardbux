@@ -861,6 +861,11 @@ removeSecurityDtlList()
     this.suggestedJointCustomer=null
     this.disabledOnNull=true;
     this.disabledJointOnNull=true;
+    this.accName=true;
+    this.SecaccCD=false;
+    this.newtm_deposit=null;
+
+    
   }
 
 
@@ -884,7 +889,7 @@ removeSecurityDtlList()
       this.HandleMessage(true, MessageType.Warning, 'Loan Already Approved !!');
       return;
     }
-
+    this.lienAccount();
     this.tm_loan_all.approval_status = 'A';
     this.masterModel.tmlaonsanction[idx].approval_status = 'A';
     this.masterModel.tmlaonsanction[idx].approved_dt = this.sys.CurrentDate;
@@ -893,6 +898,41 @@ removeSecurityDtlList()
     this.saveData('A');
   }
 
+  lienAccount() {
+    this.isLoading=true;
+    let lien_acc_cd=this.masterModel.tdloansancsetlist[0].tdloansancset.filter(e=>e.param_cd=='115')[0].param_value
+    let lien_acc_no=this.masterModel.tdloansancsetlist[0].tdloansancset.filter(e=>e.param_cd=='116')[0].param_value
+   if((lien_acc_cd!=null||lien_acc_cd!=undefined)&& (lien_acc_no!=null||lien_acc_no!=undefined)){
+    var data = {
+      "ardb_cd": this.sys.ardbCD,
+      "brn_cd": this.sys.BranchCode,
+      "acc_type_cd": lien_acc_cd,
+      "acc_num": lien_acc_no,
+      "loan_id": this.masterModel.tmloanall.loan_id,
+      "lock_mode": 'L',
+      "modified_by": this.sys.UserId,
+    }
+      var ret = 0;
+
+      this.svc.addUpdDel<any>('Deposit/UpdateDepositLockUnlock', data).subscribe(
+        res => {
+          // //debugger;
+          ret = res;
+          this.isLoading = false;
+          this.HandleMessage(true, MessageType.Sucess, 'Sucessfully added lien account !!');
+
+        },
+        err => {
+          //debugger;
+          this.isLoading = false;
+          this.HandleMessage(true, MessageType.Error, 'Error, While adding lien account !!');
+        }
+      );
+   }
+    
+
+
+  }
   saveData(saveType: string) {
 
     if (this.operationType !== 'N' && this.operationType !== 'U') {
@@ -1380,9 +1420,24 @@ removeSecurityDtlList()
         }
         else {
           if (res.tmdeposit.acc_num !== null) {
+            if(res.tmdeposit.lock_mode=='L'){
+              for (const i in this.masterModel.tdloansancsetlist) {
+                for (const j in this.masterModel.tdloansancsetlist[i].tdloansancset) {
+                  if(this.masterModel.tdloansancsetlist[i].tdloansancset[j].param_cd == '115'){
+                    this.masterModel.tdloansancsetlist[i].tdloansancset[j].param_value=null
+                  }
+                  if(this.masterModel.tdloansancsetlist[i].tdloansancset[j].param_cd == '116'){
+                   this.masterModel.tdloansancsetlist[i].tdloansancset[j].param_value=null
+                  }
+                }
+              }
+              this.HandleMessage(true, MessageType.Warning, 'this Account is already added into another loan security');
+            }
+            else{
               this.newtm_deposit=res.tmdeposit;
               console.log(this.newtm_deposit);
               this.getCustomer();
+            }
           }
           else {
             // this.showAlertMsg('WARNING', 'No record found!!!');

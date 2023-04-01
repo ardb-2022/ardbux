@@ -41,9 +41,8 @@
           <div class="form-group col-4">
             <small for="mortgage_dt">Transfer P/L to</small>
              <select
-          style="height:30px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
           formControlName="plcd" (change)="setPL($event.target.value)"
-          id="plcd" class="form-control form-control-sm">
+          id="plcd" class="form-control form-control-sm custom-scrollbar">
           <!-- <option [value]="plcd" disabled selected>{{plcd}}-{{pldesc}}</option> -->
           <option *ngFor="let ts of selectedPlList" [value]="ts.plcd">{{ts.acc_cd}}-{{ts.acc_type}}-{{ts.acc_name}}</option>
         </select>

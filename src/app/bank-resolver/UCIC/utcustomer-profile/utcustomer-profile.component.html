@@ -77,6 +77,8 @@
       <tr>
         <th> Customer Code / Phone</th>
         <th> Name</th>
+        <th>Guardian Name</th>
+        <th> Address</th>
       </tr>
       <tbody *ngFor="let cust of suggestedCustomer" >
         <tr  (click)="SelectCustomer(cust)">
@@ -85,7 +87,12 @@
           </td>
           <td>
             {{cust.cust_name}}
-
+          </td>
+          <td>
+            {{cust.guardian_name}}
+          </td>
+          <td>
+            {{cust.permanent_address}}
           </td>
         </tr>
        

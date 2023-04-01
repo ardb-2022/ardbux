@@ -144,6 +144,12 @@
     border-right: 1px solid rgb(172, 170, 170);
     padding-right: 14px;
     text-align: center;
+  }.mat-column-totalRecov {
+    width: 32px;
+    border-right: 1px solid rgb(172, 170, 170);
+    padding-right: 14px;
+    padding-left: 14px;
+    text-align: right;
   }
   .mat-column-disclaimer1{
     border-right: 1px solid rgb(172, 170, 170);
@@ -266,4 +272,9 @@
     font-size:small
   }
   
-  
+  .mat-header-row {
+    position: sticky;
+    /* position: -webkit-sticky; */
+    top: -16px;
+    background-color: inherit;
+  }

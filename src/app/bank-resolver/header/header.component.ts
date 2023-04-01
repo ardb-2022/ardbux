@@ -38,7 +38,8 @@ export class HeaderComponent implements OnInit,OnDestroy {
   collapsed = true;
   bankConfig: BankConfigMst;
   bankName: string;
-  userType:any
+  userType:any;
+  brnCD=localStorage.getItem('__brnCd');
   bankFullName: string;
   childMenu: mainmenu;
   subMenu: submenu;
@@ -61,6 +62,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
   sdoRet:any=[]
   sdo:any
   dynamicLink:any;
+  showOpenYear:boolean=false;
   // menuConfigs=[
   //       {
   //       menu_name: 'UCIC',
@@ -964,8 +966,24 @@ export class HeaderComponent implements OnInit,OnDestroy {
               ;console.log(res)
               this.userType=res[0].user_type
               console.log(this.sdoRet.filter(x=>x.brn_cd==this.sys.BranchCode)[0].cls_flg=="Y")
-              if(this.sdoRet.filter(x=>x.brn_cd==this.sys.BranchCode)[0].cls_flg=="Y")
-              this.hideMenuOnComplete=true
+              // if(this.sdoRet.filter(x=>x.brn_cd==this.sys.BranchCode)[0].cls_flg=="Y"){
+              //   this.hideMenuOnComplete=true
+              // }
+               if(this.sdoRet.filter(x=>x.brn_cd==this.sys.BranchCode)[0].cls_flg=="Y" ){
+                const m = this.convertDate(this.sys.lastDt);
+                const c = this.sys.CurrentDate;
+                const diffDays = Math.ceil((m.getTime() - c.getTime()) / (1000 * 3600 * 24)); 
+               
+                console.log(c);
+                console.log(m);
+                console.log(diffDays);
+                debugger
+                if(diffDays==0 && this.sys.BranchCode=='101'){
+                  this.hideMenuOnComplete=true
+                  this.showOpenYear=true;
+                }
+                else{this.hideMenuOnComplete=true}
+              }
               else
               this.hideMenuOnComplete=false
             }
@@ -976,4 +994,9 @@ export class HeaderComponent implements OnInit,OnDestroy {
       
       })
   }
+  private  convertDate(datestring:string):Date
+{
+var parts = datestring.match(/(\d+)/g);
+return new Date(parseInt(parts[2]), parseInt(parts[1])-1, parseInt(parts[0]));
+}
 }

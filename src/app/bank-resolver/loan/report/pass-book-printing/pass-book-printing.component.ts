@@ -16,6 +16,9 @@ import { tm_loan_all } from 'src/app/bank-resolver/Models/loan/tm_loan_all';
 import { LoanOpenDM } from 'src/app/bank-resolver/Models/loan/LoanOpenDM';
 import { PrintServiceService } from './print-service.service';
 import { Subscription } from 'rxjs';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+import jspdf from 'jspdf';
 @Component({
   selector: 'app-pass-book-printing',
   templateUrl: './pass-book-printing.component.html',
@@ -694,7 +697,30 @@ export class LoanPassBookPrintingComponent implements OnInit {
     });
   }
 
+download(){
+  // const doc = new jsPDF();
+  // const content = document.getElementById('trial');
+  // html2canvas(content).then(canvas => {
+  //   const imgData = canvas.toDataURL('image/png');
+  //   doc.addImage(imgData, 'PNG', 0, 0, 600, 400);
+  //   doc.save('document.pdf');
+  // });
+  let data = document.getElementById('trial');
+    html2canvas(data).then(canvas => {
+    // Few necessary setting options
+    const imgWidth = 250;
+    const pageHeight = 295;
+    const imgHeight = canvas.height * imgWidth / canvas.width;
+    const heightLeft = imgHeight;
 
+    const contentDataURL = canvas.toDataURL('image/png')
+    let pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF
+    var position = 0;
+    pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)
+    pdf.save('new-file.pdf'); // Generated PDF
+    });
+  
+}
   closeScreen() {
     this.router.navigate([this.sys.BankName + '/la']);
   }

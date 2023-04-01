@@ -127,6 +127,9 @@ import { LoanPassBookPrintingComponent } from './loan/report/pass-book-printing/
 import { LoanUpdatePassbookComponent } from './loan/report/update-passbook/update-passbook.component';
 import { PrintCertificateComponent } from './deposit/report/print-certificate/print-certificate.component';
 import { NpaALLComponent } from './loan/report/npa-all/npa-all.component';
+import { RecovBlockComponent } from './loan/report/recovery-register/recov-block/recov-block.component';
+import { InterestCertificateComponent } from './deposit/report/interest-certificate/interest-certificate.component';
+import { SmsChargeDeductionComponent } from './deposit/sms-charge-deduction/sms-charge-deduction.component';
 const routes: Routes = [
   { path: 'Admin', component: AdminPanelComponent },
   { path: 'admin', component: AdminPanelComponent },
@@ -226,6 +229,7 @@ const routes: Routes = [
       { path: 'LR_NPA_ALL', component: NpaALLComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecReg', component: RecoveryRegisterComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecRegFund', component: RecovFundComponent, canActivate: [AuthGuard] },
+      { path: 'LR_RecRegBlock', component: RecovBlockComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecRegNorm', component: RecovNormalComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecInterest', component: RecovInterestComponent, canActivate: [AuthGuard] },
       { path: 'LR_openClose', component: OpenCloseregComponent, canActivate: [AuthGuard] },
@@ -236,10 +240,12 @@ const routes: Routes = [
       { path: 'DT_DDIMPORT', component: DdsImportComponent, canActivate: [AuthGuard] },
       { path: 'DT_DDINDPOST', component: DdsIndividualPostingComponent, canActivate: [AuthGuard] },
       { path: 'DT_SavingInttPost', component: SavingIntPostComponent, canActivate: [AuthGuard] },
+      { path: 'DT_SMSchargeDed', component: SmsChargeDeductionComponent, canActivate: [AuthGuard] },
       { path: 'DT_AgentComPost', component: AgentCommissionComponent, canActivate: [AuthGuard] },
       { path: 'DR_NeftIn', component: NeftInwardReportComponent, canActivate: [AuthGuard] },
       { path: 'DR_NeftOut', component: NeftOutwardReportComponent, canActivate: [AuthGuard] },
       { path: 'DR_PCertificate', component: PrintCertificateComponent, canActivate: [AuthGuard] },
+      { path: 'DR_InttCertificate', component: InterestCertificateComponent, canActivate: [AuthGuard] },
       { path: 'DR_PbkPrn', component: PassBookPrintingComponent,
       children: [
       { path: 'DR_PassBookFastPage', component: PassBookFastPageComponent},

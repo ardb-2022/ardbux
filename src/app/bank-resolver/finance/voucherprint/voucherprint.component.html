@@ -119,6 +119,7 @@ style="background-color: #78c2ad21; min-height: 20vh;">
   <!-- {{item.redFlag}} -->
   <table [ngStyle]="{'color':item.redFlag?'rgb(235 3 3)':'rgb(0 0 0)'}" style="width: 100%;">
   <tr> <label style="padding-left: 20px;">Voucher Id : {{item.voucher_id}}</label></tr>
+  <tr> <label style="padding-left: 20px;">Transaction Cd : {{item.vd[0].instrument_no}}</label></tr>
   <tr><label style="padding-left: 20px;">Voucher Date : {{item.voucher_dt | date}}</label> </tr>
   <tr><label style="padding-left: 20px;">Voucher Type : {{item.voucher_typ==='C' ?'CASH':'TRANSFER'}}</label> </tr>
   <tr><label style="padding-left: 20px;">Approval Status : {{item.voucher_status==='A'?'Approved':'Un Approved'}}</label> </tr>

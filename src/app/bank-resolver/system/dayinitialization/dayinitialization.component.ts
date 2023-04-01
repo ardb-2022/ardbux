@@ -152,7 +152,7 @@ private dayInitiationCall (opnDt :any)
   this.showMsg =null;
   var pgp = new p_gen_param();
   pgp.adt_trans_dt = opnDt;
-  pgp.gs_user_id= localStorage.getItem('__userId');
+  pgp.gs_user_id= localStorage.getItem('__userId')+'/'+localStorage.getItem('getIPAddress');
   console.log(pgp)
   debugger
   this.svc.addUpdDel<any>('Sys/W_DAY_OPEN', pgp).subscribe(

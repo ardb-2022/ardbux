@@ -19,11 +19,24 @@
   <button mat-raised-button class="btn btn-light" (click)="modalRef.hide()">Close</button>
   </div>
 </ng-template>
+<ng-template #kycContent>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Signature Details
+    </h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-kyc></app-kyc>
+  </div>
+</ng-template>
 <loading *ngIf="isLoading"></loading>
 <div class="row d-flex justify-content-center align-items-center">
   <div
     class="col-xs-12 col-sm-12 col-md-11 col-lg-11 shadow mb-2 bg-white p-3 d-flex justify-content-center align-items-center">
     <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="retrieveData()">Retrieve</button>
+    <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" [disabled]="this.neftPayRet.bank_dr_acc_no ==null || this.neftPayRet.bank_dr_acc_no=='0000'" (click)="kyc(kycContent)">Kyc</button>
     <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="clearData()">Clear</button>
     <button mat-raised-button type="button" [disabled]="disableSave" class="btn btn-primary btn-sm ml-1 mr-1" (click)="saveData()">Save</button>
     <button mat-raised-button type="button" [disabled]="this.neftPayRet.approval_status =='A'" class="btn btn-primary btn-sm ml-1 mr-1" (click)="approveData()">Approve</button>
@@ -101,12 +114,17 @@
         <input  [(ngModel)]="neftPayRet.bene_name" type="text"  [disabled]="!isRetrieve"
           class="form-control form-control-sm text-capitalize" id="bene_name" >
       </div>
-      <div class="form-group col-4">
+      <div class="form-group col-2">
         <small for="amount">Amount<span class="text-danger">*</span></small>
         <input   [(ngModel)]="neftPayRet.amount" type="text"  [disabled]="!isRetrieve"
         (focusout)="setCharge($event.target.value)"  class="form-control form-control-sm text-capitalize" id="trns_cd" >
       </div>
-      <div class="form-group col-4">
+      <div class="col-4">
+        <small for="amount">Amount in Word</small>
+        <p class="amountToWord">{{neftPayRet.amount | amountToWord}}</p>
+        <!-- <b style="font-size:18px;" *ngIf="neftPayRet.amount<1">AMOUNT IN WORD</b> -->
+      </div>
+      <div class="form-group col-2">
         <small for="charge_ded">Charges</small>
         <input  [(ngModel)]="neftPayRet.charge_ded" type="text"  [disabled]="!isRetrieve"
           class="form-control form-control-sm text-capitalize" id="charge_ded" >
@@ -116,7 +134,7 @@
         <!-- <input   [(ngModel)]="neftPayRet.date_of_payment" type="text"
           class="form-control form-control-sm text-capitalize" id="date_of_payment" placeholder="Date of Payment"> -->
           <div class="input-group">
-          <input type="text" style="height:37px;" placeholder="dd/mm/yyyy" class="form-control"  [disabled]="!isRetrieve"
+          <input type="text" style="height:37px;" placeholder="dd/mm/yyyy" class="form-control"  [disabled]="true"
           [(ngModel)]="neftPayRet.date_of_payment"  bsDatepicker
           [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }"
           [isOpen]="isOpenFromDp">
@@ -280,13 +298,16 @@
   <div
     class="col-xs-12 col-sm-12 col-md-11 col-lg-11 shadow mb-2 bg-white p-3 d-flex justify-content-center align-items-center">
     <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="retrieveData()">Retrieve</button>
+    <!-- <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="retrieveData()">Modify</button> -->
+    <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" [disabled]="this.neftPayRet.bank_dr_acc_no ==null || this.neftPayRet.bank_dr_acc_no=='0000'" (click)="kyc(kycContent)">Kyc</button>
+
     <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="clearData()">Clear</button>
     <button mat-raised-button type="button" [disabled]="disableSave" class="btn btn-primary btn-sm ml-1 mr-1" (click)="saveData()">Save</button>
     <button mat-raised-button type="button" [disabled]="this.neftPayRet.approval_status =='A'" class="btn btn-primary btn-sm ml-1 mr-1" (click)="approveData()">Approve</button>
     <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="deleteData()">Delete</button>
     <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="backScreen()">Back</button>
   </div>
-
+</div>
 
   
 <ng-template #content let-modal data-keyboard="false" data-backdrop="false">

@@ -2,7 +2,7 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormGroup,FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { RestService } from 'src/app/_service';
+import { InAppMessageService, RestService } from 'src/app/_service';
 import { MessageType, ShowMessage, SystemValues, mm_ifsc_code, td_outward_payment, m_acc_master, mm_acc_type, td_def_trans_trf, mm_customer, tm_deposit } from '../../Models';
 import { p_gen_param } from '../../Models/p_gen_param';
 
@@ -13,10 +13,12 @@ import { p_gen_param } from '../../Models/p_gen_param';
 })
 export class NeftOutwardComponent implements OnInit {
 
-  constructor(private svc: RestService, private router: Router, private modalService: BsModalService, private formBuilder: FormBuilder
+  constructor(private svc: RestService, private router: Router, private msg: InAppMessageService, private modalService: BsModalService, private formBuilder: FormBuilder
   ) { }
   @ViewChild('ifsc', { static: true }) ifsc: TemplateRef<any>;
   @ViewChild('content', { static: true }) content: TemplateRef<any>;
+  @ViewChild('kycContent', { static: true }) kycContent: TemplateRef<any>;
+
   hidegl:boolean=true;
   disableAccNo:boolean=false;
   modalRef: BsModalRef;
@@ -50,7 +52,8 @@ export class NeftOutwardComponent implements OnInit {
   config = {
     keyboard: false, // ensure esc press doesnt close the modal
     backdrop: true, // enable backdrop shaded color
-    ignoreBackdropClick: true // disable backdrop click to close the modal
+    ignoreBackdropClick: true,
+    class: 'modal-xl',// disable backdrop click to close the modal
   };
   val:any;
   ngOnInit(): void {
@@ -165,7 +168,7 @@ export class NeftOutwardComponent implements OnInit {
               console.log(this.clearBalance);
               this.isLoading=false
               console.log(this.clearBalance-(Number(this.neftPayRet.amount)+Number(this.neftPayRet.charge_ded)));
-              
+              this.msg.sendcustomerCodeForKyc(res[0].cust_cd);
 
               // if(res=[]){
               //   this.isLoading=false
@@ -247,6 +250,9 @@ export class NeftOutwardComponent implements OnInit {
     this.onLoadScreen(this.content);
     
 
+  }
+  kyc(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, this.config);
   }
   
   openModal() {
@@ -781,6 +787,7 @@ debugger;
         else{
           this.disableSave=false;
         }
+        this.msg.sendcustomerCodeForKyc(res[0].cust_cd);
         this.isLoading=false
   }
     )

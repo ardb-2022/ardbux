@@ -125,7 +125,7 @@ private dayCompletionCall (clsDt :any,clsamt:any)
   var pgp = new p_gen_param();
   pgp.brn_cd = this.sys.BranchCode;
   pgp.gs_user_type = 'A';//TDB
-  pgp.gs_user_id= localStorage.getItem('__userId');
+  pgp.gs_user_id= localStorage.getItem('__userId')+'/'+localStorage.getItem('getIPAddress');
   pgp.ad_prn_amt=parseFloat(clsamt);
   ;
   this.svc.addUpdDel<any>('Sys/W_DAY_CLOSE', pgp).subscribe(

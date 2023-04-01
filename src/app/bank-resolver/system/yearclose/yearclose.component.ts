@@ -34,12 +34,14 @@ export class YearcloseComponent implements OnInit {
       pldesc:[null,null]
     });
      this.closingdata.patchValue({
-      fromyear: this.getfinyear(this.sys.CurrentDate),
-      toyear :  (+this.getfinyear(this.sys.CurrentDate) + 1).toString(),
-      enddate :  this.convertDate('31/03/'+this.getfinyear(this.sys.CurrentDate))
+      fromyear: (+(this.sys.FinYearClose).substring(6,10)),
+      toyear :   (+(this.sys.FinYearClose).substring(6,10))+1,
+      enddate :  this.convertDate('31/03/'+((+(this.sys.FinYearClose).substring(6,10))+1).toString())
     })
-
-    this.svc.addUpdDel<any>('Mst/GetAccountMaster', null).subscribe(
+    var dt={
+      "ardb_cd":this.sys.ardbCD
+    }
+    this.svc.addUpdDel<any>('Mst/GetAccountMaster', dt).subscribe(
       res => {
         this.selectedPlList = res;
         this.isLoading = false;

@@ -22,10 +22,12 @@ export class SystemValues {
   private __dist_cd:string;
   private __lastDt:string;
   private __prevStatus:string;
+  private __FinYearClose:string
 
   // private __allCustomerLst: mm_customer[];
 
   constructor() {
+    this.__FinYearClose = localStorage.getItem('__FinYearClose');
     this.__lastDt = localStorage.getItem('__lastDt');
     this.__prevStatus = localStorage.getItem('__PrevStatus');
     this.__brnCd = localStorage.getItem('__brnCd');
@@ -128,6 +130,9 @@ export class SystemValues {
 
   get prevStatus():string{
     return this.__prevStatus;
+  }
+  get FinYearClose():string{
+    return this.__FinYearClose;
   }
   /** expected format of the string is dd/mm/yyyy */
   // private convertStringToDt(str: string): Date {

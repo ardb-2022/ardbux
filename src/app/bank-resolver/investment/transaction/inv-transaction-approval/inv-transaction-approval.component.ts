@@ -248,7 +248,7 @@ export class InvTransactionApprovalComponent implements OnInit {
   private setTransactionDtl(transactionDtl: td_def_trans_trf): void {
     console.log(this.masterModel);
     console.log(transactionDtl);
-    
+    debugger
     this.showDenominationDtl = false;
     // this.showTransferDtl = false;
     this.totalOfDenomination = 0;
@@ -297,9 +297,11 @@ export class InvTransactionApprovalComponent implements OnInit {
             paid_amt: transactionDtl.paid_amt,
             curr_prn_recov: transactionDtl.curr_prn_recov,
             ovd_prn_recov: transactionDtl.ovd_prn_recov,
+            ovd_intt_recov: transactionDtl.ovd_intt_recov,
             curr_numbert_recov: transactionDtl.curr_intt_recov,
-            tot_amount:transactionDtl.trans_mode!='R'?(transactionDtl.curr_intt_recov!=null && transactionDtl.curr_intt_recov!=undefined? (transactionDtl.ovd_prn_recov?transactionDtl.ovd_prn_recov+transactionDtl.curr_intt_recov:(transactionDtl.curr_intt_recov?transactionDtl.curr_intt_recov:transactionDtl.ovd_prn_recov)):transactionDtl.amount):(transactionDtl.curr_prn_recov- transactionDtl.ovd_prn_recov-transactionDtl.curr_intt_recov+transactionDtl.ovd_prn_recov+transactionDtl.curr_intt_recov),
-            curr_intt_recov: transactionDtl.trans_mode=='R'? this.masterModel.tmdepositrenewInv.intt_amt : transactionDtl.curr_intt_recov,
+            tot_amount:transactionDtl.trans_mode!='R'?(transactionDtl.curr_intt_recov!=null && transactionDtl.curr_intt_recov!=undefined? (transactionDtl.ovd_prn_recov?transactionDtl.ovd_prn_recov+transactionDtl.curr_intt_recov-transactionDtl.ovd_intt_recov:(transactionDtl.curr_intt_recov?transactionDtl.curr_intt_recov:transactionDtl.ovd_prn_recov)):transactionDtl.amount):(transactionDtl.curr_prn_recov- transactionDtl.ovd_prn_recov-transactionDtl.curr_intt_recov+transactionDtl.ovd_prn_recov+transactionDtl.curr_intt_recov),
+            // curr_intt_recov: transactionDtl.trans_mode=='R'? this.masterModel.tmdepositrenewInv.intt_amt : transactionDtl.curr_intt_recov,
+            curr_intt_recov: transactionDtl.curr_intt_recov,
             ovd_numbert_recov: transactionDtl.ovd_intt_recov,
             remarks: transactionDtl.remarks,
             crop_cd: transactionDtl.crop_cd,
@@ -351,6 +353,7 @@ export class InvTransactionApprovalComponent implements OnInit {
       );
     }
     else if(this.masterModel.tddeftrans.trans_mode=='O'){
+      this.transactionDtlsFrm.controls.amount.setValue(this.tm_Inv.prn_amt);
       this.transactionDtlsFrm.controls.curr_intt_recov.setValue(this.tm_Inv.intt_amt);
       this.transactionDtlsFrm.controls.tot_amount.setValue(Number(this.tm_Inv.prn_amt)+Number(this.transactionDtlsFrm.controls.curr_intt_recov.value))
     }
@@ -688,6 +691,7 @@ export class InvTransactionApprovalComponent implements OnInit {
         // this.getCustInfo( this.tm_Inv.cust_cd);
         if(this.masterModel.tddeftrans.trans_mode=='O'){
           this.transactionDtlsFrm.controls.curr_intt_recov.setValue(this.tm_Inv.intt_amt);
+          
         }
         this.isLoading = false;
       },

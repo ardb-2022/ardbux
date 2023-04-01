@@ -26,13 +26,14 @@ import { Subscription } from 'rxjs';
 import { setTime } from 'ngx-bootstrap/chronos/utils/date-setters';
 import { InvTranServService } from '../inv-tran-serv.service';
 import { HttpClientModule } from '@angular/common/http';
+import { InvestmentTransactionsComponent } from '../investment-transactions.component';
 @Component({
   selector: 'app-cc-trans',
   templateUrl: './cc-trans.component.html',
   styleUrls: ['./cc-trans.component.css']
 })
 export class CcTransComponent implements OnInit {
-  
+  clickSave:Subscription
   isLoading: boolean;
   showIns:boolean=true;
   showPTrns:boolean=true;
@@ -77,9 +78,9 @@ export class CcTransComponent implements OnInit {
   glHead:any;
   showBalance:boolean=false;
   // public accNoEnteredForTransaction2:any=this.invComServ.accNoEnteredForTransaction2;......MARKAR
-  public accNoEnteredForTransaction2:any=this.invComServ.masterModel.tddeftrans
+  public accNoEnteredForTransaction2:any;
   public accNoEnteredForTransaction:any;
-  public accNoEnteredForTransaction3:any=this.invComServ.masterModel.tmdepositInv;
+  public accNoEnteredForTransaction3:any;
   showTransModeForR:boolean
   showMsg: ShowMessage;
   mat_val = 0;
@@ -96,8 +97,13 @@ export class CcTransComponent implements OnInit {
   
   constructor(public invComServ:InvTranServService ,private svc: RestService, private msg: InAppMessageService,
     private frmBldr: FormBuilder, public datepipe: DatePipe, private router: Router,
-    private modalService: BsModalService, private http:HttpClientModule) {
-      
+    private modalService: BsModalService, private http:HttpClientModule, public i_trans:InvestmentTransactionsComponent) {
+      this.clickSave=this.invComServ.getSave().subscribe(()=>{
+
+        this.onSaveClick();
+      })
+      this.accNoEnteredForTransaction2=this.invComServ.masterModel.tddeftrans;
+      this.accNoEnteredForTransaction3=this.invComServ.masterModel.tmdepositInv;
      }
 
   ngOnInit(): void {
@@ -122,12 +128,20 @@ export class CcTransComponent implements OnInit {
     if (this.invComServ.deleteVar==undefined) {  
       this.invComServ.deleteVar = this.invComServ.    
       callDelete.subscribe((name:string) => {
+        console.log(this.accNoEnteredForTransaction2);
+        console.log(this.masterModel);
         debugger    
         this.onDeleteClick()});
     } 
+    if (this.invComServ.resetVar==undefined) {  
+      this.invComServ.resetVar = this.invComServ.    
+      callReset.subscribe((name:string) => {
+        debugger    
+        this.onResetClick()});
+    }
     
-    // this.showTranDtlRe=this.invComServ.showTransactionDtlR;
-    // this.showTranDtlCl=this.invComServ.showTransactionDtlR;
+     this.showTranDtlRe=this.invComServ.showTranDtlRe;
+     this.showTranDtlCl=this.invComServ.showTranDtlCl;
     console.log(this.showTranDtlRe,this.showTranDtlCl);
     
     this.accDtlsFrm = this.frmBldr.group({
@@ -222,7 +236,7 @@ export class CcTransComponent implements OnInit {
       approval_status: [''],
       matVal:[''],
       penal_rt:[''],
-      eff_intt:['']
+      eff_intt:[0]
     })
     this.showMsg = null;
      this.getOperationMaster();
@@ -231,6 +245,8 @@ export class CcTransComponent implements OnInit {
       this.setTrnsDtlsFrmForm();
       this.showTranDtlRe=true;
       this.showTranDtlCl=false;
+      this.invComServ.showTranDtlRe=true;
+      this.invComServ.showTranDtlCl=false;
       debugger
     }
     if(this.editDeleteMode && this.accNoEnteredForTransaction2.trans_mode=='C'){
@@ -238,6 +254,8 @@ export class CcTransComponent implements OnInit {
       this.onCloseSelect()
       this.showTranDtlRe=false;
       this.showTranDtlCl=true;
+      this.invComServ.showTranDtlRe=false;
+      this.invComServ.showTranDtlCl=true;
       // this.showtransdetails=true;
       debugger}
     }
@@ -418,6 +436,7 @@ export class CcTransComponent implements OnInit {
     // const mat_amt =this.editDeleteMode?this.accNoEnteredForTransaction.prn_amt+this.accNoEnteredForTrsaction.intt_amt:this.accNoEnteredForTransaction.prn_amt+this.accNoEnteredForTransaction.intt_amt
     const mat_amt =this.masterModel.tmdepositInv.prn_amt+this.masterModel.tmdepositInv.intt_amt
     console.log(mat_amt,this.td.amount.value);
+    debugger
     if(Number(mat_amt)===Number(this.td.amount.value)){
       debugger
       this.tdDefTransFrm.patchValue({
@@ -434,11 +453,20 @@ export class CcTransComponent implements OnInit {
       this.tdDefTransFrm.patchValue({
         trans_type: 'Withdraw',
         trans_type_key: 'W',
-        balance:this.accDtlsFrm.controls.intt_amt.value,
+        //balance:this.editDeleteMode?0:this.accNoEnteredForTransaction2.amount,//this.accDtlsFrm.controls.intt_amt.value
+        ovd_intt_recov:this.accNoEnteredForTransaction2.ovd_intt_recov,
         trf_type:'T'
       })
       this.showBalance=true
       this.showtransdetails=true;
+      if(Number(this.td.amount.value)+Number(this.td.ovd_intt_recov.value)==Number(mat_amt)){
+        this.showtransdetails=false;this.showBalance=false
+        this.tdDefTransFrm.patchValue({balance:this.editDeleteMode?0:this.accNoEnteredForTransaction2.amount})
+      }
+      else{
+        this.tdDefTransFrm.patchValue({balance:this.accNoEnteredForTransaction2.amount})
+
+      }
       
     }
     
@@ -451,6 +479,7 @@ export class CcTransComponent implements OnInit {
         console.log(this.invComServ.acc_master);
         console.log(this.acc_master);
         this.td_deftranstrfList=this.masterModel.tddeftranstrf;
+
         this.td_deftranstrfList[0].gl_acc_code = this.masterModel.tddeftranstrf[0].acc_cd;
         this.acc_master1= this.acc_master.filter(x => x.acc_cd.toString().includes(this.td_deftranstrfList[0].gl_acc_code));
         this.td_deftranstrfList[0].gl_acc_desc=this.acc_master1[0].acc_name;
@@ -470,8 +499,38 @@ export class CcTransComponent implements OnInit {
   } 
 }
 applyTDS(){
+  if(this.td.amount.value==this.accDtlsFrm.controls.mat_amt.value){
+    this.td.ovd_intt_recov.value>0?this.td.amount.setValue((this.accNoEnteredForTransaction.prn_amt+this.accNoEnteredForTransaction.intt_amt)-this.td.ovd_intt_recov.value):0
+    this.td.ovd_intt_recov.value>0?this.accDtlsFrm.controls.mat_amt.setValue((this.accNoEnteredForTransaction.prn_amt+this.accNoEnteredForTransaction.intt_amt)-this.td.ovd_intt_recov.value):0
 
+  debugger
+  }
+  else{
+    
+    this.td.ovd_intt_recov.value>0?this.td.balance.setValue(this.td.balance.value-this.td.ovd_intt_recov.value):0
+  }
+  debugger
 }
+applyTDSonclose(){
+  debugger
+  // if(this.isMat){
+  //   this.tdDefTransFrmC.controls.matVal.setValue( Number(this.accNoEnteredForTransaction.prn_amt+this.accNoEnteredForTransaction.intt_amt)- Number(this.tdDefTransFrmC.controls.ovd_intt_recov.value))
+  // }
+  // else{
+    this.tdDefTransFrmC.controls.matVal.setValue(( Number(this.tdDefTransFrmC.controls.amount.value)+Number(this.tdDefTransFrmC.controls.curr_intt_recov.value))- Number(this.tdDefTransFrmC.controls.ovd_intt_recov.value))
+
+  
+  // Number(this.tdDefTransFrmC.controls.ovd_intt_recov.value)>0?this.tdDefTransFrmC.controls.matVal.setValue( Number(this.tdDefTransFrmC.controls.matVal.value)- Number(this.tdDefTransFrmC.controls.ovd_intt_recov.value))
+  // :this.isMat==false?Number(this.tdDefTransFrmC.controls.amount.value)+this.closeInt:this.accNoEnteredForTransaction.prn_amt+this.accNoEnteredForTransaction.intt_amt
+  // console.log(this.tdDefTransFrmC.controls.trf_type.value);
+  
+  debugger
+}
+ChangeinttClose(){
+ this.tdDefTransFrmC.controls.matVal.setValue(( Number(this.tdDefTransFrmC.controls.amount.value)+ Number(this.tdDefTransFrmC.controls.curr_intt_recov.value))-(Number(this.tdDefTransFrmC.controls.ovd_intt_recov.value)>0?this.tdDefTransFrmC.controls.ovd_intt_recov.value:0))
+  debugger
+}
+
 public setTrnsDtlsCloseFrm(){
   console.log(this.editDeleteMode);
 
@@ -530,7 +589,7 @@ if (undefined !== this.accNoEnteredForTransaction && Object.keys(this.accNoEnter
       bank_nm:this.invComServ.bankName,
       branch_nm:this.invComServ.branchName
   });
-  if(this.editDeleteMode==true){
+  if(this.editDeleteMode==true){//XXX
     if(this.accNoEnteredForTransaction2.trf_type=='T' && this.accNoEnteredForTransaction2.trans_type=='W'){
       debugger
       this.acc_master= this.invComServ.acc_master
@@ -556,6 +615,8 @@ onTransTypeChange(){
     this.showtransdetails=false;
   }
   else{
+    if(this.tdDefTransFrm.controls.trans_mode.value=='R'){
+      // this.invComServ.transfer_TYPE=this.tdDefTransFrm.controls.trf_type.value
     if(this.td.trf_type.value=='T'){
       debugger
       this.showtransdetails=true;
@@ -573,12 +634,17 @@ onTransTypeChange(){
       this.showtransdetails=false;
     }
   }
-  if(this.tdDefTransFrmC.controls.trf_type.value=='T'){
-    debugger
-    this.showtransdetails=true;
-    this.addTransfer();
-    debugger
+  else{
+    if(this.tdDefTransFrmC.controls.trf_type.value=='T' && this.tdDefTransFrmC.controls.trans_mode.value=='C' && !this.editDeleteMode){
+      this.invComServ.transfer_TYPE=this.tdDefTransFrmC.controls.trf_type.value
+      debugger
+      this.showtransdetails=true;
+      this.addTransfer();
+      debugger
+    }
   }
+  }
+ 
 
 }
 onAmtChngDuringRenewal(): void {
@@ -685,13 +751,14 @@ public inttCalOnClose(): void {
   else {
     debugger
     if(Number(this.tdDefTransFrmC.controls.eff_intt.value)>Number(this.accDtlsFrm.controls.intt_rt.value)){
+      debugger
       this.HandleMessage(true, MessageType.Error, 'Modified Interest Rt. should not be greater than actual interest Rt.');
-      this.tdDefTransFrmC.controls.eff_intt.setValue('');
+      this.tdDefTransFrmC.controls.eff_intt.setValue(0);
       this.tdDefTransFrmC.controls.matVal.setValue(this.accNoEnteredForTransaction.prn_amt);
       return
     }
     else{
-      
+      debugger
     let param = new p_gen_param();
     param.ad_acc_type_cd = this.accNoEnteredForTransaction.acc_type_cd;
     param.ad_prn_amt = this.accNoEnteredForTransaction.prn_amt;
@@ -721,7 +788,7 @@ public inttCalOnClose(): void {
               // eff_int:this.effInt,
               curr_intt_recov: res.toFixed(2),
               matVal:Number(this.newIntt)+Number(this.tdDefTransFrmC.controls.amount.value),
-              ovd_intt_recov: 0,
+              ovd_intt_recov: this.tdDefTransFrmC.controls.ovd_intt_recov.value,
               bonus_amt: 0,
               curr_prn_recov: 0,
               penal_rt: 0
@@ -736,7 +803,7 @@ public inttCalOnClose(): void {
             interest: res.toFixed(2),
             amount: param.ad_instl_amt * this.counter,
             //  interest: res,
-            ovd_intt_recov: 0,
+            ovd_intt_recov: this.tdDefTransFrmC.controls.ovd_intt_recov.value,
             bonus_amt: 0,
             curr_prn_recov: 0,
             td_def_mat_amt: param.ad_instl_amt * this.counter + res
@@ -897,7 +964,8 @@ setGLCode(acc_cd: string, acc_name: string, indx: number, c: any){
     this.td_deftranstrfList[indx].gl_acc_desc = acc_name;
     // this.setDebitAccDtls(this.td_deftranstrfList[indx]);
   }
-  
+  console.log(this.tdDefTransFrmC.controls.trf_type.value);
+  debugger
 }
 public removeTransfer(tdDefTransTrnsfr: td_def_trans_trf): void {
   this.td_deftranstrfList.forEach((e, i) => {
@@ -913,6 +981,7 @@ public removeTransfer(tdDefTransTrnsfr: td_def_trans_trf): void {
   this.sumTransfer();
 }
 public addTransfer(): void {
+if(this.editDeleteMode==false){
   let emptyTranTranferExist = false;
   this.td_deftranstrfList.forEach(e => {
     if (undefined !== e && null !== e
@@ -923,6 +992,10 @@ public addTransfer(): void {
   if (!emptyTranTranferExist) {
     this.td_deftranstrfList.push(new td_def_trans_trf());
   }
+}
+else{
+  return
+}
 }
 
   onChangeTrf(i: any) {
@@ -1094,22 +1167,26 @@ public addTransfer(): void {
   // }
   
 
-  else if(this.showTranDtlRe && Number(tdDefTransTrnsfr.amount)+Number(this.td.amount.value)===Number(this.accDtlsFrm.controls.mat_amt.value)) {
+  else if(this.showTranDtlRe && Number(tdDefTransTrnsfr.amount)+Number(this.td.amount.value)+Number(this.td.ovd_intt_recov.value)===Number(this.accDtlsFrm.controls.mat_amt.value)) {
       debugger
     this.sumTransfer();
       return;
   }
-  else if( this.showTranDtlCl && Number(tdDefTransTrnsfr.amount)===Number(this.tdDefTransFrmC.controls.matVal.value)) {
-  debugger
-  this.sumTransfer();
-    return;
-}
+  else if( this.showTranDtlCl ){
+    debugger
+    this.sumTransfer();
+  }
+//   else if( this.showTranDtlCl && Number(tdDefTransTrnsfr.amount)===Number(this.tdDefTransFrmC.controls.matVal.value)) {
+//   debugger
+//   this.sumTransfer();
+//     return;
+// }
   else{
     console.log(Number(tdDefTransTrnsfr.amount)+Number(this.td.amount.value),this.accDtlsFrm.controls.mat_amt.value);
-    if(this.showTranDtlCl){
+    if(this.showTranDtlCl ){ //PARTHA
       debugger
-      this.HandleMessage(true, MessageType.Warning, 'You should be Transfer Mature amount only!!!!');
-        tdDefTransTrnsfr.amount = null;
+      // this.HandleMessage(true, MessageType.Warning, 'You should be Transfer Mature amount only!!!!');
+      //   tdDefTransTrnsfr.amount = null;
     }
     else{
       debugger
@@ -1117,21 +1194,44 @@ public addTransfer(): void {
         tdDefTransTrnsfr.amount = null;
     }
   }
+    this.invComServ.sendCloseFromData(this.tdDefTransFrmC.controls, tdDefTransTrnsfr)
+    console.log(this.tdDefTransFrmC.controls.trf_type.value);
+    debugger
     
   }
   private sumTransfer(): void {
-    debugger
+    if(this.editDeleteMode==false){
     this.TrfTotAmt = 0;
     this.td_deftranstrfList.forEach(e => {
       this.TrfTotAmt += (+e.amount);
     });
+    debugger
+    if(this.TrfTotAmt!=Number(this.tdDefTransFrmC.controls.matVal.value) ){
+      if(this.showTranDtlCl==true){
+        debugger
+        this.HandleMessage(true, MessageType.Warning, 'You should be Transfer Mature amount only!!!!');
+        this.TrfTotAmt = null;
+      }
+      // else{
+      //   if( Number(tdDefTransTrnsfr.amount)===Number(this.tdDefTransFrmC.controls.matVal.value))
+      //   debugger
+      //   this.HandleMessage(true, MessageType.Warning, 'You should be Transfer Interest amount only!!!!');
+      //   this.TrfTotAmt = null;
+      // }
+    }
+    debugger
+
     console.log(this.TrfTotAmt);
-    
+  }
+  else{return}
     // console.log(this.td.amount.value+" "+this.TrfTotAmt)
     // if ((+this.td.amount.value) < this.TrfTotAmt) {
     //   this.HandleMessage(true, MessageType.Error, 'Total Amount can not be more than Transaction amount');
     //   // this.td_deftranstrfList[(this.td_deftranstrfList.length - 1)].amount = 0;
     // }
+    console.log(this.tdDefTransFrmC.controls.trf_type.value);
+    debugger
+    
   }
   compareDate(e:any){
     // console.log(e.target.value)
@@ -1266,24 +1366,35 @@ debugger
     );
   }
   onSaveClick(): void {
+    // this.processInterest();
     console.log(this.editDeleteMode);
+    // this.tdDefTransFrmC.controls=this.invComServ.closeFrm.controls;
+    // this.td_deftranstrfList[0]=this.invComServ.td_deftranstrfList[0];
   
     const accTypeCd = this.accNoEnteredForTransaction.acc_type_cd;
     
+    // console.log(this.invComServ.transfer_TYPE);
+    // this.tdDefTransFrmC.controls.trf_type.setValue(this.invComServ.transfer_TYPE)
+    this.showTranDtlCl=this.invComServ.showTranDtlCl
+    this.showTranDtlRe=this.invComServ.showTranDtlRe
+    console.log(this.tdDefTransFrmC.controls);
+    
+
     debugger;
     if (this.editDeleteMode==false) {
       debugger
     if(this.showTranDtlCl==true){
         //for Close
-        
+        console.log(this.tdDefTransFrmC.controls.trf_type.value);
         debugger
         if (undefined === this.tdDefTransFrmC.controls.trf_type.value
             || null === this.tdDefTransFrmC.controls.trf_type.value
             || this.tdDefTransFrmC.controls.trf_type.value === '') {
             this.HandleMessage(true, MessageType.Error, 'Please choose transfer type.');
-            return;
+            
           }
           else{
+            debugger
         this.isLoading = true; 
       const saveTransaction = new InvOpenDM();
       
@@ -1354,10 +1465,10 @@ debugger
       this.svc.addUpdDel<InvOpenDM>('INVESTMENT/InsertInvOpeningData', saveTransaction).subscribe(
         res => {
           this.HandleMessage(true, MessageType.Sucess, 'Saved sucessfully, your transaction code is :' + res);
-          this.tdDefTransFrmC.reset();
-          this.accDtlsFrm.reset();
-          this.td_deftranstrfList=[];
-          this.showtransdetails=false;
+          // this.tdDefTransFrmC.reset();
+          // this.accDtlsFrm.reset();
+          // this.td_deftranstrfList=[];
+          // this.showtransdetails=false;
           this.isLoading = false;
         },
         err => { this.isLoading = false; console.error('Error on onSaveClick' + JSON.stringify(err)); }
@@ -1367,7 +1478,8 @@ debugger
       //for renewal
     else{
       debugger
-    if(this.td.intt_rate.value<=0){
+    if(+this.td.intt_rate.value<=0){
+      debugger
       this.HandleMessage(true, MessageType.Error, 'Interest rate should be greater than ZERO');
       this.td.intt_rate.setValue('');
     return;
@@ -1494,13 +1606,16 @@ debugger
       debugger;
       this.svc.addUpdDel<InvOpenDM>('INVESTMENT/InsertInvOpeningData', saveTransaction).subscribe(
         res => {
+          debugger
           this.HandleMessage(true, MessageType.Sucess, 'Saved sucessfully, your transaction code is :' + res);
-          this.tdDefTransFrm.reset();
-          this.accDtlsFrm.reset();
-          this.td_deftranstrfList=[]
+          // this.tdDefTransFrm.reset();
+          // this.accDtlsFrm.reset();
+          // this.td_deftranstrfList=[]
           this.isLoading = false;
         },
-        err => { this.isLoading = false; console.error('Error on onSaveClick' + JSON.stringify(err)); }
+        
+        err => {debugger
+           this.isLoading = false; console.error('Error on onSaveClick' + JSON.stringify(err)); }
       );
     } 
   }
@@ -1574,10 +1689,10 @@ debugger
           } else {
             this.HandleMessage(true, MessageType.Sucess, `Transaction for Acc# ${accNum},
             updated sucessfully.`);
-            this.tdDefTransFrmC.reset();
-            this.accDtlsFrm.reset();
-            this.td_deftranstrfList=[];
-            this.showtransdetails=false;
+            // this.tdDefTransFrmC.reset();
+            // this.accDtlsFrm.reset();
+            // this.td_deftranstrfList=[];
+            // this.showtransdetails=false;
             this.isLoading = false;
           }
           this.isLoading = false;
@@ -1686,9 +1801,9 @@ debugger
           } else {
             this.HandleMessage(true, MessageType.Sucess, `Transaction for Acc# ${accNum},
             updated sucessfully.`);
-            this.tdDefTransFrm.reset();
-            this.accDtlsFrm.reset();
-            this.td_deftranstrfList=[]
+            // this.tdDefTransFrm.reset();
+            // this.accDtlsFrm.reset();
+            // this.td_deftranstrfList=[]
             this.isLoading = false;
           }
           this.isLoading = false;
@@ -1700,7 +1815,7 @@ debugger
   }
   onDeleteClick(): void {
     if (!(confirm('Are you sure you want to Delete Transaction of Acc '
-      + this.accNoEnteredForTransaction.acc_num
+      + this.accNoEnteredForTransaction2.acc_num
       + ' with Transancation Cd ' + this.accNoEnteredForTransaction2.trans_cd))) {
       return;
     }
@@ -1711,22 +1826,23 @@ debugger
     param.trans_cd = this.accNoEnteredForTransaction2.trans_cd;
     param.ardb_cd=this.sys.ardbCD;
     param.trans_dt = this.sys.CurrentDate;
-    param.acc_type_cd = this.masterModel.tmdepositrenewInv.acc_type_cd;
-    param.acc_num = this.accNoEnteredForTransaction.acc_num;
+    param.acc_type_cd = this.accNoEnteredForTransaction2.acc_type_cd;
+    param.acc_num = this.accNoEnteredForTransaction2.acc_num;
 
     this.svc.addUpdDel<any>('INVESTMENT/DeleteInvOpeningData', param).subscribe(
       res => {
         this.isLoading = false;
         if (res === 0) {
           debugger
-          this.HandleMessage(true, MessageType.Sucess, this.accNoEnteredForTransaction.acc_num
+          this.HandleMessage(true, MessageType.Sucess, this.accNoEnteredForTransaction2.acc_num
             + '\'s Transaction with Transacation Cd ' + this.accNoEnteredForTransaction2.trans_cd
             + ' is deleted.');
-          this.accDtlsFrm.reset();
-          this.tdDefTransFrm.reset();
-          this.tdDefTransFrmC.reset();
-          this.td_deftranstrfList=[]
-          this.showtransdetails=false;
+            // this.onResetClick();
+          // this.accDtlsFrm.reset();
+          // this.tdDefTransFrm.reset();
+          // this.tdDefTransFrmC.reset();
+          // this.td_deftranstrfList=[]
+          // this.showtransdetails=false;
 
         } else {
           this.HandleMessage(true, MessageType.Error, JSON.stringify(res));
@@ -1856,11 +1972,11 @@ debugger
         toReturn.curr_prn_recov = Number(this.td.amount.value) + Number(this.td.interest.value);
         toReturn.ovd_prn_recov = this.accNoEnteredForTransaction3.prn_amt;
         // toReturn.curr_intt_recov = Number(this.accDtlsFrm.controls.mat_amt.value)==Number(this.td.amount)?this.accDtlsFrm.controls.intt_amt.value:'';
-        toReturn.curr_intt_recov = this.accDtlsFrm.controls.intt_amt.value;
-        toReturn.ovd_intt_recov = 0;
+        toReturn.curr_intt_recov =this.masterModel.tmdepositInv.intt_amt;
+        toReturn.ovd_intt_recov = Number(this.td.ovd_intt_recov.value);
         console.log(this.td.amount.value,this.accDtlsFrm.controls.mat_amt.value);
         
-        toReturn.amount = Number(this.td.amount.value)===Number(this.accDtlsFrm.controls.mat_amt.value)?0:Number(this.accDtlsFrm.controls.mat_amt.value)-Number(this.td.amount.value);
+        toReturn.amount = Number(this.td.amount.value)===Number(this.accDtlsFrm.controls.mat_amt.value)?0:Number(this.accDtlsFrm.controls.mat_amt.value)-Number(this.td.amount.value)-Number(this.td.ovd_intt_recov.value);
         console.log( toReturn.amount);
         debugger
 
@@ -1988,13 +2104,13 @@ debugger
         toReturn.curr_prn_recov = Number(this.td.amount.value) + Number(this.td.interest.value);
         toReturn.ovd_prn_recov = this.accNoEnteredForTransaction3.prn_amt;
         // toReturn.curr_intt_recov = this.td.interest.value;
-        toReturn.curr_intt_recov = this.masterModel.tmdepositInv.intt_amt//to be change
-
-        toReturn.ovd_intt_recov = 0;
+        //toReturn.curr_intt_recov = this.masterModel.tmdepositInv.intt_amt//to be change
+        //toReturn.curr_intt_recov = this.td.interest.value;//to be change
+debugger
+        toReturn.ovd_intt_recov = Number(this.td.ovd_intt_recov.value);
         console.log(this.tdDefTransFrm.controls.amount.value)
         console.log( toReturn.curr_intt_recov);
         
-        debugger;
         
       // }
     
@@ -2233,6 +2349,8 @@ debugger
     return toReturn;
   }
   mappTddefTransFrClose(): td_def_trans_trf {
+    console.log(this.tdDefTransFrmC.controls);
+
     debugger;
     const toReturn = new td_def_trans_trf();
     // const accTypeCd = this.accNoEnteredForTransaction.acc_type_cd;
@@ -2260,9 +2378,10 @@ debugger
         toReturn.ovd_prn_recov = this.accNoEnteredForTransaction3.prn_amt;
         // toReturn.curr_intt_recov = Number(this.accDtlsFrm.controls.mat_amt.value)==Number(this.td.amount)?this.accDtlsFrm.controls.intt_amt.value:'';
         toReturn.curr_intt_recov = this.tdDefTransFrmC.controls.curr_intt_recov.value;
-        toReturn.ovd_intt_recov = 0;
+        toReturn.ovd_intt_recov = this.tdDefTransFrmC.controls.ovd_intt_recov.value;
         console.log(this.tdDefTransFrmC.controls.amount.value,this.accDtlsFrm.controls.mat_amt.value);
-        toReturn.curr_intt_rate=this.editDeleteMode?this.tdDefTransFrmC.controls.eff_intt.value:this.accNoEnteredForTransaction3.intt_rt;
+        toReturn.curr_intt_rate=this.accNoEnteredForTransaction3.intt_rt;
+        // toReturn.curr_intt_rate=this.editDeleteMode?this.tdDefTransFrmC.controls.eff_intt.value:this.accNoEnteredForTransaction3.intt_rt;
         // toReturn.amount =  Number(this.tdDefTransFrmC.controls.amount.value) + Number(this.tdDefTransFrmC.controls.curr_intt_recov.value);
         toReturn.amount = this.tdDefTransFrmC.controls.amount.value;
         
@@ -2336,6 +2455,8 @@ debugger
     // return;
   }
   mappTddefTransAndTransFrClose(): td_def_trans_trf {
+    console.log(this.tdDefTransFrmC.controls);
+    
     debugger;
     // debugger;
     // if(!this.editDeleteMode){
@@ -2453,22 +2574,37 @@ debugger
     console.log(toReturn)
     return toReturn;
   }
-//   onResetClick(): void {
-//   debugger
-//   this.showtransdetails = false;
+  onResetClick(): void {
+  debugger
+  this.accNoEnteredForTransaction=[]
+  this.accNoEnteredForTransaction2=[]
+  this.accNoEnteredForTransaction3=[]
+  this.invComServ.accNoEnteredForTransaction=[]
+  this.invComServ.accNoEnteredForTransaction2=null
+  this.showtransdetails = false;
+  this.showTranDtlCl=false;
+  this.showTranDtlRe=false;
+  this.invComServ.showTranDtlCl=false;
+  this.invComServ.showTranDtlRe=false;
+  this.editDeleteMode = false;
+  this.masterModel=null;
+  this.showBalance = false
+  this.accDtlsFrm.reset();
+  this.tdDefTransFrm.reset();
+  this.tdDefTransFrmC.reset();
   
-//   this.editDeleteMode = false;
-//   this.showBalance = false
-//   this.accDtlsFrm.reset();
-//   this.tdDefTransFrm.reset();
-  
-//   this.td_deftranstrfList = [];
-//   this.mat_val = 0 
-// }
+  this.td_deftranstrfList = [];
+  this.TrfTotAmt=0
+  this.mat_val = 0 
+  this.i_trans.onResetClick();
+  this.router.navigate([this.sys.BankName + '/I_Trns']);
+  this.i_trans.ngOnInit();
+}
   onRenewalSelect(){
     debugger
     this.setTrnsDtlsFrmForm();
     this.showTranDtlRe=true;
+    this.invComServ.showTranDtlRe=true;
   }
   onCloseSelect(){
     
@@ -2533,7 +2669,7 @@ debugger
               this.effInt = temp_gen_param.ad_intt_rt > 0 ? temp_gen_param.ad_intt_rt : 0
               console.log(this.effInt)
               
-              if (isMatured == false ) {
+              if (isMatured == false && this.editDeleteMode==false ) {
                 this.modalRefClose = this.modalService.show(this.preClose,
                   { class: 'modal-lg', keyboard: false, backdrop: true, ignoreBackdropClick: true })
               }
@@ -2548,21 +2684,35 @@ debugger
 
                         console.log("hello")
                         
-
+                        if(this.editDeleteMode){////////////////////////////////kk
+                          debugger
+                          this.tdDefTransFrmC.patchValue({
+                              amount: (this.accNoEnteredForTransaction.prn_amt),
+                              curr_intt_recov:this.accNoEnteredForTransaction2.curr_intt_recov,
+                              ovd_intt_recov: this.accNoEnteredForTransaction2.ovd_intt_recov,
+                              matVal:(Number(this.accNoEnteredForTransaction.prn_amt)+Number(this.accNoEnteredForTransaction2.curr_intt_recov))-Number(this.accNoEnteredForTransaction2.ovd_intt_recov),
+                              bonus_amt: 0,
+                              curr_prn_recov: 0,
+                            });
+                        }
+                        else{
+                          debugger
                         this.tdDefTransFrmC.patchValue({
-                        amount: (this.accNoEnteredForTransaction.prn_amt),
-                        matVal:!isMatured?Number(this.accNoEnteredForTransaction.prn_amt)+Number(this.closeInt):Number(this.accNoEnteredForTransaction.prn_amt)+Number(this.accNoEnteredForTransaction.intt_amt),
+                          amount: (this.accNoEnteredForTransaction.prn_amt),
                           curr_intt_recov: isMatured ? this.accNoEnteredForTransaction.intt_amt : this.closeInt,
                           ovd_intt_recov: 0,
+                          matVal:!isMatured?(Number(this.accNoEnteredForTransaction.prn_amt)+Number(this.closeInt))-Number(this.accNoEnteredForTransaction2.ovd_intt_recov):(Number(this.accNoEnteredForTransaction.prn_amt)+Number(this.accNoEnteredForTransaction.intt_amt))-Number(this.accNoEnteredForTransaction2.ovd_intt_recov),
                           bonus_amt: 0,
                           curr_prn_recov: 0,
                         });
-
+                      }
                     })
                 
               this.tdDefTransFrmC.controls.amount.disable();
               console.log(this.tdDefTransFrmC.controls.amount.value, this.closeInt, this.accNoEnteredForTransaction.prn_amt, this.accNoEnteredForTransaction.intt_amt)
               this.showTranDtlCl=true;
+              this.invComServ.showTranDtlCl=true;
+              
              }
             else{
               this.setTrnsDtlsCloseFrm();
@@ -2576,9 +2726,8 @@ debugger
                   acc_type_cd: this.accNoEnteredForTransaction.acc_type_cd,
                   acc_num: this.accNoEnteredForTransaction.acc_num,
                   amount: this.accNoEnteredForTransaction2.curr_prn_recov,
-                  matVal:Number(this.accNoEnteredForTransaction2.amount) + Number(this.accNoEnteredForTransaction2.curr_intt_recov),
                   curr_intt_recov: this.accNoEnteredForTransaction2.curr_intt_recov,
-                  ovd_intt_recov: 0,
+                  ovd_intt_recov:this.accNoEnteredForTransaction2.ovd_intt_recov,
                   bonus_amt: 0,
                   curr_prn_recov: 0,
                   trf_type:this.accNoEnteredForTransaction2.trf_type,
@@ -2586,6 +2735,8 @@ debugger
                   trans_mode: this.accNoEnteredForTransaction2.trans_mode,
                   trans_type: this.accNoEnteredForTransaction2.trans_type=='W'?'withdrawal':'Deposit',
                   trans_type_key: this.accNoEnteredForTransaction2.trans_type,
+                  matVal:(Number(this.accNoEnteredForTransaction2.amount) + Number(this.accNoEnteredForTransaction2.curr_intt_recov)-Number(this.accNoEnteredForTransaction2.ovd_intt_recov)),
+
                 });
               if(this.accNoEnteredForTransaction2.trf_type=='T' && this.accNoEnteredForTransaction2.trans_type=='W'){
                 debugger
@@ -2594,11 +2745,18 @@ debugger
                 console.log(this.invComServ.acc_master);
                 console.log(this.acc_master);
                 this.td_deftranstrfList=this.masterModel.tddeftranstrf;
+                // for(let i=0; i<this.td_deftranstrfList.length; i++){
+                  
+                //   this.td_deftranstrfList[i].gl_acc_code = this.masterModel.tddeftranstrf[i].acc_cd;
+                //   this.acc_master1= this.acc_master.filter(x => x.acc_cd.toString().includes(this.td_deftranstrfList[i].gl_acc_code));
+                //   this.td_deftranstrfList[i].gl_acc_desc=this.acc_master1[i].acc_name;
+                //   debugger
+                // }
                 this.td_deftranstrfList[0].gl_acc_code = this.masterModel.tddeftranstrf[0].acc_cd;
                 this.acc_master1= this.acc_master.filter(x => x.acc_cd.toString().includes(this.td_deftranstrfList[0].gl_acc_code));
                 this.td_deftranstrfList[0].gl_acc_desc=this.acc_master1[0].acc_name;
                 console.log(this.acc_master1);
-                this.sumTransfer()
+                // this.sumTransfer()
                 console.log(this.td_deftranstrfList);
                 this.showtransdetails=true;
               }
@@ -2614,6 +2772,9 @@ debugger
   }
   hideModalForClose() {
     this.modalRefClose.hide()
+  }
+  onBackClick() {
+    this.router.navigate([this.sys.BankName + '/la']);
   }
 }
 

@@ -1016,6 +1016,13 @@ getjoinholder(){
 
     this.svc.addUpdDel<any>('Deposit/GetDepositWithChild', acc).subscribe(
       res => {
+        if(res[0].constitution_cd==101){
+          this.HandleMessage(true, MessageType.Error,
+            ' Deposit and Withdrawal Operation was LOCKED!! for Account Number :' + this.f.acct_num.value  );
+          this.onResetClick();
+          this.isLoading = false;
+          return false;
+        }
         this.categories=res[0].catg_cd
         this.getCategoryMaster();
         debugger
@@ -1053,7 +1060,9 @@ getjoinholder(){
                 }
                 this.tdDefTransFrm.patchValue({
                   acc_num: acc.acc_num,
+                  
                 });
+                debugger
                 this.f.oprn_cd.enable();
               }
             }
@@ -1237,6 +1246,7 @@ getjoinholder(){
         rdInstallament.acc_num = acc.acc_num;
         this.svc.addUpdDel<any>('Deposit/GetRDInstallment', rdInstallament).subscribe(
           rdInstallamentRes => {
+            debugger
             this.rdInstallemntsForSelectedAcc = [];
             this.rdInstallemntsForSelectedAcc = Utils.ChkArrNotEmptyRetrnEmptyArr(rdInstallamentRes);
             let i = 1;
@@ -1458,7 +1468,15 @@ getjoinholder(){
     );
   }
   hideModalForClose() {
-    this.modalRefClose.hide()
+    this.modalRefClose.hide();
+    if(+this.f.acc_type_cd.value == 2){
+      this.tdDefTransFrm.patchValue({
+        amount: (this.accNoEnteredForTransaction.prn_amt),
+        curr_intt_recov: this.isMat ? this.accNoEnteredForTransaction.intt_amt : this.closeInt,
+        td_def_mat_amt: this.isMat ? this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt : this.accNoEnteredForTransaction.prn_amt + this.closeInt
+       });
+    }
+    
   }
   public onUpapprovedConfirm(selectedTransactionToEdit: td_def_trans_trf): void {
     console.log(selectedTransactionToEdit)
@@ -2244,17 +2262,22 @@ getjoinholder(){
         trans_type_key: this.transType.key
       });
       this.showTransMode = true
-      // } else if (selectedOperation.oprn_desc.toLocaleLowerCase() === 'rd installment') {
-      //   this.transType.key = 'D';
-      //   this.transType.Description = 'Deposit';
-      //   this.tdDefTransFrm.patchValue({
-      //     trans_type: this.transType.Description,
-      //     trans_type_key: this.transType.key,
-      //     // trans_mode: 'C',
-      //     amount: this.accNoEnteredForTransaction.instl_amt
-      //   });
       this.hideOnClose = true;
       this.showAmtDrpDn = true;
+      } else if (selectedOperation.oprn_desc.toLocaleLowerCase() === 'rd installment') {
+        debugger
+        this.transType.key = 'D';
+        this.transType.Description = 'Deposit';
+        
+        this.tdDefTransFrm.patchValue({
+          trans_type: this.transType.Description,
+          trans_type_key: this.transType.key,
+        
+        amount: this.accNoEnteredForTransaction.instl_amt
+        });
+        this.hideOnClose = true;
+        this.showAmtDrpDn = true;
+      debugger
     }
      else if (selectedOperation.oprn_desc.toLocaleLowerCase() === 'close') {
       if (this.selectedCust.substring(0, 3) != this.sys.BranchCode) {
@@ -2566,6 +2589,8 @@ getjoinholder(){
           }
       }
       if (accTypCode === 6) {
+        
+
         console.log("special logic for rd") // Special logic for RD on close
         var rdDt = {
           acc_num: this.accNoEnteredForTransaction.acc_num,
@@ -2611,8 +2636,9 @@ getjoinholder(){
                     bonus_amt: 0,
                     curr_prn_recov: 0,
                     // td_def_mat_amt: isMatured ? this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt : param.ad_instl_amt * this.counter + res
-                    td_def_mat_amt: param.ad_instl_amt * this.counter + res 
+                    td_def_mat_amt: param.ad_instl_amt * this.counter + res ,
                   })
+                  debugger
                   console.log(this.tdDefTransFrm.controls.eff_int.value)
                   console.log(this.accNoEnteredForTransaction)
                   // debugger;
@@ -3116,7 +3142,7 @@ getjoinholder(){
             }
             
     this.calculateInterestRate();//PARTHA
-        }
+         }
       } else if (selectedOperation.oprn_desc.toLocaleLowerCase() === 'interest payment') {
         this.showTransModeForR = false;
         this.showtransmodeforC = false;
@@ -3171,9 +3197,14 @@ getjoinholder(){
     }
 
     CloseDPenalty(){
-      if(this.f.acc_type_cd.value==11){
+      if(this.f.acc_type_cd.value==11 ){
         this.tdDefTransFrm.patchValue({
           td_def_mat_amt: ((this.accNoEnteredForTransaction.prn_amt+Number(this.td.curr_intt_recov.value))-(+this.td.ovd_intt_recov.value?+this.td.ovd_intt_recov.value:0)),
+        });
+      }
+      if(this.f.acc_type_cd.value==6){
+        this.tdDefTransFrm.patchValue({
+          td_def_mat_amt: ((this.td.amount.value+Number(this.td.curr_intt_recov.value))-(+this.td.ovd_intt_recov.value?+this.td.ovd_intt_recov.value:0)),
         });
       }
     }
@@ -3191,7 +3222,7 @@ getjoinholder(){
       console.log(this.accNoEnteredForTransaction.intt_rt, this.tdDefTransFrm.controls.ovd_intt_recov.value)
       // const diffDays = Math.ceil((Math.abs(cDt - opDt)) / (1000 * 3600 * 24));
       const diffDays = Math.ceil((Math.abs(matDt - opDt)) / (1000 * 3600 * 24));
-      temp_gen_param.ai_period = diffDays;
+      temp_gen_param.ai_period = this.isMat?diffDays:this.diff;
       console.log(this.tdDefTransFrm.controls.eff_int.value)
       console.log(this.effInt)
       // temp_gen_param.ad_intt_rt=this.accNoEnteredForTransaction.intt_rt-this.tdDefTransFrm.controls.ovd_intt_recov.value
@@ -3561,23 +3592,28 @@ getjoinholder(){
                 this.td.amount.setValue('');
                 return;
               } else {
+                if(this.accNoEnteredForTransaction.ext_instl_tot==null||this.accNoEnteredForTransaction.ext_instl_tot==undefined||this.accNoEnteredForTransaction.ext_instl_tot==0){
                 let minBal = 0;
-                if (this.accNoEnteredForTransaction.cheque_facility_flag === 'Y') { minBal = +this.sys.MinBalanceWithCheque; }
+                if (this.accNoEnteredForTransaction.cheque_facility_flag === 'Y') 
+                { minBal = +this.sys.MinBalanceWithCheque; }
                 else { minBal = +this.sys.MinBalanceWithOutCheque; }
                 if (shadowBalance - (+this.td.amount.value) < minBal) {
-                  const cnfrm = confirm('Amount is less than minimum balance ' + minBal + '. Press Ok to continue, else Cancel');
-                  if (cnfrm) {
-                    if (this.td.trans_type_key.value === 'W') {
-                      // todo need to change
-                      this.msg.sendShdowBalance(-(+this.td.amount.value));
-                    } else if (this.td.trans_type_key.value === 'D') {
-                      // todo need to change
-                      this.msg.sendShdowBalance((+this.td.amount.value));
-                    }
-                  } else {
-                    this.td.amount.setValue('');
-                  }
+                  this.HandleMessage(true, MessageType.Error, 'Withdrawal Amount is executed your A/C minimum balance ' + minBal + '.');
+                  this.td.amount.setValue('');
                   return;
+                  // const cnfrm = confirm('Amount is less than minimum balance ' + minBal + '. Press Ok to continue, else Cancel');
+                  // if (cnfrm) {
+                  //   if (this.td.trans_type_key.value === 'W') {
+                  //     // todo need to change
+                  //     this.msg.sendShdowBalance(-(+this.td.amount.value));
+                  //   } else if (this.td.trans_type_key.value === 'D') {
+                  //     // todo need to change
+                  //     this.msg.sendShdowBalance((+this.td.amount.value));
+                  //   }
+                  // } else {
+                  //   this.td.amount.setValue('');
+                  // }
+                  // return;
                 } else {
                   // check this.td.trans_type_key === 'W' / 'D'
                   // todo need to change
@@ -3587,6 +3623,20 @@ getjoinholder(){
                   // } else if (this.td.trans_type_key.value === 'D') {
 
                   // }
+                }
+              }
+              else {
+                if(accTypeCd==1 && this.td.trans_type_key.value=='W'){
+                  let minBal = 0;
+                  minBal=this.accNoEnteredForTransaction.ext_instl_tot
+                  debugger
+                  if (shadowBalance - (+this.td.amount.value) < minBal) {
+                    debugger
+                  this.HandleMessage(true, MessageType.Error, 'Withdrawal Amount is executed your A/C minimum balance ' + minBal + '.');
+                  this.td.amount.setValue('');
+                  return;
+                  }
+                }
                 }
               }
             }
@@ -3665,7 +3715,7 @@ getjoinholder(){
       if(this.matInt==undefined){
         this.matInt=0
       }
-      const mat_amt = (accTypeCd==2)?this.accNoEnteredForTransaction.prn_amt+this.fdSum:(accTypeCd==5)?this.accNoEnteredForTransaction.prn_amt+this.forB:(this.sys.ardbCD=='26' && accTypeCd==4)?this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt+this.matInt
+      const mat_amt = (accTypeCd==2 && this.accNoEnteredForTransaction.intt_trf_type != 'O')?this.accNoEnteredForTransaction.prn_amt+this.fdSum:(accTypeCd==5)?this.accNoEnteredForTransaction.prn_amt+this.forB:(this.sys.ardbCD=='26' && accTypeCd==4)?this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt+this.matInt
       :this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt;
       const balance=mat_amt-Number(this.td.amount.value)
       console.log(mat_amt,this.td.amount.value);
@@ -3743,9 +3793,11 @@ getjoinholder(){
   }
 
   onSaveClick(): void {
+    
     console.log(this.td_deftranstrfList);
 
     const accTypeCd = +this.f.acc_type_cd.value;
+    
     if ((+this.td.amount.value) <= 0) {
       this.HandleMessage(true, MessageType.Error, 'Amount can not be blank');
       return;
@@ -4177,7 +4229,7 @@ getjoinholder(){
       toReturn.remarks = selectedOperation.oprn_desc.toLocaleLowerCase()
       toReturn.intra_branch_trn = this.resBrnCd != this.sys.BranchCode ? 'Y' : 'N'
       if (selectedOperation.oprn_desc.toLocaleLowerCase() === 'close' && (accTypeCd === 2 || accTypeCd === 3 || accTypeCd === 4 || accTypeCd === 5 || accTypeCd === 6 || accTypeCd === 11)) {
-//marker
+      debugger
         toReturn.amount = accTypeCd !== 6 ? this.accNoEnteredForTransaction.prn_amt : this.tdDefTransFrm.controls.amount.value-this.tdDefTransFrm.controls.ovd_intt_recov.value+this.tdDefTransFrm.controls.curr_prn_recov.value;
        if(accTypeCd==6)
        toReturn.amount=this.tdDefTransFrm.controls.amount.value   //marker
@@ -4298,7 +4350,7 @@ getjoinholder(){
       this.tdDefTransFrm.patchValue({
         particulars: this.tdDefTransFrm.controls.trf_type.value=='C'?'To Cash':'To Transfer'
       })
-      toReturn.curr_intt_recov = +this.td.closeIntrest.value;
+      // toReturn.curr_intt_recov = +this.td.closeIntrest.value;
     }
 
       if (selectedOperation.oprn_desc.toLocaleLowerCase() === 'renewal'
@@ -5271,7 +5323,7 @@ getjoinholder(){
   else {
     debugger
   console.log(tdDefTransTrnsfr.amount,Number(this.td.balance.value));
-  if((this.f.acc_type_cd.value == 4 || this.f.acc_type_cd.value == 5) && tdDefTransTrnsfr.amount!=Number(this.td.balance.value)){
+  if(this.td.trans_mode.value == 'R' &&(this.f.acc_type_cd.value == 4 || this.f.acc_type_cd.value == 5) && tdDefTransTrnsfr.amount!=Number(this.td.balance.value)){
     debugger
     this.HandleMessage(true, MessageType.Warning, 'You should be transfer your Balance amount only');
     tdDefTransTrnsfr.amount=null;

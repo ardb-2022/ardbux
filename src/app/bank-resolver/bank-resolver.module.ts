@@ -172,6 +172,9 @@ import { LoanPassBookPrintingComponent } from './loan/report/pass-book-printing/
 import { PrintCertificateComponent } from './deposit/report/print-certificate/print-certificate.component';
 import { NpaALLComponent } from './loan/report/npa-all/npa-all.component';
 import { PrintServiceService } from './loan/report/pass-book-printing/print-service.service';
+import { RecovBlockComponent } from './loan/report/recovery-register/recov-block/recov-block.component';
+import { InterestCertificateComponent } from './deposit/report/interest-certificate/interest-certificate.component';
+import { SmsChargeDeductionComponent } from './deposit/sms-charge-deduction/sms-charge-deduction.component';
 
 @NgModule({
   declarations: [ 
@@ -213,7 +216,7 @@ import { PrintServiceService } from './loan/report/pass-book-printing/print-serv
        RdTransComponent, CreateGLHeadComponent, DetailListFdmisConstWiseComponent, INearMaturityComponent,
        IDetailListComponent, AllGLDetailsComponent, UpdatePassbookComponent, BMLoanStatementComponent, SlabwiseDepositComponent, 
        PassBookFastPageComponent, DetaillistAllComponent, SavingIntPostComponent, AgentCommissionComponent,
-       LoanUpdatePassbookComponent,LoanPassBookFastPageComponent,LoanPassBookPrintingComponent, PrintCertificateComponent, NpaALLComponent
+       LoanUpdatePassbookComponent,LoanPassBookFastPageComponent,LoanPassBookPrintingComponent, PrintCertificateComponent, NpaALLComponent, RecovBlockComponent, InterestCertificateComponent, SmsChargeDeductionComponent
   ],
   imports: [
     NgxPrintModule, MatTableModule, MatFormFieldModule,  MatInputModule, MatSlideToggleModule,MatButtonModule,

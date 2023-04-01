@@ -174,7 +174,10 @@ export class InvestmentTransactionsComponent implements OnInit {
       acct_num: ['']
     })
   }
-  callSaveFunction(){    
+  callSaveFunction(){ 
+    console.log(this.invComServ.transfer_TYPE);
+    
+    debugger   
     this.invComServ.SaveButtonClick();    
   } 
   callDeleteFunction(){    
@@ -202,11 +205,18 @@ export class InvestmentTransactionsComponent implements OnInit {
         this.HandleMessage(true, MessageType.Error, 'Pre-Mature Renewal is not possible');
         this.showTransactionDtlC = false;
         this.showTransactionDtlR = false;
+        this.invComServ.showTranDtlCl=false;
+        this.invComServ.showTranDtlRe=false;
+
+
        }
       else{
         this.cc_comp.onRenewalSelect();
         this.showTransactionDtlR = true;
         this.showTransactionDtlC = false;
+        this.invComServ.showTranDtlCl=false;
+      this.invComServ.showTranDtlRe=true;
+
       }
       
         
@@ -215,7 +225,10 @@ export class InvestmentTransactionsComponent implements OnInit {
     //for close
     if(Number(this.f.oprn_cd.value)===39){
       this.showTransactionDtlR = false;
+      this.invComServ.showTranDtlRe=false;
       this.showTransactionDtlC = true;
+      this.invComServ.showTranDtlCl=true;
+
       this.cc_comp.onCloseSelect();
       
   
@@ -580,7 +593,15 @@ export class InvestmentTransactionsComponent implements OnInit {
   
   
   onResetClick(): void {
-   this.onBackClick()
+    if(this.f.acc_type_cd.value==23){
+      debugger
+      this.editDeleteMode=false;
+      this.accTransFrm.reset();
+      this.sel_cc=false;
+      this.sel_fd=false;
+      this.sel_mis=false;
+      this.sel_rd=false;
+      }
 }
   onBackClick() {
     this.router.navigate([this.sys.BankName + '/la']);

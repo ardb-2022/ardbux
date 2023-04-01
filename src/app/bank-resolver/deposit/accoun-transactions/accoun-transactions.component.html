@@ -392,8 +392,9 @@
             </div>
             
             
+             <!-- <div class="form-group col-2" *ngIf="showOnClose && this.f.acc_type_cd.value == 11"> -->
              <!-- marker -->
-             <div class="form-group col-2" *ngIf="showOnClose && this.f.acc_type_cd.value == 11">
+             <div class="form-group col-2" *ngIf="showOnClose">
               <small for="curr_intt_recov">Interest</small>
               <input type="text" (change)="CloseDPenalty()"  class="form-control form-control-sm"
                 formControlName="curr_intt_recov" id="curr_intt_recov">
@@ -589,6 +590,60 @@
               <section *ngFor="let l of td_deftranstrfList; let i=index">
                 {{l.particulars}}
                 <div class="form-row">
+                  <div class="form-group col-3">
+                    <small for="credit_ac_name">GL Code</small>
+                    <div class="input-group">
+                      <input type="text" class="form-control form-control-sm "
+                        [disabled]="undefined !== l.cust_acc_type && l.cust_acc_type.length > 0" [(ngModel)]="l.gl_acc_code"
+                        placeholder="Enter GL-Code" [disabled]="i==0" id="debit_gl_ac" (keyup)="hidetab($event)">
+                        <div class="input-group-append">
+                          <button class="btn btn-primary btn-sm"
+                            (click)="checkAndSetDebitAccType('gl_acc', l)">
+                            <i class="fa fa-search"></i>
+                          </button>
+                        </div>
+                    </div>
+                    <div class="suggestionsTrfGl" [hidden]="hidegl">
+                      <table class="table table-hover table-bordered table-sm w-auto small" id="customers1" [hidden]="hidegl"  >
+                        <thead>
+                          <tr>
+                            <th scope="col">GL-Code</th>
+                            <th scope="col">GL-Head</th>
+                          </tr>
+                        </thead>
+                        <tbody >
+                          <tr *ngFor="let cust of acc_master"  (click)="setGLCode(cust.acc_cd,cust.acc_name,i,cust)">
+                            <td style="width: 200px" scope="row">{{cust.acc_cd}}</td>
+                            <td style="width: 200px">{{cust.acc_name}}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <!-- <div class="suggestions border p-2" style="width: 150%; font-size: small;"
+                      *ngIf="acc_master && !(acc_master.length > 0) && indxsuggestedCustomerCr==i">
+                      <strong class="text-danger"> does not match with any Gl-Code</strong>
+                    </div> -->
+                  </div>
+
+                  <div class="form-group col-4">
+                    <small for="debit_gl_head">GL Head</small>
+                    <input type="text" disabled [(ngModel)]="l.gl_acc_desc"
+                      class="form-control form-control-sm text-capitalize" id="debit_gl_head">
+                  </div>
+
+                  <div class="form-group col-3">
+                    <small for="Inst_num">Instrument Num</small>
+                    <input type="text" class="form-control form-control-sm text-capitalize" id="Inst_num" [disabled]="!(undefined !== l.cust_acc_type && l.cust_acc_type.length > 0)
+                      && !(undefined !== l.gl_acc_code && l.gl_acc_code.length > 0)">
+                  </div>
+                  <button mat-raised-button
+                    *ngIf="td_deftranstrfList.length > 1 && (undefined !== l.cust_acc_type || undefined !== l.gl_acc_code  )"
+                    type="button" style="height:22px; padding-top: 0px;" class="btn btn-danger btn-sm mt-4"
+                    (click)="removeTransfer(l)">
+                    <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                  </button>
+                </div>
+                <div class="form-row">
                   <!-- <div class="form-group col-2">
                     <small for="debit_ac">Account Type</small>
                     <input type="text" [(ngModel)]="l.cust_acc_type"
@@ -680,60 +735,7 @@
                   </div>
 
                 </div>
-                <div class="form-row">
-                  <div class="form-group col-3">
-                    <small for="credit_ac_name">GL Code</small>
-                    <div class="input-group">
-                      <input type="text" class="form-control form-control-sm "
-                        [disabled]="undefined !== l.cust_acc_type && l.cust_acc_type.length > 0" [(ngModel)]="l.gl_acc_code"
-                        placeholder="Enter GL-Code" [disabled]="i==0" id="debit_gl_ac" (keyup)="hidetab($event)">
-                        <div class="input-group-append">
-                          <button class="btn btn-primary btn-sm"
-                            (click)="checkAndSetDebitAccType('gl_acc', l)">
-                            <i class="fa fa-search"></i>
-                          </button>
-                        </div>
-                    </div>
-                    <div class="suggestionsTrfGl" [hidden]="hidegl">
-                      <table class="table table-hover table-bordered table-sm w-auto small" id="customers1" [hidden]="hidegl"  >
-                        <thead>
-                          <tr>
-                            <th scope="col">GL-Code</th>
-                            <th scope="col">GL-Head</th>
-                          </tr>
-                        </thead>
-                        <tbody >
-                          <tr *ngFor="let cust of acc_master"  (click)="setGLCode(cust.acc_cd,cust.acc_name,i,cust)">
-                            <td style="width: 200px" scope="row">{{cust.acc_cd}}</td>
-                            <td style="width: 200px">{{cust.acc_name}}</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                    <!-- <div class="suggestions border p-2" style="width: 150%; font-size: small;"
-                      *ngIf="acc_master && !(acc_master.length > 0) && indxsuggestedCustomerCr==i">
-                      <strong class="text-danger"> does not match with any Gl-Code</strong>
-                    </div> -->
-                  </div>
-
-                  <div class="form-group col-4">
-                    <small for="debit_gl_head">GL Head</small>
-                    <input type="text" disabled [(ngModel)]="l.gl_acc_desc"
-                      class="form-control form-control-sm text-capitalize" id="debit_gl_head">
-                  </div>
-
-                  <div class="form-group col-3">
-                    <small for="Inst_num">Instrument Num</small>
-                    <input type="text" class="form-control form-control-sm text-capitalize" id="Inst_num" [disabled]="!(undefined !== l.cust_acc_type && l.cust_acc_type.length > 0)
-                      && !(undefined !== l.gl_acc_code && l.gl_acc_code.length > 0)">
-                  </div>
-                  <button mat-raised-button
-                    *ngIf="td_deftranstrfList.length > 1 && (undefined !== l.cust_acc_type || undefined !== l.gl_acc_code  )"
-                    type="button" style="height:22px; padding-top: 0px;" class="btn btn-danger btn-sm mt-4"
-                    (click)="removeTransfer(l)">
-                    <i class="fa fa-minus-circle" aria-hidden="true"></i>
-                  </button>
-                </div>
+                
                 <hr />
               </section>
               <div class="form-row text-right">

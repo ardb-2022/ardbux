@@ -23,7 +23,7 @@ import { TemplateBindingParseResult } from '@angular/compiler';
 import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import { debounceTime, distinctUntilChanged, map, pluck, switchMap, takeWhile } from 'rxjs/operators';
 import { Observable } from 'rxjs/internal/Observable';
-import { Subscription } from 'rxjs';
+import { Subscription ,observable,Subject} from 'rxjs';
 import { setTime } from 'ngx-bootstrap/chronos/utils/date-setters';
 import { CcTransComponent } from './cc-trans/cc-trans.component';
 import { InvOpenDM } from 'src/app/bank-resolver/Models/deposit/InvOpenDM';
@@ -63,20 +63,39 @@ export class InvTranServService {
   accNoEnteredForTransaction:any;
   acc_master: m_acc_master[] = [];
   acc_master1: m_acc_master[] = [];
-  constructor(private svc: RestService, private msg: InAppMessageService,private comservice:InvTranServService,
+  transfer_TYPE:any;
+  showTranDtlCl:boolean;
+  showTranDtlRe:boolean;
+  editDeleteMode:boolean;
+  td_deftranstrfList: td_def_trans_trf[] = [];
+  resetClick:boolean=false;
+private subject=new Subject<any>()
+  constructor(private svc: RestService,private fb: FormBuilder, private msg: InAppMessageService,private comservice:InvTranServService,
     private frmBldr: FormBuilder, public datepipe: DatePipe, private router: Router,
-    private modalService: BsModalService) {console.log(this.masterModel.tmdepositInv);
+    private modalService: BsModalService) {
+
+      console.log(this.masterModel.tmdepositInv);
      }
-    
-    SaveButtonClick() {    
-      this.callSave.emit();    
+     closeFrm = this.fb.group({})
+    sendCloseFromData(Fval,Trnsval){
+    this.closeFrm.controls=Fval
+    this.td_deftranstrfList[0]=Trnsval
+    debugger
+    }
+    getSave():Observable<any>{
+      return this.subject.asObservable()
+    }
+    SaveButtonClick() {  
+      debugger 
+      this.subject.next(); 
+      // this.callSave.emit();    
     }
     DeleteButtonClick() {    
       this.callDelete.emit();    
     }
-    // ResetButtonClick() {    
-    //   this.callReset.emit();    
-    // }
+    ResetButtonClick() {    
+      this.callReset.emit();    
+    }
     public getConstitutionList() {
       debugger
       if (this.constitutionList.length > 0) {

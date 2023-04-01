@@ -30,6 +30,7 @@ import { Observable } from 'rxjs/internal/Observable';
 import { MatTableDataSource } from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
+import { tm_subsidy } from 'src/app/bank-resolver/Models/loan/tm_subsidy';
 @Component({
   selector: 'app-loanaccount-transaction',
   templateUrl: './loanaccount-transaction.component.html',
@@ -92,7 +93,7 @@ export class LoanaccountTransactionComponent implements OnInit {
     backdrop: true, // enable backdrop shaded color
     ignoreBackdropClick: true // disable backdrop click to close the modal
   };
-
+  subSidyAmt=0;
   customerList: mm_customer[] = [];
   td_deftrans = new td_def_trans_trf();
   td_deftranstrfList: td_def_trans_trf[] = [];
@@ -135,13 +136,14 @@ export class LoanaccountTransactionComponent implements OnInit {
   inttRetForUpdate:any;
   hidegl:boolean=true;
   glHead:any;
-  displayedColumns: string[] = ['trans_dt', 'disb_amt', 'curr_intt_cal', 'ovd_intt_cal','penal_intt_cal','last_intt_calc_dt','prn_trf','intt_trf','curr_intt_recov','ovd_intt_recov','penal_intt_recov','curr_prn_recov','adv_prn_recov','ovd_prn_recov','curr_prn','ovd_prn','curr_intt','ovd_intt','penal_intt'];
+  displayedColumns: string[] = ['trans_dt', 'disb_amt', 'curr_intt_cal', 'ovd_intt_cal','penal_intt_cal','last_intt_calc_dt','prn_trf','intt_trf','curr_intt_recov','ovd_intt_recov','penal_intt_recov','adv_prn_recov','curr_prn_recov','ovd_prn_recov','totalRecov','curr_prn','ovd_prn','curr_intt','ovd_intt','penal_intt'];
   dataSource = new MatTableDataSource()
   opcrSum = 0;
   drSum = 0;
   crSum = 0;
   clsdrSum = 0;
   clscrSum = 0;
+  totalRecovSum=0;
   lastAccCD: any;
   today: any
   cName: any
@@ -191,6 +193,9 @@ export class LoanaccountTransactionComponent implements OnInit {
   acc_phone:string;
   guardian_name:string;
   present_address:string;
+  l_cust_cd:any;
+  l_case_no:string;
+
   // editDeleteMode=false
   // showInstrumentDtl = false;
   ngOnInit(): void {
@@ -585,6 +590,8 @@ export class LoanaccountTransactionComponent implements OnInit {
     //this.f.acc_type_cd.disable()
     this.onAccountNumTabOff();
     this.suggestedCustomer = [];
+    this.getSubsidy();
+
   }
 
   private getOperationMaster(): void {
@@ -2579,6 +2586,8 @@ debugger;
   }
 
   onResetClick(): void {
+    this.joinHold=[];
+    this.subSidyAmt=0;
     this.suggestedCustomerCr = null;
     this.disableChangeTrf=true;
     this.disableOperation = false
@@ -2618,6 +2627,8 @@ debugger;
       this.present_address=null;
       this.member_id=null;
       this.guardian_name=null;
+      this.l_cust_cd=null;
+      this.l_case_no=null;
 
     // 
 
@@ -3075,6 +3086,7 @@ debugger;
     // this.totPrn+=e.ovd_prn+e.curr_prn
     this.recovSum=0
     this.disbSum=0
+    this.totalRecovSum=0
     this.reportData.length=0;
     // this.pagedItems.length=0;
     //PARTHA  this.modalRef.hide();
@@ -3125,6 +3137,7 @@ debugger;
         // this.totPrn+=e.ovd_prn+e.curr_prn
         this.recovSum+=e.recov_amt
         this.disbSum+=e.disb_amt
+        this.totalRecovSum+=e.curr_intt_recov+e.ovd_intt_recov+e.penal_intt_recov+e.adv_prn_recov+e.curr_prn_recov+e.ovd_prn_recov
       });
       this.lastCd=this.reportData[this.reportData.length-1].trans_cd
       this.lastDt=this.reportData[this.reportData.length-1].trans_dt
@@ -3206,9 +3219,10 @@ debugger;
             console.log(res)
             if (undefined !== res && null !== res && res.length > 0) {
               this.suggestedCustomer1 = res;
-              this.selectedBlock[0] = this.blocks.filter(e => e.block_cd === res[0].block_cd)[0];
+              let BLOCK=res.filter(e=>e.cust_cd===this.acc2.tmloanall.party_cd)
+              this.selectedBlock[0] = this.blocks.filter(e => e.block_cd === BLOCK[0].block_cd)[0];
               console.log(this.blocks);
-              
+              debugger
               // console.log(this.selectedBlock[0].block_name);
               // console.log(this.suggestedCustomer1[0].phone);
               // console.log(this.acc2.tmloanall.loan_acc_no);
@@ -3218,7 +3232,9 @@ debugger;
               this.member_id=this.suggestedCustomer1[0].old_cust_cd;
               this.guardian_name=this.suggestedCustomer1[0].guardian_name;
               this.acc_lfNo=this.acc2.tmloanall.loan_acc_no;
-              
+              this.l_cust_cd=this.suggestedCustomer1[0].cust_cd;
+              this.l_case_no=this.acc2.tdloansancsetlist[0].tdloansancset.filter(e=>e.param_cd=='117')[0].param_value
+              debugger
             } else {
               this.suggestedCustomer1 = [];
               return [];
@@ -3231,6 +3247,23 @@ debugger;
     return null
 
   }
+  getSubsidy() {
+    let subsidyEntry = new tm_subsidy();
+    subsidyEntry.brn_cd = this.sys.BranchCode;
+    subsidyEntry.loan_id = this.loanID;
+    subsidyEntry.ardb_cd = this.sys.ardbCD;
+    this.svc.addUpdDel<any>('Loan/GetSubsidyData', subsidyEntry).subscribe(
+      res => {
+        ;
+        console.log(res)
+        if (res.length == 0) {
+          this.HandleMessage(true, MessageType.Sucess, 'Data Not found !!!');
+        }
+        else{
+         this.subSidyAmt= res.subsidy_amt
+        }
+      })
+    }
 
 }
 export class DynamicSelect {

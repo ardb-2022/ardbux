@@ -68,6 +68,7 @@ export class RestService {
       if (undefined === bank || null === bank) { 
       } else {
       return 'http://' + bank.server_ip + '/' + __bName + '/api/';
+      // return 'http://' + bank.server_ip + '/' + 'ARDBTESTUX' + '/api/';
       }
     }
     return null;

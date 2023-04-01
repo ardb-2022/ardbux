@@ -60,7 +60,7 @@ export class AccOpeningViewComponent implements OnInit {
   };
   disablejoinholder:boolean=true;
   hidejoin:boolean=false;
-
+  disableConst:boolean=true;
   showNoResult=false
   createUser = '';
   updateUser = '';
@@ -69,7 +69,7 @@ export class AccOpeningViewComponent implements OnInit {
   disabledOnNull=true;
   sys = new SystemValues();
   denominationGrandTotal = 0;
-
+  userType:any
   isLoading = false;
   // disableCustNameFlg = true;
   // disableCustomerName = true;
@@ -341,7 +341,7 @@ export class AccOpeningViewComponent implements OnInit {
     this.tm_deposit = this.masterModel.tmdeposit;
     this.td_signatoryList = this.masterModel.tdsignatory;
     console.log(this.td_signatoryList);
-
+debugger
     this.setCustDtls(this.tm_deposit.cust_cd);
     this.setAccountType(this.tm_deposit.acc_type_cd);
     this.setIntTfrType(this.tm_deposit.intt_trf_type);
@@ -376,8 +376,12 @@ export class AccOpeningViewComponent implements OnInit {
     for (const idx in this.td_accholderList) {
       this.setRelationship(this.td_accholderList[idx].relation, Number(idx));
     }
-    
-     
+    // debugger
+    // this.tm_deposit.prn_amt = this.masterModel2.tmdeposit.prn_amt;
+    // this.tm_deposit.intt_amt = this.masterModel2.tmdeposit.intt_amt;
+
+    // debugger
+
   }
 
 
@@ -499,6 +503,7 @@ export class AccOpeningViewComponent implements OnInit {
     this.tm_deposit.brn_cd = this.branchCode;
   }
 
+
   getAccountOpeningData(cust: mm_customer) {
 
     if (this.tm_deposit.acc_type_cd === null || this.tm_deposit.acc_type_cd === undefined) {
@@ -528,7 +533,14 @@ export class AccOpeningViewComponent implements OnInit {
           if (this.masterModel.tmdeposit.acc_num !== null) {
             this.disableAccountTypeAndNo = true;
             this.assignModelsFromMasterData();
+            if(this.tm_deposit.acc_type_cd==6){
+              this.processInstallmentAmount()//To Be Change PARTHA
+             }
+             this.getUserType();
 
+            console.log(this.masterModel.tmdeposit);
+            
+            debugger
             this.operationType = 'Q';
 
           }
@@ -549,6 +561,25 @@ export class AccOpeningViewComponent implements OnInit {
 
     );
   }
+  getUserType ()
+  {
+   
+    let login = new LOGIN_MASTER();
+    login.user_id = localStorage.getItem('__userId');
+    // 
+    // login.user_id=login.user_id.split('/')[0]
+    login.brn_cd = this.sys.BranchCode;
+    login.ardb_cd=this.sys.ardbCD,
+    
+        this.svc.addUpdDel<any>('Sys/GetUserIDDtls', login).subscribe(
+            res => {
+              console.log(res)
+              this.userType=res[0].user_type
+             debugger
+            }
+        )
+
+  }
 
 
   modifyData() {
@@ -559,6 +590,13 @@ export class AccOpeningViewComponent implements OnInit {
     }
     this.operationType = 'U';
     this.disableAll = false;
+    if(this.userType=="A"){
+      this.disableConst=false
+    }
+    else{
+      this.disableConst=true
+
+    }
   }
 
 
@@ -623,11 +661,12 @@ export class AccOpeningViewComponent implements OnInit {
           this.HandleMessage(true, MessageType.Warning, 'Joint Holder Relation is Blank');
           exit(0);
         }
-
+debugger
         this.td_accholderList[l].acc_type_cd = this.tm_deposit.acc_type_cd;
         this.td_accholderList[l].acc_num = this.tm_deposit.acc_num;
         this.td_accholderList[l].brn_cd = this.branchCode;
         this.td_accholderList[l].upd_ins_flag = this.operationType;
+        debugger
       }
     }
 
@@ -658,6 +697,7 @@ export class AccOpeningViewComponent implements OnInit {
         this.td_nomineeList[l].upd_ins_flag = this.operationType;
 
         nomPercent = nomPercent + Number(this.td_nomineeList[l].percentage);
+        debugger
       }
     }
 
@@ -677,6 +717,7 @@ export class AccOpeningViewComponent implements OnInit {
     if ((this.tm_deposit.acc_type_cd === 1 || this.tm_deposit.acc_type_cd === 7
       || this.tm_deposit.acc_type_cd === 8 || this.tm_deposit.acc_type_cd === 9)) {
       this.tm_deposit.user_acc_num = null;
+      
     }
 
 
@@ -726,7 +767,13 @@ export class AccOpeningViewComponent implements OnInit {
     let ret = -1;
     this.validateData();
     this.isLoading = true;
+    this.masterModel.tmdeposit.ext_instl_tot=this.tm_deposit.ext_instl_tot
+    this.masterModel.tmdeposit.constitution_cd=this.tm_deposit.constitution_cd
+    this.masterModel.tmdeposit.constitution_desc=this.selectedConstitutionList.filter(e=>e.constitution_cd==this.tm_deposit.constitution_cd)[0].constitution_desc
+    
     console.log(this.masterModel)
+    console.log(this.tm_deposit)
+    debugger
     this.svc.addUpdDel<any>('Deposit/UpdateAccountOpeningDataOrg', this.masterModel).subscribe(
       res => {
 
@@ -1066,11 +1113,14 @@ export class AccOpeningViewComponent implements OnInit {
   public setCustDtls(cust_cd: number): void {
     this.tm_deposit.cust_cd = cust_cd;
     this.msg.sendcustomerCodeForKyc(cust_cd);
+    console.log(this.masterModel.tmdeposit);
+    debugger
     this.getSetCustDtls(cust_cd);
   }
 
   getSetCustDtls(cust_cd: number) {
-
+    console.log(this.masterModel.tmdeposit);
+    debugger
     let temp_mm_cust = new mm_customer();
     const temp_tm_deposit = new tm_deposit();
     temp_tm_deposit.cust_cd = cust_cd;
@@ -1168,11 +1218,15 @@ export class AccOpeningViewComponent implements OnInit {
     this.tm_deposit.category_cd = temp_mm_cust.catg_cd;
     this.setCategoryDesc(this.tm_deposit.category_cd);
 
+    
+
     if (this.operationType === 'I') {
       this.td_signatoryList[0].cust_cd = temp_mm_cust.cust_cd;
       this.td_signatoryList[0].signatory_name = temp_mm_cust.cust_name;
       this.td_signatoryList[0].brn_cd = this.branchCode;
     }
+    console.log(this.masterModel.tmdeposit);
+    debugger
   }
 
   setCategoryDesc(category: number) {

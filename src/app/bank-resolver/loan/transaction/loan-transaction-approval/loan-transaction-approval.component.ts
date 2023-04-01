@@ -140,6 +140,9 @@ export class LoanTransactionApprovalComponent implements OnInit {
     this.msg.sendCommonAcctInfo(null);
     this.msg.sendCommonAccountNum(null);
     this.getAcctTypeMaster();
+    this.transactionDtlsFrm.reset();
+
+    
   }
 
   setTransactionDtl(): void {
@@ -587,9 +590,8 @@ export class LoanTransactionApprovalComponent implements OnInit {
             `Transaction with Transacation Cd ${this.selectedVm.td_def_trans_trf.trans_cd} is approved.`);
           setTimeout(() => {
             this.onClickRefreshList();
-            this.transactionDtlsFrm.reset();
-            this.showDenominationDtl = false;
-            if (this.tranferDetails.length > 0) { this.tranferDetails = null; }
+            // this.showDenominationDtl = false;
+            // if (this.tranferDetails.length > 0) { this.tranferDetails = null; }
             this.isLoading = false;
 
           }, 3000);

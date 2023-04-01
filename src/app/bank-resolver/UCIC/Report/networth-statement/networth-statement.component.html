@@ -38,6 +38,8 @@
                 <th>
                   Name
                 </th>
+                <th>Guardian Name</th>
+                <th>Permanent Address</th>
               </tr>
                 <tbody *ngFor="let cust of suggestedCustomer">
                   <tr  (click)="SelectCustomer(cust)">
@@ -48,6 +50,12 @@
                     </td>
                     <td>
                       {{cust.cust_name}}
+                    </td>
+                    <td>
+                      {{cust.guardian_name}}
+                    </td>
+                    <td>
+                      {{cust.permanent_address}}
                     </td>
                   </tr>
                 </tbody>

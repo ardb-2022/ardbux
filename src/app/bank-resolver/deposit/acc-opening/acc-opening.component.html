@@ -75,6 +75,8 @@
                 <tr>
                   <th> Customer Code / Phone</th>
                   <th> Name</th>
+                  <th>Guardian Name</th>
+                <th>Permanent Address</th>
                 </tr>
                 <tbody *ngFor="let cust of suggestedCustomer" >
                   <tr  (click)="setCustDtls(cust.cust_cd)">
@@ -84,6 +86,12 @@
                     <td>
                       {{cust.cust_name}}
           
+                    </td>
+                    <td>
+                      {{cust.guardian_name}}
+                    </td>
+                    <td>
+                      {{cust.permanent_address}}
                     </td>
                   </tr>
                  
@@ -555,10 +563,18 @@
             </div>
             <div class="form-group col-3">
               <small for="dep_cert_no">S/B Account No</small>
+              <div class="input-group">
               <input [disabled]='disableAll' [(ngModel)]="tm_deposit.user_acc_num" style="height:25px" type="text"
-                class="form-control form-control-sm" (focusout)="validateSbAccount()" id="dep_sb_ac_no">
+                class="form-control form-control-sm"  id="dep_sb_ac_no">
+                <!-- (focusout)="validateSbAccount()" -->
+                <div class="input-group-append">
+                  <button class="btn btn-primary btn-sm"  (click)="suggestCustomer2()">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </div>
             </div>
-
+            </div>
+           
             <div class="form-group col-2">
               <br>
               <!-- <div class="container border"> -->
@@ -571,8 +587,9 @@
               </label>
             </div>
             <!-- </div> -->
-
+            
           </div>
+          
         </div>
         <!-- <-----------End: Fixed Deposit-------------->
 
@@ -717,12 +734,24 @@
                 <option *ngFor="let l of standingInstrAfterMaturity" [value]="l.instr_code">{{l.instr_dscr}}</option>
               </select>
             </div>
-
             <div class="form-group col-3">
+              <small for="dbs_cert_no">S/B Account No</small>
+              <div class="input-group">
+              <input [disabled]='disableAll' [(ngModel)]="tm_deposit.user_acc_num" style="height:25px" type="text"
+                class="form-control form-control-sm"  id="dbs_cert_no">
+                <!-- (focusout)="validateSbAccount()" -->
+                <div class="input-group-append">
+                  <button class="btn btn-primary btn-sm"  (click)="suggestCustomer2()">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </div>
+            </div>
+            </div>
+            <!-- <div class="form-group col-3">
               <small for="dbs_cert_no">S/B Account No</small>
               <input [disabled]='disableAll' [(ngModel)]="tm_deposit.user_acc_num" style="height:25px" type="text"
                 class="form-control form-control-sm" id="dbs_cert_no">
-            </div>
+            </div> -->
           </div>
 
         </div>
@@ -844,7 +873,7 @@
               [(ngModel)]="tm_deposit.mat_dt" bsDatepicker [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }">
           </div> -->
 
-            <div class="form-group col-2">
+            <div class="form-group col-3">
               <small for="dbs_acc_open_dt">Maturity Date</small>
               <input disabled style="height:25px;" type="text" placeholder="dd/mm/yyyy" class="form-control"
                 [(ngModel)]="tm_deposit.mat_dt" disabled bsDatepicker
@@ -852,7 +881,7 @@
             </div>
 
             <div class="form-group col-3">
-              <small for="term_dep_cert_no">Cert. No. / Ledger Folio No.</small>
+              <small for="term_dep_cert_no">Cert. No./ L/F No.</small>
               <input [(ngModel)]="tm_deposit.cert_no" [disabled]='disableAll' style="height:25px" type="text"
                 class="form-control form-control-sm text-capitalize" id="term_dep_cert_no">
             </div>
@@ -869,12 +898,24 @@
                 <option *ngFor="let l of standingInstrAfterMaturity" [selected]="tm_deposit.standing_instr_flag==l.instr_code" [value]="l.instr_code">{{l.instr_dscr}}</option>
               </select>
             </div>
-
             <div class="form-group col-3">
+              <small for="term_dep_cert_no">S/B Account No</small>
+              <div class="input-group">
+              <input [disabled]='disableAll' [(ngModel)]="tm_deposit.user_acc_num" style="height:25px" type="text"
+                class="form-control form-control-sm"  id="term_dep_cert_no">
+                <!-- (focusout)="validateSbAccount()" -->
+                <div class="input-group-append">
+                  <button class="btn btn-primary btn-sm"  (click)="suggestCustomer2()">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </div>
+            </div>
+            </div>
+            <!-- <div class="form-group col-3">
               <small for="term_dep_cert_no">S/B Account No</small>
               <input [disabled]='disableAll' [(ngModel)]="tm_deposit.user_acc_num" style="height:25px" type="text"
                 class="form-control form-control-sm" id="term_dep_cert_no">
-            </div>
+            </div> -->
           </div>
 
         </div>
@@ -986,15 +1027,15 @@
               [(ngModel)]="tm_deposit.mat_dt" bsDatepicker [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }">
           </div> -->
 
-            <div class="form-group col-2">
+            <div class="form-group col-3">
               <small for="dbs_acc_open_dt">Maturity Date</small>
               <input disabled style="height:25px;" type="text" placeholder="dd/mm/yyyy" class="form-control"
                 [(ngModel)]="tm_deposit.mat_dt" disabled bsDatepicker
                 [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }">
             </div>
 
-            <div class="form-group col-3">
-              <small for="mis_cert_no">Cert. No. / Ledger Folio No.</small>
+            <div class="form-group col-2">
+              <small for="mis_cert_no">Cert. No./ L/F No.</small>
               <input [(ngModel)]="tm_deposit.cert_no" [disabled]='disableAll' style="height:25px" type="text"
                 class="form-control form-control-sm text-capitalize" id="mis_cert_no">
             </div>
@@ -1010,12 +1051,24 @@
                 <option *ngFor="let l of standingInstrAfterMaturity" [value]="l.instr_code">{{l.instr_dscr}}</option>
               </select>
             </div>
-
             <div class="form-group col-3">
+              <small for="mis_cert_no">S/B Account No</small>
+              <div class="input-group">
+              <input [disabled]='disableAll' [(ngModel)]="tm_deposit.user_acc_num" style="height:25px" type="text"
+                class="form-control form-control-sm"  id="mis_cert_no">
+                <!-- (focusout)="validateSbAccount()" -->
+                <div class="input-group-append">
+                  <button class="btn btn-primary btn-sm"  (click)="suggestCustomer2()">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </div>
+            </div>
+            </div>
+            <!-- <div class="form-group col-3">
               <small for="mis_cert_no">S/B Account No</small>
               <input [disabled]='disableAll' [(ngModel)]="tm_deposit.user_acc_num" style="height:25px" type="text"
                 class="form-control form-control-sm" (focusout)="validateSbAccount()" id="mis_cert_no">
-            </div>
+            </div> -->
 
 
             <div class="form-group col-2">
@@ -1138,13 +1191,24 @@
               </select>
             </div>
 
-
             <div class="form-group col-3">
+              <small for="rec_sb_ac_no">S/B Account No</small>
+              <div class="input-group">
+              <input [disabled]='disableAll' [(ngModel)]="tm_deposit.user_acc_num" style="height:25px" type="text"
+                class="form-control form-control-sm"  id="rec_sb_ac_no">
+                <!-- (focusout)="validateSbAccount()" -->
+                <div class="input-group-append">
+                  <button class="btn btn-primary btn-sm"  (click)="suggestCustomer2()">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </div>
+            </div>
+            </div>
+            <!-- <div class="form-group col-3">
               <small for="dbs_cert_no">S/B Account No</small>
-              <!-- <small for="dbs_cert_no">Flexi Account No</small> -->
               <input [disabled]='disableAll' [(ngModel)]="tm_deposit.user_acc_num" style="height:25px" type="text"
                 class="form-control form-control-sm" (focusout)="validateSbAccount()" id="rec_sb_ac_no">
-            </div>
+            </div> -->
 
             <div class="form-group col-3">
               <br>
@@ -1540,6 +1604,33 @@
 
           </div>
         </div>
+        <div class="SBsuggestions" *ngIf="suggestedSBCustomer && suggestedSBCustomer.length>0">
+          <!-- <div class="suggestions" *ngIf="suggestedCustomer"> -->
+          <table class="table table-hover table-bordered table-sm w-auto small" id="customers1">
+            <!-- <thead> -->
+              <tr>
+                <th scope="col">Acc#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Guardian Name</th>
+                <th scope="col">Address</th>
+              </tr>
+            <!-- </thead> -->
+            <tbody>
+              <tr *ngFor="let cust of suggestedSBCustomer" (click)="SelectCustomer(cust)">
+                <td scope="row">{{cust.acc_num}}</td>
+                <td>{{cust.cust_name}}</td>
+                <td>{{((null === cust.phone) ? '' : cust.phone)}}</td>
+                <td>{{cust.guardian_name}}</td>
+                <td>{{cust.present_address}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="suggestions border p-2" style="width: 150%; font-size: small;" *ngIf="shownoresult">
+          <strong class="text-danger">" {{tm_deposit.user_acc_num}} " does not match with any customer</strong>
+          <!-- <strong class="text-danger" *ngIf="!resetClicked">" {{this.f.acct_num.value}} " does not match with any customer</strong> -->
+        </div>
         <!-- <-----------End: Savings Deposit Special -------------->
       </div>
 
@@ -1764,6 +1855,29 @@
           <h1></h1>
           <h4 class="customHeader">Transfer Details</h4>
 
+         
+          <section *ngFor="let l of td_deftranstrfList; let i=index">
+            <div class="form-row">
+              <div class="form-group col-2">
+                <small for="debit_gl_ac">GL Code</small>
+                <input type="text" (focusout)="checkAndSetDebitAccType('gl_acc', l.gl_acc_code)"
+                  [(ngModel)]="l.gl_acc_code" style="height:25px" [disabled]='disableAll'
+                  class="form-control form-control-sm text-capitalize" id="debit_gl_ac">
+              </div>
+
+              <div class="form-group col-4">
+                <small for="debit_gl_head">GL Head</small>
+                <input type="text" disabled [(ngModel)]="l.gl_acc_desc" style="height:25px"
+                  class="form-control form-control-sm text-capitalize" id="debit_gl_head">
+              </div>
+
+              <div class="form-group col-3">
+                <small for="Inst_num">Instrument Num</small>
+                <input type="text" [(ngModel)]="l.instrument_num" style="height:25px"
+                  class="form-control form-control-sm text-capitalize" [disabled]='disableAll' id="Inst_num">
+              </div>
+            </div>
+          </section>
           <section *ngFor="let l of td_deftranstrfList; let i=index">
             <div class="form-row">
               <!-- <div class="form-group col-1">
@@ -1850,29 +1964,6 @@
                   id="debit_amount">
               </div>
 
-            </div>
-          </section>
-
-          <section *ngFor="let l of td_deftranstrfList; let i=index">
-            <div class="form-row">
-              <div class="form-group col-2">
-                <small for="debit_gl_ac">GL Code</small>
-                <input type="text" (focusout)="checkAndSetDebitAccType('gl_acc', l.gl_acc_code)"
-                  [(ngModel)]="l.gl_acc_code" style="height:25px" [disabled]='disableAll'
-                  class="form-control form-control-sm text-capitalize" id="debit_gl_ac">
-              </div>
-
-              <div class="form-group col-4">
-                <small for="debit_gl_head">GL Head</small>
-                <input type="text" disabled [(ngModel)]="l.gl_acc_desc" style="height:25px"
-                  class="form-control form-control-sm text-capitalize" id="debit_gl_head">
-              </div>
-
-              <div class="form-group col-3">
-                <small for="Inst_num">Instrument Num</small>
-                <input type="text" [(ngModel)]="l.instrument_num" style="height:25px"
-                  class="form-control form-control-sm text-capitalize" [disabled]='disableAll' id="Inst_num">
-              </div>
             </div>
           </section>
 

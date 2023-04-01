@@ -1,3 +1,4 @@
+
 <loading *ngIf="isLoading"></loading>
 <div *ngIf="showMsg && showMsg.Show" class="col-12 mt-1">
   <div class="alert alert-dismissible fade show" role="alert" [ngClass]="{'alert-success': showMsg.Type === 0,
@@ -8,6 +9,18 @@
     </button>
   </div>
 </div>
+<br>
+<div class="mt-1 col-xs-12 col-sm-12  d-flex justify-content-center align-items-center" style="margin-bottom: 20px">
+    
+  <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" #saveBtn (click)="onSaveClick()">Save</button>
+  <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onDeleteClick()"
+    *ngIf="editDeleteMode">Delete</button>
+  <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onResetClick()">Reset</button>
+  
+  <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onBackClick()">Back</button>
+  
+</div>
+<br>
 <div class="row" [hidden]="ShowHide">
 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 ">
     <form [formGroup]="accDtlsFrm">
@@ -157,12 +170,12 @@
           <input  type="text" class="form-control form-control-sm" formControlName="amount" id="amount"
           (focusout)="onAmtChngDuringRenewal(); processInterest()" >
         </div>
-        <div class="form-group col-3" [hidden]="!showBalance">
+        <div class="form-group col-2" [hidden]="!showBalance">
           <small for="amount">Balance</small>
           <input  type="text" class="form-control form-control-sm" disabled formControlName="balance" id="balance" >
         </div>
         
-        <div class="form-group col-3" *ngIf="showOnTDS ">
+        <div class="form-group col-2">
           <small for="ovd_intt_recov">TDS</small>
           <input type="text" (change)="applyTDS()" class="form-control form-control-sm"
             formControlName="ovd_intt_recov" id="ovd_intt_recov">
@@ -299,14 +312,19 @@
         <div class="form-group col-2" >
           <small for="curr_intt_recov">Interest</small>
           <!-- (change)="inttCalOnClose()" -->
-          <input type="text"   class="form-control form-control-sm"(change)="inttCalOnClose()"
+          <input type="text"   class="form-control form-control-sm"(change)="ChangeinttClose()"
             formControlName="curr_intt_recov" id="curr_intt_recov">
         </div>
         <div class="form-group col-2">
+          <small for="ovd_intt_recov">TDS</small>
+          <input type="text" (change)="applyTDSonclose()" class="form-control form-control-sm"
+            formControlName="ovd_intt_recov" id="ovd_intt_recov">
+        </div>
+        <!-- <div class="form-group col-2">
           <small for="ovd_intt_recov">Default Penalty</small>
           <input type="text" class="form-control form-control-sm"
             formControlName="ovd_intt_recov" id="ovd_intt_recov">
-        </div>
+        </div> -->
         <!-- marker -->
 
         <div class="form-group col-2" >
@@ -323,11 +341,11 @@
           <input type="text" class="form-control form-control-sm" formControlName="penal_rt" id="penal_rt">
         </div>
         <div class="form-group col-2 mksml" *ngIf="!isMat && effInt">
-          <small for="eff_intt">Effective Intt. Rate</small>
-          <input type="text" formControlName="eff_intt" #effint (change)="inttCalOnClose()" [value]="effInt"
+          <small for="eff_intt" >Effective Intt. Rate</small>
+          <input type="number" formControlName="eff_intt" #effint (change)="inttCalOnClose()" [value]="effInt" 
             class="form-control form-control-sm mksml" id="eff_intt">
         </div>
-      
+        <!-- curr_intt_rate -->
     </div>
     </form>
     <div class="row" *ngIf="td.trf_type.value !== ''||this.tdDefTransFrmC.controls.trf_type.value!== ''">
@@ -336,6 +354,60 @@
         <div *ngIf="showtransdetails">
           <h4 class="customHeader">Transfer Details</h4>
           <section *ngFor="let l of td_deftranstrfList; let i=index">
+            <div class="form-row">
+              <div class="form-group col-3">
+                <small for="credit_ac_name">GL Code</small>
+                <div class="input-group">
+                  <input type="text" class="form-control form-control-sm "
+                    [disabled]="undefined !== l.cust_acc_type && l.cust_acc_type.length > 0" [(ngModel)]="l.gl_acc_code"
+                    placeholder="Enter GL-Code" [disabled]="i==0" id="debit_gl_ac" (keyup)="hidetab($event)">
+                    <div class="input-group-append">
+                      <button class="btn btn-primary btn-sm"
+                        (click)="checkAndSetDebitAccType('gl_acc', l)">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </div>
+                </div>
+                <div class="suggestionsTrfGl" [hidden]="hidegl">
+                  <table class="table table-hover table-bordered table-sm w-auto small" id="customers1" [hidden]="hidegl"  >
+                    <thead>
+                      <tr>
+                        <th scope="col">GL-Code</th>
+                        <th scope="col">GL-Head</th>
+                      </tr>
+                    </thead>
+                    <tbody >
+                      <tr *ngFor="let cust of acc_master"  (click)="setGLCode(cust.acc_cd,cust.acc_name,i,cust)">
+                        <td style="width: 200px" scope="row">{{cust.acc_cd}}</td>
+                        <td style="width: 200px">{{cust.acc_name}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <!-- <div class="suggestions border p-2" style="width: 150%; font-size: small;"
+                  *ngIf="acc_master && !(acc_master.length > 0) && indxsuggestedCustomerCr==i">
+                  <strong class="text-danger"> does not match with any Gl-Code</strong>
+                </div> -->
+              </div>
+
+              <div class="form-group col-4">
+                <small for="debit_gl_head">GL Head</small>
+                <input type="text" disabled [(ngModel)]="l.gl_acc_desc"
+                  class="form-control form-control-sm text-capitalize" id="debit_gl_head">
+              </div>
+
+              <div class="form-group col-3">
+                <small for="Inst_num">Instrument Num</small>
+                <input type="text" class="form-control form-control-sm text-capitalize" id="Inst_num" [disabled]="!(undefined !== l.cust_acc_type && l.cust_acc_type.length > 0)
+                  && !(undefined !== l.gl_acc_code && l.gl_acc_code.length > 0)">
+              </div>
+              <button mat-raised-button
+                *ngIf="td_deftranstrfList.length > 1 && (undefined !== l.cust_acc_type || undefined !== l.gl_acc_code  )"
+                type="button" style="height:22px; padding-top: 0px;" class="btn btn-danger btn-sm mt-4"
+                (click)="removeTransfer(l)">
+                <i class="fa fa-minus-circle" aria-hidden="true"></i>
+              </button>
+            </div>
             <div class="form-row">
               <div class="form-group col-2">
                 <small for="credit_ac">Account Type</small>
@@ -414,60 +486,7 @@
               </div>
 
             </div>
-            <div class="form-row">
-              <div class="form-group col-3">
-                <small for="credit_ac_name">GL Code</small>
-                <div class="input-group">
-                  <input type="text" class="form-control form-control-sm "
-                    [disabled]="undefined !== l.cust_acc_type && l.cust_acc_type.length > 0" [(ngModel)]="l.gl_acc_code"
-                    placeholder="Enter GL-Code" [disabled]="i==0" id="debit_gl_ac" (keyup)="hidetab($event)">
-                    <div class="input-group-append">
-                      <button class="btn btn-primary btn-sm"
-                        (click)="checkAndSetDebitAccType('gl_acc', l)">
-                        <i class="fa fa-search"></i>
-                      </button>
-                    </div>
-                </div>
-                <div class="suggestionsTrfGl" [hidden]="hidegl">
-                  <table class="table table-hover table-bordered table-sm w-auto small" id="customers1" [hidden]="hidegl"  >
-                    <thead>
-                      <tr>
-                        <th scope="col">GL-Code</th>
-                        <th scope="col">GL-Head</th>
-                      </tr>
-                    </thead>
-                    <tbody >
-                      <tr *ngFor="let cust of acc_master"  (click)="setGLCode(cust.acc_cd,cust.acc_name,i,cust)">
-                        <td style="width: 200px" scope="row">{{cust.acc_cd}}</td>
-                        <td style="width: 200px">{{cust.acc_name}}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <!-- <div class="suggestions border p-2" style="width: 150%; font-size: small;"
-                  *ngIf="acc_master && !(acc_master.length > 0) && indxsuggestedCustomerCr==i">
-                  <strong class="text-danger"> does not match with any Gl-Code</strong>
-                </div> -->
-              </div>
-
-              <div class="form-group col-4">
-                <small for="debit_gl_head">GL Head</small>
-                <input type="text" disabled [(ngModel)]="l.gl_acc_desc"
-                  class="form-control form-control-sm text-capitalize" id="debit_gl_head">
-              </div>
-
-              <div class="form-group col-3">
-                <small for="Inst_num">Instrument Num</small>
-                <input type="text" class="form-control form-control-sm text-capitalize" id="Inst_num" [disabled]="!(undefined !== l.cust_acc_type && l.cust_acc_type.length > 0)
-                  && !(undefined !== l.gl_acc_code && l.gl_acc_code.length > 0)">
-              </div>
-              <button mat-raised-button
-                *ngIf="td_deftranstrfList.length > 1 && (undefined !== l.cust_acc_type || undefined !== l.gl_acc_code  )"
-                type="button" style="height:22px; padding-top: 0px;" class="btn btn-danger btn-sm mt-4"
-                (click)="removeTransfer(l)">
-                <i class="fa fa-minus-circle" aria-hidden="true"></i>
-              </button>
-            </div>
+            
             <hr />
           </section>
           <div class="form-row text-right">
@@ -486,6 +505,8 @@
     </div>
   </div>
 </div>
+<br>
+
 <div *ngIf="showMsg && showMsg.Show" class="col-12 mt-1">
   <div class="alert alert-dismissible fade show" role="alert" [ngClass]="{'alert-success': showMsg.Type === 0,
    'alert-warning':showMsg.Type === 1, 'alert-info':showMsg.Type === 2, 'alert-danger':showMsg.Type === 3 }">
@@ -495,6 +516,21 @@
     </button>
   </div>
 </div>
+<br>
+<hr>
+<br>
+<div class="mt-1 col-xs-12 col-sm-12  d-flex justify-content-center align-items-center" style="margin-bottom: 20px">
+    
+  <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" #saveBtn (click)="onSaveClick()">Save</button>
+  <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onDeleteClick()"
+    *ngIf="editDeleteMode">Delete</button>
+  <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onResetClick()">Reset</button>
+  
+  <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onBackClick()">Back</button>
+  
+</div>
+<br>
+<br>
 <ng-template #preClose>
   <div class="modal-header">
     <h4 class="modal-title pull-left customHeader">It will be a premature closing for {{diff}} days with interest accrued :
