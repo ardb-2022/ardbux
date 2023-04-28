@@ -76,132 +76,69 @@
        
         </mat-cell>
     </ng-container> -->
-    <ng-container matColumnDef="mainHeader"> 
-      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align:center"> 
-      <!-- <div  *ngIf="reportData">
-            
-        <div style="display:inline-block">
-
-          <h4>{{ardbName}} ({{branchName}})</h4>
+    
+    <ng-container matColumnDef="mainHeader">
+      <th mat-header-cell *matHeaderCellDef >
+        <div class="justify-content-center" style="text-align:center">
+          <br><h4>{{ardbName}} ({{branchName}})</h4>
+          
+          <h4>Run Date & Time : {{today}} </h4> <br>
+          <h4> <u> Trial Balance as on {{this.reportcriteria.controls.fromDate.value.toDateString()| date: 'dd/MM/yyyy'}}</u></h4>
+        
         </div>
-        <h4>Run Date & Time : {{today}} </h4> <br>
-        <h4> <u> Trial Balance as on {{this.reportcriteria.controls.fromDate.value.toDateString()| date: 'dd/MM/yyyy'}}</u></h4>
-      </div> -->
-    </th>
+      </th>
     </ng-container>
  
-    <ng-container matColumnDef="acc_cd">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>  </th>
-      <td mat-cell *matCellDef="let element"> 
-        <ng-container>
-          <table id="trialbalance">
-            <thead>
+    <ng-container matColumnDef="acc_cd"  >
+      <th mat-header-cell *matHeaderCellDef ></th>
+      <td *matCellDef="let row"style="padding-top:20px;">  <b style="font-size:20px; padding-left:50%;"> <u>{{row.acc_type.acc_type}}</u></b>
+        <table > 
+          <ng-container>
+            <tr mat-cell style="height: 40px;">
+              <th mat-header-cell style="text-align:center!important;">Acc CD</th>
+              <th mat-header-cell style="text-align:left!important;">Acc Name</th> 
               
-              <tr>
-                <th></th>
-                <th colspan="2" style="text-align: center; font-weight: 700;">
-                 
-            
-                    <div>
-            
-                      <h4>{{ardbName}} ({{branchName}})</h4>
-                    </div>
-                    <h4>Run Date & Time : {{today}} </h4> <br>
-                    <h4> <u> Trial Balance as on {{this.reportcriteria.controls.fromDate.value.toDateString()| date: 'dd/MM/yyyy'}}</u></h4>
-                 
-                </th>
-                <th></th>
-              </tr>
-             
-              
-            </thead>
-            <thead>
-              <th> Code</th>
-              <th> Name</th>
-              <th class="showSum"> Debit</th>
-              <th class="showSum"> Credit</th>
-              <tr>
-                <td colspan="4" style="text-align:center;font-weight:700;"> {{element.acc_type.acc_type}} </td>
-              </tr>
-            </thead>
-            
-            
-            <tbody *ngFor="let trial of element.trailbalance; let itr=index;">
-
-              <tr >
-                <td>{{trial.acc_cd}} </td>
-                <td>{{trial.acc_name}} </td>
-                <td class="showSum">{{trial.dr| currency:'INR'}} </td>
-                <td class="showSum">{{trial.cr| currency:'INR'}} </td>
-              </tr>
-              <tr >
-                <ng-container style="font-weight: 700;" *ngIf="liAccCd == trial.acc_cd">
-      
-                  <td colspan="2" class="showSumTotal">Total: </td>
-                  <td class="showSumTotal">{{liDrSum | currency:'INR'}}</td>
-                  <td class="showSumTotal">{{liCrSum | currency:'INR'}}</td>
-      
-      
-                </ng-container>
-                <ng-container style="font-weight: 700;" *ngIf="asAccCd == trial.acc_cd">
-      
-                  <td colspan="2" class="showSumTotal">Total: </td>
-                  <td class="showSumTotal">{{asDrSum | currency:'INR'}}</td>
-                  <td class="showSumTotal">{{asCrSum | currency:'INR'}}</td>
-      
-      
-                </ng-container>
-                <ng-container style="font-weight: 700;" *ngIf=" revAccCd == trial.acc_cd">
-      
-                  <td colspan="2" class="showSumTotal">Total: </td>
-                  <td class="showSumTotal">{{revDrSum | currency:'INR'}}</td>
-                  <td class="showSumTotal">{{revCrSum | currency:'INR'}}</td>
-      
-      
-                </ng-container>
-                <ng-container style="font-weight: 700;" *ngIf="exAccCd == trial.acc_cd">
-      
-                  <td colspan="2" class="showSumTotal">Total: </td>
-                  <td class="showSumTotal">{{exDrSum | currency:'INR'}}</td>
-                  <td class="showSumTotal">{{exCrSum | currency:'INR'}}</td>
-      
-      
-                </ng-container>
-      
-                <!-- <ng-container *ngIf="i.acc_type==1 && itr==liNum-1">
-              <td colspan="3">Total: </td>
-              <td>{{liCrSum}}</td>
-              <td>{{liCrSum}}</td>
-            </ng-container> -->
-      
-              </tr>
-              <tr>
-                <ng-container style="font-weight: 700;" *ngIf="exAccCd == trial.acc_cd">
-                    <td colspan="2" class="showSumTotal">Grand total: </td>
-                    <td class="showSumTotal">{{exDrSum+liDrSum+asDrSum+revDrSum | currency:'INR'}}</td>
-                    <td class="showSumTotal">{{exCrSum+liCrSum+asCrSum+revCrSum | currency:'INR'}}</td>
-                </ng-container>
-              </tr>
-            </tbody>
-            <tfoot>
-              <tr>
-               <td>&nbsp;</td>
-               <td>&nbsp;</td>
-              </tr>
-              <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-               </tr>
-             
-            </tfoot>
-          </table>
-        </ng-container>
-      
-        
-      </td>
-            
-              </ng-container>
-        
+              <th mat-header-cell style="text-align:right!important;">Debit</th>
+              <th mat-header-cell style="text-align:right!important;">Credit</th>
+            </tr>
+                  <tbody>
+                      <tr *ngFor="let sbca of row.trailbalance">
+                        <td mat-cell style="text-align:center!important;">{{sbca.acc_cd}} </td>
+                        <td mat-cell>{{sbca.acc_name}}</td>
+                        <td mat-cell style="text-align:right!important;">{{sbca.dr|currency:'INR'}} </td>
+                        <td mat-cell style="text-align:right!important;">{{sbca.cr |currency:'INR'}} </td>
+                        
+                      </tr>
+                      <tr mat-cell *ngIf="row.acc_type.acc_type=='Liabiliy'">
+                        <td mat-cell colspan="2" style="text-align:right!important;"><b>Total Liabiliy:</b> </td>
+                        <td mat-cell  style="text-align:right!important;"><b>{{liDrSum|currency:'INR'}}</b> </td>
+                        <td mat-cell style="text-align:right!important;"><b>{{liCrSum|currency:'INR'}}</b></td>
+                      </tr>
+                      <tr mat-cell *ngIf="row.acc_type.acc_type=='Asset'">
+                        <td mat-cell colspan="2" style="text-align:right!important;"><b>Total Asset:</b> </td>
+                        <td mat-cell  style="text-align:right!important;"><b>{{asDrSum|currency:'INR'}}</b> </td>
+                        <td mat-cell style="text-align:right!important;"><b>{{asCrSum|currency:'INR'}}</b></td>
+                      </tr> 
+                      <tr mat-cell *ngIf="row.acc_type.acc_type=='Revenue'">
+                        <td mat-cell colspan="2" style="text-align:right!important;"><b>Total Revenue:</b> </td>
+                        <td mat-cell  style="text-align:right!important;"><b>{{revDrSum|currency:'INR'}}</b> </td>
+                        <td mat-cell style="text-align:right!important;"><b>{{revCrSum|currency:'INR'}}</b></td>
+                      </tr> 
+                      <tr mat-cell *ngIf="row.acc_type.acc_type=='Expanse'">
+                        <td mat-cell colspan="2" style="text-align:right!important;"><b>Total Expanse:</b> </td>
+                        <td mat-cell  style="text-align:right!important;"><b>{{exDrSum|currency:'INR'}}</b> </td>
+                        <td mat-cell style="text-align:right!important;"><b>{{exCrSum|currency:'INR'}}</b></td>
+                      </tr>
+                      <tr mat-cell *ngIf="row.acc_type.acc_type=='Expanse'">
+                        <td mat-cell colspan="2" style="text-align:right!important;"><b>Grand Total:</b> </td>
+                        <td mat-cell  style="text-align:right!important;"><b>{{liDrSum+asDrSum+revDrSum+exDrSum|currency:'INR'}}</b> </td>
+                        <td mat-cell style="text-align:right!important;"><b>{{liCrSum+asCrSum+revCrSum+exCrSum|currency:'INR'}}</b></td>
+                      </tr>
+                  </tbody>
+          </ng-container>
+        </table>
+    </td>
+    </ng-container>   
           
        
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -218,198 +155,6 @@
   </div>
   <mat-paginator [length]="resultLength" showFirstLastButtons [pageSizeOptions]="[1,2,3,resultLength]" MatPaginator></mat-paginator>
   
-    <pagination hidden style="float:right;" [totalItems]="reportData?.length" [itemsPerPage]="itemsPerPage"
-      [boundaryLinks]="true" [directionLinks]="true" [maxSize]="5" [(ngModel)]="currentPage" name="currentPage"
-      (pageChanged)="pageChanged($event)" (pageBoundsCorrection)="pageChanged($event)"></pagination>
-   
-     <table hidden class="p-3" id="trial">
-      <tr *ngIf="reportData">
-        <!-- <th></th> -->
-        <th>Account Type</th>
-        <th>Acc cd</th>
-        <th>Name</th>
-        <th style="text-align: right;">Debit</th>
-        <th style="text-align: right;">Credit</th>
-      </tr>
-      <tbody *ngFor="let i of pagedItems; let itr=index;">
-        <tr>
-
-          <ng-container>
-            <!-- <td>{{itr}}</td> -->
-            <td *ngIf="i.acc_type==1">Liability</td>
-            <td *ngIf="i.acc_type==2">Asset</td>
-            <td *ngIf="i.acc_type==3">Revenue</td>
-            <td *ngIf="i.acc_type==4">Expense</td>
-            <td>{{i.acc_cd}}</td>
-            <td>{{i.acc_name}}</td>
-            <td style="text-align: right;">{{i.dr  | currency:'INR'}}</td>
-            <td style="text-align: right;">{{i.cr  | currency:'INR'}}</td>
-
-          </ng-container>
-        </tr>
-        <tr>
-          <ng-container style="font-weight: 700;" *ngIf="i.acc_type==1 && liAccCd == i.acc_cd">
-
-            <td colspan="3" style="font-weight: 700;text-align: right;">Total: </td>
-            <td style="font-weight: 700;text-align: right;">{{liDrSum | currency:'INR'}}</td>
-            <td style="font-weight: 700;text-align: right;">{{liCrSum | currency:'INR'}}</td>
-
-
-          </ng-container>
-          <ng-container style="font-weight: 700;" *ngIf="i.acc_type==2 && asAccCd == i.acc_cd">
-
-            <td colspan="3" style="font-weight: 700;text-align: right;">Total: </td>
-            <td style="font-weight: 700;text-align: right;">{{asDrSum | currency:'INR'}}</td>
-            <td style="font-weight: 700;text-align: right;">{{asCrSum | currency:'INR'}}</td>
-
-
-          </ng-container>
-          <ng-container style="font-weight: 700;" *ngIf="i.acc_type==3 && revAccCd == i.acc_cd">
-
-            <td colspan="3" style="font-weight: 700;text-align: right;">Total: </td>
-            <td style="font-weight: 700;text-align: right;">{{revDrSum | currency:'INR'}}</td>
-            <td style="font-weight: 700;text-align: right;">{{revCrSum | currency:'INR'}}</td>
-
-
-          </ng-container>
-          <ng-container style="font-weight: 700;" *ngIf="i.acc_type==4 && exAccCd == i.acc_cd">
-
-            <td colspan="3" style="font-weight: 700;text-align: right;">Total: </td>
-            <td style="font-weight: 700;text-align: right;">{{exDrSum | currency:'INR'}}</td>
-            <td style="font-weight: 700;text-align: right;">{{exCrSum | currency:'INR'}}</td>
-
-
-          </ng-container>
-
-          <!-- <ng-container *ngIf="i.acc_type==1 && itr==liNum-1">
-        <td colspan="3">Total: </td>
-        <td>{{liCrSum}}</td>
-        <td>{{liCrSum}}</td>
-      </ng-container> -->
-
-        </tr>
-        <tr style="font-weight: 700;" *ngIf="i.acc_type==4 && exAccCd == i.acc_cd">
-          <td colspan="3">Grand total: </td>
-          <td style="text-align: right;">{{exDrSum+liDrSum+asDrSum+revDrSum | currency:'INR'}}</td>
-          <td style="text-align: right;">{{exCrSum+liCrSum+asCrSum+revCrSum | currency:'INR'}}</td>
-        </tr>
-      </tbody>
-      <!-- <tfoot>
-        <tr>
-          <td colspan="3"> <small>
-            This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions Pvt.Ltd. Kolkata
-           </small> </td>
-        </tr>
-        
-       </tfoot> -->
-    </table>
-   
-    <div hidden id="hiddenTab">
-      <div class="justify-content-center" style="text-align:center">
-        <h4>{{ardbName}} {{branchName}}</h4>
-        <h4>Run Date & Time : {{today}} </h4> <br>
-        <h4> <u> Trial Balance as on {{this.reportcriteria.controls.fromDate.value.toDateString()| date: 'dd/MM/yyyy'}}</u></h4>
-      </div>
-      <table class="p-3" id="trial1" class="mkSmall">
-      <thead>
-        <tr *ngIf="reportData">
-          <!-- <th></th> -->
-          <th>Account Type</th>
-          <th>Acc cd</th>
-          <th>Name</th>
-          <th style="text-align: right;">Debit</th>
-          <th style="text-align: right;">Credit</th>
-        </tr>
-      </thead>
-       
-        <tbody *ngFor="let i of reportData; let itr=index;">
-          <tr>
-  
-            <ng-container>
-              <!-- <td>{{itr}}</td> -->
-              <td *ngIf="i.acc_type==1">Liability</td>
-              <td *ngIf="i.acc_type==2">Asset</td>
-              <td *ngIf="i.acc_type==3">Revenue</td>
-              <td *ngIf="i.acc_type==4">Expense</td>
-              <td>{{i.acc_cd}}</td>
-              <td>{{i.acc_name}}</td>
-              <td style="text-align: right;">{{i.dr | currency:'INR'}}</td>
-              <td style="text-align: right;">{{i.cr  | number : '1.2-2'}}</td>
-  
-            </ng-container>
-          </tr>
-          <tr>
-            <ng-container style="font-weight: 700;" *ngIf="i.acc_type==1 && liAccCd == i.acc_cd">
-  
-              <td colspan="3" style="font-weight: 700;text-align: right;">Total: </td>
-              <td style="font-weight: 700;text-align: right;">{{liDrSum | number : '1.2-2'}}</td>
-              <td style="font-weight: 700;text-align: right;">{{liCrSum | number : '1.2-2'}}</td>
-  
-  
-            </ng-container>
-            <ng-container style="font-weight: 700;" *ngIf="i.acc_type==2 && asAccCd == i.acc_cd">
-  
-              <td colspan="3" style="font-weight: 700;text-align: right;">Total: </td>
-              <td style="font-weight: 700;text-align: right;">{{asDrSum | number : '1.2-2'}}</td>
-              <td style="font-weight: 700;text-align: right;">{{asCrSum | number : '1.2-2'}}</td>
-  
-  
-            </ng-container>
-            <ng-container style="font-weight: 700;" *ngIf="i.acc_type==3 && revAccCd == i.acc_cd">
-  
-              <td colspan="3" style="font-weight: 700;text-align: right;">Total: </td>
-              <td style="font-weight: 700;text-align: right;">{{revDrSum | number : '1.2-2'}}</td>
-              <td style="font-weight: 700;text-align: right;">{{revCrSum | number : '1.2-2'}}</td>
-  
-  
-            </ng-container>
-            <ng-container style="font-weight: 700;" *ngIf="i.acc_type==4 && exAccCd == i.acc_cd">
-  
-              <td colspan="3" style="font-weight: 700;text-align: right;">Total: </td>
-              <td style="font-weight: 700;text-align: right;">{{exDrSum | number : '1.2-2'}}</td>
-              <td style="font-weight: 700;text-align: right;">{{exCrSum | number : '1.2-2'}}</td>
-  
-  
-            </ng-container>
-  
-            <!-- <ng-container *ngIf="i.acc_type==1 && itr==liNum-1">
-          <td colspan="3">Total: </td>
-          <td>{{liCrSum}}</td>
-          <td>{{liCrSum}}</td>
-        </ng-container> -->
-  
-          </tr>
-          <tr style="font-weight: 700;" *ngIf="i.acc_type==4 && exAccCd == i.acc_cd">
-            <td colspan="3">Grand total: </td>
-            <td style="text-align: right;">{{exDrSum+liDrSum+asDrSum+revDrSum | number : '1.2-2'}}</td>
-            <td style="text-align: right;">{{exCrSum+liCrSum+asCrSum+revCrSum | number : '1.2-2'}}</td>
-          </tr>
-          
-        </tbody>
-        <tfoot>
-          <tr>
-           <td>&nbsp;</td>
-           <td>&nbsp;</td>
-          </tr>
-          <tr>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-           </tr>
-         
-        </tfoot>
-
-      </table>
-      <footer hidden>
-        <small>
-          This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions, Kolkata
-         </small> 
-       </footer>
-      <!-- <br><br><br><br> -->
-      <!-- <footer>This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions, Kolkata</footer> -->
-    </div>
-    <button mat-raised-button hidden id="chngPage" (click)="setPage(1)"></button>
-    
-    <!-- <iframe id="ifrmrpt" *ngIf="ReportUrl" [src]="ReportUrl" width="100%" height="700px" (load)="oniframeLoad()" allowfullscreen></iframe> -->
   </div>
 
   <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 shadow-sm mb-4 bg-white p-3">

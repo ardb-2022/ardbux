@@ -345,17 +345,20 @@ export class DdsIndividualPostingComponent implements OnInit {
       "agent_cd":this.f.agent_cd.value
     }
     this.svc.addUpdDel('Deposit/ApproveDdsImportData',dt).subscribe(data=>{console.log(data)
-      this.isLoading=false;
+      
     if(!data){
       this.HandleMessage(true, MessageType.Sucess, 'Approved successfully');
       this.isApprove=false
+      this.isLoading=false;
     }
     else{
       this.isApprove=true
       this.HandleMessage(true, MessageType.Error, 'Error while approving');
+      this.isLoading=false;
     }
     },error=>{this.HandleMessage(true, MessageType.Error, 'Error while approving')
       this.isApprove=true
+      this.isLoading=false;
    })
   }
 }

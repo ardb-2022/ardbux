@@ -53,7 +53,8 @@ export class SavingIntPostComponent implements OnInit,AfterViewInit {
   dt: any;
   fromdate: Date;
   toDate: Date;
-  counter=0
+  counter=0;
+  afterPost:boolean=false;
   suggestedCustomer: mm_customer[];
   exportAsConfig:ExportAsConfig;
   itemsPerPage = 50;
@@ -232,17 +233,20 @@ export class SavingIntPostComponent implements OnInit,AfterViewInit {
       this.response=res
        if(this.response==0){
         debugger
+        this.afterPost=true;
         this.isLoading=false
         this.showAlert2 = true
         this.alertMsg = 'Interest Posting in Savings Account Successfully';
       }
       else{
+        this.afterPost=false;
         this.showAlert = true
         this.alertMsg = 'Occurred in Interest Posting';
       }
        
        },
        err => {
+          this.afterPost=false;
           this.isLoading = false;
           this.comser.SnackBar_Error(); 
          })

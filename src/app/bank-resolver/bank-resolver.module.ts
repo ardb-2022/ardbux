@@ -175,10 +175,16 @@ import { PrintServiceService } from './loan/report/pass-book-printing/print-serv
 import { RecovBlockComponent } from './loan/report/recovery-register/recov-block/recov-block.component';
 import { InterestCertificateComponent } from './deposit/report/interest-certificate/interest-certificate.component';
 import { SmsChargeDeductionComponent } from './deposit/sms-charge-deduction/sms-charge-deduction.component';
-
+import { ConsoGLTrnsComponent } from './finance/report/conso-gltrns/conso-gltrns.component';
+import { ConsoCCTrialComponent } from './finance/report/conso-cctrial/conso-cctrial.component';
+import { InterestSubsidyComponent } from './loan/report/interest-subsidy/interest-subsidy.component';
+import { ConsoProfitLossComponent } from './finance/report/conso-profit-loss/conso-profit-loss.component';
+import { UserPermissionComponent } from './system/user-permission/user-permission.component';
+import { KeyoffDirective } from '../_utility/KeyoffDirective';
+import {MatListModule} from '@angular/material/list';
 @NgModule({
   declarations: [ 
-    AmountToWordPipe,UserLoginStatusComponent,OpenInvestComponent,
+    AmountToWordPipe,UserLoginStatusComponent,OpenInvestComponent,KeyoffDirective,
     BankResolverComponent, LoginComponent, HeaderComponent, LandingComponent, LoadingComponent,
     UTCustomerProfileComponent, UTSelfHelpComponent, DailybookComponent, CashaccountComponent,
     WebDataRocksPivot, TrialbalanceComponent, CashcumtrialComponent, GenLedgerComponent,
@@ -216,13 +222,13 @@ import { SmsChargeDeductionComponent } from './deposit/sms-charge-deduction/sms-
        RdTransComponent, CreateGLHeadComponent, DetailListFdmisConstWiseComponent, INearMaturityComponent,
        IDetailListComponent, AllGLDetailsComponent, UpdatePassbookComponent, BMLoanStatementComponent, SlabwiseDepositComponent, 
        PassBookFastPageComponent, DetaillistAllComponent, SavingIntPostComponent, AgentCommissionComponent,
-       LoanUpdatePassbookComponent,LoanPassBookFastPageComponent,LoanPassBookPrintingComponent, PrintCertificateComponent, NpaALLComponent, RecovBlockComponent, InterestCertificateComponent, SmsChargeDeductionComponent
+       LoanUpdatePassbookComponent,LoanPassBookFastPageComponent,LoanPassBookPrintingComponent, PrintCertificateComponent, NpaALLComponent, RecovBlockComponent, InterestCertificateComponent, SmsChargeDeductionComponent, ConsoGLTrnsComponent, ConsoCCTrialComponent, InterestSubsidyComponent, ConsoProfitLossComponent, UserPermissionComponent
   ],
   imports: [
     NgxPrintModule, MatTableModule, MatFormFieldModule,  MatInputModule, MatSlideToggleModule,MatButtonModule,
     CommonModule, PaginationModule, MatPaginatorModule, MatSortModule, MatMenuModule,MatIconModule,MatCardModule,
     BankResolverRouting, DragDropModule,ScrollingModule,CdkTableModule,CdkTreeModule,A11yModule,MatDialogModule,
-    ReactiveFormsModule, FormsModule, AutocompleteLibModule, MatExpansionModule, MatSelectModule,
+    ReactiveFormsModule, FormsModule, AutocompleteLibModule, MatExpansionModule, MatSelectModule,MatListModule,
     BsDatepickerModule.forRoot(), AccordionModule.forRoot(), MatSnackBarModule, MatTooltipModule,
     TypeaheadModule.forRoot(),
     ExportAsModule,HttpClientModule,

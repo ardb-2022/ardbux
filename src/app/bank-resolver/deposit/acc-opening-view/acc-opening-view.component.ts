@@ -584,10 +584,10 @@ debugger
 
   modifyData() {
 
-    if (this.operationType !== 'Q') {
-      this.HandleMessage(true, MessageType.Warning, 'Record not retrived to modify');
-      return;
-    }
+    // if (this.operationType !== 'Q') {
+    //   this.HandleMessage(true, MessageType.Warning, 'Record not retrived to modify');
+    //   return;
+    // }
     this.operationType = 'U';
     this.disableAll = false;
     if(this.userType=="A"){
@@ -850,7 +850,7 @@ debugger
       relation = relation.trim();
       this.td_accholderList[idx].cust_cd = Number(this.td_accholderList[idx].cust_cd);
       this.td_accholderList[idx].relation = relation;
-      this.td_accholderList[idx].relationId = this.relationship.filter(x => x.val.toLocaleLowerCase() === relation.toLocaleLowerCase())[0].id;
+      this.td_accholderList[idx].relationId = this.relationship.filter(x => x.val.toLocaleLowerCase() === relation.toLocaleLowerCase())[0]?.id;
       // this.td_signatoryList[idx+1].cust_cd = Number(this.td_accholderList[idx].cust_cd); 
       }
     }

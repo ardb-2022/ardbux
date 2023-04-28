@@ -100,6 +100,11 @@ export class SubCashBookComponent implements OnInit,AfterViewInit {
   onLoadScreen(content) {
     this.modalRef = this.modalService.show(content, this.config);
   }
+  // NewWindow(){
+  //   let serverIp = 'http://localhost:4200/';
+  //   window.open(serverIp+[this.sys.BankName + '/la']);
+
+  // }
   setPage(page: number) {
     this.currentPage = page;
     this.cd.detectChanges();

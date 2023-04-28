@@ -88,3 +88,9 @@ mat-icon.lo{
   position: absolute;
   margin-top: 7px;
 }
+button:disabled,
+button[disabled]{
+  border: 1px solid #ffffff;
+  background-color: #dbdbd8;
+  color: #fffefe;
+}

@@ -182,6 +182,8 @@ export class DetaillistAllComponent implements OnInit {
     var n = date.toDateString();
     var time = date.toLocaleTimeString();
     this.today= n + " "+ time
+    this.isLoading=false
+
   }
  onLoadScreen(content) {
   

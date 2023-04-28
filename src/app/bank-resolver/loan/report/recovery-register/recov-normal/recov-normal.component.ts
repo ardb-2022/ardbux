@@ -80,9 +80,11 @@ export class RecovNormalComponent implements OnInit {
   suggestedCustomer: mm_customer[];
   AcctTypes:  mm_operation[];
   filteredArray:any=[]
-  resultLength=0
+  resultLength=0;
+  LandingCall:boolean;
   constructor(private comser:CommonServiceService, private svc: RestService, private formBuilder: FormBuilder,private exportAsService: ExportAsService, private cd: ChangeDetectorRef,private modalService: BsModalService, private _domSanitizer: DomSanitizer,private router: Router) { }
   ngOnInit(): void {
+    
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.getOperationMaster()
@@ -93,12 +95,20 @@ export class RecovNormalComponent implements OnInit {
       toDate: [null, Validators.required],
       // acc_type_cd: [null, Validators.required]
     });
-    this.onLoadScreen(this.content);
+    if(this.comser.loanRec){
+      this.LandingCall=true;
+      this.SubmitReport();
+    }
+    else{
+      this.LandingCall=false;
+      this.onLoadScreen(this.content);
+    }
     var date = new Date();
     var n = date.toDateString();
     var time = date.toLocaleTimeString();
     this.today= n + " "+ time
   }
+  
   onLoadScreen(content) {
     this.notvalidate=false
     this.modalRef = this.modalService.show(content, this.config);
@@ -142,6 +152,52 @@ export class RecovNormalComponent implements OnInit {
   }
   public SubmitReport() {
     this.comser.getDay(this.reportcriteria.controls.fromDate.value,this.reportcriteria.controls.toDate.value)
+    if(this.comser.loanRec){
+          this.isLoading=true;
+          this.totovdInttSum=0;
+          this.totcurrInttSum=0;
+          this.totpenalInttSum=0;
+          this.totcurrPrnSum=0;
+          this.totovdPrnSum=0;
+          this.totadvPrnSum=0;
+          this.totPrn=0;
+          this.reportData.length=0;
+          this.pagedItems.length=0;
+      var dt={
+        "ardb_cd":this.sys.ardbCD,
+        "brn_cd":this.sys.BranchCode,
+        "from_dt":this.sys.CurrentDate.toISOString(),
+        "to_dt":this.sys.CurrentDate.toISOString(),
+        // "acc_cd":this.reportcriteria.controls.acc_type_cd.value,
+      }
+      this.svc.addUpdDel('Loan/PopulateRecoveryRegister',dt).subscribe(data=>{console.log(data)
+        this.reportData=data
+        if(this.reportData.length==0){
+          this.comser.SnackBar_Nodata()
+        } 
+          for(let i=0;i<this.reportData.length;i++){
+          this.totovdInttSum+=this.reportData[i].acctype.tot_acc_ovd_intt_recov
+          this.totcurrInttSum+=this.reportData[i].acctype.tot_acc_curr_intt_recov
+          this.totpenalInttSum+=this.reportData[i].acctype.tot_acc_penal_intt_recov
+          this.totcurrPrnSum+=this.reportData[i].acctype.tot_acc_curr_prn_recov
+          this.totovdPrnSum+=this.reportData[i].acctype.tot_acc_ovd_prn_recov
+          this.totadvPrnSum+=this.reportData[i].acctype.tot_acc_adv_prn_recov
+          this.totPrn+=this.reportData[i].acctype.tot_acc_recov
+          }
+        this.isLoading=false
+        this.dataSource.data=this.reportData
+        console.log(this.dataSource.data);
+        
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+       
+      }),
+      err => {
+         this.isLoading = false;
+         this.comser.SnackBar_Error(); 
+        }
+    }
+    else{
     if (this.reportcriteria.invalid) {
       this.showAlert = true;
       this.alertMsg = 'Invalid Input.';
@@ -226,6 +282,7 @@ export class RecovNormalComponent implements OnInit {
          this.comser.SnackBar_Error(); 
         }
    }
+  }
   }
   public oniframeLoad(): void {
     this.counter++;

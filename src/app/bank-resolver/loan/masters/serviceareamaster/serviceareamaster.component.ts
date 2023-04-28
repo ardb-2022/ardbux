@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RestService } from 'src/app/_service';
-import { LOGIN_MASTER, MessageType, ShowMessage, SystemValues } from '../../../Models';
+import { LOGIN_MASTER, MessageType, ShowMessage, SystemValues, mm_dist } from '../../../Models';
 import { m_branch } from '../../../Models/m_branch';
 
 @Component({
@@ -12,6 +12,7 @@ import { m_branch } from '../../../Models/m_branch';
 })
 export class ServiceareamasterComponent implements OnInit {
   brnDtls: m_branch[]=[];
+  districts: mm_dist[] = [];
   sys = new SystemValues();
   isLoading=false;
   servicearea: FormGroup;
@@ -48,13 +49,21 @@ export class ServiceareamasterComponent implements OnInit {
     this.isModify = false;
     this.isSave = true;
     this.isClear = true;
-    
+    this.getDistMaster();
   }
   get f() { return this.servicearea.controls; }
   
   closeScreen()
   {
     this.router.navigate([localStorage.getItem('__bName') + '/la']);
+  }
+  getDistMaster(){
+    this.svc.addUpdDel<mm_dist[]>('Mst/GetDistMaster', null).subscribe(
+      res => {
+        this.districts = res;
+      },
+      err => { }
+    );
   }
    getBlock(){
     var dt = {

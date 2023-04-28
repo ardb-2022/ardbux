@@ -29,7 +29,7 @@ export class InterestCertificateComponent implements OnInit,AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource = new MatTableDataSource()
-  displayedColumns: string[] = ['acc_type_cd','acc_num','opening_dt','prn_amt','intt_rt','mat_dt','acc_close_dt','prov_intt_amt'];
+  displayedColumns: string[] = ['acc_type_cd','acc_num','opening_dt','prn_amt','intt_rt','mat_dt','prov_intt_amt'];
   filteredArray:any=[]
   modalRef: BsModalRef;
   isOpenFromDp = false;

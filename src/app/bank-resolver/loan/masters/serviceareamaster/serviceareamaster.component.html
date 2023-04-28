@@ -33,8 +33,10 @@ style="background-color: #78c2ad21; min-height: 20vh;">
       </div>
       <div class="form-group col-2">
         <small for="blk_dist">District</small>
-        <select id="blk_dist" class="form-control form-control-sm" disabled formControlName="district">
-        <option  value="131">Birbhum</option>
+        <select id="blk_dist" class="form-control form-control-sm"  formControlName="district">
+          <option *ngIf="districts" >Choose</option>
+          <option *ngFor="let district of districts" [value]="district.dist_cd">{{district.dist_name}}</option>
+        
         </select>
       </div>
       <div class="form-group col-2">

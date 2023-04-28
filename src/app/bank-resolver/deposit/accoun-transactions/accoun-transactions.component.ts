@@ -1018,7 +1018,7 @@ getjoinholder(){
       res => {
         if(res[0].constitution_cd==101){
           this.HandleMessage(true, MessageType.Error,
-            ' Deposit and Withdrawal Operation was LOCKED!! for Account Number :' + this.f.acct_num.value  );
+            ' Deposit and Withdrawal Operation was not POSSIBLE!! for this Account Number :' + this.f.acct_num.value  );
           this.onResetClick();
           this.isLoading = false;
           return false;
@@ -3569,6 +3569,7 @@ getjoinholder(){
   // }
 
   onAmtChng(): void {
+    debugger
     this.HandleMessage(false);
     if ((+this.td.amount.value) < 0) {
       this.HandleMessage(true, MessageType.Error, 'Amount can not be negative.');
@@ -3576,7 +3577,7 @@ getjoinholder(){
       return;
     }
     const accTypeCd = +this.f.acc_type_cd.value;
-    if (accTypeCd === 1) { // check Shadow balance for saving only
+    if (accTypeCd === 1 ||accTypeCd === 7 ||accTypeCd === 8) { // check Shadow balance for saving only
       if (this.td.trans_type_key.value === 'W') {
         const tmDep = new tm_deposit();
         let shadowBalance = 0;
@@ -3592,12 +3593,13 @@ getjoinholder(){
                 this.td.amount.setValue('');
                 return;
               } else {
-                if(this.accNoEnteredForTransaction.ext_instl_tot==null||this.accNoEnteredForTransaction.ext_instl_tot==undefined||this.accNoEnteredForTransaction.ext_instl_tot==0){
+                if(this.accNoEnteredForTransaction.ext_instl_tot==null||this.accNoEnteredForTransaction.ext_instl_tot==undefined||this.accNoEnteredForTransaction.ext_instl_tot==0)
+                {
                 let minBal = 0;
                 if (this.accNoEnteredForTransaction.cheque_facility_flag === 'Y') 
                 { minBal = +this.sys.MinBalanceWithCheque; }
                 else { minBal = +this.sys.MinBalanceWithOutCheque; }
-                if (shadowBalance - (+this.td.amount.value) < minBal) {
+                if (shadowBalance - (+this.td.amount.value) < minBal && accTypeCd === 1) {
                   this.HandleMessage(true, MessageType.Error, 'Withdrawal Amount is executed your A/C minimum balance ' + minBal + '.');
                   this.td.amount.setValue('');
                   return;
@@ -3624,6 +3626,7 @@ getjoinholder(){
 
                   // }
                 }
+                debugger
               }
               else {
                 if(accTypeCd==1 && this.td.trans_type_key.value=='W'){
@@ -3651,9 +3654,12 @@ getjoinholder(){
         this.msg.sendShdowBalance((+this.td.amount.value));
       }
     } else {
+      debugger
       /** if amount is debited less than the min balance then a confirmation need to be shown */
       let minBal = 0;
-      if (this.accNoEnteredForTransaction.cheque_facility_flag === 'Y') { minBal = +this.sys.MinBalanceWithCheque; }
+      if (this.accNoEnteredForTransaction.cheque_facility_flag === 'Y') {
+         minBal = +this.sys.MinBalanceWithCheque; 
+        }
       else { minBal = +this.sys.MinBalanceWithOutCheque; }
       if (minBal > 0) {
         if ((+this.td.amount.value) < minBal) {
@@ -3696,7 +3702,7 @@ getjoinholder(){
   }
 
   onAmtChngDuringRenewal(): void {
-    //////////////debugger;
+    debugger;
     const accTypeCd = +this.f.acc_type_cd.value;
     // this.showTranferType = false;
     this.HandleMessage(false);
@@ -3956,11 +3962,11 @@ getjoinholder(){
                 tdDefTransAndTranfer.trans_type = 'D'  //marker
               }
               if (selectedOperation.oprn_desc.toLocaleLowerCase() === 'renewal' || selectedOperation.oprn_desc.toLocaleLowerCase() === 'close') {
-                const desc = this.accTransFrm.controls.acc_type_cd.value == 2 ? 'FD ' : (this.accTransFrm.controls.acc_type_cd.value === 3 ? 'DBS' : (this.accTransFrm.controls.acc_type_cd.value == 4 ? 'Cash Certificate ' : (this.accTransFrm.controls.acc_type_cd.value == 5 ? 'MIS ' : '')))
+                const desc = this.accTransFrm.controls.acc_type_cd.value == 2 ? 'FD ' : (this.accTransFrm.controls.acc_type_cd.value === 3 ? 'DBS' : (this.accTransFrm.controls.acc_type_cd.value == 4 ? 'TD' : (this.accTransFrm.controls.acc_type_cd.value == 5 ? 'MIS ' : '')))
                 console.log(this.accTransFrm.controls.acc_type_cd.value + " " + desc)
 
 
-                tdDefTransAndTranfer.particulars = 'By Transfer from ' + desc + 'A/C: ' + this.td.acc_num.value //marker
+                tdDefTransAndTranfer.particulars = 'By Trf from ' + desc + 'A/C: ' + this.td.acc_num.value //marker
               }
             } else {
               tdDefTransAndTranfer.acc_type_cd = +e.gl_acc_code;
@@ -3972,9 +3978,9 @@ getjoinholder(){
               tdDefTransAndTranfer.remarks = selectedOperation.oprn_desc.toLocaleLowerCase();
               tdDefTransAndTranfer.disb_id = ++i;
               if (selectedOperation.oprn_desc.toLocaleLowerCase() === 'renewal' || selectedOperation.oprn_desc.toLocaleLowerCase() === 'close') {
-                const desc = this.accTransFrm.controls.acc_type_cd.value == 2 ? 'FD ' : (this.accTransFrm.controls.acc_type_cd.value === 3 ? 'DBS' : (this.accTransFrm.controls.acc_type_cd.value == 4 ? 'Cash Certificate ' : (this.accTransFrm.controls.acc_type_cd.value == 5 ? 'MIS ' : '')))
+                const desc = this.accTransFrm.controls.acc_type_cd.value == 2 ? 'FD ' : (this.accTransFrm.controls.acc_type_cd.value === 3 ? 'DBS' : (this.accTransFrm.controls.acc_type_cd.value == 4 ? 'TD' : (this.accTransFrm.controls.acc_type_cd.value == 5 ? 'MIS ' : '')))
                 console.log(this.accTransFrm.controls.acc_type_cd.value + " " + desc)
-                tdDefTransAndTranfer.particulars = 'By Transfer from ' + desc + 'A/C: ' + this.td.acc_num.value //marker
+                tdDefTransAndTranfer.particulars = 'By Trf from ' + desc + 'A/C: ' + this.td.acc_num.value //marker
               }
             }
             if (selectedOperation.oprn_desc.toLocaleLowerCase() === 'rd installment') {
@@ -4079,16 +4085,16 @@ getjoinholder(){
             // debugger;  //marker 2660
             if (this.td.trf_type.value === 'T' && (this.td.trans_mode.value == 'C' || this.td.trans_mode.value == 'W') && this.editDeleteMode && (accTypeCd == 1 || accTypeCd == 8 || accTypeCd == 2 || accTypeCd == 4)) {
               const desc = this.accTransFrm.controls.acc_type_cd.value == 2 ? 'FD ' : (this.accTransFrm.controls.acc_type_cd.value === 3 ? 'DBS' : (this.accTransFrm.controls.acc_type_cd.value == 4 ? 'Cash Certificate ' : (this.accTransFrm.controls.acc_type_cd.value == 5 ? 'MIS ' : '')))
-              tdDefTransAndTranfer.particulars = 'By Transfer from ' + desc + 'A/C:' + this.td.acc_num.value
+              tdDefTransAndTranfer.particulars = 'By Trf from ' + desc + 'A/C:' + this.td.acc_num.value
             }
             else {
               if (this.editDeleteMode && accTypeCd != 2 && accTypeCd != 4 && accTypeCd != 5 && accTypeCd != 6 && accTypeCd != 11)
                 tdDefTransAndTranfer.particulars = this.td.particulars.value.split(' ')[0] === "BY" ? this.td.particulars.value.replace("BY", "TO") : this.td.particulars.value.replace("TO", "BY");
               else {
                 if ((accTypeCd == 4 || accTypeCd == 5 || accTypeCd == 6) && (this.td.trans_mode.value == 'R' || this.td.trans_mode.value == 'C')) { //marker
-                  const desc = this.accTransFrm.controls.acc_type_cd.value == 2 ? 'FD ' : (this.accTransFrm.controls.acc_type_cd.value === 3 ? 'DBS' : (this.accTransFrm.controls.acc_type_cd.value == 4 ? 'Cash Certificate ' : (this.accTransFrm.controls.acc_type_cd.value == 5 ? 'MIS ' : '')))
+                  const desc = this.accTransFrm.controls.acc_type_cd.value == 2 ? 'FD ' : (this.accTransFrm.controls.acc_type_cd.value === 3 ? 'DBS' : (this.accTransFrm.controls.acc_type_cd.value == 4 ? 'TD ' : (this.accTransFrm.controls.acc_type_cd.value == 5 ? 'MIS ' : '')))
 
-                  tdDefTransAndTranfer.particulars = 'By Transfer from ' + desc + 'A/C:' + this.td.acc_num.value
+                  tdDefTransAndTranfer.particulars = 'By Trf from ' + desc + 'A/C:' + this.td.acc_num.value
                 }
                 else
                   tdDefTransAndTranfer.particulars = this.tdDefTransFrm.controls.particulars.value
@@ -4256,8 +4262,8 @@ getjoinholder(){
               //  debugger;
             }
           } //marker
-          const desc = accTypeCd == 2 ? 'FD ' : (accTypeCd === 3 ? 'DBS' : (accTypeCd == 4 ? 'Cash Certificate ' : (accTypeCd == 5 ? 'MIS ' : (accTypeCd == 6 ? 'RD ' : (accTypeCd == 7 ? 'Share ' : (accTypeCd == 8 ? 'Flexi ' : 'DSP'))))))
-          toReturn.particulars = toReturn.trf_type == 'T' ? 'By Transfer ' + desc + ' A/C No: ' + this.td.acc_num.value : ''
+          const desc = accTypeCd == 2 ? 'FD ' : (accTypeCd === 3 ? 'DBS' : (accTypeCd == 4 ? 'TD' : (accTypeCd == 5 ? 'MIS ' : (accTypeCd == 6 ? 'RD ' : (accTypeCd == 7 ? 'Share ' : (accTypeCd == 8 ? 'Flexi ' : 'DSP'))))))
+          toReturn.particulars = toReturn.trf_type == 'T' ? 'By Trf ' + desc + ' A/C No: ' + this.td.acc_num.value : ''
           console.log(toReturn.particulars)
           toReturn.trf_type = toReturn.trf_type == null && this.tdDefTransFrm.controls.amount.value == this.accDtlsFrm.controls.mat_amt.value ? 'T' : toReturn.trf_type;
           // console.log(toReturn.trf_type)

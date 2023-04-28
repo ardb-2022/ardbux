@@ -92,6 +92,7 @@ export class LoanDisburseNormalComponent implements OnInit {
   date_msg:any;
   dummytotDisb=0
   totdisbNum=0
+  LandingCall:boolean;
   selectItems=[
    
     {
@@ -151,7 +152,13 @@ export class LoanDisburseNormalComponent implements OnInit {
       // acc_type_cd: [null, Validators.required]
 
     });
-    this.onLoadScreen(this.content);
+    if(this.comSer.loanDis){
+      this.SubmitReport()
+      this.LandingCall=this.comSer.loanDis
+    }
+    else{
+      this.onLoadScreen(this.content);
+      }
     var date = new Date();
     // get the date as a string
        var n = date.toDateString();
@@ -211,6 +218,50 @@ export class LoanDisburseNormalComponent implements OnInit {
   }
   public SubmitReport() {
     this.comser.getDay(this.reportcriteria.controls.fromDate.value,this.reportcriteria.controls.toDate.value)
+    if(this.comSer.loanDis){
+      this.reportData.length=0;
+      this.pagedItems.length=0;
+      this.isLoading=true
+      var dt={
+        "ardb_cd":this.sys.ardbCD,
+        "brn_cd":this.sys.BranchCode,
+        "from_dt":this.sys.CurrentDate.toISOString(),
+        "to_dt":this.sys.CurrentDate.toISOString(),
+        // "acc_cd":this.reportcriteria.controls.acc_type_cd.value,
+      }
+      this.isLoading=true
+      this.showAlert = false;
+      
+      this.svc.addUpdDel('Loan/PopulateLoanDisburseReg',dt).subscribe(data=>{
+        console.log(data)
+        this.reportData=data
+        if(this.reportData.length==0){
+          this.comser.SnackBar_Nodata()
+        } 
+        this.isLoading = false;
+        this.dataSource.data=this.reportData
+       
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.resultLength=this.reportData.length
+        this.totdisbNum=0
+        this.gndtotDisb=0
+        for(let i=0;i<this.reportData.length;i++){
+          
+            this.totdisbNum+=this.reportData[i].blocktype.tot__block_ovd_prn_recov
+            this.gndtotDisb+=this.reportData[i].blocktype.tot_block_curr_prn_recov
+          
+        }
+        this.reportData.forEach(e => {
+          this.dummytotDisb+=e.disb_amt
+        });
+      }),
+      err => {
+         this.isLoading = false;
+         this.comSer.SnackBar_Error(); 
+        }
+    }
+    else{
     if (this.reportcriteria.invalid) {
       this.showAlert = true;
       this.alertMsg = 'Invalid Input.';
@@ -300,6 +351,7 @@ export class LoanDisburseNormalComponent implements OnInit {
       //   this.isLoading = false;
       // }, 10000);
     }
+  }
   }
   public oniframeLoad(): void {
     this.counter++

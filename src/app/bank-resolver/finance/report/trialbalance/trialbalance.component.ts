@@ -44,7 +44,10 @@ export class TrialbalanceComponent implements OnInit {
     backdrop: true, // enable backdrop shaded color
     ignoreBackdropClick: true // disable backdrop click to close the modal
   };
-  trailbalance: tt_trial_balance[] = [];
+  trailbalance1: any[] = [];
+  trailbalance2: any[] = [];
+  trailbalance3: any[] = [];
+  trailbalance4: any[] = [];
   prp = new p_report_param();
   reportcriteria: FormGroup;
   closeResult = '';
@@ -84,10 +87,7 @@ export class TrialbalanceComponent implements OnInit {
   revAccCd: any;
   exAccCd: any;
   today:any
-  // displayedColumns: string[] = ['acc_type', 'acc_name', 'acc_cd', 'dr','cr'];
-  // displayedColumns: string[] = ['acc_name', 'acc_cd', 'dr','cr'];
   displayedColumns: string[] = ['acc_cd'];
-  displayedColumns1: string[] = ['acc_cd', 'dr','cr'];
   dataSource = new MatTableDataSource()
   // dataSource1 = new MatTableDataSource()
   resultLength=0;
@@ -95,6 +95,10 @@ export class TrialbalanceComponent implements OnInit {
               private modalService: BsModalService, private _domSanitizer: DomSanitizer,
               private router: Router,private cd: ChangeDetectorRef, private exportAsService: ExportAsService,private comser:CommonServiceService) { }
   ngOnInit(): void {
+    this.trailbalance1= [];
+  this.trailbalance2= [];
+  this.trailbalance3= [];
+  this.trailbalance4= [];
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     // this.fromdate = this.sys.CurrentDate;
@@ -165,11 +169,11 @@ export class TrialbalanceComponent implements OnInit {
         this.svc.addUpdDel('Finance/PopulateTrialGroupwise',dt).subscribe(data=>{
         console.log(data)
         this.reportData=data
-        for(let i=0;i<4;i++){
-          for(let j=0;j<this.reportData[i].trailbalance.length;j++){
-            console.log(this.reportData[i].trailbalance[j].acc_cd)
-          }
-        }
+        this.trailbalance1=this.reportData[0].trailbalance
+        this.trailbalance2=this.reportData[1].trailbalance
+        this.trailbalance3=this.reportData[2].trailbalance
+        this.trailbalance4=this.reportData[3].trailbalance
+        
         if(this.reportData.length==0){
           this.comser.SnackBar_Nodata()
         }
@@ -183,40 +187,53 @@ export class TrialbalanceComponent implements OnInit {
           return data.acc_type.toLowerCase().includes(filter)
         };
        
-      // this.reportData.forEach(r=>{
-      //   r.trailblance.forEach(e=>{
-      //     switch(e.acc_cd.charAt[0]){
-      //       case "1": this.liNum++; this.liCrSum+=e.cr; this.liDrSum+=e.dr; break;
-      //       case "2": this.asNum++; this.asCrSum+=e.cr; this.asDrSum+=e.dr;break;
-      //       case "3": this.revNum++; this.revCrSum+=e.cr; this.revDrSum+=e.dr; break;
-      //       case "4": this.exNum++;  this.exCrSum+=e.cr; this.exDrSum+=e.dr; break;
-      //     }
-      //   })
-      // })
-        for(let i=0;i<this.reportData.length;i++){
-          for(let j=0;j<this.reportData[i].trailbalance.length;j++){
-            switch(i){
-              case 0: this.liNum++; this.liCrSum+=this.reportData[i].trailbalance[j].cr; this.liDrSum+=this.reportData[i].trailbalance[j].dr; break;
-            case 1: this.asNum++; this.asCrSum+=this.reportData[i].trailbalance[j].cr; this.asDrSum+=this.reportData[i].trailbalance[j].dr;break;
-            case 2: this.revNum++; this.revCrSum+=this.reportData[i].trailbalance[j].cr; this.revDrSum+=this.reportData[i].trailbalance[j].dr; break;
-            case 3: this.exNum++;  this.exCrSum+=this.reportData[i].trailbalance[j].cr; this.exDrSum+=this.reportData[i].trailbalance[j].dr; break;
-            }
-          }
-        }
-        this.liAccCd=this.reportData[0].trailbalance[this.reportData[0].trailbalance.length - 1].acc_cd
-        this.asAccCd=this.reportData[1].trailbalance[this.reportData[1].trailbalance.length - 1].acc_cd
-        this.revAccCd=this.reportData[2].trailbalance[this.reportData[2].trailbalance.length- 1].acc_cd
-        this.exAccCd=this.reportData[3].trailbalance[this.reportData[3].trailbalance.length - 1].acc_cd
+        this.trailbalance1.forEach(e=>{
+          this.liCrSum+=e.cr; this.liDrSum+=e.dr;
+        })
+         this.trailbalance2.forEach(e=>{
+          this.asCrSum+=e.cr; this.asDrSum+=e.dr;
+        })
+         this.trailbalance3.forEach(e=>{
+          this.revCrSum+=e.cr; this.revDrSum+=e.dr;
+        })
+         this.trailbalance4.forEach(e=>{
+         this.exCrSum+=e.cr; this.exDrSum+=e.dr;
+         })
         
-        console.log(this.liAccCd,this.asAccCd,this.revAccCd,this.exAccCd)
-        console.log(this.liNum+" "+this.asNum+" "+this.revNum+" "+this.exNum)
+        // this.reportData.forEach(r=>{
+        //   r.trailblance.forEach(e=>{
+        //     switch(e.acc_cd.charAt[0]){
+        //       case "1": this.liNum++; this.liCrSum+=e.cr; this.liDrSum+=e.dr; break;
+        //       case "2": this.asNum++; this.asCrSum+=e.cr; this.asDrSum+=e.dr;break;
+        //       case "3": this.revNum++; this.revCrSum+=e.cr; this.revDrSum+=e.dr; break;
+        //       case "4": this.exNum++;  this.exCrSum+=e.cr; this.exDrSum+=e.dr; break;
+        //     }
+        //   })
+        // })
+        // for(let i=0;i<this.reportData.length;i++){
+        //   for(let j=0;j<this.reportData[i].trailbalance.length;j++){
+        //     switch(i){
+        //       case 0: this.liNum++; this.liCrSum+=this.reportData[i].trailbalance[j]?.cr; this.liDrSum+=this.reportData[i].trailbalance[j]?.dr; break;
+        //     case 1: this.asNum++; this.asCrSum+=this.reportData[i].trailbalance[j]?.cr; this.asDrSum+=this.reportData[i].trailbalance[j]?.dr;break;
+        //     case 2: this.revNum++; this.revCrSum+=this.reportData[i].trailbalance[j]?.cr; this.revDrSum+=this.reportData[i].trailbalance[j]?.dr; break;
+        //     case 3: this.exNum++;  this.exCrSum+=this.reportData[i].trailbalance[j]?.cr; this.exDrSum+=this.reportData[i].trailbalance[j]?.dr; break;
+        //     }
+        //   }
+        // }
+        // this.liAccCd=this.reportData[0].trailbalance[this.reportData[0].trailbalance?.length - 1]?.acc_cd
+        // this.asAccCd=this.reportData[1].trailbalance[this.reportData[1].trailbalance?.length - 1]?.acc_cd
+        // this.revAccCd=this.reportData[2].trailbalance[this.reportData[2].trailbalance?.length- 1]?.acc_cd
+        // this.exAccCd=this.reportData[3].trailbalance[this.reportData[3].trailbalance?.length - 1]?.acc_cd
+        
+        // console.log(this.liAccCd,this.asAccCd,this.revAccCd,this.exAccCd)
+        // console.log(this.liNum+" "+this.asNum+" "+this.revNum+" "+this.exNum)
         // debugger
       this.isLoading = false;
       this.modalRef.hide();
-      this.pageChange=document.getElementById('chngPage');
-      this.pageChange.click()
-      this.setPage(2);
-      this.setPage(1)
+      // this.pageChange=document.getElementById('chngPage');
+      // this.pageChange.click()
+      // this.setPage(2);
+      // this.setPage(1)
        
 
       }
@@ -239,213 +256,48 @@ export class TrialbalanceComponent implements OnInit {
     }
   }
 
-  public oniframeLoad(): void {
-    this.counter++;
-    if(this.counter==2){
-      this.isLoading = false;
-      this.counter=0
-    }
-    else{
-      this.isLoading=true;
-    }
-    this.modalRef.hide();
-   
-  }
+ 
 
   public closeAlert() {
     this.showAlert = false;
   }
   // private pdfmake : pdfMake;
-  onPivotReady(TrialBalance: WebDataRocksPivot): void {
-    console.log('[ready] WebDataRocksPivot', this.child);
-  }
-  onReportComplete(): void {
-    if (!this.isLoading) { return; }
-    this.prp.brn_cd = this.sys.BranchCode;
-    this.prp.trial_dt = this.fromdate;
-    this.prp.pl_acc_cd = parseInt(localStorage.getItem('__cashaccountCD'));
-    this.prp.gp_acc_cd = parseInt(localStorage.getItem('__cashaccountCD'));
-    const fdate = new Date(this.fromdate);
-    const tdate = new Date(this.todate);
-    this.fd = (('0' + fdate.getDate()).slice(-2)) + '/' + (('0' + (fdate.getMonth() + 1)).slice(-2)) + '/' + (fdate.getFullYear());
-    this.td = (('0' + tdate.getDate()).slice(-2)) + '/' + (('0' + (tdate.getMonth() + 1)).slice(-2)) + '/' + (tdate.getFullYear());
-    this.dt = new Date();
-    this.dt = (('0' + this.dt.getDate()).slice(-2)) + '/' + (('0' + (this.dt.getMonth() + 1)).slice(-2)) + '/' + (this.dt.getFullYear()) + ' ' + this.dt.getHours() + ':' + this.dt.getMinutes();
-    this.child.webDataRocks.off('reportcomplete');
-    this.svc.addUpdDel<any>('Report/PopulateTrialBalance', this.prp).subscribe(
-      (data: tt_trial_balance[]) => this.trailbalance = data,
-      error => { console.log(error); },
-      () => {
+  // onPivotReady(TrialBalance: WebDataRocksPivot): void {
+  //   console.log('[ready] WebDataRocksPivot', this.child);
+  // }
+ 
+ 
 
-        // this.showReport = true;
-        // this.generatePdf();
-        const totalCr = 0;
-        const totalDr = 0;
-        this.isLoading = false;
-        this.child.webDataRocks.setReport({
-          dataSource: {
-            data: this.trailbalance
-          },
-          tableSizes: {
-            columns: [
-              {
-                idx: 0,
-                width: 75
-              },
-              {
-                idx: 1,
-                width: 400
-              },
-              {
-                idx: 2,
-                width: 100
-              },
-              {
-                idx: 3,
-                width: 100
-              }
-            ]
-          },
-          options: {
-            grid: {
-              type: 'flat',
-              showTotals: 'off',
-              showGrandTotals: 'off'
-            }
-          },
-          slice: {
-            rows: [
-              {
-                uniqueName: 'acc_cd',
-                caption: 'Account Code',
-                sort: 'unsorted'
-
-              },
-              {
-                uniqueName: 'acc_name',
-                caption: 'Account Name',
-                sort: 'unsorted'
-              },
-              {
-                uniqueName: 'dr',
-                caption: 'Debit',
-                sort: 'unsorted'
-              },
-              {
-                uniqueName: 'cr',
-                caption: 'Credit',
-                sort: 'unsorted'
-              }
-            ],
-            measures: [
-              {
-                uniqueName: 'acc_cd',
-                format: 'decimal0'
-              }],
-            flatOrder: [
-              'Debit',
-              'Dr Description',
-              'Dr Amount',
-              'Credit',
-              'Cr Description',
-              'Cr Amount',
-            ]
-          },
-
-          formats: [{
-            name: '',
-            thousandsSeparator: ',',
-            decimalSeparator: '.',
-            decimalPlaces: 2,
-            maxSymbols: 20,
-            currencySymbol: '',
-            currencySymbolAlign: 'left',
-            nullValue: ' ',
-            infinityValue: 'Infinity',
-            divideByZeroValue: 'Infinity'
-          },
-          {
-            name: 'decimal0',
-            decimalPlaces: 0,
-            thousandsSeparator: '',
-            textAlign: 'left'
-          }
-          ]
-        });
-        this.modalRef.hide();
-      }
-    );
-  }
-  setOption(option, value) {
-    this.child.webDataRocks.setOptions({
-      grid: {
-        [option]: value
-      }
-    });
-
-    this.child.webDataRocks.refresh();
-  }
-
-  exportPDFTitle() {
-    const options = this.child.webDataRocks.getOptions();
-    this.child.webDataRocks.setOptions({
-      grid: {
-        title: 'Trial Balance as on ' + this.fd
-      }
-    }
-    );
-    this.child.webDataRocks.refresh();
-    this.child.webDataRocks.exportTo('pdf', { pageOrientation: 'potrait', header: '<div>##CURRENT-DATE##&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Synergic Banking&emsp;&emsp;&emsp;Branch : ' + localStorage.getItem('__brnName') + '<br>&nbsp</div>', filename: 'TrialBalance' });
-    this.child.webDataRocks.on('exportcomplete', function() {
-      this.child.webDataRocks.off('exportcomplete');
-      this.child.webDataRocks.setOptions(options);
-      this.child.webDataRocks.refresh();
-    });
-  }
+  // exportPDFTitle() {
+  //   const options = this.child.webDataRocks.getOptions();
+  //   this.child.webDataRocks.setOptions({
+  //     grid: {
+  //       title: 'Trial Balance as on ' + this.fd
+  //     }
+  //   }
+  //   );
+  //   this.child.webDataRocks.refresh();
+  //   this.child.webDataRocks.exportTo('pdf', { pageOrientation: 'potrait', header: '<div>##CURRENT-DATE##&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Synergic Banking&emsp;&emsp;&emsp;Branch : ' + localStorage.getItem('__brnName') + '<br>&nbsp</div>', filename: 'TrialBalance' });
+  //   this.child.webDataRocks.on('exportcomplete', function() {
+  //     this.child.webDataRocks.off('exportcomplete');
+  //     this.child.webDataRocks.setOptions(options);
+  //     this.child.webDataRocks.refresh();
+  //   });
+  // }
   closeScreen() {
     this.router.navigate([localStorage.getItem('__bName') + '/la']);
   }
-  pageChanged(event: PageChangedEvent): void {
-    const startItem = (event.page - 1) * event.itemsPerPage;
-    const endItem = event.page * event.itemsPerPage;
-    this.pagedItems = this.reportData.slice(startItem, endItem); //Retrieve items for page
-    this.cd.detectChanges();
-  }
-  downloadexcel(){
-    this.exportAsConfig = {
-      type: 'pdf',
-      // elementId: 'hiddenTab', 
-      elementIdOrContent:'hiddenTab'
-    }
-    this.exportAsService.save(this.exportAsConfig, 'trialbalance').subscribe(() => {
-      // save started
-      console.log("hello")
-    });
-  }
-  applyFilter(event: Event) {
-    // console.log(event)
-    // const filterValue = (event.target as HTMLInputElement).value;
-   
-    // this.dataSource.filter = filterValue.trim().toLowerCase();
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-      var input, filter, table, tr, td, i, txtValue;
-
-  input = document.getElementById("myInput");
-  filter = input.value.toUpperCase();
-  table = document.getElementById("trialbalance");
-  tr = table.getElementsByTagName("tr");
-  for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[0];
-    if (td) {
-      txtValue = td.textContent || td.innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
-      }
-    }       
-  }
-    }
-  }
+  
+  // downloadexcel(){
+  //   this.exportAsConfig = {
+  //     type: 'pdf',
+  //     // elementId: 'hiddenTab', 
+  //     elementIdOrContent:'hiddenTab'
+  //   }
+  //   this.exportAsService.save(this.exportAsConfig, 'trialbalance').subscribe(() => {
+  //     // save started
+  //     console.log("hello")
+  //   });
+  // }
+  
 }

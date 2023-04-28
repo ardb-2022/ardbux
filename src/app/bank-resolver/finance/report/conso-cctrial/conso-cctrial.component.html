@@ -1,0 +1,308 @@
+<ng-template #content let-modal data-keyboard="false" data-backdrop="false">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Report Criteria</h4>
+      <button  type="button" class="close text-danger" aria-label="Close" data-dismiss="modal" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div *ngIf="showAlert" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Error! </strong> {{alertMsg}}
+        <button  type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="closeAlert()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+  
+      <form [formGroup]="reportcriteria">
+        <div class="form-row">
+          <div class="form-group col-6">
+            <label for="fromDate">From Date</label>
+            <div class="input-group">
+              <!-- <input id="fromDate" class="form-control" placeholder="yyyy-mm-dd" name="fd" [ngModel]="fromdate  | date:'yyyy-dd-MM' " formControlName="fromDate" id="fd" type="date" > -->
+              <input type="text" placeholder="dd/mm/yyyy" class="form-control" [ngModel]="fromdate" disabled bsDatepicker
+                formControlName="fromDate"
+                [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }" [isOpen]="isOpenFromDp">
+              <div class="input-group-append">
+                <button mat-raised-button class="btn btn-outline-secondary" type="button" (click)="isOpenFromDp = !isOpenFromDp">
+                  <i class="fa fa-calendar" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="form-group col-6">
+            <label for="toDate">To Date</label>
+            <div class="input-group">
+              <!-- <input id="toDate" class="form-control" placeholder="yyyy-mm-dd" name="td" [ngModel]="todate  | date:'yyyy-dd-MM' " formControlName="toDate" id="td" type="date"> -->
+              <input type="text" placeholder="dd/mm/yyyy" class="form-control" [ngModel]="todate" disabled bsDatepicker
+                formControlName="toDate" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }"
+                [isOpen]="isOpenToDp">
+              <div class="input-group-append">
+                <button mat-raised-button class="btn btn-outline-secondary" type="button" (click)="isOpenToDp = !isOpenToDp">
+                  <i class="fa fa-calendar" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer clearfix">
+      <button mat-raised-button class="btn btn-primary" (click)="SubmitReport()">Submit</button> &nbsp;
+      <button mat-raised-button class="btn btn-light" (click)="modalRef.hide()">Close</button>
+    </div>
+  </ng-template>
+  
+  <div class="row d-flex justify-content-center align-items-center pt-4"
+    style="background-color: #78c2ad21; min-height: 20vh;">
+  
+    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 shadow-sm mb-4 bg-white p-3">
+      <div>
+        <!-- <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1"  (click)="exportPDFTitle()">Download PDF</button> -->
+        <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="closeScreen()">Close</button>
+        <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="exportAsPDF()">Export as PDF</button>
+        <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" [useExistingCss]="true"
+          printSectionId="mattable" ngxPrint>Print</button>
+        <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
+  
+      </div>
+    </div>
+    <!-- <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 shadow-lg mb-4 bg-white p-3"> -->
+    <div class="col-xs-12 col-sm-12 shadow-lg mb-4 bg-white p-3 mkScroll">
+      
+  
+      <mat-form-field appearance="outline">
+        <mat-label>Search Cash Cum Trial</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Ex. abc/123" #input>
+      </mat-form-field>
+      <div class="mat-elevation-z8" class="row" id="mattable">
+        <div class="col-12">
+        <div class="justify-content-center" style="text-align:center">
+          <br><h4>{{ardbName}} ({{branchName}})</h4>
+          
+          <h4>Run Date & Time : {{today}} </h4>
+          <h4> <u>Consolidated Cash Cum Trial from {{fromdate.toDateString()| date: 'dd/MM/yyyy'}} to  {{todate.toDateString()| date: 'dd/MM/yyyy'}} </u></h4>
+       </div>
+      </div>
+      <div class="col-6">
+        <table mat-table [dataSource]="dataSource1" matSort>
+      
+            <!-- ID Column -->
+            <ng-container matColumnDef="acc_cd">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Acc CD </th>
+              <td mat-cell *matCellDef="let row"> {{row.acc_cd}} </td>
+            </ng-container>
+        
+            <!-- Progress Column -->
+            <ng-container matColumnDef="acc_name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Account Name </th>
+              <td mat-cell *matCellDef="let row"> {{row.acc_name}} </td>
+            </ng-container>
+        
+            <!-- Name Column -->
+            <ng-container matColumnDef="opng_dr">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: rigth;"> Opening Credit	 </th>
+              <td mat-cell *matCellDef="let row"> {{row.opng_dr| currency:"INR"}} </td>
+            </ng-container>
+        
+        
+            <!-- Fruit Column -->
+            <ng-container matColumnDef="dr">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: rigth;"> Dr During Period	 </th>
+              <td mat-cell *matCellDef="let row"> {{row.dr| currency:"INR"}} </td>
+            </ng-container>
+            <!-- Fruit Column -->
+            <ng-container matColumnDef="cr">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: rigth;"> Cr During Period	 </th>
+              <td mat-cell *matCellDef="let row"> {{row.cr| currency:"INR"}} </td>
+            </ng-container>
+            <!-- Fruit Column -->
+            <ng-container matColumnDef="clos_dr">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: rigth;"> Closing Credit	 </th>
+              <td mat-cell *matCellDef="let row"> {{row.clos_dr| currency:"INR"}} </td>
+            </ng-container>
+            
+            <!-- Header column -->
+          <!-- <ng-container matColumnDef="Header">
+            <th mat-header-cell *matHeaderCellDef colspan="12">
+              <div class="justify-content-center" style="text-align:center">
+                <br><h4>{{ardbName}} ({{branchName}})</h4>
+                
+                <h4>Run Date & Time : {{today}} </h4>
+                <h4> <u>Consolidated Cash Cum Trial from {{fromdate.toDateString()| date: 'dd/MM/yyyy'}} to  {{todate.toDateString()| date: 'dd/MM/yyyy'}} </u></h4>
+             </div>
+            </th>
+          </ng-container> -->
+            <!-- Footer column -->
+          <ng-container matColumnDef="Total">
+            <td mat-footer-cell *matFooterCellDef colspan="2" >
+              <b>Total</b>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="Opening_Debit">
+            <td mat-footer-cell *matFooterCellDef colspan="" >
+              <b>{{opdrSum1 | currency:"INR"}}</b>
+            </td>
+           </ng-container>
+           
+          <ng-container matColumnDef="Dr_During_Period">
+            <td mat-footer-cell *matFooterCellDef colspan="" >
+              <b>{{drSum1 | currency:"INR"}}</b>
+            </td>
+           </ng-container>
+           <ng-container matColumnDef="Cr_During_Period">
+            <td mat-footer-cell *matFooterCellDef colspan="" >
+             <b>{{crSum1 | currency:"INR"}}</b>
+            </td>
+           </ng-container>
+          
+          <ng-container matColumnDef="Closing_Debit">
+            <td mat-footer-cell *matFooterCellDef colspan="" >
+              <b>{{clsdrSum1 | currency:"INR"}}</b>
+            </td>
+           </ng-container>
+           
+    
+            <!-- <tr mat-header-row *matHeaderRowDef="['Header']"
+              class="example-second-header-row">
+            </tr> -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr mat-footer-row *matFooterRowDef="['Total','Opening_Debit', 'Dr_During_Period','Cr_During_Period','Closing_Debit']" class="example-second-footer-row"></tr>
+            <!-- <tr mat-footer-row *matFooterRowDef="['blankSpace']" class="example-second-footer-row"></tr> -->
+            <!-- Row shown when there is no matching data. -->
+            
+            
+          </table>
+      </div>
+      
+        
+        <div class="col-6">
+        <table mat-table [dataSource]="dataSource2" matSort>
+      
+            <!-- ID Column -->
+            <ng-container matColumnDef="acc_cd">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Acc CD </th>
+              <td mat-cell *matCellDef="let row"> {{row.acc_cd}} </td>
+            </ng-container>
+        
+            <!-- Progress Column -->
+            <ng-container matColumnDef="acc_name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Account Name </th>
+              <td mat-cell *matCellDef="let row"> {{row.acc_name}} </td>
+            </ng-container>
+        
+            <!-- Name Column -->
+            <ng-container matColumnDef="opng_dr">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: rigth;"> Opening Debit	 </th>
+              <td mat-cell *matCellDef="let row"> {{row.opng_dr| currency:"INR"}} </td>
+            </ng-container>
+        
+        
+            <!-- Fruit Column -->
+            <ng-container matColumnDef="dr">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: rigth;"> Dr During Period	 </th>
+              <td mat-cell *matCellDef="let row"> {{row.dr| currency:"INR"}} </td>
+            </ng-container>
+            <!-- Fruit Column -->
+            <ng-container matColumnDef="cr">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: rigth;"> Cr During Period	 </th>
+              <td mat-cell *matCellDef="let row"> {{row.cr| currency:"INR"}} </td>
+            </ng-container>
+            <!-- Fruit Column -->
+            <ng-container matColumnDef="clos_dr">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: rigth;"> Closing Debit	 </th>
+              <td mat-cell *matCellDef="let row"> {{row.clos_dr| currency:"INR"}} </td>
+            </ng-container>
+            
+            <!-- Header column -->
+          <!-- <ng-container matColumnDef="Header">
+            <th mat-header-cell *matHeaderCellDef colspan="12">
+              <div class="justify-content-center" style="text-align:center">
+                <br><h4>{{ardbName}} ({{branchName}})</h4>
+                
+                <h4>Run Date & Time : {{today}} </h4>
+                <h4> <u>Consolidated Cash Cum Trial from {{fromdate.toDateString()| date: 'dd/MM/yyyy'}} to  {{todate.toDateString()| date: 'dd/MM/yyyy'}} </u></h4>
+             </div>
+            </th>
+          </ng-container> -->
+            <!-- Footer column -->
+          <ng-container matColumnDef="Total">
+            <td mat-footer-cell *matFooterCellDef colspan="2" >
+              <b>Total</b>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="Opening_Debit">
+            <td mat-footer-cell *matFooterCellDef colspan="" >
+              <b>{{opdrSum2 | currency:"INR"}}</b>
+            </td>
+           </ng-container>
+           
+          <ng-container matColumnDef="Dr_During_Period">
+            <td mat-footer-cell *matFooterCellDef colspan="" >
+              <b>{{drSum2 | currency:"INR"}}</b>
+            </td>
+           </ng-container>
+           <ng-container matColumnDef="Cr_During_Period">
+            <td mat-footer-cell *matFooterCellDef colspan="" >
+             <b>{{crSum2 | currency:"INR"}}</b>
+            </td>
+           </ng-container>
+          
+          <ng-container matColumnDef="Closing_Debit">
+            <td mat-footer-cell *matFooterCellDef colspan="" >
+              <b>{{clsdrSum2| currency:"INR"}}</b>
+            </td>
+           </ng-container>
+           
+    
+            <!-- <tr mat-header-row *matHeaderRowDef="['Header']"
+              class="example-second-header-row">
+            </tr> -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr mat-footer-row *matFooterRowDef="['Total','Opening_Debit', 'Dr_During_Period','Cr_During_Period','Closing_Debit']" class="example-second-footer-row"></tr>
+            <!-- <tr mat-footer-row *matFooterRowDef="['blankSpace']" class="example-second-footer-row"></tr> -->
+            <!-- Row shown when there is no matching data. -->
+            
+            
+          </table>
+          </div>
+        <footer>
+          <small>
+            This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions Pvt.Ltd. Kolkata
+           </small> 
+          </footer>
+      </div>
+      <!-- <mat-paginator showFirstLastButtons [pageSizeOptions]="[5, 10, 25, 100, this.reportData.length]" aria-label="Select page of users"></mat-paginator> -->
+  
+      <!-- <pagination style="float:right;" [totalItems]="reportData?.length" [itemsPerPage]="itemsPerPage"
+        [boundaryLinks]="true" [directionLinks]="true" [maxSize]="5" [(ngModel)]="currentPage" name="currentPage"
+        (pageChanged)="pageChanged($event)" (pageBoundsCorrection)="pageChanged($event)"></pagination> -->
+      
+      
+    </div>
+    <!-- <div  class="col-xs-12 col-sm-12 col-md-8 col-lg-8 shadow-lg mb-4 bg-white p-3">
+       <div style="text-align: center;"><strong> Synergic Banking </strong>  </div>
+       <div style="text-align: center;"><b> Branch: Main Branch</b></div>
+       <div style="text-align: center;"><b> Branch Code: 101</b></div>
+       <div style="text-align: center;"><b> Run Date: {{dt}}</b></div>
+  <wbr-pivot #CashCumTrial [toolbar]="false"
+            [width]="'100%'"
+            [height]="500"
+            (ready)="onPivotReady($event)"
+            (reportcomplete)="onReportComplete()">
+  </wbr-pivot>
+  </div> -->
+    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 shadow-sm mb-4 bg-white p-3">
+      <div>
+        <!-- <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1"  (click)="exportPDFTitle()">Download PDF</button> -->
+        <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="closeScreen()">Close</button>
+        <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="exportAsPDF()">Export as PDF</button>
+        <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" [useExistingCss]="true"
+          printSectionId="mattable" ngxPrint>Print</button>
+        <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
+  
+      </div>
+    </div>
+  </div>
+  <loading *ngIf="isLoading"></loading>

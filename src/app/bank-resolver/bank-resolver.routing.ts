@@ -130,6 +130,11 @@ import { NpaALLComponent } from './loan/report/npa-all/npa-all.component';
 import { RecovBlockComponent } from './loan/report/recovery-register/recov-block/recov-block.component';
 import { InterestCertificateComponent } from './deposit/report/interest-certificate/interest-certificate.component';
 import { SmsChargeDeductionComponent } from './deposit/sms-charge-deduction/sms-charge-deduction.component';
+import { ConsoGLTrnsComponent } from './finance/report/conso-gltrns/conso-gltrns.component';
+import { ConsoCCTrialComponent } from './finance/report/conso-cctrial/conso-cctrial.component';
+import { InterestSubsidyComponent } from './loan/report/interest-subsidy/interest-subsidy.component';
+import { ConsoProfitLossComponent } from './finance/report/conso-profit-loss/conso-profit-loss.component';
+import { UserPermissionComponent } from './system/user-permission/user-permission.component';
 const routes: Routes = [
   { path: 'Admin', component: AdminPanelComponent },
   { path: 'admin', component: AdminPanelComponent },
@@ -171,6 +176,7 @@ const routes: Routes = [
       { path: 'FR_CdCashAccount', component: ConsolidatedCashAccComponent, canActivate: [AuthGuard] },
       { path: 'FR_CdTrialBalance', component: ConsolidatedTrialBalanceComponent, canActivate: [AuthGuard] },
       { path: 'FR_CdCashCumTrial', component: ConsolidatedCashCumTrialComponent, canActivate: [AuthGuard] },
+      { path: 'FR_CdCCTrial', component: ConsoCCTrialComponent, canActivate: [AuthGuard] },
       { path: 'FR_CashCumTrial', component: CashcumtrialComponent, canActivate: [AuthGuard] },
       { path: 'FR_TrialBalance', component: TrialbalanceComponent, canActivate: [AuthGuard] },
       { path: 'FR_GeneralLadger', component: GenLedgerComponent, canActivate: [AuthGuard] },
@@ -179,6 +185,7 @@ const routes: Routes = [
 
       
       { path: 'FR_GLTD', component: GenLedger2Component, canActivate: [AuthGuard] },
+      { path: 'FR_CdGlTrns', component: ConsoGLTrnsComponent, canActivate: [AuthGuard] },
       { path: 'DT_ApproveTran', component: TransactionapprovalComponent, canActivate: [AuthGuard] },
       { path: 'DT_AccTrans', component: AccounTransactionsComponent, canActivate: [AuthGuard] },
       { path: 'DT_OpenAcc', component: AccOpeningComponent, canActivate: [AuthGuard] },
@@ -186,7 +193,8 @@ const routes: Routes = [
       { path: 'DA_DayCmpl', component: DaycomplitionComponent, canActivate: [AuthGuard] },
       { path: 'UM_AddUsr', component: AdduserComponent, canActivate: [AuthGuard] },
       { path: 'UM_UpLogStatus', component: UserLoginStatusComponent, canActivate: [AuthGuard] },
-
+      { path: 'UM_UPermission', component: UserPermissionComponent, canActivate: [AuthGuard] },
+      
       { path: 'LT_OpenLoanAcc', component: OpenLoanAccountComponent, canActivate: [AuthGuard] },
       { path: 'LT_LoanTrans', component: LoanaccountTransactionComponent, canActivate: [AuthGuard] },
       { path: 'LT_CalcIntt', component: LoanAccwiseinttcalcComponent, canActivate: [AuthGuard] },
@@ -226,6 +234,8 @@ const routes: Routes = [
       { path: 'Service_Area', component: ServiceareamasterComponent, canActivate: [AuthGuard] },
       { path: 'LM_Villentry', component: VillageMasterComponent, canActivate: [AuthGuard] },
       { path: 'LR_NPA', component: NpaComponent, canActivate: [AuthGuard] },
+      { path: 'LR_Int_Subsidy', component: InterestSubsidyComponent, canActivate: [AuthGuard] },
+
       { path: 'LR_NPA_ALL', component: NpaALLComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecReg', component: RecoveryRegisterComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecRegFund', component: RecovFundComponent, canActivate: [AuthGuard] },
@@ -273,6 +283,7 @@ const routes: Routes = [
       { path: 'LR_OverdueNotice', component: OverdueNoticeComponent, canActivate: [AuthGuard] },
       { path: 'LR_OverdueTransfer', component: OverdueTransferComponent, canActivate: [AuthGuard] },
       { path: 'FR_ProfitLoss', component: ProfitLossAccComponent, canActivate: [AuthGuard] },
+      { path: 'FR_ConsoProfitLoss', component: ConsoProfitLossComponent, canActivate: [AuthGuard] },
       { path: 'FR_Trading', component: TradingAccComponent, canActivate: [AuthGuard] },
       { path: 'FR_WeeklyReturn', component: WeeklyReturnComponent, canActivate: [AuthGuard] },
       { path: 'I_BankEntry', component: BankEntryComponent, canActivate: [AuthGuard] },

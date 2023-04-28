@@ -60,7 +60,7 @@
         <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="CalIntt()" >Calculate Interest</button>
         <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="closeScreen()" >Back</button>
         <!-- <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="Delete()" >Delete</button> -->
-        <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="PostIntt()" >Post Interest</button>
+        <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" [disabled]="afterPost" (click)="PostIntt()" >Post Interest</button>
         <button mat-raised-button type="button" 
         class="btn btn-rounded btn-primary m-1" 
         [useExistingCss]="true"
@@ -166,7 +166,7 @@
     <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="CalIntt()" >Calculate Interest</button>
    <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="closeScreen()" >Back</button>
    <!-- <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="Delete()" >Delete</button> -->
-   <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="PostIntt()" >Post Interest</button>
+   <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" [disabled]="afterPost" (click)="PostIntt()" >Post Interest</button>
    <button mat-raised-button type="button" 
    class="btn btn-rounded btn-primary m-1" 
    [useExistingCss]="true"

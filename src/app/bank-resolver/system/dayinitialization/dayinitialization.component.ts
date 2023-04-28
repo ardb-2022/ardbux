@@ -30,7 +30,8 @@ export class DayinitializationComponent implements OnInit {
   // fromdate: Date;
   isOpenFromDp = false;
   bankName: string;
-  diff:any
+  brnDtls: any = [];
+  diff:any;
   alertMsg = '';
   closeResult='';
   showAlert = false;
@@ -45,6 +46,7 @@ export class DayinitializationComponent implements OnInit {
     ignoreBackdropClick: true // disable backdrop click to close the modal
   };
   ngOnInit(): void {
+    this.GetBranchMaster();
     this.bankName = localStorage.getItem('__bName');
   this.currDt= new Date().toString().substring(0,15) 
     // this.sys.CurrentDate.toString().replace(this.)
@@ -65,6 +67,21 @@ export class DayinitializationComponent implements OnInit {
     });
     this.isRetrieve=true;
     this.isOk=false;
+  }
+  private GetBranchMaster() {
+    // this.isLoading = true;
+    var dt = { "ardb_cd": this.sys.ardbCD };
+    console.log(dt)
+    this.svc.addUpdDel('Mst/GetBranchMaster', dt).subscribe(
+      res => {
+        console.log(res)
+        // this.isLoading = false;
+        this.brnDtls = res;
+      },
+      err => { 
+        // this.isLoading = false;
+       }
+    );
   }
   getDay(){
     this.disbBtn=false
@@ -122,6 +139,17 @@ private getDayOpertion ()
       this.isOk=true;
       this.sdoRet.forEach(x=>x.operation_dt=this.convertDate(x.operation_dt.toString()))
       }
+      for(let j=0;j<this.sdoRet.length;j++){
+        for(let i=0;i<this.brnDtls.length;i++){
+          if(this.sdoRet[j].brn_cd==this.brnDtls[i].brn_cd){
+            this.sdoRet[j].ardb_cd=this.brnDtls[i].brn_name
+          }
+          console.log(this.sdoRet[j].brn_cd==this.brnDtls[i].brn_cd);
+          
+          // this.reportData[j].acc_cd_desc=this.reportData[j].filter(e=>e.brn_cd==this.brnDtls[i].brn_cd)[0].brn_name
+          // this.reportData.forEach(e=>{e.brn_cd==this.brnDtls[i].brn_cd?this.reportData[e].acc_cd_desc.push(this.brnDtls[i].brn_name)})
+        }
+        }
     },
     err => { ;  this.isLoading = false;}
   );
@@ -170,7 +198,10 @@ private dayInitiationCall (opnDt :any)
       },3000)
       
     },
-    err => { debugger;  this.isLoading = false;
+    err => {
+      this.HandleMessage(true, MessageType.Error,this.alertMsg===null?"Day Initialization was Failed." :this.alertMsg);
+       debugger;  
+       this.isLoading = false;
       this.isRetrieve=true;
       this.isOk=false;
       this.modalRef.hide();

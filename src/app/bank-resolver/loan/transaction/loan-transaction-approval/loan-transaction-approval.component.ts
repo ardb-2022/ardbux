@@ -55,6 +55,7 @@ export class LoanTransactionApprovalComponent implements OnInit {
   // cust: mm_customer;
   // tdDepTransRet: td_def_trans_trf[] = [];
   frmParticulars: any;
+  trfDtls:boolean=false;
   ngOnInit(): void {
     this.transactionDtlsFrm = this.frmBldr.group({
       trans_dt: [''],
@@ -141,6 +142,8 @@ export class LoanTransactionApprovalComponent implements OnInit {
     this.msg.sendCommonAccountNum(null);
     this.getAcctTypeMaster();
     this.transactionDtlsFrm.reset();
+    this.trfDtls=false;
+    this.totalOfDenomination=0;
 
     
   }
@@ -260,6 +263,14 @@ export class LoanTransactionApprovalComponent implements OnInit {
         err => { this.isLoading = false; }
       );
     } else { this.transactionDtlsFrm.reset(); }
+    
+    if(this.loanOpenDm.tddeftrans.trf_type === 'T'){
+      this.trfDtls=true;
+    }
+    else{
+      this.trfDtls=false;
+
+    }
 
   }
 
@@ -418,6 +429,8 @@ export class LoanTransactionApprovalComponent implements OnInit {
             filter(e => e.acc_type_cd === element.acc_type_cd && e.dep_loan_flag === 'L')[0];
           vm.td_def_trans_trf = element;
           this.vm.push(vm);
+        this.isLoading = false;
+
           // add and check account type in unique account type list
           const isAcctTypePresent = this.uniqueAccTypes.filter(e => e.acc_type_cd === vm.mm_acc_type.acc_type_cd)[0];
           if (undefined === isAcctTypePresent) {

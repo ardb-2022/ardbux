@@ -60,7 +60,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     localStorage.removeItem('ardb_name');
-
+    localStorage.removeItem('L2L');
     if (this.router.url.includes('/login')) {
       this.getLogdUser();
       //  this.updateLoginStatus();
@@ -150,7 +150,7 @@ export class LoginComponent implements OnInit {
     let bankName=this.ardbBrnMst.filter(x=>x.ardB_CD==this.f.ardbbrMst.value)[0].bank_name
     // let bankName2=this.ardbBrnMst.filter(x=>x.ardB_CD=='100')[0].bank_name
     if(this.f.ardbbrMst.value=='100'){
-        localStorage.setItem('__ardb_cd', '26');
+        localStorage.setItem('__ardb_cd', '20');
     }
     else{
       localStorage.setItem('__ardb_cd',this.f.ardbbrMst.value);
@@ -172,7 +172,7 @@ export class LoginComponent implements OnInit {
     // this.router.navigate([__bName + '/la']); // TODO remove this it will be after login
     const login = new LOGIN_MASTER();
     const toreturn = false;
-    login.ardb_cd = this.f.ardbbrMst.value=='100'?'26':this.f.ardbbrMst.value;
+    login.ardb_cd = this.f.ardbbrMst.value=='100'?'20':this.f.ardbbrMst.value;
     login.user_id = this.f.username.value;
     login.password = this.f.password.value;
     login.brn_cd = this.f.branch.value;
@@ -272,7 +272,7 @@ export class LoginComponent implements OnInit {
   private getSystemParam(): void {
     this.isLoading=true
     var dt={
-      "ardb_cd":this.f.ardbbrMst.value=='100'?'26':this.f.ardbbrMst.value
+      "ardb_cd":this.f.ardbbrMst.value=='100'?'20':this.f.ardbbrMst.value
     }
    
     this.rstSvc.addUpdDel('Mst/GetSystemDate',dt).subscribe(data=>
@@ -302,7 +302,7 @@ export class LoginComponent implements OnInit {
 
             })
             
-      // 
+          localStorage.setItem('L2L', 'true');
           // console.log(localStorage.getItem('ipAddress'))
           // localStorage.setItem('__ardb_cd', this.f.ardbbrMst.value);
           localStorage.setItem('__dist_cd', this.ardbBrnMst.find(x=>x.ardB_CD == this.f.ardbbrMst.value).dist_code)
@@ -357,6 +357,7 @@ export class LoginComponent implements OnInit {
     localStorage.removeItem('ardb_name');
     localStorage.removeItem('__ardb_cd');
     localStorage.removeItem('ardb_addr');
+    localStorage.removeItem('L2L');
     this.brnDtls.length = 0;
     this.loginForm.reset();
     this.loginForm.enable();

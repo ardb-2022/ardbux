@@ -40,7 +40,7 @@
           type="text" class="form-control form-control-sm text-capitalize" id="loan_id" placeholder="Loan ID"
           (change)="getLoanAccountData()" [(ngModel)]="tm_loan_all.loan_id"> -->
       <div class="input-group">
-        <input style="height:25px; text-align-last: left;" [disabled]="operationType!='R' || disableAll == 'Y'"
+        <input style="height:25px; text-align-last: left;" [disabled]="operationType!='R' || disableAll == 'N'"
           type="text" class="form-control form-control-sm text-capitalize" id="loan_id" placeholder="Loan ID"
            [(ngModel)]="tm_loan_all.loan_id" (keyup)="disableonNull($event)">
           <div class="input-group-append"> 
@@ -439,7 +439,7 @@
           </div>
         </div>
 
-
+        <!-- || ls.approval_status == 'A' -->
         <h1></h1>
         <h4 class="customHeader">Sanction Details</h4>
 
@@ -449,7 +449,7 @@
               <small>Sector</small>
               <select
                 style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
-                [disabled]="disableAll == 'Y' || ls.approval_status == 'A'" [(ngModel)]="ls.sector_cd"
+                [disabled]="disableAll == 'Y' " [(ngModel)]="ls.sector_cd"
                 (change)="setSectorType($event.target.value , i)" id="sec_type" 
                 class="form-control form-control-sm">
                 <!-- <option [value]="ls.sector_cd" disabled selected>{{ls.sector_desc}}</option> -->
@@ -461,7 +461,7 @@
               <small>Activity</small>
               <select
                 style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
-                [disabled]="disableAll == 'Y' || ls.approval_status == 'A'" [(ngModel)]="ls.activity_cd"
+                [disabled]="disableAll == 'Y' " [(ngModel)]="ls.activity_cd"
                 (change)="setActivityType($event.target.value , i)" id="act_type" class="form-control form-control-sm">
                 <!-- <option [value]="ls.activity_cd" disabled selected>{{ls.activity_desc}}</option> -->
                 <option *ngFor="let t of selectedActivityList" [value]="t.activity_cd">
@@ -474,7 +474,7 @@
               <small>Activity Details</small>
               <select
                 style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
-                [disabled]="disableAll == 'Y' || ls.approval_status == 'A'" [(ngModel)]="ls.crop_cd" (change)="setCorpType($event.target.value , i)"
+                [disabled]="disableAll == 'Y' " [(ngModel)]="ls.crop_cd" (change)="setCorpType($event.target.value , i)"
                 id="act_type" class="form-control form-control-sm">
                 <option [value]="ls.crop_cd" disabled selected>{{ls.crop_cd}}-{{ls.crop_desc}}</option>
                 <option *ngFor="let t of selectedCorpList" [value]="t.crop_cd">{{t.crop_cd}}-{{t.crop_desc}}</option>
@@ -493,7 +493,7 @@
             <div class="form-group col-2">
               <small for=due_date>Validity Date</small>
               <div class="input-group">
-                <input class="form-control form-control-sm text-capitalize" id="validity_date"
+                <input class="form-control form-control-sm text-capitalize" id="validity_date" [disabled]="disableAll == 'Y' || ls.approval_status == 'A'"
                   style="height:25px; text-align: right;" bsDatepicker
                   [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }" type="text" 
                   [(ngModel)]="ls.due_dt" type="text" placeholder="DD/MM/YYYY">

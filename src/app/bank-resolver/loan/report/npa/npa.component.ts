@@ -1,9 +1,9 @@
-import { ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild ,AfterViewInit} from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild ,AfterViewInit, ElementRef} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-import { SystemValues, mm_customer, p_report_param, mm_operation } from 'src/app/bank-resolver/Models';
+import { SystemValues, mm_customer, p_report_param, mm_operation, mm_acc_type } from 'src/app/bank-resolver/Models';
 import { p_gen_param } from 'src/app/bank-resolver/Models/p_gen_param';
 import { tt_trial_balance } from 'src/app/bank-resolver/Models/tt_trial_balance';
 import { RestService } from 'src/app/_service';
@@ -15,7 +15,11 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import { CommonServiceService } from 'src/app/bank-resolver/common-service.service';
+import { WebDataRocksPivot } from 'src/app/webdatarocks/webdatarocks.angular4';
+import html2canvas from 'html2canvas';
+import jspdf from 'jspdf';
 
+import { MatTable } from '@angular/material/table';
 @Component({
   selector: 'app-npa',
   templateUrl: './npa.component.html',
@@ -26,8 +30,9 @@ export class NpaComponent implements OnInit,AfterViewInit {
   @ViewChild('content', { static: true }) content: TemplateRef<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatTable) table: MatTable<any>;
   dataSource = new MatTableDataSource()
-  displayedColumns: string[] = ['loan_id','party_name','disb_dt','disb_amt', 'prn_due', 'intt_due','penal_intt','npa_dt','ovd_prn','ovd_intt','stan_prn','substan_prn','d1_prn','d2_prn','d3_prn','totalNPA','provision'];
+  displayedColumns: string[] = ['loan_id','block_name','party_name','activity','case_no','disb_dt','disb_amt', 'prn_due', 'intt_due','penal_intt','npa_dt','ovd_prn','ovd_intt','stan_prn','substan_prn','d1_prn','d2_prn','d3_prn','totalNPA','provision'];
   modalRef: BsModalRef;
   isOpenFromDp = false;
   isOpenToDp = false;
@@ -39,7 +44,7 @@ export class NpaComponent implements OnInit,AfterViewInit {
   };
   trailbalance: tt_trial_balance[] = [];
 
-  AcctTypes: mm_operation[];
+  AcctTypes:  mm_acc_type[] = [];
   prp = new p_report_param();
   reportcriteria: FormGroup;
   closeResult = '';
@@ -135,7 +140,7 @@ selectItems1=[
       acc_type_cd: [null, Validators.required],
       fType: [null, Validators.required]
     });
-    this.getOperationMaster();
+    this.getAccountTypeList();
     this.onLoadScreen(this.content);
     var date = new Date();
     var n = date.toDateString();
@@ -149,32 +154,27 @@ selectItems1=[
     this.currentPage = page;
     this.cd.detectChanges();
   }
-  private getOperationMaster(): void {
-    this.isLoading = true;
-    if (undefined !== DetailListComponent.operations &&
-      null !== DetailListComponent.operations &&
-      DetailListComponent.operations.length > 0) {
-      this.isLoading = false;
-      this.AcctTypes = DetailListComponent.operations.filter(e => e.module_type === 'LOAN')
-        .filter((thing, i, arr) => {
-          return arr.indexOf(arr.find(t => t.acc_type_cd === thing.acc_type_cd)) === i;
-        });
-      this.AcctTypes = this.AcctTypes.sort((a, b) => (a.acc_type_cd > b.acc_type_cd ? 1 : -1));
-    } else {
-      this.svc.addUpdDel<mm_operation[]>('Mst/GetOperationDtls', null).subscribe(
-        res => {
-          DetailListComponent.operations = res;
-          this.isLoading = false;
-          this.AcctTypes = DetailListComponent.operations.filter(e => e.module_type === 'LOAN')
-            .filter((thing, i, arr) => {
-              return arr.indexOf(arr.find(t => t.acc_type_cd === thing.acc_type_cd)) === i;
-            });
-          this.AcctTypes = this.AcctTypes.sort((a, b) => (a.acc_type_cd > b.acc_type_cd ? 1 : -1));
-          // console.log(this.AcctTypes)
-        },
-        err => { this.isLoading = false; }
-      );
+  
+  getAccountTypeList() {
+
+    if (this.AcctTypes.length > 0) {
+      return;
     }
+    this.AcctTypes = [];
+
+    this.isLoading = true;
+    this.svc.addUpdDel<any>('Mst/GetAccountTypeMaster', null).subscribe(
+      res => {
+
+        this.isLoading = false;
+        this.AcctTypes = res;
+        this.AcctTypes = this.AcctTypes.filter(c => c.dep_loan_flag === 'L');
+        this.AcctTypes = this.AcctTypes.sort((a, b) => (a.acc_type_cd > b.acc_type_cd) ? 1 : -1);
+      },
+      err => {
+        this.isLoading = false;
+      }
+    );
   }
   public SubmitReport() {
     if (this.reportcriteria.invalid) {
@@ -225,13 +225,13 @@ selectItems1=[
         this.isLoading=false
        
         
-        this.pageChange=document.getElementById('chngPage');
-        this.pageChange.click()
-        this.setPage(2);
-        this.setPage(1)
+        // this.pageChange=document.getElementById('chngPage');
+        // this.pageChange.click()
+        // this.setPage(2);
+        // this.setPage(1)
         this.modalRef.hide();
-        this.lastAccNum=this.reportData[this.reportData.length-1].loan_id
-        console.log(this.lastAccNum)
+        // this.lastAccNum=this.reportData[this.reportData.length-1].loan_id
+        // console.log(this.lastAccNum)
         this.reportData.forEach(e => {
           this.totIssueSum+=e.disb_amt
           this.totPrnDue+=e.prn_due
@@ -447,4 +447,53 @@ selectItems1=[
 
     }
   }
+  // private pdfmake : pdfMake;
+  
+//   exportPDFTitle(){
+//     const doc = new jspdf('landscape', 'pt', 'a4');
+
+//     const table = document.getElementById('mattable');
+//     const rows = table.getElementsByTagName('tr');
+
+//     for (let i = 0; i < rows.length; i++) {
+//       const row = rows[i];
+//       html2canvas(row).then(canvas => {
+//         const imgData = canvas.toDataURL('image/png');
+//         doc.addImage(imgData, 'PNG', 10, 10, 0, 0);
+//         if (i < rows.length - 1) {
+//           doc.addPage();
+//         }
+//         doc.save('my-document.pdf');
+//       });
+//   }
+// }
+//   exportPDFTitle() {
+//     var data = document.getElementById('mattable');
+// html2canvas(data).then(canvas => {
+// // Few necessary setting options
+// var imgWidth = 208;
+// var pageHeight = 295;
+// var imgHeight = canvas.height * imgWidth / canvas.width;
+// var heightLeft = imgHeight;
+ 
+// const contentDataURL = canvas.toDataURL('image/png')
+// let pdf = new jspdf('l', 'mm', 'a4'); // A4 size page of PDF
+// var position = 0;
+// pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)
+// pdf.save('MYPdf.pdf'); // Generated PDF
+// });
+    
+// }
+exportPDFTitle() {
+  const doc = new jspdf('landscape');
+
+  const content = document.getElementById('mattable') as HTMLDivElement; // get the HTML content element
+
+  html2canvas(content).then(canvas => { // use html2canvas to convert the HTML content to a canvas
+    const imageData = canvas.toDataURL('image/png', 1.0); // convert the canvas to an image data URL
+    doc.addImage(imageData, 'PNG', 10, 10, doc.internal.pageSize.width, 0); // add the image to the PDF
+    doc.save('sample.pdf'); // save the PDF with a filename
+  });
+}
+
 }

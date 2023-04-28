@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { RestService } from 'src/app/_service';
-import { LOGIN_MASTER, MessageType, ShowMessage, SystemValues } from '../../../Models';
+import { LOGIN_MASTER, MessageType, ShowMessage, SystemValues, mm_dist } from '../../../Models';
 import { m_branch } from '../../../Models/m_branch';
 
 @Component({
@@ -17,6 +17,7 @@ export class VillageMasterComponent implements OnInit {
     backdrop: true, // enable backdrop shaded color
     ignoreBackdropClick: true // disable backdrop click to close the modal
   };
+  districts: mm_dist[] = [];
   brnDtls: m_branch[]=[];
   sys = new SystemValues()
   isLoading=false;
@@ -59,11 +60,20 @@ export class VillageMasterComponent implements OnInit {
     this.isModify = false;
     this.isSave = false;
     this.isClear = true;
+    this.getDistMaster();
   }
   get f() { return this.addVill.controls; }
   closeScreen()
   {
     this.router.navigate([localStorage.getItem('__bName') + '/la']);
+  }
+  getDistMaster(){
+    this.svc.addUpdDel<mm_dist[]>('Mst/GetDistMaster', null).subscribe(
+      res => {
+        this.districts = res;
+      },
+      err => { }
+    );
   }
   new()
   {

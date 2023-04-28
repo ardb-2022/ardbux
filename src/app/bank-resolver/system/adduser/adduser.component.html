@@ -70,11 +70,11 @@ style="background-color: #78c2ad21; min-height: 20vh;">
     <div class="form-row">
       <div class="form-group  col-3">
         <small for="userid">User Id<span class="text-danger">*</span></small>
-        <input type="text" class="form-control form-control-sm " [disabled]="userType!=='A'" formControlName="userid" id="userid">
+        <input type="text" class="form-control form-control-sm " [disabled]="userType!='A'" formControlName="userid" id="userid">
       </div>
       <div class="form-group col-2">
         <small for="branch">Branch<span class="text-danger">*</span></small>
-        <select id="branch" class="form-control form-control-sm" [disabled]="userType!=='A'" formControlName="branch">
+        <select id="branch" class="form-control form-control-sm" [disabled]="userType!='A'" formControlName="branch">
         <option>Select an Option</option>
         <option *ngFor="let options of brnDtls" [value]="options.brn_cd" >{{ options.brn_name }}</option>
         </select>

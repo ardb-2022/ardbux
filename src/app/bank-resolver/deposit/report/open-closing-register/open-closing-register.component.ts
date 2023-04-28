@@ -73,12 +73,22 @@ export class OpenClosingRegisterComponent implements OnInit ,AfterViewInit{
   lastAccCD:any;
   today:any
   showWait=false;
+  LandingOpenCall:boolean;
+  LandingCloseCall:boolean;
   suggestedCustomer: mm_customer[];
   filteredArray:any=[]
   constructor(private svc: RestService, private formBuilder: FormBuilder,
     private modalService: BsModalService, private _domSanitizer: DomSanitizer,private exportAsService: ExportAsService, private cd: ChangeDetectorRef,
     private router: Router, private comser:CommonServiceService) { }
   ngOnInit(): void {
+    this.LandingOpenCall=false;
+    this.LandingCloseCall=false;
+    if(this.comser.accOpen){
+      this.LandingOpenCall=true;
+    }
+    if(this.comser.accClose){
+      this.LandingCloseCall=true;
+    }
     this.fromdate = this.sys.CurrentDate;
     this.toDate = this.sys.CurrentDate;
     this.reportcriteria = this.formBuilder.group({
@@ -86,7 +96,24 @@ export class OpenClosingRegisterComponent implements OnInit ,AfterViewInit{
       toDate: [null, Validators.required],
       OpenClose: [null, Validators.required]
     });
-    this.onLoadScreen(this.content);
+    if(this.LandingOpenCall||this.LandingCloseCall){
+      if(this.LandingOpenCall){
+        this.reportcriteria.controls.OpenClose.setValue('O')
+        this.reportcriteria.controls.toDate.setValue(this.sys.CurrentDate)
+        this.reportcriteria.controls.fromDate.setValue(this.sys.CurrentDate)
+      }
+      else{
+        this.reportcriteria.controls.OpenClose.setValue('C')
+        this.reportcriteria.controls.toDate.setValue(this.sys.CurrentDate)
+        this.reportcriteria.controls.fromDate.setValue(this.sys.CurrentDate)
+      }
+      debugger
+      this.SubmitReport();
+    }
+    else{
+      this.onLoadScreen(this.content);
+    }
+    
     var date = new Date();
     // get the date as a string
        var n = date.toDateString();
@@ -106,21 +133,9 @@ export class OpenClosingRegisterComponent implements OnInit ,AfterViewInit{
   
   public SubmitReport() {
     this.comser.getDay(this.reportcriteria.controls.fromDate.value,this.reportcriteria.controls.toDate.value)
-    if (this.reportcriteria.invalid) {
-      this.showAlert = true;
-      this.alertMsg = 'Invalid Input.';
-      return false;
-    }
-    else if(this.comser.diff<0){
-      this.date_msg= this.comser.date_msg
-      this.notvalidate=true
-    }
-
-    else {
+    if(this.LandingOpenCall||this.LandingCloseCall){
       this.sumPrn=0;
       this.sumIntt=0
-      this.reportData.length=0
-      this.modalRef.hide();
       this.reportData.length=0;
       this.pagedItems.length=0;
       this.isLoading=true
@@ -141,14 +156,10 @@ export class OpenClosingRegisterComponent implements OnInit ,AfterViewInit{
           this.comser.SnackBar_Nodata()
         } 
         this.isLoading=false
-        this.pageChange=document.getElementById('chngPage');
-        this.pageChange.click()
-        this.setPage(2);
-        this.setPage(1)
-        this.modalRef.hide();
         this.reportData.forEach(e=>{
           this.sumPrn+=e.prn_amt;
-          this.sumIntt=e.intt_amt;
+          this.sumIntt+=e.intt_amt;
+          debugger
         })
         },
         err => {
@@ -156,24 +167,80 @@ export class OpenClosingRegisterComponent implements OnInit ,AfterViewInit{
            this.comser.SnackBar_Error(); 
           })
         this.showAlert = false;
-      // this.showAlert = false;
-      // this.fromdate = this.reportcriteria.controls.fromDate.value;
-      // this.toDate = this.reportcriteria.controls.toDate.value;
-      // this.UrlString = this.svc.getReportUrl();
-      // this.UrlString = this.UrlString + 'WebForm/Deposit/opencloseregister?'
-      //   + 'ardb_cd='+this.sys.ardbCD
-      //   + '&from_dt=' + Utils.convertDtToString(this.fromdate)
-      //   + '&to_dt=' + Utils.convertDtToString(this.toDate)
-      //   + '&brn_cd=' + this.sys.BranchCode
-      //   + '&flag=' + this.reportcriteria.controls.OpenClose.value; // todo opn/close    O / C.
-
-      // this.isLoading = true;
-      // this.ReportUrl = this._domSanitizer.bypassSecurityTrustResourceUrl(this.UrlString);
-      // this.modalRef.hide();
-      // setTimeout(() => {
-      //   this.isLoading = false;
-      // }, 10000);
     }
+    else{
+      if (this.reportcriteria.invalid) {
+        debugger
+        this.showAlert = true;
+        this.alertMsg = 'Invalid Input.';
+        return false;
+      }
+      else if(this.comser.diff<0){
+        debugger
+        this.date_msg= this.comser.date_msg
+        this.notvalidate=true
+      }
+
+  else {
+    this.sumPrn=0;
+    this.sumIntt=0
+    this.reportData.length=0
+    this.modalRef.hide();
+    this.reportData.length=0;
+    this.pagedItems.length=0;
+    this.isLoading=true
+    this.fromdate = this.reportcriteria.controls.fromDate.value;
+    this.toDate = this.reportcriteria.controls.toDate.value;
+    var dt={
+      "ardb_cd": this.sys.ardbCD,
+      "from_dt": this.fromdate.toISOString(),
+      "to_dt":this.toDate.toISOString(),
+      "brn_cd":this.sys.BranchCode,
+      "flag":this.reportcriteria.controls.OpenClose.value
+      
+    }
+    this.svc.addUpdDel('Deposit/PopulateOpenCloseRegister',dt).subscribe(data=>{console.log(data)
+      this.reportData=data;
+      this.dataSource.data=this.reportData
+      if(this.reportData.length==0){
+        this.comser.SnackBar_Nodata()
+      } 
+      this.isLoading=false
+      this.pageChange=document.getElementById('chngPage');
+      this.pageChange.click()
+      this.setPage(2);
+      this.setPage(1)
+      this.modalRef.hide();
+      this.reportData.forEach(e=>{
+        this.sumPrn+=e.prn_amt;
+        this.sumIntt+=e.intt_amt;
+      })
+      },
+      err => {
+         this.isLoading = false;
+         this.comser.SnackBar_Error(); 
+        })
+      this.showAlert = false;
+    // this.showAlert = false;
+    // this.fromdate = this.reportcriteria.controls.fromDate.value;
+    // this.toDate = this.reportcriteria.controls.toDate.value;
+    // this.UrlString = this.svc.getReportUrl();
+    // this.UrlString = this.UrlString + 'WebForm/Deposit/opencloseregister?'
+    //   + 'ardb_cd='+this.sys.ardbCD
+    //   + '&from_dt=' + Utils.convertDtToString(this.fromdate)
+    //   + '&to_dt=' + Utils.convertDtToString(this.toDate)
+    //   + '&brn_cd=' + this.sys.BranchCode
+    //   + '&flag=' + this.reportcriteria.controls.OpenClose.value; // todo opn/close    O / C.
+
+    // this.isLoading = true;
+    // this.ReportUrl = this._domSanitizer.bypassSecurityTrustResourceUrl(this.UrlString);
+    // this.modalRef.hide();
+    // setTimeout(() => {
+    //   this.isLoading = false;
+    // }, 10000);
+  }
+    }
+        
   }
   public oniframeLoad(): void {
     this.counter++

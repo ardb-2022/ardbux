@@ -70,7 +70,7 @@
       [useExistingCss]="true"
       printSectionId="mattable" 
       ngxPrint>Print</button>
-   <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
+   <button mat-raised-button type="button" [hidden]="LandingCall" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
 
     </div>
   </div>
@@ -398,7 +398,7 @@
     [useExistingCss]="true"
     printSectionId="mattable" 
     ngxPrint>Print</button>
- <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
+ <button mat-raised-button type="button" [hidden]="LandingCall" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
 
   </div>
 </div>

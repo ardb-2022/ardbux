@@ -238,11 +238,11 @@ setActivity(){//PARTHA
   debugger;
   console.log( this.tm_loan_sanction_dtls);
   
-  this.tm_loan_sanction_dtls[0].activity_cd=this.masterModel.tmlaonsanctiondtls[0].activity_cd
-  this.tm_loan_sanction_dtls[0].activity_desc=this.masterModel.tmlaonsanctiondtls[0].activity_desc
-  this.tm_loan_sanction_dtls[0].sector_cd=this.masterModel.tmlaonsanctiondtls[0].sector_cd
+  this.tm_loan_sanction_dtls[0].activity_cd=this.masterModel.tmlaonsanctiondtls[0]?.activity_cd
+  this.tm_loan_sanction_dtls[0].activity_desc=this.masterModel.tmlaonsanctiondtls[0]?.activity_desc
+  this.tm_loan_sanction_dtls[0].sector_cd=this.masterModel.tmlaonsanctiondtls[0]?.sector_cd
   this.selectedActivityList=[];
-  this.selectedActivityList = this.activityList.filter(x => x.sector_cd.toString() === this.tm_loan_sanction_dtls[0].sector_cd.toString());
+  this.selectedActivityList = this.activityList.filter(x => x.sector_cd?.toString() === this.tm_loan_sanction_dtls[0].sector_cd?.toString());
   // const actDtls: tm_loan_sanction_dtls[] = [];
   // this.actDesc=this.activityList.filter(x => x.activity_cd.toString() === 
   // this.masterModel.tmlaonsanctiondtls[0].activity_cd.toString())[0].activity_desc;
@@ -589,6 +589,7 @@ removeSecurityDtlList()
     this.tm_loan_all.cust_name = temp_mm_cust.cust_name;
     this.suggestedCustomer = [];
     this.suggestedCustomer = null;
+   
 
     debugger
   }
@@ -655,8 +656,8 @@ removeSecurityDtlList()
   setJointHolderRelation(relation: string, idx: number) {
 
     this.td_accholder[idx].relation = relation;
-    this.td_accholder[idx].relationId =
-      this.relationship.filter(x => x.val.toString() === relation)[0].id;
+    // this.td_accholder[idx].relationId =
+    //   this.relationship.filter(x => x.val.toString() === relation)[0].id;
   }
 
 
@@ -732,8 +733,8 @@ removeSecurityDtlList()
     this.tm_loan_sanction_dtls[idx].activity_desc = null;
     this.tm_loan_sanction_dtls[idx].crop_cd = null;
     this.tm_loan_sanction_dtls[idx].crop_desc = null;
-    this.tm_loan_sanction_dtls[idx].due_dt = null;
-    this.tm_loan_sanction_dtls[idx].sanc_amt = null;
+    // this.tm_loan_sanction_dtls[idx].due_dt = null;
+    // this.tm_loan_sanction_dtls[idx].sanc_amt = null;
 
     this.selectedActivityList = [];
     this.selectedCorpList = [];
@@ -764,8 +765,8 @@ removeSecurityDtlList()
     this.tm_loan_sanction_dtls[idx].crop_cd = corp;
     this.tm_loan_sanction_dtls[idx].crop_desc = this.corpList.filter(x => x.crop_cd.toString() === corp.toString())[0].crop_desc;
 
-    this.tm_loan_sanction_dtls[idx].sanc_amt = null;
-    this.tm_loan_sanction_dtls[idx].due_dt = null;
+    // this.tm_loan_sanction_dtls[idx].sanc_amt = null;
+    // this.tm_loan_sanction_dtls[idx].due_dt = null;
 
     if (this.tm_loan_sanction_dtls[idx].crop_cd !== '00' && this.tm_loan_all.acc_cd === 23103) {
       const temp_p_loan_param = new p_loan_param();
@@ -841,7 +842,7 @@ removeSecurityDtlList()
 
     this.clearData();
     this.operationType = 'R';
-    this.disableAll = 'N';
+    this.disableAll = 'Y';
     // this.disablePersonal = 'Y';
 
     // this.isLoading = true;
@@ -873,7 +874,6 @@ removeSecurityDtlList()
     debugger
     console.log(this.operationType)
     if (this.operationType !== 'Q') {
-      // this.showAlertMsg('WARNING', 'Record not retrived to modify');
       this.HandleMessage(true, MessageType.Warning, 'Record not retrived to modify');
       return;
     }
@@ -899,6 +899,15 @@ removeSecurityDtlList()
   }
 
   lienAccount() {
+    if(this.masterModel.tdloansancsetlist.length>0){
+    
+    if(this.masterModel.tdloansancsetlist[0].tdloansancset.filter(e=>e.param_cd.includes('115'&&'116')!=true )){
+    debugger
+      return
+    }
+  
+    else{
+      debugger
     this.isLoading=true;
     let lien_acc_cd=this.masterModel.tdloansancsetlist[0].tdloansancset.filter(e=>e.param_cd=='115')[0].param_value
     let lien_acc_no=this.masterModel.tdloansancsetlist[0].tdloansancset.filter(e=>e.param_cd=='116')[0].param_value
@@ -929,9 +938,9 @@ removeSecurityDtlList()
         }
       );
    }
-    
-
-
+  } 
+  }
+  else{return}
   }
   saveData(saveType: string) {
 
@@ -1129,7 +1138,7 @@ removeSecurityDtlList()
             this.assignModelsFromMasterData();
             this.associateChildRecordsWithHeader();
             this.operationType = 'Q';
-            this.disableAll = 'N';
+            this.disableAll = 'Y';
           }
           else {
             this.HandleMessage(true, MessageType.Warning, 'No record found!!!');
@@ -1297,6 +1306,7 @@ removeSecurityDtlList()
     }
     else {
       this.masterModel.tmlaonsanctiondtls[0].loan_id = this.tm_loan_all.loan_id;
+      this.masterModel.tmloanall.activity_cd=this.masterModel.tmlaonsanctiondtls[0].activity_cd
       this.masterModel.tmlaonsanctiondtls[0].srl_no = this.masterModel.tmlaonsanctiondtls[0].sanc_no;
       if (this.masterModel.tmlaonsanctiondtls[0].approval_status === undefined ||
         this.masterModel.tmlaonsanctiondtls[0].approval_status === '') {
@@ -1480,4 +1490,5 @@ removeSecurityDtlList()
    
 
   }
+
 }

@@ -65,6 +65,8 @@
        <button mat-raised-button type="button" 
        class="btn btn-rounded btn-primary m-1" 
        (click)="openPDF()">Print</button>
+       <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="openPDF()">Export to PDF</button>
+
         <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
       
       </div>
@@ -189,7 +191,7 @@
       <ng-container matColumnDef="block_name" style="text-align:center;" >
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Block</th>
         <td mat-cell *matCellDef="let row">{{row.block_name}}</td>
-      </ng-container> <ng-container matColumnDef="acc_desc" style="text-align:center;" >
+      </ng-container> <ng-container matColumnDef="acc_desc"  >
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Loan Type </th>
         <td mat-cell *matCellDef="let row">{{row.acc_desc}}</td>
       </ng-container>
@@ -273,7 +275,7 @@
       <!-- Name Column -->
       <ng-container matColumnDef="totalNPA" >
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Total NPA </th>
-        <td mat-cell *matCellDef="let row" >{{row.d3_prn + row.d2_prn + row.d1_prn + row.stan_prn + row.substan_prn | currency:"INR"}}</td>
+        <td mat-cell *matCellDef="let row" >{{row.d3_prn + row.d2_prn + row.d1_prn+ row.substan_prn | currency:"INR"}}</td>
       </ng-container>
       <!-- Name Column -->
       <ng-container matColumnDef="provision" >
@@ -283,7 +285,7 @@
   
       <!-- Header column -->
       <ng-container matColumnDef="Header">
-        <th mat-header-cell *matHeaderCellDef colspan="17">
+        <th mat-header-cell *matHeaderCellDef colspan="19">
           <div class="justify-content-center" style="text-align:center">
             <br><h4>{{ardbName}} ({{branchName}})</h4>
             
@@ -431,6 +433,8 @@
      [useExistingCss]="true"
      printSectionId="hiddenTab" 
      ngxPrint>Print</button>
+     <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="openPDF()">Export to PDF</button>
+
  <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
 
     

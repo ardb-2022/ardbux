@@ -51,6 +51,7 @@ export class AdduserComponent implements OnInit {
   
   
   ngOnInit(): void {
+    
     this.currentUID= localStorage.getItem('__userId');
     this.upd_s_User = this.formBuilder.group({
       userid: ['', Validators.required],
@@ -254,7 +255,7 @@ export class AdduserComponent implements OnInit {
     this.addUser.controls.password.disable()
     this.addUser.controls.utype.enable();
     this.addUser.controls.userid.enable();
-    this.addUser.controls.branch.enable();
+    this.addUser.controls.branch.disable();
     this.addUser.controls.fname.enable();
     this.addUser.controls.mname.enable();
     this.addUser.controls.lname.enable();
@@ -262,7 +263,9 @@ export class AdduserComponent implements OnInit {
   new()
   {
     this.initialize();
+    
     this.addUser.controls.password.enable();
+    this.addUser.controls.branch.enable();
     this.showCpassword=true;
     this.pass=true;
     this.cpass=true;
@@ -279,7 +282,7 @@ export class AdduserComponent implements OnInit {
   {
     this.isLoading=true;
     var dt={
-      "ardb_cd":this.sys.ardbCD,
+      "ardb_cd":localStorage.getItem('__bName').toLocaleLowerCase()=="ardbtestux"?"100":this.sys.ardbCD,
     }
     this.svc.addUpdDel('Mst/GetBranchMaster', dt).subscribe(
       res => {
@@ -356,42 +359,49 @@ console.log(this.defaultPass);
   }
   saveuser()
   {
-    this.isLoading=true;
-    this.showMsg =null;
-    let login = new LOGIN_MASTER();
-    login.user_id = this.f.userid.value;
-    login.brn_cd = this.f.branch.value;
-    login.user_first_name=this.f.fname.value;
-    login.user_middle_name=this.f.mname.value;
-    login.user_last_name=this.f.lname.value;
-    login.user_type=this.f.utype.value;
-    login.password=this.f.password.value;
-    login.login_status='N';
-    login.ardb_cd=this.sys.ardbCD;
-    ;
-    // this.checkPassword();
-    this.svc.addUpdDel('Sys/InsertUserMaster', login).subscribe(
-      res => {
-        ;console.log(res)
-        this.isLoading=false;
-        this.HandleMessage(true, MessageType.Sucess,'Sucessfully Saved the User Details' );
-        // this.initialize();
-        this.isDel = false;
-        this.isRetrieve = true;
-        this.isNew = true;
-        this.isModify = false;
-        this.isSave = false;
-        this.isClear = true;
-      },
-      err => {this.isLoading=false; ; this.HandleMessage(true, MessageType.Error,'Insertion Failed!!' );
-              this.isDel = false;
-              this.isRetrieve = false;
-              this.isNew = false;
-              this.isModify = true;
-              this.isSave = true;
-              this.isClear = true;
+    if(this.f.utype.value==null||this.f.utype.value==undefined){
+      return;
     }
-    )
+    else{
+      this.isLoading=true;
+      this.showMsg =null;
+      let login = new LOGIN_MASTER();
+      login.user_id = this.f.userid.value;
+      login.brn_cd = this.f.branch.value;
+      login.user_first_name=this.f.fname.value;
+      login.user_middle_name=this.f.mname.value;
+      login.user_last_name=this.f.lname.value;
+      login.user_type=this.f.utype.value;
+      login.password=this.f.password.value;
+      login.login_status='N';
+      // login.ardb_cd=localStorage.getItem('__bName').toLocaleLowerCase()=="ardbtestux"?"100":this.sys.ardbCD
+      login.ardb_cd=this.sys.ardbCD;
+      ;
+      // this.checkPassword();
+      this.svc.addUpdDel('Sys/InsertUserMaster', login).subscribe(
+        res => {
+          ;console.log(res)
+          this.isLoading=false;
+          this.HandleMessage(true, MessageType.Sucess,'Sucessfully Saved the User Details' );
+          // this.initialize();
+          this.isDel = false;
+          this.isRetrieve = true;
+          this.isNew = true;
+          this.isModify = false;
+          this.isSave = false;
+          this.isClear = true;
+        },
+        err => {this.isLoading=false; ; this.HandleMessage(true, MessageType.Error,'Insertion Failed!!' );
+                this.isDel = false;
+                this.isRetrieve = false;
+                this.isNew = false;
+                this.isModify = true;
+                this.isSave = true;
+                this.isClear = true;
+      }
+      )
+    }
+    
 
   }
   checkPassword(){
@@ -521,6 +531,7 @@ console.log(this.defaultPass);
   }
   clearuser()
   {
+    ;
     this.initialize();
     this.isDel = false;
     this.isRetrieve = true;
@@ -531,6 +542,7 @@ console.log(this.defaultPass);
   }
   initialize()
   {
+    ;
     this.f.fname.setValue(null);
     this.f.mname.setValue(null);
     this.f.lname.setValue(null);

@@ -360,20 +360,17 @@
             <!-- <td mat-footer-cell *matFooterCellDef >Hello</td> -->
             <!-- <td mat-footer-cell *matFooterCellDef >{{crSum | number : '1.2-2'}}</td> -->
           </ng-container>
-        <ng-container matColumnDef="disclaimer9" >
+        <!-- <ng-container matColumnDef="disclaimer9" >
           <td mat-footer-cell *matFooterCellDef  style="font-weight: 800;text-align:center">
             {{currPrnSum | number : '1.2-2'}}
-          </td>
-          
-          <!-- <td mat-footer-cell *matFooterCellDef >Hello</td> -->
-          <!-- <td mat-footer-cell *matFooterCellDef >{{crSum | number : '1.2-2'}}</td> -->
-        </ng-container>
+          </td> 
+        </ng-container>-->
         
-        <ng-container matColumnDef="disclaimer10" >
+        <!-- <ng-container matColumnDef="disclaimer10" >
           <td mat-footer-cell *matFooterCellDef style="font-weight: 800;text-align:center">
             {{currInttSum | number : '1.2-2'}}
           </td>
-        </ng-container>
+        </ng-container> -->
         <ng-container matColumnDef="s" >
           <td mat-footer-cell *matFooterCellDef colspan="2" style="font-weight: 800;text-align:center">
             Grand Total:
@@ -389,17 +386,17 @@
             {{currInttRecovSum+ovdInttRecovSum+penalInttRecovSum |currency:'INR'}}
           </td>
         </ng-container>
-        <ng-container matColumnDef="g3" >
+        <!-- <ng-container matColumnDef="g3" >
           <td mat-footer-cell *matFooterCellDef colspan="2" style="font-weight: 800;text-align:center">
             {{currInttSum+currPrnSum | currency:'INR'}}
           </td>
-        </ng-container>
+        </ng-container> -->
        
         
   <tr mat-header-row *matHeaderRowDef="['mainHeader']"></tr>
         
-        <tr mat-footer-row *matFooterRowDef="['disclaimer1','disclaimer2','disclaimer3','disclaimer4','disclaimer5','disclaimer6','disclaimer7','disclaimer8','disclaimer9','disclaimer10']" class="example-second-footer-row"></tr>
-        <tr mat-footer-row *matFooterRowDef="['s','g1','g2','g3']" class="example-second-footer-row"></tr>
+        <tr mat-footer-row *matFooterRowDef="['disclaimer1','disclaimer2','disclaimer3','disclaimer4','disclaimer5','disclaimer6','disclaimer7','disclaimer8']" class="example-second-footer-row"></tr>
+        <tr mat-footer-row *matFooterRowDef="['s','g1','g2']" class="example-second-footer-row"></tr>
   
         <tr mat-header-row *matHeaderRowDef="['header1','header2','header3','header4','header5']"></tr>
       

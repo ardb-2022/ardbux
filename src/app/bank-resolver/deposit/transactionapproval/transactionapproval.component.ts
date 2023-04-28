@@ -48,6 +48,7 @@ export class TransactionapprovalComponent implements OnInit {
   toFltrTrnCd = '';
   toFltrAccountTyp = '';
   refresh = false;
+  trfDtls:boolean=false;
   custMstrFrm: FormGroup;
   accDtlsFrm: FormGroup;
   constitutionList: mm_constitution[] = [];
@@ -292,19 +293,20 @@ export class TransactionapprovalComponent implements OnInit {
             curr_prn_recov: transactionDtl.curr_prn_recov,
             ovd_prn_recov: transactionDtl.ovd_prn_recov,
             curr_numbert_recov: transactionDtl.curr_intt_recov,
-            tot_amount:transactionDtl.trans_mode!='R'?(transactionDtl.curr_intt_recov!=null && transactionDtl.curr_intt_recov!=undefined? (transactionDtl.amount?transactionDtl.amount+transactionDtl.curr_intt_recov:(transactionDtl.curr_intt_recov?transactionDtl.curr_intt_recov:transactionDtl.ovd_prn_recov)):transactionDtl.amount):
+            tot_amount:transactionDtl.trans_mode!='R'?(transactionDtl.curr_intt_recov!=null && transactionDtl.curr_intt_recov!=undefined? 
+              (transactionDtl.amount?transactionDtl.amount+transactionDtl.curr_intt_recov+(transactionDtl.curr_prn_recov!=null || transactionDtl.curr_prn_recov!=undefined?transactionDtl.curr_prn_recov:0)-(transactionDtl.ovd_intt_recov!=null ||transactionDtl.ovd_intt_recov!=undefined?transactionDtl.ovd_intt_recov:0):(transactionDtl.curr_intt_recov?transactionDtl.curr_intt_recov:transactionDtl.ovd_prn_recov)):transactionDtl.amount):
               (transactionDtl.acc_type_cd==2?(transactionDtl.trans_type=='D'? transactionDtl.ovd_prn_recov+transactionDtl.curr_intt_recov:transactionDtl.ovd_prn_recov):
               (transactionDtl.acc_type_cd==4?(transactionDtl.trans_type=='D'?transactionDtl.ovd_prn_recov+transactionDtl.curr_intt_recov:transactionDtl.ovd_prn_recov):
               (transactionDtl.acc_type_cd==5?(transactionDtl.trans_type=='D'?transactionDtl.ovd_prn_recov+transactionDtl.curr_intt_recov:transactionDtl.ovd_prn_recov):
               transactionDtl.curr_prn_recov- transactionDtl.ovd_prn_recov-transactionDtl.curr_intt_recov+transactionDtl.ovd_prn_recov+transactionDtl.curr_intt_recov))),
             
-            curr_intt_recov: transactionDtl.trans_mode=='R'? transactionDtl.acc_type_cd==4?transactionDtl.curr_intt_recov:
+              curr_intt_recov: transactionDtl.trans_mode=='R'? transactionDtl.acc_type_cd==4?transactionDtl.curr_intt_recov:
             transactionDtl.acc_type_cd==2?transactionDtl.curr_intt_recov:
             transactionDtl.acc_type_cd==5?transactionDtl.curr_intt_recov:
             transactionDtl.curr_prn_recov- transactionDtl.ovd_prn_recov-transactionDtl.curr_intt_recov :
              transactionDtl.curr_intt_recov,//PARTHA
 
-            ovd_numbert_recov: transactionDtl.ovd_intt_recov,
+            ovd_intt_recov: transactionDtl.ovd_intt_recov,
             remarks: transactionDtl.remarks,
             crop_cd: transactionDtl.crop_cd,
             activity_cd: transactionDtl.activity_cd,
@@ -330,6 +332,13 @@ export class TransactionapprovalComponent implements OnInit {
         err => { this.isLoading = false; }
       );
     } else { this.transactionDtlsFrm.reset(); }
+    if(transactionDtl.trf_type === 'T'){
+      this.trfDtls=true;
+    }
+    else{
+      this.trfDtls=false;
+
+    }
 
   }
 
@@ -560,8 +569,10 @@ export class TransactionapprovalComponent implements OnInit {
     this.toFltrAccountTyp = '';
     this.toFltrTrnCd = '';
     this.refresh = true;
+    this.trfDtls=false;
     this.getAcctTypeMaster();
     this.tranferDetails = [];
+    this.totalOfDenomination = 0;
   }
 
   private getAcctTypeMaster(): void {

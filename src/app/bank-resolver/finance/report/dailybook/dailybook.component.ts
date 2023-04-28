@@ -78,6 +78,7 @@ export class DailybookComponent implements OnInit ,AfterViewInit{
   lastcrAccCD:any;
   lastdrAccCD:any;
   today:any
+  LandingCall:boolean;
 
   constructor(private svc: RestService, private formBuilder: FormBuilder,
     private modalService: BsModalService,private _domSanitizer : DomSanitizer, private cd: ChangeDetectorRef,
@@ -95,8 +96,14 @@ export class DailybookComponent implements OnInit ,AfterViewInit{
       fromDate: [null, Validators.required],
       toDate: [null, Validators.required]
     });
-    this.onLoadScreen(this.content);
-    var date = new Date();
+    if(this.comser.openDayBook){
+      this.SubmitReport()
+      this.LandingCall=this.comser.openDayBook
+    }
+    else{
+      this.onLoadScreen(this.content);
+    }
+      var date = new Date();
     // get the date as a string
        var n = date.toDateString();
     // get the time as a string
@@ -130,17 +137,7 @@ export class DailybookComponent implements OnInit ,AfterViewInit{
   // }
 
   public SubmitReport() {
-    if (this.reportcriteria.invalid) {
-      this.alertMsg = "Invalid Input.";
-      return false;
-    }
-    else if (new Date(this.reportcriteria.value['fromDate']) > new Date(this.reportcriteria.value['toDate'])) {
-      this.showAlert = true;
-      this.alertMsg = "To Date cannot be greater than From Date!";
-      return false;
-    }
-    else {
-      this.modalRef.hide();
+    if(this.comser.openDayBook){
       this.reportData.length=0;
       this.pagedItems.length=0
       this.showAlert = false;
@@ -149,11 +146,9 @@ export class DailybookComponent implements OnInit ,AfterViewInit{
       this.drSum=0;
       this.crSumTr=0;
       this.drSumTr=0;
-      this.fromdate = this.reportcriteria.value.fromDate;
-      this.todate = this.reportcriteria.value.toDate;
+      this.fromdate = this.sys.CurrentDate;
+      this.todate = this.sys.CurrentDate;
       this.isLoading=true;
-      // this.onReportComplete();
-      // this.modalService.dismissAll(this.content);
       var dt={
         "ardb_cd":this.sys.ardbCD,
         "brn_cd":this.sys.BranchCode,
@@ -171,11 +166,7 @@ export class DailybookComponent implements OnInit ,AfterViewInit{
       } 
 
       this.isLoading=false
-      this.pageChange=document.getElementById('chngPage');
-      this.pageChange.click()
-      this.modalRef.hide();
-      this.setPage(2);
-      this.setPage(1)
+      
       this.crSum=0;
       this.drSum=0
       this.reportData.forEach(e=>{
@@ -192,16 +183,86 @@ export class DailybookComponent implements OnInit ,AfterViewInit{
        this.isLoading = false;
        this.comser.SnackBar_Error(); 
       })
-      // this.UrlString = this.svc.getReportUrl();
-      // this.UrlString = this.UrlString + 'WebForm/Fin/cashaccount?' + 'ardb_cd=' + this.sys.ardbCD + '&brn_cd=' + this.sys.BranchCode + '&from_dt=' + Utils.convertDtToString(this.fromdate) + '&to_dt=' + Utils.convertDtToString(this.todate) + '&acc_cd=' + localStorage.getItem('__cashaccountCD')
-      //   ;
-      // this.isLoading = true;
-      // this.ReportUrl = this._domSanitizer.bypassSecurityTrustResourceUrl(this.UrlString); // 20/01/2019
-      this.modalRef.hide();
 
       setTimeout(() => {
         this.isLoading = false;
       }, 3000);
+    }
+    else{
+      if (this.reportcriteria.invalid) {
+        this.alertMsg = "Invalid Input.";
+        return false;
+      }
+      else if (new Date(this.reportcriteria.value['fromDate']) > new Date(this.reportcriteria.value['toDate'])) {
+        this.showAlert = true;
+        this.alertMsg = "To Date cannot be greater than From Date!";
+        return false;
+      }
+      else {
+        this.modalRef.hide();
+        this.reportData.length=0;
+        this.pagedItems.length=0
+        this.showAlert = false;
+        this.isLoading=true
+        this.crSum=0;
+        this.drSum=0;
+        this.crSumTr=0;
+        this.drSumTr=0;
+        this.fromdate = this.reportcriteria.value.fromDate;
+        this.todate = this.reportcriteria.value.toDate;
+        this.isLoading=true;
+        // this.onReportComplete();
+        // this.modalService.dismissAll(this.content);
+        var dt={
+          "ardb_cd":this.sys.ardbCD,
+          "brn_cd":this.sys.BranchCode,
+          "from_dt":this.fromdate.toISOString(),
+          "to_dt":this.todate.toISOString(),
+          "acc_cd":localStorage.getItem('__cashaccountCD')
+        }
+        this.svc.addUpdDel('Finance/PopulateDailyCashBook',dt).subscribe(data=>{console.log(data)
+        this.reportData=data
+        this.dataSource=this.reportData
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        if(this.reportData.length==0){
+          this.comser.SnackBar_Nodata()
+        } 
+  
+        this.isLoading=false
+        this.pageChange=document.getElementById('chngPage');
+        this.pageChange.click()
+        this.modalRef.hide();
+        this.setPage(2);
+        this.setPage(1)
+        this.crSum=0;
+        this.drSum=0
+        this.reportData.forEach(e=>{
+          this.crSum+=e.cr_amt;
+          this.drSum+=e.dr_amt;
+          this.crSumTr+=e.cr_amt_tr;
+          this.drSumTr+=e.dr_amt_tr;
+        })
+        // this.setPage(1)
+        this.lastcrAccCD=this.reportData[this.reportData.length-1].cr_acc_cd
+        this.lastdrAccCD=this.reportData[this.reportData.length-1].dr_acc_cd
+      },
+      err => {
+         this.isLoading = false;
+         this.comser.SnackBar_Error(); 
+        })
+        // this.UrlString = this.svc.getReportUrl();
+        // this.UrlString = this.UrlString + 'WebForm/Fin/cashaccount?' + 'ardb_cd=' + this.sys.ardbCD + '&brn_cd=' + this.sys.BranchCode + '&from_dt=' + Utils.convertDtToString(this.fromdate) + '&to_dt=' + Utils.convertDtToString(this.todate) + '&acc_cd=' + localStorage.getItem('__cashaccountCD')
+        //   ;
+        // this.isLoading = true;
+        // this.ReportUrl = this._domSanitizer.bypassSecurityTrustResourceUrl(this.UrlString); // 20/01/2019
+        this.modalRef.hide();
+  
+        setTimeout(() => {
+          this.isLoading = false;
+        }, 3000);
+    }
+    
     }
   }
   public oniframeLoad(): void {

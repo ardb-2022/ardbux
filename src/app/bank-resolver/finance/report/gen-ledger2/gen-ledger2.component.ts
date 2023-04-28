@@ -69,6 +69,7 @@ export class GenLedger2Component implements OnInit {
   today:any
   opng_bal:any;
   resultLength=0;
+  LandingCall:boolean;
   constructor(private svc: RestService,
     private formBuilder: FormBuilder,
     private modalService: BsModalService,
@@ -87,7 +88,13 @@ export class GenLedger2Component implements OnInit {
       fromAcc: [null, Validators.required],
       toAcc: [null, Validators.required],
     });
+    if(this.comser.openGlTrns){
+      this.SubmitReport()
+      this.LandingCall=this.comser.openGlTrns
+    }
+    else{
     this.onLoadScreen(this.content);
+    }
     var date = new Date();
     // get the date as a string
        var n = date.toDateString();
@@ -109,25 +116,15 @@ export class GenLedger2Component implements OnInit {
 
 
   public SubmitReport() {
-    if (this.reportcriteria.invalid) {
-      this.showAlert = true;
-      this.alertMsg = 'Invalid Input.';
-      return false;
-    }
-    else if (new Date(this.r.fromDate.value) > new Date(this.r.toDate.value)) {
-      this.showAlert = true;
-      this.alertMsg = 'To Date cannot be greater than From Date!';
-      return false;
-    }
-    else {
+    if(this.comser.openGlTrns){
+      this.isLoading=true;
       this.crSum=0;
       this.drSum=0;
-      this.modalRef.hide()
       this.showAlert = false;
       this.reportData.length=0;
       this.pagedItems.length=0;
-      this.fromdate=this.reportcriteria.value['fromDate'];
-      this.todate=this.reportcriteria.value['toDate'];
+      this.fromdate=this.sys.CurrentDate;
+      this.todate=this.sys.CurrentDate;
       //this.isLoading=true;
       //this.onReportComplete();
       // this.modalService.dismissAll(this.content);
@@ -136,8 +133,8 @@ export class GenLedger2Component implements OnInit {
         "brn_cd": this.sys.BranchCode,
         "from_dt": this.fromdate.toISOString(),
         "to_dt": this.todate.toISOString(),
-        "ad_from_acc_cd": this.reportcriteria.controls.fromAcc.value,
-        "ad_to_acc_cd": this.reportcriteria.controls.toAcc.value
+        "ad_from_acc_cd": '21101',
+        "ad_to_acc_cd": '21101'
       }
       this.svc.addUpdDel('Finance/GetGLTransDtls',dt).subscribe(data=>{console.log(data)
       this.reportData=data
@@ -146,11 +143,7 @@ export class GenLedger2Component implements OnInit {
       } 
       console.log(this.reportData)
       this.isLoading=false
-      this.pageChange=document.getElementById('chngPage');
-      this.pageChange.click()
-      this.setPage(2);
-      this.setPage(1)
-      this.modalRef.hide();
+      
       this.itemsPerPage=this.reportData.length % 50 <=0 ? this.reportData.length: this.reportData.length % 50
       this.firstAccCD=this.reportData[0].acc_cd;
       this.lastAccCD=this.reportData[this.reportData.length-1].acc_cd  
@@ -182,9 +175,87 @@ export class GenLedger2Component implements OnInit {
      
       this.isLoading = true;
       this.ReportUrl=this._domSanitizer.bypassSecurityTrustResourceUrl(this.UrlString)
-      // setTimeout(() => {
-      //   this.isLoading = false;
-      // }, 10000);
+      
+    }
+    else{
+      if (this.reportcriteria.invalid) {
+        this.showAlert = true;
+        this.alertMsg = 'Invalid Input.';
+        return false;
+      }
+      else if (new Date(this.r.fromDate.value) > new Date(this.r.toDate.value)) {
+        this.showAlert = true;
+        this.alertMsg = 'To Date cannot be greater than From Date!';
+        return false;
+      }
+      else {
+        this.crSum=0;
+        this.drSum=0;
+        this.modalRef.hide()
+        this.showAlert = false;
+        this.reportData.length=0;
+        this.pagedItems.length=0;
+        this.fromdate=this.reportcriteria.value['fromDate'];
+        this.todate=this.reportcriteria.value['toDate'];
+        //this.isLoading=true;
+        //this.onReportComplete();
+        // this.modalService.dismissAll(this.content);
+        var data={
+          "ardb_cd": this.sys.ardbCD,
+          "brn_cd": this.sys.BranchCode,
+          "from_dt": this.fromdate.toISOString(),
+          "to_dt": this.todate.toISOString(),
+          "ad_from_acc_cd": this.reportcriteria.controls.fromAcc.value,
+          "ad_to_acc_cd": this.reportcriteria.controls.toAcc.value
+        }
+        this.svc.addUpdDel('Finance/GetGLTransDtls',data).subscribe(data=>{console.log(data)
+        this.reportData=data
+        if(this.reportData.length==0){
+          this.comser.SnackBar_Nodata()
+        } 
+        console.log(this.reportData)
+        this.isLoading=false
+        this.pageChange=document.getElementById('chngPage');
+        this.pageChange.click()
+        this.setPage(2);
+        this.setPage(1)
+        this.modalRef.hide();
+        this.itemsPerPage=this.reportData.length % 50 <=0 ? this.reportData.length: this.reportData.length % 50
+        this.firstAccCD=this.reportData[0].acc_cd;
+        this.lastAccCD=this.reportData[this.reportData.length-1].acc_cd  
+        this.opng_bal=this.reportData[0].opng_bal
+        this.dataSource.data=this.reportData
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.resultLength=this.reportData.length
+        this.reportData.forEach(e=>{
+         
+        //   this.opdrSum+=e.opng_dr;
+        //   this.opcrSum+=e.opng_cr;
+          this.crSum+=e.cr_amt;
+          this.drSum+=e.dr_amt;
+        //   this.clsdrSum+=e.clos_dr;
+        //   this.clscrSum+=e.clos_cr;
+        })
+        // this.lastAccCD=this.reportData[this.reportData.length-1].acc_cd
+        },
+        err => {
+           this.isLoading = false;
+           this.comser.SnackBar_Error(); 
+          }
+  )
+        
+        // this.UrlString=this.svc.getReportUrl()
+        // this.UrlString=this.UrlString+"WebForm/Fin/cashcumtrail?" + 'ardb_cd=' + this.sys.ardbCD+"&brn_cd="+this.sys.BranchCode+"&from_dt="+Utils.convertDtToString(this.fromdate)+"&to_dt="+Utils.convertDtToString(this.todate)
+        ;
+       
+        this.isLoading = true;
+        this.ReportUrl=this._domSanitizer.bypassSecurityTrustResourceUrl(this.UrlString)
+        // setTimeout(() => {
+        //   this.isLoading = false;
+        // }, 10000);
+    }
+    
     }
   }
 

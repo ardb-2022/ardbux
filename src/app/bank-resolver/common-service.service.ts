@@ -21,14 +21,21 @@ export class CommonServiceService {
   static bankconfigurationList: BankConfig[] = [];
   static serverIp = '36.255.3.143';
   customerList: mm_customer[] = [];
-  
+  accOpen:boolean=false;
+  accClose:boolean=false;
+  loanDis:boolean=false;
+  loanRec:boolean=false;
+  openDayBook:boolean=false;
+  openGlTrns:boolean=false;
   diff:any;
   date_msg="FROM-DATE should be lower than TO-DATE"
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   constructor(private _snackBar: MatSnackBar,private datePipe:DatePipe,
     private http: HttpClient, private confSvc: ConfigurationService,
-    private router: Router) { this.getConfiginSysn();}
+    private router: Router) { 
+      this.getConfiginSysn();
+    }
 
   SnackBar_Error() {
     this._snackBar.open('Error!!!', 'Close', {

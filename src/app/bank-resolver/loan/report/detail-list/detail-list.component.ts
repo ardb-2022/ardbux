@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-import { SystemValues, mm_customer, p_report_param, mm_operation } from 'src/app/bank-resolver/Models';
+import { SystemValues, mm_customer, p_report_param, mm_operation, mm_acc_type } from 'src/app/bank-resolver/Models';
 import { p_gen_param } from 'src/app/bank-resolver/Models/p_gen_param';
 import { tt_trial_balance } from 'src/app/bank-resolver/Models/tt_trial_balance';
 import { RestService } from 'src/app/_service';
@@ -37,8 +37,7 @@ export class DetailListComponent implements OnInit {
   trailbalance: tt_trial_balance[] = [];
   resultLength=0
   filteredArray:any=[]
-
-  AcctTypes: mm_operation[];
+  AcctTypes:  mm_acc_type[] = [];
   prp = new p_report_param();
   reportcriteria: FormGroup;
   closeResult = '';
@@ -169,7 +168,7 @@ export class DetailListComponent implements OnInit {
       fromDate: [null, Validators.required],
       acc_type_cd: [null, Validators.required]
     });
-    this.getOperationMaster();
+    this.getAccountTypeList();
     this.onLoadScreen(this.content);
     var date = new Date();
     var n = date.toDateString();
@@ -184,35 +183,28 @@ export class DetailListComponent implements OnInit {
     this.currentPage = page;
     this.cd.detectChanges();
   }
-  private getOperationMaster(): void {
-    this.isLoading = true;
-    if (undefined !== DetailListComponent.operations &&
-      null !== DetailListComponent.operations &&
-      DetailListComponent.operations.length > 0) {
-      this.isLoading = false;
-      this.AcctTypes = DetailListComponent.operations.filter(e => e.module_type === 'LOAN')
-        .filter((thing, i, arr) => {
-          return arr.indexOf(arr.find(t => t.acc_type_cd === thing.acc_type_cd)) === i;
-        });
-      this.AcctTypes = this.AcctTypes.sort((a, b) => (a.acc_type_cd > b.acc_type_cd ? 1 : -1));
-    } else {
-      this.svc.addUpdDel<mm_operation[]>('Mst/GetOperationDtls', null).subscribe(
-        res => {
+  
+  getAccountTypeList() {
 
-          DetailListComponent.operations = res;
-          this.isLoading = false;
-          this.AcctTypes = DetailListComponent.operations.filter(e => e.module_type === 'LOAN')
-            .filter((thing, i, arr) => {
-              return arr.indexOf(arr.find(t => t.acc_type_cd === thing.acc_type_cd)) === i;
-            });
-          this.AcctTypes = this.AcctTypes.sort((a, b) => (a.acc_type_cd > b.acc_type_cd ? 1 : -1));
-          // console.log(this.AcctTypes)
-        },
-        err => { this.isLoading = false; }
-      );
+    if (this.AcctTypes.length > 0) {
+      return;
     }
-  }
+    this.AcctTypes = [];
 
+    this.isLoading = true;
+    this.svc.addUpdDel<any>('Mst/GetAccountTypeMaster', null).subscribe(
+      res => {
+
+        this.isLoading = false;
+        this.AcctTypes = res;
+        this.AcctTypes = this.AcctTypes.filter(c => c.dep_loan_flag === 'L');
+        this.AcctTypes = this.AcctTypes.sort((a, b) => (a.acc_type_cd > b.acc_type_cd) ? 1 : -1);
+      },
+      err => {
+        this.isLoading = false;
+      }
+    );
+  }
   public SubmitReport() {
     if (this.reportcriteria.invalid) {
       this.showAlert = true;

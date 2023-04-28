@@ -290,9 +290,9 @@
             <!-- <button type="button" class="btn btn-link" *ngIf="showDenominationDtl" (click)="openModal(content)">
               Denomination Details
             </button> -->
-            <button type="button" class="btn btn-link" *ngIf="undefined !== tranferDetails && tranferDetails.length > 0" (click)="openModal(trfcontent)">
+            <!-- <button type="button" class="btn btn-link" *ngIf="undefined !== tranferDetails && tranferDetails.length > 0" (click)="openModal(trfcontent)">
               Transfer Details
-            </button>
+            </button> -->
             <ng-template #content>
               <div class="modal-header">
                 <h4 class="modal-title pull-left customHeader">Denomination Details for Acc#
@@ -327,7 +327,7 @@
                 </table>
               </div>
             </ng-template>
-            <ng-template #trfcontent>
+            <!-- <ng-template #trfcontent>
               <div class="modal-header text-center">
                 <h4 class="modal-title pull-left customHeader">Transfer Details for Acc#
                  <strong>{{selectedVm.td_def_trans_trf.acc_num}}</strong> and Transaction Code
@@ -339,13 +339,13 @@
               </div>
               <div class="modal-body">
                 <table class="table table-sm table-hover" id="customers2">
-                  <!-- <thead> -->
+                 
                     <tr>
                       <th scope="col">Acc Typ / Acc No</th>
                       <th scope="col">GL Head</th>
                       <th scope="col">Amount</th>
                     </tr>
-                  <!-- </thead> -->
+                 
                   <tbody>
                     <tr *ngFor="let transfer of tranferDetails">
                       <td *ngIf="transfer.acc_num !== '0000'">{{transfer.acc_type_cd +' - ' +
@@ -363,11 +363,40 @@
                   </tbody>
                 </table>
               </div>
-            </ng-template>
+            </ng-template> -->
           </form>
           <hr>
         </div>
       </div>
+    </div>
+    <div class="col-12" *ngIf="trfDtls">
+      <table class="table table-sm table-hover" id="customers2">
+        <!-- <thead> -->
+          <tr>
+            <th scope="col">Transfer Details:</th>
+            <th scope="col" style="text-align: center;">Acc Typ / Acc No</th>
+            <th scope="col">GL Head</th>
+            <th scope="col">Amount</th>
+          </tr>
+        <!-- </thead> -->
+        <tbody>
+          <tr *ngFor="let transfer of tranferDetails">
+            <td>&nbsp;</td>
+            <td style="text-align: center;" *ngIf="transfer.acc_num !== '0000'">{{transfer.acc_type_cd +' - ' +
+              transfer.remarks +' / ' +transfer.created_by + '(' +transfer.acc_num + ')'}}</td>
+            <td *ngIf="transfer.acc_num === '0000'"></td>
+            <td *ngIf="transfer.acc_num !== '0000'"></td>
+            <td *ngIf="transfer.acc_num === '0000'">{{transfer.acc_type_cd + ' - ' + transfer.acc_name}}</td>
+            <td>&#8377;{{transfer.amount}}</td>
+          </tr>
+          <tr>
+            <td></td> 
+            <td></td>
+            <td><strong>Total</strong></td>
+            <td><strong>&#8377;{{totalOfDenomination}}</strong></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
   <div *ngIf="showMsg && showMsg.Show" class="col-xs-12 col-sm-12 col-md-11 col-lg-11 shadow mb-2 bg-white p-3">

@@ -54,6 +54,7 @@ export class AgentCommissionComponent implements OnInit {
   fromdate: Date;
   toDate: Date;
   counter=0
+  afterPost:boolean=false;
   suggestedCustomer: mm_customer[];
   exportAsConfig:ExportAsConfig;
   itemsPerPage = 50;
@@ -241,15 +242,18 @@ export class AgentCommissionComponent implements OnInit {
         debugger
         this.isLoading=false
         this.showAlert2 = true
+        this.afterPost=true;
         this.alertMsg = 'Commission Posting in Agent Account Successfully';
       }
       else{
+        this.afterPost=false;
         this.showAlert = true
         this.alertMsg = 'Occurred in Commission Posting';
       }
        
        },
        err => {
+          this.afterPost=false;
           this.isLoading = false;
           this.comser.SnackBar_Error(); 
          })

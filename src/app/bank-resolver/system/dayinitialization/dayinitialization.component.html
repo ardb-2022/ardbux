@@ -69,7 +69,7 @@ style="background-color: #78c2ad21; min-height: 20vh;">
     </tr>
     <tr *ngFor="let item of sdoRet; let i = index;"  style="cursor: pointer;">
       <td>{{item.operation_dt  | date}}</td>
-      <td>{{item.brn_cd=='101'?'Main Branch':'Other Branch'}}</td>
+      <td>{{item.ardb_cd}}</td>
       <td>{{item.cls_flg=='Y'?'Closed':'Opened'}}</td>
     </tr> 
   </table>

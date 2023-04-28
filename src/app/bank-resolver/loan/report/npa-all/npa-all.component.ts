@@ -17,6 +17,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import { CommonServiceService } from 'src/app/bank-resolver/common-service.service';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import jspdf from 'jspdf';
 @Component({
   selector: 'app-npa-all',
   templateUrl: './npa-all.component.html',
@@ -48,7 +49,7 @@ export class NpaALLComponent implements OnInit {
   closeResult = '';
   showReport = false;
   showAlert = false;
-  isLoading = true;
+  isLoading = false;
   ReportUrl: SafeResourceUrl;
   UrlString = '';
   alertMsg = '';
@@ -151,7 +152,7 @@ selectItems1=[
     private modalService: BsModalService, private _domSanitizer: DomSanitizer,private exportAsService: ExportAsService, private cd: ChangeDetectorRef,
     private router: Router, private comser:CommonServiceService) { }
   ngOnInit(): void {
-    this.isLoading=true;
+    // this.isLoading=true;
     this.fromdate = this.sys.CurrentDate;
     this.reportcriteria = this.formBuilder.group({
       fromDate: [null, Validators.required],
@@ -617,31 +618,23 @@ debugger
     }
   }
   openPDF(): void {
-  //   const element = document.getElementById('mattable');
-  // html2canvas(element).then((canvas) => {
-  //   const imgData = canvas.toDataURL('image/png');
-  //   const pdf = new jsPDF('l', 'pt', 'a4');
-  //   pdf.addImage(imgData, 'PNG', 0, 0);
-  //   pdf.setPageOrientation('landscape');
-  //   pdf.save('myPDF.pdf');
-  // });
-  // const doc = new jsPDF();
-//  const content = document.getElementById('mattable');
-//  let data = this.htmlData.nativeElement;
-//     let options : any = {
-//       orientation: 'p',
-//       unit: 'px',
-//       format: 'a0',
-//       };
-//     let doc = new jsPDF(options);
-//      doc.fromHTML(data.innerHTML{
-//       callback: function (doc) {
-//             doc.save("angular-demo.pdf");
-//           },
-//       margin:15,
-//       x: 10,
-//       y: 10
-//     });
+    const div = document.getElementById('mattable');
+    div.style.width = "fit-content";
+    html2canvas(div, {
+      scale: 2, // Increase the scale to improve the quality
+      scrollX: -window.scrollX, // Fix the position on the x-axis
+      scrollY: -window.scrollY, // Fix the position on the y-axis
+    }).then(canvas => {
+      const pdf = new jspdf('landscape', 'pt');
+      const width = 2000;
+      const height = 1300;
+      const ratio = width / height;
+      const pageWidth =840;
+      // pdf.internal.pageSize.getWidth()
+      const pageHeight = pageWidth / ratio;
+      pdf.addImage(canvas, 'PNG', 0, 0, pageWidth, pageHeight);
+      pdf.save('my-document.pdf');
+    });
   }
 
 }

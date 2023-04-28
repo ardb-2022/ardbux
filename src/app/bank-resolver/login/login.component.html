@@ -1,7 +1,8 @@
 <div>
-  <div style=" margin: 50px 100px 50px 0px; ">
-
-    <div class="col-xs-9 col-sm-6 col-md-5 col-lg-5 shadow-lg mb-5 bg-white p-3 " style="margin-left: 60%;">
+  <div style=" margin: 50px 100px 50px 50px; ">
+  
+    <div class="col-xs-9 col-sm-6 col-md-5 col-lg-5 shadow-lg mb-5 bg-white p-3 logindiv ">
+      <!-- <div class="bagimg"></div> -->
     <br>
     <img src="./assets/images/login.png"  width="100" height="100" class="log1">
     <img src="./assets/images/login2.png"  width="100" height="100" class="log2">
@@ -20,50 +21,41 @@
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" id="mainselection">
         <!-- <label for="ardbbrMst">ARBD CD</label> -->
         <label for="ardbbrMst">Organization Name</label>
-        <select id="ardbbrMst" class="form-control form-control-sm custom-scrollbar" tabindex="1" formControlName="ardbbrMst" (change)="getArdbCode($event)">
+        <select id="ardbbrMst" style="border-radius: 1.25rem!important;" class="form-control form-control-sm custom-scrollbar" tabindex="1" formControlName="ardbbrMst" (change)="getArdbCode($event)">
           <option value="">Select</option>
           <option *ngFor="let option of ardbBrnMst;let i = index" [value]="option.ardB_CD" >{{ option.name }}</option>
         </select>
         <div class="form-group ">
           <label for="exampleInputEmail1">User ID</label>
-          <input tabindex="2" type="text" (focusout)="onfocusOut($event)" class="form-control" id="exampleInputEmail1" formControlName="username"
+          <input tabindex="2" type="text" style="border-radius: 1.25rem!important;" (focusout)="onfocusOut($event)" class="form-control" id="exampleInputEmail1" formControlName="username"
             aria-describedby="emailHelp" placeholder="Enter user"
              name="PreventChromeAutocomplete" autocomplete="address-level4">
         </div>
         <div class="form-group">
           <label for="exampleInputPassword1">Password</label>
-          <input tabindex="3" type="password" class="form-control" id="exampleInputPassword1" formControlName="password"
+          <input tabindex="3" type="password" style="border-radius: 1.25rem!important;" class="form-control" id="exampleInputPassword1" formControlName="password"
             placeholder="Password"  name="x-field-2" autocomplete="new-field-2">
         </div>
         <div class="form-group">
           <label for="branch">Branch</label>
-          <!-- <small class="text-muted ml-4">IP - {{ipAddress.ip}}</small> -->
-        <select tabindex="4" [disabled]="brnDtls.length > 0" id="branch" class="form-control form-control-sm custom-scrollbar" formControlName="branch">
+        <select tabindex="4" [disabled]="brnDtls.length > 0" id="branch" style="border-radius: 1.25rem!important;" class="form-control form-control-sm custom-scrollbar" formControlName="branch">
           <option value="">Select</option>
           <option  *ngFor="let option of brnDtls;let i = index" [value]="option.brn_cd">{{ option.brn_name }}</option>
         </select>
         </div>
-        <!-- <button tabindex="6" type="button" class="btn btn-light " (click)="cancel()">Cancel</button> -->
-        <button mat-raised-button color="basic"  class="clr-btn" (click)="cancel()" style="margin-right:25px;">Clear
+        <button mat-raised-button color="basic"  class="clr-btn" (click)="cancel()" style="border-radius: 20%; margin-left: 20%;">Clear
           <mat-icon>restart_alt</mat-icon>
         </button>
         
-        <!-- <button mat-raised-button  *ngIf="showUnlockUsr" class="log-btn" color="primary" (click)="unlockUsr()">Unlock User
-          <mat-icon>lock_open</mat-icon>
-        </button> -->
-        <button mat-raised-button color="primary" class="float-right log-btn" [disabled]=!loginForm.valid>Login
+        <button mat-raised-button color="primary" class="float-right log-btn" [disabled]=!loginForm.valid style="border-radius: 20%; margin-right: 20%;">Login
           <mat-icon>login</mat-icon>
         </button>
-        <!-- <button *ngIf="showUnlockUsr" type="button" class="btn btn-primary ml-1" (click)="unlockUsr()">Unlock User</button> -->
-        <!-- <button tabindex="5" type="submit" class="btn btn-primary float-right" [disabled]=!loginForm.valid>Login</button> -->
       </form>
       <hr />
-      <!-- <a routerLink="" class="text-info float-left">Forgot Password</a> -->
-      <!-- <a routerLink="/register" class="text-info float-right">Register</a> -->
     </div>
-     <img src="./assets/images/goldenrice.png" class="log3">
   </div>
-</div>
+    <img src="./assets/images/abc.png" class="log3">
+  </div>
 
  
  
