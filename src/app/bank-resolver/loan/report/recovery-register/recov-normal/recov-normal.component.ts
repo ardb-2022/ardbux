@@ -310,6 +310,17 @@ export class RecovNormalComponent implements OnInit {
     }
     // this.getTotal()
   }
+  downloadexcel(){
+    this.exportAsConfig = {
+      type: 'xlsx',
+      // elementId: 'hiddenTab', 
+      elementIdOrContent:'mattable'
+    }
+    this.exportAsService.save(this.exportAsConfig, 'ConsoTrial').subscribe(() => {
+      // save started
+      console.log("hello")
+    });
+  }
   // getTotal(){
   //   this.ovdInttSum=0
   //   this.currInttSum=0

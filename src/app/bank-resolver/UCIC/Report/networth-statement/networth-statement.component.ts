@@ -39,11 +39,12 @@ export class NetworthStatementComponent implements OnInit {
   custType:any;
   custAddr:any;
   suggestedCustomer: mm_customer[];
-  today:any
+  today:any;
+  memberID:any;
   reportData:any=[];
   reportData1:any=[];
-  ardbName=localStorage.getItem('ardb_name')
-  branchName=this.sys.BranchName
+  ardbName=localStorage.getItem('ardb_name');
+  branchName=this.sys.BranchName;
   showWait=false
   ngOnInit(): void {
     this.reportcriteria = this.formBuilder.group({
@@ -60,6 +61,19 @@ export class NetworthStatementComponent implements OnInit {
   }
   onLoadScreen(content) {
     this.modalRef = this.modalService.show(content, this.config);
+  }
+  public getMember(cust_cd): void {
+    this.showWait=true;
+      const prm = new p_gen_param();
+      prm.as_cust_name = cust_cd;
+      this.svc.addUpdDel<any>('Deposit/GetCustDtls', prm).subscribe(
+        res => {
+          this.memberID=res[0].old_cust_cd;
+          
+        },
+        err => { this.isLoading = false; }
+      );
+   
   }
   public suggestCustomer(): void {
     this.showWait=true;
@@ -95,6 +109,7 @@ export class NetworthStatementComponent implements OnInit {
   }
   public SelectCustomer(cust: mm_customer): void {
     console.log(cust)
+    this.getMember(cust.cust_cd)
     this.custCD=cust.cust_cd
     this.custType=cust.cust_type
     this.custName=cust.cust_name
@@ -124,6 +139,7 @@ export class NetworthStatementComponent implements OnInit {
         this.reportData=data
         this.svc.addUpdDel('UCIC/GetDepositDtls',dt).subscribe(data=>{console.log(data)
           this.reportData1=data
+          // this.reportData1 = this.reportData1.sort((a, b) => (a.acc_type_cd > b.acc_type_cd) ? 1 : -1);
           if(this.reportData.length==0 && this.reportData1.length==0){
             this.comser.SnackBar_Nodata()
           } 

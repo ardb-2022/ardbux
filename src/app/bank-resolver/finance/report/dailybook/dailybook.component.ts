@@ -16,6 +16,8 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import { CommonServiceService } from 'src/app/bank-resolver/common-service.service';
+import html2canvas from 'html2canvas';
+import jspdf from 'jspdf';
 @Component({
   selector: 'app-dailybook',
   templateUrl: './dailybook.component.html',
@@ -229,7 +231,6 @@ export class DailybookComponent implements OnInit ,AfterViewInit{
           this.comser.SnackBar_Nodata()
         } 
   
-        this.isLoading=false
         this.pageChange=document.getElementById('chngPage');
         this.pageChange.click()
         this.modalRef.hide();
@@ -246,6 +247,10 @@ export class DailybookComponent implements OnInit ,AfterViewInit{
         // this.setPage(1)
         this.lastcrAccCD=this.reportData[this.reportData.length-1].cr_acc_cd
         this.lastdrAccCD=this.reportData[this.reportData.length-1].dr_acc_cd
+        if(this.reportData.length>0){
+          this.isLoading=false
+          }
+
       },
       err => {
          this.isLoading = false;
@@ -477,13 +482,47 @@ export class DailybookComponent implements OnInit ,AfterViewInit{
   }
 downloadexcel(){
   this.exportAsConfig = {
-    type: 'csv',
+    type: 'xlsx',
     // elementId: 'hiddenTab', 
-    elementIdOrContent:'hiddenTab'
+    elementIdOrContent:'mattable'
   }
   this.exportAsService.save(this.exportAsConfig, 'daybook').subscribe(() => {
     // save started
     console.log("hello")
+  });
+}
+downloadPDF(){
+  this.exportAsConfig = {
+    type: 'pdf',
+    // elementId: 'hiddenTab', 
+    elementIdOrContent:'mattable'
+  }
+  this.exportAsService.save(this.exportAsConfig, 'daybook').subscribe(() => {
+    // save started
+    console.log("hello")
+  });
+}
+exportAsPDF() {
+  const elementToPrint = document.getElementById('mattable'); // replace 'mattable' with the ID of your HTML div
+  html2canvas(elementToPrint).then((canvas) => {
+    const contentDataURL = canvas.toDataURL('image/png');
+    const pdf = new jspdf('landscape', 'px', 'a4');
+    const imgWidth = 610;
+    const pageHeight = 250;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    let heightLeft = imgHeight;
+    let position = 0;
+    pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
+    heightLeft -= pageHeight;
+    let pageCount = 1;
+    while (heightLeft >= 0) {
+      position = heightLeft - imgHeight-210;
+      pdf.addPage();
+      pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight; // add the gap height to the page height
+      pageCount++;
+    }
+    pdf.save('cashcumtrial.pdf'); // replace 'cashcumtrial' with the desired filename
   });
 }
 ngAfterViewInit() {

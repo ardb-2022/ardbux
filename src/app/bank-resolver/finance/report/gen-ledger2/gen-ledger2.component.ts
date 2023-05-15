@@ -465,11 +465,11 @@ pageChanged(event: PageChangedEvent): void {
 }
 downloadexcel(){
   this.exportAsConfig = {
-    type: 'csv',
+    type: 'xlsx',
     // elementId: 'hiddenTab', 
-    elementIdOrContent:'hiddenTab'
+    elementIdOrContent:'mattable'
   }
-  this.exportAsService.save(this.exportAsConfig, 'generalledger').subscribe(() => {
+  this.exportAsService.save(this.exportAsConfig, 'GenLeagerTrans').subscribe(() => {
     // save started
     console.log("hello")
   });

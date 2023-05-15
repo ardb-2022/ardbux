@@ -162,6 +162,10 @@
               <small for="shadow_bal">Shadow Balance</small>
               <input type="text" class="form-control form-control-sm" formControlName="shadow_bal" id="shadow_bal"
                 disabled>
+            </div><div class="form-group col-6" *ngIf="!accNoEnteredForTransaction.ShowClose">
+              <small for="ext_instl_tot">Minimum Balance</small>
+              <input type="text" class="form-control form-control-sm" formControlName="ext_instl_tot" id="ext_instl_tot"
+                disabled>
             </div>
           </div>
           <div class="form-row">
@@ -178,10 +182,14 @@
               <small for="instl_amt">Installment Amt</small>
               <input type="text" class="form-control form-control-sm" formControlName="instl_amt" disabled>
             </div>
-            <div class="form-group col-4" *ngIf="showInterestDtls">
+            <div class="form-group col-6" *ngIf="showInterestDtls ||showRdInstalment">
               <small for="mat_dt">Maturity Date</small>
               <input type="text" class="form-control form-control-sm" formControlName="mat_dt" disabled>
+            </div><div class="form-group col-6" *ngIf="showRdInstalment">
+              <small for="RD_mat_amount">Maturity Amt</small>
+              <input type="text" class="form-control form-control-sm" formControlName="RD_mat_amount" disabled>
             </div>
+
             <div class="form-group col-4" *ngIf="showInterestDtls">
               <small for="mat_status">Maturity Status</small>
               <input type="text" class="form-control form-control-sm" formControlName="mat_status" disabled>

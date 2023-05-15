@@ -257,11 +257,11 @@ export class ConsolidatedTrialBalanceComponent implements OnInit {
   
   downloadexcel(){
     this.exportAsConfig = {
-      type: 'pdf',
+      type: 'xlsx',
       // elementId: 'hiddenTab', 
-      elementIdOrContent:'hiddenTab'
+      elementIdOrContent:'mattable'
     }
-    this.exportAsService.save(this.exportAsConfig, 'trialbalance').subscribe(() => {
+    this.exportAsService.save(this.exportAsConfig, 'ConsoTrialBalance').subscribe(() => {
       // save started
       console.log("hello")
     });

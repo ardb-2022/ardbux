@@ -259,7 +259,7 @@ export class AccounTransactionsComponent implements OnInit {
       closeIntrest: [''],
       balance: [''],
       intra_brn_cd: [this.sys.BranchCode],
-      home_brn_cd: ['Y']
+      home_brn_cd: ['Y'],
     });
     this.resetTransfer();
     this.resetAccDtlsFrmFormData();
@@ -529,6 +529,24 @@ debugger
 
       }
     );
+  }  
+  calCrdIntOpenTime(tempGenParam: p_gen_param): void {
+    this.isLoading = true;
+    
+    this.svc.addUpdDel<any>('Deposit/F_CALCRDINTT_REG', tempGenParam).subscribe(
+      res => {
+        // this.tm_deposit.intt_amt = res;
+        this.accDtlsFrm.patchValue({
+          RD_mat_amount:Number(Number(this.accNoEnteredForTransaction.instl_no) * Number(this.accNoEnteredForTransaction.instl_amt)) +res
+        });
+        // this.tm_deposit.mat_val = ;
+        this.isLoading = false;
+      },
+      err => {
+        this.isLoading = false;
+
+      }
+    );
   }
 
   f_calctdintt_reg(temp_gen_param: p_gen_param): void {
@@ -697,6 +715,7 @@ debugger
       dep_period_y: [''],
       dep_period_m: [''],
       dep_period_d: [''],
+      RD_mat_amount:['']
     });
   }
 
@@ -802,11 +821,21 @@ debugger
         transfer_flag: this.accNoEnteredForTransaction.transfer_flag,
         transfer_dt: this.accNoEnteredForTransaction.transfer_dt,
         agent_cd: this.accNoEnteredForTransaction.agent_cd,
+       
       });
       // 
 console.log(this.accDtlsFrm.controls.mat_amt.value);
 
       if(this.accNoEnteredForTransaction.acc_type_cd==6){
+        const temp_gen_param = new p_gen_param();
+
+        temp_gen_param.ad_acc_type_cd = this.accNoEnteredForTransaction.acc_type_cd;
+    
+          temp_gen_param.ad_instl_amt = +this.accNoEnteredForTransaction.instl_amt;
+          temp_gen_param.an_instl_no = +this.accNoEnteredForTransaction.instl_no;
+          temp_gen_param.an_intt_rate = +this.accNoEnteredForTransaction.intt_rt;
+          this.calCrdIntOpenTime(temp_gen_param);
+
       const rdInstallament = new td_rd_installment();
 
       rdInstallament.acc_num = this.accNoEnteredForTransaction.acc_num;

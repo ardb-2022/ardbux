@@ -106,6 +106,7 @@
     <tr>
       <th>UCIC</th>
       <th>Type</th>
+      <th>Member ID</th>
       <th >Name</th>
       <th >Address</th>
     </tr>
@@ -114,6 +115,7 @@
         <td>{{custCD}}</td>
         <td *ngIf="custType=='M'">Member</td>
         <td *ngIf="custType=='N'">Non-Member</td>
+        <td>{{memberID}}</td>
         <td>{{custName}}</td>
         <td>{{custAddr}}</td>
       </tr>
@@ -191,6 +193,7 @@
       <tr>
         <th>UCIC</th>
         <th>Type</th>
+        <th>Member ID</th>
         <th>Name</th>
         <th>Address</th>
       </tr>
@@ -199,6 +202,7 @@
           <td>{{custCD}}</td>
           <td *ngIf="custType=='M'">Member</td>
           <td *ngIf="custType=='N'">Non-Member</td>
+          <td>{{memberID}}</td>
           <td>{{custName}}</td>
           <td>{{custAddr}}</td>
         </tr>
@@ -224,6 +228,7 @@
             <td *ngIf="i.acc_type_cd==6">Recurring Deposit</td>
             <td *ngIf="i.acc_type_cd==7">Share Account</td>
             <td *ngIf="i.acc_type_cd==8">Flexi Deposit</td>
+            <td *ngIf="i.acc_type_cd==9">Loan Suspense</td>
             <td *ngIf="i.acc_type_cd==11">DSP</td>
             <td>{{i.acc_num}}</td>
             <td style="text-align:right">{{i.clr_bal | INRCurrency}}</td>

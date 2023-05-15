@@ -59,10 +59,11 @@
       <div>
         <!-- <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1"  (click)="exportPDFTitle()">Download PDF</button> -->
         <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="closeScreen()">Close</button>
-        <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="exportAsPDF()">Export as PDF</button>
+        <!-- <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="exportAsPDF()">Export as PDF</button> -->
         <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" [useExistingCss]="true"
           printSectionId="mattable" ngxPrint>Print</button>
         <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
+        <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadexcel()">Export as EXCEL</button>
   
       </div>
     </div>
@@ -75,6 +76,7 @@
         <input matInput (keyup)="applyFilter($event)" placeholder="Ex. abc/123" #input>
       </mat-form-field>
       <div class="mat-elevation-z8" class="row" id="mattable">
+       
         <div class="col-12">
         <div class="justify-content-center" style="text-align:center">
           <br><h4>{{ardbName}} ({{branchName}})</h4>
@@ -83,7 +85,7 @@
           <h4> <u>Consolidated Cash Cum Trial from {{fromdate.toDateString()| date: 'dd/MM/yyyy'}} to  {{todate.toDateString()| date: 'dd/MM/yyyy'}} </u></h4>
        </div>
       </div>
-      <div class="col-6">
+      <div class="col-6" >
         <table mat-table [dataSource]="dataSource1" matSort>
       
             <!-- ID Column -->
@@ -297,10 +299,11 @@
       <div>
         <!-- <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1"  (click)="exportPDFTitle()">Download PDF</button> -->
         <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="closeScreen()">Close</button>
-        <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="exportAsPDF()">Export as PDF</button>
+        <!-- <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="exportAsPDF()">Export as PDF</button> -->
         <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" [useExistingCss]="true"
           printSectionId="mattable" ngxPrint>Print</button>
         <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
+        <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadexcel()">Export as EXCEL</button>
   
       </div>
     </div>

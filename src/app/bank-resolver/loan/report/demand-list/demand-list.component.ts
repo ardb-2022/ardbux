@@ -85,7 +85,7 @@ export class DemandListComponent implements OnInit {
   bName=''
   selectedValue=''
   selectedValue1=''
-  displayedColumns: string[] = ['acc_name','block_name','vill_name','loan_id','party_name','disb_dt','activity_cd','outstanding_prn','curr_prn','ovd_prn','curr_intt','ovd_intt','penal_intt','total'];
+  displayedColumns: string[] = ['acc_name','block_name','vill_name','loan_id','lf_no','party_name','disb_dt','activity_cd','outstanding_prn','curr_prn','ovd_prn','curr_intt','ovd_intt','penal_intt','total'];
   displayedColumns1: string[] = ['acc_cd', 'dr','cr'];
   dataSource = new MatTableDataSource()
   resultLength=0;
@@ -609,6 +609,17 @@ debugger
     
       // this.crSum+=this.filteredArray[i].cr_amount
     }
+  }
+  downloadexcel(){
+    this.exportAsConfig = {
+      type: 'xlsx',
+      // elementId: 'hiddenTab', 
+      elementIdOrContent:'mattable'
+    }
+    this.exportAsService.save(this.exportAsConfig, 'DemandListMember').subscribe(() => {
+      // save started
+      console.log("hello")
+    });
   }
   resetList(){
     this.isLoading=true

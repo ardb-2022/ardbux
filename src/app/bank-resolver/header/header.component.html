@@ -16,7 +16,7 @@
   <div class="row" >
     <nav class="navbar navbar-expand-lg col-md-12 col-xl-12">
       
-  <div [hidden]="hideMenuOnComplete" ccCardHover>
+  <div class="myDivClass" [hidden]="hideMenuOnComplete">
     
     <button mat-button [matMenuTriggerFor]="ucic"><mat-icon>account_box</mat-icon>
       UCIC</button>  <label class = "vertical"></label>
@@ -40,7 +40,7 @@
         <span>Transaction</span>
       </button>
     </mat-menu>
-    <mat-menu #utransaction="matMenu">
+    <mat-menu #utransaction="matMenu" ccCardHover>
       <button mat-menu-item routerLink="UT_CustomerProfile" >
         <mat-icon>group</mat-icon>
         <span>Customer Profile Entry</span>
@@ -68,7 +68,7 @@
         <span>Report</span>
       </button>
     </mat-menu>
-    <mat-menu #ftransaction="matMenu" (mouseenter)="abc()">
+    <mat-menu #ftransaction="matMenu" (mouseenter)="abc()" ccCardHover>
       <button mat-menu-item routerLink="FT_Voucher" id="FT_Voucher">
         <mat-icon>local_activity</mat-icon>
         <span>Voucher</span>
@@ -90,7 +90,7 @@
         <span>Create Gl Head</span>
       </button>
     </mat-menu>
-    <mat-menu #report="matMenu" >
+    <mat-menu #report="matMenu" ccCardHover>
       <button mat-menu-item routerLink="FT_PrintVoucher" id="FT_PrintVoucher">
         <mat-icon>print</mat-icon>
         <span>Print Voucher</span>
@@ -132,9 +132,13 @@
         <mat-icon>legend_toggle</mat-icon>
         <span>Balance Sheet</span>
       </button>
+      
       <button mat-menu-item routerLink="FR_CdCashAccount" (mouseenter)="hideButton($event)" id="FR_CdCashAccount">
         <mat-icon>add_to_photos</mat-icon>
         <span>Consolidated Cash Account</span>
+      </button><button mat-menu-item routerLink="FR_CdCashAccNew" (mouseenter)="hideButton($event)" id="FR_CdCashAccNew">
+        <mat-icon>gamepad</mat-icon>
+        <span>Conso Cash Account New</span>
       </button>
       <button mat-menu-item routerLink="FR_CdDayBook" (mouseenter)="hideButton($event)" id="FR_CdDayBook">
         <mat-icon>library_books</mat-icon>
@@ -161,6 +165,10 @@
         <mat-icon>devices</mat-icon>
         <span> Consolidated Profit/Loss A/C</span>
       </button>
+      <button  mat-menu-item routerLink="FR_CdBalanceSheet" (mouseenter)="hideButton($event)" id="FR_CdBalanceSheet">
+        <mat-icon>format_list_numbered_rtl</mat-icon>
+        <span>Consolidated Balance Sheet</span>
+      </button>
       <button mat-menu-item routerLink="FR_allGLHead" (mouseenter)="hideButton($event)" id="FR_allGLHead">
         <mat-icon>list_alt</mat-icon>
         <span>Account Master Details</span>
@@ -177,7 +185,7 @@
         <span>Report</span>
       </button>
     </mat-menu>
-    <mat-menu #dftransaction="matMenu">
+    <mat-menu #dftransaction="matMenu" ccCardHover>
       <button mat-menu-item routerLink="DT_OpenAcc" (mouseenter)="hideButton($event)" id="DT_OpenAcc">
         <mat-icon>account_balance</mat-icon>
         <span>Account Opening</span>
@@ -219,7 +227,7 @@
         <span>DDS Import/Export</span>
       </button>
     </mat-menu>
-    <mat-menu #dds_imp_exp="matMenu">
+    <mat-menu #dds_imp_exp="matMenu" ccCardHover>
       <button mat-menu-item routerLink="DT_DDEXPORT" (mouseenter)="hideButton($event)" id="DT_DDEXPORT">
         <mat-icon>publish</mat-icon>
         <span>DDS Export</span>
@@ -233,7 +241,7 @@
         <span>DDS Individual Posting</span>
       </button>
     </mat-menu>
-    <mat-menu #dreport="matMenu">
+    <mat-menu #dreport="matMenu" ccCardHover>
       
       <button mat-menu-item routerLink="DR_SubCashBook" (mouseenter)="hideButton($event)" id="DR_SubCashBook">
         <mat-icon>request_quote</mat-icon>
@@ -290,7 +298,7 @@
         <span>Update Passbook Print Status</span>
       </button>
     </mat-menu>
-    <mat-menu #Standing_Instruction="matMenu">
+    <mat-menu #Standing_Instruction="matMenu" ccCardHover>
       <button mat-menu-item routerLink="DR_Act_SI_List" (mouseenter)="hideButton($event)" id="DR_Act_SI_List">
         <mat-icon>fact_check</mat-icon>
         <span>Active SI List</span>
@@ -299,7 +307,7 @@
         <span>Today's SI Executed</span>
       </button>
     </mat-menu>
-    <mat-menu #detail_list="matMenu">
+    <mat-menu #detail_list="matMenu" ccCardHover>
       <button mat-menu-item routerLink="DR_DLS" (mouseenter)="hideButton($event)" id="DR_DLS">
         <mat-icon>savings</mat-icon>
         <span>Detail List SB/CA</span>
@@ -321,7 +329,7 @@
         <span>Detail List Constitution-Wise</span>
       </button>
     </mat-menu>
-    <mat-menu #acc_stat="matMenu">
+    <mat-menu #acc_stat="matMenu" ccCardHover>
       <button mat-menu-item routerLink="DR_ASS"(mouseenter)="hideButton($event)" id="DR_ASS">
         <mat-icon>savings</mat-icon>
         <span>Account Statement SB/CA</span>
@@ -353,7 +361,7 @@
       <span>Master</span>
     </button>
     </mat-menu>
-    <mat-menu #lftransaction="matMenu">
+    <mat-menu #lftransaction="matMenu" ccCardHover>
     <button mat-menu-item routerLink="LT_OpenLoanAcc" (mouseenter)="hideButton($event)" id="LT_OpenLoanAcc">
       <mat-icon>real_estate_agent</mat-icon>
       <span>Open Loan Account</span>
@@ -379,7 +387,7 @@
       <span>One Time Settlement</span>
     </button>
   </mat-menu>
-  <mat-menu #lreport="matMenu">
+  <mat-menu #lreport="matMenu" ccCardHover>
     <button mat-menu-item routerLink="DR_LoanPbkPrn" (mouseenter)="hideButton($event)" id="DR_LoanPbkPrn">
       <mat-icon>print</mat-icon>
       <span>Pass book Printing</span>
@@ -429,6 +437,10 @@
       <mat-icon>switch_access_shortcut_add</mat-icon>
       <span>Interest Recovery Statement</span>
     </button>
+    <button  mat-menu-item routerLink="LR_Disb_Cert" (mouseenter)="hideButton($event)" id="LR_Disb_Cert">
+      <mat-icon>verified_user</mat-icon>
+      <span>Disb Certificate Statement</span>
+    </button>
     <button mat-menu-item [matMenuTriggerFor]="loan_dis_reg">
       <mat-icon>add_home_work</mat-icon>
       <span>Disbursement Register</span>
@@ -462,7 +474,7 @@
       <span>Update Passbook Print Status</span>
     </button>
   </mat-menu>
-  <mat-menu #dList="matMenu">
+  <mat-menu #dList="matMenu" ccCardHover>
     <button mat-menu-item routerLink="LR_DtlLst" (mouseenter)="hideButton($event)" id="LR_DtlLst">
       <mat-icon>list</mat-icon>
       <span>Account Wise Detail List</span>
@@ -473,7 +485,7 @@
     </button>
     
   </mat-menu>
-  <mat-menu #lmaster="matMenu">
+  <mat-menu #lmaster="matMenu" ccCardHover>
     <button mat-menu-item routerLink="LM_Kccmember" (mouseenter)="hideButton($event)" id="LM_Kccmember">
       <mat-icon>how_to_reg</mat-icon>
       <span>KCC Member Entry</span>
@@ -491,7 +503,7 @@
       <span>Village Entry</span>
     </button>
   </mat-menu>
-  <mat-menu #demand_list="matMenu">
+  <mat-menu #demand_list="matMenu" ccCardHover>
     <button mat-menu-item routerLink="LR_DMLst" (mouseenter)="hideButton($event)" id="LR_DMLst">
       <mat-icon>groups</mat-icon>
       <span>Member-wise</span>
@@ -505,7 +517,7 @@
       <span>Activity-wise</span>
     </button>
   </mat-menu>
-  <mat-menu #demand_coll_list="matMenu">
+  <mat-menu #demand_coll_list="matMenu" ccCardHover>
     <button mat-menu-item routerLink="LR_RELst" (mouseenter)="hideButton($event)" id="LR_RELst">
       <mat-icon>groups</mat-icon>
       <span>Member-wise</span>
@@ -519,7 +531,7 @@
       <span>Activity-wise</span>
     </button>
   </mat-menu>
-  <mat-menu #rec_reg="matMenu">
+  <mat-menu #rec_reg="matMenu" ccCardHover>
     <button hidden mat-menu-item routerLink="LR_RecReg" (mouseenter)="hideButton($event)" id="LR_RecReg">
       <mat-icon>recent_actors</mat-icon>
       <span>Acc-wise</span>
@@ -541,7 +553,7 @@
       <span>Interest Recovery</span>
     </button>
   </mat-menu>
-  <mat-menu #loan_dis_reg="matMenu">
+  <mat-menu #loan_dis_reg="matMenu" ccCardHover>
     <button hidden mat-menu-item routerLink="LR_DisReg" (mouseenter)="hideButton($event)" id="LR_DisReg">
       <mat-icon>recent_actors</mat-icon>
       <span>Acc-wise</span>
@@ -562,7 +574,7 @@
       <span>Daily Activity</span>
     </button>
   </mat-menu>
-  <mat-menu #u_maintenance="matMenu">
+  <mat-menu #u_maintenance="matMenu" ccCardHover>
     <button mat-menu-item routerLink="UM_AddUsr" (mouseenter)="hideButton($event)" id="UM_AddUsr">
       <mat-icon>person_add</mat-icon>
       <span>Add User</span>
@@ -571,13 +583,17 @@
       <mat-icon>browser_updated</mat-icon>
       <span>Update Login-Status</span>
     </button>
+    
     <button mat-menu-item routerLink="UM_UPermission" (mouseenter)="hideButton($event)" id="UM_UPermission">
       <mat-icon>how_to_reg</mat-icon>
       <span>User Permission</span>
     </button>
-    
+    <button mat-menu-item routerLink="UM_UTransfer"  (mouseenter)="hideButton($event)" id="UM_UTransfer">
+      <mat-icon>move_up</mat-icon>
+      <span>User Transfer to Another Branch</span>
+    </button>
   </mat-menu> 
-  <mat-menu #d_activity="matMenu">
+  <mat-menu #d_activity="matMenu" ccCardHover>
 
     <button mat-menu-item routerLink="DA_DayInit"  (mouseenter)="hideButton($event)" id="DA_DayInit">
       <mat-icon>event_available</mat-icon>
@@ -596,7 +612,7 @@
       <span> Year Close</span>
     </button>
   </mat-menu>
-  <mat-menu #parameter="matMenu">
+  <mat-menu #parameter="matMenu" ccCardHover>
     <button mat-menu-item routerLink="SP_Update" (mouseenter)="hideButton($event)" id="SP_Update">
       <mat-icon>cloud_sync</mat-icon>
       <span>System Parameter Update</span>
@@ -608,7 +624,7 @@
         <span>Transaction</span>
       </button>
     </mat-menu>
-    <mat-menu #ttransaction="matMenu">
+    <mat-menu #ttransaction="matMenu" ccCardHover>
       <button mat-menu-item routerLink="TT_TransEntry" (mouseenter)="hideButton($event)" id="TT_TransEntry">
         <mat-icon>queue_play_next</mat-icon>
         <span>Transfer Entry</span>
@@ -631,7 +647,7 @@
         <mat-icon>receipt_long</mat-icon>
         <span>Report</span>
       </button>
-      <mat-menu #investMaster="matMenu">
+      <mat-menu #investMaster="matMenu" ccCardHover>
         <button mat-menu-item routerLink="I_BankEntry" (mouseenter)="hideButton($event)" id="I_BankEntry">
           <mat-icon>account_balance</mat-icon>
           <span>Bank Entry</span>
@@ -641,7 +657,7 @@
           <span>Branch Entry</span>
         </button>
       </mat-menu>
-      <mat-menu #iTrans="matMenu">
+      <mat-menu #iTrans="matMenu" ccCardHover>
         <button mat-menu-item routerLink="I_Open" (mouseenter)="hideButton($event)" id="I_Open">
          <mat-icon>lock_open</mat-icon>
           <span>Investment Opening</span>
@@ -660,7 +676,7 @@
          </button>
         
       </mat-menu>
-      <mat-menu #iReport="matMenu">
+      <mat-menu #iReport="matMenu" ccCardHover>
         <button mat-menu-item routerLink="IR_Detail_list" (mouseenter)="hideButton($event)" id="IR_Detail_list">
           <mat-icon>content_paste_search</mat-icon>
           <span>Detail List</span>

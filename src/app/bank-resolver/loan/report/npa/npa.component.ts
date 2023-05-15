@@ -32,7 +32,7 @@ export class NpaComponent implements OnInit,AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatTable) table: MatTable<any>;
   dataSource = new MatTableDataSource()
-  displayedColumns: string[] = ['loan_id','block_name','party_name','activity','case_no','disb_dt','disb_amt', 'prn_due', 'intt_due','penal_intt','npa_dt','ovd_prn','ovd_intt','stan_prn','substan_prn','d1_prn','d2_prn','d3_prn','totalNPA','provision'];
+  displayedColumns: string[] = ['loan_id','block_name','party_name','activity','case_no','disb_dt','disb_amt', 'prn_due', 'intt_due','npa_dt','ovd_prn','ovd_intt','penal_intt','stan_prn','substan_prn','d1_prn','d2_prn','d3_prn','totalNPA','provision'];
   modalRef: BsModalRef;
   isOpenFromDp = false;
   isOpenToDp = false;
@@ -288,17 +288,7 @@ selectItems1=[
   
     this.cd.detectChanges();
   }
-  downloadexcel(){
-    this.exportAsConfig = {
-      type: 'csv',
-      // elementId: 'hiddenTab', 
-      elementIdOrContent:'hiddenTab'
-    }
-    this.exportAsService.save(this.exportAsConfig, 'cashcumtrial').subscribe(() => {
-      // save started
-      console.log("hello")
-    });
-  }
+ 
   closeScreen() {
     this.router.navigate([this.sys.BankName + '/la']);
   }
@@ -484,6 +474,17 @@ selectItems1=[
 // });
     
 // }
+downloadexcel(){
+  this.exportAsConfig = {
+    type: 'xlsx',
+    // elementId: 'hiddenTab', 
+    elementIdOrContent:'mattable'
+  }
+  this.exportAsService.save(this.exportAsConfig, 'NPAList').subscribe(() => {
+    // save started
+    console.log("hello")
+  });
+}
 exportPDFTitle() {
   const doc = new jspdf('landscape');
 

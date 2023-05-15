@@ -750,7 +750,7 @@ export class TransactionapprovalComponent implements OnInit {
     this.isLoading = true;
     const param = new p_gen_param();
     param.brn_cd = this.sys.BranchCode; // localStorage.getItem('__brnCd');
-    param.ad_trans_cd = this.selectedVm.td_def_trans_trf.trans_cd;
+    param.ad_trans_cd =this.transactionDtlsFrm.controls.acc_num.value.length>0? this.selectedVm.td_def_trans_trf.trans_cd:null;
     // const dt = this.sys.CurrentDate;
     param.adt_trans_dt = this.sys.CurrentDate;
     param.ad_acc_type_cd = this.selectedVm.mm_acc_type.acc_type_cd;
@@ -758,6 +758,7 @@ export class TransactionapprovalComponent implements OnInit {
     param.flag = this.selectedVm.td_def_trans_trf.trans_type === 'D' ? 'D' : 'W';
     param.gs_user_id = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
     param.ardb_cd = this.sys.ardbCD
+    debugger
     this.svc.addUpdDel<any>('Deposit/ApproveAccountTranaction', param).subscribe(
       res => {
         if (res === 0) {
@@ -776,7 +777,7 @@ export class TransactionapprovalComponent implements OnInit {
       },
       err => {
         this.isLoading = false;
-        this.HandleMessage(true, MessageType.Error, err.error.text);
+        this.HandleMessage(true, MessageType.Error, err.status==400?'Select Transaction to be APPROVE!!':'Error from server side');
       }
     );
   }

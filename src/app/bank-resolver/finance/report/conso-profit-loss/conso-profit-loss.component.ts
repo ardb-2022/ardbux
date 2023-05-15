@@ -194,11 +194,11 @@ export class ConsoProfitLossComponent implements OnInit {
   }
   downloadexcel(){
     this.exportAsConfig = {
-      type: 'csv',
+      type: 'xlsx',
       // elementId: 'hiddenTab', 
-      elementIdOrContent:'hiddenTab'
+      elementIdOrContent:'mattable'
     }
-    this.exportAsService.save(this.exportAsConfig, 'cashcumtrial').subscribe(() => {
+    this.exportAsService.save(this.exportAsConfig, 'ConsoProfit&Loss').subscribe(() => {
       // save started
       console.log("hello")
     });

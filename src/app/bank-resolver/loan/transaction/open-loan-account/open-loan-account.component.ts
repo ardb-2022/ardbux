@@ -960,6 +960,7 @@ removeSecurityDtlList()
     }
 
     if (this.operationType === 'U') {
+      this.tm_loan_all.brn_cd = this.sys.BranchCode;
       this.tm_loan_all.modified_by = this.updateUser;
       this.tm_loan_all.created_dt = this.updateDate;
       this.UpdateLoanAccountOpeningData(saveType);
@@ -1033,7 +1034,7 @@ removeSecurityDtlList()
 
   UpdateLoanAccountOpeningData(saveType: string) {
     this.ValidateLoanUpdateData();
-    // debugger;
+     debugger;
     this.isLoading = true;
     this.svc.addUpdDel<any>('Loan/InsertLoanAccountOpeningData', this.masterModel).subscribe(
       res => {

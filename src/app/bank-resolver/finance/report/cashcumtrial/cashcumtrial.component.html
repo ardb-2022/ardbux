@@ -63,6 +63,7 @@
       <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" [useExistingCss]="true"
         printSectionId="mattable" ngxPrint>Print</button>
       <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
+      <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadexcel()">Export as EXCEL</button>
 
     </div>
   </div>
@@ -94,34 +95,34 @@
         <!-- Name Column -->
         <ng-container matColumnDef="opng_dr">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Opening Debit	 </th>
-          <td mat-cell *matCellDef="let row"> {{row.opng_dr| currency:"INR"}} </td>
+          <td mat-cell *matCellDef="let row" style="text-align:right"> {{row.opng_dr| currency:"INR"}} </td>
         </ng-container>
     
         <!-- Fruit Column -->
         <ng-container matColumnDef="opng_cr">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Opening Credit	 </th>
-          <td mat-cell *matCellDef="let row"> {{row.opng_cr| currency:"INR"}} </td>
+          <td mat-cell *matCellDef="let row" style="text-align:right"> {{row.opng_cr| currency:"INR"}} </td>
         </ng-container>
     
         <!-- Fruit Column -->
         <ng-container matColumnDef="dr">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Dr During Period	 </th>
-          <td mat-cell *matCellDef="let row"> {{row.dr| currency:"INR"}} </td>
+          <td mat-cell *matCellDef="let row" style="text-align:right"> {{row.dr| currency:"INR"}} </td>
         </ng-container>
         <!-- Fruit Column -->
         <ng-container matColumnDef="cr">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Cr During Period	 </th>
-          <td mat-cell *matCellDef="let row"> {{row.cr| currency:"INR"}} </td>
+          <td mat-cell *matCellDef="let row" style="text-align:right"> {{row.cr| currency:"INR"}} </td>
         </ng-container>
         <!-- Fruit Column -->
         <ng-container matColumnDef="clos_dr">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Closing Debit	 </th>
-          <td mat-cell *matCellDef="let row"> {{row.clos_dr| currency:"INR"}} </td>
+          <td mat-cell *matCellDef="let row" style="text-align:right"> {{row.clos_dr| currency:"INR"}} </td>
         </ng-container>
         <!-- Fruit Column -->
         <ng-container matColumnDef="clos_cr">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Closing Credit	 </th>
-          <td mat-cell *matCellDef="let row"> {{row.clos_cr| currency:"INR"}} </td>
+          <td mat-cell *matCellDef="let row" style="text-align:right"> {{row.clos_cr| currency:"INR"}} </td>
         </ng-container>
         <!-- Header column -->
       <ng-container matColumnDef="Header">
@@ -142,12 +143,12 @@
       </ng-container>
       <ng-container matColumnDef="Opening_Debit">
         <td mat-footer-cell *matFooterCellDef colspan="" >
-          <b>{{crSum | currency:"INR"}}</b>
+          <b>{{opdrSum | currency:"INR"}}</b>
         </td>
        </ng-container>
        <ng-container matColumnDef="Opening_Credit">
         <td mat-footer-cell *matFooterCellDef colspan="" >
-         <b>{{drSum | currency:"INR"}}</b>
+         <b>{{opcrSum | currency:"INR"}}</b>
         </td>
        </ng-container>
        
@@ -164,12 +165,12 @@
       
       <ng-container matColumnDef="Closing_Debit">
         <td mat-footer-cell *matFooterCellDef colspan="" >
-          <b>{{crSum | currency:"INR"}}</b>
+          <b>{{clsdrSum | currency:"INR"}}</b>
         </td>
        </ng-container>
        <ng-container matColumnDef="Closing_Credit">
         <td mat-footer-cell *matFooterCellDef colspan="" >
-         <b>{{drSum | currency:"INR"}}</b>
+         <b>{{clscrSum | currency:"INR"}}</b>
         </td>
        </ng-container>
        <ng-container matColumnDef="blankSpace">
@@ -428,6 +429,7 @@
       <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" [useExistingCss]="true"
         printSectionId="mattable" ngxPrint>Print</button>
       <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
+      <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadexcel()">Export as EXCEL</button>
 
     </div>
   </div>

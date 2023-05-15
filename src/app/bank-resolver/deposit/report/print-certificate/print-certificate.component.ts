@@ -118,7 +118,10 @@ export class PrintCertificateComponent implements OnInit {
        var n = date.toDateString();
     // get the time as a string
        var time = date.toLocaleTimeString();
-       this.today= n + " "+ time
+       this.today= this.sys.CurrentDate
+      //  this.today= n + " "+ time
+    console.log(this.today);
+    
   }
   getOperationalInstr() {
 

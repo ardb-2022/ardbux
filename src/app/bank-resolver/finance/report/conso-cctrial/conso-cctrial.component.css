@@ -8,27 +8,38 @@ table{
 .mkScroll{
     height:auto;
     max-height:450px;
-    overflow:auto
+    overflow:auto;
+    font-size:10pt;
 }
 /* th,td{
     padding: 1%;
 }  */
 table{
-  width: 100%;
+  font-size: xx-small;
+  /* width: 100%; */
 }
 .mat-row {
   height: auto;
+}
+th.mat-header-cell:last-of-type, td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type {
+  padding-right: 0px!important;
 }
 .mat-column-acc_cd {
     padding-right: 10px;
     border-left: 1px solid rgb(172, 170, 170); 
   }
-
+  .mat-column-acc_name{
+    max-width: 100px!important;
+  }
 .mat-cell {
-  padding: 8px 8px 8px 0;
+  /* padding: 8px 8px 8px 0; */
 }
 .mat-header-cell{
-  font-size: 14px;
+  font-size: 13px;
+  color: black;
+}
+.mat-footer-cell{
+  font-size: 12px;
   color: black;
 }
 #trial {
@@ -131,7 +142,7 @@ color: rgb(0, 0, 0);
 footer { position: fixed; bottom: 0;text-align: center; }
 header  { position: fixed; top: 0;text-align: center; } */
 .mkSmall{
-  font-size: x-small;
+  font-size: xx-small;
 }
 /* thead {
   display: table-header-group;
@@ -158,8 +169,13 @@ footer{
  mso-footer: footer;
 }*/
 /* @page table{width:95%; margin: 10px;} */
-@media print{footer{
-  font-size: x-small;
+@media print{
+  table{
+  font-size: xx-small;
+
+  }
+  footer{
+  
   margin-top: 25px !important; 
   margin-left: 25px !important; 
   position:fixed!important; 

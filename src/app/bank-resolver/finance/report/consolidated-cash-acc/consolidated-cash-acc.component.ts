@@ -142,7 +142,6 @@ export class ConsolidatedCashAccComponent implements OnInit ,AfterViewInit{
       this.svc.addUpdDel('Finance/PopulateDailyCashAccountConso',dt).subscribe(data=>{console.log(data)
       this.reportData=data
       this.dataSource.data=this.reportData
-      this.isLoading=false
       if(this.reportData.length==0){
         this.comser.SnackBar_Nodata()
       } 
@@ -159,6 +158,10 @@ export class ConsolidatedCashAccComponent implements OnInit ,AfterViewInit{
       })
       this.lastcrAccCD=this.reportData[this.reportData.length-1].cr_acc_cd
       this.lastdrAccCD=this.reportData[this.reportData.length-1].dr_acc_cd
+      if(this.reportData.length>0){
+        this.isLoading=false
+
+      }
       // this.setPage(1)
     },
     err => {
@@ -394,11 +397,11 @@ export class ConsolidatedCashAccComponent implements OnInit ,AfterViewInit{
   }
   downloadexcel(){
     this.exportAsConfig = {
-      type: 'csv',
+      type: 'xlsx',
       // elementId: 'hiddenTab', 
-      elementIdOrContent:'hiddenTab'
+      elementIdOrContent:'trial111'
     }
-    this.exportAsService.save(this.exportAsConfig, 'cashaccount').subscribe(() => {
+    this.exportAsService.save(this.exportAsConfig, 'ConsoCashAcount').subscribe(() => {
       // save started
       console.log("hello")
     });

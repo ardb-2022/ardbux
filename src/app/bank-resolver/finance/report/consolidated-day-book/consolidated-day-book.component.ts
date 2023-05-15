@@ -416,11 +416,11 @@ export class ConsolidatedDayBookComponent implements OnInit,AfterViewInit {
   }
 downloadexcel(){
   this.exportAsConfig = {
-    type: 'csv',
+    type: 'xlsx',
     // elementId: 'hiddenTab', 
-    elementIdOrContent:'hiddenTab'
+    elementIdOrContent:'mattable'
   }
-  this.exportAsService.save(this.exportAsConfig, 'daybook').subscribe(() => {
+  this.exportAsService.save(this.exportAsConfig, 'ConsoDayBook').subscribe(() => {
     // save started
     console.log("hello")
   });

@@ -61,6 +61,7 @@ export class AccOpeningViewComponent implements OnInit {
   disablejoinholder:boolean=true;
   hidejoin:boolean=false;
   disableConst:boolean=true;
+  enableConst:boolean=true;
   showNoResult=false
   createUser = '';
   updateUser = '';
@@ -591,7 +592,13 @@ debugger
     this.operationType = 'U';
     this.disableAll = false;
     if(this.userType=="A"){
-      this.disableConst=false
+      this.disableConst=false;
+      // if(this.tm_deposit.constitution_cd==101){
+      //   this.enableConst=false
+      // }
+      // else{
+      //   this.enableConst=true
+      // }
     }
     else{
       this.disableConst=true

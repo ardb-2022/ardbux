@@ -117,7 +117,9 @@ export class WeeklyReturnComponent implements OnInit ,AfterViewInit{
       this.svc.addUpdDel('Finance/PopulateWeeklyReturn',dt).subscribe(data=>{console.log(data)
       this.reportData=data
       this.dataSource.data=this.reportData
-      this.isLoading=false
+      if(this.reportData.length>0){
+        this.isLoading=false
+        }
       if(this.reportData.length==0){
         this.comser.SnackBar_Nodata()
       } 
@@ -160,6 +162,17 @@ export class WeeklyReturnComponent implements OnInit ,AfterViewInit{
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+  }
+  downloadexcel(){
+    this.exportAsConfig = {
+      type: 'xlsx',
+      // elementId: 'hiddenTab', 
+      elementIdOrContent:'trial111'
+    }
+    this.exportAsService.save(this.exportAsConfig, 'WeeklyReturn').subscribe(() => {
+      // save started
+      console.log("hello")
+    });
   }
 
   applyFilter(event: Event) {

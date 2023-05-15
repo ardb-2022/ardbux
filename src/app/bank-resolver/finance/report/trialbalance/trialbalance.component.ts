@@ -288,16 +288,16 @@ export class TrialbalanceComponent implements OnInit {
     this.router.navigate([localStorage.getItem('__bName') + '/la']);
   }
   
-  // downloadexcel(){
-  //   this.exportAsConfig = {
-  //     type: 'pdf',
-  //     // elementId: 'hiddenTab', 
-  //     elementIdOrContent:'hiddenTab'
-  //   }
-  //   this.exportAsService.save(this.exportAsConfig, 'trialbalance').subscribe(() => {
-  //     // save started
-  //     console.log("hello")
-  //   });
-  // }
+  downloadexcel(){
+    this.exportAsConfig = {
+      type: 'xlsx',
+      // elementId: 'hiddenTab', 
+      elementIdOrContent:'mattable'
+    }
+    this.exportAsService.save(this.exportAsConfig, 'TrialBalance').subscribe(() => {
+      // save started
+      console.log("hello")
+    });
+  }
   
 }

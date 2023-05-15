@@ -18,6 +18,7 @@ export class UserPermissionComponent implements OnInit {
 
   showMsg: ShowMessage;
   form: FormGroup;
+  form2: FormGroup;
   userType:any;
   sys = new SystemValues();
   isChecked:boolean=false;
@@ -104,6 +105,15 @@ bName1=''
   ngOnInit(): void {
     this.form = this.formBuilder.group({
       user_type: ['0', Validators.required]
+    });
+    this.form2 = this.formBuilder.group({
+      user_type: ['0', Validators.required],
+      module:[null,Validators.required],
+      submodule:[null,Validators.required],
+      fastsubmodule:[null,Validators.required],
+      secondsubmodule:[null,Validators.required],
+      identification:[null,Validators.required],
+      permission:[0,Validators.required],
     });
     this.openModal(this.content)
    }
@@ -247,6 +257,36 @@ bName1=''
   }
   addItem(){
     this.addModal(this.add)
+  }
+  insertNewItem(){
+    this.isLoading = true;
+    var dt={
+  "ardb_cd":this.sys.ardbCD,
+  "role_cd":this.form2.controls.user_type.value,
+  "module":this.form2.controls.module.value,
+  "sub_module":this.form2.controls.submodule.value,
+  "first_sub_module_item":this.form2.controls.fastsubmodule.value,
+  "second_sub_module_item":this.form2.controls.secondsubmodule.value,
+  "identification":this.form2.controls.identification.value,
+  "permission":this.form2.controls.permission.value,
+  "created_by":this.sys.UserId
+    }
+  debugger
+  this.svc.addUpdDel<any>('Mst/InsertRolePermission', dt).subscribe(
+          res => {
+
+            if(res==0){
+              debugger
+              this.isLoading = false;
+          this.HandleMessage(true, MessageType.Sucess,'Successfully Insert New Item!! ' );
+
+            }  
+        else{
+          this.isLoading = false;
+          this.HandleMessage(true, MessageType.Error,'Error Insert New Item!! ' );
+
+        }
+      })
   }
  addModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template, this.addconfig);

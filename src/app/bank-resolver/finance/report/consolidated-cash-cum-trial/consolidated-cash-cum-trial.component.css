@@ -127,7 +127,7 @@ color: rgb(0, 0, 0);
 footer { position: fixed; bottom: 0;text-align: center; }
 header  { position: fixed; top: 0;text-align: center; } */
 .mkSmall{
-  font-size: x-small;
+  font-size: 12pt;
 }
 /* thead {
   display: table-header-group;
@@ -154,7 +154,12 @@ footer{
  mso-footer: footer;
 }*/
 /* @page table{width:95%; margin: 10px;} */
-@media print{footer{
+@media print{
+html, body {
+  height: auto;
+  font-size: 12pt;
+  } 
+footer{
   margin-top: 25px !important; 
   margin-left: 25px !important; 
   position:fixed!important; 

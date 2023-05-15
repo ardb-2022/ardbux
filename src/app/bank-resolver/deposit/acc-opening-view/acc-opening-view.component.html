@@ -356,7 +356,7 @@
                 id="trans_type" class="form-control form-control-sm">
                 <!-- <option [value]="tm_deposit.constitution_cd" [disabled]="tm_deposit.constitution_cd!=101" selected>
                   {{tm_deposit.constitution_cd}}-{{tm_deposit.constitution_desc}}</option> -->
-                  <option *ngFor="let l of selectedConstitutionList"  [disabled]="l.constitution_cd!=101" [value]="l.constitution_cd">
+                  <option *ngFor="let l of selectedConstitutionList"   [value]="l.constitution_cd">
                     {{l.constitution_cd}}-{{l.constitution_desc}}</option>
               </select>
 

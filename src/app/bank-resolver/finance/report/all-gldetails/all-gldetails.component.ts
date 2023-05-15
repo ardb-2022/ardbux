@@ -74,8 +74,8 @@ export class AllGLDetailsComponent implements OnInit,AfterViewInit {
 
   lastdrAccCD:any;
   lastcrAccCD:any;
-  today:any
-  constructor( private modalService: BsModalService,private svc: RestService, private formBuilder: FormBuilder,private cd: ChangeDetectorRef,
+  today:any;
+  constructor( private modalService: BsModalService,private exportAsService: ExportAsService,private svc: RestService, private formBuilder: FormBuilder,private cd: ChangeDetectorRef,
     private router: Router,private comser:CommonServiceService) { }
   ngOnInit(): void {
     this.reportcriteria = this.formBuilder.group({
@@ -167,6 +167,17 @@ export class AllGLDetailsComponent implements OnInit,AfterViewInit {
       this.isLoading=true
     }
    
+  }
+  downloadexcel(){
+    this.exportAsConfig = {
+      type: 'xlsx',
+      // elementId: 'hiddenTab', 
+      elementIdOrContent:'trial111'
+    }
+    this.exportAsService.save(this.exportAsConfig, 'AllGLHead').subscribe(() => {
+      // save started
+      console.log("hello")
+    });
   }
 
   public closeAlert() {

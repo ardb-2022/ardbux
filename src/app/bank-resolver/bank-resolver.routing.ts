@@ -135,6 +135,10 @@ import { ConsoCCTrialComponent } from './finance/report/conso-cctrial/conso-cctr
 import { InterestSubsidyComponent } from './loan/report/interest-subsidy/interest-subsidy.component';
 import { ConsoProfitLossComponent } from './finance/report/conso-profit-loss/conso-profit-loss.component';
 import { UserPermissionComponent } from './system/user-permission/user-permission.component';
+import { UserTransferComponent } from './system/user-transfer/user-transfer.component';
+import { ConsoBalSheetComponent } from './finance/report/conso-bal-sheet/conso-bal-sheet.component';
+import { ConsoCashAccNewComponent } from './finance/report/conso-cash-acc-new/conso-cash-acc-new.component';
+import { LoanDisbCertificateComponent } from './loan/report/loan-disb-certificate/loan-disb-certificate.component';
 const routes: Routes = [
   { path: 'Admin', component: AdminPanelComponent },
   { path: 'admin', component: AdminPanelComponent },
@@ -182,7 +186,10 @@ const routes: Routes = [
       { path: 'FR_GeneralLadger', component: GenLedgerComponent, canActivate: [AuthGuard] },
       { path: 'FR_DayScrollBook', component: ScrollbookComponent, canActivate: [AuthGuard] },
       { path: 'FR_allGLHead', component: AllGLDetailsComponent, canActivate: [AuthGuard] },
-
+      { path: 'FR_CdBalanceSheet', component: ConsoBalSheetComponent, canActivate: [AuthGuard] },
+      { path: 'FR_CdCashAccNew', component: ConsoCashAccNewComponent, canActivate: [AuthGuard] },
+      
+      { path: 'UM_UTransfer', component: UserTransferComponent, canActivate: [AuthGuard] },
       
       { path: 'FR_GLTD', component: GenLedger2Component, canActivate: [AuthGuard] },
       { path: 'FR_CdGlTrns', component: ConsoGLTrnsComponent, canActivate: [AuthGuard] },
@@ -235,7 +242,8 @@ const routes: Routes = [
       { path: 'LM_Villentry', component: VillageMasterComponent, canActivate: [AuthGuard] },
       { path: 'LR_NPA', component: NpaComponent, canActivate: [AuthGuard] },
       { path: 'LR_Int_Subsidy', component: InterestSubsidyComponent, canActivate: [AuthGuard] },
-
+      { path: 'LR_Disb_Cert', component: LoanDisbCertificateComponent, canActivate: [AuthGuard] },
+      
       { path: 'LR_NPA_ALL', component: NpaALLComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecReg', component: RecoveryRegisterComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecRegFund', component: RecovFundComponent, canActivate: [AuthGuard] },

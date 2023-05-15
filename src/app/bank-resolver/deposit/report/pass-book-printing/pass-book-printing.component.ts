@@ -394,7 +394,7 @@ export class PassBookPrintingComponent implements OnInit {
       }
       else{
       
-      for (let index = 0; index <= this.lastRowNo-1; index++) {
+      for (let index = 0; index <= this.lastRowNo; index++) {
         this.printData.unshift(o);
       } 
       console.log( this.printData);

@@ -103,7 +103,7 @@ export class LoanPassBookFastPageComponent implements OnInit {
     });
     this.getAccountTypeList()
     // this.getOperationalInstr();
-    this.onLoadScreen(this.content2);
+    
     var date = new Date();
     // get the date as a string
        var n = date.toDateString();
@@ -128,26 +128,7 @@ export class LoanPassBookFastPageComponent implements OnInit {
     );
   }
   loadFastPageData(){
-    // this.joinHold=[];
-    this.masterModel = new LoanOpenDM();
-    var dt={
-      "ardb_cd":this.sys.ardbCD,
-      "brn_cd":this.sys.BranchCode,
-      "loan_id":this.accNum,
-      // "acc_type_cd":this.accType,
-      
-    }
-    debugger
-    this.svc.addUpdDel('Loan/GetLoanData',dt).subscribe(data=>{
-      console.log(data);
-      this.masterModel = data;
-      // debugger
-      //  for (let i = 0; i <=  this.masterModel.tdaccholder.length; i++) {
-      //    console.log( this.masterModel);
-      //   debugger 
-      //  this.joinHold+=( this.masterModel.tdaccholder.length==0?'': this.masterModel.tdaccholder[i].acc_holder+',')
-      //  console.log(this.joinHold);
-      //  }
+    
       this.custCD=this.masterModel.tmloanall.party_cd
       this.acc_cd=this.masterModel.tmloanall.acc_cd
       if(this.acc_cd===20411){
@@ -162,13 +143,10 @@ export class LoanPassBookFastPageComponent implements OnInit {
       
       debugger
       this.getCustomer()
-       this.oprn_instr_desc = this.operationalInstrList.filter(x => x.oprn_cd.toString() === this.masterModel.tmdeposit.oprn_instr_cd.toString())[0].oprn_desc;
-       
-        
-        
-    })
-    this.accountTypeList=this.accountTypeList.filter(c => c.acc_type_cd == this.acc_cd)
+      
     
+    this.accountTypeList=this.accountTypeList.filter(c => c.acc_type_cd == this.acc_cd)
+    debugger
     // this.suggestedCustomer=[]
     // var dc={
     //   "ardb_cd":this.sys.ardbCD,
@@ -196,12 +174,30 @@ export class LoanPassBookFastPageComponent implements OnInit {
     this.isLoading = true;
     this.svc.addUpdDel<any>('Mst/GetAccountTypeMaster', null).subscribe(
       res => {
-
-        this.isLoading = false;
-        this.accountTypeList = res;
-        this.accountTypeList = this.accountTypeList.filter(c => c.dep_loan_flag === 'L');
-        this.accountTypeList = this.accountTypeList.sort((a, b) => (a.acc_type_cd > b.acc_type_cd) ? 1 : -1);
-      },
+      if(res.length>0){
+              this.accountTypeList = res;
+              this.accountTypeList = this.accountTypeList.filter(c => c.dep_loan_flag === 'L');
+              // this.accountTypeList = this.accountTypeList.sort((a, b) => (a.acc_type_cd > b.acc_type_cd) ? 1 : -1);
+              
+              this.masterModel = new LoanOpenDM();
+              var dt={
+                "ardb_cd":this.sys.ardbCD,
+                "brn_cd":this.sys.BranchCode,
+                "loan_id":this.accNum,
+                // "acc_type_cd":this.accType,
+                
+              }
+              debugger
+              this.svc.addUpdDel('Loan/GetLoanData',dt).subscribe(data=>{
+                console.log(data);
+                
+                this.masterModel = data;
+                if(this.masterModel.tmloanall.acc_cd>0){
+                  this.onLoadScreen(this.content2);
+                }
+              })   
+      }
+        },
       err => {
         this.isLoading = false;
       }

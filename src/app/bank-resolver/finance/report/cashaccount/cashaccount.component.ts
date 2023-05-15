@@ -395,11 +395,11 @@ export class CashaccountComponent implements OnInit ,AfterViewInit{
   }
   downloadexcel(){
     this.exportAsConfig = {
-      type: 'csv',
+      type: 'xlsx',
       // elementId: 'hiddenTab', 
-      elementIdOrContent:'hiddenTab'
+      elementIdOrContent:'trial111'
     }
-    this.exportAsService.save(this.exportAsConfig, 'cashaccount').subscribe(() => {
+    this.exportAsService.save(this.exportAsConfig, 'CashAccount').subscribe(() => {
       // save started
       console.log("hello")
     });

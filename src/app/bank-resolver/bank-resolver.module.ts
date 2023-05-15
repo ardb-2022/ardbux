@@ -182,6 +182,10 @@ import { ConsoProfitLossComponent } from './finance/report/conso-profit-loss/con
 import { UserPermissionComponent } from './system/user-permission/user-permission.component';
 import { KeyoffDirective } from '../_utility/KeyoffDirective';
 import {MatListModule} from '@angular/material/list';
+import { UserTransferComponent } from './system/user-transfer/user-transfer.component';
+import { ConsoBalSheetComponent } from './finance/report/conso-bal-sheet/conso-bal-sheet.component';
+import { ConsoCashAccNewComponent } from './finance/report/conso-cash-acc-new/conso-cash-acc-new.component';
+import { LoanDisbCertificateComponent } from './loan/report/loan-disb-certificate/loan-disb-certificate.component';
 @NgModule({
   declarations: [ 
     AmountToWordPipe,UserLoginStatusComponent,OpenInvestComponent,KeyoffDirective,
@@ -222,7 +226,7 @@ import {MatListModule} from '@angular/material/list';
        RdTransComponent, CreateGLHeadComponent, DetailListFdmisConstWiseComponent, INearMaturityComponent,
        IDetailListComponent, AllGLDetailsComponent, UpdatePassbookComponent, BMLoanStatementComponent, SlabwiseDepositComponent, 
        PassBookFastPageComponent, DetaillistAllComponent, SavingIntPostComponent, AgentCommissionComponent,
-       LoanUpdatePassbookComponent,LoanPassBookFastPageComponent,LoanPassBookPrintingComponent, PrintCertificateComponent, NpaALLComponent, RecovBlockComponent, InterestCertificateComponent, SmsChargeDeductionComponent, ConsoGLTrnsComponent, ConsoCCTrialComponent, InterestSubsidyComponent, ConsoProfitLossComponent, UserPermissionComponent
+       LoanUpdatePassbookComponent,LoanPassBookFastPageComponent,LoanPassBookPrintingComponent, PrintCertificateComponent, NpaALLComponent, RecovBlockComponent, InterestCertificateComponent, SmsChargeDeductionComponent, ConsoGLTrnsComponent, ConsoCCTrialComponent, InterestSubsidyComponent, ConsoProfitLossComponent, UserPermissionComponent, UserTransferComponent, ConsoBalSheetComponent, ConsoCashAccNewComponent, LoanDisbCertificateComponent
   ],
   imports: [
     NgxPrintModule, MatTableModule, MatFormFieldModule,  MatInputModule, MatSlideToggleModule,MatButtonModule,

@@ -25,8 +25,18 @@
   width: 32px;
   border-right: 1px solid rgb(172, 170, 170);
   padding-right: 20px;
-  text-align: center;
+  text-align: right;
 }
+.mat-column-dr_amt{
+  text-align: right;
+}
+.mat-column-cr_amt{
+  text-align: right;
+}
+.mat-column-cr_amt_tr{
+  text-align: right;
+}
+
 .mat-column-cr_acc_cd{
   text-align: center;
   padding-left: 20px;

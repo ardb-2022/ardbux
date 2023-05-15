@@ -515,11 +515,13 @@ pageChanged(event: PageChangedEvent): void {
 }
 downloadexcel(){
   this.exportAsConfig = {
-    type: 'csv',
+    type: 'xlsx',
+    // elementId: 'hiddenTab', 
     elementIdOrContent:'mattable'
   }
-  this.exportAsService.save(this.exportAsConfig, 'cashcumtrial').subscribe(() => {
-   
+  this.exportAsService.save(this.exportAsConfig, 'ConsoTrial').subscribe(() => {
+    // save started
+    console.log("hello")
   });
 }
 exportAsPDF() {
@@ -527,18 +529,20 @@ exportAsPDF() {
   html2canvas(elementToPrint).then((canvas) => {
     const contentDataURL = canvas.toDataURL('image/png');
     const pdf = new jspdf('landscape', 'px', 'a4');
-    const imgWidth = 310;
-    const pageHeight = 200;
+    const imgWidth = 610;
+    const pageHeight = 250;
     const imgHeight = (canvas.height * imgWidth) / canvas.width;
     let heightLeft = imgHeight;
     let position = 0;
     pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
     heightLeft -= pageHeight;
+    let pageCount = 1;
     while (heightLeft >= 0) {
-      position = heightLeft - imgHeight;
+      position = heightLeft - imgHeight-150;
       pdf.addPage();
       pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
+      heightLeft -= pageHeight+100; // add the gap height to the page height
+      pageCount++;
     }
     pdf.save('cashcumtrial.pdf'); // replace 'cashcumtrial' with the desired filename
   });

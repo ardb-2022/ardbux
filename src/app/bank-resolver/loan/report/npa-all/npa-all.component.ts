@@ -31,7 +31,7 @@ export class NpaALLComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource = new MatTableDataSource()
-  displayedColumns: string[] = ['block_name','acc_desc','loan_id','party_name','disb_dt','disb_amt', 'prn_due', 'intt_due','penal_intt','npa_dt','ovd_prn','ovd_intt','stan_prn','substan_prn','d1_prn','d2_prn','d3_prn','totalNPA','provision'];
+  displayedColumns: string[] = ['block_name','acc_desc','loan_id','party_name','disb_dt','disb_amt', 'prn_due', 'intt_due','npa_dt','ovd_prn','ovd_intt','penal_intt','stan_prn','substan_prn','d1_prn','d2_prn','d3_prn','totalNPA','provision'];
   modalRef: BsModalRef;
   isOpenFromDp = false;
   isOpenToDp = false;
@@ -313,17 +313,7 @@ selectItems1=[
   
     this.cd.detectChanges();
   }
-  downloadexcel(){
-    this.exportAsConfig = {
-      type: 'csv',
-      // elementId: 'hiddenTab', 
-      elementIdOrContent:'hiddenTab'
-    }
-    this.exportAsService.save(this.exportAsConfig, 'cashcumtrial').subscribe(() => {
-      // save started
-      console.log("hello")
-    });
-  }
+  
   closeScreen() {
     this.router.navigate([this.sys.BankName + '/la']);
   }
@@ -616,6 +606,17 @@ debugger
       this.totProvSum+=this.filteredArray[i].provision
 
     }
+  }
+  downloadexcel(){
+    this.exportAsConfig = {
+      type: 'xlsx',
+      // elementId: 'hiddenTab', 
+      elementIdOrContent:'mattable'
+    }
+    this.exportAsService.save(this.exportAsConfig, 'NPAListAll').subscribe(() => {
+      // save started
+      console.log("hello")
+    });
   }
   openPDF(): void {
     const div = document.getElementById('mattable');
