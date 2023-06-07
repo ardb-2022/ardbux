@@ -9,14 +9,14 @@ table{
     height:auto;
     max-height:450px;
     overflow:auto;
-    font-size:10pt;
+    font-size:12pt;
 }
 /* th,td{
     padding: 1%;
 }  */
 table{
-  font-size: xx-small;
-  /* width: 100%; */
+  font-size: large;
+   width: 100%;
 }
 .mat-row {
   height: auto;
@@ -142,7 +142,7 @@ color: rgb(0, 0, 0);
 footer { position: fixed; bottom: 0;text-align: center; }
 header  { position: fixed; top: 0;text-align: center; } */
 .mkSmall{
-  font-size: xx-small;
+  font-size: large;
 }
 /* thead {
   display: table-header-group;
@@ -170,10 +170,7 @@ footer{
 }*/
 /* @page table{width:95%; margin: 10px;} */
 @media print{
-  table{
-  font-size: xx-small;
 
-  }
   footer{
   
   margin-top: 25px !important; 

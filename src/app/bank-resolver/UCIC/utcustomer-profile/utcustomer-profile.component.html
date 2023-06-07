@@ -15,8 +15,8 @@
     <button mat-raised-button type="button" #saveBtn class="btn btn-primary btn-sm ml-1 mr-1" (click)="onSaveClick()" [disabled]="f.cust_type.value ==='' || f.first_name.value ===''
     || f.guardian_name.value ==='' || _isDisabled ">Save</button>
     <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onBackClick()">Back</button>
-    <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" [disabled]="!enableModifyAndDel"
-      (click)="onDelClick()">Delete</button>
+    <!-- <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" [disabled]="!enableModifyAndDel"
+      (click)="onDelClick()">Delete</button> -->
   </div>
 </div>
 </ng-template>
@@ -164,6 +164,22 @@
           <input type="text" class="form-control form-control-sm mkUpper" formControlName="guardian_name"
             id="guardian_name" placeholder="Guardian Name">
         </div>
+        <!-- <div class="form-group col-1">
+          <small for="sex">Guardian Relation <span class="text-danger"></span></small>
+          <select id="lbr_status" class="form-control form-control-sm" formControlName="lbr_status">
+            <option value="" selected disabled>Choose</option>
+            <option *ngFor="let rel of lbr_status" value="{{rel.val}}">{{rel.val}}</option>
+           
+          </select>
+        </div> -->
+        <div class="form-group col-1">
+          <small for="lbr_status">Guardian Relation</small>
+          <select id="lbr_status" class="form-control form-control-sm" formControlName="lbr">
+            <option value="" selected disabled>Choose</option>
+            <option *ngFor="let lbr of lbr_status" value="{{lbr.val}}">{{lbr.val}}</option>
+           
+          </select>
+        </div>
         <div class="form-group col-2">
           <small for="dt_of_birth">Date Of Birth <span class="text-danger">*</span></small>
           <!-- <input type="date" class="form-control form-control-sm" (change)="onDobChange()" formControlName="dt_of_birth" id="dt_of_birth"
@@ -203,7 +219,7 @@
           </select>
         </div>
   
-        <div class="form-group col-2">
+        <div class="form-group col-1">
           <small for="catg_cd">Category <span class="text-danger">*</span></small>
           <select id="catg_cd" class="form-control form-control-sm" formControlName="catg_cd">
             <option *ngIf="categories" disabled>Choose</option>
@@ -298,7 +314,7 @@
         </div>
       </div> <!-- form group row end -->
       <div class="form-row">
-        <div class="form-group col-1">
+        <div class="form-group col-2">
           <small for="pan">PAN</small>
           <input type="text" class="form-control form-control-sm text-uppercase" id="pan" formControlName="pan"
             placeholder="PAN Number" maxlength="10">
@@ -311,14 +327,7 @@
             <option value="B">Big</option>
           </select>
         </div>
-        <div class="form-group col-1">
-          <small for="lbr_status">LBR Status</small>
-          <select id="lbr_status" class="form-control form-control-sm" formControlName="lbr">
-            <option value="" selected disabled>Choose</option>
-            <option *ngFor="let lbr of lbr_status" value="{{lbr.val}}">{{lbr.name}}</option>
-           
-          </select>
-        </div>
+        
         <div class="form-group col-1 mt-4">
           <div class="form-check">
             <input class="form-check-input" type="checkbox" id="is_weaker" [attr.checked]="this.f.is_weaker.value=='Y'" formControlName="is_weaker">

@@ -209,7 +209,11 @@
     bottom: 0px;
   }
 
-@media print{footer{
+@media print{
+  @page {
+    orientation: landscape !important;
+}
+  footer{
   margin-top: 25px !important; 
   margin-left: 25px !important; 
   position:fixed!important; 

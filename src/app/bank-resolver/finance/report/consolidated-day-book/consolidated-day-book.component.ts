@@ -151,7 +151,6 @@ export class ConsolidatedDayBookComponent implements OnInit,AfterViewInit {
       this.drSumTr=0;
       this.fromdate = this.reportcriteria.value.fromDate;
       this.todate = this.reportcriteria.value.toDate;
-      this.isLoading=true;
       // this.onReportComplete();
       // this.modalService.dismissAll(this.content);
       var dt={
@@ -169,8 +168,7 @@ export class ConsolidatedDayBookComponent implements OnInit,AfterViewInit {
       if(this.reportData.length==0){
         this.comser.SnackBar_Nodata()
       } 
-
-      this.isLoading=false
+      
       this.pageChange=document.getElementById('chngPage');
       this.pageChange.click()
       this.modalRef.hide();
@@ -187,7 +185,11 @@ export class ConsolidatedDayBookComponent implements OnInit,AfterViewInit {
       // this.setPage(1)
       this.lastcrAccCD=this.reportData[this.reportData.length-1].cr_acc_cd
       this.lastdrAccCD=this.reportData[this.reportData.length-1].dr_acc_cd
+      if(this.reportData.length>0){
+        this.isLoading=false
+      } 
     },
+    
     err => {
        this.isLoading = false;
        this.comser.SnackBar_Error(); 
@@ -199,9 +201,7 @@ export class ConsolidatedDayBookComponent implements OnInit,AfterViewInit {
       // this.ReportUrl = this._domSanitizer.bypassSecurityTrustResourceUrl(this.UrlString); // 20/01/2019
       this.modalRef.hide();
 
-      setTimeout(() => {
-        this.isLoading = false;
-      }, 3000);
+      
     }
   }
   public oniframeLoad(): void {

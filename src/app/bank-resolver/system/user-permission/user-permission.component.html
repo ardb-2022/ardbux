@@ -11,6 +11,7 @@
       </div>
     <div class="card" style="background-color: rgb(219, 245, 235);">
         <div class="form-group col-12" style="text-align:center;">
+          <!-- <button mat-raised-button type="button" class="btn btn-rounded btn-primary btn-primary-spacing btn-sm" (click)="accessControl()" style="margin-top:20px; margin-right:20px;">User Access Control</button> &nbsp; -->
           <button mat-raised-button type="button" class="btn btn-rounded btn-primary btn-primary-spacing btn-sm" (click)="addItem()" style="margin-top:20px; margin-right:20px;">Add New Item</button> &nbsp;
           <button mat-raised-button type="button" class="btn btn-rounded btn-primary btn-primary-spacing btn-sm" (click)="onRetrieve()" style="margin-top:20px; margin-right:20px;">Retrieve</button> &nbsp;
           <!-- <button mat-raised-button type="button" class="btn btn-rounded btn-primary btn-primary-spacing btn-sm" (click)="onRetrieve()" style="margin-top:20px; margin-right:20px;">Retrieve</button> &nbsp; -->
@@ -193,6 +194,72 @@
                 <small for="fname">Identification<span class="text-danger">*</span></small>
                 <input type="text" class="form-control form-control-sm "  formControlName="identification" id="identification">
               </div>
+            <div class="form-group col-3">
+              <label for="acc_type">Permission<span class="text-danger">*</span></label>
+              <select id="user_type" class="form-control form-control-sm"  formControlName="permission">
+                  <option disabled value='0'>Select Permission</option>
+                  <option  value="Y">YES</option>
+                  <option  value="N">No</option>
+              </select>
+              </div> 
+      
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button mat-raised-button class="btn btn-primary" (click)="insertNewItem()">Submit</button> &nbsp;
+      <button mat-raised-button class="btn btn-light" (click)="modalRef.hide()">Close</button>
+      <!-- <button mat-raised-button type="button" class="btn btn-outline-dark" data-dismiss="modal">Submit</button> -->
+    </div>
+  </ng-template>
+
+
+
+  <ng-template #access let-modal data-keyboard="false" data-backdrop="false">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Report Criteria</h4>
+      <button  type="button" class="close text-danger" aria-label="Close" data-dismiss="modal" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div *ngIf="showAlert" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Error! </strong> {{alertMsg}}
+        <button  type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="closeAlert()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+  
+      <form [formGroup]="form2">
+        <div class="form-row">
+
+          <div class="form-group col-3"  [formGroup]="get_user">
+            <small >Select User<span class="text-danger">*</span></small>
+            <select name="select_user"class="form-control form-control-sm" [disabled]="userType!=='A'" formControlName="select_user">
+                    <option disabled selected>Select User</option>
+                    
+                  <option *ngFor="let title of selectalluser" [value]="title.user_id">{{title.user_id}}</option>
+            </select>
+            </div>
+
+            <div class="col-3">
+              <label for="acc_type">Select Module<span class="text-danger">*</span></label>
+              <select id="user_type" class="form-control form-control-sm"  formControlName="module">
+                  <option disabled value='0'>Select</option>
+                  <option  value="UCIC">UCIC</option>
+                  <option  value="Finance">Finance</option>
+                  <option  value="Deposit">Deposit</option>
+                  <option  value="Loans">Loans</option>
+                  <option  value="System">System</option>
+                  <option  value="Transfer">Transfer</option>
+                  <option  value="Investment">Investment</option>
+              </select>
+            </div>
+                
+        </div>   
+        
+        <div class="form-row">
+          
             <div class="form-group col-3">
               <label for="acc_type">Permission<span class="text-danger">*</span></label>
               <select id="user_type" class="form-control form-control-sm"  formControlName="permission">

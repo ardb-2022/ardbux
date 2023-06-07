@@ -134,3 +134,15 @@ thead tfoot{
   position:fixed!important; 
   bottom: 0px !important;
 } }
+.mat-column-disclaimer2{
+  border-right: 1px solid rgb(172, 170, 170);
+}
+.mat-column-disclaimer3{
+  border-right: 1px solid rgb(172, 170, 170);
+}
+.mat-column-disclaimer4{
+  border-right: 1px solid rgb(172, 170, 170);
+}
+.mat-column-disclaimer5{
+  border-right: 1px solid rgb(172, 170, 170);
+}

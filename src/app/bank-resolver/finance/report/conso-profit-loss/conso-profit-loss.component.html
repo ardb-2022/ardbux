@@ -147,16 +147,9 @@
       <!-- <td mat-footer-cell *matFooterCellDef >Hello</td> -->
       <!-- <td mat-footer-cell *matFooterCellDef >{{crSum | number : '1.2-2'}}</td> -->
     </ng-container>
-    <ng-container matColumnDef="disclaimer3">
-      <td mat-footer-cell *matFooterCellDef colspan="2" style="text-align:right;font-weight: 800;">
-       
-      </td>
-      
-      <!-- <td mat-footer-cell *matFooterCellDef >Hello</td> -->
-      <!-- <td mat-footer-cell *matFooterCellDef >{{crSum | number : '1.2-2'}}</td> -->
-    </ng-container>
+    
     <ng-container matColumnDef="disclaimer1" >
-      <td mat-footer-cell *matFooterCellDef colspan="2" style="text-align:right;font-weight: 800;">
+      <td mat-footer-cell *matFooterCellDef colspan="2" style="text-align:right;font-weight: 800;padding-right: 4%;">
         {{crSum| currency:'INR'}}
       </td>
       
@@ -166,7 +159,7 @@
   <tr mat-header-row *matHeaderRowDef="['mainHeader']"></tr>
   
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-footer-row *matFooterRowDef="['disclaimer0','disclaimer','disclaimer1','disclaimer3']" class="example-second-footer-row"></tr>
+  <tr mat-footer-row *matFooterRowDef="['disclaimer0','disclaimer','disclaimer1']" class="example-second-footer-row"></tr>
   
     <tr mat-row *matRowDef="let element; columns: displayedColumns;"></tr>
      </table>

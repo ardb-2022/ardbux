@@ -74,15 +74,21 @@ border-top:1px solid black
   }
   
   .mat-column-curr_prn_recov {
-    padding-left: 14px;
+    padding-left: 5px;
   }
   .mat-column-curr_intt_recov {
-    padding-left: 14px;
+    padding-left: 5px;
   }
   .mat-column-ovd_prn_recov {
-    padding-left: 14px;
+    padding-left: 5px;
   }
   .mat-column-penal_intt_recov {
+    width: 32px;
+    border-right: 1px solid rgb(172, 170, 170);
+    padding-right: 24px;
+    text-align: right;
+  }
+  .mat-column-tot_recov{
     width: 32px;
     border-right: 1px solid rgb(172, 170, 170);
     padding-right: 24px;

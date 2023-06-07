@@ -100,29 +100,33 @@ export class WeeklyReturnComponent implements OnInit ,AfterViewInit{
 
 
   public SubmitReport() {
-    
+      this.showAlert = false;
       this.isLoading=true;
+      debugger
       this.reportData.length=0;
       this.pagedItems.length=0
       this.modalRef.hide()
       this.crSum=0;
       this.drSum=0;
-      this.showAlert = false;
+      
       this.todate = this.reportcriteria.value.todate;
       var dt={
         "ardb_cd":this.sys.ardbCD,
         "brn_cd":this.sys.BranchCode,
         "to_dt":this.todate.toISOString()
       }
-      this.svc.addUpdDel('Finance/PopulateWeeklyReturn',dt).subscribe(data=>{console.log(data)
+      this.svc.addUpdDel('Finance/PopulateWeeklyReturn',dt).subscribe(data=>{
+      console.log(data)
       this.reportData=data
-      this.dataSource.data=this.reportData
       if(this.reportData.length>0){
+        debugger
         this.isLoading=false
+        this.dataSource.data=this.reportData
         }
       if(this.reportData.length==0){
         this.comser.SnackBar_Nodata()
-      } 
+      }
+      
       // this.pageChange=document.getElementById('chngPage');
       // this.pageChange.click()
       // this.modalRef.hide();
@@ -143,9 +147,7 @@ export class WeeklyReturnComponent implements OnInit ,AfterViewInit{
        this.comser.SnackBar_Error(); 
       })
       
-      setTimeout(() => {
-        this.isLoading = false;
-      }, 3000);
+      
     }
   
 

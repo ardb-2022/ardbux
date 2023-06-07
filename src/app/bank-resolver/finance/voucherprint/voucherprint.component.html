@@ -113,8 +113,12 @@ style="background-color: #78c2ad21; min-height: 20vh;">
 
 </ng-container>
 
+<button class="scroll-to-top" (click)="scrollToTop()" > <mat-icon>north</mat-icon></button>
+<button class="scroll-to-bottom" (click)="scrollToBotom()" > <mat-icon>south</mat-icon></button>
+  
 <div  class="col-xs-12 col-sm-12 col-md-8 col-lg-8 shadow-lg mb-4 bg-white p-3">
   <div id="reportcontent" #reportcontent>
+    
 <table style="width: 100% " >     
 <tr *ngFor="let item of tvn; let i = index;">
   <!-- <p *ngIf="tvn[i].vd.length> 2" style="page-break-after: always;">&nbsp;</p> -->

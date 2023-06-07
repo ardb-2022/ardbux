@@ -15,10 +15,12 @@ import {ThemePalette} from '@angular/material/core';
 export class UserPermissionComponent implements OnInit {
   @ViewChild('content', { static: true }) content: TemplateRef<any>;
   @ViewChild('add', { static: true }) add: TemplateRef<any>;
+  @ViewChild('access', { static: true }) access: TemplateRef<any>;
 
   showMsg: ShowMessage;
   form: FormGroup;
   form2: FormGroup;
+  get_user:FormGroup;
   userType:any;
   sys = new SystemValues();
   isChecked:boolean=false;
@@ -103,6 +105,10 @@ bName1=''
   constructor(private rstSvc: RestService,private formBuilder: FormBuilder, private router: Router, private svc:RestService,private modalService: BsModalService) { }
 
   ngOnInit(): void {
+    this.get_user = this.formBuilder.group({
+      select_user: ['', Validators.required],
+      module:['', Validators.required]
+     });
     this.form = this.formBuilder.group({
       user_type: ['0', Validators.required]
     });
@@ -117,6 +123,18 @@ bName1=''
     });
     this.openModal(this.content)
    }
+   getallUser(){
+    let login = new LOGIN_MASTER();
+    login.user_id = localStorage.getItem('__userId');
+    login.brn_cd = localStorage.getItem('__brnCd');
+    login.ardb_cd=this.sys.ardbCD,
+    this.svc.addUpdDel('Sys/GetUserIDDtls', login).subscribe(
+      res => {
+        this.selectalluser=res
+      })
+
+    
+  }
 
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template, this.config);
@@ -258,6 +276,9 @@ bName1=''
   addItem(){
     this.addModal(this.add)
   }
+  accessControl(){
+    this.accessModal(this.access)
+  }
   insertNewItem(){
     this.isLoading = true;
     var dt={
@@ -288,16 +309,19 @@ bName1=''
         }
       })
   }
- addModal(template: TemplateRef<any>) {
+  accessModal(template: TemplateRef<any>){
     this.modalRef = this.modalService.show(template, this.addconfig);
-  }
-  
-  
-  private HandleMessage(show: boolean, type: MessageType = null, message: string = null) {
-    this.showMsg = new ShowMessage();
-    this.showMsg.Show = show;
-    this.showMsg.Type = type;
-    this.showMsg.Message = message;
-  }
+    }
+  addModal(template: TemplateRef<any>) {
+      this.modalRef = this.modalService.show(template, this.addconfig);
+    }
+    
+    
+    private HandleMessage(show: boolean, type: MessageType = null, message: string = null) {
+      this.showMsg = new ShowMessage();
+      this.showMsg.Show = show;
+      this.showMsg.Type = type;
+      this.showMsg.Message = message;
+    }
 
 }

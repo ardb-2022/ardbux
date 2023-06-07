@@ -139,6 +139,9 @@ import { UserTransferComponent } from './system/user-transfer/user-transfer.comp
 import { ConsoBalSheetComponent } from './finance/report/conso-bal-sheet/conso-bal-sheet.component';
 import { ConsoCashAccNewComponent } from './finance/report/conso-cash-acc-new/conso-cash-acc-new.component';
 import { LoanDisbCertificateComponent } from './loan/report/loan-disb-certificate/loan-disb-certificate.component';
+import { CloseAccDtlsComponent } from './deposit/close-acc-dtls/close-acc-dtls.component';
+import { GMloanDCComponent } from './loan/report/gmloan-dc/gmloan-dc.component';
+import { RecovVillageComponent } from './loan/report/recovery-register/recov-village/recov-village.component';
 const routes: Routes = [
   { path: 'Admin', component: AdminPanelComponent },
   { path: 'admin', component: AdminPanelComponent },
@@ -195,6 +198,7 @@ const routes: Routes = [
       { path: 'FR_CdGlTrns', component: ConsoGLTrnsComponent, canActivate: [AuthGuard] },
       { path: 'DT_ApproveTran', component: TransactionapprovalComponent, canActivate: [AuthGuard] },
       { path: 'DT_AccTrans', component: AccounTransactionsComponent, canActivate: [AuthGuard] },
+      { path: 'DT_CloseAccDtls', component: CloseAccDtlsComponent, canActivate: [AuthGuard] },
       { path: 'DT_OpenAcc', component: AccOpeningComponent, canActivate: [AuthGuard] },
       { path: 'DA_DayInit', component: DayinitializationComponent, canActivate: [AuthGuard] },
       { path: 'DA_DayCmpl', component: DaycomplitionComponent, canActivate: [AuthGuard] },
@@ -243,10 +247,12 @@ const routes: Routes = [
       { path: 'LR_NPA', component: NpaComponent, canActivate: [AuthGuard] },
       { path: 'LR_Int_Subsidy', component: InterestSubsidyComponent, canActivate: [AuthGuard] },
       { path: 'LR_Disb_Cert', component: LoanDisbCertificateComponent, canActivate: [AuthGuard] },
+      { path: 'LR_GM_DC', component: GMloanDCComponent, canActivate: [AuthGuard] },
       
       { path: 'LR_NPA_ALL', component: NpaALLComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecReg', component: RecoveryRegisterComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecRegFund', component: RecovFundComponent, canActivate: [AuthGuard] },
+      { path: 'LR_RecRegVill', component: RecovVillageComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecRegBlock', component: RecovBlockComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecRegNorm', component: RecovNormalComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecInterest', component: RecovInterestComponent, canActivate: [AuthGuard] },

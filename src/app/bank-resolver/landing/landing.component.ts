@@ -151,5 +151,6 @@ export class LandingComponent implements OnInit {
     this.router.navigate([this.sys.BankName + '/FR_GLTD']);
 
   }
+  
   }
 

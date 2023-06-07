@@ -3,7 +3,7 @@
   <div class="col-xs-12 col-sm-12 col-md-11 col-lg-11 shadow bg-white" style="min-height: 70vh;">
     <div class="mt-1 col-xs-12 col-sm-12 col-md-11 col-lg-11 d-flex justify-content-center align-items-center">
       <!-- <button mat-raised-button type="button" [disabled]="disableSave" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onSaveClick()">Save</button> -->
-      <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" #saveBtn (click)="onSaveClick()">Save</button>
+      <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" [disabled]="disableSave" #saveBtn (click)="onSaveClick()">Save</button>
       <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onDeleteClick()"
         *ngIf="editDeleteMode">Delete</button>
       <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onResetClick()">Reset</button>
@@ -351,7 +351,7 @@
             <div class="form-group col-2" *ngIf="!showOnRenewal && !showOnClose">
               <small for="amount">Amount <span class="text-danger">*</span> </small>
               <input *ngIf="!showAmtDrpDn" type="text" class="form-control form-control-sm" formControlName="amount"
-                id="amount" (change)="onAmtChng()">
+                id="amount" (keypress)="onAmtChng()">
                
 
               <!-- <select *ngIf="showAmtDrpDn" id="amount" class="form-control form-control-sm" formControlName="amount"> -->
@@ -775,7 +775,7 @@
     <div *ngIf="undefined !== accNoEnteredForTransaction"
       class="mb-1 col-xs-12 col-sm-12 col-md-11 col-lg-11 d-flex justify-content-center align-items-center">
       <!-- <button mat-raised-button type="button" [disabled]="disableSave" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onSaveClick()">Save</button> -->
-      <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onSaveClick()">Save</button>
+      <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" [disabled]="disableSave" (click)="onSaveClick()">Save</button>
       <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onDeleteClick()"
         *ngIf="editDeleteMode">Delete</button>
       <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onResetClick()">Reset</button>
@@ -975,7 +975,7 @@
 </ng-template>
 <ng-template #unappconfirm>
   <div class="modal-header">
-    <h4 class="modal-title pull-left">Wish to edit or delete Unapproved Transaction?
+    <h4 class="modal-title pull-left">You Have Already Unapproved Transaction With This Account, Wish to edit or delete Transaction?
     </h4>
     <!-- <button mat-raised-button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
       <span aria-hidden="true">&times;</span>
@@ -1028,9 +1028,15 @@
   </div>
 </ng-template>
 <ng-template #preClose>
-  <div class="modal-header">
+  <div class="modal-header" *ngIf="misPreMatClose">
+    <h4 class="modal-title pull-left customHeader">It will be a premature closing for {{diff}} days with interest  &#8377;{{preCloseMIS}} accrued, And interest already paid {{this.accNoEnteredForTransaction.intt_amt * this.counter}} &nbsp;&nbsp;</h4>
+    <!-- <button mat-raised-button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button> -->
+  </div>
+  <div class="modal-header" *ngIf="!misPreMatClose">
     <h4 class="modal-title pull-left customHeader">It will be a premature closing for {{diff}} days with interest accrued :
-      &#8377;{{closeInt}}
+      &#8377;{{closeInt}}&nbsp;
     </h4>
     <!-- <button mat-raised-button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
       <span aria-hidden="true">&times;</span>
@@ -1046,7 +1052,6 @@
     <button mat-raised-button type="button" class="btn btn-primary float-right" (click)="hideModalForClose()">OK</button>
   </div>
 </ng-template>
-
 <ng-template #preCloseDbs>
   <div class="modal-header">
     <h4 class="modal-title pull-left customHeader">Can't close a DBS account prematurely
@@ -1105,5 +1110,19 @@
     </div>
     <button mat-raised-button type="button" class="btn btn-default" (click)="hideModalForClose();onResetClick();">Cancel</button> &nbsp;
     <button mat-raised-button type="button" class="btn btn-primary float-right" (click)="hideModalForClose()">OK</button>
+  </div>
+</ng-template>
+<ng-template #getalltrans>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left"><span style="color: rgb(168, 131, 8);">Warning!!</span>,Some Transaction have already occured for this account. Do you want to continue with more Transaction?</h4>
+    
+    <!-- <button mat-raised-button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button> -->
+  </div>
+  <div class="modal-body">
+    <button mat-raised-button type="button" class="btn btn-default" (click)="onResetClick();this.modalRef.hide()">No</button> &nbsp;&nbsp;&nbsp;
+    <button mat-raised-button type="button" class="btn btn-primary float-right" (click)="this.modalRef.hide()">Yes</button> 
+    
   </div>
 </ng-template>

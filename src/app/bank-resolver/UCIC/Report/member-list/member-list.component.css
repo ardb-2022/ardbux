@@ -1,7 +1,11 @@
 .mkScroll{
     height:auto;
-    max-height:450px;
+    max-height:550px;
     overflow:auto
+}
+#mattable{
+  max-height:550px;
+  overflow: scroll;
 }
 #trial {
     font-family: Arial, Helvetica, sans-serif;

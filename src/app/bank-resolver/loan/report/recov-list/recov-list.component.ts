@@ -529,6 +529,17 @@ bName1=''
     this.secondGroup=this.secondGroup.sort()
     this.getTotal()
   }
+  downloadexcel(){
+    this.exportAsConfig = {
+      type: 'xlsx',
+      // elementId: 'hiddenTab', 
+      elementIdOrContent:'matTable'
+    }
+    this.exportAsService.save(this.exportAsConfig, 'Demand_col_List_Member').subscribe(() => {
+      // save started
+      console.log("hello")
+    });
+  }
   searchSecondGroup(){
     this.isLoading=true
     setTimeout(()=>{this.isLoading=false},500)

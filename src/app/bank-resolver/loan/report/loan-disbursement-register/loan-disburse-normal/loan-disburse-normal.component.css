@@ -144,10 +144,10 @@ th{
   text-align: center;
 }
 .mat-column-dis_dtls{
-  width: 100%;
+  /* width: 100%; */
   padding-left: 10px;
   border-right: 1px solid rgb(172, 170, 170);
   border-left: 1px solid rgb(172, 170, 170);
   border-top:1px solid rgb(172, 170, 170) ; 
-  
+  text-align: center;
 }

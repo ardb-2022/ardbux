@@ -78,15 +78,21 @@ export class HeaderComponent implements OnInit,OnDestroy,AfterViewInit {
 matmenuTrg:any=[];
   permission:boolean=false;
   dynamicLink:any;
+  dynamicLink2:any;
   showOpenYear:boolean=false;
   items: any[];
  
   ngOnInit(): void {
     if(this.sys.ardbCD=='26'){
-      this.dynamicLink='LR_BMLoanStmt'
+      this.dynamicLink='LR_BMLoanStmt';
+      this.dynamicLink2='LR_Disb_Cert'
+    }
+    if(this.sys.ardbCD=='4'){
+      this.dynamicLink2='LR_GM_DC'
     }
     else{
-      this.dynamicLink='LR_LoanStmt'
+      this.dynamicLink='LR_LoanStmt';
+      this.dynamicLink2='LR_Disb_Cert'
       }
   this.getLogdUser()
    //console.log(localStorage.getItem('__currentDate')==localStorage.getItem('__prevDate'))

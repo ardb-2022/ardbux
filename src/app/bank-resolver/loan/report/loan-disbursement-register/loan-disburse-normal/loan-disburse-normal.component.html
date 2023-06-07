@@ -185,17 +185,19 @@
       <table > 
        
             <ng-container style="padding-bottom:30px;">
-              <tr mat-cell  style="width:100%;">
-                <th mat-header-cell>Loan Type</th>
+              <tr mat-cell  >
+                <th mat-header-cell style="width: 30%">Loan Type</th>
+                <th mat-header-cell>Fund Type</th>
                 <th mat-header-cell>Purpose</th> 
                 <th mat-header-cell>Trans DT</th>
                 <th mat-header-cell> Loan ID</th>
                 <th mat-header-cell> Name</th>
-                <th mat-header-cell style="width:50px;"> Disbursement Amount</th>
+                <th mat-header-cell > Disbursement Amount</th>
             </tr>
                       <tbody>
                         <tr *ngFor="let blkDtls of element.tmloanall">
                           <td mat-cell>{{blkDtls.acc_desc}} </td>
+                          <td mat-cell>{{blkDtls.fund_type=='N'?'Borrowed Fund':blkDtls.fund_type=='O'?'Owned Fund':''}}</td>
                           <td mat-cell>{{blkDtls.activity_name}}</td>
                           <td mat-cell>{{blkDtls.trans_dt.substr(0,10)}} </td>
                           <td mat-cell>{{blkDtls.loan_id }} </td>
@@ -211,17 +213,17 @@
       </table>
       <table>
         <tr mat-cell >
-          <td mat-cell colspan="4"><b>(Total No of Disbursement at {{element.blocktype.block_name}})....{{element.blocktype.tot__block_ovd_prn_recov}}</b></td>
+          <td mat-cell style="width: 91%;" ><b>(Total No of Disbursement at {{element.blocktype.block_name}})....{{element.blocktype.tot__block_ovd_prn_recov}}</b></td>
             
-            <td mat-cell colspan="2"><b>{{element.blocktype.tot_block_curr_prn_recov|currency:"INR"}}</b></td>
+            <td mat-cell ><b>{{element.blocktype.tot_block_curr_prn_recov|currency:"INR"}}</b></td>
              
         </tr>
       </table><br>
       <table *ngIf="i==reportData.length-1">
         <tr mat-cell>
-          <td mat-cell colspan="4"><b style="font-size:14px;"> Grandtotal: (Total Number of Disbursements {{totdisbNum}}) </b></td>
+          <td mat-cell style="width: 91%;"><b style="font-size:14px;"> Grandtotal: (Total Number of Disbursements {{totdisbNum}}) </b></td>
             
-            <td mat-cell colspan="2"><b style="font-size:14px;">{{gndtotDisb | currency:"INR"}}</b></td>
+            <td mat-cell ><b style="font-size:14px;">{{gndtotDisb | currency:"INR"}}</b></td>
              
         </tr>
        </table>

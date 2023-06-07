@@ -64,9 +64,12 @@
     <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 shadow-sm mb-4 bg-white p-3">
       <div>
         <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="closeScreen()">Close</button>
-        <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" [useExistingCss]="true"
-          printSectionId="matTable" ngxPrint>Print</button>
- <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
+        <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" 
+        [useExistingCss]="true"
+        [printStyle]="{ '@page': { size: 'landscape !important' } }"
+        printSectionId="matTable" ngxPrint>Print</button>
+        <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
+        <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadexcel()">Export as EXCEL</button>
 
       </div>
     </div>
@@ -179,7 +182,7 @@
             </th>
            
             
-            <td mat-cell *matCellDef="let element"> {{element.block_name}} </td>
+            <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.block_name}} </td>
           </ng-container>
           <ng-container matColumnDef="vill_name">
           
@@ -724,9 +727,12 @@
     <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 shadow-sm mb-4 bg-white p-3">
       <div>
         <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="closeScreen()">Close</button>
-        <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" [useExistingCss]="true"
+        <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" 
+        [useExistingCss]="true"
+        [printStyle]="{ '@page': { size: 'landscape !important' } }"
           printSectionId="matTable" ngxPrint>Print</button>
- <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
+    <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
+     <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadexcel()">Export as EXCEL</button>
 
       </div>
     </div>

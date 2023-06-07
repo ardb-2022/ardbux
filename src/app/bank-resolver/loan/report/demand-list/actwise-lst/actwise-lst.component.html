@@ -76,11 +76,11 @@
     </div>
     <div class="col-xs-12 col-sm-12 shadow-lg mb-4 bg-white p-3 mkScroll">
       <div class="justify-content-center" style="text-align:center" *ngIf="reportData">
-        <h6>{{ardbName}} {{branchName}}</h6>
+        <h4>{{ardbName}} {{branchName}}</h4>
   
-        <h6>Run Date & Time : {{today}} </h6> <br>
-        <h6> <u> Activity-wise Demand List from {{reportcriteria.controls.fromDate.value?.toDateString() | date: 'dd/MM/yyyy'}} to
-            {{reportcriteria.controls.toDate.value?.toDateString() | date: 'dd/MM/yyyy'}}</u></h6>
+        <h4>Run Date & Time : {{today}} </h4> <br>
+        <h4> <u> Activity-wise Demand List from {{reportcriteria.controls.fromDate.value?.toDateString() | date: 'dd/MM/yyyy'}} to
+            {{reportcriteria.controls.toDate.value?.toDateString() | date: 'dd/MM/yyyy'}}</u></h4>
         <!-- <p>
           <b>
             Loan Type : {{reportcriteria.controls.acc_type_cd.value}} {{loanNm}}</b>

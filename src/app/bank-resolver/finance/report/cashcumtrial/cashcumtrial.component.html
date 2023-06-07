@@ -137,44 +137,44 @@
       </ng-container>
         <!-- Footer column -->
       <ng-container matColumnDef="Total">
-        <td mat-footer-cell *matFooterCellDef colspan="2" >
+        <td mat-footer-cell *matFooterCellDef colspan="2"style="text-align: center;" >
           <b>Total</b>
         </td>
       </ng-container>
       <ng-container matColumnDef="Opening_Debit">
-        <td mat-footer-cell *matFooterCellDef colspan="" >
+        <td mat-footer-cell *matFooterCellDef colspan="" style="text-align: right;">
           <b>{{opdrSum | currency:"INR"}}</b>
         </td>
        </ng-container>
        <ng-container matColumnDef="Opening_Credit">
-        <td mat-footer-cell *matFooterCellDef colspan="" >
+        <td mat-footer-cell *matFooterCellDef colspan="" style="text-align: right;">
          <b>{{opcrSum | currency:"INR"}}</b>
         </td>
        </ng-container>
        
       <ng-container matColumnDef="Dr_During_Period">
-        <td mat-footer-cell *matFooterCellDef colspan="" >
+        <td mat-footer-cell *matFooterCellDef colspan="" style="text-align: right;">
           <b>{{crSum | currency:"INR"}}</b>
         </td>
        </ng-container>
        <ng-container matColumnDef="Cr_During_Period">
-        <td mat-footer-cell *matFooterCellDef colspan="" >
+        <td mat-footer-cell *matFooterCellDef colspan="" style="text-align: right;">
          <b>{{drSum | currency:"INR"}}</b>
         </td>
        </ng-container>
       
       <ng-container matColumnDef="Closing_Debit">
-        <td mat-footer-cell *matFooterCellDef colspan="" >
+        <td mat-footer-cell *matFooterCellDef colspan="" style="text-align: right;">
           <b>{{clsdrSum | currency:"INR"}}</b>
         </td>
        </ng-container>
        <ng-container matColumnDef="Closing_Credit">
-        <td mat-footer-cell *matFooterCellDef colspan="" >
+        <td mat-footer-cell *matFooterCellDef colspan="" style="text-align: right;">
          <b>{{clscrSum | currency:"INR"}}</b>
         </td>
        </ng-container>
        <ng-container matColumnDef="blankSpace">
-        <td mat-footer-cell *matFooterCellDef colspan="8" >
+        <td mat-footer-cell *matFooterCellDef colspan="8" style="text-align: right;">
           <b></b>
         </td>
       </ng-container>

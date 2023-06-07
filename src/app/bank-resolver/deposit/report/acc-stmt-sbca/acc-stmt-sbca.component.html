@@ -18,13 +18,20 @@
         <div class="form-group col-3">
           <small for="acc_type_cd">Account Type</small>
           <select id="acc_type_cd" class="form-control form-control-sm" formControlName="acc_type_cd"
+              (change)="onAccountTypeChange()">
+              <option *ngIf="AcctTypes" disabled>Choose</option>
+              <option *ngFor="let acctType of AcctTypes" [value]="acctType.acc_type_cd">
+                {{acctType.acc_type_cd +' ' + acctType.acc_type_desc}}
+              </option>
+            </select>
+          <!-- <select id="acc_type_cd" class="form-control form-control-sm" formControlName="acc_type_cd"
           (change)="onAccountTypeChange()">
             <option disabled>Choose</option>
             <option [value]="1">1 - Saving Deposit</option>
             <option [value]="7">7 - Share</option>
             <option [value]="8">8 - Current</option> 
             <option [value]="9">9 - Loan Suspense</option>
-          </select>
+          </select> -->
         </div>
         <div class="col-9">
           <small for="acct_num" >Search Name/Cust code/Phone</small>

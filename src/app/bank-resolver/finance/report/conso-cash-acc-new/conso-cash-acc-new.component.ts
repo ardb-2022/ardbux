@@ -159,13 +159,16 @@ export class ConsoCashAccNewComponent implements OnInit {
         "to_dt":this.toDate.toISOString(),
         // "acc_cd":this.reportcriteria.controls.acc_type_cd.value,
       }
-      this.isLoading=true;
+      
       this.svc.addUpdDel('Finance/PopulateDailyCashAccountConsoNew',dt).subscribe(data=>{console.log(data)
         this.reportData=data
         this.reportData2=data;
         debugger
         if(this.reportData.length==0){
           this.comser.SnackBar_Nodata()
+        } 
+        if(this.reportData.length>0){
+          this.isLoading=false;
         } 
           for(let i=0;i<this.reportData2.length;i++){
           this.totdrSum+=this.reportData2[i].acccashaccount.tot_dr_amt
@@ -210,7 +213,7 @@ export class ConsoCashAccNewComponent implements OnInit {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         this.resultLength=this.reportData.length
-        this.isLoading=false;
+        
         
       }),
       err => {

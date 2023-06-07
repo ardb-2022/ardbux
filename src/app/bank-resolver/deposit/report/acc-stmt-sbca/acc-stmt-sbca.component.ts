@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { SystemValues, p_report_param, mm_customer } from 'src/app/bank-resolver/Models';
+import { SystemValues, p_report_param, mm_customer, mm_operation } from 'src/app/bank-resolver/Models';
 import { p_gen_param } from 'src/app/bank-resolver/Models/p_gen_param';
 import { tt_trial_balance } from 'src/app/bank-resolver/Models/tt_trial_balance';
 import { RestService } from 'src/app/_service';
@@ -26,7 +26,9 @@ export class AccStmtSBCAComponent implements OnInit {
   @ViewChild('content', { static: true }) content: TemplateRef<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  dataSource = new MatTableDataSource()
+  dataSource = new MatTableDataSource();
+  public static operations: mm_operation[] = [];
+
   displayedColumns: string[] = ['trans_dt', 'particulars','dr_amt','cr_amt','balance'];
 
   modalRef: BsModalRef;
@@ -67,7 +69,7 @@ export class AccStmtSBCAComponent implements OnInit {
   branchName=this.sys.BranchName
   ardbAddress=localStorage.getItem('ardb_addr')
   ardbCD=localStorage.getItem('__ardb_cd')
-  
+  AcctTypes: mm_operation[];
   pageChange: any;
   opdrSum=0;
   opcrSum=0;
@@ -85,6 +87,7 @@ export class AccStmtSBCAComponent implements OnInit {
     private modalService: BsModalService, private _domSanitizer: DomSanitizer,private exportAsService: ExportAsService, private cd: ChangeDetectorRef,
     private router: Router, private comser:CommonServiceService) { }
   ngOnInit(): void {
+    this.getOperationMaster();
     // this.fromdate = this.sys.CurrentDate;
     this.reportcriteria = this.formBuilder.group({
       fromDate: [null, Validators.required],
@@ -105,6 +108,39 @@ export class AccStmtSBCAComponent implements OnInit {
   onLoadScreen(content) {
     this.modalRef = this.modalService.show(content, this.config);
   }
+  private getOperationMaster(): void {
+    console.log(AccStmtSBCAComponent.operations);
+
+    this.isLoading = true;
+    if (undefined !== AccStmtSBCAComponent.operations &&
+      null !== AccStmtSBCAComponent.operations &&
+      AccStmtSBCAComponent.operations.length > 0) {
+      this.isLoading = false;
+      this.AcctTypes = AccStmtSBCAComponent.operations.filter(e => e.module_type === 'DEPOSIT')
+        .filter((thing, i, arr) => {
+          return arr.indexOf(arr.find(t => t.acc_type_cd === thing.acc_type_cd)) === i;
+        });
+      this.AcctTypes = this.AcctTypes.sort((a, b) => (a.acc_type_cd > b.acc_type_cd ? 1 : -1));
+    } else {
+      this.svc.addUpdDel<mm_operation[]>('Mst/GetOperationDtls', null).subscribe(
+        res => {
+          console.log(res)
+          AccStmtSBCAComponent.operations = res;
+          this.isLoading = false;
+          this.AcctTypes = AccStmtSBCAComponent.operations.filter(e => e.module_type === 'DEPOSIT')
+            .filter((thing, i, arr) => {
+              return arr.indexOf(arr.find(t => t.acc_type_cd === thing.acc_type_cd)) === i;
+            });
+          this.AcctTypes = this.AcctTypes.sort((a, b) => (a.acc_type_cd > b.acc_type_cd ? 1 : -1));
+          this.AcctTypes =this.AcctTypes.filter(e=>e.acc_type_cd==1 || e.acc_type_cd==7||e.acc_type_cd==8||e.acc_type_cd==9)
+        },
+        err => { this.isLoading = false; }
+      );
+    }
+    console.log(this.AcctTypes);
+
+  }
+
   public onAccountTypeChange(): void {
     this.reportcriteria.controls.acct_num.setValue('');
     this.suggestedCustomer = null;

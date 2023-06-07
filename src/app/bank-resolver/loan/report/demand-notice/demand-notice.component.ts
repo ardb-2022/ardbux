@@ -16,6 +16,7 @@ import {MatSort} from '@angular/material/sort';
 import { environment } from 'src/environments/environment';
 import { DatePipe } from '@angular/common';
 import { CommonServiceService } from 'src/app/bank-resolver/common-service.service';
+import { sm_parameter } from 'src/app/bank-resolver/Models/sm_parameter';
 
 @Component({
   selector: 'app-demand-notice',
@@ -30,6 +31,8 @@ export class DemandNoticeComponent implements OnInit {
   modalRef: BsModalRef;
   isOpenFromDp = false;
   isOpenToDp = false;
+  systemParam: sm_parameter[] = [];
+
   sys = new SystemValues();
   config = {
     keyboard: false, // ensure esc press doesnt close the modal
@@ -59,6 +62,7 @@ export class DemandNoticeComponent implements OnInit {
   pagedItems = [];
   reportData:any=[]
   ardbName=localStorage.getItem('ardb_name')
+  ardbcd=localStorage.getItem('__ardb_cd')
   branchName=this.sys.BranchName
 
   pageChange: any;
@@ -98,6 +102,8 @@ export class DemandNoticeComponent implements OnInit {
   loanId: any;
   custNm:any;
   addr:any;
+  accCD:any;
+  gName:any
   showWait=false
   notvalidate:boolean=false;
   date_msg:any;
@@ -129,7 +135,7 @@ export class DemandNoticeComponent implements OnInit {
       this.translatedData=data
       // this.menuConfigs=data;
     })
- 
+   
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.fromdate = this.sys.CurrentDate;
@@ -147,6 +153,7 @@ export class DemandNoticeComponent implements OnInit {
        var time = date.toLocaleTimeString();
        this.today= n + " "+ time
   }
+
   cancelOnNull() {
     this.suggestedCustomer = null;
     if (this.reportcriteria.controls.acct_num.value.length > 0) {
@@ -164,7 +171,7 @@ export class DemandNoticeComponent implements OnInit {
       const prm = new p_gen_param();
       prm.as_cust_name = this.reportcriteria.controls.acct_num.value.toLowerCase();
       prm.ardb_cd = this.sys.ardbCD
-      this.svc.addUpdDel<any>('Loan/GetLoanDtlsByID', prm).subscribe(
+      this.svc.addUpdDel<any>('Loan/GetLoanDtls1', prm).subscribe(
         res => {
           this.isLoading = false
           console.log(res)
@@ -182,17 +189,25 @@ export class DemandNoticeComponent implements OnInit {
       this.isLoading = false;
       this.suggestedCustomer = null;
     }
+    
+    
   }
 
   public SelectCustomer(cust: any): void {
     console.log(cust)
     // this.fromdate=cust.disb_dt
     // this.toDate=this.sys.CurrentDate
+    this.gName=cust.guardian_name
+    this.accCD=cust.acc_cd
     this.loanId=cust.loan_id
     this.custNm=cust.cust_name
     this.addr=cust.present_address
     this.reportcriteria.controls.acct_num.setValue(cust.loan_id);
     this.suggestedCustomer = null;
+    const currFYear = localStorage.getItem('__curFinyr');
+    debugger
+    this.reportcriteria.controls.fromDate.setValue('01/04/'+currFYear)
+    debugger
   }
   onLoadScreen(content) {
     this.notvalidate=false
@@ -235,7 +250,7 @@ export class DemandNoticeComponent implements OnInit {
       this.reportData.length=0;
       this.pagedItems.length=0;
       // this.isLoading=true;
-      this.fromdate = this.reportcriteria.controls.fromDate.value;
+      // this.fromdate = this.reportcriteria.controls.fromDate.value;
       this.toDate = this.reportcriteria.controls.toDate.value;
       console.log(this.datePipe.transform(this. toDate, 'dd/MM/yyyy'))
       this.convertDt=this.datePipe.transform(this. toDate, 'dd/MM/yyyy')
@@ -246,12 +261,18 @@ export class DemandNoticeComponent implements OnInit {
         this.converDttoDt+='/'
 
     }
-    console.log(this.reportcriteria.controls.fromDate.value.toISOString(),this.reportcriteria.controls.toDate.value.toISOString())
+    const str = this.reportcriteria.controls.fromDate.value;
+    const darr = str.split("/");    // ["29", "1", "2016"]
+    const dobj = new Date(parseInt(darr[2]),parseInt(darr[1])-1,parseInt(darr[0]));
+    console.log(dobj.toISOString());
+    // console.log(this.reportcriteria.controls.fromDate.value.toISOString(),this.reportcriteria.controls.toDate.value.toISOString())
     console.log(this.calc)
       var dt={
         "ardb_cd":this.sys.ardbCD,
-        "from_dt":this.reportcriteria.controls.fromDate.value.toISOString(),
+        "from_dt":dobj.toISOString(),
+        // "from_dt":this.reportcriteria.controls.fromDate.value,
         "to_dt":this.reportcriteria.controls.toDate.value.toISOString(),
+        // "to_dt":this.reportcriteria.controls.toDate.value,
         "loan_id":this.reportcriteria.controls.acct_num.value
       }
       this.isLoading=true
@@ -261,7 +282,7 @@ export class DemandNoticeComponent implements OnInit {
         this.svc.addUpdDel('Loan/GetDemandNotice',dt).subscribe(data=>{console.log(data)
         this.reportData=data
         this.isLoading=false;
-        if(this.reportData.length==0){
+        if(this.reportData?.length==0||this.reportData==null){
           this.comser.SnackBar_Nodata()
         } 
         // this.itemsPerPage=this.reportData.length % 50 <=0 ? this.reportData.length: this.reportData.length % 50

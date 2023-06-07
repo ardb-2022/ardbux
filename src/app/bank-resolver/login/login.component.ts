@@ -150,7 +150,7 @@ export class LoginComponent implements OnInit {
     let bankName=this.ardbBrnMst.filter(x=>x.ardB_CD==this.f.ardbbrMst.value)[0].bank_name
     // let bankName2=this.ardbBrnMst.filter(x=>x.ardB_CD=='100')[0].bank_name
     if(this.f.ardbbrMst.value=='100'){
-        localStorage.setItem('__ardb_cd', '20');
+        localStorage.setItem('__ardb_cd', '4');
     }
     else{
       localStorage.setItem('__ardb_cd',this.f.ardbbrMst.value);
@@ -172,7 +172,7 @@ export class LoginComponent implements OnInit {
     // this.router.navigate([__bName + '/la']); // TODO remove this it will be after login
     const login = new LOGIN_MASTER();
     const toreturn = false;
-    login.ardb_cd = this.f.ardbbrMst.value=='100'?'20':this.f.ardbbrMst.value;
+    login.ardb_cd = this.f.ardbbrMst.value=='100'?'4':this.f.ardbbrMst.value;
     login.user_id = this.f.username.value;
     login.password = this.f.password.value;
     login.brn_cd = this.f.branch.value;
@@ -272,7 +272,7 @@ export class LoginComponent implements OnInit {
   private getSystemParam(): void {
     this.isLoading=true
     var dt={
-      "ardb_cd":this.f.ardbbrMst.value=='100'?'20':this.f.ardbbrMst.value
+      "ardb_cd":this.f.ardbbrMst.value=='100'?'4':this.f.ardbbrMst.value
     }
    
     this.rstSvc.addUpdDel('Mst/GetSystemDate',dt).subscribe(data=>

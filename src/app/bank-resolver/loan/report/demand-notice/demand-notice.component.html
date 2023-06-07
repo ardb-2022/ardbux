@@ -116,37 +116,46 @@
     <div class="col-xs-12 col-sm-12 shadow-lg mb-4 bg-white p-3 mkScroll">
       <div id="mattable">
       <div class="justify-content-center" style="text-align:center" *ngIf="reportData">
-        <h3> <b>{{getArdb}} {{translatedData?.heading}} </b> </h3> <br>
-        <!-- <h6>{{ardbName}} {{branchName}}</h6>
-  
-        <h6>Run Date & Time : {{today}} </h6> <br>
-        <h6> <u> Member-wise Demand List from {{reportcriteria.controls.fromDate.value?.toDateString() | date:
-            'dd/MM/yyyy'}} to
-            {{reportcriteria.controls.toDate.value?.toDateString() | date: 'dd/MM/yyyy'}}</u></h6>
-        <p>
-          <b>
-            Loan Type : {{reportcriteria.controls.acc_type_cd.value}} {{loanNm}}</b>
-        </p> -->
+        <div *ngIf="ardbcd=='26'">
+          <h4> <b>{{getArdb}} {{translatedData?.heading}} </b> </h4> <br>
+        <h5> <b>{{translatedData?.bmaddr?.bm_branch}} </b> </h5> 
+        <h5> <b>{{translatedData?.bmaddr?.bm_cont}} </b> </h5> 
+        <h5> <b>{{translatedData?.bmaddr?.bm_addr}} </b> </h5> 
+        <h5> <b>{{translatedData?.bmaddr?.bm_website}} </b> </h5> <br>
+        </div>
+        <div *ngIf="ardbcd=='20'">
+          <h4> <b>{{getArdb}} {{translatedData?.heading}} </b> </h4> <br>
+        <h5> <b>{{translatedData?.biraddr?.bir_branch}} </b> </h5> 
+        <!-- <h5> <b>{{translatedData?.bmaddr.burdwan_cont}} </b> </h5> 
+        <h5> <b>{{translatedData?.bmaddr.burdwan_addr}} </b> </h5> 
+        <h5> <b>{{translatedData?.bmaddr.burdwan_website}} </b> </h5> <br> -->
+        </div>
+        <div *ngIf="ardbcd=='4'">
+          <h4> <b>{{getArdb}} {{translatedData?.heading}} </b> </h4> <br>
+        <h5> <b>{{translatedData?.gmaddr?.gm_branch}} </b> </h5> 
+        <!-- <h5> <b>{{translatedData?.bmaddr.burdwan_cont}} </b> </h5> 
+        <h5> <b>{{translatedData?.bmaddr.burdwan_addr}} </b> </h5> 
+        <h5> <b>{{translatedData?.bmaddr.burdwan_website}} </b> </h5> <br> -->
+        </div>
+        
+        
+        
   
       <table style="border: 1px solid white;margin-left:10%;">
         <tr>
             
-          <td colspan="3">{{translatedData?.name}} - {{reportData[0]?.cust_name }}</td> 
-         
-        <tr></tr>
+          <td colspan="6">{{translatedData?.name}} - {{reportData[0]?.cust_name }}</td> 
+          <td colspan="6">{{translatedData?.address}} - {{reportData[0]?.cust_address}}</td> 
+        </tr>
         <tr>
-            <td colspan="2">{{translatedData?.father_name}} - </td>   
-            <td>{{translatedData?.party_code}} - </td>   
+            <td colspan="6">{{translatedData?.guardian_name}} - {{gName}}</td> 
+            <td colspan="6">{{translatedData?.loan_id}} -{{reportData[0]?.loan_id}} </td>   
         </tr>
        
-<tr>
-          <td colspan="2">{{translatedData?.address}} - {{reportData[0]?.cust_address}}</td> 
-         <td>{{translatedData?.loan_id}} -{{reportData[0]?.loan_id}} </td>   
-        </tr>
         <tr>
-            <td>{{translatedData?.block}} - {{reportData[0]?.block_name}} </td>  
-            <td>{{translatedData?.district}} - {{getArdb}} </td>  
-            <td> {{translatedData?.ledger_no}} - {{reportData[0]?.loan_case_no}}</td>   
+            <td colspan="6">{{translatedData?.block}} - {{reportData[0]?.block_name}} </td>  
+            <!-- <td colspan="4">{{translatedData?.district}} - {{getArdb}} </td>   -->
+            <td colspan="6"> {{translatedData?.ledger_no}} - {{reportData[0]?.loan_case_no}}</td>   
         </tr>
          
     </table> <br>
@@ -155,36 +164,36 @@
     <hr>
     <table style="border:1px solid black;margin-left:10%">
         <tr>
-            <td>{{translatedData?.intt_rt}} -{{reportData[0]?.curr_intt_rate}}% </td>  
-            <td style="text-align:center">{{translatedData?.current_loan_amt}} - {{reportData[0]?.disb_amt| currency:"INR"}} </td>
+            <td colspan="6">{{translatedData?.intt_rt}} -{{reportData[0]?.curr_intt_rate}}% </td>  
+            <td colspan="6" style="text-align:center">{{translatedData?.current_loan_amt}} - {{reportData[0]?.disb_amt| currency:"INR"}} </td>
         </tr>
     </table>
     <hr>
     </div>
     <div style="padding:100px;">
-        {{translatedData?.salutation}}, <br> {{translatedData?.salutation_sub}}, <br> {{translatedData?.body_pre}} {{reportData[0]?.activity_name}} {{translatedData?.body_mid}} {{converDttoDt}} {{translatedData?.body_post}} <br>
+        {{translatedData?.salutation}}, <br> {{translatedData?.salutation_sub}}, <br> {{translatedData?.body_pre}} {{reportData?reportData[0]?.activity_name:''}} {{translatedData?.body_mid}} {{converDttoDt}} {{translatedData?.body_post}} <br>
       <br>  <table style="border-style:dotted">
             <tr>
                 <th colspan="2" style="text-align:center">{{translatedData?.installment_amt| currency:"INR"}}</th>
             </tr>
             <tr>
                 <td>
-                    {{translatedData?.prn}}: {{reportData[0]?.ovd_prn| currency:"INR"}}
+                    {{translatedData?.prn}}: {{reportData?reportData[0]?.ovd_prn:0| currency:"INR"}}
                 </td>
                 <td style="text-align:center">
-                    {{translatedData?.curr_prn}}: {{reportData[0]?.curr_prn| currency:"INR"}}
+                    {{translatedData?.curr_prn}}: {{reportData?reportData[0]?.curr_prn:0| currency:"INR"}}
                 </td>
             </tr> <tr>
                 <td>
-                    {{translatedData?.intt}}: {{reportData[0]?.ovd_intt| currency:"INR"}}
+                    {{translatedData?.intt}}: {{reportData?reportData[0]?.ovd_intt:0| currency:"INR"}}
                 </td>
                 <td style="text-align:center">
-                    {{translatedData?.curr_intt}}: {{reportData[0]?.curr_intt| currency:"INR"}}
+                    {{translatedData?.curr_intt}}: {{reportData?reportData[0]?.curr_intt:0| currency:"INR"}}
                 </td>
             </tr>
             <tr>
                 <td>
-                    {{translatedData?.penal_amt}}: {{reportData[0]?.penal_intt| currency:"INR"}}
+                    {{translatedData?.penal_amt}}: {{reportData?reportData[0]?.penal_intt:0| currency:"INR"}}
                 </td>
             </tr>
             <tr>
@@ -196,8 +205,8 @@
      <br>   {{translatedData?.foot_pre}} <br> {{translatedData?.foot_mid}} <br> {{translatedData?.foot_post}} <br> <br>
 
      <div class="pull-right bt-5">
-        {{translatedData?.regards_pre}} <br> <br>
-        ------------------------------------- <br> <br>
+        {{translatedData?.regards_pre}} <br> <br><br>
+        ------------------------------------------------------------------ <br> 
         {{translatedData?.regards_post}}
      </div>
     </div>

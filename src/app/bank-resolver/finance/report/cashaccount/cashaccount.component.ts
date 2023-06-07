@@ -430,4 +430,10 @@ export class CashaccountComponent implements OnInit ,AfterViewInit{
       
     }
   }
+  print(){
+    window.addEventListener("afterprint", (event) => {
+      console.log("After print");
+      alert("This document is now being printed");
+    });
+  }
 }

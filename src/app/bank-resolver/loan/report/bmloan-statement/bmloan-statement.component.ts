@@ -34,7 +34,7 @@ export class BMLoanStatementComponent implements OnInit {
   counter = 0;
   filteredArray:any=[]
   sys = new SystemValues();
-  displayedColumns: string[] = ['trans_dt', 'disb_amt','curr_prn_recov','ovd_prn_recov','adv_prn_recov','curr_intt_recov','ovd_intt_recov','penal_intt_recov','curr_prn','curr_intt','narr'];
+  displayedColumns: string[] = ['trans_dt', 'disb_amt','curr_prn_recov','ovd_prn_recov','adv_prn_recov','curr_intt_recov','ovd_intt_recov','penal_intt_recov','tot_recov','curr_prn','curr_intt','narr'];
   dataSource = new MatTableDataSource()
   config = {
     keyboard: false, // ensure esc press doesnt close the modal

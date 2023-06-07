@@ -75,7 +75,7 @@ export class LoanPassBookFastPageComponent implements OnInit {
   cAddress:any
   cAcc:any
   showWait=false
-  // joinHold:any;
+  customerBrn_CD:any;
   cstName:any;
   gdName:any;
   phNo:any;
@@ -88,6 +88,7 @@ export class LoanPassBookFastPageComponent implements OnInit {
   accountTypeList: mm_acc_type[] = [];
   loan_case_dtls:any;
   loan_case_no:any;
+  customer:[]=[]
   constructor(public pServ: PrintServiceService,private svc: RestService, private formBuilder: FormBuilder,
     private modalService: BsModalService,public datepipe: DatePipe, private _domSanitizer: DomSanitizer,private exportAsService: ExportAsService, private cd: ChangeDetectorRef,
     private router: Router) { }
@@ -193,6 +194,7 @@ export class LoanPassBookFastPageComponent implements OnInit {
                 
                 this.masterModel = data;
                 if(this.masterModel.tmloanall.acc_cd>0){
+                  this.customerBrn_CD=this.masterModel.tmloanall.brn_cd;
                   this.onLoadScreen(this.content2);
                 }
               })   
@@ -211,14 +213,24 @@ export class LoanPassBookFastPageComponent implements OnInit {
         debugger
         this.svc.addUpdDel<any>('Deposit/GetCustDtls', prm).subscribe(
           res => {
-            console.log(res)
-            this.custDtls=res[0]
+            
             debugger
+            console.log(res)
+            if(res.length>1){
+              this.custDtls=res.filter(element => element.brn_cd==this.customerBrn_CD)[0];
+              
+              debugger
+            }
+            
+            else{
+              debugger
+              this.custDtls=res[0]
+            }
           })
   }
   onLoadScreen(content2) {
     this.loadFastPageData();
-    this.modalRef = this.modalService.show(content2, this.config);
+    // this.modalRef = this.modalService.show(content2, this.config);
     
   }
   public closeAlert() {

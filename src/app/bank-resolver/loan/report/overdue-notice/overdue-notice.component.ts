@@ -60,7 +60,7 @@ export class OverdueNoticeComponent implements OnInit {
   reportData:any=[]
   ardbName=localStorage.getItem('ardb_name')
   branchName=this.sys.BranchName
-
+  ardbcd=localStorage.getItem('__ardb_cd')
   pageChange: any;
   opdrSum=0;
   opcrSum=0;
@@ -269,7 +269,7 @@ export class OverdueNoticeComponent implements OnInit {
         this.svc.addUpdDel('Loan/GetDemandNotice',dt).subscribe(data=>{console.log(data)
         this.reportData=data
         this.isLoading=false;
-        if(this.reportData.length==0){
+        if(this.reportData?.length==0 || this.reportData==null){
           this.comser.SnackBar_Nodata()
         } 
         // this.itemsPerPage=this.reportData.length % 50 <=0 ? this.reportData.length: this.reportData.length % 50

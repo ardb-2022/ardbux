@@ -176,9 +176,6 @@ export class ConsolidatedCashAccComponent implements OnInit ,AfterViewInit{
       this.modalRef.hide();
       this.itemsPerPage=this.reportData.length % 50 <=0 ? this.reportData.length: this.reportData.length % 50
 
-      setTimeout(() => {
-        this.isLoading = false;
-      }, 3000);
     }
   }
   public oniframeLoad(): void {

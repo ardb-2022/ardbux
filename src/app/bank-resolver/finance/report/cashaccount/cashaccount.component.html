@@ -99,7 +99,10 @@
       class="btn btn-rounded btn-primary m-1" 
       [useExistingCss]="true"
       printSectionId="trial111" 
-      ngxPrint>Print</button>
+      ngxPrint (click)="print()">Print</button>
+      <!-- <button mat-raised-button type="button" 
+      class="btn btn-rounded btn-primary m-1" 
+      (click)="print">Print</button> -->
    <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
    <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadexcel()">Export as EXCEL</button>
 

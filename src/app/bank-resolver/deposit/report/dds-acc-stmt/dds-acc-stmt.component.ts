@@ -109,6 +109,7 @@ export class DdsAccStmtComponent implements OnInit ,AfterViewInit{
       const prm = new p_gen_param();
       prm.ad_acc_type_cd = 11;
       prm.as_cust_name = this.reportcriteria.controls.acct_num.value.toLowerCase();
+      debugger
       this.svc.addUpdDel<any>('Deposit/GetAccDtls', prm).subscribe(
         res => {
           this.isLoading=false

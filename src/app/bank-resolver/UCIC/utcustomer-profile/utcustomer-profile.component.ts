@@ -115,6 +115,7 @@ export class UTCustomerProfileComponent implements OnInit {
   fileTypes = ['jpg', 'jpeg', 'png'];
   errMessage = '';
   relStatus:any;
+  
   ngOnInit(): void {
 
    
@@ -138,10 +139,10 @@ export class UTCustomerProfileComponent implements OnInit {
     /**       */
 
     this.operation = 'New';
-    this.svc.getlbr(environment.relUrl,null).subscribe(data=>{
+    this.svc.getlbr(environment.relUrl,null).subscribe(data => {
       this.relStatus=data;
     })
-    this.svc.getlbr(environment.url, null).subscribe(data => {
+    this.svc.getlbr(environment.relUrl, null).subscribe(data => {
       console.log(data)
       this.lbr_status = data
     })

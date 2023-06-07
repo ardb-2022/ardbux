@@ -282,7 +282,17 @@ setColumnWidthChanges(index: number, width: number) {
       }
   }
 }
-
+downloadexcel(){
+  this.exportAsConfig = {
+    type: 'xlsx',
+    // elementId: 'hiddenTab', 
+    elementIdOrContent:'mattable'
+  }
+  this.exportAsService.save(this.exportAsConfig, 'MemberList').subscribe(() => {
+    // save started
+    console.log("hello")
+  });
+}
 setColumnWidth(column: any) {
   const columnEls = Array.from( document.getElementsByClassName('mat-column-' + column.field) );
   columnEls.forEach(( el: HTMLDivElement ) => {

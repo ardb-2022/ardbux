@@ -206,6 +206,10 @@
         <mat-icon>badge</mat-icon>
         <span>View Account Details</span>
       </button>
+      <button mat-menu-item routerLink="DT_CloseAccDtls" (mouseenter)="hideButton($event)" id="DT_CloseAccDtls">
+        <mat-icon>close</mat-icon>
+        <span>Close Account Details</span>
+      </button>
       <button mat-menu-item routerLink="DT_NEFTPayment" (mouseenter)="hideButton($event)" id="DT_NEFTPayment">
         <mat-icon>currency_rupee</mat-icon>
         <span>NEFT/RTGS/IMPS Payment</span>
@@ -437,9 +441,9 @@
       <mat-icon>switch_access_shortcut_add</mat-icon>
       <span>Interest Recovery Statement</span>
     </button>
-    <button  mat-menu-item routerLink="LR_Disb_Cert" (mouseenter)="hideButton($event)" id="LR_Disb_Cert">
+    <button  mat-menu-item routerLink="{{dynamicLink2}}" (mouseenter)="hideButton($event)" id="{{dynamicLink2}}">
       <mat-icon>verified_user</mat-icon>
-      <span>Disb Certificate Statement</span>
+      <span>Disbursement Certificate</span>
     </button>
     <button mat-menu-item [matMenuTriggerFor]="loan_dis_reg">
       <mat-icon>add_home_work</mat-icon>
@@ -539,6 +543,10 @@
     <button mat-menu-item routerLink="LR_RecRegNorm" (mouseenter)="hideButton($event)" id="LR_RecRegNorm">
       <mat-icon>groups</mat-icon>
       <span>Member-wise</span>
+    </button>
+    <button mat-menu-item routerLink="LR_RecRegVill" (mouseenter)="hideButton($event)" id="LR_RecRegVill">
+      <mat-icon>holiday_village</mat-icon>
+      <span>Village-wise</span>
     </button>
     <button mat-menu-item routerLink="LR_RecRegFund" (mouseenter)="hideButton($event)" id="LR_RecRegFund">
       <mat-icon>swipe_right</mat-icon>

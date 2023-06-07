@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, ElementRef, HostListener } from '@angular/core';
 import { p_report_param, SystemValues } from '../../Models';
 import { T_VOUCHER_NARRATION } from '../../Models/T_VOUCHER_NARRATION';
 import { RestService } from 'src/app/_service';
@@ -19,6 +19,7 @@ export class VoucherprintComponent implements OnInit {
   @ViewChild('content', { static: true }) content: TemplateRef<any>;
   @ViewChild('contentSearch', { static: true }) contentSearch: TemplateRef<any>;
   @ViewChild('reportcontent') reportcontent: ElementRef;
+ 
   modalRef: BsModalRef;
   modalRefSearch: BsModalRef;
   isOpenFromDp = false;
@@ -47,6 +48,7 @@ export class VoucherprintComponent implements OnInit {
   drSum=0;
   nullVD:number;
   RedVoucher:any;
+  showTopButton = false;
   constructor(private svc: RestService,private formBuilder: FormBuilder,
      private modalService: BsModalService,
      private router: Router) { }
@@ -64,6 +66,13 @@ export class VoucherprintComponent implements OnInit {
       searchDate:[null]
     })
     this.onLoadScreen(this.content);
+  }
+  scrollToBotom(){
+    window.scrollTo({  top:document.body.scrollHeight, behavior: 'smooth' }); // Smooth scroll to top
+
+  }
+  scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' }); // Smooth scroll to top
   }
   private onLoadScreen(content) {
     this.modalRef = this.modalService.show(content, this.config);
@@ -267,5 +276,17 @@ submitSearch(){
   
   this.modalRefSearch.hide()
   console.log(this.tvn1)
+}
+topFunction() {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
+scrollFunction() {
+  let mybutton = document.getElementById("myBtn");
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    mybutton.style.display = "block";
+  } else {
+    mybutton.style.display = "none";
+  }
 }
 }
