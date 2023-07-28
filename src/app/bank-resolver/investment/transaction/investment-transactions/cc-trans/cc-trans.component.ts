@@ -1,12 +1,12 @@
 import { Router } from '@angular/router';
 import { InvOpenDM } from '../../../../Models/deposit/InvOpenDM';
-import { Component, ElementRef, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component,  Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { RestService, InAppMessageService } from 'src/app/_service';
 import {
   MessageType, mm_acc_type, mm_customer,
   mm_operation, m_acc_master, ShowMessage, SystemValues,
-  td_def_trans_trf, td_intt_dtls, td_rd_installment, tm_deposit, tm_depositall
+  td_def_trans_trf, tm_deposit
 } from '../../../../Models';
 import { tm_denomination_trans } from '../../../../Models/deposit/tm_denomination_trans';
 import { DatePipe } from '@angular/common';
@@ -17,13 +17,8 @@ import Utils from 'src/app/_utility/utils';
 import { p_gen_param } from '../../../../Models/p_gen_param';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { mm_oprational_intr } from '../../../../Models/deposit/mm_oprational_intr';
-import { LoanOpenDM } from '../../../../Models/loan/LoanOpenDM';
-import { TemplateBindingParseResult } from '@angular/compiler';
-import { Message } from '@angular/compiler/src/i18n/i18n_ast';
-import { debounceTime, distinctUntilChanged, map, pluck, switchMap, takeWhile } from 'rxjs/operators';
-import { Observable } from 'rxjs/internal/Observable';
+
 import { Subscription } from 'rxjs';
-import { setTime } from 'ngx-bootstrap/chronos/utils/date-setters';
 import { InvTranServService } from '../inv-tran-serv.service';
 import { HttpClientModule } from '@angular/common/http';
 import { InvestmentTransactionsComponent } from '../investment-transactions.component';
@@ -275,6 +270,7 @@ export class CcTransComponent implements OnInit {
       //   this.accNoEnteredForTransaction.ShowClose = true;
       // }
       if (this.accNoEnteredForTransaction3.acc_type_cd === 23) {
+        debugger
         this.accNoEnteredForTransaction3.ShowClose = true;
       }
       const OprnInstrDesc = CcTransComponent.operationalInstrList.filter(e => e.oprn_cd
@@ -383,9 +379,17 @@ export class CcTransComponent implements OnInit {
       intrestType = 'Monthly'; this.interestPeriod=12
     }
     let acc_desc=''
-    if (this.accNoEnteredForTransaction.acc_type_cd ==23) {
-      acc_desc = 'Cash Certificate';
-      
+    if (this.accNoEnteredForTransaction.acc_type_cd ==22) {
+      acc_desc = 'Fixed Deposit';
+    }
+    else if (this.accNoEnteredForTransaction.acc_type_cd ==23) {
+      acc_desc = 'Term Deposit';
+    }
+    else if (this.accNoEnteredForTransaction.acc_type_cd ==24) {
+      acc_desc = 'Special TD';
+    }
+    else if (this.accNoEnteredForTransaction.acc_type_cd ==25) {
+      acc_desc = 'RD';
     }
     // console.log(this.td.amount.value)
     // console.log(this.accNoEnteredForTransaction.intt_trf_type=='H' || this.accNoEnteredForTransaction.intt_trf_type=='Q'? this.td.amount.value :this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt)
@@ -418,7 +422,7 @@ export class CcTransComponent implements OnInit {
       constitution_cd_desc:this.invComServ.constitutionDes,
       constitution_cd:this.invComServ.constitutionCd,
       // mat_dt: this.accNoEnteredForTransaction.mat_dt.toString().substr(0, 10),
-      ovd_intt_recov:0,
+      ovd_intt_recov:this.masterModel.tddeftrans.ovd_intt_recov>0?this.masterModel.tddeftrans.ovd_intt_recov:0,
       curr_prn_recov:0,
       dep_period_y: null === this.accNoEnteredForTransaction.dep_period ? ''
         : (this.accNoEnteredForTransaction.dep_period.split(';')[0].split('=')[1]),
@@ -434,7 +438,7 @@ export class CcTransComponent implements OnInit {
       branch_nm:this.invComServ.branchName
     });
     // const mat_amt =this.editDeleteMode?this.accNoEnteredForTransaction.prn_amt+this.accNoEnteredForTrsaction.intt_amt:this.accNoEnteredForTransaction.prn_amt+this.accNoEnteredForTransaction.intt_amt
-    const mat_amt =this.masterModel.tmdepositInv.prn_amt+this.masterModel.tmdepositInv.intt_amt
+    const mat_amt =(this.masterModel.tmdepositInv.prn_amt+this.masterModel.tmdepositInv.intt_amt)-Number(this.masterModel.tddeftrans.ovd_intt_recov>=0?this.masterModel.tddeftrans.ovd_intt_recov:0)
     console.log(mat_amt,this.td.amount.value);
     debugger
     if(Number(mat_amt)===Number(this.td.amount.value)){
@@ -500,6 +504,8 @@ export class CcTransComponent implements OnInit {
 }
 applyTDS(){
   if(this.td.amount.value==this.accDtlsFrm.controls.mat_amt.value){
+    // this.td.amount.setValue((this.accNoEnteredForTransaction.prn_amt+this.accNoEnteredForTransaction.intt_amt)-this.td.ovd_intt_recov.value)
+    // this.accDtlsFrm.controls.mat_amt.setValue((this.accNoEnteredForTransaction.prn_amt+this.accNoEnteredForTransaction.intt_amt)-this.td.ovd_intt_recov.value)
     this.td.ovd_intt_recov.value>0?this.td.amount.setValue((this.accNoEnteredForTransaction.prn_amt+this.accNoEnteredForTransaction.intt_amt)-this.td.ovd_intt_recov.value):0
     this.td.ovd_intt_recov.value>0?this.accDtlsFrm.controls.mat_amt.setValue((this.accNoEnteredForTransaction.prn_amt+this.accNoEnteredForTransaction.intt_amt)-this.td.ovd_intt_recov.value):0
 
@@ -546,9 +552,17 @@ if (undefined !== this.accNoEnteredForTransaction && Object.keys(this.accNoEnter
     === this.accNoEnteredForTransaction.oprn_instr_cd)[0];
 
   let acc_desc=''
-  if (this.accNoEnteredForTransaction.acc_type_cd ==23) {
-    acc_desc = 'Cash Certificate';
-    
+  if (this.accNoEnteredForTransaction.acc_type_cd ==22) {
+    acc_desc = 'Fixed Deposit';
+  }
+  else if (this.accNoEnteredForTransaction.acc_type_cd ==23) {
+    acc_desc = 'Term Deposit';
+  }
+  else if (this.accNoEnteredForTransaction.acc_type_cd ==24) {
+    acc_desc = 'Special TD';
+  }
+  else if (this.accNoEnteredForTransaction.acc_type_cd ==25) {
+    acc_desc = 'RD';
   }
   // console.log(this.td.amount.value)
   // console.log(this.accNoEnteredForTransaction.intt_trf_type=='H' || this.accNoEnteredForTransaction.intt_trf_type=='Q'? this.td.amount.value :this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt)
@@ -658,14 +672,15 @@ onAmtChngDuringRenewal(): void {
     return;
   }
   console.log(this.td.amount.value, this.accDtlsFrm.controls.prn_amt.value)
-  if ((this.td.amount.value != this.accDtlsFrm.controls.prn_amt.value) && (this.td.amount.value != this.accDtlsFrm.controls.mat_amt.value) ) {
+  if ((this.td.amount.value + Number(this.td.ovd_intt_recov.value>=0?this.td.ovd_intt_recov.value:0) != this.accDtlsFrm.controls.prn_amt.value) && (this.td.amount.value + Number(this.td.ovd_intt_recov.value>=0?this.td.ovd_intt_recov.value:0) != this.accDtlsFrm.controls.mat_amt.value) ) {
     this.HandleMessage(true, MessageType.Error, 'Amount should be equal to principal or maturity amount');
-    this.td.amount.setValue('');
+    this.td.amount.setValue(this.accDtlsFrm.controls.mat_amt.value);
     return;
   }
   if (this.td.trans_type_key.value === 'D' || this.td.trans_type_key.value === 'W') {
-    const mat_amt =this.masterModel.tmdepositInv.prn_amt
-      + this.masterModel.tmdepositInv.intt_amt;
+    const mat_amt =(this.masterModel.tmdepositInv.prn_amt
+      + this.masterModel.tmdepositInv.intt_amt)-Number(this.td.ovd_intt_recov.value>=0?this.td.ovd_intt_recov.value:0)
+      ;
 if(Number(mat_amt)===Number(this.td.amount.value)){
   this.tdDefTransFrm.patchValue({
     trans_type: 'Deposit',
@@ -715,7 +730,7 @@ else{
   // this.td_deftranstrfList[0].amount = this.td.amount.value;
 }
 public inttCalOnClose(): void {
-  if (this.accNoEnteredForTransaction.acc_type_cd !== 23) {
+  if (this.accNoEnteredForTransaction.acc_type_cd == 25) {
     debugger;
     const temp_gen_param = new p_gen_param();
     temp_gen_param.ad_acc_type_cd = this.accNoEnteredForTransaction.acc_type_cd;
@@ -1421,7 +1436,7 @@ debugger
               tdDefTransAndTranfer.remarks = 'Close';
               tdDefTransAndTranfer.disb_id = ++i;
               if (this.showTranDtlRe==true || this.showTranDtlCl==true) {
-                const desc =this.accNoEnteredForTransaction.acc_type_cd.value == 23 ? 'Cash Certificate ' : '';
+                const desc =this.accNoEnteredForTransaction.acc_type_cd.value == 23 ? 'Term Deposit' : this.accNoEnteredForTransaction.acc_type_cd.value == 22 ?'Fixed Deposit':this.accNoEnteredForTransaction.acc_type_cd.value == 24 ?'Special TD':'RD';
                 console.log(this.accNoEnteredForTransaction.acc_type_cd.value + " " + desc)
                 tdDefTransAndTranfer.particulars = 'By Transfer from ' + desc + 'A/C: ' + this.tdDefTransFrmC.controls.acc_num.value //marker
               }
@@ -1547,7 +1562,7 @@ debugger
                 tdDefTransAndTranfer.trans_type = 'D'  //marker
               }
               if (this.showTranDtlRe==true || this.showTranDtlCl==true) {
-                const desc = this.accNoEnteredForTransaction.acc_type_cd == 22 ? 'FD ' : (this.accNoEnteredForTransaction.acc_type_cd.value === 25 ? 'RD' : (this.accNoEnteredForTransaction.acc_type_cd.value == 23 ? 'Cash Certificate ' : (this.accNoEnteredForTransaction.acc_type_cd.value == 24 ? 'MIS ' : '')))
+                const desc = this.accNoEnteredForTransaction.acc_type_cd == 22 ? 'FD ' : (this.accNoEnteredForTransaction.acc_type_cd.value === 25 ? 'RD' : (this.accNoEnteredForTransaction.acc_type_cd.value == 23 ? 'Term Deposit' : (this.accNoEnteredForTransaction.acc_type_cd.value == 24 ? 'Special TD ' : '')))
                 console.log(this.accNoEnteredForTransaction.acc_type_cd.value + " " + desc)
 
 
@@ -1563,7 +1578,7 @@ debugger
               tdDefTransAndTranfer.remarks = 'Renewal';
               tdDefTransAndTranfer.disb_id = ++i;
               if (this.showTranDtlRe==true || this.showTranDtlCl==true) {
-                const desc = this.accNoEnteredForTransaction.acc_type_cd == 22 ? 'FD ' : (this.accNoEnteredForTransaction.acc_type_cd.value === 25 ? 'RD' : (this.accNoEnteredForTransaction.acc_type_cd.value == 23 ? 'Cash Certificate ' : (this.accNoEnteredForTransaction.acc_type_cd.value == 24 ? 'MIS ' : '')))
+                const desc = this.accNoEnteredForTransaction.acc_type_cd == 22 ? 'FD ' : (this.accNoEnteredForTransaction.acc_type_cd.value === 25 ? 'RD' : (this.accNoEnteredForTransaction.acc_type_cd.value == 23 ? 'Term Deposit ' : (this.accNoEnteredForTransaction.acc_type_cd.value == 24 ? 'Special TD ' : '')))
                 console.log(this.accNoEnteredForTransaction.acc_type_cd.value + " " + desc)
                 tdDefTransAndTranfer.particulars = 'By Transfer from ' + desc + 'A/C: ' + this.td.acc_num.value //marker
               }
@@ -1608,6 +1623,7 @@ debugger
         res => {
           debugger
           this.HandleMessage(true, MessageType.Sucess, 'Saved sucessfully, your transaction code is :' + res);
+          // this.onResetClick();
           // this.tdDefTransFrm.reset();
           // this.accDtlsFrm.reset();
           // this.td_deftranstrfList=[]
@@ -1642,8 +1658,8 @@ debugger
             debugger
             const tdDefTransAndTranfer = this.mappTddefTransAndTransFrClose();
             console.log(tdDefTransAndTranfer);
-            if (( accTypeCd == 23 ) && ( this.tdDefTransFrmC.controls.trans_mode.value == 'C')) { 
-                  const desc = 'Cash Certificate '
+            if ( this.tdDefTransFrmC.controls.trans_mode.value == 'C') { 
+                  const desc = 'Term Deposit '
                   tdDefTransAndTranfer.particulars = 'By Transfer from ' + desc + 'A/C:' + this.tdDefTransFrmC.controls.acc_num.value
            }
             else{ tdDefTransAndTranfer.particulars = this.tdDefTransFrmC.controls.particulars.value}
@@ -1689,6 +1705,7 @@ debugger
           } else {
             this.HandleMessage(true, MessageType.Sucess, `Transaction for Acc# ${accNum},
             updated sucessfully.`);
+            // this.onResetClick();
             // this.tdDefTransFrmC.reset();
             // this.accDtlsFrm.reset();
             // this.td_deftranstrfList=[];
@@ -1701,12 +1718,18 @@ debugger
       );
     }
     else{this.isLoading = true;
-
+      debugger
+      this.tdDefTransFrm.patchValue({ 
+        trans_mode1:this.showTranDtlRe?'Renewal':'Close',
+        trans_mode:this.showTranDtlRe?'R':'C',
+        // amount:this.td.amount.value,
+        })
       const updateTransaction = new InvOpenDM();
       const tdDefTrans = this.mappTddefTransFrom();
       console.log(tdDefTrans);
       updateTransaction.tddeftrans = tdDefTrans;
-     if (this.td.trans_mode.value && this.td.trans_mode.value.toLocaleLowerCase() === 'r') {
+     if (this.td.trans_mode.value.toLocaleLowerCase() === 'r') {
+      debugger
        updateTransaction.tmdepositrenewInv = this.mapRenewData();
       }
       console.log(updateTransaction.tddeftrans);
@@ -1727,8 +1750,8 @@ debugger
             const tdDefTransAndTranfer = this.mappTddefTransAndTransFrFromFrm();
             console.log(tdDefTransAndTranfer);
             
-            if (this.td.trf_type.value === 'T' && (this.td.trans_mode.value == 'C' || this.td.trans_mode.value == 'W') && this.editDeleteMode && ( accTypeCd == 23)) {
-              const desc = this.accNoEnteredForTransaction.acc_type_cd == 22 ? 'FD ' : (this.accNoEnteredForTransaction.acc_type_cd.value === 25 ? 'RD' : (this.accNoEnteredForTransaction.acc_type_cd.value == 23 ? 'Cash Certificate ' : (this.accNoEnteredForTransaction.acc_type_cd.value == 24 ? 'MIS ' : '')))
+            if (this.td.trf_type.value === 'T' && (this.td.trans_mode.value == 'C' || this.td.trans_mode.value == 'W') && this.editDeleteMode && ( accTypeCd == 22|| accTypeCd == 23|| accTypeCd == 24)) {
+              const desc = this.accNoEnteredForTransaction.acc_type_cd == 22 ? 'FD ' : (this.accNoEnteredForTransaction.acc_type_cd.value === 25 ? 'RD' : (this.accNoEnteredForTransaction.acc_type_cd.value == 23 ?(this.sys.ardbCD=="26"?'Cash Certificate':'TD') : (this.accNoEnteredForTransaction.acc_type_cd.value == 24 ? 'SPECIAL TD ' : '')))
               tdDefTransAndTranfer.particulars = 'By Transfer from ' + desc + 'A/C:' + this.td.acc_num.value
             }
             else {
@@ -1736,7 +1759,7 @@ debugger
                 tdDefTransAndTranfer.particulars = this.td.particulars.value.split(' ')[0] === "BY" ? this.td.particulars.value.replace("BY", "TO") : this.td.particulars.value.replace("TO", "BY");
               else {
                 if ((accTypeCd == 22 || accTypeCd == 23 || accTypeCd == 24) && (this.td.trans_mode.value == 'R' || this.td.trans_mode.value == 'C')) { //marker
-                  const desc = this.accNoEnteredForTransaction.acc_type_cd == 22 ? 'FD ' : (this.accNoEnteredForTransaction.acc_type_cd.value === 25 ? 'RD' : (this.accNoEnteredForTransaction.acc_type_cd.value == 23 ? 'Cash Certificate ' : (this.accNoEnteredForTransaction.acc_type_cd.value == 24 ? 'MIS ' : '')))
+                  const desc = this.accNoEnteredForTransaction.acc_type_cd == 22 ? 'FD ' : (this.accNoEnteredForTransaction.acc_type_cd.value === 25 ? 'RD' : (this.accNoEnteredForTransaction.acc_type_cd.value == 23 ? (this.sys.ardbCD=="26"?'Cash Certificate':'TD') : (this.accNoEnteredForTransaction.acc_type_cd.value == 24 ? 'SPECIAL TD ' : '')))
 
                   tdDefTransAndTranfer.particulars = 'By Transfer from ' + desc + 'A/C:' + this.td.acc_num.value
                 }
@@ -1794,7 +1817,7 @@ debugger
         res => {
           console.log(this.td_deftranstrfList)
           
-          const accNum = updateTransaction.tmdepositrenewInv.acc_num;
+          const accNum = updateTransaction.tddeftrans.acc_num;//PARTHA
           if ((+res) === -1) {
             this.HandleMessage(true, MessageType.Error, `Transaction for Acc# ${accNum},
             Not updated sucessfully.`);
@@ -1919,7 +1942,9 @@ debugger
     toReturn.created_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
     toReturn.modified_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
     toReturn.constitution_desc = this.accNoEnteredForTransaction.constitution_desc;
-    toReturn.acc_cd = this.accNoEnteredForTransaction.acc_cd;
+    // toReturn.acc_cd = this.accNoEnteredForTransaction.acc_cd;
+    toReturn.acc_cd = this.invComServ.selectedconstitution.filter(e=>e.acc_type_cd==this.accNoEnteredForTransaction.acc_type_cd)[0].acc_cd;
+
     toReturn.bank_cd=this.accNoEnteredForTransaction.bank_cd;
     toReturn.branch_cd=this.accNoEnteredForTransaction.branch_cd;
 
@@ -2113,7 +2138,9 @@ debugger
         
         
       // }
-    
+      this.accNoEnteredForTransaction;
+      this.accNoEnteredForTransaction;
+      this.accNoEnteredForTransaction3;
       debugger;
       console.log(toReturn)
       debugger;
@@ -2121,12 +2148,12 @@ debugger
       toReturn.modified_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
       toReturn.modified_dt = this.sys.CurrentDate;
       toReturn.trans_cd=this.td.trans_cd.value;
-
-    }
+     }
+   
     
     // if (selectedOperation.oprn_desc.toLocaleLowerCase() === 'interest payment')
      //marker1
-     toReturn.acc_cd = this.invComServ.selectedconstitution[0].acc_cd
+    toReturn.acc_cd = this.invComServ.selectedconstitution.filter(e=>e.acc_type_cd==accTypeCd)[0].acc_cd;
      console.log(toReturn.acc_cd)
      debugger
     toReturn.disb_id = 1;
@@ -2185,7 +2212,7 @@ debugger
       
     }
 
-    if (selectedOperation.toLocaleLowerCase() === 'close' && (accTypeCd === 23)) {
+    if (selectedOperation.toLocaleLowerCase() === 'close') {
       toReturn.amount = this.accNoEnteredForTransaction.prn_amt;
       toReturn.curr_intt_recov = this.accNoEnteredForTransaction.intt_amt;
     } else {
@@ -2195,7 +2222,7 @@ debugger
         console.log(toReturn.amount + " " + toReturn.curr_intt_recov)
         debugger
         toReturn.amount = this.td.interest.value;
-        if (toReturn.acc_type_cd == 23 && this.editDeleteMode && this.td.trf_type.value == 'T') {
+        if (this.editDeleteMode && this.td.trf_type.value == 'T') {
           toReturn.trans_type = 'D'  //marker (while renewal send deposit trans type)
         } 
       } else {
@@ -2442,7 +2469,9 @@ debugger
     
     // if (selectedOperation.oprn_desc.toLocaleLowerCase() === 'interest payment')
      //marker1
-     toReturn.acc_cd = this.invComServ.selectedconstitution[0].acc_cd
+    toReturn.acc_cd = this.invComServ.selectedconstitution.filter(e=>e.acc_type_cd==accTypeCd)[0].acc_cd;
+
+    //  toReturn.acc_cd = this.invComServ.selectedconstitution[0].acc_cd
      console.log(toReturn.acc_cd)
      debugger
     toReturn.disb_id = 1;
@@ -2503,7 +2532,7 @@ debugger
       
     }
 
-    if (selectedOperation.toLocaleLowerCase() === 'close' && (accTypeCd === 23)) {
+    if (selectedOperation.toLocaleLowerCase() === 'close' && (accTypeCd === 22||accTypeCd === 23||accTypeCd === 24)) {
       toReturn.amount = this.accNoEnteredForTransaction.prn_amt;
       toReturn.curr_intt_recov = this.accNoEnteredForTransaction.intt_amt;
     }
@@ -2567,7 +2596,8 @@ debugger
      //marker
     toReturn.disb_id = 1;
     toReturn.created_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
-    toReturn.acc_cd = this.invComServ.selectedconstitution[0].acc_cd
+    toReturn.acc_cd = this.invComServ.selectedconstitution.filter(e=>e.acc_type_cd==accTypeCd)[0].acc_cd;
+
     console.log(toReturn.acc_cd)
     debugger
     // console.log( {"toReturn.particulars":toReturn.particulars," this.td.particulars.value": this.td.particulars.value})
@@ -2628,9 +2658,18 @@ debugger
       console.log(isMatured)
       }
       let acc_desc=''
-            if (this.accNoEnteredForTransaction.acc_type_cd ==23) {
-                acc_desc = 'Cash Certificate';
-            }
+      if (this.accNoEnteredForTransaction.acc_type_cd ==22) {
+        acc_desc = 'Fixed Deposit';
+      }
+      else if (this.accNoEnteredForTransaction.acc_type_cd ==23) {
+        acc_desc = 'Term Deposit';
+      }
+      else if (this.accNoEnteredForTransaction.acc_type_cd ==24) {
+        acc_desc = 'Special TD';
+      }
+      else if (this.accNoEnteredForTransaction.acc_type_cd ==25) {
+        acc_desc = 'RD';
+      }
     if( this.isMat==false){
         
             console.log(Number(this.accNoEnteredForTransaction.prn_amt),Number(this.closeInt));

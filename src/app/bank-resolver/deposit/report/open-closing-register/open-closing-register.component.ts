@@ -267,15 +267,16 @@ export class OpenClosingRegisterComponent implements OnInit ,AfterViewInit{
   }
   downloadexcel(){
     this.exportAsConfig = {
-      type: 'csv',
+      type: 'xlsx',
       // elementId: 'hiddenTab', 
-      elementIdOrContent:'hiddenTab'
+      elementIdOrContent:'mattable'
     }
-    this.exportAsService.save(this.exportAsConfig, 'cashcumtrial').subscribe(() => {
+    this.exportAsService.save(this.exportAsConfig, 'OpenClose_Register').subscribe(() => {
       // save started
       console.log("hello")
     });
   }
+ 
 
   closeScreen() {
     this.router.navigate([this.sys.BankName + '/la']);

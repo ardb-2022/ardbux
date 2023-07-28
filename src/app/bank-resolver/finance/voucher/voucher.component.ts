@@ -1,11 +1,11 @@
-import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray, AbstractControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Router } from '@angular/router';
 // import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { RestService } from 'src/app/_service';
 import { T_VOUCHER_DTLS, m_acc_master, SystemValues, MessageType, ShowMessage } from '../../Models';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+
 
 @Component({
   selector: 'app-voucher',
@@ -13,7 +13,7 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
   styleUrls: ['./voucher.component.css']
 })
 export class VoucherComponent implements OnInit {
-
+  @ViewChild('print', { static: true }) print: TemplateRef<any>;
   tvd = new T_VOUCHER_DTLS();
   tvdRet: T_VOUCHER_DTLS[] = [];
   tvn = new T_VOUCHER_DTLS();
@@ -21,12 +21,14 @@ export class VoucherComponent implements OnInit {
   tvnRetFilter: T_VOUCHER_DTLS[] = [];
   maccmaster: m_acc_master[] = [];
   maccmaster1: m_acc_master[] = [];
-
+  ardbName=localStorage.getItem('ardb_name');ardb_addr
+  ardbAddr=localStorage.getItem('ardb_addr');
   maccmasterRet: m_acc_master[] = [];
   keyword = 'acc_name';
   tvdGroupRes: any;
   reportcriteria: FormGroup;
   closeResult = '';
+  printData:any[]=[];
   //alertMsg = '';
   // showAlert = false;
   showMsg: ShowMessage;
@@ -40,6 +42,9 @@ export class VoucherComponent implements OnInit {
   _totalCr: number = 0;
   _totalDr: number = 0;
   _voucherNarration: string = '';
+  _cName: string = '';
+  _cAddress: string = '';
+  _cDt:any;
   insertMode = false;
   app_flg: any;
   isDel = true;
@@ -56,8 +61,11 @@ export class VoucherComponent implements OnInit {
   drInput = false;
   crInput = false;
   tableId:any
+  today: any
 
   sys = new SystemValues();
+  branchName=this.sys.BranchName;
+
   constructor(private svc: RestService, private formBuilder: FormBuilder, 
     private modalService: BsModalService,
     private router: Router) { }
@@ -72,6 +80,10 @@ export class VoucherComponent implements OnInit {
     ignoreBackdropClick: true // disable backdrop click to close the modal
   };
   ngOnInit(): void {
+    var date = new Date();
+    var n = date.toDateString();
+    var time = date.toLocaleTimeString();
+    this.today= n + " "+ time
     this.fromdate = this.sys.CurrentDate;
     this.reportcriteria = this.formBuilder.group({
       fromDate: [null, Validators.required],
@@ -96,6 +108,19 @@ export class VoucherComponent implements OnInit {
     console.log(this.onVoucherCreation.get('VoucherF'))
 
   }
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, this.config);
+  }
+  arrowkeyOFF(){
+    const numberField = document.getElementById("numberField");
+    numberField.addEventListener("keydown", function (event) {
+      if (event.key === "ArrowUp") {
+        event.preventDefault();
+      } else if (event.key === "ArrowDown") {
+        event.preventDefault();
+      }
+    });
+  }
   Initialize() {
     ;
     this.maccmaster = this.maccmasterRet;
@@ -108,6 +133,8 @@ export class VoucherComponent implements OnInit {
     this._totalCr = 0;
     this._totalDr = 0;
     this._voucherNarration = '';
+    this._cName = '';
+    this._cAddress = '';
     try {
       let VoucherFCnt = this.VoucherF.value.length;
       console.log(VoucherFCnt)
@@ -195,6 +222,7 @@ export class VoucherComponent implements OnInit {
       if (this._approvalSts == "Unapproved")
         this.DeleteVoucher();
       else
+      this.modalRef.hide()
         this.HandleMessage(true, MessageType.Error, 'Voucher already Approved can not be Deleted !');
   }
   Approve() {
@@ -230,7 +258,7 @@ export class VoucherComponent implements OnInit {
     this.tvdRet = [];
   }
   Save() {
-    ;
+    debugger
     
     let isAccCDBlank = false;
     if (this._voucherNarration == null || this._voucherNarration == '') {
@@ -413,6 +441,12 @@ export class VoucherComponent implements OnInit {
     this.VoucherF.controls[i].get('acc_cd').setValue('')
     this.maccmaster1.length=0
   }
+  else if(this._voucherTyp == 'T' && entry.acc_cd==21101){
+    this.HandleMessage(true, MessageType.Error, '('+entry.acc_cd+' - '+ entry.acc_name+')'+'  Can not be use in Transfer Voucher');
+    this.VoucherF.controls[i].get('acc_cd').setValue('');
+    this.VoucherF.controls[i].get('desc').setValue('');
+    this.maccmaster1.length=0
+  }
   else{this.VoucherF.controls[i].get('desc').setValue(entry.acc_name)
   this.VoucherF.controls[i].get('acc_cd').setValue(entry.acc_cd)
   this.maccmaster1.length=0}
@@ -429,7 +463,7 @@ export class VoucherComponent implements OnInit {
     // do something
     this.getmAccMaster()
   }
-
+  
   private getVoucher(vDt: any, vID: any): void {
     this.tvd = new T_VOUCHER_DTLS();
     this.tvd.brn_cd = this.sys.BranchCode//localStorage.getItem('__brnCd');
@@ -469,9 +503,32 @@ export class VoucherComponent implements OnInit {
         this._totalDr = 0;
         if (this.tvdRet[0].approval_status == 'U')
           this.isApprove = false;
-        this._voucherNarration = this.tvdRet[0].narrationdtl;//this.tvdRet[0].narration+
+        this._voucherNarration = this.tvdRet[0].narrationdtl;
+        this._cDt=this.tvdRet[0].voucher_dt//this.tvdRet[0].narration+
+        this._cName = this.tvdRet[0].bank_name;//this.tvdRet[0].narration+
+        this._cAddress = this.tvdRet[0].branch_name;//this.tvdRet[0].narration+
         // this.modalService.dismissAll(this.content);
         this.modalRef.hide();
+
+        debugger
+        this.printData=[]
+      if(this._voucherTyp=="T"){
+        debugger
+        for (let x = 0; x < this.tvdRet.length; x++) {
+          this.tvdRet[x].narration=this.maccmasterRet.filter(e=>e.acc_cd==this.tvdRet[x].acc_cd)[0].acc_name
+          this.printData.push(this.tvdRet[x])
+          
+        }
+      }
+      else{
+        for (let x = 0; x < this.tvdRet.length; x++) {
+          if(this.tvdRet[x].acc_cd!=21101){
+          this.tvdRet[x].narration=this.maccmasterRet.filter(e=>e.acc_cd==this.tvdRet[x].acc_cd)[0].acc_name
+          this.printData.push(this.tvdRet[x])
+          }
+        }
+      }
+        debugger
       },
       err => {
         this.isLoading = false;
@@ -512,9 +569,32 @@ export class VoucherComponent implements OnInit {
         this._totalCr = 0;
         this._totalDr = 0;
         this._voucherNarration = narr;
+        this._cDt=this.tvdRet[0].voucher_dt
+        this._cName=this.tvdRet[0].bank_name;
+        this._cAddress=this.tvdRet[0].branch_name;
+
         if (this.tvdRet[0].approval_status == 'U')
           this.isApprove = false;
         this.modalRef.hide();
+        debugger
+        this.printData=[]
+      if(this._voucherTyp=="T"){
+        debugger
+        for (let x = 0; x < this.tvdRet.length; x++) {
+          this.tvdRet[x].narration=this.maccmasterRet.filter(e=>e.acc_cd==this.tvdRet[x].acc_cd)[0].acc_name
+          this.printData.push(this.tvdRet[x])
+          
+        }
+      }
+      else{
+        for (let x = 0; x < this.tvdRet.length; x++) {
+          if(this.tvdRet[x].acc_cd!=21101){
+            this.tvdRet[x].narration=this.maccmasterRet.filter(e=>e.acc_cd==this.tvdRet[x].acc_cd)[0].acc_name
+            this.printData.push(this.tvdRet[x])
+          }
+          }
+      }
+        debugger
         // this.modalService.dismissAll(this.content);
       },
       err => { this.modalRef.hide(); }
@@ -543,7 +623,9 @@ export class VoucherComponent implements OnInit {
       err => { this.isLoading = false; }
     );
   }
-
+  ShowVPrint(){
+    this.modalRef = this.modalService.show(this.print, { class: 'modal-xl' });
+  }
   private InsertVoucher(): void {
 
     try {
@@ -558,6 +640,8 @@ export class VoucherComponent implements OnInit {
         tvdSave.dr_amount = this.voucherData.value[x].dr_amt == null ? this.voucherData.value[x].cr_amt : this.voucherData.value[x].dr_amt;
         tvdSave.debit_credit_flag = this.voucherData.value[x].dr_cr == 'Debit' ? 'D' : 'C';
         tvdSave.narrationdtl = this._voucherNarration;
+        tvdSave.bank_name = this._cName;
+        tvdSave.branch_name = this._cAddress;
         tvdSave.transaction_type = this._voucherTyp == 'CR' || this._voucherTyp == 'CP' ? 'C' : 'T';
         tvdSave.voucher_dt = this._voucherDt;//new Date(Date.UTC(this._voucherDt.getFullYear(), this._voucherDt.getMonth(), this._voucherDt.getDate(), this._voucherDt.getHours(), this._voucherDt.getMinutes()));
         //tvdSave.voucher_dt = this._voucherDt;
@@ -578,9 +662,37 @@ export class VoucherComponent implements OnInit {
         tvdSave.created_by=this.sys.UserId+'/'+localStorage.getItem('getIPAddress')
 
         tvdSaveAll.push(tvdSave);
+
       }
+      debugger
+      this.printData=[]
+      this._cDt='';
+      let date = tvdSaveAll[0].voucher_dt;
+      let dd = date.getDate();
+      let mm = date.getMonth() + 1;
+      let yyyy = date.getFullYear();
+      let dt=dd + "/" + mm + "/" + yyyy;
+      this._cDt=dt;
+      debugger
+      if(this._voucherTyp=="T"){
+        debugger
+        for (let x = 0; x < tvdSaveAll.length; x++) {
+          tvdSaveAll[x].narration=this.maccmasterRet.filter(e=>e.acc_cd==tvdSaveAll[x].acc_cd)[0].acc_name
+          this.printData.push(tvdSaveAll[x])
+          
+        }
+      }
+      else{
+        for (let x = 0; x < tvdSaveAll.length; x++) {
+          if(  tvdSaveAll[x].acc_cd!=21101){
+          tvdSaveAll[x].narration=this.maccmasterRet.filter(e=>e.acc_cd==tvdSaveAll[x].acc_cd)[0].acc_name
+          this.printData.push(tvdSaveAll[x])
+          }
+        }
+      }
+      
       console.log(tvdSaveAll)
-        ;
+        debugger
       this.svc.addUpdDel<any>('Voucher/InsertTVoucherDtls', tvdSaveAll).subscribe(
         res => {
           ;
@@ -600,6 +712,7 @@ export class VoucherComponent implements OnInit {
           this.isClear = false;
           this.isLoading = false;
           this.HandleMessage(true,MessageType.Sucess,"Voucher saved successfully!")
+          this.modalRef = this.modalService.show(this.print, { class: 'modal-xl' });
         },
         err => { this.isLoading = false; 
           this.HandleMessage(true, MessageType.Error, 'Field can not be blank !')
@@ -626,6 +739,8 @@ export class VoucherComponent implements OnInit {
         tvdSave.dr_amount = this.voucherData.value[x].dr_amt==0 || this.voucherData.value[x].dr_amt==null ? this.voucherData.value[x].cr_amt : this.voucherData.value[x].dr_amt;
         tvdSave.debit_credit_flag = this.voucherData.value[x].dr_cr == 'Debit' ? 'D' : 'C';
         tvdSave.narrationdtl = this._voucherNarration;
+        tvdSave.bank_name = this._cName;
+        tvdSave.branch_name = this._cAddress;
         tvdSave.transaction_type = this._voucherTypeName == "Cash Receipt" ||  this._voucherTypeName == "Cash Payment"? "C" : this._voucherTypeName == "Clearing" ? "L" : "T";
         this._voucherTyp = this._voucherTypeName == "Cash Receipt" ? "CR" : this._voucherTypeName == "Cash Payment" ? "CP" : this._voucherTypeName == "Clearing" ? "L" : "T";
         tvdSave.voucher_dt = this._voucherDt;//new Date(Date.UTC(this._voucherDt.getFullYear(), this._voucherDt.getMonth(), this._voucherDt.getDate(), this._voucherDt.getHours(), this._voucherDt.getMinutes()));
@@ -648,7 +763,25 @@ export class VoucherComponent implements OnInit {
         tvdSave.ardb_cd = this.sys.ardbCD
         tvdSaveAll.push(tvdSave);
       }
-      ;
+      this._cDt='';
+      this._cDt=tvdSaveAll[0].voucher_dt
+      this.printData=[]
+      if(this._voucherTyp=="T"){
+        for (let x = 0; x < tvdSaveAll.length; x++) {
+          tvdSaveAll[x].narration=this.maccmasterRet.filter(e=>e.acc_cd==tvdSaveAll[x].acc_cd)[0].acc_name
+          this.printData.push(tvdSaveAll[x])
+          
+        }
+      }
+      else{
+        for (let x = 0; x < tvdSaveAll.length; x++) {
+          if(tvdSaveAll[x].acc_cd!=21101){
+          tvdSaveAll[x].narration=this.maccmasterRet.filter(e=>e.acc_cd==tvdSaveAll[x].acc_cd)[0].acc_name
+          this.printData.push(tvdSaveAll[x])
+          }
+        }
+      }
+      debugger;
       console.log(tvdSaveAll)
       this.svc.addUpdDel<any>('Voucher/DeleteInsertVoucherDtls', tvdSaveAll).subscribe(
         res => {
@@ -671,6 +804,7 @@ export class VoucherComponent implements OnInit {
           this.isClear = false;
           this.isLoading = false;
           this.HandleMessage(true, MessageType.Sucess, 'Voucher Updated Successfully !');
+          this.modalRef = this.modalService.show(this.print, { class: 'modal-xl' });
         },
         err => { this.isLoading = false; this.HandleMessage(true, MessageType.Error, 'Update Failed !'); }
       );
@@ -694,6 +828,8 @@ export class VoucherComponent implements OnInit {
         tvdSave.dr_amount = this.voucherData.value[x].dr_amt==0 || this.voucherData.value[x].dr_amt==null ? this.voucherData.value[x].cr_amt : this.voucherData.value[x].dr_amt;
         tvdSave.debit_credit_flag = this.voucherData.value[x].dr_cr == 'Debit' ? 'D' : 'C';
         tvdSave.narrationdtl = this._voucherNarration;
+        tvdSave.bank_name = this._cName;
+        tvdSave.branch_name = this._cAddress;
         tvdSave.ardb_cd=this.sys.ardbCD
         tvdSave.transaction_type = this._voucherTypeName == "Cash Receipt" || this._voucherTypeName == "Cash Payment" ? "C" : this._voucherTypeName == "Clearing" ? "L" : "T";
         tvdSave.voucher_dt = this._voucherDt;//new Date(Date.UTC(this._voucherDt.getFullYear(), this._voucherDt.getMonth(), this._voucherDt.getDate(), this._voucherDt.getHours(), this._voucherDt.getMinutes()));
@@ -731,6 +867,7 @@ export class VoucherComponent implements OnInit {
           this.isClear = false;
           this.isLoading = false;
           this.HandleMessage(true, MessageType.Sucess, 'Voucher Deleted Successfully !');
+          this.modalRef.hide()
         },
         err => { this.isLoading = false; this.HandleMessage(true, MessageType.Error, 'Delete Failed !'); }
       );
@@ -755,6 +892,8 @@ export class VoucherComponent implements OnInit {
         tvdSave.voucher_id = this._voucherId;//Merge
         tvdSave.acc_cd = this.voucherData.value[x].acc_cd;
         tvdSave.narrationdtl = this._voucherNarration;
+        tvdSave.bank_name = this._cName;
+        tvdSave.branch_name = this._cAddress;
         tvdSaveAll.push(tvdSave);
       }
       ;
@@ -802,6 +941,7 @@ export class VoucherComponent implements OnInit {
       for (var i = 0; i < this.VoucherF.value.length; i++) {     
         if (this.VoucherF.value[i].dr_amt > 0) {
           total = total + Number(this.VoucherF.value[i].dr_amt);
+          this._totalDr=total
         }
       }
     }
@@ -905,7 +1045,7 @@ export class VoucherComponent implements OnInit {
         this.maccmaster.sort((a, b)=>{return a.acc_cd - b.acc_cd})
         let Index = this.maccmaster.findIndex(el => el.acc_cd == 21101);
        console.log(Index);
-       
+       debugger
       },
       err => { }
     );

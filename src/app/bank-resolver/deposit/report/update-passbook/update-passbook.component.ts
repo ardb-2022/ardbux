@@ -1,10 +1,9 @@
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { YEAR } from 'ngx-bootstrap/chronos/units/constants';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { CommonServiceService } from 'src/app/bank-resolver/common-service.service';
-import { MessageType, mm_acc_type, mm_customer, m_acc_master, p_loan_param, ShowMessage, SystemValues } from 'src/app/bank-resolver/Models';
+import { MessageType, mm_acc_type, mm_customer, ShowMessage, SystemValues } from 'src/app/bank-resolver/Models';
 import { p_gen_param } from 'src/app/bank-resolver/Models/p_gen_param';
 import { InAppMessageService, RestService } from 'src/app/_service';
 import Utils from 'src/app/_utility/utils';

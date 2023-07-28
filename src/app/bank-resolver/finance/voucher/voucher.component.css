@@ -15,6 +15,11 @@ small{
     max-height: 200px;
     overflow: auto;
   }
+
+  /* input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        display: none;
+      } */
   .shiftLabel{
     margin-left: 22%;
     padding-bottom: inherit;
@@ -41,4 +46,11 @@ small{
   text-align: left;
   background-color: #04AA6D;
   color: white;
+}
+@media print {
+  .table-container {
+    display: inline-block;
+    width: 50%; /* Adjust the width as needed */
+    margin-top: 1%;
+  }
 }

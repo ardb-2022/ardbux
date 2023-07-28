@@ -4,19 +4,15 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { SystemValues, mm_customer, p_report_param, mm_operation } from 'src/app/bank-resolver/Models';
-import { p_gen_param } from 'src/app/bank-resolver/Models/p_gen_param';
 import { tt_trial_balance } from 'src/app/bank-resolver/Models/tt_trial_balance';
 import { RestService } from 'src/app/_service';
-import Utils from 'src/app/_utility/utils';
 import { PageChangedEvent } from "ngx-bootstrap/pagination/public_api";
 import { ExportAsService, ExportAsConfig } from 'ngx-export-as'
-import { DetailListComponent } from '../detail-list/detail-list.component';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import { CommonServiceService } from 'src/app/bank-resolver/common-service.service';
 import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
 import jspdf from 'jspdf';
 @Component({
   selector: 'app-npa-all',
@@ -31,7 +27,7 @@ export class NpaALLComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource = new MatTableDataSource()
-  displayedColumns: string[] = ['block_name','acc_desc','loan_id','party_name','disb_dt','disb_amt', 'prn_due', 'intt_due','npa_dt','ovd_prn','ovd_intt','penal_intt','stan_prn','substan_prn','d1_prn','d2_prn','d3_prn','totalNPA','provision'];
+  displayedColumns: string[] = ['block_name','activity','acc_desc','loan_id','party_name','disb_dt','disb_amt', 'prn_due', 'intt_due','npa_dt','ovd_prn','ovd_intt','penal_intt','stan_prn','substan_prn','d1_prn','d2_prn','d3_prn','totalNPA','provision'];
   modalRef: BsModalRef;
   isOpenFromDp = false;
   isOpenToDp = false;
@@ -117,6 +113,10 @@ export class NpaALLComponent implements OnInit {
     name:'Block'
   },
   {
+    value:'Activity',
+    name:'Activity'
+  },
+  {
     value:'Loan Type',
     name:'Loan Type'
   },
@@ -133,6 +133,10 @@ selectItems1=[
   {
     value:'Block',
     name:'Block'
+  },
+  {
+    value:'Activity',
+    name:'Activity'
   },
   {
     value:'Loan Type',
@@ -353,9 +357,12 @@ selectItems1=[
       for(let i=0;i<this.reportData.length;i++){
         this.firstGroup[i]=this.reportData[i].block_name
      }
-      //  console.log(this.blockNames)
-     
-        break;
+      break;
+      case "Activity": 
+      for(let i=0;i<this.reportData.length;i++){
+        this.firstGroup[i]=this.reportData[i].activity
+     }
+      break;
       case "Loan Type": 
       for(let i=0;i<this.reportData.length;i++){
         this.firstGroup[i]=this.reportData[i].acc_desc
@@ -390,6 +397,9 @@ selectItems1=[
       case "Block": 
       this.filteredArray=this.reportData.filter(e=>e.block_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
         break;
+        case "Activity": 
+      this.filteredArray=this.reportData.filter(e=>e.activity?.toLowerCase().includes(this.bName.toLowerCase())==true)
+        break;
       case "Loan Type": 
     this.filteredArray=this.reportData.filter(e=>e.acc_desc?.toLowerCase().includes(this.bName.toLowerCase())==true)
       break;
@@ -420,9 +430,12 @@ selectItems1=[
       for(let i=0;i<this.filteredArray1.length;i++){
         this.secondGroup[i]=this.filteredArray1[i].block_name
      }
-      //  console.log(this.blockNames)
-     
-        break;
+      break;
+      case "Activity": 
+      for(let i=0;i<this.filteredArray1.length;i++){
+        this.secondGroup[i]=this.filteredArray1[i].activity
+     }
+      break;
       case "Loan Type": 
       for(let i=0;i<this.filteredArray1.length;i++){
         this.secondGroup[i]=this.filteredArray1[i].acc_desc
@@ -463,6 +476,9 @@ debugger
       case "Block": 
       this.filteredArray=this.filteredArray1.filter(e=>e.block_name?.toLowerCase().includes(this.bName1.toLowerCase())==true)
         break;
+        case "Activity": 
+      this.filteredArray=this.filteredArray1.filter(e=>e.activity?.toLowerCase().includes(this.bName1.toLowerCase())==true)
+        break;
       case "Loan Type": 
     this.filteredArray=this.filteredArray1.filter(e=>e.acc_desc?.toLowerCase().includes(this.bName1.toLowerCase())==true)
       break;
@@ -490,6 +506,9 @@ debugger
     switch(this.selectedValue1){
       case "Block": 
       this.filteredArray=this.reportData.filter(e=>e.block_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
+          break;
+          case "Activity": 
+      this.filteredArray=this.reportData.filter(e=>e.activity?.toLowerCase().includes(this.bName.toLowerCase())==true)
           break;
       case "Loan Type": 
       this.filteredArray=this.reportData.filter(e=>e.acc_desc?.toLowerCase().includes(this.bName.toLowerCase())==true)
@@ -523,6 +542,9 @@ debugger
     switch(this.selectedValue){
       case "Block": 
       this.filteredArray=this.reportData.filter(e=>e.block_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
+        break;
+        case "Activity": 
+      this.filteredArray=this.reportData.filter(e=>e.activity?.toLowerCase().includes(this.bName.toLowerCase())==true)
         break;
       case "Loan Type": 
       this.filteredArray=this.reportData.filter(e=>e.acc_desc?.toLowerCase().includes(this.bName.toLowerCase())==true)

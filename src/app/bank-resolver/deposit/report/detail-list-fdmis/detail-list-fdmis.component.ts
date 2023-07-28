@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { SystemValues, p_report_param } from 'src/app/bank-resolver/Models';
+import { SystemValues, mm_operation, p_report_param } from 'src/app/bank-resolver/Models';
 import { mm_constitution } from 'src/app/bank-resolver/Models/deposit/mm_constitution';
 import { tt_trial_balance } from 'src/app/bank-resolver/Models/tt_trial_balance';
 import { RestService } from 'src/app/_service';
@@ -28,7 +28,8 @@ export class DetailListFDMISComponent implements OnInit,AfterViewInit {
   dataSource = new MatTableDataSource()
   
   displayedColumns: string[] = ['constitution'];
-
+  public static operations: mm_operation[] = [];
+  AcctTypes: mm_operation[];
   // displayedColumns: string[] = ['acc_num','cust_name', 'opening_dt', 'mat_dt','instL_AMT','intT_RT','prN_AMT','proV_INTT_AMT'];
 
   modalRef: BsModalRef;
@@ -99,6 +100,7 @@ export class DetailListFDMISComponent implements OnInit,AfterViewInit {
       acc_type_cd: [null, Validators.required],
       // constitution_cd: [{ disabled: true }, Validators.required]
     });
+    this.getOperationMaster();
     this.getConstitutionList();
     this.onLoadScreen(this.content);
     var date = new Date();
@@ -107,6 +109,38 @@ export class DetailListFDMISComponent implements OnInit,AfterViewInit {
     // get the time as a string
        var time = date.toLocaleTimeString();
        this.today= n + " "+ time
+  }
+  private getOperationMaster(): void {
+    console.log(DetailListFDMISComponent.operations);
+
+    this.isLoading = true;
+    if (undefined !== DetailListFDMISComponent.operations &&
+      null !== DetailListFDMISComponent.operations &&
+      DetailListFDMISComponent.operations.length > 0) {
+      this.isLoading = false;
+      this.AcctTypes = DetailListFDMISComponent.operations.filter(e => e.module_type === 'DEPOSIT')
+        .filter((thing, i, arr) => {
+          return arr.indexOf(arr.find(t => t.acc_type_cd === thing.acc_type_cd)) === i;
+        });
+      this.AcctTypes = this.AcctTypes.sort((a, b) => (a.acc_type_cd > b.acc_type_cd ? 1 : -1));
+    } else {
+      this.svc.addUpdDel<mm_operation[]>('Mst/GetOperationDtls', null).subscribe(
+        res => {
+          console.log(res)
+          DetailListFDMISComponent.operations = res;
+          this.isLoading = false;
+          this.AcctTypes = DetailListFDMISComponent.operations.filter(e => e.module_type === 'DEPOSIT')
+            .filter((thing, i, arr) => {
+              return arr.indexOf(arr.find(t => t.acc_type_cd === thing.acc_type_cd)) === i;
+            });
+          this.AcctTypes = this.AcctTypes.sort((a, b) => (a.acc_type_cd > b.acc_type_cd ? 1 : -1));
+          this.AcctTypes =this.AcctTypes.filter(e=>e.acc_type_cd==2 || e.acc_type_cd==3||e.acc_type_cd==4||e.acc_type_cd==5)
+        },
+        err => { this.isLoading = false; }
+      );
+    }
+    console.log(this.AcctTypes);
+
   }
   onLoadScreen(content) {
     this.modalRef = this.modalService.show(content, this.config);

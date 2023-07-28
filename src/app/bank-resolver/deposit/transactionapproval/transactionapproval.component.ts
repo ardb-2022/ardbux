@@ -1,8 +1,7 @@
 import { p_gen_param } from './../../Models/p_gen_param';
-import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 // import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ExportAsService } from 'ngx-export-as';
 import { InAppMessageService, RestService } from 'src/app/_service';
 import {
   MessageType, mm_customer, ShowMessage, td_def_trans_trf,
@@ -24,7 +23,7 @@ import { AccOpenDM } from '../../Models/deposit/AccOpenDM';
 
 })
 export class TransactionapprovalComponent implements OnInit {
-  constructor(private svc: RestService, private elementRef: ElementRef,
+  constructor(private svc: RestService,
     private msg: InAppMessageService, private modalService: BsModalService,
     private router: Router, private frmBldr: FormBuilder) { }
   static accType: mm_acc_type[] = [];
@@ -736,6 +735,7 @@ export class TransactionapprovalComponent implements OnInit {
   }
 
   public onApproveClick(): void {
+    this.modalRef.hide();
     if (this.selectedVm.td_def_trans_trf.trans_type.toLocaleLowerCase() === 'W') {
       if (this.selectedVm.tm_deposit.acc_type_cd === 1 ||
         this.selectedVm.tm_deposit.acc_type_cd === 7) {

@@ -1,7 +1,7 @@
 import { SystemValues } from './../../Models/SystemValues';
 
 import { Component, OnInit, ViewChild, ElementRef, TemplateRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
 import { InAppMessageService, RestService } from 'src/app/_service';
 import { MessageType, mm_category, mm_customer, m_acc_master, ShowMessage, td_def_trans_trf } from '../../Models';
 import { AccOpenDM } from '../../Models/deposit/AccOpenDM';
@@ -435,7 +435,7 @@ export class AccOpeningComponent implements OnInit {
     //  console.log(this.accDtlsFrm.get('home_brn_cd').value)
     if (this.tm_deposit.user_acc_num.length > 0) {
       const prm = new p_gen_param();
-      prm.ad_acc_type_cd = 1;
+      prm.ad_acc_type_cd = (this.sys.ardbCD=="20" || this.sys.ardbCD=="26")? 1:8;
       prm.as_cust_name = this.tm_deposit.user_acc_num.toLowerCase();
       console.log(prm.ardb_cd);
 
@@ -1004,7 +1004,7 @@ export class AccOpeningComponent implements OnInit {
 
 
     if ((this.operationType === 'I') && (this.tm_deposit.user_acc_num === undefined || this.tm_deposit.user_acc_num === null || this.tm_deposit.user_acc_num === "")
-      && (this.tm_deposit.acc_type_cd === 6)) {
+      && (this.tm_deposit.acc_type_cd === 6)&&(this.tm_deposit.standing_instr_flag!='0')) {
       this.HandleMessage(true, MessageType.Warning, 'S/B Account Number not present to create the Account Type- '
         + this.tm_deposit.acc_type_desc);
       exit(0);
@@ -1110,6 +1110,7 @@ export class AccOpeningComponent implements OnInit {
     let ret = -1;
     this.validateData();   
     this.masterModel.tmdeposit.ardb_cd=this.sys.ardbCD;
+    this.masterModel.tmdeposit.acc_close_dt=null;
     this.masterModel.tddeftrans.ardb_cd=this.sys.ardbCD;
     this.isLoading = true;
     if (this.operationType === 'I') // For New Account
@@ -2208,7 +2209,7 @@ export class AccOpeningComponent implements OnInit {
     const temp_deposit = new tm_deposit();
     temp_deposit.brn_cd = this.branchCode;
     temp_deposit.acc_num = this.tm_deposit.user_acc_num;
-    temp_deposit.acc_type_cd = 1;
+    temp_deposit.acc_type_cd = (this.sys.ardbCD=="20" || this.sys.ardbCD=="26")? 1:8;
     temp_deposit.ardb_cd=this.sys.ardbCD;
     this.isLoading = true;
     this.svc.addUpdDel<any>('Deposit/GetDeposit', temp_deposit).subscribe(
@@ -2653,7 +2654,7 @@ export class AccOpeningComponent implements OnInit {
   }
 
   deleteData() {
-
+    this.modalRef.hide();
     let n = 1;
     const temp_def_trans_trf = new td_def_trans_trf();
 

@@ -1,12 +1,12 @@
 import { Router } from '@angular/router';
-import { AccOpenDM } from './../../../Models/deposit/AccOpenDM';
+
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { RestService, InAppMessageService } from 'src/app/_service';
 import {
   MessageType, mm_acc_type, mm_block, mm_customer,
   mm_operation, m_acc_master, ShowMessage, SystemValues,
-  td_def_trans_trf, tm_deposit, tm_depositall
+  td_def_trans_trf, tm_deposit
 } from '../../../Models';
 import { tm_denomination_trans } from '../../../Models/deposit/tm_denomination_trans';
 import { DatePipe } from '@angular/common';
@@ -24,7 +24,6 @@ import { mm_installment_type } from 'src/app/bank-resolver/Models/mm_installment
 import { p_loan_param } from 'src/app/bank-resolver/Models/loan/p_loan_param';
 import { tt_loan_rep } from 'src/app/bank-resolver/Models/loan/tt_loan_rep';
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
-import { DateFormatter } from 'ngx-bootstrap/datepicker';
 import { Observable } from 'rxjs/internal/Observable';
 // import { threadId } from 'worker_threads';
 import { MatTableDataSource } from '@angular/material/table';
@@ -39,7 +38,7 @@ import { tm_subsidy } from 'src/app/bank-resolver/Models/loan/tm_subsidy';
 })
 export class LoanaccountTransactionComponent implements OnInit {
   constructor(private svc: RestService, private msg: InAppMessageService, private modalService: BsModalService,
-    private frmBldr: FormBuilder, public c: DatePipe, private router: Router, private _domSanitizer: DomSanitizer) { }
+    private frmBldr: FormBuilder, public c: DatePipe, private router: Router) { }
   get f() { return this.accTransFrm.controls; }
   get fd() { return this.accDtlsFrm.controls; }
   get td() { return this.tdDefTransFrm.controls; }
@@ -50,6 +49,7 @@ export class LoanaccountTransactionComponent implements OnInit {
   @ViewChild('contentLoanRep', { static: true }) contentLoanRep: TemplateRef<any>;
   @ViewChild('contentLoanStmt', { static: true }) contentLoanStmt: TemplateRef<any>;
   @ViewChild('custDtls', { static: true }) custDtls: TemplateRef<any>;
+  @ViewChild('LoanChallan', { static: true }) LoanChallan: TemplateRef<any>;
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -94,6 +94,7 @@ export class LoanaccountTransactionComponent implements OnInit {
     ignoreBackdropClick: true // disable backdrop click to close the modal
   };
   subSidyAmt=0;
+  CurrentYearDemand:any[]=[];
   customerList: mm_customer[] = [];
   td_deftrans = new td_def_trans_trf();
   td_deftranstrfList: td_def_trans_trf[] = [];
@@ -115,7 +116,9 @@ export class LoanaccountTransactionComponent implements OnInit {
   denominationGrandTotal = 0;
   transferGrandTotal = 0;
   suggestedCustomer1: mm_customer[];
-
+  ardbName=localStorage.getItem('ardb_name');ardb_addr
+  ardbAddr=localStorage.getItem('ardb_addr');
+  branchName=this.sys.BranchName;
   suggestedCustomer: mm_customer[];
   suggestedCustomerCr: mm_customer[];
   indxsuggestedCustomerCr = 0;
@@ -195,12 +198,36 @@ export class LoanaccountTransactionComponent implements OnInit {
   present_address:string;
   l_cust_cd:any;
   l_case_no:string;
-
+  t_d:any;
+  t_a:any;
+  s_a:any;
+  c_int:any;
+  o_int:any;
+  i_r_t:any;
+  c_p:any;
+  c_i:any;
+  o_p:any;
+  o_i:any;
+  a_p:any;
+  p_i:any;
+  t_cd:any;
+  i_n_dt:any;
+  partyName:any;
+  ln_id:any;
+  aCD:any
+  acDesc:any;
+  trns_type:any;
+  m_id:any;
+  fdt:any;
+  tdt:any;
   // editDeleteMode=false
   // showInstrumentDtl = false;
   ngOnInit(): void {
     this.isLoading = false;
-
+    var date = new Date();
+    var n = date.toDateString();
+    var time = date.toLocaleTimeString();
+    this.today= n + " "+ time
     this.accTransFrm = this.frmBldr.group({
       acc_type_cd: [''],
       oprn_cd: [''],
@@ -668,6 +695,9 @@ export class LoanaccountTransactionComponent implements OnInit {
       res => {
         ////////debugger;
         acc = res;
+        this.acc2=res;
+        this.GetCustomer();
+        this.CurrentDemand();
         console.log(res)
         if (undefined === acc || acc.tmloanall.loan_id == null) {
           this.accTransFrm.patchValue({
@@ -754,7 +784,23 @@ export class LoanaccountTransactionComponent implements OnInit {
           dt.setDate(dt.getDate() - 1)
           console.log(this.c.transform(dt, 'dd/MM/yyyy hh:mm:ss'))
           console.log(acc.tddeftrans.intt_till_dt);
-          
+
+          //Challan Value set Retrive time
+          this.t_cd=acc.tddeftrans.trans_cd;
+          this.t_a=acc.tddeftrans?.amount;
+                // this.s_a=saveTransaction.tddeftrans?.share_amt;
+                this.c_p=acc.tddeftrans?.curr_prn_recov;
+                this.c_i=acc.tddeftrans?.curr_intt_recov;
+                this.o_p=acc.tddeftrans?.ovd_prn_recov;
+                this.o_i=acc.tddeftrans?.ovd_intt_recov;
+                this.a_p=acc.tddeftrans?.adv_prn_recov;
+                this.p_i=acc.tddeftrans?.penal_intt_recov;
+                this.i_n_dt=acc.tddeftrans?.intt_till_dt;
+                this.trns_type=acc.tddeftrans?.trf_type;
+                this.ln_id=acc.tddeftrans?.acc_num;
+                this.aCD=acc.tmloanall.acc_cd;
+                this.acDesc=this.AcctTypes.filter(e=>e.acc_type_cd==this.aCD)[0].acc_type_desc;
+                
           debugger;
 
           this.tdDefTransFrm.patchValue({
@@ -1180,6 +1226,7 @@ export class LoanaccountTransactionComponent implements OnInit {
           acc = res;
           this.acc2 = res;
           this.GetCustomer();
+          this.CurrentDemand();
           debugger
           this.strtDt = acc.tmloanall.instl_start_dt
           this.currRt = acc.tmloanall.curr_intt_rate
@@ -1191,7 +1238,10 @@ export class LoanaccountTransactionComponent implements OnInit {
           this.currIntt = acc.tmloanall.curr_intt
           this.ovdIntt = acc.tmloanall.ovd_intt
           this.inttTillDt = acc.tmloanall.last_intt_calc_dt
-          
+          this.aCD=acc.tmloanall.acc_cd
+          this.ln_id=Number(acc.tmloanall.loan_id)
+          this.acDesc=this.AcctTypes.filter(e=>e.acc_type_cd==this.aCD)[0].acc_type_desc
+          debugger
           console.log(acc)
           ////debugger
           if (undefined === acc || acc.tmloanall.loan_id == null) {
@@ -1573,6 +1623,7 @@ export class LoanaccountTransactionComponent implements OnInit {
     console.log(this.inttTillDt)
     // var dt1=this.c.transform(this.td.intt_recov_dt.value,'dd/MM/yyyy hh:mm:ss')
     var dt1 = this.c.transform(ev, 'dd/MM/yyyy hh:mm:ss')
+      this.i_n_dt=dt1;//partha
     var dt2 = this.inttTillDt
     // console.log(dt1, dt2)
     // console.log(this.dayDiff(this.td.intt_recov_dt.value, this.td.intt_till_dt.value))
@@ -1589,8 +1640,27 @@ export class LoanaccountTransactionComponent implements OnInit {
           ovd_prn_recov: '',
           ovd_intt_recov: ''
         });
+        return;
       }
       else {
+        debugger
+        const fyearlstfDT= localStorage.getItem('__lastDt');
+        const lstfDT=this.convertDate(fyearlstfDT).toLocaleString();
+        var dt = this.c.transform(lstfDT, 'dd/MM/yyyy hh:mm:ss')
+        console.log(this.dayDiff(dt1, dt))
+        if(this.dayDiff(dt1 ,dt)>0){
+          debugger
+          this.HandleMessage(true, MessageType.Error, 'Interest can not be calculated after ' + fyearlstfDT);
+        this.tdDefTransFrm.patchValue({
+          intt_recov_dt:Utils.convertStringToDt(fyearlstfDT),
+          no_of_day: 0,
+          curr_prn_recov: '',
+          curr_intt_recov: '',
+          ovd_prn_recov: '',
+          ovd_intt_recov: ''
+        });
+        return
+        }
         console.log(dt1 + " " + dt2)
         this.PopulateRecoveryDetails(3);
         if (this.td.amount.value > 0){
@@ -1612,7 +1682,7 @@ export class LoanaccountTransactionComponent implements OnInit {
       // }
     }
   }
-
+  
   dayDiff(d1: any, d2: any) {
     console.log(d1 + " " + d2)
     d1 = Utils.convertStringToDt(d1);
@@ -1621,7 +1691,7 @@ export class LoanaccountTransactionComponent implements OnInit {
     if (d2) {
       const diffDays = Math.floor((Date.UTC(d1.getFullYear(), d1.getMonth(), d1.getDate())
         - Date.UTC(d2.getFullYear(), d2.getMonth(), d2.getDate())) / (1000 * 60 * 60 * 24));
-      // console.log(diffDays)
+       console.log(diffDays)
 
       return diffDays;
     }
@@ -1758,6 +1828,7 @@ export class LoanaccountTransactionComponent implements OnInit {
              
               // total_due: (+inttRet.curr_intt_recov) + (+inttRet.ovd_intt_recov) + (+inttRet.penal_intt_recov) - (+this.tdDefTransFrm.controls.curr_intt_recov.value) - (+this.tdDefTransFrm.controls.penal_intt_recov.value) -  (+this.tdDefTransFrm.controls.ovd_intt_recov.value) + this.accDtlsFrm.controls.principal.value
             });
+            debugger
             // this.editDeleteMode=false;
           }
           }
@@ -1773,9 +1844,11 @@ export class LoanaccountTransactionComponent implements OnInit {
               // total_due:this.fd.curr_intt.value + this.fd.ovd_intt.value + this.fd.penal_intt.value + this.fd.ovd_principal.value + this.fd.curr_principal.value -this.td.paid_amount.value,
               intt_recev:(+inttRet.curr_intt_recov) + (+inttRet.ovd_intt_recov) + (+inttRet.penal_intt_recov) - (+this.tdDefTransFrm.controls.curr_intt_recov.value) - (+this.tdDefTransFrm.controls.penal_intt_recov.value) -  (+this.tdDefTransFrm.controls.ovd_intt_recov.value),
               // curr_principal:(+inttRet.curr_prn.value)+this.td.paid_amount.value,
-              // principal:(inttRet.principal)+this.td.paid_amount.value
-              total_due: (+inttRet.curr_intt_recov) + (+inttRet.ovd_intt_recov) + (+inttRet.penal_intt_recov) - (+this.tdDefTransFrm.controls.curr_intt_recov.value) - (+this.tdDefTransFrm.controls.penal_intt_recov.value) -  (+this.tdDefTransFrm.controls.ovd_intt_recov.value) + this.fd.principal.value
+              principal:(inttRet.curr_prn_recov - (+this.tdDefTransFrm.controls.curr_prn_recov.value))+((+inttRet.ovd_prn_recov) - (+this.tdDefTransFrm.controls.ovd_prn_recov.value)),
+              // total_due: (+this.fd.intt_recev.value) + (+this.fd.principal.value)
             });
+            this.accDtlsFrm.controls.total_due.setValue((+this.fd.intt_recev.value) + (+this.fd.principal.value))
+            debugger
           }
          
           
@@ -1867,7 +1940,12 @@ export class LoanaccountTransactionComponent implements OnInit {
     // }
 if(this.isRecovery){
    this.recov_sum=0;
-   this.recov_sum=this.td.curr_prn_recov.value + this.td.ovd_prn_recov.value + this.td.adv_prn_recov.value + this.td.curr_intt_recov.value + this.td.ovd_intt_recov.value + this.td.penal_intt_recov.value
+   this.recov_sum=Number(this.td.curr_prn_recov.value?this.td.curr_prn_recov.value:0) +
+    Number(this.td.ovd_prn_recov.value?this.td.ovd_prn_recov.value:0) + 
+    Number(this.td.adv_prn_recov.value?this.td.adv_prn_recov.value:0) + 
+    Number(this.td.curr_intt_recov.value?this.td.curr_intt_recov.value:0) + 
+    Number(this.td.ovd_intt_recov.value?this.td.ovd_intt_recov.value:0) + 
+    Number(this.td.penal_intt_recov.value?this.td.penal_intt_recov.value:0)
    console.log(this.recov_sum)
    debugger; 
    if (this.td.trf_type.value === 'T' && this.TrfTotAmt !== (+this.td.amount.value) && this.TrfTotAmt !=this.recov_sum) {
@@ -1891,6 +1969,16 @@ if(this.isDisburs){
     return;
   }
 }
+this.t_a=null;
+this.c_p=null;
+this.c_i=null;
+this.o_p=null;
+this.o_i=null;
+this.a_p=null;
+this.p_i=null;
+// this.i_n_dt=this.td.intt_recov_dt.value;
+this.i_n_dt=null;
+
 // debugger
 console.log(this.td.recov_type.value)
 debugger;
@@ -1962,6 +2050,8 @@ debugger;
                 tdDefTransAndTranfer.amount = e.amount;
                 ////////debugger;
                 saveTransaction.tddeftranstrf.push(tdDefTransAndTranfer);
+                
+                
               });
 
               const tmTrnsfr = new tm_transfer();
@@ -1973,10 +2063,24 @@ debugger;
               tmTrnsfr.created_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
               tmTrnsfr.approval_status = 'U';
               saveTransaction.tmtransfer.push(tmTrnsfr);
+              
+              
             }
             ////////debugger;
           
             if (this.td.trans_cd.value > 0) {
+              this.t_a=saveTransaction.tddeftrans?.amount;
+                // this.s_a=saveTransaction.tddeftrans?.share_amt;
+                this.c_p=saveTransaction.tddeftrans?.curr_prn_recov;
+                this.c_i=saveTransaction.tddeftrans?.curr_intt_recov;
+                this.o_p=saveTransaction.tddeftrans?.ovd_prn_recov;
+                this.o_i=saveTransaction.tddeftrans?.ovd_intt_recov;
+                this.a_p=saveTransaction.tddeftrans?.adv_prn_recov;
+                this.p_i=saveTransaction.tddeftrans?.penal_intt_recov;
+                // this.i_n_dt=this.td.intt_recov_dt.value;
+                this.i_n_dt=this.td.no_of_day.value!=0? this.c.transform(this.td.intt_recov_dt.value, 'dd/MM/yyyy hh:mm:ss'):this.td.intt_recov_dt.value;
+              
+              debugger
               this.svc.addUpdDel<LoanOpenDM>('Common/UpdateTransactionDetails', saveTransaction).subscribe(
                 res => {
                   this.tdDefTransFrm.disable();
@@ -2057,6 +2161,9 @@ debugger;
                   const loanId = this.td.acc_num.value;
                   this.HandleMessage(true, MessageType.Sucess, `Transaction for Loan Id ${loanId}, updated successfully !!!!`);
                   this.isLoading = false;
+                   if(this.isRecovery){
+                    this.modalRef = this.modalService.show(this.LoanChallan, { class: 'modal-sm' });
+                  }
                   // this.onResetClick();
                   // this.tdDefTransFrm.reset();
                   // this.accTransFrm.reset();
@@ -2069,9 +2176,26 @@ debugger;
               );
             }
             else {
+              this.t_a=saveTransaction.tddeftrans?.amount;
+                // this.s_a=saveTransaction.tddeftrans?.share_amt;
+                this.c_p=saveTransaction.tddeftrans?.curr_prn_recov;
+                this.c_i=saveTransaction.tddeftrans?.curr_intt_recov;
+                this.o_p=saveTransaction.tddeftrans?.ovd_prn_recov;
+                this.o_i=saveTransaction.tddeftrans?.ovd_intt_recov;
+                this.a_p=saveTransaction.tddeftrans?.adv_prn_recov;
+                this.p_i=saveTransaction.tddeftrans?.penal_intt_recov;
+                // this.i_n_dt=this.td.intt_recov_dt.value;
+                this.i_n_dt=this.td.no_of_day.value!=0? this.c.transform(this.td.intt_recov_dt.value, 'dd/MM/yyyy hh:mm:ss'):this.td.intt_recov_dt.value;
+
+                
+                // this.i_n_dt=saveTransaction.tddeftrans?.intt_till_dt
+                debugger
+                // this.i_n_dt=this.c.transform(this.i_n_dt, 'dd/MM/yyyy')
+              debugger
               this.disableOnSaveEdit=true;
               this.tdDefTransFrm.disable();
               this.td.trf_type.disable();
+              this.trns_type=this.td.trf_type.value;
               // this.td.amount.disable()
               if(this.isDisburs){
                 debugger;
@@ -2093,7 +2217,7 @@ debugger;
               this.svc.addUpdDel<LoanOpenDM>('Loan/InsertLoanTransactionData', saveTransaction).subscribe(
                 res => {
                   ////////debugger;
-                 
+                  this.t_cd=+res
                   tdDefTrans.trans_cd = +res;
                   console.log(JSON.stringify(tdDefTrans))
                   this.unApprovedTransactionLst.push(tdDefTrans);
@@ -2114,6 +2238,7 @@ debugger;
                     this.accDtlsFrm.patchValue({
                       principal: this.fd.ovd_principal.value + this.fd.curr_principal.value
                     })
+                    debugger
                   }
                   if(this.isDisburs){
                     this.accDtlsFrm.patchValue({
@@ -2137,6 +2262,9 @@ debugger;
 
                   })
                   // 
+                  if(this.isRecovery){
+                    this.modalRef = this.modalService.show(this.LoanChallan, { class: 'modal-sm' });
+                  }
                
                   //  
                   
@@ -2176,12 +2304,12 @@ debugger;
         this.td.ovd_intt_recov.value,
         this.td.penal_intt_recov.value,
         this.td.adv_prn_recov.value, this.td.amount.value)
-        let tempSum = (+this.td.curr_prn_recov.value) +
-        (+this.td.curr_intt_recov.value) +
-        (+this.td.ovd_prn_recov.value) +
-        (+this.td.ovd_intt_recov.value) +
-        (+this.td.penal_intt_recov.value) +
-        (+this.td.adv_prn_recov.value)
+        let tempSum = (Number(this.td.curr_prn_recov.value) +
+        Number(this.td.curr_intt_recov.value) +
+        Number(this.td.ovd_prn_recov.value) +
+        Number(this.td.ovd_intt_recov.value) +
+        Number(this.td.penal_intt_recov.value) +
+        Number(this.td.adv_prn_recov.value))
       if (tempSum != this.td.amount.value && this.isRecovery) {
 
         this.HandleMessage(true, MessageType.Error,
@@ -2374,9 +2502,14 @@ debugger;
                 ovd_intt:+this.fd.ovd_intt.value-(+this.td.ovd_intt_recov.value),
                 penal_intt:+this.fd.penal_intt.value-(+this.td.penal_intt_recov.value),
                 intt_recev:this.fd.curr_intt.value + this.fd.ovd_intt.value + this.fd.penal_intt.value - this.td.curr_intt_recov.value - this.td.ovd_intt_recov.value - this.td.penal_intt_recov.value,
-                principal:+this.inttRetForUpdate.curr_prn_recov-(+this.td.curr_prn_recov.value) - (+this.td.adv_prn_recov.value) + this.inttRetForUpdate.ovd_prn_recov-(+this.td.ovd_prn_recov.value),
+                principal:((+this.fd.curr_principal.value)+(+this.fd.ovd_principal.value))-((+this.td.ovd_prn_recov.value)+(+this.td.adv_prn_recov.value)+(+this.td.curr_prn_recov.value)),
                 total_due: this.fd.curr_intt.value + this.fd.ovd_intt.value + this.fd.penal_intt.value + this.fd.ovd_principal.value + this.fd.curr_principal.value - this.td.ovd_prn_recov.value - this.td.curr_prn_recov.value -this.td.curr_intt_recov.value - this.td.ovd_intt_recov.value - this.td.penal_intt_recov.value- (+this.td.adv_prn_recov.value),
                 })
+                // principal:+this.inttRetForUpdate.curr_prn_recov-(+this.td.curr_prn_recov.value) - (+this.td.adv_prn_recov.value) + this.inttRetForUpdate.ovd_prn_recov-(+this.td.ovd_prn_recov.value),
+                // if(this.td.recov_type.value=='M'){
+                //   this.accDtlsFrm.controls.principal.setValue(((+this.fd.curr_principal.value)+(+this.fd.ovd_principal.value))-((+this.td.ovd_prn_recov.value)+(+this.td.adv_prn_recov.value)+(+this.td.curr_prn_recov.value)))
+                // }
+                debugger
             }
             if(this.isDisburs){
               this.accDtlsFrm.patchValue({
@@ -2396,7 +2529,9 @@ debugger;
               })
             }
             this.HandleMessage(true, MessageType.Sucess, 'Saved successfully, your transaction code is -' + res);
-          
+            if(this.isRecovery){
+              this.modalRef = this.modalService.show(this.LoanChallan, { class: 'modal-sm' });
+            }
            this.tdDefTransFrm.patchValue({
               trans_cd: res
             });
@@ -2415,11 +2550,11 @@ debugger;
   }
 
   onDeleteClick(): void {
-    if (!(confirm('Are you sure you want to Delete Transaction of Acc '
-      + this.td.acc_num.value
-      + ' with Transancation Cd ' + this.td.trans_cd.value))) {
-      return;
-    }
+    // if (!(confirm('Are you sure you want to Delete Transaction of Acc '
+    //   + this.td.acc_num.value
+    //   + ' with Transancation Cd ' + this.td.trans_cd.value))) {
+    //   return;
+    // }
     ////////debugger;
     this.isLoading = true;
     const param = new td_def_trans_trf();
@@ -2429,7 +2564,7 @@ debugger;
     param.acc_type_cd = (+this.f.acc_type_cd.value);
     param.acc_num = this.td.acc_num.value;
     param.ardb_cd = this.sys.ardbCD
-
+    this.modalRef.hide();
     this.svc.addUpdDel<any>('Deposit/DeleteAccountOpeningData ', param).subscribe(
       res => {
         this.isLoading = false;
@@ -2919,8 +3054,9 @@ debugger;
     //marker
     if(tdDefTransTrnsfr.gl_acc_code){
       if((+tdDefTransTrnsfr.amount)>this.tdDefTransFrm.controls.amount.value && this.isRecovery){
-        this.HandleMessage(true, MessageType.Error, 'Amount entered is more than the Balance of - '+ tdDefTransTrnsfr.gl_acc_code);
+        this.HandleMessage(true, MessageType.Error, 'Entered amount does not match with recovery amount..!!');
         tdDefTransTrnsfr.amount = 0;
+        this.TrfTotAmt=0;
         return;
     }
   }
@@ -2928,6 +3064,7 @@ debugger;
       if((+tdDefTransTrnsfr.amount)>tdDefTransTrnsfr.clr_bal && this.isRecovery){
         this.HandleMessage(true, MessageType.Error, 'Amount entered is more than the Balance of - '+ tdDefTransTrnsfr.cust_acc_number);
         tdDefTransTrnsfr.amount = 0;
+        this.TrfTotAmt=0;
         return;
       
     }
@@ -2981,6 +3118,7 @@ debugger;
     if ((+this.td.amount.value) < this.TrfTotAmt) {
       this.HandleMessage(true, MessageType.Error, 'Total Amount can not be more than Transaction amount');
       this.td_deftranstrfList[(this.td_deftranstrfList.length - 1)].amount = 0;
+      this.TrfTotAmt = 0;
     }
   }
 
@@ -3226,14 +3364,18 @@ debugger;
               // console.log(this.selectedBlock[0].block_name);
               // console.log(this.suggestedCustomer1[0].phone);
               // console.log(this.acc2.tmloanall.loan_acc_no);
+              // this.ln_id=this.suggestedCustomer1[0].acc_num
+              this.partyName=this.suggestedCustomer1[0].cust_name
               this.acc_block=this.selectedBlock[0].block_name;
               this.acc_phone=this.suggestedCustomer1[0].phone;
               this.present_address=this.suggestedCustomer1[0].present_address;
               this.member_id=this.suggestedCustomer1[0].old_cust_cd;
+              this.m_id=this.member_id
               this.guardian_name=this.suggestedCustomer1[0].guardian_name;
               this.acc_lfNo=this.acc2.tmloanall.loan_acc_no;
-              this.l_cust_cd=this.suggestedCustomer1[0].cust_cd;
-              this.l_case_no=this.acc2.tdloansancsetlist[0].tdloansancset.filter(e=>e.param_cd=='117')[0].param_value
+              this.l_cust_cd=this.suggestedCustomer1[0].cust_cd;debugger
+              this.l_case_no=this.acc2.tdloansancsetlist[0]?.tdloansancset.filter(e=>e.param_cd=='117')[0]?.param_value
+              
               debugger
             } else {
               this.suggestedCustomer1 = [];
@@ -3263,6 +3405,34 @@ debugger;
          this.subSidyAmt= res.subsidy_amt
         }
       })
+    }
+    CurrentDemand() {
+  this.fdt='01/04/'+((+(this.sys.lastDt).substring(6,10))-1).toString();
+  this.tdt='31/03/'+(+(this.sys.lastDt).substring(6,10)).toString();
+      var dt = {
+        "ardb_cd": this.sys.ardbCD,
+        "brn_cd":this.sys.BranchCode,
+        "from_dt":this.convertDate('01/04/'+((+(this.sys.lastDt).substring(6,10))-1).toString()),
+        "to_dt": this.convertDate('31/03/'+(+(this.sys.lastDt).substring(6,10)).toString()),
+        "fund_type":this.acc2.tmloanall.fund_type,
+        "loan_id":this.loanID
+      }
+      debugger
+      this.svc.addUpdDel<any>('Loan/GetDemandListSingle', dt).subscribe(
+        res => {
+          console.log(res)
+          this.CurrentYearDemand = res;
+        },
+        err => { }
+      );
+    }
+    private convertDate(datestring:string):Date
+      {
+      var parts = datestring.match(/(\d+)/g);
+      return new Date(parseInt(parts[2]), parseInt(parts[1])-1, parseInt(parts[0]));
+      }
+    printChallan(){
+      this.modalRef = this.modalService.show(this.LoanChallan, { class: 'modal-xl' });
     }
 
 }

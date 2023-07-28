@@ -39,12 +39,19 @@
            {{row.acc_type_from}}
           </td>
         </ng-container>
+        <ng-container matColumnDef="fname" >
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Cust Name </th>
+          <td mat-cell *matCellDef="let row"> 
+           {{row.from_name }}
+          </td>
+        </ng-container>
         <!-- Fruit Column -->
         <ng-container matColumnDef="dr_accNo" >
           <th mat-header-cell *matHeaderCellDef mat-sort-header> A/C No. </th>
           <td mat-cell *matCellDef="let row"> 
             {{row.acc_num_from}} </td>
         </ng-container>
+        
         <!-- Fruit Column -->
         <ng-container matColumnDef="cr_type" >
           <th mat-header-cell *matHeaderCellDef mat-sort-header > Type </th>
@@ -53,13 +60,19 @@
           </td>
         </ng-container>
         <!-- ID Column -->
+        <ng-container matColumnDef="tname" >
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Cust Name </th>
+          <td mat-cell *matCellDef="let row"> 
+           {{row.to_name }}
+          </td>
+        </ng-container>
         <ng-container matColumnDef="cr_accNo" >
           <th mat-header-cell *matHeaderCellDef mat-sort-header> A/C No. </th>
           <td mat-cell *matCellDef="let row"> 
            {{row.acc_num_to }}
           </td>
         </ng-container>
-    
+        
         <!-- Progress Column -->
         <ng-container matColumnDef="tf_dt" >
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
@@ -94,7 +107,7 @@
     
         <!-- Header column -->
         <ng-container matColumnDef="Header">
-          <th mat-header-cell *matHeaderCellDef colspan="12">
+          <th mat-header-cell *matHeaderCellDef colspan="14">
             <div class="justify-content-center" style="text-align:center">
               <br><h4>{{ardbName}} ({{branchName}})</h4>
               
@@ -105,11 +118,11 @@
         </ng-container>
        
         <ng-container matColumnDef="dr">
-          <th mat-header-cell *matHeaderCellDef colspan="3"><b>Debit A/C</b></th>
+          <th mat-header-cell *matHeaderCellDef colspan="4"><b>Debit A/C</b></th>
         </ng-container>
       
         <ng-container matColumnDef="cr">
-          <th mat-header-cell *matHeaderCellDef colspan="2"><b>Credit A/C</b></th>
+          <th mat-header-cell *matHeaderCellDef colspan="3"><b>Credit A/C</b></th>
         </ng-container>
 
         <ng-container matColumnDef="tf">

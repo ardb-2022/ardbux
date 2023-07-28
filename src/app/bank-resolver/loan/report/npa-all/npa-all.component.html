@@ -191,7 +191,12 @@
       <ng-container matColumnDef="block_name" style="text-align:center;" >
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Block</th>
         <td mat-cell *matCellDef="let row">{{row.block_name}}</td>
-      </ng-container> <ng-container matColumnDef="acc_desc"  >
+      </ng-container> 
+      <ng-container matColumnDef="activity" style="text-align:center;" >
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Purpose</th>
+        <td mat-cell *matCellDef="let row">{{row.activity}}</td>
+      </ng-container>
+      <ng-container matColumnDef="acc_desc"  >
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Loan Type </th>
         <td mat-cell *matCellDef="let row">{{row.acc_desc}}</td>
       </ng-container>
@@ -285,7 +290,7 @@
   
       <!-- Header column -->
       <ng-container matColumnDef="Header">
-        <th mat-header-cell *matHeaderCellDef colspan="19">
+        <th mat-header-cell *matHeaderCellDef colspan="20">
           <div class="justify-content-center" style="text-align:center">
             <br><h4>{{ardbName}} ({{branchName}})</h4>
             
@@ -300,7 +305,7 @@
       </ng-container>
      
       <ng-container matColumnDef="space1">
-        <th mat-header-cell *matHeaderCellDef colspan="6"><b></b></th>
+        <th mat-header-cell *matHeaderCellDef colspan="7"><b></b></th>
       </ng-container>
       <ng-container matColumnDef="Outstanding">
         <th mat-header-cell *matHeaderCellDef colspan="2"><b>Outstanding</b></th>
@@ -321,7 +326,7 @@
       
       <!-- Footer column -->
       <ng-container matColumnDef="Total">
-        <td mat-footer-cell *matFooterCellDef colspan="5" style="text-align:center;">
+        <td mat-footer-cell *matFooterCellDef colspan="6" style="text-align:center;">
           <b>Total</b>
         </td>
       </ng-container>

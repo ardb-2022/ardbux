@@ -1,11 +1,9 @@
-import { BankConfiguration } from './../Models/bankConfiguration';
-import { AfterViewInit, Component,ViewChild , HostListener, OnDestroy, OnInit, TemplateRef , ElementRef, Renderer2, ViewChildren, QueryList, Input} from '@angular/core';
+import { AfterViewInit, Component,ViewChild , HostListener, OnDestroy, OnInit, TemplateRef} from '@angular/core';
 import { InAppMessageService, RestService } from 'src/app/_service';
-import { BankConfigMst, mainmenu, submenu, screenlist, SystemValues, LOGIN_MASTER, MenuConfig } from '../Models';
+import { BankConfigMst, submenu, SystemValues, LOGIN_MASTER, MenuConfig } from '../Models';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Title } from '@angular/platform-browser';
-import { lvLocale } from 'ngx-bootstrap/chronos';
+
 import { environment } from 'src/environments/environment';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { sd_day_operation } from '../Models/sd_day_operation';
@@ -18,7 +16,7 @@ import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 export class HeaderComponent implements OnInit,OnDestroy,AfterViewInit {
   currentRoute: any;
   objectKeys = Object.keys;
-  constructor(private rstSvc: RestService, private router: Router, private svc:RestService, private modalService:BsModalService,private elementRef: ElementRef, private renderer: Renderer2,
+  constructor(private rstSvc: RestService, private router: Router, private svc:RestService, private modalService:BsModalService,
               private msg: InAppMessageService) {
                 this.showScreenTitle=false
                 this.selectedScreenToShow=''
@@ -79,21 +77,12 @@ matmenuTrg:any=[];
   permission:boolean=false;
   dynamicLink:any;
   dynamicLink2:any;
+  dynamicLink3:any;
   showOpenYear:boolean=false;
   items: any[];
  
   ngOnInit(): void {
-    if(this.sys.ardbCD=='26'){
-      this.dynamicLink='LR_BMLoanStmt';
-      this.dynamicLink2='LR_Disb_Cert'
-    }
-    if(this.sys.ardbCD=='4'){
-      this.dynamicLink2='LR_GM_DC'
-    }
-    else{
-      this.dynamicLink='LR_LoanStmt';
-      this.dynamicLink2='LR_Disb_Cert'
-      }
+   
   this.getLogdUser()
    //console.log(localStorage.getItem('__currentDate')==localStorage.getItem('__prevDate'))
    
@@ -115,8 +104,26 @@ matmenuTrg:any=[];
     })
     debugger
     this.retrieve();
-
+    this.createDynamicLink();
     // this.bankName=this.titleService.getTitle()
+  }
+  createDynamicLink(){
+    if(this.sys.ardbCD=='26'){
+      this.dynamicLink='LR_BMLoanStmt';
+      this.dynamicLink2='LR_GM_DC';
+      this.dynamicLink3='LR_Int_Subsidy';
+      // this.dynamicLink2='LR_Disb_Cert'
+    }
+    else if(this.sys.ardbCD=='4'){
+      this.dynamicLink='LR_BMLoanStmt';
+      this.dynamicLink2='LR_GM_DC';
+      this.dynamicLink3='LR_GM_Int_Subsidy';
+    }
+    else{
+      this.dynamicLink='LR_BMLoanStmt';
+      this.dynamicLink2='LR_GM_DC';
+      this.dynamicLink3='LR_Int_Subsidy';
+      }
   }
   getLogdUser(){
     // Getuserdetails
@@ -451,12 +458,11 @@ matmenuTrg:any=[];
   }
   hideButton(buttonId: any) {
     console.log(buttonId);
-    debugger
     if(this.userPermission.length>0){
       this.matmenuTrg=this.userPermission.filter(e=>e.identification==buttonId.target.id)
      if( this.matmenuTrg[0].permission=='N'){
       const input = document.getElementById(buttonId.target.id) as HTMLInputElement | null;
-      debugger
+      
       input.disabled=true
      }
     }
@@ -480,13 +486,11 @@ matmenuTrg:any=[];
     "ardb_cd": this.sys.ardbCD,
     "role_cd":this.userType=='S'?2:this.userType=='G'?3:1
   }
-  debugger
   this.svc.addUpdDel<any>('Mst/GetRolePermission', data).subscribe(
     res => {
       console.log(res);
       this.userPermission=res
       this.items=res
-      debugger
       
       
     })

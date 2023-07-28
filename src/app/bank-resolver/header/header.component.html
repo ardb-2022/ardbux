@@ -251,6 +251,10 @@
         <mat-icon>request_quote</mat-icon>
         <span>Sub Cash Book</span>
       </button>
+      <button mat-menu-item routerLink="DR_UserWiseTrans" (mouseenter)="hideButton($event)" id="DR_UserWiseTrans">
+        <mat-icon>folder_shared</mat-icon>
+        <span>Transaction Details</span>
+      </button>
       <button mat-menu-item routerLink="DR_InttCertificate" (mouseenter)="hideButton($event)" id="DR_InttCertificate">
         <mat-icon>privacy_tip</mat-icon>
         <span>Interest Certificate</span>
@@ -396,6 +400,10 @@
       <mat-icon>print</mat-icon>
       <span>Pass book Printing</span>
     </button>
+    <button mat-menu-item routerLink="LR_UserWiseTrans" (mouseenter)="hideButton($event)" id="LR_UserWiseTrans">
+      <mat-icon>tv_signin</mat-icon>
+      <span>Transaction Details</span>
+    </button>
     <button mat-menu-item routerLink="LR_LoanStmt" (mouseenter)="hideButton($event)" id="LR_LoanStmt">
       <mat-icon>receipt_long</mat-icon>
       <span>Loan Ledger</span>
@@ -457,7 +465,7 @@
       <mat-icon>rule_folder</mat-icon>
       <span>Open/Close Register</span>
     </button>
-    <button mat-menu-item routerLink="LR_Int_Subsidy" (mouseenter)="hideButton($event)" id="LR_Int_Subsidy">
+    <button mat-menu-item routerLink="{{dynamicLink3}}" (mouseenter)="hideButton($event)" id="{{dynamicLink3}}">
       <mat-icon>gesture_select</mat-icon>
       <span>Interest Subsidy</span>
     </button>
@@ -569,6 +577,10 @@
     <button mat-menu-item routerLink="LR_DisNorm" (mouseenter)="hideButton($event)" id="LR_DisNorm">
       <mat-icon>groups</mat-icon>
       <span>Member-wise</span>
+    </button>
+    <button mat-menu-item routerLink="LR_DisAll" (mouseenter)="hideButton($event)" >
+      <mat-icon>recent_actors</mat-icon>
+      <span>Activity-Wise</span>
     </button>
   </mat-menu>
     

@@ -119,7 +119,7 @@
    <ng-container matColumnDef="tot_intt">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Interest </th>
     <td mat-cell *matCellDef="let row"> 
-      {{row.acctype.tot_acc_recov|currency:"INR"}}
+      {{row.acctype.tot_acc_curr_intt_recov+row.acctype.tot_acc_ovd_intt_recov+row.acctype.tot_acc_penal_intt_recov|currency:"INR"}}
       </td>
    </ng-container>
   
@@ -134,7 +134,7 @@
       <td style="width: 17%"><b>{{totcurrInttSum|currency:"INR"}}</b></td>
       <td style="width: 18%"><b>{{totovdInttSum|currency:"INR"}}</b></td>
       <td style="width: 17%"><b>{{totpenalInttSum|currency:"INR"}}</b></td>
-      <td><b> {{totPrn|currency:"INR"}}</b></td>
+      <td><b> {{totcurrInttSum+totovdInttSum+totpenalInttSum|currency:"INR"}}</b></td>
     </tr>
   </table>
 <footer>

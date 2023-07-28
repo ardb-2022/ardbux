@@ -1,31 +1,18 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { AccOpenDM } from '../../../Models/deposit/AccOpenDM';
-import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { RestService, InAppMessageService } from 'src/app/_service';
 import {
-  MessageType, mm_acc_type, mm_customer,
-  mm_operation, m_acc_master, ShowMessage, SystemValues,
-  td_def_trans_trf, td_intt_dtls, td_rd_installment, tm_deposit, tm_depositall
+  
+  mm_operation, m_acc_master, SystemValues,
+  td_def_trans_trf, tm_deposit
 } from '../../../Models';
-import { tm_denomination_trans } from '../../../Models/deposit/tm_denomination_trans';
 import { DatePipe } from '@angular/common';
-import { tm_transfer } from '../../../Models/deposit/tm_transfer';
-import { tt_denomination } from '../../../Models/deposit/tt_denomination';
 import { mm_constitution } from '../../../Models/deposit/mm_constitution';
-import Utils from 'src/app/_utility/utils';
-import { p_gen_param } from '../../../Models/p_gen_param';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalService } from 'ngx-bootstrap/modal';
 import { mm_oprational_intr } from '../../../Models/deposit/mm_oprational_intr';
-import { LoanOpenDM } from '../../../Models/loan/LoanOpenDM';
-import { TemplateBindingParseResult } from '@angular/compiler';
-import { Message } from '@angular/compiler/src/i18n/i18n_ast';
-import { debounceTime, distinctUntilChanged, map, pluck, switchMap, takeWhile } from 'rxjs/operators';
 import { Observable } from 'rxjs/internal/Observable';
-import { Subscription ,observable,Subject} from 'rxjs';
-import { setTime } from 'ngx-bootstrap/chronos/utils/date-setters';
-import { CcTransComponent } from './cc-trans/cc-trans.component';
+import { Subscription ,Subject} from 'rxjs';
 import { InvOpenDM } from 'src/app/bank-resolver/Models/deposit/InvOpenDM';
 
 @Injectable({
@@ -70,9 +57,8 @@ export class InvTranServService {
   td_deftranstrfList: td_def_trans_trf[] = [];
   resetClick:boolean=false;
 private subject=new Subject<any>()
-  constructor(private svc: RestService,private fb: FormBuilder, private msg: InAppMessageService,private comservice:InvTranServService,
-    private frmBldr: FormBuilder, public datepipe: DatePipe, private router: Router,
-    private modalService: BsModalService) {
+  constructor(private svc: RestService,private fb: FormBuilder, 
+     public datepipe: DatePipe) {
 
       console.log(this.masterModel.tmdepositInv);
      }

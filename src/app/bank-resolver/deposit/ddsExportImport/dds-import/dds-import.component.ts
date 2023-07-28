@@ -1,10 +1,9 @@
-import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { MessageType, ShowMessage, SystemValues } from 'src/app/bank-resolver/Models';
 import { ddsExport } from 'src/app/bank-resolver/Models/deposit/ddsExport';
-import { getExportData } from 'src/app/bank-resolver/Models/deposit/getExportData';
 import { RestService } from 'src/app/_service';
 @Component({
   selector: 'app-dds-import',

@@ -16,7 +16,7 @@ export class UserPermissionComponent implements OnInit {
   @ViewChild('content', { static: true }) content: TemplateRef<any>;
   @ViewChild('add', { static: true }) add: TemplateRef<any>;
   @ViewChild('access', { static: true }) access: TemplateRef<any>;
-
+  allRole:any[]=[];
   showMsg: ShowMessage;
   form: FormGroup;
   form2: FormGroup;
@@ -105,6 +105,7 @@ bName1=''
   constructor(private rstSvc: RestService,private formBuilder: FormBuilder, private router: Router, private svc:RestService,private modalService: BsModalService) { }
 
   ngOnInit(): void {
+    this.getRoleMaster();
     this.get_user = this.formBuilder.group({
       select_user: ['', Validators.required],
       module:['', Validators.required]
@@ -122,6 +123,7 @@ bName1=''
       permission:[0,Validators.required],
     });
     this.openModal(this.content)
+
    }
    getallUser(){
     let login = new LOGIN_MASTER();
@@ -181,8 +183,18 @@ bName1=''
         )
 
   }
+  getRoleMaster(){
+    var dt={
+      "ardb_cd":this.sys.ardbCD
+      }
+      this.svc.addUpdDel<any>('Mst/GetRoleMaster', dt).subscribe(
+        res => {
+          this.allRole=res
+        })
+
+  }
   getUserPermission(){
-    this.userType=this.form.controls.user_type.value==1?"Admin":this.form.controls.user_type.value==2?"Super User":"General User"
+    this.userType=this.form.controls.user_type.value==1?"Admin":this.form.controls.user_type.value==2?"Super User":this.form.controls.user_type.value==3?"General User":this.form.controls.user_type.value==4?"Deposit User":this.form.controls.user_type.value==5?"Loan User":"Discard User"
 
     this.isLoading = true;
       var dt={

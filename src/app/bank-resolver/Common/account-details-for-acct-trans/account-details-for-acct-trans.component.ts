@@ -5,7 +5,6 @@ import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/c
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { InAppMessageService, RestService } from 'src/app/_service';
-import { formatDate } from '@angular/common';
 import Utils from 'src/app/_utility/utils';
 import { mm_constitution } from '../../Models/deposit/mm_constitution';
 import { mm_oprational_intr } from '../../Models/deposit/mm_oprational_intr';

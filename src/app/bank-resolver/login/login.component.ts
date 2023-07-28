@@ -1,16 +1,12 @@
 import { RestService } from './../../_service/rest.service';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LOGIN_MASTER, SystemValues } from '../Models';
 import { InAppMessageService } from 'src/app/_service';
-import { m_branch } from '../Models/m_branch';
 import { sm_parameter } from '../Models/sm_parameter';
-import { p_gen_param } from '../Models/p_gen_param';
 import { HttpClient } from '@angular/common/http';
-import { mm_ardb } from '../Models/mm_ardb';
 import { DatePipe } from '@angular/common';
-import Utils from 'src/app/_utility/utils';
 import { environment } from 'src/environments/environment';
 import { CommonServiceService } from '../common-service.service';
 // import {WINDOW} from '../../bank-resolver/window.providers'
@@ -51,7 +47,6 @@ export class LoginComponent implements OnInit {
     private rstSvc: RestService,
     private msg: InAppMessageService,
     private http: HttpClient,
-    private datePipe: DatePipe,
     private cms:CommonServiceService
     // @Inject(WINDOW) private window:Window
     ) {
@@ -152,6 +147,9 @@ export class LoginComponent implements OnInit {
     if(this.f.ardbbrMst.value=='100'){
         localStorage.setItem('__ardb_cd', '4');
     }
+    else if(this.f.ardbbrMst.value=='99'){
+      localStorage.setItem('__ardb_cd', '4');
+    }
     else{
       localStorage.setItem('__ardb_cd',this.f.ardbbrMst.value);
     }
@@ -172,7 +170,7 @@ export class LoginComponent implements OnInit {
     // this.router.navigate([__bName + '/la']); // TODO remove this it will be after login
     const login = new LOGIN_MASTER();
     const toreturn = false;
-    login.ardb_cd = this.f.ardbbrMst.value=='100'?'4':this.f.ardbbrMst.value;
+    login.ardb_cd = this.f.ardbbrMst.value=='100'?'4':this.f.ardbbrMst.value=='99'?'4':this.f.ardbbrMst.value;
     login.user_id = this.f.username.value;
     login.password = this.f.password.value;
     login.brn_cd = this.f.branch.value;
@@ -185,6 +183,10 @@ export class LoginComponent implements OnInit {
     if( this.f.ardbbrMst.value=='26'){
       let ardb_addrs=` H.O.: Old Court Compound, PO+PS- Burdwan, Purba Bardhaman- 713101 
       Contact No: (0342) 2662390/ 9800960007`
+      localStorage.setItem('ardb_addr', ardb_addrs)
+    }
+    if( this.f.ardbbrMst.value=='4'){
+      let ardb_addrs=` Ghatal : : Kushpata, Paschim Medinipur, WestBengal`
       localStorage.setItem('ardb_addr', ardb_addrs)
     }
     else{
@@ -272,7 +274,7 @@ export class LoginComponent implements OnInit {
   private getSystemParam(): void {
     this.isLoading=true
     var dt={
-      "ardb_cd":this.f.ardbbrMst.value=='100'?'4':this.f.ardbbrMst.value
+      "ardb_cd":this.f.ardbbrMst.value=='100'?'4':this.f.ardbbrMst.value=='99'?'4':this.f.ardbbrMst.value
     }
    
     this.rstSvc.addUpdDel('Mst/GetSystemDate',dt).subscribe(data=>

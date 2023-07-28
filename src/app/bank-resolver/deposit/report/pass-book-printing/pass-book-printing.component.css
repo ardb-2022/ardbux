@@ -119,5 +119,11 @@ thead {
   mso-footer: footer;
 }*/
 @media print {
- html,table{font-size: large;font-family:Arial, Helvetica, ui-sans-serif} 
+  .mkSmallG{font-size: large;font-family:Arial, Helvetica, ui-sans-serif}
+}
+.mkSmallG{
+  font-size: large;
+  width: 100%;
+}.mkSmallG,tbody,tr,td{
+  padding-bottom: 5px;
 }

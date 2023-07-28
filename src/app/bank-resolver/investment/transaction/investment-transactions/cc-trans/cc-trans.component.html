@@ -164,6 +164,11 @@
             <option  value="T">Transfer</option>
           </select>
         </div>
+        <div class="form-group col-2">
+          <small for="ovd_intt_recov">TDS</small>
+          <input type="text" (change)="applyTDS()" class="form-control form-control-sm"
+            formControlName="ovd_intt_recov" id="ovd_intt_recov">
+        </div>
         <!-- (focusout)="onAmtChngDuringRenewal(); processInterest()" -->
         <div class="form-group col-3">
           <small for="amount">Principal Amt<span class="text-danger">*</span> </small>
@@ -175,11 +180,7 @@
           <input  type="text" class="form-control form-control-sm" disabled formControlName="balance" id="balance" >
         </div>
         
-        <div class="form-group col-2">
-          <small for="ovd_intt_recov">TDS</small>
-          <input type="text" (change)="applyTDS()" class="form-control form-control-sm"
-            formControlName="ovd_intt_recov" id="ovd_intt_recov">
-        </div>
+        
       <div class="form-row" >
         <div class="form-group col-3">
           <small for="constitution_cd">Constitution</small>

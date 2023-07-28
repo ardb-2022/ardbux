@@ -142,6 +142,10 @@ import { LoanDisbCertificateComponent } from './loan/report/loan-disb-certificat
 import { CloseAccDtlsComponent } from './deposit/close-acc-dtls/close-acc-dtls.component';
 import { GMloanDCComponent } from './loan/report/gmloan-dc/gmloan-dc.component';
 import { RecovVillageComponent } from './loan/report/recovery-register/recov-village/recov-village.component';
+import { UserWiseTransactionComponent } from './deposit/report/user-wise-transaction/user-wise-transaction.component';
+import { UserWiseTransactionLoanComponent } from './loan/report/user-wise-transaction-loan/user-wise-transaction-loan.component';
+import { GmLoanSubsidyComponent } from './loan/report/gm-loan-subsidy/gm-loan-subsidy.component';
+import { LoanDisburseActWiseComponent } from './loan/report/loan-disbursement-register/loan-disburse-act-wise/loan-disburse-act-wise.component';
 const routes: Routes = [
   { path: 'Admin', component: AdminPanelComponent },
   { path: 'admin', component: AdminPanelComponent },
@@ -216,6 +220,7 @@ const routes: Routes = [
       { path: 'DT_AccLockUnlock', component: LienAccLockUnlockComponent, canActivate: [AuthGuard] },
       { path: 'UR_Networth', component: NetworthStatementComponent, canActivate: [AuthGuard] },
       { path: 'DR_SubCashBook', component: SubCashBookComponent, canActivate: [AuthGuard] },
+      { path: 'DR_UserWiseTrans', component: UserWiseTransactionComponent, canActivate: [AuthGuard] },
       { path: 'DR_DLS', component: DetailListSBCAComponent, canActivate: [AuthGuard] },
       { path: 'DR_DLR', component: DetailListRDComponent, canActivate: [AuthGuard] },
       { path: 'DR_DLF', component: DetailListFDMISComponent, canActivate: [AuthGuard] },
@@ -229,6 +234,7 @@ const routes: Routes = [
       { path: 'LR_BMLoanStmt', component: BMLoanStatementComponent, canActivate: [AuthGuard] },
       { path: 'LR_LoanStmt', component: LoanStatementComponent, canActivate: [AuthGuard] },
       { path: 'LR_DtlLst', component: DetailListComponent, canActivate: [AuthGuard] },
+      { path: 'LR_UserWiseTrans', component: UserWiseTransactionLoanComponent, canActivate: [AuthGuard] },
       { path: 'LR_DlistAll', component: DetaillistAllComponent, canActivate: [AuthGuard] },
       { path: 'LR_DflLst', component: DefaulterListComponent, canActivate: [AuthGuard] },
       { path: 'LR_DMLst', component: DemandListComponent, canActivate: [AuthGuard] },
@@ -237,6 +243,7 @@ const routes: Routes = [
       { path: 'LR_RELst', component: RecovListComponent, canActivate: [AuthGuard] },
       { path: 'LR_DisReg', component: LoanDisbursementRegisterComponent, canActivate: [AuthGuard] },
       { path: 'LR_DisNorm', component: LoanDisburseNormalComponent, canActivate: [AuthGuard] },
+      { path: 'LR_DisAll', component: LoanDisburseActWiseComponent, canActivate: [AuthGuard] },
       { path: 'LR_AWISECol', component: ActWiseColLstComponent, canActivate: [AuthGuard] },
       { path: 'LR_BWISECol', component: BlockWiseColLstComponent, canActivate: [AuthGuard] },
       { path: 'LR_AdvRec', component: AdRecStmtComponent, canActivate: [AuthGuard] },
@@ -246,6 +253,7 @@ const routes: Routes = [
       { path: 'LM_Villentry', component: VillageMasterComponent, canActivate: [AuthGuard] },
       { path: 'LR_NPA', component: NpaComponent, canActivate: [AuthGuard] },
       { path: 'LR_Int_Subsidy', component: InterestSubsidyComponent, canActivate: [AuthGuard] },
+      { path: 'LR_GM_Int_Subsidy', component: GmLoanSubsidyComponent, canActivate: [AuthGuard] },
       { path: 'LR_Disb_Cert', component: LoanDisbCertificateComponent, canActivate: [AuthGuard] },
       { path: 'LR_GM_DC', component: GMloanDCComponent, canActivate: [AuthGuard] },
       

@@ -1,3 +1,11 @@
+<ng-template #Delconfirm >
+  <div class="modal-body text-center" >
+    <p>'Are you sure, you want to <b style="color: red;">Delete</b> this Voucher with ID {{_voucherId}}</p>
+    <button mat-raised-button type="button" class="btn btn-light" (click)="this.modalRef.hide()" >No</button>&nbsp;
+    <button mat-raised-button type="button" class=" btn btn-primary" (click)="Remove()" >Yes</button>
+    
+  </div>
+</ng-template>
 <ng-template #content let-modal>
     <div class="modal-header">
       <h4 class="modal-title" id="modal-basic-title">Retrieve Voucher</h4>
@@ -101,7 +109,7 @@
           <button mat-raised-button type="button" class="btn btn-rounded btn-primary btn-primary-spacing btn-sm" [disabled]="isNew"
             (click)="New()">New</button>
           <button mat-raised-button type="button" class="btn btn-rounded btn-primary btn-primary-spacing btn-sm" [disabled]="isRemove"
-            (click)="Remove()">Delete</button>
+            (click)="openModal(Delconfirm)">Delete</button>
           <button mat-raised-button type="button" class="btn btn-rounded btn-primary btn-primary-spacing btn-sm"
             [disabled]="(!onVoucherCreation.valid || isSave) ? true : false" (click)="Save()">Save</button>
           <!-- <button mat-raised-button type="button" class="btn btn-rounded btn-primary btn-primary-spacing btn-sm" [disabled]="isApprove"

@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { SystemValues, p_report_param, mm_customer } from 'src/app/bank-resolver/Models';
+import { SystemValues, p_report_param, mm_customer, mm_operation } from 'src/app/bank-resolver/Models';
 import { p_gen_param } from 'src/app/bank-resolver/Models/p_gen_param';
 import { tt_trial_balance } from 'src/app/bank-resolver/Models/tt_trial_balance';
 import { RestService } from 'src/app/_service';
@@ -26,6 +26,7 @@ export class AccStmtTDComponent implements OnInit,AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
   dataSource = new MatTableDataSource()
   displayedColumns: string[] = ['acc_num','intt_trf_type', 'trans_type','prn_amt'];
+  AcctTypes: mm_operation[];
 
   modalRef: BsModalRef;
   isOpenFromDp = false;
@@ -62,6 +63,7 @@ export class AccStmtTDComponent implements OnInit,AfterViewInit {
   reportData:any=[]
   ardbName=localStorage.getItem('ardb_name')
   branchName=this.sys.BranchName
+  public static operations: mm_operation[] = [];
 
   pageChange: any;
   opdrSum=0;
@@ -90,6 +92,7 @@ export class AccStmtTDComponent implements OnInit,AfterViewInit {
       acct_num: [{ value: '', disabled: true }, Validators.required],
       acc_type_cd: [null, Validators.required]
     });
+    this.getOperationMaster();
     this.onLoadScreen(this.content);
     var date = new Date();
     // get the date as a string
@@ -97,6 +100,38 @@ export class AccStmtTDComponent implements OnInit,AfterViewInit {
     // get the time as a string
        var time = date.toLocaleTimeString();
        this.today= n + " "+ time
+  }
+  private getOperationMaster(): void {
+    console.log(AccStmtTDComponent.operations);
+
+    this.isLoading = true;
+    if (undefined !== AccStmtTDComponent.operations &&
+      null !== AccStmtTDComponent.operations &&
+      AccStmtTDComponent.operations.length > 0) {
+      this.isLoading = false;
+      this.AcctTypes = AccStmtTDComponent.operations.filter(e => e.module_type === 'DEPOSIT')
+        .filter((thing, i, arr) => {
+          return arr.indexOf(arr.find(t => t.acc_type_cd === thing.acc_type_cd)) === i;
+        });
+      this.AcctTypes = this.AcctTypes.sort((a, b) => (a.acc_type_cd > b.acc_type_cd ? 1 : -1));
+    } else {
+      this.svc.addUpdDel<mm_operation[]>('Mst/GetOperationDtls', null).subscribe(
+        res => {
+          console.log(res)
+          AccStmtTDComponent.operations = res;
+          this.isLoading = false;
+          this.AcctTypes = AccStmtTDComponent.operations.filter(e => e.module_type === 'DEPOSIT')
+            .filter((thing, i, arr) => {
+              return arr.indexOf(arr.find(t => t.acc_type_cd === thing.acc_type_cd)) === i;
+            });
+          this.AcctTypes = this.AcctTypes.sort((a, b) => (a.acc_type_cd > b.acc_type_cd ? 1 : -1));
+          this.AcctTypes =this.AcctTypes.filter(e=>e.acc_type_cd==2 || e.acc_type_cd==3||e.acc_type_cd==4||e.acc_type_cd==5)
+        },
+        err => { this.isLoading = false; }
+      );
+    }
+    console.log(this.AcctTypes);
+
   }
   setPage(page: number) {
     this.currentPage = page;

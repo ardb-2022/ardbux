@@ -1,8 +1,8 @@
 import { Router } from '@angular/router';
 import { AccOpenDM } from '../../../Models/deposit/AccOpenDM';
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import {  Component, ElementRef,  OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { RestService, InAppMessageService } from 'src/app/_service';
+import { RestService} from 'src/app/_service';
 import {
   MessageType, mm_acc_type, mm_customer,
   mm_operation, m_acc_master, ShowMessage, SystemValues,
@@ -14,16 +14,9 @@ import { tm_transfer } from '../../../Models/deposit/tm_transfer';
 import { tt_denomination } from '../../../Models/deposit/tt_denomination';
 import { mm_constitution } from '../../../Models/deposit/mm_constitution';
 import Utils from 'src/app/_utility/utils';
-import { p_gen_param } from '../../../Models/p_gen_param';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { mm_oprational_intr } from '../../../Models/deposit/mm_oprational_intr';
-import { LoanOpenDM } from '../../../Models/loan/LoanOpenDM';
-import { TemplateBindingParseResult } from '@angular/compiler';
-import { Message } from '@angular/compiler/src/i18n/i18n_ast';
-import { debounceTime, distinctUntilChanged, map, pluck, switchMap, takeWhile } from 'rxjs/operators';
-import { Observable } from 'rxjs/internal/Observable';
-import { Subscription } from 'rxjs';
-import { setTime } from 'ngx-bootstrap/chronos/utils/date-setters';
+
 import { InvTranServService } from './inv-tran-serv.service';
 import { CcTransComponent } from './cc-trans/cc-trans.component';
 @Component({
@@ -34,7 +27,7 @@ import { CcTransComponent } from './cc-trans/cc-trans.component';
 })
 export class InvestmentTransactionsComponent implements OnInit {
 
-  constructor(private invComServ:InvTranServService ,private svc: RestService, private msg: InAppMessageService,private comservice:InvTranServService,
+  constructor(private invComServ:InvTranServService ,private svc: RestService,
     private frmBldr: FormBuilder, public datepipe: DatePipe, private router: Router,
     private modalService: BsModalService) { }
   get f() { return this.accTransFrm.controls; }
@@ -191,9 +184,10 @@ export class InvestmentTransactionsComponent implements OnInit {
     this.accNoEnteredForTransaction=this.masterModel.tmdepositInv;
     console.log(typeof(Number(this.f.oprn_cd.value)));
     console.log(Number(this.f.oprn_cd.value));
+    debugger
     // this.onUpapprovedConfirm(this.unApprovedTransactionLstOfAcc[0])
     //for renewal
-    if(Number(this.f.oprn_cd.value)===38){
+    if(Number(this.f.oprn_cd.value)===36 ||Number(this.f.oprn_cd.value)===38 ||Number(this.f.oprn_cd.value)===41){
       const m = Utils.convertStringToDt(this.accNoEnteredForTransaction.mat_dt.toString());
       const c = this.sys.CurrentDate;
       const diffDays = Math.ceil((m.getTime() - c.getTime()) / (1000 * 3600 * 24)); 
@@ -223,7 +217,7 @@ export class InvestmentTransactionsComponent implements OnInit {
 
     }
     //for close
-    if(Number(this.f.oprn_cd.value)===39){
+    if(Number(this.f.oprn_cd.value)===37 ||Number(this.f.oprn_cd.value)===39||Number(this.f.oprn_cd.value)===42){
       this.showTransactionDtlR = false;
       this.invComServ.showTranDtlRe=false;
       this.showTransactionDtlC = true;
@@ -340,15 +334,15 @@ export class InvestmentTransactionsComponent implements OnInit {
                 this.sel_rd=false;
                 }
               else if(this.f.acc_type_cd.value==22){
-                  this.sel_fd=true;
-                  this.sel_cc=false;
+                  this.sel_fd=false;
+                  this.sel_cc=true;
                   this.sel_mis=false;
                   this.sel_rd=false;
                   }
               else if(this.f.acc_type_cd.value==24){
-                    this.sel_mis=true;
+                    this.sel_mis=false;
                     this.sel_fd=false;
-                    this.sel_cc=false;
+                    this.sel_cc=true;
                     this.sel_rd=false;
           
                     }
@@ -593,7 +587,7 @@ export class InvestmentTransactionsComponent implements OnInit {
   
   
   onResetClick(): void {
-    if(this.f.acc_type_cd.value==23){
+    if(this.f.acc_type_cd.value==22 ||this.f.acc_type_cd.value==23||this.f.acc_type_cd.value==24){
       debugger
       this.editDeleteMode=false;
       this.accTransFrm.reset();
@@ -649,15 +643,15 @@ export class InvestmentTransactionsComponent implements OnInit {
         this.sel_rd=false;
         }
       else if(this.f.acc_type_cd.value==22){
-          this.sel_fd=true;
-          this.sel_cc=false;
+          this.sel_fd=false;
+          this.sel_cc=true;
           this.sel_mis=false;
           this.sel_rd=false;
           }
       else if(this.f.acc_type_cd.value==24){
-            this.sel_mis=true;
+            this.sel_mis=false;
             this.sel_fd=false;
-            this.sel_cc=false;
+            this.sel_cc=true;
             this.sel_rd=false;
   
             }

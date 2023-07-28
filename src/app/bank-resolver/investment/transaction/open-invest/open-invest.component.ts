@@ -1,7 +1,6 @@
 import { SystemValues } from '../../../../../app/bank-resolver/Models/SystemValues';
 
-import { Component, OnInit, ViewChild, ElementRef, TemplateRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { InAppMessageService, RestService } from 'src/app/_service';
 import { MessageType, mm_category, mm_customer, m_acc_master, ShowMessage, td_def_trans_trf } from '../../../../../app/bank-resolver/Models';
 import { AccOpenDM } from '../../../../../app/bank-resolver/Models/deposit/AccOpenDM';
@@ -1199,7 +1198,7 @@ debugger
     
       this.svc.addUpdDel<any>('INVESTMENT/InsertInvOpeningData', this.masterModel).subscribe(
         res => {
-        
+          this.clearData();
           this.td_deftrans.trans_cd = Number(res);
           this.isLoading = false;
           this.disableCustomerName = true;
@@ -1275,7 +1274,7 @@ debugger
       accType = 1;
     }
 
-    if (this.tm_deposit.acc_type_cd==23) {
+    if ((this.tm_deposit.acc_type_cd==22)||(this.tm_deposit.acc_type_cd==23)||(this.tm_deposit.acc_type_cd==24)) {
       debugger
       this.tm_deposit.intt_trf_type = this.intTransferType[4].tfr_type;
       this.tm_deposit.intt_tfr_type_dscr = this.intTransferType[4].tfr_desc;
@@ -2825,6 +2824,7 @@ else{
     
     this.svc.addUpdDel<any>('INVESTMENT/DeleteInvOpeningData', temp_def_trans_trf).subscribe(
       res => {
+        this.clearData();
       console.log(res);
 
         this.isLoading = false;

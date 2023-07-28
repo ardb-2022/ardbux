@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": " node --max-old-space-size=4096 node_modules/@angular/cli/bin/ng serve",
     "build": "node --max_old_space_size=4096 node_modules/@angular/cli/bin/ng build --baseHref=/ardb.SynergicBanking/ --prod=true",
     "ionic:build": "node --max-old-space-size=8192 ./node_modules/@ionic/app-scripts/bin/ionic-app-scripts.js build",
     "test": "ng test",

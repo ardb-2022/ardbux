@@ -51,12 +51,14 @@ export class LoanTransactionApprovalComponent implements OnInit {
   tmDenominationTransLst: tm_denomination_trans[] = [];
   totalOfDenomination = 0;
   loanOpenDm: LoanOpenDM;
+  showINSTNO=false;
   tranferDetails: td_def_trans_trf[] = [];
   // cust: mm_customer;
   // tdDepTransRet: td_def_trans_trf[] = [];
   frmParticulars: any;
   trfDtls:boolean=false;
   ngOnInit(): void {
+    this.showINSTNO=false;
     this.transactionDtlsFrm = this.frmBldr.group({
       trans_dt: [''],
       trans_cd: [''],
@@ -142,6 +144,7 @@ export class LoanTransactionApprovalComponent implements OnInit {
     this.msg.sendCommonAccountNum(null);
     this.getAcctTypeMaster();
     this.transactionDtlsFrm.reset();
+    this.showINSTNO=false;
     this.trfDtls=false;
     this.totalOfDenomination=0;
 
@@ -257,12 +260,14 @@ export class LoanTransactionApprovalComponent implements OnInit {
             this.HandleMessage(true, MessageType.Error, 'Total amount '+this.transactionDtlsFrm.controls.amount.value + ' does not match with recovery amount of ' + (this.transactionDtlsFrm.controls.curr_intt_recov.value + this.transactionDtlsFrm.controls.curr_prn_recov.value + this.transactionDtlsFrm.controls.ovd_prn_recov.value + this.transactionDtlsFrm.controls.ovd_intt_recov.value + this.transactionDtlsFrm.controls.adv_prn_recov.value + this.transactionDtlsFrm.controls.penal_intt_recov.value));
                   //  return
                    this.transactionDtlsFrm.reset()
+                   this.showINSTNO=false;
            }
         
         },
         err => { this.isLoading = false; }
       );
-    } else { this.transactionDtlsFrm.reset(); }
+    } else { this.transactionDtlsFrm.reset();
+      this.showINSTNO=false; }
     
     if(this.loanOpenDm.tddeftrans.trf_type === 'T'){
       this.trfDtls=true;
@@ -349,6 +354,7 @@ export class LoanTransactionApprovalComponent implements OnInit {
     this.selectedTransactionMode = vm.td_def_trans_trf.trans_mode;
     // this.getTranAcctInfo(vm.td_def_trans_trf.acc_num);
     this.getDepTrans(vm.td_def_trans_trf);
+    this.showINSTNO=true;
   }
   private getDepTrans(depTras: td_def_trans_trf): void {
     //debugger;
@@ -517,9 +523,10 @@ export class LoanTransactionApprovalComponent implements OnInit {
 
   // }
   public onApproveClick(): void {
+    this.modalRef.hide();
     this.isLoading = true;
     debugger;
-    console.log(this.transactionDtlsFrm.controls.curr_intt_recov.value + this.transactionDtlsFrm.controls.curr_prn_recov.value + this.transactionDtlsFrm.controls.ovd_prn_recov.value + this.transactionDtlsFrm.controls.ovd_intt_recov.value + this.transactionDtlsFrm.controls.adv_prn_recov.value + this.transactionDtlsFrm.controls.penal_intt_recov.value)
+    console.log(this.transactionDtlsFrm.controls.loan_id.value + this.transactionDtlsFrm.controls.curr_prn_recov.value + this.transactionDtlsFrm.controls.ovd_prn_recov.value + this.transactionDtlsFrm.controls.ovd_intt_recov.value + this.transactionDtlsFrm.controls.adv_prn_recov.value + this.transactionDtlsFrm.controls.penal_intt_recov.value)
     debugger
     const param = new p_loan_param();
     param.brn_cd = this.sys.BranchCode; // localStorage.getItem('__brnCd');
@@ -587,7 +594,8 @@ export class LoanTransactionApprovalComponent implements OnInit {
     this.isLoading = true;
     const trnParam = new p_gen_param();
     trnParam.brn_cd = this.sys.BranchCode; // localStorage.getItem('__brnCd');
-    trnParam.ad_trans_cd = this.selectedVm.td_def_trans_trf.trans_cd;
+    trnParam.ad_trans_cd =this.transactionDtlsFrm.controls.trans_cd.value!=null? this.selectedVm.td_def_trans_trf.trans_cd:null;
+
     // const dt = this.sys.CurrentDate;
     trnParam.adt_trans_dt = this.sys.CurrentDate;
     // trnParam.ad_acc_type_cd = this.selectedVm.mm_acc_type.acc_type_cd;
@@ -597,6 +605,7 @@ export class LoanTransactionApprovalComponent implements OnInit {
     trnParam.ardb_cd = this.sys.ardbCD
     this.svc.addUpdDel<any>('Loan/ApproveLoanAccountTranaction', trnParam).subscribe(
       res => {
+        debugger
         if (res === 0) {
           this.selectedVm.td_def_trans_trf.approval_status = 'A';
           this.HandleMessage(true, MessageType.Sucess,
@@ -613,8 +622,10 @@ export class LoanTransactionApprovalComponent implements OnInit {
         }
       },
       err => {
+        debugger
         this.isLoading = false;
-        this.HandleMessage(true, MessageType.Error, err.error.text);
+        this.HandleMessage(true, MessageType.Error, err.status==400?'Select Transaction to be APPROVE!!':'Error from server side');
+      
       }
     );
   }

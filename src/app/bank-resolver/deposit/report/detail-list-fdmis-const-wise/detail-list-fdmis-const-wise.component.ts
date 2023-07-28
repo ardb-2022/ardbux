@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { SystemValues, p_report_param } from 'src/app/bank-resolver/Models';
+import { SystemValues, mm_operation, p_report_param } from 'src/app/bank-resolver/Models';
 import { tt_trial_balance } from 'src/app/bank-resolver/Models/tt_trial_balance';
 import { RestService } from 'src/app/_service';
 import Utils from 'src/app/_utility/utils';
@@ -28,8 +28,9 @@ export class DetailListFdmisConstWiseComponent implements OnInit,AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
   dataSource = new MatTableDataSource()
   // displayedColumns: string[] = ['constitution_cd','acc_num','cust_name', 'opening_dt', 'mat_dt','instL_AMT','intT_RT','prN_AMT','proV_INTT_AMT'];
-   displayedColumns: string[] = ['slNo','acc_num','cust_name', 'opening_dt', 'mat_dt','instL_AMT','intT_RT','prN_AMT','proV_INTT_AMT'];
-   
+   displayedColumns: string[] = ['slNo','acc_num','cust_name', 'opening_dt', 'mat_dt','instL_AMT','prN_AMT','proV_INTT_AMT','intT_RT'];
+   public static operations: mm_operation[] = [];
+   AcctTypes: mm_operation[];
   modalRef: BsModalRef;
   isOpenFromDp = false;
   isOpenToDp = false;
@@ -94,6 +95,7 @@ export class DetailListFdmisConstWiseComponent implements OnInit,AfterViewInit {
       acc_type_cd: [null, Validators.required],
       constitution_cd: [{ disabled: true }, Validators.required]
     });
+    this.getOperationMaster()
     this.onLoadScreen(this.content);
     var date = new Date();
     // get the date as a string
@@ -102,6 +104,38 @@ export class DetailListFdmisConstWiseComponent implements OnInit,AfterViewInit {
        var time = date.toLocaleTimeString();
        this.today= n + " "+ time
        this.getConstitutionList();
+  }
+  private getOperationMaster(): void {
+    console.log(DetailListFdmisConstWiseComponent.operations);
+
+    this.isLoading = true;
+    if (undefined !== DetailListFdmisConstWiseComponent.operations &&
+      null !== DetailListFdmisConstWiseComponent.operations &&
+      DetailListFdmisConstWiseComponent.operations.length > 0) {
+      this.isLoading = false;
+      this.AcctTypes = DetailListFdmisConstWiseComponent.operations.filter(e => e.module_type === 'DEPOSIT')
+        .filter((thing, i, arr) => {
+          return arr.indexOf(arr.find(t => t.acc_type_cd === thing.acc_type_cd)) === i;
+        });
+      this.AcctTypes = this.AcctTypes.sort((a, b) => (a.acc_type_cd > b.acc_type_cd ? 1 : -1));
+    } else {
+      this.svc.addUpdDel<mm_operation[]>('Mst/GetOperationDtls', null).subscribe(
+        res => {
+          console.log(res)
+          DetailListFdmisConstWiseComponent.operations = res;
+          this.isLoading = false;
+          this.AcctTypes = DetailListFdmisConstWiseComponent.operations.filter(e => e.module_type === 'DEPOSIT')
+            .filter((thing, i, arr) => {
+              return arr.indexOf(arr.find(t => t.acc_type_cd === thing.acc_type_cd)) === i;
+            });
+          this.AcctTypes = this.AcctTypes.sort((a, b) => (a.acc_type_cd > b.acc_type_cd ? 1 : -1));
+          this.AcctTypes =this.AcctTypes.filter(e=>e.acc_type_cd==2 || e.acc_type_cd==3||e.acc_type_cd==4||e.acc_type_cd==5)
+        },
+        err => { this.isLoading = false; }
+      );
+    }
+    console.log(this.AcctTypes);
+
   }
   onLoadScreen(content) {
     this.modalRef = this.modalService.show(content, this.config);

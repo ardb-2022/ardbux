@@ -11,7 +11,7 @@
         <button mat-raised-button type="button" class="btn btn-rounded btn-primary btn-primary-spacing btn-sm" 
           (click)="saveuser()">Save</button>
         <button mat-raised-button type="button" class="btn btn-rounded btn-primary btn-primary-spacing btn-sm" [disabled]="!isApprove"
-          (click)="approve()">Approve</button>
+          (click)="openModal(Appconfirm)">Approve</button>
         <button mat-raised-button type="button" class="btn btn-rounded btn-primary btn-primary-spacing btn-sm" [disabled]="!isClear"
           (click)="clearuser()">Clear</button>
         <button mat-raised-button type="button" class="btn btn-rounded btn-primary btn-primary-spacing btn-sm" [disabled]="!isDel"
@@ -120,3 +120,11 @@
   <ng-container *ngTemplateOutlet="buttonDiv"></ng-container>
 </div>
 <loading *ngIf="isLoading"></loading>
+<ng-template #Appconfirm >
+  <div class="modal-body text-center" >
+    <p>'Are you sure, you want to <b style="color: rgb(8, 148, 55);">APPROVE</b> this Transaction</p>
+    <button mat-raised-button type="button" class="btn btn-light" (click)="this.modalRef.hide()" >No</button>&nbsp;
+    <button mat-raised-button type="button" class=" btn btn-primary" (click)="approve()" >Yes</button>
+    
+  </div>
+</ng-template>

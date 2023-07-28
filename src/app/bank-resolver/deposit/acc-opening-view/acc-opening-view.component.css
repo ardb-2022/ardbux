@@ -15,6 +15,18 @@ small{
   
 
 }
+.SBsuggestions{
+  position: absolute;
+  background-color: rgb(255, 255, 255);
+  z-index: 999;
+  width: 98%;
+  height: auto;
+  max-height: 300px;
+  overflow: auto;
+  /* margin-left: 1%; */
+  font-size: medium;
+
+}
 #customers1 {
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;

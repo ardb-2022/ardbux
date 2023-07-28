@@ -1,3 +1,147 @@
+<ng-template #print>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left customHeader" style="padding-right: 10px;">Recovery Challan </h4>
+    
+    <button  type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row print" id="challan" hidden>
+      <div class="col-6 table-container" >
+        <div style="border: 1px solid #b7b4b4;">
+          <div>
+            <div class="justify-content-center" style="text-align:center" >
+              <br><h5>{{ardbName}} </h5>
+              <h5>{{branchName}}</h5>
+              <h5>Run Date & Time : {{today}} </h5>
+              <h5>{{ardbAddr}}</h5>
+              <h6>Bank's Copy</h6>
+          </div>
+          </div>
+          <hr>
+          <div class="row" style="padding-left: 5px;" >
+            <div class="col-6">
+            <b>Voucher Date:</b> {{_cDt.substr(0,10)}}<br>
+            <b>Name:</b> {{_cName}}<br>
+            <b>Address:</b> {{_cAddress}}
+
+            </div>
+            <div class="col-6">
+              <b>Voucher ID:</b> {{_voucherId}}<br>
+            <b>Voucher Type:</b> {{_voucherTypeName}}
+
+            </div>
+          </div><br>
+          <div class="row" style="padding-left: 5px;">
+            <div class="col-12">
+              <p style="text-align: center;">Total {{_voucherTypeName}} of <b>Rs.{{_voucherTypeName=="Cash Receipt"?_totalCr:_totalDr | currency:'INR'}}</b> </p>
+
+              <table style="width: 100%;">
+                <tr *ngFor="let i of printData">
+                  <td style="text-align: left;">{{i.acc_cd}}</td>
+                  <td style="text-align: left;">{{i.narration}} of Rs. </td>
+                  <td style="text-align: right;padding-right: 10px;"><b>{{i.amount| currency:'INR'}}</b></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <br><br>
+          <div class="row" style="padding-left: 5px;padding-bottom: 10px;">
+            <div class="col-4">
+              <b>Details</b>
+            </div>
+            <div class="col-4">
+              <b>Accountant</b>
+            </div>
+            <div class="col-4">
+              <b>Cashier</b>
+            </div>
+          </div>
+          <br><br>
+          <div class="row" style="padding-left: 5px;padding-bottom: 10px;">
+            <div class="col-6">
+              <b>Receiver's/Payer's Signature</b>
+            </div>
+            <div class="col-6" style="padding-right: 85px;text-align: right;">
+              <b>Manager/CEO</b>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+      <div class="col-6 table-container" >
+        <div style="border: 1px solid #b7b4b4;">
+          <div>
+            <div class="justify-content-center" style="text-align:center" >
+              <br><h5>{{ardbName}} </h5>
+              <h5>{{branchName}}</h5>
+              <h5>Run Date & Time : {{today}} </h5>
+              <h5>{{ardbAddr}}</h5>
+              <h6>Receiver's/Payer's Copy </h6>
+          </div>
+          </div>
+          <hr>
+          <div class="row" style="padding-left: 5px;" >
+            <div class="col-6">
+            <b>Voucher Date:</b> {{_cDt.substr(0,10)}}<br>
+            <b>Name:</b> {{_cName}}<br>
+            <b>Address:</b> {{_cAddress}}
+
+            </div>
+            <div class="col-6">
+              <b>Voucher ID:</b> {{_voucherId}}<br>
+            <b>Voucher Type:</b> {{_voucherTypeName}}
+
+            </div>
+          </div><br>
+          <div class="row" style="padding-left: 5px;">
+            <div class="col-12">
+              <p style="text-align: center;">Total {{_voucherTypeName}} of <b>Rs.{{_voucherTypeName=="Cash Receipt"?_totalCr:_totalDr | currency:'INR'}}</b> </p>
+
+              <table style="width: 100%;">
+                <tr *ngFor="let i of printData">
+                  <td style="text-align: left;">{{i.acc_cd}}</td>
+                  <td style="text-align: left;">{{i.narration}} of Rs. </td>
+                  <td style="text-align: right;padding-right: 10px;"><b>{{i.amount| currency:'INR'}}</b></td>
+                </tr>
+              </table>
+            </div>
+          </div><br><br>
+          <div class="row" style="padding-left: 5px;padding-bottom: 10px;">
+            <div class="col-4">
+              <b>Details</b>
+            </div>
+            <div class="col-4">
+              <b>Accountant</b>
+            </div>
+            <div class="col-4">
+              <b>Cashier</b>
+            </div>
+          </div>
+          <br><br>
+          <div class="row" style="padding-left: 5px;padding-bottom: 10px;">
+            <div class="col-6">
+              <b>Receiver's/Payer's Signature</b>
+            </div>
+            <div class="col-6" style="padding-right: 85px;text-align: right;">
+              <b>Manager/CEO</b>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+     
+    </div>
+    <h4>Are you want to print this Voucher?</h4>
+  </div>
+  <div class="modal-footer">
+    <div class="print">
+        <button mat-raised-button type="button" [useExistingCss]="true" class="btn btn-rounded btn-primary m-1" 
+        printSectionId="challan" ngxPrint (click)="modalRef.hide()">Print Voucher</button>
+    </div>
+  </div>
+</ng-template>
 <ng-template #content let-modal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">Retrieve Voucher</h4>
@@ -109,16 +253,20 @@
       <button mat-raised-button type="button" class="btn btn-rounded btn-primary btn-primary-spacing btn-sm" [disabled]="isNew"
         (click)="New()">New</button>
       <button mat-raised-button type="button" class="btn btn-rounded btn-primary btn-primary-spacing btn-sm" [disabled]="isRemove"
-        (click)="Remove()">Delete</button>
+        (click)="openModal(Delconfirm)">Delete</button>
       <button mat-raised-button type="button" class="btn btn-rounded btn-primary btn-primary-spacing btn-sm"
         [disabled]="onVoucherCreation.invalid" (click)="Save()">Save</button>
+
       <!-- <button mat-raised-button type="button" class="btn btn-rounded btn-primary btn-primary-spacing btn-sm" [disabled]="isApprove"
         (click)="Approve()">Approve</button> -->
         <!-- <button mat-raised-button type="button" class="btn btn-rounded btn-primary btn-primary-spacing btn-sm" [disabled]="isModify"
         (click)="Modify()">Modify</button> -->
       <button mat-raised-button type="button" class="btn btn-rounded btn-primary btn-primary-spacing btn-sm" [disabled]="isClear"
         (click)="Clear()">Clear</button>
-      <button mat-raised-button type="button" class="btn btn-rounded btn-primary btn-primary-spacing btn-sm" (click)="closeScreen()"
+      
+        <button mat-raised-button type="button" class="btn btn-rounded btn-primary btn-primary-spacing btn-sm" style="position: absolute;right: 9%;top: 15px;"  
+        (click)="ShowVPrint()" >Print Voucher</button>
+        <button mat-raised-button type="button" class="btn btn-rounded btn-primary btn-primary-spacing btn-sm" (click)="closeScreen()"
         style="position: absolute;right: 10px;">Close</button>
       <!-- <input type="text" value="{{ getTotalCr() }}" />
   <input type="text" value="{{ getTotalCr() }}" /> -->
@@ -234,9 +382,9 @@
                     <!-- </div> -->
                   </td>
                   <!-- <td style="width: 40%"><input formControlName="desc"  type="text" class="form-control"></td> -->
-                  <td style="width: 10%"><input formControlName="dr_amt" (input)="drAmountInput(i,$event)" type="number"
+                  <td style="width: 10%"><input formControlName="dr_amt" (input)="drAmountInput(i,$event)" type="number" id="numberField" (keypress)="arrowkeyOFF()"
                      class="form-control form-control-sm"  ></td>
-                  <td style="width: 10%"><input formControlName="cr_amt"  (input)="crAmountInput(i,$event)" type="number"
+                  <td style="width: 10%"><input formControlName="cr_amt"  (input)="crAmountInput(i,$event)" type="number" id="numberField" (keypress)="arrowkeyOFF()"
                      class="form-control form-control-sm"   ></td>
 
                      
@@ -281,6 +429,19 @@
           <input name="narr" value="{{_voucherNarration}}" [(ngModel)]="_voucherNarration" type="text"
             class="form-control form-control-sm">
         </div>
+        <div>
+          <div class="row">
+            <div class="col-3">
+              <label><strong>Name</strong></label>
+              <input type="text" value="{{_cName}}" [(ngModel)]="_cName" class="form-control" placeholder="Name">
+            </div>
+            <div class="col-9">
+              <label><strong>Address</strong></label>
+              <input type="text" value="{{_cAddress}}" [(ngModel)]="_cAddress" class="form-control" placeholder="Address">
+            </div>
+          </div>
+          
+        </div>
 
       </div>
     </div>
@@ -288,5 +449,12 @@
   
   <ng-container *ngTemplateOutlet="buttonDiv"></ng-container>
 </div>
-
+<ng-template #Delconfirm >
+  <div class="modal-body text-center" >
+    <p>'Are you sure, you want to <b style="color: red;">Delete</b> this Voucher with ID {{_voucherId}}</p>
+    <button mat-raised-button type="button" class="btn btn-light" (click)="this.modalRef.hide()" >No</button>&nbsp;
+    <button mat-raised-button type="button" class=" btn btn-primary" (click)="Remove()" >Yes</button>
+    
+  </div>
+</ng-template>
 

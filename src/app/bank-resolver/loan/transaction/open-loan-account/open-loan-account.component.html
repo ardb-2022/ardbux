@@ -7,11 +7,12 @@
   <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="retrieveData()">Retrieve</button>
   <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="modifyData()">Modify</button>
   <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="clearData()">Clear</button>
-  <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="saveData('N')">Save</button>
   <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="backScreen()">Back</button>
   <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" >Delete</button>
   <button mat-raised-button type="button" [disabled]="!kycEnable" class="btn btn-primary btn-sm ml-1 mr-1"
     (click)="openModal(kycContent)">Kyc</button>
+  <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="saveData('N')">Save</button>
+
   <!-- class="btn btn-primary btn-sm ml-1 mr-1" (click)="openModal(kycContent)" >Kyc</button> -->
 </div>
  </ng-template>
@@ -166,11 +167,11 @@
       <div class="form-group col-1">
         <small for=due_date>Inst. Start Date</small>
         <div class="input-group">
-          <input class="form-control form-control-sm text-capitalize" id="due_date"
+          <input class="form-control form-control-sm text-capitalize" id="due_date" 
             [disabled]="tm_loan_all.loan_id != undefined || operationType == '' || disableAll == 'Y' "
             style="height:25px; text-align: right;" bsDatepicker 
             [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }"
-            [(ngModel)]="tm_loan_all.instl_start_dt" type="text" placeholder="DD/MM/YYYY">
+            [(ngModel)]="tm_loan_all.instl_start_dt" type="text" placeholder="DD/MM/YYYY" (ngModelChange)="rep_stDT()">
         </div>
       </div>
     </div>

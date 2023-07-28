@@ -226,6 +226,18 @@
          <b>{{drSumTr | INRCurrency}}</b>
         </td>
        </ng-container>
+       <ng-container matColumnDef="signature">
+        <td mat-footer-cell *matFooterCellDef colspan="8" style="padding-top: 120px">
+          <div class="row">
+              <div class="col-3"><b>CASHIER</b></div>
+              <div class="col-3"><b>ACCOUNTANT</b></div>
+              <div class="col-3"><b>MANAGER</b></div>
+              <div class="col-3"><b>CHIFF EXECUTIVE OFFICER</b></div>
+            
+          </div>
+         
+        </td>
+       </ng-container>
        
        <tr mat-header-row *matHeaderRowDef="['Header']"
           class="example-second-header-row">
@@ -237,6 +249,7 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         <tr mat-footer-row *matFooterRowDef="['Total','space1','disclaimer1', 'disclaimer2','space2', 'disclaimer3', 'disclaimer4']" class="example-second-footer-row"></tr>
+        <tr mat-footer-row *matFooterRowDef="['signature']" class="example-second-footer-row"></tr>
         <!-- Row shown when there is no matching data. -->
         <tr class="mat-row" *matNoDataRow>
           <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
@@ -245,7 +258,8 @@
       <footer>
         <small>
           This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions Pvt.Ltd. Kolkata
-         </small> 
+          (NOTE:This report generates by taking account of both approved and unapproved vouchers.) 
+        </small> 
         </footer>
     </div>
     <mat-paginator showFirstLastButtons [pageSizeOptions]="[5, 10, 25, 100, this.reportData.length]" aria-label="Select page of users"></mat-paginator>

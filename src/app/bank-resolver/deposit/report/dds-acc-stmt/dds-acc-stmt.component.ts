@@ -1,9 +1,9 @@
 import { ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild,AfterViewInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { SystemValues, p_report_param, mm_customer } from 'src/app/bank-resolver/Models';
+import { SystemValues, mm_customer } from 'src/app/bank-resolver/Models';
 import { p_gen_param } from 'src/app/bank-resolver/Models/p_gen_param';
 import { RestService } from 'src/app/_service';
 import Utils from 'src/app/_utility/utils';
@@ -25,7 +25,7 @@ export class DdsAccStmtComponent implements OnInit ,AfterViewInit{
   @ViewChild(MatSort) sort: MatSort;
   dataSource = new MatTableDataSource()
   displayedColumns: string[] = ['paid_dt','paid_amt'];
-
+  allAgent:any[]=[];
   modalRef: BsModalRef;
   isOpenFromDp = false;
   isOpenToDp = false;
@@ -75,6 +75,7 @@ export class DdsAccStmtComponent implements OnInit ,AfterViewInit{
       toDate: [null, Validators.required],
       acct_num: [null, Validators.required],
     });
+    this.GetAgentData();
     this.onLoadScreen(this.content);
     var date = new Date();
     var n = date.toDateString();
@@ -101,6 +102,17 @@ export class DdsAccStmtComponent implements OnInit ,AfterViewInit{
       this.disabledOnNull=false
     else 
       this.disabledOnNull=true
+  }
+
+  GetAgentData(){
+    var dt={
+      "ardb_cd":this.sys.ardbCD,
+      "brn_cd":this.sys.BranchCode
+    }
+    this.svc.addUpdDel<any>('Deposit/GetAgentData', dt).subscribe(
+      res => {
+        this.allAgent=res;
+      })
   }
   public suggestCustomer(): void {
     this.isLoading=true;
@@ -170,7 +182,7 @@ export class DdsAccStmtComponent implements OnInit ,AfterViewInit{
       } 
       this.total_bal=this.reportData[0].clr_bal
       this.dataSource.data=this.reportData
-      this.agentCD=this.reportData[0].agent_cd;
+      this.agentCD=this.allAgent.filter(e=>e.agent_cd==this.reportData[0].agent_cd)[0].agent_name
       this.opening_bal=this.reportData[0].opng_bal;
       // this.itemsPerPage=this.reportData.length % 50 <=0 ? this.reportData.length: this.reportData.length % 50
       this.isLoading=false

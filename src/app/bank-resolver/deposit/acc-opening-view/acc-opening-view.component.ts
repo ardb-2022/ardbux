@@ -22,6 +22,7 @@ import Utils from 'src/app/_utility/utils';
 import { Router } from '@angular/router';
 import { tt_denomination } from '../../Models/deposit/tt_denomination';
 import { environment } from 'src/environments/environment';
+import { Observable } from 'rxjs/internal/Observable';
 
 @Component({
   selector: 'app-acc-opening-view',
@@ -63,6 +64,7 @@ export class AccOpeningViewComponent implements OnInit {
   disableConst:boolean=true;
   enableConst:boolean=true;
   showNoResult=false
+  shownoresult:boolean=false
   createUser = '';
   updateUser = '';
   createDate: Date;
@@ -106,7 +108,7 @@ export class AccOpeningViewComponent implements OnInit {
 
 
   denominationList: tt_denomination[] = [];
-
+  suggestedSBCustomer: mm_customer[];
   customerList: mm_customer[] = [];
   suggestedCustomer: mm_customer[];
   suggestedCustomerSignatories: mm_customer[];
@@ -265,8 +267,76 @@ export class AccOpeningViewComponent implements OnInit {
 
   }
 
+  public suggestCustomer2(): Observable<mm_customer> {
+    this.isLoading = true;
+    console.log("here")
+    // console.log(this.f.acct_num.value.length)
+    //  console.log(this.accDtlsFrm.get('home_brn_cd').value)
+    if (this.tm_deposit.user_acc_num.length > 0) {
+      const prm = new p_gen_param();
+      prm.ad_acc_type_cd = (this.sys.ardbCD=="20" || this.sys.ardbCD=="26")? 1:8;
+      prm.as_cust_name = this.tm_deposit.user_acc_num.toLowerCase();
+      console.log(prm.ardb_cd);
+
+      this.svc.addUpdDel<any>('Deposit/GetAccDtls', prm).subscribe(
+        res => {
+          console.log(res)
+          this.isLoading = false;
+          console.log(this.tm_deposit.user_acc_num)
+          if (undefined !== res && null !== res && res.length > 0 && res != '' && this.tm_deposit.user_acc_num) {
+            this.suggestedSBCustomer = [];
+            // this.suggestedCustomer = res.slice(0, 10);
+            this.suggestedSBCustomer = res
+            console.log(res.length + " " + this.suggestedSBCustomer.length)
+            return this.suggestedSBCustomer;
+          } else {
+            this.shownoresult = true;
+            console.log(res.length)
+            this.suggestedSBCustomer = [];
+            return this.suggestedSBCustomer;
+          }
+        },
+        err => {
+          this.shownoresult = true;
+          this.isLoading = false;
+        }
+      );
 
 
+    } else {
+      // debugger;
+      this.isLoading = false;
+      this.suggestedSBCustomer = null;
+      return null;
+    }
+    // console.log(this.suggestedCustomer)
+  }
+  public SelectCustomer(cust: any): void {
+    // this.optionClicked=true;
+    this.shownoresult = false;
+    // this.selectedCust = cust.acc_num
+    console.log(cust)
+    this.tm_deposit.user_acc_num=cust.acc_num
+    // this.f.acct_num.setValue(cust.acc_num);
+    // this.onAccountNumTabOff();
+    // this.f.acct_num.value.length=0;
+    this.suggestedSBCustomer = [];
+    this.validateSbAccount();
+   
+
+  }
+  clearSuggestedCust() {
+    this.suggestedSBCustomer = null;
+    this.shownoresult = false;
+    if (this.tm_deposit.user_acc_num.length > 0) {
+      this.disabledOnNull = false;
+    }
+    else {
+      this.disabledOnNull = true;
+    }
+
+
+  }
   initializeModels() {
 
     this.tm_deposit = new tm_deposit();
@@ -743,7 +813,7 @@ debugger
     const temp_deposit = new tm_deposit();
     temp_deposit.brn_cd = this.branchCode;
     temp_deposit.acc_num = this.tm_deposit.user_acc_num;
-    temp_deposit.acc_type_cd = 1;
+    temp_deposit.acc_type_cd = (this.sys.ardbCD=="20" || this.sys.ardbCD=="26")? 1:8;
 
     this.isLoading = true;
     this.svc.addUpdDel<any>('Deposit/GetDeposit', temp_deposit).subscribe(

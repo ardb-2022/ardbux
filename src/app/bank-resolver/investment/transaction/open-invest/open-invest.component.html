@@ -188,6 +188,12 @@
 
           <div class="form-row">
             <div class="form-group col-2">
+              <small for="term_dep_matu_val">Matured Value</small>
+              <input [ngModel]="tm_deposit.mat_val" [disabled]='disableAll' style="height:25px; text-align-last: right;"
+                type="number" min="0" step='any' class="form-control form-control-sm text-capitalize"
+                id="term_dep_matu_val">
+            </div>
+            <div class="form-group col-3">
               <small for="dbs_acc_open_dt">Maturity Date</small>
               <input disabled style="height:25px;" type="text" placeholder="dd/mm/yyyy" class="form-control"
                 [(ngModel)]="tm_deposit.mat_dt" disabled bsDatepicker
@@ -236,6 +242,32 @@
               </label>
             </div>
             <!-- </div> -->
+
+          </div>
+          <div class="form-row">
+            <div class="form-group col-6">
+              <small for="rec_dep_intt_rate">Bank Name</small>
+              <select [disabled]='disableAll'
+                  style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
+                  id="trans_type" [(ngModel)]="tm_deposit.bank_cd" class="form-control form-control-sm"
+                  (change)="setBankName($event.target.value)">
+                  <option value="">
+                   Choose </option>
+                  <option *ngFor="let l of bankData" [value]="l.bank_cd">
+                    {{l.bank_cd}}-{{l.bank_name}}</option>
+                </select>
+            </div>
+            <div class="form-group col-6">
+              <small for="rec_dep_intt_rate">Branch Name</small>
+              <select [disabled]='disableAll'
+                  style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
+                  id="branch_cd" [(ngModel)]="tm_deposit.branch_cd" class="form-control form-control-sm">
+                  <option [value]="" disabled>
+                    select Branch</option>
+                  <option *ngFor="let l of branch" [value]="l.branch_cd">
+                    {{l.branch_cd}}-{{l.branch_name}}</option>
+                </select>
+            </div>
 
           </div>
         </div>
@@ -571,7 +603,32 @@
               <!-- </div> -->
             </div>
           </div>
+          <div class="form-row">
+            <div class="form-group col-6">
+              <small for="rec_dep_intt_rate">Bank Name</small>
+              <select [disabled]='disableAll'
+                  style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
+                  id="trans_type" [(ngModel)]="tm_deposit.bank_cd" class="form-control form-control-sm"
+                  (change)="setBankName($event.target.value)">
+                  <option value="">
+                   Choose </option>
+                  <option *ngFor="let l of bankData" [value]="l.bank_cd">
+                    {{l.bank_cd}}-{{l.bank_name}}</option>
+                </select>
+            </div>
+            <div class="form-group col-6">
+              <small for="rec_dep_intt_rate">Branch Name</small>
+              <select [disabled]='disableAll'
+                  style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
+                  id="branch_cd" [(ngModel)]="tm_deposit.branch_cd" class="form-control form-control-sm">
+                  <option [value]="" disabled>
+                    select Branch</option>
+                  <option *ngFor="let l of branch" [value]="l.branch_cd">
+                    {{l.branch_cd}}-{{l.branch_name}}</option>
+                </select>
+            </div>
 
+          </div>
         </div>
         <!-- <-----------End: Monthly Income Scheme-------------->
 

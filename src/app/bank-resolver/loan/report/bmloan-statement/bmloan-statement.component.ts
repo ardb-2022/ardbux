@@ -42,6 +42,7 @@ export class BMLoanStatementComponent implements OnInit {
     ignoreBackdropClick: true, // disable backdrop click to close the modal
     class: 'modal-lg'
   };
+  ardbCD:any =this.sys.ardbCD;
   trailbalance: tt_trial_balance[] = [];
   prp = new p_report_param();
   reportcriteria: FormGroup;
@@ -309,7 +310,7 @@ export class BMLoanStatementComponent implements OnInit {
       
         this.acc = res;
         this.intRate=res.tmloanall.curr_intt_rate
-        this.actvDtls=res.tmlaonsanctiondtls[0].activity_desc
+        this.actvDtls=res.tmlaonsanctiondtls[0]?.activity_desc
         this.allLoanType=this.allLoanType.filter(e=>e.acc_type_cd==res.tmloanall.acc_cd)
         this.LoanType=this.allLoanType[0].acc_type_desc
         console.log(this.LoanType);

@@ -11,7 +11,6 @@ import Utils from 'src/app/_utility/utils';
 import { PageChangedEvent } from "ngx-bootstrap/pagination/public_api";
 import { ExportAsService, ExportAsConfig } from 'ngx-export-as'
 import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import { CommonServiceService } from 'src/app/bank-resolver/common-service.service';
 

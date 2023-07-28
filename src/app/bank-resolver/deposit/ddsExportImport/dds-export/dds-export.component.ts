@@ -32,7 +32,7 @@ export class DdsExportComponent implements OnInit {
   agentData: any;
   agentName: any;
   mType:any
-  isType=true;
+  isType:boolean;
   typeName:any;
   constructor(private svc: RestService, private formBuilder: FormBuilder, private modalService: BsModalService, private router: Router) { }
   ngOnInit(): void {
@@ -41,6 +41,7 @@ export class DdsExportComponent implements OnInit {
       agent_id: [null, Validators.required]
     });
     this.onLoadScreen(this.content);
+    this.isType=true;
   }
   private onLoadScreen(content) {
     this.modalRef = this.modalService.show(content, this.config);
@@ -73,6 +74,7 @@ export class DdsExportComponent implements OnInit {
       newLink.click();
       this.str = ''
     })
+    this.isType=true;
   }
   get entry() { return this.exportEntryForm.controls }
   public SubmitReport() {
@@ -93,8 +95,34 @@ export class DdsExportComponent implements OnInit {
       this.svc.addUpdDel('Deposit/GetExportData', ddsExp).subscribe(data => {
         this.getExportData = data;
         this.getExportData.forEach(x => x.interest = '.0' + x.interest)
-        this.getExportData.forEach(x => x.curr_bal_amt = '000' + x.curr_bal_amt)
-        this.getExportData.forEach(x => x.balance_amt = '000' + x.balance_amt)
+        // this.getExportData.forEach(x => x.curr_bal_amt = '000' + x.curr_bal_amt)
+        // this.getExportData.forEach(x => x.balance_amt = '000' + x.balance_amt)
+        this.getExportData.forEach(x => {
+          console.log(x.balance_amt.toString().length)
+          
+            if(x.balance_amt.toString().length==0){
+              x.balance_amt = '000000' + x.balance_amt
+            }
+            else if(x.balance_amt.toString().length==1){
+              x.balance_amt = '00000' + x.balance_amt
+            }
+            else if(x.balance_amt.toString().length==2){
+              x.balance_amt = '000' + x.balance_amt
+            }
+            else if(x.balance_amt.toString().length==3){
+              x.balance_amt = '000' + x.balance_amt
+            }
+            else if(x.balance_amt.toString().length==4){
+              x.balance_amt = '00' + x.balance_amt
+            }
+            else if(x.balance_amt.toString().length==5){
+              x.balance_amt = '0' + x.balance_amt
+            }
+            else{
+              x.balance_amt = x.balance_amt
+            }
+          
+        })
         this.agentPass = this.getExportData[0].password
         this.agentCD = this.getExportData[0].agent_cd
         this.agentOpenDt = this.getExportData[0].opening_dt

@@ -76,29 +76,18 @@
                 <th mat-header-cell style="text-align:center!important;">Maturity Dt</th>
                 <th mat-header-cell style="text-align:center!important;">Prn Amt</th>
                 <th mat-header-cell style="text-align:center!important;">Intt Amt</th>
+                <th mat-header-cell style="text-align:center!important;">Mat Amt</th>
                 <th mat-header-cell style="text-align:center!important;">Intt Rt</th>
               </tr>
                     <tbody>
                         <tr *ngFor="let sbca of row.ttsbcadtllist">
-                            <td mat-cell style="text-align:center!important;">
-                            <ng-container *ngIf="sbca.acc_type_cd==22">
-                                {{'Fixed Deposit'}}
-                            </ng-container>
-                            <ng-container *ngIf="sbca.acc_type_cd==23">
-                                {{'Cash Cirtificate'}}
-                            </ng-container>
-                            <ng-container *ngIf="sbca.acc_type_cd==24">
-                                {{'Monthly Income Scheme'}}
-                            </ng-container>
-                            <ng-container *ngIf="sbca.acc_type_cd==25">
-                                {{'Recurring Deposit'}}
-                            </ng-container>
-                          </td>
+                          <td mat-cell style="text-align:center!important;">{{sbca.acc_type_desc}} </td>
                           <td mat-cell style="text-align:center!important;">{{sbca.acc_num}} </td>
                           <td mat-cell style="text-align:center!important;">{{sbca.opening_dt .substr(0,10)}} </td>
                           <td mat-cell style="text-align:center!important;">{{sbca.mat_dt.substr(0,10)}} </td>
                           <td mat-cell style="text-align:right!important;">{{sbca.prN_AMT |currency:'INR'}} </td>
                           <td mat-cell style="text-align:right!important;">{{sbca.proV_INTT_AMT |currency:'INR'}} </td>
+                          <td mat-cell style="text-align:right!important;">{{sbca.prN_AMT+sbca.proV_INTT_AMT |currency:'INR'}} </td>
                           <td mat-cell style="text-align:center!important;">{{sbca.intT_RT }}% </td>
                           
                         </tr>
@@ -107,7 +96,8 @@
                           <td mat-cell colspan="2" style="text-align:center!important;"><b>Total {{row.constype.constitution_desc}} Balance</b> </td>
                           <td mat-cell style="text-align:right!important;"><b>{{row.constype.tot_cons_balance|currency:'INR'}}</b></td>
                           <td mat-cell style="text-align:right!important;"><b>{{row.constype.tot_cons_intt_balance|currency:'INR'}}</b></td>
-                          <td mat-cell colspan="1"></td>
+                          <td mat-cell style="text-align:right!important;"><b>{{row.constype.tot_cons_balance+row.constype.tot_cons_intt_balance|currency:'INR'}}</b></td>
+                          <td mat-cell colspan=""></td>
                           
                          
                         </tr>
@@ -214,10 +204,11 @@
     <table>
       <tr>
         <td style="text-align: left;"><b>Overall Total Account No.{{allconscount}}</b></td>
-        <td style="width:100px;" ></td>
         <td style="text-align: right;"><b>Overall Total</b></td>
-        <td style="text-align: right;"><b>{{totprnamt | currency:"INR"}}</b></td>
-        <td style="width:25px; "></td>
+        <td style="width:20%; text-align: right;"><b>{{totprnamt | currency:"INR"}}</b></td>
+        <td style="width:12%;text-align: right;" ><b>{{totinttamt | currency:"INR"}}</b></td> 
+        <td style="width:14%;text-align: right;" ><b>{{totmatamt | currency:"INR"}}</b></td>
+        <td style="width:8%; "></td>
         
         </tr>
     </table>

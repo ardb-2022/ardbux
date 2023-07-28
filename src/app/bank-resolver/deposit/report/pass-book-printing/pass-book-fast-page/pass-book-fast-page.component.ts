@@ -1,18 +1,16 @@
-import { ChangeDetectorRef, Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
-import { Router } from '@angular/router';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import {  Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { FormGroup, FormBuilder} from '@angular/forms';
+import { SafeResourceUrl } from '@angular/platform-browser';
+import { BsModalRef } from 'ngx-bootstrap/modal';
 import { SystemValues, p_report_param, mm_customer } from 'src/app/bank-resolver/Models';
 import { p_gen_param } from 'src/app/bank-resolver/Models/p_gen_param';
 import { tt_trial_balance } from 'src/app/bank-resolver/Models/tt_trial_balance';
 import { RestService } from 'src/app/_service';
-import Utils from 'src/app/_utility/utils';
-import { PageChangedEvent } from "ngx-bootstrap/pagination/public_api";
-import { ExportAsService, ExportAsConfig } from 'ngx-export-as'
+import {  ExportAsConfig } from 'ngx-export-as'
 import { AccOpenDM } from 'src/app/bank-resolver/Models/deposit/AccOpenDM';
 import { mm_oprational_intr } from 'src/app/bank-resolver/Models/deposit/mm_oprational_intr';
 import { DatePipe } from '@angular/common';
+import { sm_parameter } from 'src/app/bank-resolver/Models/sm_parameter';
 @Component({
   selector: 'app-pass-book-fast-page',
   templateUrl: './pass-book-fast-page.component.html',
@@ -36,6 +34,7 @@ export class PassBookFastPageComponent implements OnInit {
   trailbalance: tt_trial_balance[] = [];
   prp = new p_report_param();
   reportcriteria: FormGroup;
+  printID:any;
   closeResult = '';
   showReport = false;
   showAlert = false;
@@ -57,7 +56,7 @@ export class PassBookFastPageComponent implements OnInit {
   pagedItems = [];
   reportData:any=[]
   ardbName=localStorage.getItem('ardb_name')
-  branchName=this.sys.BranchName
+  branchName=this.sys.BranchName.toUpperCase();
   masterModel: any;
   pageChange: any;
   opdrSum=0;
@@ -81,17 +80,23 @@ export class PassBookFastPageComponent implements OnInit {
   custCD:any;
   oprn_instr_desc:any;
   curDay:any
+  IFSC:any;
+  paddingACC:any;
+  systemParam: sm_parameter[] = [];
   constructor(private svc: RestService, private formBuilder: FormBuilder,
-    private modalService: BsModalService,public datepipe: DatePipe, private _domSanitizer: DomSanitizer,private exportAsService: ExportAsService, private cd: ChangeDetectorRef,
-    private router: Router) { }
+    public datepipe: DatePipe) { }
   ngOnInit(): void {
+    this.getsystemParam();
+    this.sys.ardbCD=="4"?this.printID="fastPageGhatal":this.printID="fastPage"
     // this.branchName = localStorage.getItem('__bName');
     this.reportcriteria = this.formBuilder.group({
       yes: [''],
       no: ['']
     });
     this.getOperationalInstr();
-    this.onLoadScreen(this.content2);
+    this.loadFastPageData();
+
+    // this.onLoadScreen(this.content2);
     var date = new Date();
     // get the date as a string
        var n = date.toDateString();
@@ -100,6 +105,18 @@ export class PassBookFastPageComponent implements OnInit {
        this.today= n + " "+ time;
        this.curDay=this.datepipe.transform(this.sys.CurrentDate,"dd/MM/yyyy") 
        debugger
+
+     
+  }
+  getsystemParam(){
+    this.svc.addUpdDel<any>('Mst/GetSystemParameter', null).subscribe(
+      sysRes => {
+        this.systemParam=sysRes
+        console.log(this.systemParam);
+        
+       
+      })
+      debugger
   }
   getOperationalInstr() {
 
@@ -157,7 +174,6 @@ export class PassBookFastPageComponent implements OnInit {
       
     })
     
-    
   }
   getCustomer(){
     debugger
@@ -171,10 +187,13 @@ export class PassBookFastPageComponent implements OnInit {
             this.custDtls=res[0]
             debugger
           })
+    this.IFSC=this.systemParam.filter(e=>e.param_cd=="114")[0].param_value
+    this.paddingACC=this.systemParam.filter(e=>e.param_cd=="115")[0].param_value
+    debugger
   }
   onLoadScreen(content2) {
     this.loadFastPageData();
-    this.modalRef = this.modalService.show(content2, this.config);
+    // this.modalRef = this.modalService.show(content2, this.config);
     
   }
   public closeAlert() {

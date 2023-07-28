@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, TemplateRef, ElementRef,ChangeDetectorRef ,AfterViewInit} from '@angular/core';
 import { RestService } from 'src/app/_service';
 import { WebDataRocksPivot } from 'src/app/webdatarocks/webdatarocks.angular4';
-import { tt_cash_account, p_report_param, SystemValues } from 'src/app/bank-resolver/Models';
+import { tt_cash_account, p_report_param, SystemValues, mm_customer } from 'src/app/bank-resolver/Models';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 // import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { STRING_TYPE } from '@angular/compiler';
@@ -29,14 +29,17 @@ export class StandingInsActiveSIListComponent implements OnInit,AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource = new MatTableDataSource()
-  displayedColumns: string[] = ['SLNO','dr_type','dr_accNo','cr_type','cr_accNo', 'tf_dt', 'tf_period','prn_intt','amount'];
+  displayedColumns: string[] = ['SLNO','dr_type','fname','dr_accNo','cr_type','tname','cr_accNo', 'tf_dt', 'tf_period','prn_intt','amount'];
   filteredArray:any=[]
+  cus_name:any;
   isOpenFromDp = false;
   isOpenToDp = false;
   notvalidate:boolean=false;
   date_msg:any;
   exportAsConfig:ExportAsConfig;
   sys = new SystemValues();
+  suggestedCustomer:any=new mm_customer();
+
   config = {
     keyboard: false, // ensure esc press doesnt close the modal
     backdrop: true, // enable backdrop shaded color
@@ -72,8 +75,7 @@ export class StandingInsActiveSIListComponent implements OnInit,AfterViewInit {
   lastdrAccCD:any;
   lastcrAccCD:any;
   today:any
-  constructor(private svc: RestService, private formBuilder: FormBuilder,private cd: ChangeDetectorRef,
-    private router: Router,private comser:CommonServiceService) { }
+  constructor(private svc: RestService, private router: Router,private comser:CommonServiceService) { }
   ngOnInit(): void {
     this.isLoading=true;
     this.SubmitReport()
@@ -86,25 +88,9 @@ export class StandingInsActiveSIListComponent implements OnInit,AfterViewInit {
    this.today= n + " "+ time
   }
   
- 
-  onLoadScreen(content) {
-    this.notvalidate=false
-  }
-
 
   public SubmitReport() {
-    // this.comser.getDay(this.reportcriteria.controls.fromDate.value,this.reportcriteria.controls.toDate.value)
-    // if (this.reportcriteria.invalid) {
-    //   this.showAlert = true;
-    //   this.alertMsg = 'Invalid Input.';
-    //   return false;
-    // }
-    // else if (new Date(this.reportcriteria.value.fromDate) > new Date(this.reportcriteria.value.toDate)) {
-    //   this.showAlert = true;
-    //   this.alertMsg = 'To Date cannot be greater than From Date!';
-    //   return false;
-    // }
-    // else {
+    
       
       this.reportData.length=0;
       this.pagedItems.length=0
@@ -117,31 +103,33 @@ export class StandingInsActiveSIListComponent implements OnInit,AfterViewInit {
       }
       this.svc.addUpdDel('Deposit/PopulateActiveSIList',dt).subscribe(data=>{console.log(data)
       this.reportData=data
-      this.dataSource.data=this.reportData
-      this.isLoading=false
+      
       if(this.reportData.length==0){
         this.comser.SnackBar_Nodata()
-      } 
+      }
+     
       this.crSum=0;
       this.drSum=0
       this.reportData.forEach(e=>{
         this.crSum+=e.cr_amt;
         this.drSum+=e.dr_amt;
+
       })
-      this.lastcrAccCD=this.reportData[this.reportData.length-1].cr_acc_cd
-      this.lastdrAccCD=this.reportData[this.reportData.length-1].dr_acc_cd
+     
+      // this.lastcrAccCD=this.reportData[this.reportData.length-1].cr_acc_cd
+      // this.lastdrAccCD=this.reportData[this.reportData.length-1].dr_acc_cd
       // this.setPage(1)
+      this.dataSource.data=this.reportData
+      this.isLoading=false
     },
     err => {
        this.isLoading = false;
        this.comser.SnackBar_Error(); 
       })
       
-      setTimeout(() => {
-        this.isLoading = false;
-      }, 3000);
     // }
   }
+ 
   public oniframeLoad(): void {
     this.counter++;
     if(this.counter==2){

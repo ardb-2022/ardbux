@@ -1,20 +1,20 @@
-import { ChangeDetectorRef, Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
+import {  Component,OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { FormGroup, FormBuilder} from '@angular/forms';
+import { SafeResourceUrl} from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { SystemValues, p_report_param, mm_customer } from 'src/app/bank-resolver/Models';
 import { p_gen_param } from 'src/app/bank-resolver/Models/p_gen_param';
 import { tt_trial_balance } from 'src/app/bank-resolver/Models/tt_trial_balance';
 import { RestService } from 'src/app/_service';
-import Utils from 'src/app/_utility/utils';
-import { PageChangedEvent } from "ngx-bootstrap/pagination/public_api";
-import { ExportAsService, ExportAsConfig } from 'ngx-export-as'
+
+import {  ExportAsConfig } from 'ngx-export-as'
 import { mm_oprational_intr } from 'src/app/bank-resolver/Models/deposit/mm_oprational_intr';
 import { DatePipe } from '@angular/common';
 import { LoanOpenDM } from 'src/app/bank-resolver/Models/loan/LoanOpenDM';
 import { mm_acc_type } from 'src/app/bank-resolver/Models/deposit/mm_acc_type';
 import { PrintServiceService } from '../print-service.service';
+import { sm_parameter } from 'src/app/bank-resolver/Models/sm_parameter';
 @Component({
   selector: 'app-pass-book-fast-page-loan',
   templateUrl: './pass-book-fast-page.component.html',
@@ -26,6 +26,7 @@ export class LoanPassBookFastPageComponent implements OnInit {
   isOpenFromDp = false;
   isOpenToDp = false;
   sys = new SystemValues();
+  systemParam: sm_parameter[] = [];
   config = {
     keyboard: false, // ensure esc press doesnt close the modal
     backdrop: true, // enable backdrop shaded color
@@ -90,9 +91,14 @@ export class LoanPassBookFastPageComponent implements OnInit {
   loan_case_no:any;
   customer:[]=[]
   constructor(public pServ: PrintServiceService,private svc: RestService, private formBuilder: FormBuilder,
-    private modalService: BsModalService,public datepipe: DatePipe, private _domSanitizer: DomSanitizer,private exportAsService: ExportAsService, private cd: ChangeDetectorRef,
+    private modalService: BsModalService,public datepipe: DatePipe,
     private router: Router) { }
   ngOnInit(): void {
+    this.svc.addUpdDel('Mst/GetSystemParameter', null).subscribe(
+      sysRes => {
+        console.log(sysRes);
+        this.systemParam=sysRes
+      })
 
     this.joinHoldAll=this.pServ.joinHold;
     this.accNum=this.pServ.accNum;
@@ -132,8 +138,8 @@ export class LoanPassBookFastPageComponent implements OnInit {
     
       this.custCD=this.masterModel.tmloanall.party_cd
       this.acc_cd=this.masterModel.tmloanall.acc_cd
-      if(this.acc_cd===20411){
-        this.loan_case_dtls=this.masterModel.tdloansancsetlist[0].tdloansancset.filter(x => x.param_cd=='117')
+      if(this.acc_cd===20411 && this.masterModel.tdloansancsetlist.length>0){
+        this.loan_case_dtls=this.masterModel.tdloansancsetlist[0].tdloansancset.filter(x => x.param_cd==(this.systemParam.find(x => x.param_cd == '926').param_value))
         this.loan_case_no=this.loan_case_dtls[0].param_value
       }
       else{

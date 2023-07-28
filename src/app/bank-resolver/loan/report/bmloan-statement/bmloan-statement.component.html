@@ -130,7 +130,7 @@
           </p>
         </div> -->
         <mat-form-field appearance="outline">
-          <mat-label>Search BM Loan Statement</mat-label>
+          <mat-label>Search Loan Statement</mat-label>
           <input matInput (keyup)="applyFilter($event)" placeholder="Ex. abc / 123">
         </mat-form-field>
         <div class="mat-elevation-z8" id="mattable">
@@ -138,7 +138,7 @@
         <!-- Position Column -->
         <ng-container matColumnDef="mainHeader">
           <th mat-header-cell colspan="12" *matHeaderCellDef>
-            <div class="justify-content-center" style="text-align:center">
+            <div class="justify-content-center" style="text-align:center" *ngIf="ardbCD=='26'">
             <h3><b>Burdwan Co-op. Agriculture & Rural Development Bank Ltd.</b></h3>
             <h4>H.O.: Old Court Compound, PO+PS- Burdwan, Purba Bardhaman- 713101<br>
               Contact No: (0342) 2662390/ 9800960007<br>
@@ -152,6 +152,19 @@
                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Activity :</b> {{actvDtls}}<br>
                 <b> Present Address : </b>{{addr}}
                   
+              </p>
+            </div>
+            <div class="justify-content-center" style="text-align:center" *ngIf="ardbCD!='26'">
+              <h4>{{ardbName}} ({{branchName}})</h4>
+              <h4>Run Date & Time : {{today}} </h4> <br>
+              <h4> <u> Loan Statement from {{reportcriteria.controls.fromDate.value | date: 'dd/MM/yyyy'}} to
+                  {{reportcriteria.controls.toDate.value | date: 'dd/MM/yyyy'}}</u></h4>
+              <p>
+                <b>
+                  Name : {{custNm}} <br>
+                  Loan ID : {{loanId}} <br>
+                  Present Address : {{addr}}
+                </b>
               </p>
             </div>
          </th>

@@ -1,12 +1,11 @@
 
-import { Component, OnInit, ViewChild, TemplateRef, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray, AbstractControl } from '@angular/forms';
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Router } from '@angular/router';
 // import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { RestService } from 'src/app/_service';
 import { T_VOUCHER_DTLS, m_acc_master, SystemValues, MessageType, ShowMessage } from '../../Models';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-import { VoucherapprovalComponent } from '../voucherapproval/voucherapproval.component';
 @Component({
   selector: 'app-bakdatevoucher',
   templateUrl: './bakdatevoucher.component.html',

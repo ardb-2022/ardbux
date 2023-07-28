@@ -161,7 +161,7 @@ export class DetaillistAllComponent implements OnInit {
     }
   ]
   // displayedColumns: string[] = ['block_name','acc_name','party_name', 'acc_num', 'list_dt', 'curr_intt_rate','ovd_intt_rate','curr_prn','ovd_prn','plus','curr_intt','ovd_intt','computed_till_dt'];
-  displayedColumns: string[] = ['block_name','acc_name','activity','party_name', 'acc_num', 'list_dt','plus','curr_prn','ovd_prn','curr_intt','ovd_intt','pnl_intt','computed_till_dt'];
+  displayedColumns: string[] = ['SL_NO','block_name','acc_name','activity','party_name', 'acc_num', 'list_dt','plus','curr_prn','ovd_prn','curr_intt','ovd_intt','pnl_intt','computed_till_dt'];
   dataSource = new MatTableDataSource()
   searchfilter= new MatTableDataSource()
 
@@ -315,11 +315,11 @@ export class DetaillistAllComponent implements OnInit {
   }
   downloadexcel(){
     this.exportAsConfig = {
-      type: 'csv',
+      type: 'xlsx',
       // elementId: 'hiddenTab', 
-      elementIdOrContent:'hiddenTab'
+      elementIdOrContent:'mattable'
     }
-    this.exportAsService.save(this.exportAsConfig, 'cashcumtrial').subscribe(() => {
+    this.exportAsService.save(this.exportAsConfig, 'Detail_List').subscribe(() => {
       // save started
       console.log("hello")
     });

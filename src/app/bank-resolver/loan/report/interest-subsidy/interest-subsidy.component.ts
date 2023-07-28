@@ -6,7 +6,6 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { SystemValues, p_report_param, mm_customer } from 'src/app/bank-resolver/Models';
 import { tt_trial_balance } from 'src/app/bank-resolver/Models/tt_trial_balance';
 import { RestService } from 'src/app/_service';
-import Utils from 'src/app/_utility/utils';
 import { PageChangedEvent } from "ngx-bootstrap/pagination/public_api";
 import { ExportAsService, ExportAsConfig } from 'ngx-export-as';
 import {MatPaginator} from '@angular/material/paginator';

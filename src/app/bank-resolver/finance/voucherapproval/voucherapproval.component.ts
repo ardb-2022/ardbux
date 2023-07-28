@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild, TemplateRef, Input } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray, AbstractControl } from '@angular/forms';
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Router } from '@angular/router';
 // import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { RestService } from 'src/app/_service';
@@ -166,6 +166,7 @@ export class VoucherapprovalComponent implements OnInit {
 
   }
   Approve() {
+    this.modalRef.hide()
     this.UpdateVoucher();
 
   }
@@ -490,7 +491,9 @@ export class VoucherapprovalComponent implements OnInit {
   //   }
   //   catch (exception) { let x = 0; }
   // }
-
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, { class: 'modal-lg' });
+  }
   private UpdateVoucher(): void {
     try {
       this.isLoading=true;

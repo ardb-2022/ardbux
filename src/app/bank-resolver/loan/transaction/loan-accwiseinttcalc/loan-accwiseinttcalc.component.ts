@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { BsModalService } from 'ngx-bootstrap/modal';
-import { MessageType, mm_acc_type, m_acc_master, p_loan_param, ShowMessage, SystemValues } from 'src/app/bank-resolver/Models';
+import { MessageType, mm_acc_type, p_loan_param, ShowMessage, SystemValues } from 'src/app/bank-resolver/Models';
 import { InAppMessageService, RestService } from 'src/app/_service';
 
 @Component({

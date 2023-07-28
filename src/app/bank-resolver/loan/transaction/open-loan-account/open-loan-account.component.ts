@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild,  TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { InAppMessageService, RestService } from 'src/app/_service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -13,7 +13,6 @@ import { td_accholder } from 'src/app/bank-resolver/Models/deposit/td_accholder'
 import { tm_loan_sanction } from 'src/app/bank-resolver/Models/loan/tm_loan_sanction';
 import { tm_loan_sanction_dtls } from 'src/app/bank-resolver/Models/loan/tm_loan_sanction_dtls';
 import { p_gen_param } from 'src/app/bank-resolver/Models/p_gen_param';
-import { stringify } from '@angular/compiler/src/util';
 import { exit } from 'process';
 import { tm_deposit } from 'src/app/bank-resolver/Models/tm_deposit';
 
@@ -26,8 +25,9 @@ import { sm_loan_sanction } from 'src/app/bank-resolver/Models/loan/sm_loan_sanc
 import { td_loan_sanc } from 'src/app/bank-resolver/Models/loan/td_loan_sanc';
 import { td_loan_sanc_set } from 'src/app/bank-resolver/Models/loan/td_loan_sanc_set';
 import Utils from 'src/app/_utility/utils';
-import { MessageType, mm_category, mm_customer, m_acc_master, ShowMessage, td_def_trans_trf } from 'src/app/bank-resolver/Models';
+import { MessageType, mm_customer, ShowMessage } from 'src/app/bank-resolver/Models';
 import { CommonServiceService } from 'src/app/bank-resolver/common-service.service';
+import { sm_parameter } from 'src/app/bank-resolver/Models/sm_parameter';
 
 
 
@@ -43,7 +43,6 @@ export class OpenLoanAccountComponent implements OnInit {
               private modalService: BsModalService,
               private router: Router,
               private msg: InAppMessageService,
-              private comserv:CommonServiceService,
 
   ) { }
 
@@ -62,7 +61,7 @@ export class OpenLoanAccountComponent implements OnInit {
   updateDate: Date;
   newtm_deposit:any;
   p_gen_param = new p_gen_param();
-
+  diff:any;
   isLoading = false;
   showNoName=false;
   showNoJoint=false;
@@ -85,7 +84,8 @@ export class OpenLoanAccountComponent implements OnInit {
 
   smLoanSanctionList: sm_loan_sanction[] = [];
   selectedSmLoanSanctionList: sm_loan_sanction[] = [];
-
+  systemParam: sm_parameter[] = [];
+  penalIntt:number;
   sectorList: mm_sector[] = [];
   activityList: mm_activity[] = [];
   corpList: mm_crop[] = [];
@@ -141,6 +141,8 @@ export class OpenLoanAccountComponent implements OnInit {
   };
 
   ngOnInit(): void {
+    this.getsystemParam();
+    
     this.branchCode = this.sys.BranchCode;
     this.createUser = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
     this.createDate = this.sys.CurrentDate;
@@ -162,12 +164,41 @@ export class OpenLoanAccountComponent implements OnInit {
     this.newAccount();
 
   }
-
+  getsystemParam(){
+    this.svc.addUpdDel<any>('Mst/GetSystemParameter', null).subscribe(
+      sysRes => {
+        this.systemParam=sysRes
+        console.log(this.systemParam);
+        
+        this.penalIntt=Number(this.systemParam.filter(e=>e.param_cd=="913")[0].param_value)
+      })
+  }
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template, { class: 'modal-lg' });
   }
 
-
+  rep_stDT(){
+    const cDt = this.sys.CurrentDate.getTime();
+    console.log(this.tm_loan_all.instl_start_dt)
+    // const opDt = Utils.convertStringToDt(this.tm_loan_all.instl_start_dt.toString()).getTime();
+    const opDt = this.tm_loan_all.instl_start_dt.getTime();
+        // const o = Utils.convertStringToDt(this.td.opening_dt.value);
+        const diffDays =(opDt-cDt ) / (1000 * 3600 * 24);
+        this.diff = diffDays
+        console.log(cDt + " " + opDt + " " + diffDays)
+        debugger
+        if(this.diff<=0){
+          this.HandleMessage(true, MessageType.Warning, 'Installment start date should be getter than Operation Date!!' );
+            this.tm_loan_all.instl_start_dt=null
+           debugger
+        }
+    
+  }
+  // private  convertDate(datestring:string):Date
+  //   {
+  //   var parts = datestring.match(/(\d+)/g);
+  //   return new Date(parseInt(parts[2]), parseInt(parts[1])-1, parseInt(parts[0]));
+  //   }
 
   initializeModels() {
 
@@ -951,19 +982,34 @@ removeSecurityDtlList()
     }
 
     if (this.operationType === 'N') {
-
-      this.tm_loan_all.brn_cd = this.branchCode;
-      this.tm_loan_all.created_by = this.createUser;
-      this.tm_loan_all.created_dt = this.createDate;
-
-      this.GetLoanAccountNumberAndInsertData();
+      if(this.tm_loan_all.curr_intt_rate==0){
+        this.HandleMessage(true, MessageType.Warning, 'Interest rate can not be zero!!!');
+        this.tm_loan_all.curr_intt_rate = 0;
+        this.tm_loan_all.ovd_intt_rate = 0;
+      }
+      else{
+        this.tm_loan_all.brn_cd = this.branchCode;
+        this.tm_loan_all.created_by = this.createUser;
+        this.tm_loan_all.created_dt = this.createDate;
+  
+        this.GetLoanAccountNumberAndInsertData();
+      }
+      
     }
 
     if (this.operationType === 'U') {
-      this.tm_loan_all.brn_cd = this.sys.BranchCode;
-      this.tm_loan_all.modified_by = this.updateUser;
-      this.tm_loan_all.created_dt = this.updateDate;
-      this.UpdateLoanAccountOpeningData(saveType);
+      if(this.tm_loan_all.curr_intt_rate==0){
+        this.HandleMessage(true, MessageType.Warning, 'Interest rate can not be zero!!!');
+        this.tm_loan_all.curr_intt_rate = 0;
+        this.tm_loan_all.ovd_intt_rate = 0;
+      }
+      else{
+        this.tm_loan_all.brn_cd = this.sys.BranchCode;
+        this.tm_loan_all.modified_by = this.updateUser;
+        this.tm_loan_all.created_dt = this.updateDate;
+        this.UpdateLoanAccountOpeningData(saveType);
+      }
+      
     }
   }
 
@@ -1353,14 +1399,22 @@ removeSecurityDtlList()
   }
 
   checkAndSetOverdueInterest() {
+    if(this.tm_loan_all.curr_intt_rate>100){
+      this.HandleMessage(true, MessageType.Warning, 'Interest rate should be lower than 100%');
+      this.tm_loan_all.curr_intt_rate = 0;
+      this.tm_loan_all.ovd_intt_rate = 0;
+    }
+    else{
+      this.tm_loan_all.ovd_intt_rate = this.tm_loan_all.curr_intt_rate + this.penalIntt;
+
+    }
     // if (this.tm_loan_all.ovd_intt_rate === undefined ||
     //   this.tm_loan_all.ovd_intt_rate === null ||
     //   this.tm_loan_all.ovd_intt_rate === 0) {
     //   this.tm_loan_all.ovd_intt_rate = this.tm_loan_all.curr_intt_rate + 2;
     // }
-    if(this.sys.ardbCD=='26'){this.tm_loan_all.ovd_intt_rate = this.tm_loan_all.curr_intt_rate}
-    else{this.tm_loan_all.ovd_intt_rate = this.tm_loan_all.curr_intt_rate + 2;}
-    
+    // if(this.sys.ardbCD=='26'){this.tm_loan_all.ovd_intt_rate = this.tm_loan_all.curr_intt_rate}
+    // else{this.tm_loan_all.ovd_intt_rate = this.tm_loan_all.curr_intt_rate + 2;}
 
   }
 

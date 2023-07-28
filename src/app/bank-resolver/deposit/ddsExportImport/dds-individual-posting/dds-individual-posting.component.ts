@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, TemplateRef } from '@angular/core';
+import { FormBuilder, FormGroup} from '@angular/forms';
 import { Router } from '@angular/router';
 import { tm_subsidy } from 'src/app/bank-resolver/Models/loan/tm_subsidy';
 import { RestService } from 'src/app/_service';
-import Utils from 'src/app/_utility/utils';
 import { LOGIN_MASTER, MessageType, mm_customer, ShowMessage, SystemValues } from '../../../Models';
 import { m_branch } from '../../../Models/m_branch';
 import { DatePipe } from '@angular/common'
 import { environment } from 'src/environments/environment';
 import { p_gen_param } from 'src/app/bank-resolver/Models/p_gen_param';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-dds-individual-posting',
@@ -18,6 +18,7 @@ import { p_gen_param } from 'src/app/bank-resolver/Models/p_gen_param';
 })
 export class DdsIndividualPostingComponent implements OnInit {
   brnDtls: m_branch[] = [];
+  modalRef: BsModalRef;
 
   isLoading = false;
   agentFrm: FormGroup;
@@ -47,7 +48,7 @@ export class DdsIndividualPostingComponent implements OnInit {
   totSum=0;
   totAmt=0;
   k=0;
-  constructor(public datepipe: DatePipe, private router: Router, private formBuilder: FormBuilder, private svc: RestService) { }
+  constructor(public datepipe: DatePipe,private modalService: BsModalService, private router: Router, private formBuilder: FormBuilder, private svc: RestService) { }
   disTransBtn = true;
   ngOnInit(): void {
     this.getSubsidyType()
@@ -334,7 +335,11 @@ export class DdsIndividualPostingComponent implements OnInit {
     this.showMsg.Type = type;
     this.showMsg.Message = message;
   }
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, { class: 'modal-lg' });
+  }
   approve(){
+    this.modalRef.hide();
     this.isLoading=true;
     var dt={
       "ardb_cd":this.sys.ardbCD,

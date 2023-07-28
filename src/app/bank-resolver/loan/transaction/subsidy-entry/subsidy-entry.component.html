@@ -13,8 +13,7 @@
         <button mat-raised-button type="button" class="btn btn-rounded btn-primary btn-primary-spacing btn-sm" [disabled]="!isNew"
           (click)="next()">Next</button> -->
         <!-- <button mat-raised-button type="button" class="btn btn-rounded btn-primary btn-primary-spacing btn-sm" [disabled]="!isSave" (click)="saveuser()">Save</button> -->
-        <button mat-raised-button type="button" class="btn btn-rounded btn-primary btn-primary-spacing btn-sm" [disabled]="!isSave"
-          (click)="saveuser()">Save</button>
+       
         <!-- <button mat-raised-button type="button" class="btn btn-rounded btn-primary btn-primary-spacing btn-sm" [disabled]="!isModify"
           (click)="updateuser()">Modify</button> -->
         <button mat-raised-button type="button" class="btn btn-rounded btn-primary btn-primary-spacing btn-sm" [disabled]="!isClear"
@@ -23,6 +22,8 @@
           (click)="deleteuser()">Delete</button>
         <button mat-raised-button type="button" class="btn btn-rounded btn-primary btn-primary-spacing btn-sm" (click)="closeScreen()"
           style="position: absolute;right: 10px;">Close</button>
+          <button mat-raised-button type="button" class="btn btn-rounded btn-primary btn-primary-spacing btn-sm" [disabled]="!isSave"
+          (click)="saveuser()">Save</button>
       </div>
     </div>
   </ng-template>

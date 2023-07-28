@@ -1,3 +1,49 @@
+
+<ng-template #Delconfirm >
+  <div class="modal-body text-center" >
+    <p>'Are you sure you want to <b style="color: red;">Delete</b> Transaction of Acc {{this.td.acc_num.value}}
+      with Transancation Cd {{this.td.trans_cd.value}}</p>
+    <button mat-raised-button type="button" class="btn btn-light" (click)="this.modalRef.hide()" >No</button>&nbsp;
+    <button mat-raised-button type="button" class=" btn btn-primary" (click)="onDeleteClick()" >Yes</button>
+    
+  </div>
+</ng-template>
+<ng-template #currDemand let-modal bd-example-modal-lg>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Current Demand ({{fdt}} to {{tdt}})</h4>
+
+  </div>
+  <div class="modal-body">
+
+    <table class="table table-sm table-hover" id="customers2">
+      <tr>
+        <th>Current Prn.</th>
+        <th>Overdue Prn.</th>
+        <th>Current Intt.</th>
+        <th>Overdue Intt.</th>
+        <th>Penal Intt.</th>
+        <th>Total Demand</th>
+      </tr>
+      <tr *ngFor="let item of CurrentYearDemand ">
+        <td>{{item.curr_prn?item.curr_prn:0| currency:'INR'}}</td>
+        <td>{{item.ovd_prn?item.ovd_prn:0| currency:'INR'}}</td>
+        <td>{{item.curr_intt?item.curr_intt:0| currency:'INR'}}</td>
+        <td>{{item.ovd_intt?item.ovd_intt:0| currency:'INR'}}</td>
+        <td>{{item.penal_intt?item.penal_intt:0| currency:'INR'}}</td>
+        <td>{{(item.curr_prn?item.curr_prn:0)+(item.ovd_prn?item.ovd_prn:0)+(item.curr_intt?item.curr_intt:0)+(item.ovd_intt?item.ovd_intt:0)+(item.penal_intt?item.penal_intt:0) | currency:'INR'}}</td>
+        <!-- <td>
+          <button mat-raised-button>
+            <button mat-raised-button class="btn btn-primary float-right" (click)="Submit()">View/Edit</button>
+          </button>
+        </td> -->
+      </tr>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <!-- <button mat-raised-button class="btn btn-default" (click)="modalRef.hide();disableOperation=false;showTransactionDtl=false;">Cancel</button> -->
+    <button mat-raised-button class="btn btn-default" (click)="onCancel()">Close</button>
+  </div>
+</ng-template>
 <ng-template #contentbatch let-modal bd-example-modal-lg>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">Unapprove Transaction List</h4>
@@ -533,18 +579,229 @@
     </table>
   </div>
 </ng-template>
+<ng-template #LoanChallan>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left customHeader" style="padding-right: 10px;">Recovery Challan </h4>
+    
+    <button  type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row print" id="challan" hidden >
+      <div class="col-6 table-container" >
+        <div style="border: 1px solid #b7b4b4;">
+          <div>
+            <div class="justify-content-center" style="text-align:center" *ngIf="reportData">
+              <br><h5>{{ardbName}} </h5>
+              <h5>{{branchName}}</h5>
+              <h5>Run Date & Time : {{today}} </h5>
+              <h5>{{ardbAddr}}</h5>
+          <br>
+          </div>
+          </div>
+          <hr>
+          <br>
+          <div class="row" style="padding-left: 5px;" >
+            <div class="col-6">
+            <b>Trans Date:</b> {{sys?.CurrentDate | date:'dd/MM/yyyy'}}
+            </div>
+            <div class="col-6">
+              <b>Trans ID:</b> {{t_cd}}
+            </div>
+          </div>
+          <div class="row" style="padding-left: 5px;">
+            <div class="col-12">
+              <b>Loan Account:</b> {{acDesc}}
+              <br>
+              <b>Lonee Name:</b> {{partyName}}
+              <br>
+              <b>Address:</b> {{present_address}}
+            </div>
+          </div>
+          <div class="row" style="padding-left: 5px;padding-bottom: 10px;">
+            <div class="col-6">
+              <b>Member No:</b> {{m_id}}
+              <br>
+              <b>Curr & Ovd Intt Rt. :</b> {{currRt}} & {{ovdRt}}
+              <br>
+              <b>Loan ID: {{ln_id}}</b>
+            </div>
+            <div class="col-6">
+              <b>Ledger No:</b> {{acc_lfNo}}
+              <br>
+              <b>Operation:</b> Recovery By  {{trns_type=='C'?"Cash":"Transfer"}}
+              <br>
+              <!-- <b>Share:</b> {{s_a}} -->
+              
+              <b>Intt Recov Till:</b> {{i_n_dt?.substr(0,10)}}
+            </div>
+          </div>
+          <br>
+          <b style="font-size: large; padding-left: 28%;">Total Amount:{{t_a| number : '1.2-2'}}</b> 
+          <hr>
+          <div>
+            <div class="row" style="padding-left: 5px;">
+              <div class="col-4" style="border-right: 1px solid #cdcdcd;">
+                <b> Prn / Intt Typ</b>
+                <hr><br>
+                <b>Current</b> 
+                <br>
+                <b>Overdue</b>
+                <br>
+                <b>Advance / Penal</b> 
+                <br><br>
+                <hr>
+                <b>Total</b>
+              </div>
+              <div class="col-4" style="border-right: 1px solid #cdcdcd;text-align: right; padding-right: 10%;">
+                <b>Principal</b>
+                <hr><br>
+                {{c_p| number : '1.2-2'}}
+                <br>
+                {{o_p| number : '1.2-2'}}
+                <br>
+                {{a_p| number : '1.2-2'}}
+                <br><br>
+                <hr>
+                {{c_p+o_p+a_p | number : '1.2-2'}}
+              </div>
+              <div class="col-4" style="text-align: right; padding-right: 10%;">
+                <b>Interest</b>
+                <hr><br>
+                {{c_i | number : '1.2-2'}}
+                <br>
+                {{o_i | number : '1.2-2'}}
+                <br>
+                {{p_i | number : '1.2-2'}}
+                <br><br>
+                <hr>
+              {{c_i+o_i+p_i | number : '1.2-2'}}
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
 
+      <div class="col-6 table-container" >
+        <div style="border: 1px solid #b7b4b4;">
+          <div>
+            <div class="justify-content-center" style="text-align:center" *ngIf="reportData">
+              <br><h5>{{ardbName}} </h5>
+              <h5>{{branchName}}</h5>
+              <h5>Run Date & Time : {{today}} </h5>
+              <h5> {{ardbAddr}}</h5>
+              <br>
+          </div>
+          </div>
+          <hr>
+          <br>
+          <div class="row" style="padding-left: 5px;">
+            <div class="col-6">
+            <b>Trans Date:</b>  {{sys?.CurrentDate | date:'dd/MM/yyyy'}}
+            </div>
+            <div class="col-6">
+              <b>Trans ID:</b> {{t_cd}}
+            </div>
+          </div>
+          <div class="row" style="padding-left: 5px;">
+            <div class="col-12">
+              <b>Loan Account:</b> {{acDesc}}
+              <br>
+              <b>Lonee Name:</b> {{partyName}}
+              <br>
+              <b>Address:</b> {{present_address}}
+            </div>
+          </div>
+          <div class="row" style="padding-left: 5px;padding-bottom: 10px;">
+            <div class="col-6">
+              <b>Member No:</b> {{m_id}}
+              <br>
+              <b>Curr & Ovd Intt Rt. :</b> {{currRt}} & {{ovdRt}}
+              <br>
+              <b>Loan ID:</b> {{ln_id}}
+            </div>
+            <div class="col-6">
+              <b>Ledger No:</b> {{acc_lfNo}}
+              <br>
+              <b>Operation:</b> Recovery By {{trns_type=='C'?"Cash":"Transfer"}}
+              <br>
+              <!-- <b>Share:</b> {{s_a | number : '1.2-2'}}
+              <br> -->
+              <b>Intt Recov Till:</b> {{i_n_dt?.substr(0,10)}}
+            </div>
+          </div><br>
+          <b style="font-size: large; padding-left: 28%;">Total Amount:{{t_a| number : '1.2-2'}}</b> 
+          <hr>
+          <div>
+            <div class="row" style="padding-left: 5px;">
+              <div class="col-4" style="border-right: 1px solid #cdcdcd;">
+                <b> Prn / Intt Typ</b>
+                <hr><br>
+                <b>Current</b> 
+                <br>
+                <b>Overdue</b>
+                <br>
+                <b>Advance / Penal</b> 
+                <br><br>
+                <hr>
+                <b>Total</b>
+              </div>
+              <div class="col-4" style="border-right: 1px solid #cdcdcd;text-align: right; padding-right: 10%;">
+                <b>Principal</b>
+                <hr><br>
+                {{c_p| number : '1.2-2'}}
+                <br>
+                {{o_p| number : '1.2-2'}}
+                <br>
+                {{a_p| number : '1.2-2'}}
+                <br><br>
+                <hr>
+                {{c_p+o_p+a_p| number : '1.2-2'}}
+              </div>
+              <div class="col-4" style="text-align: right; padding-right: 10%;">
+                <b>Interest</b>
+                <hr><br>
+                {{c_i| number : '1.2-2'}}
+                <br>
+                {{o_i| number : '1.2-2'}}
+                <br>
+                {{p_i| number : '1.2-2'}}
+                <br><br>
+                <hr>
+              {{c_i+o_i+p_i| number : '1.2-2'}}
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <h4>Are you want to print this transaction challan?</h4>
+  </div>
+  <div class="modal-footer">
+    <div class="print">
+        <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" [useExistingCss]="true" 
+        class="btn btn-rounded btn-primary m-1" 
+        printSectionId="challan" ngxPrint (click)="modalRef.hide()">Print Challan</button>
+    </div>
+  </div>
+</ng-template>
 <loading *ngIf="isLoading"></loading>
 <div class="row d-flex justify-content-center align-items-center"
   style="background-color: #78c2ad21; min-height: 90vh;">
   <ng-template #buttonDiv>
     <div
     class="col-xs-12 col-sm-12 col-md-11 col-lg-11 shadow mb-2 bg-white p-3 d-flex justify-content-center align-items-center">
-    <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onSaveClick()">Save</button>
-    <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onDeleteClick()" [disabled]="!isDelete">Delete</button>
+    <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="openModal(Delconfirm)" [disabled]="!isDelete">Delete</button>
     <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onResetClick()">Reset</button>
     <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onBackClick()">Back</button>
     <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1">Cancel</button>
+    <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onSaveClick()">Save</button>
+
+    <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" style="position: absolute;right: 10px;" (click)="printChallan()">Print Challan</button>
+  
   </div>
   </ng-template>
   <ng-container *ngTemplateOutlet="buttonDiv">
@@ -747,6 +1004,8 @@
               <button style="font-weight: 500; font-size: 14px;" type="button" class="btn btn-link" (click)="openModal(content)">Show Sanction Dtls</button>
               <button style="font-weight: 500; font-size: 14px;" type="button" class="btn btn-link" (click)="openModalC1(contentLoanStmt)">Show Loan Stmt</button>
               <button style="font-weight: 500; font-size: 14px;" type="button" class="btn btn-link" (click)="customerDtls(custDtls)">Show Customer Details</button>
+              <button style="font-weight: 500; font-size: 14px;" type="button" class="btn btn-link" (click)="openModal(currDemand)">Show Current Demand</button>
+              <!-- <button style="font-weight: 500; font-size: 14px;" type="button" class="btn btn-link" (click)="customerDtls(LoanChallan)">Show Customer Details</button> -->
 
               <ng-template #content>
                 <div class="modal-header">

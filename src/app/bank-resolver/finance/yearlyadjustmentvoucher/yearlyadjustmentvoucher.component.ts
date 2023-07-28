@@ -1,6 +1,6 @@
 
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray, AbstractControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Router } from '@angular/router';
 // import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { RestService } from 'src/app/_service';
@@ -86,6 +86,9 @@ export class YearlyadjustmentvoucherComponent implements OnInit {
     this.isNew = false;
     this.getmAccMaster();
     this.New();
+  }
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, this.config);
   }
   Initialize() {
     this.RemoveItem(0);
@@ -175,6 +178,7 @@ export class YearlyadjustmentvoucherComponent implements OnInit {
         if (this._approvalSts=="Unapproved")
                 this.DeleteVoucher();
          else 
+         this.modalRef.hide()
         this.HandleMessage(true, MessageType.Error, 'Voucher already Approved can not be Deleted !');
       }
   Approve() {
@@ -625,6 +629,7 @@ export class YearlyadjustmentvoucherComponent implements OnInit {
           this.isApprove = true;
           this.isClear = false;
           this.isLoading=false;
+          this.modalRef.hide();
           this.HandleMessage(true, MessageType.Sucess, 'Voucher Deleted Successfully !');
         },
         err => {this.isLoading=false; this.HandleMessage(true, MessageType.Error, 'Delete Failed !'); }

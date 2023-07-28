@@ -1,9 +1,9 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormGroup,FormBuilder, Validators } from '@angular/forms';
+import { FormGroup,FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { InAppMessageService, RestService } from 'src/app/_service';
-import { MessageType, ShowMessage, SystemValues, mm_ifsc_code, td_outward_payment, m_acc_master, mm_acc_type, td_def_trans_trf, mm_customer, tm_deposit } from '../../Models';
+import { MessageType, ShowMessage, SystemValues, mm_ifsc_code, td_outward_payment, m_acc_master, mm_acc_type, mm_customer, tm_deposit } from '../../Models';
 import { p_gen_param } from '../../Models/p_gen_param';
 
 @Component({

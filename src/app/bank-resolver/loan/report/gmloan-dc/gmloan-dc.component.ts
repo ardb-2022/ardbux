@@ -12,6 +12,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import { CommonServiceService } from 'src/app/bank-resolver/common-service.service';
+import { mm_activity } from 'src/app/bank-resolver/Models/loan/mm_activity';
 @Component({
   selector: 'app-gmloan-dc',
   templateUrl: './gmloan-dc.component.html',
@@ -79,15 +80,17 @@ export class GMloanDCComponent implements OnInit {
   totadvPrnSum=0;
   loanNm:any;
   male:any;
+  activityList: mm_activity[] = [];
   female:any;
   suggestedCustomer: mm_customer[];
   AcctTypes:  mm_operation[];
   filteredArray:any=[]
   resultLength=0;
   LandingCall:boolean;
+  filterData:any[]=[];
   constructor(private comser:CommonServiceService, private svc: RestService, private formBuilder: FormBuilder,private exportAsService: ExportAsService, private cd: ChangeDetectorRef,private modalService: BsModalService, private _domSanitizer: DomSanitizer,private router: Router) { }
   ngOnInit(): void {
-    
+    this.getActivityList()
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.fromdate = this.sys.CurrentDate;
@@ -95,6 +98,8 @@ export class GMloanDCComponent implements OnInit {
     this.reportcriteria = this.formBuilder.group({
       fromDate: [null, Validators.required],
       toDate: [null, Validators.required],
+      activity_cd: [null, Validators.required],
+      sex: [null, Validators.required],
       // acc_type_cd: [null, Validators.required]
     });
     if(this.comser.loanRec){
@@ -110,7 +115,25 @@ export class GMloanDCComponent implements OnInit {
     var time = date.toLocaleTimeString();
     this.today= n + " "+ time
   }
-  
+  getActivityList() {
+
+    if (this.activityList.length > 0) {
+      return;
+    }
+    this.activityList = [];
+
+    this.svc.addUpdDel<any>('Mst/GetActivityMaster', null).subscribe(
+      res => {
+
+        this.activityList = res;
+        debugger
+      },
+      err => {
+
+      }
+    );
+
+  }
   onLoadScreen(content) {
     this.notvalidate=false
     this.modalRef = this.modalService.show(content, this.config);
@@ -141,11 +164,14 @@ export class GMloanDCComponent implements OnInit {
           this.totPrn=0;
           this.reportData.length=0;
           this.pagedItems.length=0;
+          this.filterData=[]
       var dt={
         "ardb_cd":this.sys.ardbCD,
         "brn_cd":this.sys.BranchCode,
         "from_dt":this.reportcriteria.controls.fromDate.value.toISOString(),
         "to_dt":this.reportcriteria.controls.toDate.value.toISOString(),
+        "activity_cd":this.reportcriteria.controls.activity_cd.value,
+        "sex":this.reportcriteria.controls.sex.value
         // "acc_cd":this.reportcriteria.controls.acc_type_cd.value,
       }
       this.svc.addUpdDel('Loan/PopulateDcStatement',dt).subscribe(data=>{console.log(data)
@@ -155,18 +181,22 @@ export class GMloanDCComponent implements OnInit {
           this.comser.SnackBar_Nodata()
         } 
           for(let i=0;i<this.reportData.length;i++){
-            for(let j=0;j<this.reportData[i].dclist.length;j++){
-              this.totDisAmt=0;
-              for(let k=0;k<this.reportData[i].dclist[j].dc_statement.length;k++){
-                  this.totDisAmt+=this.reportData[i].dclist[j].dc_statement[k].disb_amt;
-                  this.reportData[i].dclist[j].dc_statement[0].lso_no=this.totDisAmt;
-                  if(this.reportData[i].dclist[j].dc_statement[0].sex=='M')
-                    {this.male+=1}
-                    else{
-                      this.female+=1
-                    }
+            // if(this.reportData[i].activity_cd.toLowerCase()==this.reportcriteria.controls.activity.value.toLowerCase()){
+              
+              for(let j=0;j<this.reportData[i].dclist.length;j++){
+                this.totDisAmt=0;
+                for(let k=0;k<this.reportData[i].dclist[j].dc_statement.length;k++){
+                    this.totDisAmt+=this.reportData[i].dclist[j].dc_statement[k].disb_amt;
+                    this.reportData[i].dclist[j].dc_statement[0].lso_no=this.totDisAmt;
+                    
+                }
               }
-            }
+              if(this.reportcriteria.controls.sex.value=='M')
+                      {this.male=this.reportData[i].dclist.length}
+                      else
+                      {this.female=this.reportData[i].dclist.length}
+            //   this.filterData.push(this.reportData[i])
+            // }
 
           }
         this.modalRef.hide();

@@ -12,11 +12,12 @@
     <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" [disabled]="f.cust_type.value ==='' || f.first_name.value ===''
       || f.guardian_name.value ===''" (click)="openUploadModal(UploadImg)">Upload Document</button>
     <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onClearClick()">Clear</button>
-    <button mat-raised-button type="button" #saveBtn class="btn btn-primary btn-sm ml-1 mr-1" (click)="onSaveClick()" [disabled]="f.cust_type.value ==='' || f.first_name.value ===''
-    || f.guardian_name.value ==='' || _isDisabled ">Save</button>
+    
     <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onBackClick()">Back</button>
     <!-- <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" [disabled]="!enableModifyAndDel"
       (click)="onDelClick()">Delete</button> -->
+      <button mat-raised-button type="button" #saveBtn class="btn btn-primary btn-sm ml-1 mr-1" (click)="onSaveClick()" [disabled]="f.cust_type.value ==='' || f.first_name.value ===''
+    || f.guardian_name.value ==='' || _isDisabled ">Save</button>
   </div>
 </div>
 </ng-template>

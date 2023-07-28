@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { SystemValues, p_report_param, mm_customer } from 'src/app/bank-resolver/Models';
+import { SystemValues, p_report_param, mm_customer, mm_acc_type } from 'src/app/bank-resolver/Models';
 import { p_gen_param } from 'src/app/bank-resolver/Models/p_gen_param';
 import { tt_trial_balance } from 'src/app/bank-resolver/Models/tt_trial_balance';
 import { RestService } from 'src/app/_service';
@@ -62,6 +62,7 @@ export class INearMaturityComponent implements OnInit,AfterViewInit  {
   reportData:any=[]
   ardbName=localStorage.getItem('ardb_name')
   branchName=this.sys.BranchName
+  accountTypeList: mm_acc_type[] = [];
 
   lastAccCD:any;
   today:any
@@ -78,6 +79,7 @@ export class INearMaturityComponent implements OnInit,AfterViewInit  {
       fromDate: [null, Validators.required],
       toDate: [null, Validators.required]
     });
+    this.getAccountTypeList()
     this.onLoadScreen(this.content);
     var date = new Date();
     // get the date as a string
@@ -85,6 +87,28 @@ export class INearMaturityComponent implements OnInit,AfterViewInit  {
     // get the time as a string
        var time = date.toLocaleTimeString();
        this.today= n + " "+ time
+  }
+  getAccountTypeList() {
+
+    if (this.accountTypeList.length > 0) {
+      return;
+    }
+    this.accountTypeList = [];
+    var dt={
+      "ardb_cd":this.sys.ardbCD
+    }
+    this.svc.addUpdDel<any>('Mst/GetAccountTypeMaster', dt).subscribe(
+      res => {
+      
+        this.accountTypeList = res;
+        // this.accountTypeList = this.accountTypeList.filter(c => c.dep_loan_flag === 'D');
+        this.accountTypeList = this.accountTypeList.filter(c => c.dep_loan_flag === 'I');
+        this.accountTypeList = this.accountTypeList.sort((a, b) => (a.acc_type_cd > b.acc_type_cd) ? 1 : -1);
+      },
+      err => {
+
+      }
+    );
   }
   onLoadScreen(content) {
     this.notvalidate=false
@@ -127,6 +151,9 @@ export class INearMaturityComponent implements OnInit,AfterViewInit  {
           this.comser.SnackBar_Nodata()
         } 
         this.dataSource.data=this.reportData
+        for(let i=0;i<this.reportData.length;i++){
+          this.reportData[i].acc_type_desc=this.accountTypeList.filter(e=>e.acc_type_cd==this.reportData[i].acc_type_cd)[0].acc_type_desc
+        }
         this.itemsPerPage=this.reportData.length % 50 <=0 ? this.reportData.length: this.reportData.length % 50
     
         this.isLoading=false

@@ -8,11 +8,12 @@
       <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="retrieveData()">Retrieve</button>
       <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="modifyData()">Modify</button>
       <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="clearData()">Clear</button>
-      <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="saveData()" >Save</button>
       <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="backScreen()">Back</button>
-      <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="deleteData()">Delete</button>
+      <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="openModal(Delconfirm)">Delete</button>
       <button mat-raised-button type="button" [disabled]="undefined === tm_deposit.cust_cd" class="btn btn-primary btn-sm ml-1 mr-1"
         (click)="openModal(kycContent)">Kyc</button>
+      <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="saveData()" >Save</button>
+
     </div>
   </ng-template>
 
@@ -2029,5 +2030,14 @@
   </div>
   <div class="modal-body">
     <app-kyc></app-kyc>
+  </div>
+</ng-template>
+<ng-template #Delconfirm >
+  <div class="modal-body text-center" >
+    <p>'Are you sure you want to <b style="color: red;">Delete</b> Transaction of Acc {{this.masterModel.tmdeposit.acc_num}}
+      with Transancation Cd {{this.td_deftrans.trans_cd}}</p>
+    <button mat-raised-button type="button" class="btn btn-light" (click)="this.modalRef.hide()" >No</button>&nbsp;
+    <button mat-raised-button type="button" class=" btn btn-primary" (click)="deleteData()" >Yes</button>
+    
   </div>
 </ng-template>

@@ -91,19 +91,7 @@
       <!-- ID Column -->
       <ng-container matColumnDef="acc_type_desc">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Account Type </th>
-        <td mat-cell *matCellDef="let row"> 
-            <ng-container *ngIf="row.acc_type_cd==22">
-                {{'Fixed Deposit'}}
-            </ng-container>
-            <ng-container *ngIf="row.acc_type_cd==23">
-                {{'Cash Cirtificate'}}
-            </ng-container>
-            <ng-container *ngIf="row.acc_type_cd==24">
-                {{'Monthly Income Scheme'}}
-            </ng-container>
-            <ng-container *ngIf="row.acc_type_cd==25">
-                {{'Recurring Deposit'}}
-            </ng-container>
+        <td mat-cell *matCellDef="let row"> {{row.acc_type_desc}}
         </td>
       </ng-container>
   

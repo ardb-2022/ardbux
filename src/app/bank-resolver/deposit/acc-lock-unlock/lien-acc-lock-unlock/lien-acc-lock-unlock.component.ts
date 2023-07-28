@@ -1,4 +1,4 @@
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { mm_acc_type, SystemValues, tm_deposit, tm_depositall } from 'src/app/bank-resolver/Models';

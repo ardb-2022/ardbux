@@ -278,3 +278,19 @@
     top: -16px;
     background-color: inherit;
   }
+  .print{
+    position: relative;
+    margin-right: 45%;
+  }
+  
+  hr {
+    margin-top: 0!important;
+    margin-bottom: 0!important;
+  }
+  @media print {
+    .table-container {
+      display: inline-block;
+      width: 50%; /* Adjust the width as needed */
+      margin-top: 1%;
+    }
+  }

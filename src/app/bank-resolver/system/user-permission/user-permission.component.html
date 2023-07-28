@@ -120,10 +120,9 @@
           <div class="form-group col-12">
             <label for="acc_type">User Type<span class="text-danger">*</span></label>
             <select id="user_type" class="form-control form-control-sm"  formControlName="user_type">
-                <option disabled value='0'>Select User type</option>
-                <option  value="1">Admin User</option>
-                <option  value="2">Super User</option>
-                <option  value="3">General User</option>
+              <option disabled value='0'>Select User type</option>
+              <option *ngFor="let i of allRole" [value]="i.role_cd">{{i.role_type}}</option>
+                
             </select>
             </div>
         </div>
@@ -155,10 +154,9 @@
           <div class="form-group col-3">
             <label for="acc_type">User Type<span class="text-danger">*</span></label>
             <select id="user_type" class="form-control form-control-sm"  formControlName="user_type">
-                <option disabled value='0'>Select User type</option>
-                <option  value="1">Admin User</option>
-                <option  value="2">Super User</option>
-                <option  value="3">General User</option>
+              <option disabled value='0'>Select User type</option>
+              <option *ngFor="let i of allRole" [value]="i.role_cd">{{i.role_type}}</option>
+                
             </select>
             </div>
             <div class="col-3">

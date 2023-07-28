@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { SystemValues, p_report_param } from 'src/app/bank-resolver/Models';
+import { SystemValues, mm_acc_type, p_report_param } from 'src/app/bank-resolver/Models';
 import { mm_constitution } from 'src/app/bank-resolver/Models/deposit/mm_constitution';
 import { tt_trial_balance } from 'src/app/bank-resolver/Models/tt_trial_balance';
 import { RestService } from 'src/app/_service';
@@ -41,6 +41,7 @@ export class IDetailListComponent implements OnInit,AfterViewInit  {
     backdrop: true, // enable backdrop shaded color
     ignoreBackdropClick: true // disable backdrop click to close the modal
   };
+  accountTypeList: mm_acc_type[] = [];
   trailbalance: tt_trial_balance[] = [];
   prp = new p_report_param();
   reportcriteria: FormGroup;
@@ -77,6 +78,8 @@ export class IDetailListComponent implements OnInit,AfterViewInit  {
   lastCustCD:any
   today:any
   totprnamt=0
+  totinttamt=0
+  totmatamt=0
   prvamt=0
   insamt=0
   pageLength=0
@@ -97,6 +100,7 @@ export class IDetailListComponent implements OnInit,AfterViewInit  {
     
       // constitution_cd: [{ disabled: true }, Validators.required]
     });
+    this.getAccountTypeList();
     this.getConstitutionList();
     this.onLoadScreen(this.content);
     var date = new Date();
@@ -105,6 +109,28 @@ export class IDetailListComponent implements OnInit,AfterViewInit  {
     // get the time as a string
        var time = date.toLocaleTimeString();
        this.today= n + " "+ time
+  }
+  getAccountTypeList() {
+
+    if (this.accountTypeList.length > 0) {
+      return;
+    }
+    this.accountTypeList = [];
+    var dt={
+      "ardb_cd":this.sys.ardbCD
+    }
+    this.svc.addUpdDel<any>('Mst/GetAccountTypeMaster', dt).subscribe(
+      res => {
+      
+        this.accountTypeList = res;
+        // this.accountTypeList = this.accountTypeList.filter(c => c.dep_loan_flag === 'D');
+        this.accountTypeList = this.accountTypeList.filter(c => c.dep_loan_flag === 'I');
+        this.accountTypeList = this.accountTypeList.sort((a, b) => (a.acc_type_cd > b.acc_type_cd) ? 1 : -1);
+      },
+      err => {
+
+      }
+    );
   }
   onLoadScreen(content) {
     this.modalRef = this.modalService.show(content, this.config);
@@ -149,6 +175,8 @@ export class IDetailListComponent implements OnInit,AfterViewInit  {
       this.opdrSum=0;
       this.insamt=0;
       this.totprnamt=0;
+      this.totinttamt=0;
+      this.totmatamt=0;
       this.prvamt=0
       this.modalRef.hide();
       this.isLoading=true;
@@ -166,9 +194,15 @@ export class IDetailListComponent implements OnInit,AfterViewInit  {
         // this.sendData(data);
 
         for(let i=0;i<this.reportData.length;i++){
+          for(let j=0;j<this.reportData[i].ttsbcadtllist.length;j++){
+            this.reportData[i].ttsbcadtllist[j].acc_type_desc=this.accountTypeList.filter(e=>e.acc_type_cd==this.reportData[i].ttsbcadtllist[j].acc_type_cd)[0].acc_type_desc
+          }
           this.totprnamt+=this.reportData[i].constype.tot_cons_balance
+          this.totinttamt+=this.reportData[i].constype.tot_cons_intt_balance
           this.allconscount+=this.reportData[i].constype.tot_cons_count
         }
+        this.totmatamt=this.totprnamt+this.totinttamt
+
         this.pageLength=this.reportData.length
         this.dataSource.data=this.reportData
         if(this.reportData.length<50){

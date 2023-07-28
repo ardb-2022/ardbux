@@ -2,7 +2,6 @@ import { p_gen_param } from '../../../Models/p_gen_param';
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 // import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ExportAsService } from 'ngx-export-as';
 import { InAppMessageService, RestService } from 'src/app/_service';
 import {
   MessageType, mm_customer, ShowMessage, td_def_trans_trf,
@@ -15,7 +14,6 @@ import Utils from 'src/app/_utility/utils';
 import { mm_constitution } from '../../../Models/deposit/mm_constitution';
 import { mm_oprational_intr } from '../../../Models/deposit/mm_oprational_intr';
 import { tm_denomination_trans } from '../../../Models/deposit/tm_denomination_trans';
-import { AccOpenDM } from '../../../Models/deposit/AccOpenDM';
 import { InvOpenDM } from 'src/app/bank-resolver/Models/deposit/InvOpenDM';
 
 
@@ -72,6 +70,8 @@ export class InvTransactionApprovalComponent implements OnInit {
   typeCd:any;
   tm_Inv:any
   intAmount:any;
+  trfDtls:boolean=false;
+
   // cust: mm_customer;
   // tdDepTransRet: td_def_trans_trf[] = [];
 
@@ -328,7 +328,13 @@ export class InvTransactionApprovalComponent implements OnInit {
         err => { this.isLoading = false; }
       );
     } else { this.transactionDtlsFrm.reset(); }
+    if(transactionDtl.trf_type === 'T'){
+      this.trfDtls=true;
+    }
+    else{
+      this.trfDtls=false;
 
+    }
   }
 
   private getDenominationOrTransferDtl(transactionDtl: td_def_trans_trf): void {
@@ -565,6 +571,7 @@ export class InvTransactionApprovalComponent implements OnInit {
     this.toFltrAccountTyp = '';
     this.toFltrTrnCd = '';
     this.refresh = true;
+    this.trfDtls=false;
     this.getAcctTypeMaster();
     this.tranferDetails = [];
   }
@@ -743,6 +750,7 @@ export class InvTransactionApprovalComponent implements OnInit {
   }
 
   public onApproveClick(): void {
+    this.modalRef.hide();
     if (this.selectedVm.td_def_trans_trf.trans_type.toLocaleLowerCase() === 'W') {
       if (this.selectedVm.tm_deposit.acc_type_cd === 1 ||
         this.selectedVm.tm_deposit.acc_type_cd === 7) {
@@ -756,7 +764,9 @@ export class InvTransactionApprovalComponent implements OnInit {
     this.isLoading = true;
     const param = new p_gen_param();
     param.brn_cd = this.sys.BranchCode; // localStorage.getItem('__brnCd');
-    param.ad_trans_cd = this.selectedVm.td_def_trans_trf.trans_cd;
+    param.ad_trans_cd =this.transactionDtlsFrm.controls.acc_num.value.length>0? this.selectedVm.td_def_trans_trf.trans_cd:null;
+
+    // param.ad_trans_cd = this.selectedVm.td_def_trans_trf.trans_cd;
     // const dt = this.sys.CurrentDate;
     param.adt_trans_dt = this.sys.CurrentDate;
     param.ad_acc_type_cd = this.selectedVm.mm_acc_type.acc_type_cd;
@@ -785,7 +795,8 @@ export class InvTransactionApprovalComponent implements OnInit {
       },
       err => {
         this.isLoading = false;
-        this.HandleMessage(true, MessageType.Error, err.error.text);
+        this.HandleMessage(true, MessageType.Error, err.status==400?'Select Transaction to be APPROVE!!':'Error from server side');
+
       }
     );
   }

@@ -152,7 +152,6 @@ import { FdTransComponent } from './investment/transaction/investment-transactio
 import { CcTransComponent } from './investment/transaction/investment-transactions/cc-trans/cc-trans.component';
 import { MisTransComponent } from './investment/transaction/investment-transactions/mis-trans/mis-trans.component';
 import { RdTransComponent } from './investment/transaction/investment-transactions/rd-trans/rd-trans.component';
-import { InvTranServService } from './investment/transaction/investment-transactions/inv-tran-serv.service';
 import { HttpClientModule } from '@angular/common/http';
 import { CreateGLHeadComponent } from './finance/create-glhead/create-glhead.component';
 import { DetailListFdmisConstWiseComponent } from './deposit/report/detail-list-fdmis-const-wise/detail-list-fdmis-const-wise.component';
@@ -189,6 +188,10 @@ import { LoanDisbCertificateComponent } from './loan/report/loan-disb-certificat
 import { CloseAccDtlsComponent } from './deposit/close-acc-dtls/close-acc-dtls.component';
 import { GMloanDCComponent } from './loan/report/gmloan-dc/gmloan-dc.component';
 import { RecovVillageComponent } from './loan/report/recovery-register/recov-village/recov-village.component';
+import { UserWiseTransactionComponent } from './deposit/report/user-wise-transaction/user-wise-transaction.component';
+import { UserWiseTransactionLoanComponent } from './loan/report/user-wise-transaction-loan/user-wise-transaction-loan.component';
+import { GmLoanSubsidyComponent } from './loan/report/gm-loan-subsidy/gm-loan-subsidy.component';
+import { LoanDisburseActWiseComponent } from './loan/report/loan-disbursement-register/loan-disburse-act-wise/loan-disburse-act-wise.component';
 @NgModule({
   declarations: [ 
     AmountToWordPipe,UserLoginStatusComponent,OpenInvestComponent,KeyoffDirective,
@@ -229,7 +232,7 @@ import { RecovVillageComponent } from './loan/report/recovery-register/recov-vil
        RdTransComponent, CreateGLHeadComponent, DetailListFdmisConstWiseComponent, INearMaturityComponent,
        IDetailListComponent, AllGLDetailsComponent, UpdatePassbookComponent, BMLoanStatementComponent, SlabwiseDepositComponent, 
        PassBookFastPageComponent, DetaillistAllComponent, SavingIntPostComponent, AgentCommissionComponent,
-       LoanUpdatePassbookComponent,LoanPassBookFastPageComponent,LoanPassBookPrintingComponent, PrintCertificateComponent, NpaALLComponent, RecovBlockComponent, InterestCertificateComponent, SmsChargeDeductionComponent, ConsoGLTrnsComponent, ConsoCCTrialComponent, InterestSubsidyComponent, ConsoProfitLossComponent, UserPermissionComponent, UserTransferComponent, ConsoBalSheetComponent, ConsoCashAccNewComponent, LoanDisbCertificateComponent, CloseAccDtlsComponent, GMloanDCComponent, RecovVillageComponent
+       LoanUpdatePassbookComponent,LoanPassBookFastPageComponent,LoanPassBookPrintingComponent, PrintCertificateComponent, NpaALLComponent, RecovBlockComponent, InterestCertificateComponent, SmsChargeDeductionComponent, ConsoGLTrnsComponent, ConsoCCTrialComponent, InterestSubsidyComponent, ConsoProfitLossComponent, UserPermissionComponent, UserTransferComponent, ConsoBalSheetComponent, ConsoCashAccNewComponent, LoanDisbCertificateComponent, CloseAccDtlsComponent, GMloanDCComponent, RecovVillageComponent, UserWiseTransactionComponent, UserWiseTransactionLoanComponent, GmLoanSubsidyComponent, LoanDisburseActWiseComponent
   ],
   imports: [
     NgxPrintModule, MatTableModule, MatFormFieldModule,  MatInputModule, MatSlideToggleModule,MatButtonModule,
