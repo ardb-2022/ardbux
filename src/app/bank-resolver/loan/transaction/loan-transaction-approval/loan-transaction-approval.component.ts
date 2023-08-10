@@ -544,22 +544,32 @@ export class LoanTransactionApprovalComponent implements OnInit {
     param.gs_user_id = this.sys.UserId;
     param.commit_roll_flag = 1;
     if (this.selectedVm.td_def_trans_trf.trans_type === 'R') {
-      this.svc.addUpdDel<any>('Loan/CalculateLoanInterest', param).subscribe(
-        loanRes => {
-          this.isLoading = false;
-          // if(this.transactionDtlsFrm.controls.amount.value!= (this.transactionDtlsFrm.controls.curr_intt_recov.value + this.transactionDtlsFrm.controls.curr_prn_recov.value + this.transactionDtlsFrm.controls.ovd_prn_recov.value + this.transactionDtlsFrm.controls.ovd_intt_recov.value + this.transactionDtlsFrm.controls.adv_prn_recov.value + this.transactionDtlsFrm.controls.penal_intt.value))
-          //   {
-          //       this.HandleMessage(true, MessageType.Error, 'Total amount '+this.transactionDtlsFrm.controls.amount.value + ' does not match with recovery amount of ' + (this.transactionDtlsFrm.controls.curr_intt_recov.value + this.transactionDtlsFrm.controls.curr_prn_recov.value + this.transactionDtlsFrm.controls.ovd_prn_recov.value + this.transactionDtlsFrm.controls.ovd_intt_recov.value + this.transactionDtlsFrm.controls.adv_prn_recov.value + this.transactionDtlsFrm.controls.penal_intt_recov.value));
-          //        return
-          //   }
-          //   else
-             this.approveLoanAccTransaction();
-        },
-        loanErr => {
-          this.isLoading = false;
-          this.HandleMessage(true, MessageType.Error, loanErr.error.text);
-        }
-      );
+      if(this.selectedVm.loan.tddeftrans.paid_to=='YEAREND'){
+        this.svc.addUpdDel<any>('Loan/CalculateLoanInterestYearend', param).subscribe(
+          loanRes => {
+            this.isLoading = false;
+            
+               this.approveLoanAccTransaction();
+          },
+          loanErr => {
+            this.isLoading = false;
+            this.HandleMessage(true, MessageType.Error, loanErr.error.text);
+          }
+        );
+      }
+      else{
+        this.svc.addUpdDel<any>('Loan/CalculateLoanInterest', param).subscribe(
+          loanRes => {
+            this.isLoading = false;
+            
+               this.approveLoanAccTransaction();
+          },
+          loanErr => {
+            this.isLoading = false;
+            this.HandleMessage(true, MessageType.Error, loanErr.error.text);
+          }
+        );
+      }
     }
    
     else {

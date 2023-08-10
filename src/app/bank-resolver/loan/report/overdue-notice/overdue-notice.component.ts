@@ -16,6 +16,8 @@ import {MatSort} from '@angular/material/sort';
 import { environment } from 'src/environments/environment';
 import { DatePipe } from '@angular/common';
 import { CommonServiceService } from 'src/app/bank-resolver/common-service.service';
+import {Observable} from 'rxjs';
+import {map, startWith} from 'rxjs/operators';
 
 @Component({
   selector: 'app-overdue-notice',
@@ -89,6 +91,13 @@ export class OverdueNoticeComponent implements OnInit {
   resultLength=0;
   translatedData:any
   numData:any
+  blocks:any[]=[];
+  blocks1:any[]=[];
+  AcctTypes:any[]=[];
+  villages:any[]=[];
+  villages1:any[]=[];
+  options: string[] = ['One', 'Two', 'Three'];
+  filteredOptions: Observable<string[]>;
   intt=3425
   calc=''
   convertDt:any;
@@ -103,10 +112,14 @@ export class OverdueNoticeComponent implements OnInit {
   showWait=false
   notvalidate:boolean=false;
   date_msg:any;
+  vilcode:any='';
   constructor(private svc: RestService, private formBuilder: FormBuilder,private exportAsService: ExportAsService, private cd: ChangeDetectorRef,
     private modalService: BsModalService, private _domSanitizer: DomSanitizer, private rstSvc:RestService, private datePipe:DatePipe,
     private router: Router, private comser: CommonServiceService) { }
   ngOnInit(): void {
+    this.getBlock();
+    this.getVillageMaster();
+    this.getAccountTypeList();
     var dt={"ardb_cd":this.sys.ardbCD}
     this.rstSvc.getlbr(environment.ardbBanglaUrl,null).subscribe(res=>{
       console.log(res)
@@ -139,7 +152,9 @@ export class OverdueNoticeComponent implements OnInit {
     this.reportcriteria = this.formBuilder.group({
       fromDate: [null, Validators.required],
       toDate: [null, Validators.required],
-      acct_num: [null, Validators.required]
+      acc_cd: [null, Validators.required],
+      vill_cd: [null, Validators.required],
+      block: [null, Validators.required]
     });
     this.onLoadScreen(this.content);
     var date = new Date();
@@ -148,6 +163,87 @@ export class OverdueNoticeComponent implements OnInit {
     // get the time as a string
        var time = date.toLocaleTimeString();
        this.today= n + " "+ time
+
+       
+  }
+  setVill(){
+    this.vilcode='';
+    this.vilcode=this.villages.filter(option => option.vill_name.toLowerCase()==this.reportcriteria.controls.vill_cd.value.toLowerCase())[0].vill_cd;
+  if(this.vilcode.length>0){
+    this.getBlockName()
+  }
+  }
+  filterVill(){
+    debugger
+    this.filteredOptions = this.reportcriteria.controls.vill_cd.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value || '')),
+    );
+  }
+  private _filter(value: any): any[] {
+    debugger
+    const filterValue = value.toLowerCase();
+  //  if(value.length>0 && !isNaN(value)){
+  //   debugger
+  //   this.getBlockName()
+  //  }
+  if(value.length>0){
+
+  }
+    debugger
+    return this.villages.filter(option => option.vill_name.toLowerCase().includes(filterValue));
+  }
+  getBlockName(){
+    const X= this.villages.filter(e=>e.vill_cd==this.vilcode)
+    debugger
+    this.blocks1=this.blocks.filter(e=>e.block_cd==X[0].block_cd)
+    debugger
+    this.reportcriteria.controls.block.setValue(this.blocks1[0].block_name)
+  }
+  getBlock(){
+    var dt={"ardb_cd":this.sys.ardbCD}
+    this.svc.addUpdDel<any>('Mst/GetBlockMaster', dt).subscribe(
+      res => {
+        this.blocks=res;
+      })
+  }
+  getVillageMaster(): void {
+    var dt = {
+      "ardb_cd": this.sys.ardbCD,
+    }
+     this.svc.addUpdDel<any>('Mst/GetVillageMaster', dt).subscribe(
+      res => {
+        console.log(res)
+        this.villages = res;
+        this.villages.forEach(e => {
+          this.villages1.push(e.vill_name);
+        })
+        debugger
+      },
+      err => { }
+    )
+    debugger
+  }
+  getAccountTypeList() {
+
+    if (this.AcctTypes.length > 0) {
+      return;
+    }
+    this.AcctTypes = [];
+
+    this.isLoading = true;
+    this.svc.addUpdDel<any>('Mst/GetAccountTypeMaster', null).subscribe(
+      res => {
+
+        this.isLoading = false;
+        this.AcctTypes = res;
+        this.AcctTypes = this.AcctTypes.filter(c => c.dep_loan_flag === 'L');
+        this.AcctTypes = this.AcctTypes.sort((a, b) => (a.acc_type_cd > b.acc_type_cd) ? 1 : -1);
+      },
+      err => {
+        this.isLoading = false;
+      }
+    );
   }
   cancelOnNull() {
     this.suggestedCustomer = null;
@@ -212,6 +308,7 @@ export class OverdueNoticeComponent implements OnInit {
   
     this.cd.detectChanges();
   }
+
   public SubmitReport() {
     this.comser.getDay(this.reportcriteria.controls.fromDate.value,this.reportcriteria.controls.toDate.value)
     this.converDttoDt=''
@@ -260,51 +357,26 @@ export class OverdueNoticeComponent implements OnInit {
         "ardb_cd":this.sys.ardbCD,
         "from_dt":this.reportcriteria.controls.fromDate.value.toISOString(),
         "to_dt":this.reportcriteria.controls.toDate.value.toISOString(),
-        "loan_id":this.reportcriteria.controls.acct_num.value
+        "vill_cd":this.vilcode,
+        "acc_cd":Number(this.reportcriteria.controls.acc_cd.value),
       }
       this.isLoading=true
       this.showAlert = false;
+        this.svc.addUpdDel('Loan/GetDemandNoticeVillagewise',dt).subscribe(data=>{console.log(data)
+          this.reportData=data
+          this.dataSource.data=this.reportData
+          debugger
+          this.isLoading=false;
+          if(this.reportData?.length==0 || this.reportData==null){
+            this.comser.SnackBar_Nodata()
+          } 
+         
+        }, err => {
+          this.isLoading = false;
+          this.comser.SnackBar_Error(); 
+         }
+      )
       
-      // this.svc.addUpdDel('Loan/GetDemandList',dt).subscribe(data=>{console.log(data)
-        this.svc.addUpdDel('Loan/GetDemandNotice',dt).subscribe(data=>{console.log(data)
-        this.reportData=data
-        this.isLoading=false;
-        if(this.reportData?.length==0 || this.reportData==null){
-          this.comser.SnackBar_Nodata()
-        } 
-        // this.itemsPerPage=this.reportData.length % 50 <=0 ? this.reportData.length: this.reportData.length % 50
-        // this.isLoading=false
-        // this.dataSource.data=this.reportData
-        // for(let i=0;i<50;i++)
-        // this.dataSource.data.push(this.reportData)
-        // this.dataSource.paginator = this.paginator;
-        // this.dataSource.sort = this.sort;
-        // this.resultLength=this.reportData.length
-        // if(this.reportData.length<50){
-        //   this.pagedItems=this.reportData
-        // }
-        // this.pageChange=document.getElementById('chngPage');
-        // this.pageChange.click()
-        // this.setPage(2);
-        // this.setPage(1)
-        // this.modalRef.hide();
-        // this.reportData.forEach(e => {
-        //   this.ovdInttSum+=e.ovd_intt
-        //   this.currInttSum+=e.curr_intt
-        //   this.currPrnSum+=e.curr_prn
-        //   this.ovdPrnSum+=e.ovd_prn
-        //   this.penalInttSum+=e.penal_intt
-        //   this.totalSum+=e.ovd_intt+e.curr_intt+e.curr_prn+e.ovd_prn
-        // });
-        // this.reportData.forEach(e=>{
-        //   this.lastLoanID=e.loan_id
-        // })
-      }, err => {
-        this.isLoading = false;
-        this.comser.SnackBar_Error(); 
-       }
-    )
-    
     }
   }
   public oniframeLoad(): void {

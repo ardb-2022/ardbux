@@ -3,7 +3,7 @@ import { BankResolverComponent } from './bank-resolver.component';
 import { NgModule } from '@angular/core';
 import {MatTableModule} from '@angular/material/table';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-import {MatDialogModule} from '@angular/material/dialog';
+import { MatDialogModule} from '@angular/material/dialog';
 import { BankResolverRouting } from './bank-resolver.routing';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -192,6 +192,10 @@ import { UserWiseTransactionComponent } from './deposit/report/user-wise-transac
 import { UserWiseTransactionLoanComponent } from './loan/report/user-wise-transaction-loan/user-wise-transaction-loan.component';
 import { GmLoanSubsidyComponent } from './loan/report/gm-loan-subsidy/gm-loan-subsidy.component';
 import { LoanDisburseActWiseComponent } from './loan/report/loan-disbursement-register/loan-disburse-act-wise/loan-disburse-act-wise.component';
+import { YearendDemandRecoveryComponent } from './loan/transaction/yearend-demand-recovery/yearend-demand-recovery.component';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { DemandNoticeBlockWiseComponent } from './loan/report/demand-notice-block-wise/demand-notice-block-wise.component';
+
 @NgModule({
   declarations: [ 
     AmountToWordPipe,UserLoginStatusComponent,OpenInvestComponent,KeyoffDirective,
@@ -232,9 +236,10 @@ import { LoanDisburseActWiseComponent } from './loan/report/loan-disbursement-re
        RdTransComponent, CreateGLHeadComponent, DetailListFdmisConstWiseComponent, INearMaturityComponent,
        IDetailListComponent, AllGLDetailsComponent, UpdatePassbookComponent, BMLoanStatementComponent, SlabwiseDepositComponent, 
        PassBookFastPageComponent, DetaillistAllComponent, SavingIntPostComponent, AgentCommissionComponent,
-       LoanUpdatePassbookComponent,LoanPassBookFastPageComponent,LoanPassBookPrintingComponent, PrintCertificateComponent, NpaALLComponent, RecovBlockComponent, InterestCertificateComponent, SmsChargeDeductionComponent, ConsoGLTrnsComponent, ConsoCCTrialComponent, InterestSubsidyComponent, ConsoProfitLossComponent, UserPermissionComponent, UserTransferComponent, ConsoBalSheetComponent, ConsoCashAccNewComponent, LoanDisbCertificateComponent, CloseAccDtlsComponent, GMloanDCComponent, RecovVillageComponent, UserWiseTransactionComponent, UserWiseTransactionLoanComponent, GmLoanSubsidyComponent, LoanDisburseActWiseComponent
+       LoanUpdatePassbookComponent,LoanPassBookFastPageComponent,LoanPassBookPrintingComponent, PrintCertificateComponent, NpaALLComponent, RecovBlockComponent, InterestCertificateComponent, SmsChargeDeductionComponent, ConsoGLTrnsComponent, ConsoCCTrialComponent, InterestSubsidyComponent, ConsoProfitLossComponent, UserPermissionComponent, UserTransferComponent, ConsoBalSheetComponent, ConsoCashAccNewComponent, LoanDisbCertificateComponent, CloseAccDtlsComponent, GMloanDCComponent, RecovVillageComponent, UserWiseTransactionComponent, UserWiseTransactionLoanComponent, GmLoanSubsidyComponent, LoanDisburseActWiseComponent, YearendDemandRecoveryComponent, DemandNoticeBlockWiseComponent
   ],
   imports: [
+    MatAutocompleteModule,
     NgxPrintModule, MatTableModule, MatFormFieldModule,  MatInputModule, MatSlideToggleModule,MatButtonModule,
     CommonModule, PaginationModule, MatPaginatorModule, MatSortModule, MatMenuModule,MatIconModule,MatCardModule,
     BankResolverRouting, DragDropModule,ScrollingModule,CdkTableModule,CdkTreeModule,A11yModule,MatDialogModule,
@@ -246,7 +251,7 @@ import { LoanDisburseActWiseComponent } from './loan/report/loan-disbursement-re
   providers: [
     PaginationConfig,
     CommonServiceService,
-    CurrencyPipe,DecimalPipe,PrintServiceService
+    CurrencyPipe,DecimalPipe,PrintServiceService,
     // { provide: ErrorHandler, useClass: GlobalErrorHandler },
     // { provide: HTTP_INTERCEPTORS, useClass: ServerErrorInterceptor, multi: true  }
   ],

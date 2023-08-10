@@ -146,6 +146,8 @@ import { UserWiseTransactionComponent } from './deposit/report/user-wise-transac
 import { UserWiseTransactionLoanComponent } from './loan/report/user-wise-transaction-loan/user-wise-transaction-loan.component';
 import { GmLoanSubsidyComponent } from './loan/report/gm-loan-subsidy/gm-loan-subsidy.component';
 import { LoanDisburseActWiseComponent } from './loan/report/loan-disbursement-register/loan-disburse-act-wise/loan-disburse-act-wise.component';
+import { YearendDemandRecoveryComponent } from './loan/transaction/yearend-demand-recovery/yearend-demand-recovery.component';
+import { DemandNoticeBlockWiseComponent } from './loan/report/demand-notice-block-wise/demand-notice-block-wise.component';
 const routes: Routes = [
   { path: 'Admin', component: AdminPanelComponent },
   { path: 'admin', component: AdminPanelComponent },
@@ -215,6 +217,7 @@ const routes: Routes = [
       { path: 'LT_CalcIntt', component: LoanAccwiseinttcalcComponent, canActivate: [AuthGuard] },
       { path: 'LT_Subsidy', component: SubsidyEntryComponent, canActivate: [AuthGuard] },
       { path: 'LT_OTS', component: OnetimesettlementComponent, canActivate: [AuthGuard] },
+      { path: 'LT_YDR', component: YearendDemandRecoveryComponent, canActivate: [AuthGuard] },
       { path: 'LT_LoanAprv', component: LoanTransactionApprovalComponent, canActivate: [AuthGuard] },
       { path: 'LM_Kccmember', component: KccmemberdtlsComponent, canActivate: [AuthGuard] },
       { path: 'DT_AccLockUnlock', component: LienAccLockUnlockComponent, canActivate: [AuthGuard] },
@@ -302,6 +305,7 @@ const routes: Routes = [
       { path: 'TT_TransApprove', component: TransApproveComponent, canActivate: [AuthGuard] },
       { path: 'FR_BalanceSheet', component: BalanaceSheetComponent, canActivate: [AuthGuard] },
       { path: 'LR_DemandNotice', component: DemandNoticeComponent, canActivate: [AuthGuard] },
+      { path: 'LR_DN_Block', component: DemandNoticeBlockWiseComponent, canActivate: [AuthGuard] },
       { path: 'LR_OverdueNotice', component: OverdueNoticeComponent, canActivate: [AuthGuard] },
       { path: 'LR_OverdueTransfer', component: OverdueTransferComponent, canActivate: [AuthGuard] },
       { path: 'FR_ProfitLoss', component: ProfitLossAccComponent, canActivate: [AuthGuard] },

@@ -21,6 +21,7 @@
             (change)="onAccountTypeChange()">
             <option disabled>Choose</option>
             <option [value]="1">1 - Saving Deposit</option>
+            <option [value]="6">6 - Recurring Deposit</option>
             <option [value]="7">7 - Share</option>
             <option [value]="8">8 - Flexi</option>
           </select>
@@ -150,11 +151,14 @@
     <table class="p-3" id="trial">
       <tr *ngIf="reportData">
         <!-- <th></th> -->
+        <th *ngIf="accType=='6'">Instl No</th>
         <th>Trans Dt</th>
-        <th>Particulars</th>
-        <th>Instrument</th>
-        <th style="text-align:right;">Withdrawal</th>
-        <th style="text-align:right;">Deposit</th>
+        <th *ngIf="accType=='6'">Month/Year</th>
+        <th *ngIf="accType!='6'">Particulars</th>
+        <th *ngIf="accType!='6'">Instrument</th>
+        <th *ngIf="accType!='6'" style="text-align:right;">Withdrawal</th>
+        <th *ngIf="accType!='6'" style="text-align:right;">Deposit</th>
+        <th *ngIf="accType=='6'">Instl Amount</th>
         <th style="text-align:right;">Balance</th>
 
 
@@ -162,27 +166,23 @@
       <tbody *ngFor="let i of reportData; let itr=index;">
         
         <tr>
-          <td>{{i.trans_dt.substr(0,10)}}</td>
-          <td>{{i.particulars}}</td>
-          <td>{{i.instrument_num}}</td>
-          <td>
+          <td  *ngIf="accType=='6'">{{i.instrument_num}}</td>
+          <td >{{i.trans_dt.substr(0,10)}}</td>
+          <td  *ngIf="accType=='6'">{{i.ardb_cd}}</td>
+          <td *ngIf="accType!='6'">{{i.particulars}}</td>
+          <td *ngIf="accType!='6'">{{i.instrument_num}}</td>
+          <td *ngIf="accType!='6'">
             {{i.trans_type=='W'?i.amount:0 | number : '1.2-2'}}
            </td>
-           <td>
+           <td *ngIf="accType!='6'">
            {{i.trans_type=='D'?i.amount:0 | number : '1.2-2'}}
            </td>
+          <td  *ngIf="accType=='6'">{{i.amount | number : '1.2-2'}}</td>
+
           <td style="text-align: right;">{{i.balance | number : '1.2-2'}}</td>
 
-          <!-- <td style="text-align:right">{{i.balance | number : '1.2-2'}}</td> -->
         </tr>
-        <!-- <tr style="font-weight:700;" *ngIf="itr == reportData.length-1">
-   
-      <td colspan="3" style="text-align: right;font-weight: 700;">Total: </td>
-      <td style="text-align: right;font-weight: 700;">{{opdrSum | number : '1.2-2'}}</td>
-      <td style="text-align: right;font-weight: 700;">{{opcrSum | number : '1.2-2'}}</td>
-      
-    </tr> -->
-
+        
 
       </tbody>
       <tfoot>
@@ -194,7 +194,43 @@
         
        </tfoot>
     </table>
-    <div id="hiddenTab">
+    <div id="hiddenTabRD">
+      <br><br>
+      <table style="width: 60%;font-size: large;">
+        <tbody *ngFor="let i of printData; let itr=index;">
+          <!-- <tr *ngIf="i.trans_type==null">
+           <td style="margin-top: 26px;">&nbsp;</td>
+          </tr> -->
+          <tr>
+            <td style="width: 15%; padding-left: 5%;">{{i.instrument_num}}</td>
+            <td style="width:16%;">{{i.trans_dt==null?'':i.trans_dt.substr(0,10)}}</td>
+            <td  style="width:25%; padding-left: 5%;"> {{i.ardb_cd}}</td>
+            <td style="text-align: right;">{{i.amount| number : '1.2-2'}}</td>
+            <td style="text-align: right; padding-right: 2%;">{{i.balance | number : '1.2-2'}}</td>
+
+
+            <!-- <td style="text-align:right">{{i.balance | number : '1.2-2'}}</td> -->
+          </tr>
+          <!-- <tr style="font-weight:700;" *ngIf="itr == reportData.length-1">
+   
+      <td colspan="3" style="text-align: right;font-weight: 700;">Total: </td>
+      <td style="text-align: right;font-weight: 700;">{{opdrSum | number : '1.2-2'}}</td>
+      <td style="text-align: right;font-weight: 700;">{{opcrSum | number : '1.2-2'}}</td>
+      
+    </tr> -->
+          <!-- <tr *ngIf="i.cust_cd==lastcustcd">
+     <td colspan="8" style="text-align:right;font-weight:800">Total</td>
+     <td colspan="8" style="text-align:right;font-weight:800">{{opdrSum | number : '1.2-2'}}</td>
+    </tr> -->
+
+        </tbody>
+        
+
+      </table>
+      <!-- <br><br><br><br>
+<small>This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions, Kolkata</small> -->
+    </div>
+    <div id="hiddenTab" hidden>
       <br><br>
       <table  class="mkSmall">
         <tbody *ngFor="let i of printData; let itr=index;">

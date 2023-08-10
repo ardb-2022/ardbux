@@ -4,6 +4,7 @@
     "guardian_name":"অভিভাবকের নাম",
     "address":"ঠিকানা",
     "block":"ব্লক",
+    "member_code":"সদস্য / লোন কেস নং",
     "party_code":"পার্টি কোড",
     "loan_id":"লোন আইডি",
     "ledger_no":"লেজার নং",
@@ -28,7 +29,7 @@
     "foot_mid":"ইতি মধ্যে কিস্তির টাকা জমা পড়িলে এই নোটিশ বাতিল বলিয়া গণ্য হইবে।",
     "foot_post":"**৩১শে মার্চের মধ্যে ফার্ম লোন শোধ করলে পশ্চিমবঙ্গ সরকারের থেকে অনুদান পাওয়া যেতে পারে।",
     "regards_pre":"ধন্যবাদান্তে",
-    "regards_post":"ম্যানেজার / ব্রাঞ্চ ম্যানেজার /  সুপারভিইজার",
+    "regards_post":"ম্যানেজার / ব্রাঞ্চ ম্যানেজার",
     
     "bmaddr":{
         "bm_branch":"Branch : JamalPur / SeharaBazar / Durgapur / Asansol ",
@@ -42,7 +43,8 @@
     },
 
     "gmaddr":{
-        "gm_branch":"Branch : Ghatal / Khirpai / Sonakhali"
+        "gm_branch":"Branch : Ghatal / Khirpai / Sonakhali",
+        "gm_addr":"Telephone No: (03225) 244907/ 244908/ 244909, Email: ghatalcardb@gmail.com"
     }
     
 

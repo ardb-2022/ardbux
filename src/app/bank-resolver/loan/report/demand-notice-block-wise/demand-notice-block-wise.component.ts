@@ -20,12 +20,12 @@ import { sm_parameter } from 'src/app/bank-resolver/Models/sm_parameter';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 @Component({
-  selector: 'app-demand-notice',
-  templateUrl: './demand-notice.component.html',
-  styleUrls: ['./demand-notice.component.css'],
+  selector: 'app-demand-notice-block-wise',
+  templateUrl: './demand-notice-block-wise.component.html',
+  styleUrls: ['./demand-notice-block-wise.component.css'],
   providers:[DatePipe]
 })
-export class DemandNoticeComponent implements OnInit {
+export class DemandNoticeBlockWiseComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild('content', { static: true }) content: TemplateRef<any>;
@@ -153,8 +153,6 @@ export class DemandNoticeComponent implements OnInit {
     this.reportcriteria = this.formBuilder.group({
       fromDate: [null, Validators.required],
       toDate: [null, Validators.required],
-      acc_cd: [null, Validators.required],
-      vill_cd: [null, Validators.required],
       block: [null, Validators.required]
     });
     this.onLoadScreen(this.content);
@@ -360,14 +358,14 @@ export class DemandNoticeComponent implements OnInit {
       "ardb_cd":this.sys.ardbCD,
       "from_dt":this.reportcriteria.controls.fromDate.value.toISOString(),
       "to_dt":this.reportcriteria.controls.toDate.value.toISOString(),
-      "vill_cd":this.vilcode,
-      "acc_cd":Number(this.reportcriteria.controls.acc_cd.value),
+      "block_cd":this.reportcriteria.controls.block.value
+      // "acc_cd":Number(this.reportcriteria.controls.acc_cd.value),
     }
       this.isLoading=true
       this.showAlert = false;
       
       // this.svc.addUpdDel('Loan/GetDemandList',dt).subscribe(data=>{console.log(data)
-        this.svc.addUpdDel('Loan/GetDemandNoticeVillagewise',dt).subscribe(data=>{console.log(data)
+        this.svc.addUpdDel('Loan/GetDemandNoticeBlockwise',dt).subscribe(data=>{console.log(data)
         this.reportData=data;
         this.dataSource.data=this.reportData
 debugger
@@ -429,4 +427,3 @@ debugger
     }
   }
 }
-

@@ -931,8 +931,10 @@ removeSecurityDtlList()
 
   lienAccount() {
     if(this.masterModel.tdloansancsetlist.length>0){
-    
-    if(this.masterModel.tdloansancsetlist[0].tdloansancset.filter(e=>e.param_cd.includes('115'&&'116')!=true )){
+      const accCD=this.masterModel.tdloansancsetlist[0].tdloansancset.filter(e=>e.param_cd.includes('115'))
+      const accNUM=this.masterModel.tdloansancsetlist[0].tdloansancset.filter(e=>e.param_cd.includes('116'))
+    debugger
+    if((accCD.length==0 ||accCD==undefined||accCD==null) && (accNUM.length==0 ||accNUM==undefined||accNUM==null)){
     debugger
       return
     }

@@ -924,4 +924,10 @@ select{
 .form-control{
   height: 38px!important;
 }
+.cdk-overlay-pane{
+  z-index:9000 !important; 
+}
+.cdk-overlay-container{
+  z-index:9000 !important; 
+}
 /*  */

@@ -89,8 +89,9 @@ export class LoginComponent implements OnInit {
         this.updateUsrStatus(usr);
       }
       localStorage.removeItem('__userId');
-      this.isLoading = false;
+      this.isLoading = false
     }, 300);
+
   }
 
   getLogdUser(){

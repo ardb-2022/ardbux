@@ -81,21 +81,16 @@ export class PassBookPrintingComponent implements OnInit {
   showWait=false
   restItem:any
   printID:any;
-  
+  monthNames = [
+    "January", "February", "March",
+    "April", "May", "June",
+    "July", "August", "September",
+    "October", "November", "December"
+  ];
   constructor(private svc: RestService, private formBuilder: FormBuilder,
     private modalService: BsModalService, private _domSanitizer: DomSanitizer,private exportAsService: ExportAsService, private cd: ChangeDetectorRef,
     private router: Router) { }
   ngOnInit(): void {
-    
-    if(this.sys.ardbCD=="26"){
-      this.printID="hiddenTab"
-    }
-    else if(this.sys.ardbCD=="4"){
-      this.printID="hiddenTabGhatal"
-    }
-    else{
-      this.printID="hiddenTab"
-    }
     this.getSMParameter();
     // this.fromdate = this.sys.CurrentDate;
     this.reportcriteria = this.formBuilder.group({
@@ -110,7 +105,17 @@ export class PassBookPrintingComponent implements OnInit {
        var n = date.toDateString();
     // get the time as a string
        var time = date.toLocaleTimeString();
-       this.today= n + " "+ time
+       this.today= n + " "+ time;
+       if(this.sys.ardbCD=="26"){
+       this.printID="hiddenTab"
+        
+      }
+      else if(this.sys.ardbCD=="4"){
+        this.printID="hiddenTabGhatal"
+      }
+      else{
+        this.printID="hiddenTab"
+      }
   }
   onLoadScreen(content) {
     this.passBookData=[];
@@ -132,6 +137,9 @@ export class PassBookPrintingComponent implements OnInit {
     this.suggestedCustomer = null;
     if (+this.reportcriteria.controls.acc_type_cd.value > 0) {
       this.reportcriteria.controls.acct_num.enable();
+      if(+this.reportcriteria.controls.acc_type_cd.value==6){
+        this.printID="hiddenTabRD"
+      }
     }
   }
   onChangeNull(){
@@ -175,6 +183,14 @@ export class PassBookPrintingComponent implements OnInit {
     this.toDate = this.sys.CurrentDate;
     this.suggestedCustomer = null;
   }
+  getMY(d:any){
+    const [day, month, year, hour, minute] = d.split(/[/: ]/);
+    const dateObject = new Date(year, month - 1, day, hour, minute);
+    const formattedDate = dateObject.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+    console.log(formattedDate); 
+    debugger
+    return formattedDate
+  }
 
   public SubmitReport() {
     if (this.reportcriteria.invalid) {
@@ -184,6 +200,8 @@ export class PassBookPrintingComponent implements OnInit {
     }
 
     else {
+      
+
       this.modalRef.hide();
       this.reportData.length=0
       this.pagedItems.length=0;
@@ -200,9 +218,15 @@ export class PassBookPrintingComponent implements OnInit {
         "from_dt":this.fromdate.toISOString(),
         "to_dt":this.toDate.toISOString()
       }
+      
       this.svc.addUpdDel('Deposit/PassBookPrint',dt).subscribe(data=>{
         console.log(data);
         this.reportData=data
+        for (let i = 0; i < this.reportData.length; i++) {
+         this.reportData[i].ardb_cd=this.getMY(this.reportData[i].trans_dt)
+         debugger
+        }
+        debugger
         if(this.reportData.length==0){
           this.isLoading=false
           this.showAlert = true;

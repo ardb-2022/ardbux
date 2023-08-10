@@ -390,9 +390,13 @@
       <mat-icon>rate_review</mat-icon>
       <span>Subsidy Entry</span>
     </button>
-    <button mat-menu-item routerLink="LT_OTS" (mouseenter)="hideButton($event)" id="LT_OTS">
+    <button hidden mat-menu-item routerLink="LT_OTS" (mouseenter)="hideButton($event)" id="LT_OTS">
       <mat-icon>home_work</mat-icon>
       <span>One Time Settlement</span>
+    </button>
+    <button mat-menu-item routerLink="LT_YDR" (mouseenter)="hideButton($event)" id="LT_YDR">
+      <mat-icon>event_available</mat-icon>
+      <span>Year-End Demand Recovery</span>
     </button>
   </mat-menu>
   <mat-menu #lreport="matMenu" ccCardHover>
@@ -420,10 +424,11 @@
       <mat-icon>assignment</mat-icon>
       <span>Overdue List</span>
     </button>
-    <button mat-menu-item routerLink="LR_DemandNotice" (mouseenter)="hideButton($event)" id="LR_DemandNotice">
+    <button mat-menu-item [matMenuTriggerFor]="DM_Notice">
       <mat-icon>receipt_long</mat-icon>
       <span>Demand Notice</span>
     </button>
+    
      <button mat-menu-item routerLink="LR_OverdueNotice" (mouseenter)="hideButton($event)" id="LR_OverdueNotice">
       <mat-icon>event_busy</mat-icon>
       <span>Overdue Notice</span>
@@ -485,6 +490,17 @@
       <mat-icon>published_with_changes</mat-icon>
       <span>Update Passbook Print Status</span>
     </button>
+  </mat-menu>
+  <mat-menu #DM_Notice="matMenu" ccCardHover>
+    <button mat-menu-item routerLink="LR_DemandNotice" (mouseenter)="hideButton($event)" id="LR_DemandNotice">
+      <mat-icon>holiday_village</mat-icon>
+      <span>Demand Notice Vill-Wise</span>
+    </button>
+    <button mat-menu-item routerLink="LR_DN_Block" (mouseenter)="hideButton($event)" id="LR_DemandNotice">
+      <mat-icon>window</mat-icon>
+      <span>Demand Notice Block-Wise</span>
+    </button>
+    
   </mat-menu>
   <mat-menu #dList="matMenu" ccCardHover>
     <button mat-menu-item routerLink="LR_DtlLst" (mouseenter)="hideButton($event)" id="LR_DtlLst">

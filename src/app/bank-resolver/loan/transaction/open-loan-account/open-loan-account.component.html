@@ -184,7 +184,7 @@
       <div class="form-group col-2">
         <small for=curr_int_rate>Current Interest Rate</small>
         <input class="form-control form-control-sm text-capitalize"
-          [disabled]="tm_loan_all.loan_id != undefined || operationType == '' || disableAll == 'Y'" id="curr_int_rate"
+          [disabled]="disableAll == 'Y'" id="curr_int_rate"
           style="height:25px; text-align: right; float: none;" type="number" min="0" step='any'
           [(ngModel)]="tm_loan_all.curr_intt_rate" (change)="checkAndSetOverdueInterest()" placeholder="Curr Int Rate">
       </div>

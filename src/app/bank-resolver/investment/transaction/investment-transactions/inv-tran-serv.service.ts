@@ -84,10 +84,7 @@ private subject=new Subject<any>()
     }
     public getConstitutionList() {
       debugger
-      if (this.constitutionList.length > 0) {
-        return;
-      }
-  
+      
       this.constitutionList = [];
       var dt={
         "ardb_cd":this.sys.ardbCD
@@ -101,7 +98,7 @@ private subject=new Subject<any>()
           this.constitutionDes=this.selectedconstitution[0].constitution_desc
           this.constitutionCd=this.selectedconstitution[0].constitution_cd
           console.log(this.selectedconstitution[0].constitution_desc);
-  
+          debugger
         },
         err => { // ;
         }

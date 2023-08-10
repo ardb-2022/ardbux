@@ -1,9 +1,12 @@
 table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
-    width: 50%;
+    width: 100%;
   }
   
+  .custom-row {
+    margin-bottom: 20px; /* Or any other styling you want */
+  }
   td, th {
     border: 1px solid #ffffff;
     text-align: left;
@@ -12,6 +15,15 @@ table {
   }
   hr{
     background-color: black;
+  }
+  .example-form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+  }
+  
+  .example-full-width {
+    width: 100%;
   }
  
   /* tr:nth-child(even) {

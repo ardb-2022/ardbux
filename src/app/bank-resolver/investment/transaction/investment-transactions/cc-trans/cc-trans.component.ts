@@ -295,6 +295,7 @@ export class CcTransComponent implements OnInit {
       console.log(this.accNoEnteredForTransaction);
       console.log(this.accNoEnteredForTransaction2);
       console.log(this.accNoEnteredForTransaction3);
+      this.invComServ.getConstitutionList();
       debugger
       this.accDtlsFrm.patchValue({
         

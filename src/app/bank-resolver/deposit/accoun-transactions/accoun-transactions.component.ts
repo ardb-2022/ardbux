@@ -2065,7 +2065,8 @@ getjoinholder(){
     // debugger;
     if (this.f.acc_type_cd.value == 1) {
       if (tdDefTransTrf.trans_type.toLowerCase() === 'w') {
-        if (tdDefTransTrf.trans_mode.toLowerCase() == 'c' && tdDefTransTrf.trans_mode.toLowerCase()) {
+
+        if (tdDefTransTrf.trans_mode == 'C') {
           this.f.oprn_cd.setValue(3)
         }
         else {
@@ -2207,14 +2208,14 @@ getjoinholder(){
     if (tdDefTransTrf.trans_type.toLowerCase() === 'w') {
       this.showTransMode = true;
       console.log(tdDefTransTrf.trans_mode)
-      if (tdDefTransTrf.trans_mode.toLowerCase() === 'i') {
+      if (tdDefTransTrf.trans_mode == 'I') {
         console.log('inside i')
         console.log(tdDefTransTrf.acc_cd)
         this.hideOnClose = false;
         this.showAmtDrpDn = true;
         this.showTransMode = false
       }  //marker
-      if (tdDefTransTrf.trans_mode.toLowerCase() === 'c') {
+      if (tdDefTransTrf.trans_mode == 'C') {
         // this is the case of close
         this.showTransMode = false //marker
         console.log(this.tdDefTransFrm.controls.amount.value + " " + this.tdDefTransFrm.controls.curr_intt_recov.value)

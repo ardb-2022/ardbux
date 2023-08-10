@@ -244,7 +244,7 @@ selectItems1=[
           this.totD1+=e.d1_prn
           this.totD2+=e.d2_prn
           this.totD3+=e.d3_prn
-          this.totNpaSum+=e.d1_prn+e.d2_prn+e.d3_prn+e.stan_prn+e.substan_prn
+          this.totNpaSum+=e.d1_prn+e.d2_prn+e.d3_prn+e.substan_prn
           this.totProvSum+=e.provision
             this.dummytotIssueSum+=e.disb_amt
             this.dummytotPrnDue+=e.prn_due
@@ -257,7 +257,7 @@ selectItems1=[
             this. dummytotD1+=e.d1_prn
             this.dummytotD2+=e.d2_prn
             this.dummytotD3+=e.d3_prn
-            this. dummytotNpaSum+=e.d1_prn+e.d2_prn+e.d3_prn+e.stan_prn+e.substan_prn
+            this. dummytotNpaSum+=e.d1_prn+e.d2_prn+e.d3_prn+e.substan_prn
             this.dummytotProvSum+=e.provision
         });
       })
@@ -432,7 +432,7 @@ selectItems1=[
       this.totD1+=this.filteredArray[i].d1_prn
       this.totD2+=this.filteredArray[i].d2_prn
       this.totD3+=this.filteredArray[i].d3_prn
-      this.totNpaSum+=this.totD1+ this.totD2+this.totD3+this.totStan+this.totSubStan
+      this.totNpaSum+=this.totD1+ this.totD2+this.totD3+this.totSubStan
       this.totProvSum+=this.filteredArray[i].provision
 
     }

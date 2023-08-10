@@ -32,7 +32,7 @@ export class OverdueTransferComponent implements OnInit {
   sys = new SystemValues();
   // displayedColumns: string[] = ['trans_dt', 'cust_name', 'loan_id'];
  
-  displayedColumns: string[] = ['trans_dt', 'cust_name', 'loan_id', 'prn_trf', 'intt_trf','curr_prn','ovd_prn','curr_intt','ovd_intt','penal_intt'];
+  displayedColumns: string[] = ['trans_dt', 'cust_name','block', 'loan_id', 'prn_trf', 'intt_trf','curr_prn','ovd_prn','curr_intt','ovd_intt','penal_intt'];
   dataSource = new MatTableDataSource()
   config = {
     keyboard: false, // ensure esc press doesnt close the modal
