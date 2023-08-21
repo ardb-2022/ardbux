@@ -148,6 +148,11 @@ import { GmLoanSubsidyComponent } from './loan/report/gm-loan-subsidy/gm-loan-su
 import { LoanDisburseActWiseComponent } from './loan/report/loan-disbursement-register/loan-disburse-act-wise/loan-disburse-act-wise.component';
 import { YearendDemandRecoveryComponent } from './loan/transaction/yearend-demand-recovery/yearend-demand-recovery.component';
 import { DemandNoticeBlockWiseComponent } from './loan/report/demand-notice-block-wise/demand-notice-block-wise.component';
+import { RecovAdvPrnComponent } from './loan/report/recovery-register/recov-adv-prn/recov-adv-prn.component';
+import { RecovAdvPrnVillComponent } from './loan/report/recovery-register/recov-adv-prn-vill/recov-adv-prn-vill.component';
+import { InterestSubsidySummaryComponent } from './loan/report/interest-subsidy-summary/interest-subsidy-summary.component';
+import { DcbrPrintComponent } from './loan/report/dcbr-print/dcbr-print.component';
+import { NpaSummaryComponent } from './loan/report/npa-summary/npa-summary.component';
 const routes: Routes = [
   { path: 'Admin', component: AdminPanelComponent },
   { path: 'admin', component: AdminPanelComponent },
@@ -243,6 +248,7 @@ const routes: Routes = [
       { path: 'LR_DMLst', component: DemandListComponent, canActivate: [AuthGuard] },
       { path: 'LR_AMLst', component: ActwiseLstComponent, canActivate: [AuthGuard] },
       { path: 'LR_BMLst', component: BlockwiseLstComponent, canActivate: [AuthGuard] },
+      { path: 'LR_DCBR_P', component: DcbrPrintComponent, canActivate: [AuthGuard] },
       { path: 'LR_RELst', component: RecovListComponent, canActivate: [AuthGuard] },
       { path: 'LR_DisReg', component: LoanDisbursementRegisterComponent, canActivate: [AuthGuard] },
       { path: 'LR_DisNorm', component: LoanDisburseNormalComponent, canActivate: [AuthGuard] },
@@ -256,9 +262,11 @@ const routes: Routes = [
       { path: 'LM_Villentry', component: VillageMasterComponent, canActivate: [AuthGuard] },
       { path: 'LR_NPA', component: NpaComponent, canActivate: [AuthGuard] },
       { path: 'LR_Int_Subsidy', component: InterestSubsidyComponent, canActivate: [AuthGuard] },
+      { path: 'LR_Int_Subsidy_Sum', component: InterestSubsidySummaryComponent, canActivate: [AuthGuard] },
       { path: 'LR_GM_Int_Subsidy', component: GmLoanSubsidyComponent, canActivate: [AuthGuard] },
       { path: 'LR_Disb_Cert', component: LoanDisbCertificateComponent, canActivate: [AuthGuard] },
       { path: 'LR_GM_DC', component: GMloanDCComponent, canActivate: [AuthGuard] },
+      { path: 'LR_NPA_Sum', component: NpaSummaryComponent, canActivate: [AuthGuard] },
       
       { path: 'LR_NPA_ALL', component: NpaALLComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecReg', component: RecoveryRegisterComponent, canActivate: [AuthGuard] },
@@ -266,6 +274,8 @@ const routes: Routes = [
       { path: 'LR_RecRegVill', component: RecovVillageComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecRegBlock', component: RecovBlockComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecRegNorm', component: RecovNormalComponent, canActivate: [AuthGuard] },
+      { path: 'LR_RecAdvPrnBlock', component: RecovAdvPrnComponent, canActivate: [AuthGuard] },
+      { path: 'LR_RecAdvPrnVill', component: RecovAdvPrnVillComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecInterest', component: RecovInterestComponent, canActivate: [AuthGuard] },
       { path: 'LR_openClose', component: OpenCloseregComponent, canActivate: [AuthGuard] },
       { path: 'LR_SubCashBk', component: LoanSubCashBookComponent, canActivate: [AuthGuard] },

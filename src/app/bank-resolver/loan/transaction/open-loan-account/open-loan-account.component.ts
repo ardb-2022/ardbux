@@ -1462,66 +1462,72 @@ removeSecurityDtlList()
         }
       }
     }
-    
-    const usr = new tm_deposit();
-    usr.ardb_cd=this.sys.ardbCD
-    usr.brn_cd = this.sys.BranchCode;
-    usr.acc_type_cd= this.SecaccCD
-    usr.acc_num = this.SecaccNum
-
-
-    this.isLoading = true;
-    this.svc.addUpdDel<any>('Deposit/GetAccountOpeningData', usr).subscribe(
-      res => {
-      console.log(res);
-      this.newtm_deposit = new tm_deposit();
-      //  this.custNameForAcc=this.comserv.customerList.forEach(element =>element.cust_cd===Number(res.tm_deposit.cust_cd))
-      // console.log(this.comserv.customerList);
-      
-        debugger;
-        this.isLoading = false;
-
-        if (res === undefined || res === null) {
-          // this.showAlertMsg('WARNING', 'No record found!!');
-          this.HandleMessage(true, MessageType.Warning, 'No Account Details found!!');
-        }
-        else {
-          if (res.tmdeposit.acc_num !== null) {
-            if(res.tmdeposit.lock_mode=='L'){
-              for (const i in this.masterModel.tdloansancsetlist) {
-                for (const j in this.masterModel.tdloansancsetlist[i].tdloansancset) {
-                  if(this.masterModel.tdloansancsetlist[i].tdloansancset[j].param_cd == '115'){
-                    this.masterModel.tdloansancsetlist[i].tdloansancset[j].param_value=null
-                  }
-                  if(this.masterModel.tdloansancsetlist[i].tdloansancset[j].param_cd == '116'){
-                   this.masterModel.tdloansancsetlist[i].tdloansancset[j].param_value=null
-                  }
-                }
-              }
-              this.HandleMessage(true, MessageType.Warning, 'this Account is already added into another loan security');
-            }
-            else{
-              this.newtm_deposit=res.tmdeposit;
-              console.log(this.newtm_deposit);
-              this.getCustomer();
-            }
+    if(this.SecaccNum){
+      const usr = new tm_deposit();
+      usr.ardb_cd=this.sys.ardbCD
+      usr.brn_cd = this.sys.BranchCode;
+      usr.acc_type_cd= this.SecaccCD
+      usr.acc_num = this.SecaccNum
+  
+  
+      this.isLoading = true;
+      this.svc.addUpdDel<any>('Deposit/GetAccountOpeningData', usr).subscribe(
+        res => {
+        console.log(res);
+        this.newtm_deposit = new tm_deposit();
+        //  this.custNameForAcc=this.comserv.customerList.forEach(element =>element.cust_cd===Number(res.tm_deposit.cust_cd))
+        // console.log(this.comserv.customerList);
+        
+          debugger;
+          this.isLoading = false;
+  
+          if (res === undefined || res === null) {
+            // this.showAlertMsg('WARNING', 'No record found!!');
+            this.HandleMessage(true, MessageType.Warning, 'No Account Details found!!');
           }
           else {
-            // this.showAlertMsg('WARNING', 'No record found!!!');
-            this.HandleMessage(true, MessageType.Warning, 'No record found for getting Account Details!!');
+            if (res.tmdeposit.acc_num !== null) {
+              if(res.tmdeposit.lock_mode=='L'){
+                for (const i in this.masterModel.tdloansancsetlist) {
+                  for (const j in this.masterModel.tdloansancsetlist[i].tdloansancset) {
+                    if(this.masterModel.tdloansancsetlist[i].tdloansancset[j].param_cd == '115'){
+                      this.masterModel.tdloansancsetlist[i].tdloansancset[j].param_value=null
+                    }
+                    if(this.masterModel.tdloansancsetlist[i].tdloansancset[j].param_cd == '116'){
+                     this.masterModel.tdloansancsetlist[i].tdloansancset[j].param_value=null
+                    }
+                  }
+                }
+                this.HandleMessage(true, MessageType.Warning, 'this Account is already added into another loan security');
+              }
+              else{
+                this.newtm_deposit=res.tmdeposit;
+                console.log(this.newtm_deposit);
+                this.getCustomer();
+              }
+            }
+            else {
+              // this.showAlertMsg('WARNING', 'No record found!!!');
+              this.HandleMessage(true, MessageType.Warning, 'No record found for getting Account Details!!');
+            }
+  
           }
-
+  
+  
+        },
+        err => {
+          this.isLoading = false;
+          // this.showAlertMsg('ERROR', 'Unable to find record!!');
+          this.HandleMessage(true, MessageType.Warning, 'Unable to find record!!');
         }
-
-
-      },
-      err => {
-        this.isLoading = false;
-        // this.showAlertMsg('ERROR', 'Unable to find record!!');
-        this.HandleMessage(true, MessageType.Warning, 'Unable to find record!!');
-      }
-
-    );
+  
+      );
+    }
+    else{
+      return
+    }
+    
+    
   }
   public getCustomer() {
     debugger

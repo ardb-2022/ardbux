@@ -82,10 +82,10 @@ export class PassBookPrintingComponent implements OnInit {
   restItem:any
   printID:any;
   monthNames = [
-    "January", "February", "March",
-    "April", "May", "June",
-    "July", "August", "September",
-    "October", "November", "December"
+    "Jan", "Feb", "Mar",
+    "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep",
+    "Oct", "Nov", "Dec"
   ];
   constructor(private svc: RestService, private formBuilder: FormBuilder,
     private modalService: BsModalService, private _domSanitizer: DomSanitizer,private exportAsService: ExportAsService, private cd: ChangeDetectorRef,
@@ -188,7 +188,7 @@ export class PassBookPrintingComponent implements OnInit {
     const dateObject = new Date(year, month - 1, day, hour, minute);
     const formattedDate = dateObject.toLocaleString('en-US', { month: 'long', year: 'numeric' });
     console.log(formattedDate); 
-    debugger
+    
     return formattedDate
   }
 
@@ -224,9 +224,9 @@ export class PassBookPrintingComponent implements OnInit {
         this.reportData=data
         for (let i = 0; i < this.reportData.length; i++) {
          this.reportData[i].ardb_cd=this.getMY(this.reportData[i].trans_dt)
-         debugger
+         
         }
-        debugger
+        
         if(this.reportData.length==0){
           this.isLoading=false
           this.showAlert = true;
@@ -235,7 +235,7 @@ export class PassBookPrintingComponent implements OnInit {
           return;
         }
         else if(this.reportData.length==1){
-          debugger
+          
           this.isLoading=false
           let prTrans = [];
           prTrans = Utils.ChkArrNotEmptyRetrnEmptyArr(data);
@@ -247,11 +247,11 @@ export class PassBookPrintingComponent implements OnInit {
            prTrans[0].balance=tot1
           console.log( prTrans);
           this.passBookData.push(prTrans[0]);
-          debugger
+          
         
         }
         else{
-          debugger;
+          ;
           let prTrans = [];
           prTrans = Utils.ChkArrNotEmptyRetrnEmptyArr(data);
           this.passBookData = [];
@@ -261,7 +261,7 @@ export class PassBookPrintingComponent implements OnInit {
           console.log(tot);
            prTrans[prTrans.length-1].balance=tot
           console.log( prTrans);
-          debugger
+          
           for (let i = prTrans.length-1; i >= 0; i--) {
             
             if (i > 0) {
@@ -304,8 +304,14 @@ export class PassBookPrintingComponent implements OnInit {
             return element !== null && element !== undefined;
           });
         }
-        debugger
-        this.passBookPrint();
+        if(this.accType=='6'){
+          this.rdPassbook()
+        }
+        else{
+          this.passBookPrint();
+        }
+        
+       
         this.itemsPerPage=this.reportData.length % 50 <=0 ? this.reportData.length: this.reportData.length % 50
         this.isLoading=false
         if(this.reportData.length<50){
@@ -353,14 +359,14 @@ export class PassBookPrintingComponent implements OnInit {
 
   }
   updatePassbookStatus(){
-    debugger
+    
     let ardbCD=this.sys.ardbCD;
     for (let i = 0; i < this.reportData.length; i++) {
         this.reportData[i].printed_flag = 'Y';
         this.reportData[i].ardb_cd= ardbCD;
         this.reportData[i].acc_type_cd=this.reportcriteria.controls.acc_type_cd.value;// Push 'Y' into data array
     }
-    debugger
+    
     this.svc.addUpdDel<any>('Deposit/UpdatePassbookData', this.reportData).subscribe(
     res => {console.log(res);
       setTimeout(() => {
@@ -371,8 +377,113 @@ export class PassBookPrintingComponent implements OnInit {
       
     })
   }
+  rdPassbook(){
+    
+    const o = {
+      instrument_num : null,
+      trans_dt  : null,
+      ardb_cd : null,
+      amount : null,
+      balance : null,
+      
+     }
+    var dt={
+      "ardb_cd":this.sys.ardbCD,
+      "acc_num":this.reportcriteria.controls.acct_num.value,
+      "acc_type_cd":this.reportcriteria.controls.acc_type_cd.value,
+     }
+     this.svc.addUpdDel('Deposit/GetPassbookline',dt).subscribe(lRowNo=>{
+      this.lastRowNo = lRowNo;
+      
+      this.printData=this.passBookData.length>1?this.passBookData.slice():this.passBookData;
+      // this.printData=this.passBookData.slice();
+      if(this.lastRowNo == 40){
+        this.modalRef = this.modalService.show(this.fullpageUpdate, this.config);
+        console.log( this.printData);
+      if(this.printData.length>19){
+        this.printData.splice(20, 0, o);
+        // this.printData.splice(21, 0, o);
+        // this.printData.splice(22, 0, o);
+        // this.printData.splice(16, 0, o);
+        console.log( this.printData);
+        this.lastRowNo=this.printData.length-1
+      }
+      else{
+        this.lastRowNo=this.printData.length
+        // this.updateLineNo();
+        // this.updatePassbookStatus();
+      }
+      if(this.printData.length >41) {
+        for(let i = 0; i< this.printData.length ; i ++) 
+        {
+          if(i>40){
+          this.afterPrint.push(this.printData[i]);
+          this.restItem=this.afterPrint.length;
+          }
+        }
+          this.printData.splice(41,this.printData.length-41);
+          ;
+      }
+      
+      else{
+        if(this.printData.length>19 && this.printData.length<41){
+          this.lastRowNo=this.printData.length-1
+          // this.updateLineNo();
+          // this.updatePassbookStatus();
+        }
+      }
+      console.log(this.lastRowNo);
+      }
+      else{
+      
+      for (let index = 1; index <= this.lastRowNo; index++) {
+        this.printData.unshift(o);
+      } 
+      console.log( this.printData);
+      if(this.printData.length>19){
+        this.printData.splice(20, 0, o);
+        // this.printData.splice(21, 0, o);
+        // this.printData.splice(22, 0, o);
+        // this.printData.splice(16, 0, o);
+        console.log( this.printData);
+        this.lastRowNo=this.printData.length-1
+      }
+      else{
+        this.lastRowNo=this.printData.length
+        // this.updateLineNo();
+        // this.updatePassbookStatus();
+      }
+      if(this.printData.length >41) {
+        for(let i = 0; i< this.printData.length ; i ++) 
+        {
+          if(i>40){
+          this.afterPrint.push(this.printData[i]);
+          this.restItem=this.afterPrint.length;
+          }
+        }
+          this.printData.splice(41,this.printData.length-41);
+          ;
+      }
+      
+      else{
+        if(this.printData.length>19 && this.printData.length<41){
+          this.lastRowNo=this.printData.length-1
+          // this.updateLineNo();
+          // this.updatePassbookStatus();
+        }
+      }
+      console.log(this.lastRowNo);
+      
+      
+      console.log(this.printData);
+      ;
+       
+    }
+       
+    })
+  }
   passBookPrint(){
-    debugger
+    
     const o = {
       trans_dt  : null,
       particulars   : null,
@@ -389,7 +500,7 @@ export class PassBookPrintingComponent implements OnInit {
      if(this.sys.ardbCD=="26"||this.sys.ardbCD=="20"){
     this.svc.addUpdDel('Deposit/GetPassbookline',dt).subscribe(lRowNo=>{
       this.lastRowNo = lRowNo;
-      debugger
+      
       this.printData=this.passBookData.length>1?this.passBookData.slice():this.passBookData;
       // this.printData=this.passBookData.slice();
       if(this.lastRowNo == 30){
@@ -416,7 +527,7 @@ export class PassBookPrintingComponent implements OnInit {
           }
         }
           this.printData.splice(31,this.printData.length-31);
-          debugger;
+          ;
       }
       
       else{
@@ -455,7 +566,7 @@ export class PassBookPrintingComponent implements OnInit {
           }
         }
           this.printData.splice(31,this.printData.length-31);
-          debugger;
+          ;
       }
       
       else{
@@ -469,7 +580,7 @@ export class PassBookPrintingComponent implements OnInit {
       
       
       console.log(this.printData);
-      debugger;
+      ;
        
     }
        
@@ -478,7 +589,7 @@ export class PassBookPrintingComponent implements OnInit {
   else if(this.sys.ardbCD=="4"){
     this.svc.addUpdDel('Deposit/GetPassbookline',dt).subscribe(lRowNo=>{
       this.lastRowNo = lRowNo;
-      debugger
+      
       this.printDataGhatal=this.passBookData.length>1?this.passBookData.slice():this.passBookData;
       // this.printData=this.passBookData.slice();
       if(this.lastRowNo == 20){
@@ -494,7 +605,7 @@ export class PassBookPrintingComponent implements OnInit {
           }
         }
           this.printDataGhatal.splice(20,this.printDataGhatal.length-20);
-          debugger;
+          ;
       }
       
       else{
@@ -523,7 +634,7 @@ export class PassBookPrintingComponent implements OnInit {
           }
         }
           this.printDataGhatal.splice(20,this.printDataGhatal.length-20);
-          debugger;
+          ;
       }
       
       else{
@@ -537,7 +648,7 @@ export class PassBookPrintingComponent implements OnInit {
       
       
       console.log(this.printDataGhatal);
-      debugger;
+      ;
        
     }
        
@@ -549,22 +660,27 @@ export class PassBookPrintingComponent implements OnInit {
   }
   printCall(){
   // if(this.printData.length<=33){ 
-  //   debugger
+  //   
   //   this.printData=this.printData
   //   let printContents = document.getElementById('hiddenTab').innerHTML;
   //   let originalContents = document.body.innerHTML;
   //   document.body.innerHTML = printContents
   //   document.body.innerHTML = originalContents;
     if(this.afterPrint.length>0){
-      this.PrintNext()
-      debugger
+      if(this.accType=='6'){
+        this.rdPrintNext()
+      }
+      else{
+        this.PrintNext()
+      }
+      
         setTimeout(() => {
         this.modalRef = this.modalService.show(this.nextpage, this.config);
         }, 5000);
       
     }
     else{
-      debugger
+      
        this.updateLineNo()
        this.updatePassbookStatus()
       // this.showAlert = true;
@@ -577,7 +693,7 @@ export class PassBookPrintingComponent implements OnInit {
     // if(this.afterPrint.length>0){
 
 
-    //   debugger
+    //   
     //   this.printData=this.printData
     //   let printContents = document.getElementById('hiddenTab').innerHTML;
     //   let originalContents = document.body.innerHTML;
@@ -585,7 +701,7 @@ export class PassBookPrintingComponent implements OnInit {
     //   document.body.innerHTML = originalContents;
     // }
     // else{
-    //   debugger
+    //   
     //   this.printData=this.printData
     //   let printContents = document.getElementById('hiddenTab').innerHTML;
     //   let originalContents = document.body.innerHTML;
@@ -612,10 +728,10 @@ export class PassBookPrintingComponent implements OnInit {
         {
           this.printData.push(this.afterPrint[i]);
         }
-        debugger;
+        ;
         console.log( this.printData);
         if(this.printData.length>0 && this.printData.length<13){
-          debugger
+          
           this.restItem=0;
           this.restItem=this.printData.length;
   
@@ -632,7 +748,7 @@ export class PassBookPrintingComponent implements OnInit {
           // this.updateLineNo();
           // this.updatePassbookStatus();
         }
-        debugger;
+        ;
         if(this.printData.length >30) {
           this.afterPrint=[];
           this.restItem=0;
@@ -645,7 +761,7 @@ export class PassBookPrintingComponent implements OnInit {
             }
             }
             this.printData.splice(31,this.printData.length-31);
-            debugger;
+            ;
         }
         else{
           this.afterPrint=[];
@@ -660,7 +776,7 @@ export class PassBookPrintingComponent implements OnInit {
           }
         }
         console.log(this.lastRowNo);
-        debugger;
+        ;
         
         console.log(this.printData);
         
@@ -672,7 +788,7 @@ export class PassBookPrintingComponent implements OnInit {
         {
           this.printDataGhatal.push(this.afterPrint[i]);
         }
-        debugger;
+        ;
         
           this.lastRowNo=0;
           this.lastRowNo=this.printDataGhatal.length
@@ -689,7 +805,7 @@ export class PassBookPrintingComponent implements OnInit {
             }
             }
             this.printDataGhatal.splice(20,this.printDataGhatal.length-20);
-            debugger;
+            ;
         }
         else{
           this.afterPrint=[];
@@ -707,6 +823,74 @@ export class PassBookPrintingComponent implements OnInit {
     else{
       this.printData=[]
     }
+  }
+  rdPrintNext(){
+    const o = {
+      instrument_num : null,
+      trans_dt  : null,
+      ardb_cd : null,
+      amount : null,
+      balance : null,
+      }
+    this.modalRef.hide();
+    this.printData=[];
+    for(let i = 0; i< this.afterPrint.length ; i ++) 
+      {
+        this.printData.push(this.afterPrint[i]);
+      }
+      ;
+      console.log( this.printData);
+      if(this.printData.length>0 && this.printData.length<19){
+        
+        this.restItem=0;
+        this.restItem=this.printData.length;
+
+      }
+      if(this.printData.length>19){
+        this.printData.splice(20, 0, o);
+        // this.printData.splice(21, 0, o);
+        // this.printData.splice(22, 0, o);
+
+        // this.printData.splice(16, 0, o);
+        console.log( this.printData);
+      }
+      else{
+        this.lastRowNo=0;
+        this.lastRowNo=this.printData.length
+        // this.updateLineNo();
+        // this.updatePassbookStatus();
+      }
+      ;
+      if(this.printData.length >41) {
+        this.afterPrint=[];
+        this.restItem=0;
+        for(let i = 0; i< this.printData.length ; i ++) 
+          { if(i>40){
+            this.afterPrint.push(this.printData[i]);
+            this.lastRowNo=this.afterPrint.length
+            this.restItem=this.afterPrint.length;
+
+          }
+          }
+          this.printData.splice(41,this.printData.length-41);
+          ;
+      }
+      else{
+        this.afterPrint=[];
+        
+        if(this.printData.length>19 && this.printData.length<41){
+        this.restItem=0;
+        this.lastRowNo=this.printData.length-1
+        this.restItem=this.printData.length-1;
+
+        // this.updateLineNo();
+        // this.updatePassbookStatus();
+        }
+      }
+      console.log(this.lastRowNo);
+      ;
+      
+      console.log(this.printData);
   }
   public oniframeLoad(): void {
     this.counter++;

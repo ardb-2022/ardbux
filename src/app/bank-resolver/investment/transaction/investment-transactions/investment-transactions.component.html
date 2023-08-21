@@ -42,7 +42,7 @@
           <div class="form-group col-6">
             <small for="acc_no">Account Number</small>
             <div class="input-group">
-                <input style="height:25px"  (change)="loadInvData()"
+                <input style="height:25px"  (change)="loadInvData()" (keypress)="enable($event)"
                 formControlName="acct_num" type="text" [attr.disabled]="null == operations ? '' : null"
                   class="form-control form-control-sm text-capitalize" id="acc_no" placeholder="Account Number">
                   <div class="input-group-append">

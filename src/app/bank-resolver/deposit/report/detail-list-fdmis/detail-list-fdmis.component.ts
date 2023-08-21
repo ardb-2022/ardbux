@@ -257,11 +257,11 @@ public onAccountTypeChange(): void {
   }
   downloadexcel(){
     this.exportAsConfig = {
-      type: 'csv',
+      type: 'xlsx',
       // elementId: 'hiddenTab', 
-      elementIdOrContent:'hiddenTab'
+      elementIdOrContent:'trial111'
     }
-    this.exportAsService.save(this.exportAsConfig, 'cashcumtrial').subscribe(() => {
+    this.exportAsService.save(this.exportAsConfig, 'Detail_List_FDMIS').subscribe(() => {
       // save started
       console.log("hello")
     });

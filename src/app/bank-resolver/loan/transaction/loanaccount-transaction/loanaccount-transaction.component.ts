@@ -139,6 +139,7 @@ export class LoanaccountTransactionComponent implements OnInit {
   inttRetForUpdate:any;
   hidegl:boolean=true;
   glHead:any;
+  memberCD:any;
   displayedColumns: string[] = ['trans_dt', 'disb_amt', 'curr_intt_cal', 'ovd_intt_cal','penal_intt_cal','last_intt_calc_dt','prn_trf','intt_trf','curr_intt_recov','ovd_intt_recov','penal_intt_recov','adv_prn_recov','curr_prn_recov','ovd_prn_recov','totalRecov','curr_prn','ovd_prn','curr_intt','ovd_intt','penal_intt'];
   dataSource = new MatTableDataSource()
   opcrSum = 0;
@@ -220,6 +221,7 @@ export class LoanaccountTransactionComponent implements OnInit {
   m_id:any;
   fdt:any;
   tdt:any;
+  Share_fl_no:any;
   // editDeleteMode=false
   // showInstrumentDtl = false;
   ngOnInit(): void {
@@ -1225,6 +1227,9 @@ export class LoanaccountTransactionComponent implements OnInit {
           ////////debugger;
           acc = res;
           this.acc2 = res;
+          if(this.acc2.tdloansancsetlist.length>0){
+
+          }
           this.GetCustomer();
           this.CurrentDemand();
           debugger
@@ -3357,6 +3362,8 @@ debugger;
             console.log(res)
             if (undefined !== res && null !== res && res.length > 0) {
               this.suggestedCustomer1 = res;
+              this.memberCD= this.suggestedCustomer1[0].old_cust_cd;
+
               let BLOCK=res.filter(e=>e.cust_cd===this.acc2.tmloanall.party_cd)
               this.selectedBlock[0] = this.blocks.filter(e => e.block_cd === BLOCK[0].block_cd)[0];
               console.log(this.blocks);
@@ -3365,7 +3372,8 @@ debugger;
               // console.log(this.suggestedCustomer1[0].phone);
               // console.log(this.acc2.tmloanall.loan_acc_no);
               // this.ln_id=this.suggestedCustomer1[0].acc_num
-              this.partyName=this.suggestedCustomer1[0].cust_name
+              this.Share_fl_no=this.suggestedCustomer1[0].email;
+              this.partyName=this.suggestedCustomer1[0].cust_name;
               this.acc_block=this.selectedBlock[0].block_name;
               this.acc_phone=this.suggestedCustomer1[0].phone;
               this.present_address=this.suggestedCustomer1[0].present_address;
@@ -3374,7 +3382,13 @@ debugger;
               this.guardian_name=this.suggestedCustomer1[0].guardian_name;
               this.acc_lfNo=this.acc2.tmloanall.loan_acc_no;
               this.l_cust_cd=this.suggestedCustomer1[0].cust_cd;debugger
-              this.l_case_no=this.acc2.tdloansancsetlist[0]?.tdloansancset.filter(e=>e.param_cd=='117')[0]?.param_value
+              if(this.sys.ardbCD=="26"){
+                this.l_case_no=this.acc2.tdloansancsetlist[0]?.tdloansancset.filter(e=>e.param_cd=='117')[0]?.param_value
+              }
+              else{
+                this.l_case_no=this.acc2.tdloansancsetlist[0]?.tdloansancset.filter(e=>e.param_cd=='500')[0]?.param_value
+
+              }
               
               debugger
             } else {

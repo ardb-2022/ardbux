@@ -195,6 +195,11 @@ import { LoanDisburseActWiseComponent } from './loan/report/loan-disbursement-re
 import { YearendDemandRecoveryComponent } from './loan/transaction/yearend-demand-recovery/yearend-demand-recovery.component';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { DemandNoticeBlockWiseComponent } from './loan/report/demand-notice-block-wise/demand-notice-block-wise.component';
+import { RecovAdvPrnComponent } from './loan/report/recovery-register/recov-adv-prn/recov-adv-prn.component';
+import { RecovAdvPrnVillComponent } from './loan/report/recovery-register/recov-adv-prn-vill/recov-adv-prn-vill.component';
+import { InterestSubsidySummaryComponent } from './loan/report/interest-subsidy-summary/interest-subsidy-summary.component';
+import { DcbrPrintComponent } from './loan/report/dcbr-print/dcbr-print.component';
+import { NpaSummaryComponent } from './loan/report/npa-summary/npa-summary.component';
 
 @NgModule({
   declarations: [ 
@@ -236,7 +241,12 @@ import { DemandNoticeBlockWiseComponent } from './loan/report/demand-notice-bloc
        RdTransComponent, CreateGLHeadComponent, DetailListFdmisConstWiseComponent, INearMaturityComponent,
        IDetailListComponent, AllGLDetailsComponent, UpdatePassbookComponent, BMLoanStatementComponent, SlabwiseDepositComponent, 
        PassBookFastPageComponent, DetaillistAllComponent, SavingIntPostComponent, AgentCommissionComponent,
-       LoanUpdatePassbookComponent,LoanPassBookFastPageComponent,LoanPassBookPrintingComponent, PrintCertificateComponent, NpaALLComponent, RecovBlockComponent, InterestCertificateComponent, SmsChargeDeductionComponent, ConsoGLTrnsComponent, ConsoCCTrialComponent, InterestSubsidyComponent, ConsoProfitLossComponent, UserPermissionComponent, UserTransferComponent, ConsoBalSheetComponent, ConsoCashAccNewComponent, LoanDisbCertificateComponent, CloseAccDtlsComponent, GMloanDCComponent, RecovVillageComponent, UserWiseTransactionComponent, UserWiseTransactionLoanComponent, GmLoanSubsidyComponent, LoanDisburseActWiseComponent, YearendDemandRecoveryComponent, DemandNoticeBlockWiseComponent
+       LoanUpdatePassbookComponent,LoanPassBookFastPageComponent,LoanPassBookPrintingComponent, PrintCertificateComponent, NpaALLComponent,
+        RecovBlockComponent, InterestCertificateComponent, SmsChargeDeductionComponent, ConsoGLTrnsComponent, ConsoCCTrialComponent,
+         InterestSubsidyComponent, ConsoProfitLossComponent, UserPermissionComponent, UserTransferComponent, ConsoBalSheetComponent,
+          ConsoCashAccNewComponent, LoanDisbCertificateComponent, CloseAccDtlsComponent, GMloanDCComponent, RecovVillageComponent,
+           UserWiseTransactionComponent, UserWiseTransactionLoanComponent, GmLoanSubsidyComponent, LoanDisburseActWiseComponent,
+            YearendDemandRecoveryComponent, DemandNoticeBlockWiseComponent, RecovAdvPrnComponent, RecovAdvPrnVillComponent, InterestSubsidySummaryComponent, DcbrPrintComponent, NpaSummaryComponent
   ],
   imports: [
     MatAutocompleteModule,

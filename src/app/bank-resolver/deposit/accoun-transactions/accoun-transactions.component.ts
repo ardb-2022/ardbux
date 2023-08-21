@@ -97,7 +97,10 @@ export class AccounTransactionsComponent implements OnInit {
   misInstallemntsFor_B: td_intt_dtls[] = [];
   misPreMatClose:boolean=false;
   fdInstallemntsForSelectedAcc: td_intt_dtls[] = [];
-  allApproveTrans:any[]=[]
+  allApproveTrans:any[]=[];
+  StandingRD:any=[];
+  StandingArr:any=[];
+  StandingArr2:any;
   preTransactionDtlForSelectedAcc: td_def_trans_trf[] = [];
   rdInstallamentOption: any[] = [];
   showOnRenewal = false;
@@ -182,6 +185,7 @@ export class AccounTransactionsComponent implements OnInit {
       this.getDenominationList();
       this.getConstitutionList();
       this.getOperationalInstr();
+      this.getRDActiveList();
       // this.getAllCustomer();
     }, 150);
 
@@ -324,7 +328,9 @@ export class AccounTransactionsComponent implements OnInit {
     })
 
   }
+getRDActiveList(){
 
+}
   // private getAllCustomer(): void {
   //   if (undefined !== AccounTransactionsComponent.existingCustomers &&
   //     null !== AccounTransactionsComponent.existingCustomers &&
@@ -2353,7 +2359,29 @@ getjoinholder(){
       this.hideOnClose = true;
       this.showAmtDrpDn = true;
       } else if (selectedOperation.oprn_desc.toLocaleLowerCase() === 'rd installment') {
+        var rd={
+          "ardb_cd":this.sys.ardbCD,
+          "brn_cd":this.sys.BranchCode
+        }
+        this.svc.addUpdDel('Deposit/PopulateActiveSIList',rd).subscribe(data=>{console.log(data)
+        this.StandingRD=data
+        if(this.StandingRD.length>0){
+          debugger
+          this.StandingArr=this.StandingRD.filter(e=>e.acc_type_to.toLowerCase()=='recurring deposit')
+          debugger
+          console.log(this.StandingArr.filter(p=>p.acc_num_to == this.f.acct_num.value))
+          this.StandingArr2=this.StandingArr.filter(p=>p.acc_num_to==this.f.acct_num.value)[0]
+          debugger
+          if(this.StandingArr2){
+            this.HandleMessage(true, MessageType.Error, `A/C ${this.f.acct_num.value} have already Standing Instraction, Transaction Not Permited from this screen !!!`);
+            this.showTransactionDtl=false;
+            return
+          }
+        }
+      })
+        
         debugger
+        
         this.transType.key = 'D';
         this.transType.Description = 'Deposit';
         
@@ -2395,7 +2423,7 @@ getjoinholder(){
       else{ this.afMat1 = false}
       debugger
        this.aftmatInt=0;
-       if((this.sys.ardbCD!='20'&& this.sys.ardbCD!='26') && ( this.afMat1 == true && accTypCode === 2 )) {
+       if((this.sys.ardbCD!='20'&& this.sys.ardbCD!='26') && ( this.afMat1 == true && (accTypCode === 2 || accTypCode === 4) )) {
          debugger
          
           this.modalRefClose = this.modalService.show(this.afterMatClose,
@@ -3301,7 +3329,7 @@ getjoinholder(){
         
         const temp_gen_param = new p_gen_param();
             temp_gen_param.ad_acc_type_cd=2;//for simple interest calculation like FD //PARTHA
-            temp_gen_param.ad_prn_amt=this.accNoEnteredForTransaction.prn_amt+this.accNoEnteredForTransaction.intt_amt;
+            temp_gen_param.ad_prn_amt=(this.sys.ardbCD=='4'&&(accTypCode === 2 || accTypCode == 4))?this.accNoEnteredForTransaction.prn_amt:this.accNoEnteredForTransaction.prn_amt+this.accNoEnteredForTransaction.intt_amt;///13
             temp_gen_param.ai_period=this.diff1-1;//for subtract current date //PARTHA
             temp_gen_param.ad_intt_rt = 4 //Need to be change in future
             temp_gen_param.as_intt_type = "O" 

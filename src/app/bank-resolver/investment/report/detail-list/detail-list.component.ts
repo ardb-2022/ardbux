@@ -79,6 +79,7 @@ export class IDetailListComponent implements OnInit,AfterViewInit  {
   today:any
   totprnamt=0
   totinttamt=0
+  totProvinttamt=0
   totmatamt=0
   prvamt=0
   insamt=0
@@ -176,6 +177,7 @@ export class IDetailListComponent implements OnInit,AfterViewInit  {
       this.insamt=0;
       this.totprnamt=0;
       this.totinttamt=0;
+      this.totProvinttamt=0;
       this.totmatamt=0;
       this.prvamt=0
       this.modalRef.hide();
@@ -199,6 +201,7 @@ export class IDetailListComponent implements OnInit,AfterViewInit  {
           }
           this.totprnamt+=this.reportData[i].constype.tot_cons_balance
           this.totinttamt+=this.reportData[i].constype.tot_cons_intt_balance
+          this.totProvinttamt+=this.reportData[i].constype.tot_cons_mat_intt_balance
           this.allconscount+=this.reportData[i].constype.tot_cons_count
         }
         this.totmatamt=this.totprnamt+this.totinttamt

@@ -4,11 +4,15 @@
     "guardian_name":"অভিভাবকের নাম",
     "address":"ঠিকানা",
     "block":"ব্লক",
-    "member_code":"সদস্য / লোন কেস নং",
+    "village":"গ্রাম",
+    "gp":"অঞ্চল",
+    "member_code":"লোন কেস নং",
     "party_code":"পার্টি কোড",
     "loan_id":"লোন আইডি",
+    "loan_date":"ঋণের তারিখ",
     "ledger_no":"লেজার নং",
     "intt_rt":"সুদের হার",
+    "total_loan_amt":"মোট ঋণের পরিমাণ",
     "current_loan_amt":"বর্তমান ঋণের পরিমাণ",
     "district":"জেলা",
     "notice_flag":"নোটিশ",
@@ -44,7 +48,7 @@
 
     "gmaddr":{
         "gm_branch":"Branch : Ghatal / Khirpai / Sonakhali",
-        "gm_addr":"Telephone No: (03225) 244907/ 244908/ 244909, Email: ghatalcardb@gmail.com"
+        "gm_addr":"Telephone No: (03225) 295261, Email: ghatalcardb@gmail.com"
     }
     
 

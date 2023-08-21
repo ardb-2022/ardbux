@@ -188,26 +188,7 @@
       <ng-container matColumnDef="Payment">
         <th mat-header-cell *matHeaderCellDef colspan="3"><b>Payment</b></th>
       </ng-container>
-      
-      
-      <!-- Footer column -->
-      <!-- <ng-container matColumnDef="Total">
-        <td mat-footer-cell *matFooterCellDef colspan="" style="text-align: left;">
-          <b>Total</b>
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="disclaimer1">
-        <td mat-footer-cell *matFooterCellDef colspan="2" style="text-align: right;">
-         
-          <b>{{crSum | currency:"INR"}}</b>
-        </td>
-       </ng-container>
-       <ng-container matColumnDef="disclaimer2">
-        <td mat-footer-cell *matFooterCellDef colspan="4" style="text-align: right;">
-          <b>{{drSum | currency:"INR"}}</b>
-        
-        </td>
-       </ng-container> -->
+     
         
       <tr mat-header-row *matHeaderRowDef="['Header']"
        class="example-second-header-row">
@@ -218,9 +199,7 @@
       
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      <!-- <tr mat-footer-row *matFooterRowDef="['Total','disclaimer1', 'disclaimer2']" class="example-second-footer-row"></tr> -->
       
-      <!-- Row shown when there is no matching data. -->
           </table>
           <table>
             <tr>
@@ -244,142 +223,9 @@
       </footer>
   </div>
   <mat-paginator showFirstLastButtons [pageSizeOptions]="[5, 10, 25, 100, this.reportData.length]" aria-label="Select page of users"></mat-paginator>
-    <!-- <pagination style="float:right;"
-    [totalItems]="reportData?.length"  
-    [itemsPerPage]="itemsPerPage"
-    [boundaryLinks]="true"
-    [directionLinks]="true"
-    [maxSize]="5"
-    [(ngModel)]="currentPage"
-    name="currentPage"
-    (pageChanged)="pageChanged($event)"
-    (pageBoundsCorrection)="pageChanged($event)"></pagination> -->
-      <table class="p-3" id="trial" hidden>
-        <tr *ngIf="reportData" style="text-align:center">
-          <th colspan="3">Receipt</th>
-          <th colspan="3">Payment</th>
-        </tr>
-        <tr *ngIf="reportData">
-          <!-- <th></th> -->
-          <th>Acc CD</th>
-          <th>Particulars</th>
-          <th style="text-align: right;">Amount</th>
-          <th>Acc CD</th>
-          <th>Particulars</th>
-          <th style="text-align: right;">Amount</th>
-         </tr>
-        <tbody *ngFor="let i of pagedItems; let itr=index;">
-        <tr >
-         <td *ngIf="i.dr_particulars">{{i.dr_acc_cd}}</td>
-         <td *ngIf="!i.dr_particulars"></td>
-         <td>{{i.dr_particulars}}</td>
-         <td style="text-align: right;" *ngIf="i.dr_particulars">{{i.dr_amt | number : '1.2-2'}}</td>
-         <td *ngIf="!i.dr_particulars"></td>
-         <td *ngIf="i.cr_particulars">{{i.cr_acc_cd}}</td>
-         <td *ngIf="!i.cr_particulars"></td>
-         <td>{{i.cr_particulars}}</td>
-         <td style="text-align: right;" *ngIf="i.cr_particulars">{{i.cr_amt | number : '1.2-2'}}</td>
-         <td *ngIf="!i.cr_particulars"></td>
-        </tr> 
-        <tr style="font-weight:700;" *ngIf="lastcrAccCD == i.cr_acc_cd && lastdrAccCD == i.dr_acc_cd">
-         <td colspan="2">Total: </td>
-         <td style="text-align: right;">{{drSum | number : '1.2-2'}}</td>
-         <td colspan="2"></td>
-         <td style="text-align: right;">{{crSum | number : '1.2-2'}}</td>
-        
-       </tr>
-      </tbody>
-      <tfoot>
-        <tr>
-          <td colspan="5"> <small>
-            This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions, Kolkata
-           </small> </td>
-        </tr>
-        
-       </tfoot>
-      </table>
-      <div hidden id="hiddenTab">
-        <div class="justify-content-center" style="text-align:center">
-          <h4>{{ardbName}} {{branchName}}</h4>
+   
+</div>
 
-          <h4>Run Date & Time : {{today}} </h4> <br>
-          <h4> <u> Cash Account from {{fromdate.toDateString()}} to  {{todate.toDateString()}} </u></h4>
-       </div>
-        <table class="p-3"  class="mkSmall">
-        <thead>
-          <tr *ngIf="reportData" style="text-align:center">
-            <th colspan="3">Receipt</th>
-            <th colspan="3">Payment</th>
-          </tr>
-        
-          <tr *ngIf="reportData">
-            <!-- <th></th> -->
-            <th>Acc CD</th>
-            <th>Particulars</th>
-            <th style="text-align: right;">Amount</th>
-            <th>Acc CD</th>
-            <th>Particulars</th>
-            <th style="text-align: right;">Amount</th>
-           </tr>
-          </thead>
-          <tbody *ngFor="let i of reportData; let itr=index;">
-          <tr >
-           <td *ngIf="i.dr_particulars">{{i.dr_acc_cd}}</td>
-           <td *ngIf="!i.dr_particulars"></td>
-           <td>{{i.dr_particulars}}</td>
-           <td style="text-align: right;" *ngIf="i.dr_particulars">{{i.dr_amt | number : '1.2-2'}}</td>
-           <td *ngIf="!i.dr_particulars"></td>
-           <td *ngIf="i.cr_particulars">{{i.cr_acc_cd}}</td>
-           <td *ngIf="!i.cr_particulars"></td>
-           <td>{{i.cr_particulars}}</td>
-           <td style="text-align: right;" *ngIf="i.cr_particulars">{{i.cr_amt | number : '1.2-2'}}</td>
-           <td *ngIf="!i.cr_particulars"></td>
-          </tr> 
-          <tr style="font-weight:700;" *ngIf="lastcrAccCD == i.cr_acc_cd && lastdrAccCD == i.dr_acc_cd">
-           <td colspan="2">Total: </td>
-           <td style="text-align: right;">{{drSum | number : '1.2-2'}}</td>
-           <td colspan="2"> </td>
-           <td style="text-align: right;">{{crSum | number : '1.2-2'}}</td>
-          
-         </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-          </tr>
-          <tr>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-           </tr>
-         
-        </tfoot>
-
-        </table>
-        <footer>
-          <small>
-            This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions, Kolkata
-           </small> 
-         </footer>
-        <!-- <br><br><br><br>
-        <small> This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions, Kolkata</small> -->
-      </div>
-    <button mat-raised-button hidden id="chngPage" (click)="setPage(1)"></button>
-    <!-- <iframe *ngIf="ReportUrl" [src]="ReportUrl" width="100%" height="700px"
-    (load)="oniframeLoad()"  allowfullscreen></iframe> -->
-  </div>
-  <!-- <div  class="col-xs-12 col-sm-12 col-md-8 col-lg-8 shadow-lg mb-4 bg-white p-3">
-     <div style="text-align: center;"><strong> Synergic Banking </strong>  </div>
-     <div style="text-align: center;"><b> Branch: Main Branch</b></div>
-     <div style="text-align: center;"><b> Branch Code: 101</b></div>
-     <div style="text-align: center;"><b> Run Date: {{dt}}</b></div>
-<wbr-pivot #CashAccount [toolbar]="false"
-          [width]="'100%'"
-          [height]="500"
-          (ready)="onPivotReady($event)"
-          (reportcomplete)="onReportComplete()">
-</wbr-pivot>
-</div> -->
   <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 shadow-sm mb-4 bg-white p-3">
     <div>
       <!-- <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1"  (click)="exportPDFTitle()">Download PDF</button> -->
@@ -398,10 +244,4 @@
 </div>
 <loading *ngIf="isLoading"></loading>
 
-<!-- <script>
- // Here's how you'd do this with plain old Javascript
-const iframe = document.querySelector('#frame_id');
-iframe.onload = () => {
-   console.log('iframe is completely loaded');
-}
-  </script> -->
+

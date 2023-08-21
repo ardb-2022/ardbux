@@ -55,7 +55,7 @@ export class GenLedger2Component implements OnInit {
   exportAsConfig:ExportAsConfig;
   ardbName=localStorage.getItem('ardb_name')
   branchName=this.sys.BranchName
-  displayedColumns: string[] = ['acc_cd', 'voucher_dt', 'voucher_id', 'narration','voucher_type','dr_amt','cr_amt','cum_bal','cum_bal_type'];
+  displayedColumns: string[] = ['acc_cd_desc', 'voucher_dt', 'voucher_id', 'narration','voucher_type','dr_amt','cr_amt','cum_bal','cum_bal_type'];
   dataSource = new MatTableDataSource()
   firstAccCD:any
   lastAccCD:any;
@@ -70,6 +70,8 @@ export class GenLedger2Component implements OnInit {
   opng_bal:any;
   resultLength=0;
   LandingCall:boolean;
+  AcctTypes:any[]=[];
+
   constructor(private svc: RestService,
     private formBuilder: FormBuilder,
     private modalService: BsModalService,
@@ -88,6 +90,7 @@ export class GenLedger2Component implements OnInit {
       fromAcc: [null, Validators.required],
       toAcc: [null, Validators.required],
     });
+    this.getAccountTypeList()
     if(this.comser.openGlTrns){
       this.SubmitReport()
       this.LandingCall=this.comser.openGlTrns
@@ -113,7 +116,29 @@ export class GenLedger2Component implements OnInit {
     this.modalRef = this.modalService.show(content, this.config);
   }
 
+  getAccountTypeList() {
 
+    
+    this.AcctTypes = [];
+
+    this.isLoading = true;
+    var dt={
+      "ardb_cd": this.sys.ardbCD
+    }
+    this.svc.addUpdDel<any>('Mst/GetAccountMaster', dt).subscribe(
+      res => {
+
+        this.isLoading = false;
+        this.AcctTypes = res;
+        debugger
+        // this.AcctTypes = this.AcctTypes.filter(c => c.dep_loan_flag === 'L');
+        // this.AcctTypes = this.AcctTypes.sort((a, b) => (a.acc_type_cd > b.acc_type_cd) ? 1 : -1);
+      },
+      err => {
+        this.isLoading = false;
+      }
+    );
+  }
 
   public SubmitReport() {
     if(this.comser.openGlTrns){
@@ -141,6 +166,7 @@ export class GenLedger2Component implements OnInit {
       if(this.reportData.length==0){
         this.comser.SnackBar_Nodata()
       } 
+      
       console.log(this.reportData)
       this.isLoading=false
       
@@ -213,6 +239,10 @@ export class GenLedger2Component implements OnInit {
         if(this.reportData.length==0){
           this.comser.SnackBar_Nodata()
         } 
+        this.reportData.forEach(p => {
+          p.acc_cd_desc=this.AcctTypes.filter(e=>e.acc_cd==p.acc_cd)[0].acc_name;
+        })
+        debugger
         console.log(this.reportData)
         this.isLoading=false
         this.pageChange=document.getElementById('chngPage');

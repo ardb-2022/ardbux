@@ -62,4 +62,6 @@ table {
     color: white;
     font-size:small
   }
- 
+  tr.mat-header-row {
+    height: 0px!important;
+  }

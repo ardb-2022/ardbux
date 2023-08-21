@@ -260,15 +260,18 @@ export class InvestmentTransactionsComponent implements OnInit {
     // this.msg.sendCommonTmDepositAll(null);
     // this.refresh = true;
   }
-
+enable(e:any){
+  debugger
+  if (e) {
+    this.disabledOnNull = false;
+  }
+  else {
+    this.disabledOnNull = true;
+  }
+}
 
   loadInvData(){
-    if (this.f.acct_num.value.length > 0) {
-      this.disabledOnNull = false;
-    }
-    else {
-      this.disabledOnNull = true;
-    }
+    
     console.log(this.f.acc_type_cd)
     if (this.f.acc_type_cd === null || this.f.acc_type_cd === undefined) {
       // this.showAlertMsg('WARNING', 'Please select Account Type');
@@ -360,18 +363,18 @@ export class InvestmentTransactionsComponent implements OnInit {
     
     
   }
-  clearSuggestedCust() {
-    this.suggestedCustomer = null;
-    this.shownoresult = false;
-    if (this.f.acct_num.value.length > 0) {
-      this.disabledOnNull = false;
-    }
-    else {
-      this.disabledOnNull = true;
-    }
+  // clearSuggestedCust() {
+  //   this.suggestedCustomer = null;
+  //   this.shownoresult = false;
+  //   if (this.f.acct_num.value.length > 0) {
+  //     this.disabledOnNull = false;
+  //   }
+  //   else {
+  //     this.disabledOnNull = true;
+  //   }
 
 
-  }
+  // }
   public onAccountNumTabOff(): void {
     this.tm_denominationList = [];
     this.resetTransfer();

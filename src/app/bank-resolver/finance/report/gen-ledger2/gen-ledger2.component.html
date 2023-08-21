@@ -109,17 +109,16 @@ style="background-color: #78c2ad21; min-height: 20vh;">
  </div>
  </th>
 </ng-container>
-<ng-container matColumnDef="acc_cd">
-
-  
-  <th mat-header-cell *matHeaderCellDef mat-sort-header>Account Desc
-    <!-- <mat-footer-cell *matFooterCellDef> Total </mat-footer-cell> -->
+<!-- <ng-container matColumnDef="acc_cd">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header>Acc cd
   </th>
-
-  
   <td mat-cell *matCellDef="let element"> {{element.acc_cd}} </td>
+</ng-container> -->
+<ng-container matColumnDef="acc_cd_desc">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header>Account Name
+  </th>
+  <td mat-cell *matCellDef="let element"> {{element.acc_cd_desc}} </td>
 </ng-container>
-
 <!-- Name Column -->
 <ng-container matColumnDef="voucher_dt">
 

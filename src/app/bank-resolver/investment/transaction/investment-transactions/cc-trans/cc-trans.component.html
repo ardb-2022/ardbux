@@ -172,7 +172,7 @@
         <!-- (focusout)="onAmtChngDuringRenewal(); processInterest()" -->
         <div class="form-group col-3">
           <small for="amount">Principal Amt<span class="text-danger">*</span> </small>
-          <input  type="text" class="form-control form-control-sm" formControlName="amount" id="amount"
+          <input  type="text" class="form-control form-control-sm" formControlName="amount" id="amount" disabled
           (focusout)="onAmtChngDuringRenewal(); processInterest()" >
         </div>
         <div class="form-group col-2" [hidden]="!showBalance">

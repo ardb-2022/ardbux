@@ -7,7 +7,7 @@ table {
   td, th {
     border: 1px solid #ffffff;
     text-align: left;
-    padding: 8px;
+    padding: 4px;
     
   }
   hr{
@@ -44,7 +44,7 @@ table {
   
   #customers1 td, #customers1 th {
     border: 1px solid #ddd;
-    padding: 8px;
+    padding: 4px;
     
   }
   
@@ -62,4 +62,15 @@ table {
   }
   tr.mat-header-row {
     height: 0px!important;
+  }
+  #mattable{
+    font-size:large
+  }
+  .logo{
+    
+    position: absolute;
+    opacity: 23%;
+    left: 30%;
+    /* margin-left: 26%;
+    margin-top: 10%; */
   }

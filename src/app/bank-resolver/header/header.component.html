@@ -458,6 +458,10 @@
       <mat-icon>verified_user</mat-icon>
       <span>Disbursement Certificate</span>
     </button>
+    <button  mat-menu-item routerLink="LR_DCBR_P" >
+      <mat-icon>auto_awesome_motion</mat-icon>
+      <span>DCBR Print</span>
+    </button>
     <button mat-menu-item [matMenuTriggerFor]="loan_dis_reg">
       <mat-icon>add_home_work</mat-icon>
       <span>Disbursement Register</span>
@@ -466,36 +470,64 @@
       <mat-icon>data_saver_on</mat-icon>
       <span>Recovery Register</span>
     </button>
+    <button mat-menu-item [matMenuTriggerFor]="adv_coll_reg">
+      <mat-icon>history</mat-icon>
+      <span>Advance Collection Register</span>
+    </button>
     <button mat-menu-item routerLink="LR_openClose" (mouseenter)="hideButton($event)" id="LR_openClose">
       <mat-icon>rule_folder</mat-icon>
       <span>Open/Close Register</span>
     </button>
-    <button mat-menu-item routerLink="{{dynamicLink3}}" (mouseenter)="hideButton($event)" id="{{dynamicLink3}}">
-      <mat-icon>gesture_select</mat-icon>
-      <span>Interest Subsidy</span>
+    <button mat-menu-item [matMenuTriggerFor]="Intt_Sub">
+      <mat-icon>real_estate_agent</mat-icon>
+      <span>Interest Subsidy </span>
     </button>
+    <button mat-menu-item [matMenuTriggerFor]="npa">
+      <mat-icon>grade</mat-icon>
+      <span>NPA</span>
+    </button>
+    
     <button mat-menu-item routerLink="LR_SubCashBk" (mouseenter)="hideButton($event)" id="LR_SubCashBk">
       <mat-icon>auto_stories</mat-icon>
       <span>Sub Cash Book</span>
     </button>
-    <button mat-menu-item routerLink="LR_NPA" (mouseenter)="hideButton($event)" id="LR_NPA">
-      <mat-icon>local_library</mat-icon>
-      <span>NPA List</span>
-    </button>
-    <button mat-menu-item routerLink="LR_NPA_ALL" (mouseenter)="hideButton($event)" id="LR_NPA_ALL">
-      <mat-icon>local_library</mat-icon>
-      <span>NPA List ALL</span>
-    </button>
+    
     <button mat-menu-item routerLink="DR_LoanUpbkPrnSts"(mouseenter)="hideButton($event)" id="DR_LoanUpbkPrnSts">
       <mat-icon>published_with_changes</mat-icon>
       <span>Update Passbook Print Status</span>
     </button>
   </mat-menu>
+  <mat-menu #npa="matMenu" ccCardHover>
+    <button mat-menu-item routerLink="LR_NPA" (mouseenter)="hideButton($event)" id="LR_NPA">
+      <mat-icon>local_library</mat-icon>
+      <span>NPA List</span>
+    </button>
+    
+    <button mat-menu-item routerLink="LR_NPA_ALL" (mouseenter)="hideButton($event)" id="LR_NPA_ALL">
+      <mat-icon>note_stack</mat-icon>
+      <span>NPA List ALL</span>
+    </button>
+    <button mat-menu-item routerLink="LR_NPA_Sum" (mouseenter)="hideButton($event)" id="LR_NPA">
+      <mat-icon>format_align_justify</mat-icon>
+      <span>NPA Summary</span>
+    </button>
+  </mat-menu>
+  <mat-menu #Intt_Sub="matMenu" ccCardHover>
+    <button mat-menu-item routerLink="{{dynamicLink3}}" (mouseenter)="hideButton($event)" id="{{dynamicLink3}}">
+      <mat-icon>groups</mat-icon>
+      <span>Interest Subsidy Loan-Wise</span>
+    </button>
+    <button mat-menu-item routerLink="LR_Int_Subsidy_Sum" (mouseenter)="hideButton($event)" >
+      <mat-icon>window</mat-icon>
+      <span>Interest Subsidy Summary-Wise</span>
+    </button>
+    
+  </mat-menu>
   <mat-menu #DM_Notice="matMenu" ccCardHover>
-    <button mat-menu-item routerLink="LR_DemandNotice" (mouseenter)="hideButton($event)" id="LR_DemandNotice">
+    <!-- <button mat-menu-item routerLink="LR_DemandNotice" (mouseenter)="hideButton($event)" id="LR_DemandNotice">
       <mat-icon>holiday_village</mat-icon>
       <span>Demand Notice Vill-Wise</span>
-    </button>
+    </button> -->
     <button mat-menu-item routerLink="LR_DN_Block" (mouseenter)="hideButton($event)" id="LR_DemandNotice">
       <mat-icon>window</mat-icon>
       <span>Demand Notice Block-Wise</span>
@@ -584,6 +616,7 @@
       <mat-icon>real_estate_agent</mat-icon>
       <span>Interest Recovery</span>
     </button>
+    
   </mat-menu>
   <mat-menu #loan_dis_reg="matMenu" ccCardHover>
     <button hidden mat-menu-item routerLink="LR_DisReg" (mouseenter)="hideButton($event)" id="LR_DisReg">
@@ -597,6 +630,17 @@
     <button mat-menu-item routerLink="LR_DisAll" (mouseenter)="hideButton($event)" >
       <mat-icon>recent_actors</mat-icon>
       <span>Activity-Wise</span>
+    </button>
+  </mat-menu>
+  <mat-menu #adv_coll_reg="matMenu" ccCardHover>
+    
+    <button mat-menu-item routerLink="LR_RecAdvPrnVill" (mouseenter)="hideButton($event)" >
+      <mat-icon>groups</mat-icon>
+      <span>Vill-wise</span>
+    </button>
+    <button mat-menu-item routerLink="LR_RecAdvPrnBlock" (mouseenter)="hideButton($event)" >
+      <mat-icon>recent_actors</mat-icon>
+      <span>Block-Wise</span>
     </button>
   </mat-menu>
     

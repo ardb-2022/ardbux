@@ -113,6 +113,8 @@ export class DemandNoticeBlockWiseComponent implements OnInit {
   AcctTypes:any[]=[];
   villages:any[]=[];
   villages1:any[]=[];
+  allServiceArea:any[]=[];
+  lastDate:any
   filteredOptions: Observable<string[]>;
   constructor(private svc: RestService, private formBuilder: FormBuilder,private exportAsService: ExportAsService, private cd: ChangeDetectorRef,
     private modalService: BsModalService, private _domSanitizer: DomSanitizer, private rstSvc:RestService, private datePipe:DatePipe,
@@ -121,6 +123,7 @@ export class DemandNoticeBlockWiseComponent implements OnInit {
     this.getBlock();
     this.getVillageMaster();
     this.getAccountTypeList();
+    this.GetServiceAreaMaster();
     var dt={"ardb_cd":this.sys.ardbCD}
     this.rstSvc.getlbr(environment.ardbBanglaUrl,null).subscribe(res=>{
       console.log(res)
@@ -151,6 +154,7 @@ export class DemandNoticeBlockWiseComponent implements OnInit {
     this.fromdate = this.sys.CurrentDate;
     this.toDate = this.sys.CurrentDate;
     this.reportcriteria = this.formBuilder.group({
+      acc_cd: [null, Validators.required],
       fromDate: [null, Validators.required],
       toDate: [null, Validators.required],
       block: [null, Validators.required]
@@ -162,6 +166,8 @@ export class DemandNoticeBlockWiseComponent implements OnInit {
     // get the time as a string
        var time = date.toLocaleTimeString();
        this.today= n + " "+ time
+    this.lastDate = localStorage.getItem('__lastDt');
+
   }
   setVill(){
     this.vilcode='';
@@ -191,11 +197,11 @@ export class DemandNoticeBlockWiseComponent implements OnInit {
     return this.villages.filter(option => option.vill_name.toLowerCase().includes(filterValue));
   }
   getBlockName(){
-    const X= this.villages.filter(e=>e.vill_cd==this.vilcode)
+    const X= this.reportcriteria.controls.block.value
     debugger
-    this.blocks1=this.blocks.filter(e=>e.block_cd==X[0].block_cd)
+    this.blocks1=this.blocks.filter(e=>e.block_cd==X)
     debugger
-    this.reportcriteria.controls.block.setValue(this.blocks1[0].block_name)
+    // this.reportcriteria.controls.block.setValue(this.blocks1[0].block_name)
   }
   getBlock(){
     var dt={"ardb_cd":this.sys.ardbCD}
@@ -212,9 +218,7 @@ export class DemandNoticeBlockWiseComponent implements OnInit {
       res => {
         console.log(res)
         this.villages = res;
-        this.villages.forEach(e => {
-          this.villages1.push(e.vill_name);
-        })
+        
         debugger
       },
       err => { }
@@ -241,6 +245,21 @@ export class DemandNoticeBlockWiseComponent implements OnInit {
         this.isLoading = false;
       }
     );
+  }
+  GetServiceAreaMaster()
+  {
+    var dt={
+      "ardb_cd":this.sys.ardbCD,
+    }
+   
+    this.svc.addUpdDel<any>('Mst/GetServiceAreaMaster', dt).subscribe(
+      res => {
+        // this.allServiceArea=res;
+        this.allServiceArea=res;
+        
+    }
+    )
+  
   }
   cancelOnNull() {
     this.suggestedCustomer = null;
@@ -293,6 +312,7 @@ export class DemandNoticeBlockWiseComponent implements OnInit {
     this.reportcriteria.controls.acct_num.setValue(cust.loan_id);
     this.suggestedCustomer = null;
     const currFYear = localStorage.getItem('__curFinyr');
+    
     debugger
     this.reportcriteria.controls.fromDate.setValue('01/04/'+currFYear)
     debugger
@@ -314,6 +334,7 @@ export class DemandNoticeBlockWiseComponent implements OnInit {
     this.cd.detectChanges();
   }
   public SubmitReport() {
+    this.getBlockName();
     this.comser.getDay(this.reportcriteria.controls.fromDate.value,this.reportcriteria.controls.toDate.value)
     this.converDttoDt=''
     if (this.reportcriteria.invalid) {
@@ -342,9 +363,9 @@ export class DemandNoticeBlockWiseComponent implements OnInit {
       this.toDate = this.reportcriteria.controls.toDate.value;
       console.log(this.datePipe.transform(this. toDate, 'dd/MM/yyyy'))
       this.convertDt=this.datePipe.transform(this. toDate, 'dd/MM/yyyy')
-      for(let j=0;j<this.convertDt.toString().length;j++){
-        if(this.convertDt.toString().charAt(j)!='/')
-        this.converDttoDt+=this.numData[(+this.convertDt.toString().charAt(j))]
+      for(let j=0;j<this.lastDate.length;j++){
+        if(this.lastDate.charAt(j)!='/')
+        this.converDttoDt+=this.numData[(+this.lastDate.charAt(j))]
         else
         this.converDttoDt+='/'
 
@@ -358,8 +379,8 @@ export class DemandNoticeBlockWiseComponent implements OnInit {
       "ardb_cd":this.sys.ardbCD,
       "from_dt":this.reportcriteria.controls.fromDate.value.toISOString(),
       "to_dt":this.reportcriteria.controls.toDate.value.toISOString(),
-      "block_cd":this.reportcriteria.controls.block.value
-      // "acc_cd":Number(this.reportcriteria.controls.acc_cd.value),
+      "block_cd":this.reportcriteria.controls.block.value,
+      "acc_cd":Number(this.reportcriteria.controls.acc_cd.value),
     }
       this.isLoading=true
       this.showAlert = false;
@@ -367,12 +388,17 @@ export class DemandNoticeBlockWiseComponent implements OnInit {
       // this.svc.addUpdDel('Loan/GetDemandList',dt).subscribe(data=>{console.log(data)
         this.svc.addUpdDel('Loan/GetDemandNoticeBlockwise',dt).subscribe(data=>{console.log(data)
         this.reportData=data;
-        this.dataSource.data=this.reportData
-debugger
+        this.reportData.forEach(p => {
+          p.ardb_cd=this.villages.filter(e=>e.vill_cd==p.ardb_cd)[0].vill_name;
+          p.cust_address=this.allServiceArea.filter(e=>e.service_area_cd==p.cust_address)[0].service_area_name;
+        })
+        debugger
         this.isLoading=false;
         if(this.reportData?.length==0||this.reportData==null){
           this.comser.SnackBar_Nodata()
-        } 
+        }
+        this.dataSource.data=this.reportData;
+
       },
       err => {
          this.isLoading = false;
@@ -401,29 +427,11 @@ debugger
     this.router.navigate([this.sys.BankName + '/la']);
   }
   applyFilter(event: Event) {
-    // console.log(event)
-    // const filterValue = (event.target as HTMLInputElement).value;
-   
-    // this.dataSource.filter = filterValue.trim().toLowerCase();
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
-      var input, filter, table, tr, td, i, txtValue;
-
-  input = document.getElementById("myInput");
-  filter = input.value.toUpperCase();
-  table = document.getElementById("trialbalance");
-  tr = table.getElementsByTagName("tr");
-  for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[0];
-    if (td) {
-      txtValue = td.textContent || td.innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
-      }
-    }       
-  }
     }
   }
 }

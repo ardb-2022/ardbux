@@ -83,11 +83,19 @@ export class PassBookFastPageComponent implements OnInit {
   IFSC:any;
   paddingACC:any;
   systemParam: sm_parameter[] = [];
+  RDinterest:any;
+  RDmatValue:any;
   constructor(private svc: RestService, private formBuilder: FormBuilder,
     public datepipe: DatePipe) { }
   ngOnInit(): void {
     this.getsystemParam();
-    this.sys.ardbCD=="4"?this.printID="fastPageGhatal":this.printID="fastPage"
+    if(this.accType=="6" && this.sys.ardbCD=="26" ){
+      this.printID="fastPageRD"
+    }else{
+      this.sys.ardbCD=="4"?this.printID="fastPageGhatal":this.printID="fastPage"
+
+    }
+    debugger
     // this.branchName = localStorage.getItem('__bName');
     this.reportcriteria = this.formBuilder.group({
       yes: [''],
@@ -132,6 +140,22 @@ export class PassBookFastPageComponent implements OnInit {
       }
     );
   }
+  calINTT(){
+    var dt={
+      "ad_instl_amt":this.masterModel.tmdeposit.instl_amt,
+      "an_instl_no":this.masterModel.tmdeposit.instl_no,
+      "an_intt_rate":this.masterModel.tmdeposit.intt_rt,
+      "ardb_cd":this.sys.ardbCD,
+      
+    }
+    this.svc.addUpdDel('Deposit/F_CALCRDINTT_REG',dt).subscribe(data=>{
+      console.log(data);
+      this.RDinterest=data;
+      if(this.RDinterest){
+        this.RDmatValue=(this.masterModel.tmdeposit.instl_amt*this.masterModel.tmdeposit.instl_no)+this.RDinterest
+      }
+    })
+  }
   loadFastPageData(){
     this.joinHold=[];
     this.masterModel = new AccOpenDM();
@@ -147,6 +171,9 @@ export class PassBookFastPageComponent implements OnInit {
       this.masterModel = data;
       this.custCD=this.masterModel.tmdeposit.cust_cd
       debugger
+      if(this.accType=="6"){
+        this.calINTT()
+      }
       this.getCustomer()
      
         this.oprn_instr_desc = this.operationalInstrList.filter(x => x.oprn_cd.toString() === this.masterModel.tmdeposit.oprn_instr_cd.toString())[0].oprn_desc;

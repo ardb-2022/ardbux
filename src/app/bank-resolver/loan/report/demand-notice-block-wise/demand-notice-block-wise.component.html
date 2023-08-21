@@ -18,6 +18,15 @@
   
           <div class="form-row">
             <div class="col-12">
+              <small for="acc_type_cd">Loan Type</small>
+             <select id="acc_type_cd" class="form-control form-control-sm" formControlName="acc_cd">
+               <option *ngIf="AcctTypes" disabled>Choose</option>
+               <option  *ngFor="let acctType of AcctTypes" [value]="acctType.acc_type_cd">
+                 {{acctType.acc_type_cd +' ' + acctType.acc_type_desc}}
+               </option>
+             </select>
+            </div>
+            <div class="col-12">
               <small for="block">Block</small>
              <select id="block" class="form-control form-control-sm" formControlName="block">
                <option *ngIf="blocks" disabled>Choose</option>
@@ -95,6 +104,11 @@
         </div>
       </div>
       <div class="col-xs-12 col-sm-12 shadow-lg mb-4 bg-white p-3 mkScroll">
+        <mat-form-field appearance="outline" >
+          <mat-label>Search....</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Abc/123" #input>
+        </mat-form-field>
+        
         <div id="mattable">
           <table mat-table [dataSource]="dataSource" matSort >
               
@@ -105,82 +119,96 @@
                 <td mat-cell *matCellDef="let data let i=index"> 
                   <div class="justify-content-center" style="text-align:center;padding-top: 40px;" *ngIf="data">
                     <div *ngIf="ardbcd=='26'">
-                      <h4> <b>{{getArdb}} {{translatedData?.heading}} </b> </h4>
-                    <h5> <b>{{translatedData?.bmaddr?.bm_branch}} </b> </h5> 
-                    <h5> <b>{{translatedData?.bmaddr?.bm_cont}} </b> </h5> 
-                    <h5> <b>{{translatedData?.bmaddr?.bm_addr}} </b> </h5> 
+                      <h6> <b>{{getArdb}} {{translatedData?.heading}} </b> </h6>
+                    <h6> <b>{{translatedData?.bmaddr?.bm_branch}} </b> </h6> 
+                    <h6> <b>{{translatedData?.bmaddr?.bm_cont}} </b> </h6> 
+                    <h6> <b>{{translatedData?.bmaddr?.bm_addr}} </b> </h6> 
                     <!-- <h5> <b>{{translatedData?.bmaddr?.bm_website}} </b> </h5> -->
                     </div>
                     <div *ngIf="ardbcd=='20'">
-                      <h4> <b>{{getArdb}} {{translatedData?.heading}} </b> </h4>
-                    <h5> <b>{{translatedData?.biraddr?.bir_branch}} </b> </h5> 
+                      <h6> <b>{{getArdb}} {{translatedData?.heading}} </b> </h6>
+                    <h6> <b>{{translatedData?.biraddr?.bir_branch}} </b> </h6> 
                     <!-- <h5> <b>{{translatedData?.bmaddr.burdwan_cont}} </b> </h5> 
                     <h5> <b>{{translatedData?.bmaddr.burdwan_addr}} </b> </h5> 
                     <h5> <b>{{translatedData?.bmaddr.burdwan_website}} </b> </h5> <br> -->
                     </div>
                     <div *ngIf="ardbcd=='4'">
-                      <h4> <b>{{getArdb}} {{translatedData?.heading}} </b> </h4>
-                    <h4> <b>{{translatedData?.gmaddr?.gm_branch}} </b> </h4> 
-                    <h4> <b>{{translatedData?.gmaddr?.gm_addr}} </b> </h4> 
+                      <h6> <b>{{getArdb}} {{translatedData?.heading}} </b> </h6>
+                    <h6> <b>{{translatedData?.gmaddr?.gm_branch}} </b> </h6> 
+                    <h6> <b>{{translatedData?.gmaddr?.gm_addr}} </b> </h6> 
                     <!-- <h5> <b>{{translatedData?.bmaddr.burdwan_addr}} </b> </h5> 
                     <h5> <b>{{translatedData?.bmaddr.burdwan_website}} </b> </h5> <br> -->
                     </div>
+                    <br>
+                  <img src="./assets/images/ardb.png" width="450" height="450"  class="logo"/>
+
                     <table style="width: 100%;">
                     <tr>
                       <td colspan="6" >{{translatedData?.name}} - {{data?.cust_name }}</td> 
-                      <td colspan="6" style="text-align: right;">{{translatedData.member_code}} - {{data.brn_cd}}</td> 
+                      <td colspan="6" style="text-align: right;">{{translatedData.member_code}} - {{data?.brn_cd}}</td> 
   
                     </tr>
                     <tr>
-                      <td colspan="6">{{translatedData?.block}} - {{this.blocks1[0].block_name}} </td>  
+                      <td colspan="6" >{{translatedData?.guardian_name}} - {{data?.block_name }}</td> 
+
+                      <!-- <td colspan="6">{{translatedData?.village}} - {{data?.block_name}}, {{translatedData?.block}} - {{this.blocks1[0].block_name}} </td>   -->
                         <td colspan="6" style="text-align: right;">{{translatedData.loan_id}} -{{data?.loan_id}} </td>   
                     </tr>
                    
                     <tr>  
-                        <td colspan="6" >{{translatedData?.address}} - {{data?.cust_address}}</td> 
+                        <td colspan="6" >{{translatedData?.village}} - {{data?.ardb_cd}},  {{translatedData?.gp}} - {{data?.cust_address}}</td> 
   
                         <td colspan="6" style="text-align: right;"> {{translatedData.ledger_no}} - {{data?.loan_case_no}}</td>   
                     </tr>
-                     
+                    <tr>  
+                      <td colspan="6" >{{translatedData?.block}} - {{this.blocks1[0].block_name}}</td> 
+
+                      <td colspan="6" style="text-align: right;"> {{translatedData.loan_date}} - {{data?.disb_dt.substr(0,10)}}</td>   
+                  </tr>
                 </table>
-               <b> {{translatedData?.notice_flag}} </b> 
+               
                 
-                <!-- style="border:1px solid black;margin-left:10%" -->
-                
+                <b> {{translatedData?.notice_flag}} </b>
                 </div>
                 <table>
                   <tr>
                       <td colspan="6">{{translatedData?.intt_rt}} -<b>{{data?.curr_intt_rate}}%</b> </td>  
-                      <td colspan="6" style="text-align:center">{{translatedData?.current_loan_amt}} - <b>{{data?.disb_amt}} </b></td>
+                      <td colspan="6" style="text-align:center">{{translatedData?.total_loan_amt}} - <b>{{data?.disb_amt}} </b>, {{translatedData?.current_loan_amt}} - <b>{{reportData?data?.outstanding:0}} </b></td>
                   </tr>
               </table>
-                <div style="padding:10px;">
-                  {{translatedData?.salutation}}, <br> {{translatedData?.salutation_sub}}, <br> {{translatedData?.body_pre}} {{reportData?data?.activity_name:''}} {{translatedData?.body_mid}} {{converDttoDt}} {{translatedData?.body_post}} <br>
-                <br>  <table style="border-style:dotted; width: 100%; ">
+                <div style="padding:5px;">
+                  {{translatedData?.salutation}}, <br> {{translatedData?.salutation_sub}}, <br> {{translatedData?.body_pre}} {{reportData?data?.activity_name:''}} {{translatedData?.body_mid}} 
+                  ................................
+                  {{translatedData?.body_post}} 
+                 <br>
+                <br>
+                <table style="border-style:dotted; width: 100%; ">
                       
                       <tr>
-                        <th>{{translatedData?.installment_amt}}</th>
+                        <td>{{translatedData?.installment_amt}}</td>
                           <td>
-                              <b>{{translatedData?.prn}}: {{reportData?data?.ovd_prn:0}}</b>
+                              {{translatedData?.prn}}: <b>{{reportData?data?.ovd_prn:0}}</b>
                           </td>
-                          <td><b>{{translatedData?.curr_prn}}: {{reportData?data?.curr_prn:0}}</b></td>
+                          <td>{{translatedData?.curr_prn}}: <b>{{reportData?data?.curr_prn:0}}</b></td>
                       
-                          <td><b>{{translatedData?.intt}}: {{reportData?data?.ovd_intt:0}}</b></td>
-                          <td> <b>{{translatedData?.curr_intt}}: {{reportData?data?.curr_intt:0}}</b>
+                          <td>{{translatedData?.intt}}:<b> {{reportData?data?.ovd_intt:0}}</b></td>
+                          <td> {{translatedData?.curr_intt}}: <b>{{reportData?data?.curr_intt:0}}</b>
                           </td>
                      
-                          <td><b>{{translatedData?.penal_amt}}: {{reportData?data?.penal_intt:0}}</b></td>
+                          <td>{{translatedData?.penal_amt}}: <b>{{reportData?data?.penal_intt:0}}</b></td>
                       
-                          <th >{{translatedData?.total}}:   </th>
-                          <th style="text-align:center"> {{data?.curr_intt + data?.curr_prn + data?.ovd_prn + data?.ovd_intt + data?.penal_intt}}</th> 
+                          <td >{{translatedData?.total}}: <b>{{data?.curr_intt + data?.curr_prn + data?.ovd_prn + data?.ovd_intt + data?.penal_intt}}</b>  </td>
+                         
                       </tr>
-          
-                  </table>
+                      <tr>
+                        <td>{{converDttoDt}}</td>
+                      </tr>
+                  </table><br>
                <br>   {{translatedData?.foot_pre}} <br> {{translatedData?.foot_mid}} <br> {{translatedData?.foot_post}} 
           
-               <div class="pull-right bt-5" style="padding-bottom: 25px;">
+               <div class="pull-right bt-5" style="padding-bottom: 30px;">
                   <p style="text-align: center;">{{translatedData?.regards_pre}}</p><br><br>
-                  ------------------------------------- <br> 
+                  ---------------------------------<br> 
                   {{translatedData?.regards_post}}
                </div>
               </div>
@@ -194,10 +222,10 @@
             
           </table>
           
-          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100, this.reportData?.length]" aria-label="Select page of users"></mat-paginator>
        </div>
   
-  
+       <mat-paginator [pageSizeOptions]="[5, 10, 25, 100, this.reportData?.length]" aria-label="Select page of users"></mat-paginator>
+       
         
       </div>
     

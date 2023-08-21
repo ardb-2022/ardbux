@@ -337,10 +337,11 @@ export class UTCustomerProfileComponent implements OnInit {
     const cust_name = (this.f.first_name.value) + ' '
       + ((this.f.middle_name.value == null) ? '' : (this.f.middle_name.value + ' '))
       + ((this.f.last_name.value==null)?'':(this.f.last_name.value));
-     
+     debugger
     this.custMstrFrm.patchValue({
       cust_name: cust_name
     });
+    debugger
   }
 
   public onRetrieveClick(): void {

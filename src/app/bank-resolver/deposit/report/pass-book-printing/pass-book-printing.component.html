@@ -194,17 +194,17 @@
         
        </tfoot>
     </table>
-    <div id="hiddenTabRD">
+    <div id="hiddenTabRD" hidden>
       <br><br>
-      <table style="width: 60%;font-size: large;">
+      <table style="width: 60%;font-size: large;" class="mkSmallRD">
         <tbody *ngFor="let i of printData; let itr=index;">
-          <!-- <tr *ngIf="i.trans_type==null">
-           <td style="margin-top: 26px;">&nbsp;</td>
-          </tr> -->
+          <tr *ngIf="i.balance==null">
+            <td style="margin-top: 30px;">&nbsp;</td>
+           </tr>
           <tr>
             <td style="width: 15%; padding-left: 5%;">{{i.instrument_num}}</td>
             <td style="width:16%;">{{i.trans_dt==null?'':i.trans_dt.substr(0,10)}}</td>
-            <td  style="width:25%; padding-left: 5%;"> {{i.ardb_cd}}</td>
+            <td  style="width:35%; padding-left: 5%;"> {{i.ardb_cd}}</td>
             <td style="text-align: right;">{{i.amount| number : '1.2-2'}}</td>
             <td style="text-align: right; padding-right: 2%;">{{i.balance | number : '1.2-2'}}</td>
 
