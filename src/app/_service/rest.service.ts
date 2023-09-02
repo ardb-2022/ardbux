@@ -31,7 +31,7 @@ export class RestService {
   
   async getConfiginSysn() {
     // RestService.configuration = (await this.confSvc.getAllConfiguration() as BankConfiguration[]);
-    console.log(await this.confSvc.getAllConfiguration(RestService.serverIp) as BankConfig[])
+    // console.log(await this.confSvc.getAllConfiguration(RestService.serverIp) as BankConfig[])
     RestService.bankconfigurationList = (await this.confSvc.getAllConfiguration(RestService.serverIp) as BankConfig[]);
   }
 
@@ -55,12 +55,12 @@ export class RestService {
     // debugger;
    
     const __bName = localStorage.getItem('__bName');
-    console.log(RestService.bankconfigurationList);
+    // console.log(RestService.bankconfigurationList);
     
     if (null !== RestService.bankconfigurationList
       && RestService.bankconfigurationList.length > 0) {
-        console.log( RestService.bankconfigurationList.
-          filter(e => e.bank_name.toLowerCase() === __bName.toLowerCase())[0]);
+        // console.log( RestService.bankconfigurationList.
+        //   filter(e => e.bank_name.toLowerCase() === __bName.toLowerCase())[0]);
         
       const bank = RestService.bankconfigurationList.
         filter(e => e.bank_name.toLowerCase() ===
@@ -110,7 +110,7 @@ export class RestService {
     return url;
   }
   public getAll<T>(ofwhat: string): Observable<T> {
-    console.log(this.getUrl()+ofwhat)
+    // console.log(this.getUrl()+ofwhat)
 
     return this.http.get<T>(this.getUrl() + ofwhat);
   }
@@ -143,10 +143,10 @@ export class RestService {
   }
 
   public addUpdDel<T>(ofwhat: string, data: T): Observable<T> {
-    console.log(data)
-    console.log(ofwhat)
-    console.log(this.getUrl());
-    console.log(this.getUrl() + ofwhat)
+    // console.log(data)
+    // console.log(ofwhat)
+    // console.log(this.getUrl());
+    // console.log(this.getUrl() + ofwhat)
     return this.http.post<T>((this.getUrl() + ofwhat), data);
   }
 

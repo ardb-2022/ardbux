@@ -294,3 +294,33 @@
       margin-top: 1%;
     }
   }
+
+  #trialbalance {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  #trialbalance td, #trialbalance th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  #trialbalance tfoot>tr{
+    border:1px solid white !important;
+  }
+  #trialbalance tfoot>tr>td{
+    border:1px solid white !important;
+  }
+  #trialbalance tr:nth-child(even){background-color: #f2f2f2;}
+  #trialbalance tfoot>tr:nth-child(even){background-color: #ffffff;}
+  
+  #trialbalance tr:hover {background-color: #ddd;}
+  
+  #trialbalance th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #ffffff;
+    color: rgb(9, 63, 2);
+  }
+  

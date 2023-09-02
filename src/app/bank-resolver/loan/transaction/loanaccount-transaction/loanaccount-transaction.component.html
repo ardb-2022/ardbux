@@ -758,12 +758,84 @@
     </div>
   </div>
 </ng-template>
+<ng-template #netWorth>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left customHeader">NetWorth Statement details #UCIC: {{l_cust_cd}}({{partyName}})
+    </h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="col-xs-12 col-sm-12 shadow-lg mb-4 bg-white p-3 mkScroll">
+    
+    <div class="row" >
+      <div class="col-4">
+        <table id="trialbalance">
+            <tr>
+              <th>Acc Type</th>
+              <th>Acc Num</th>
+              <th style="text-align:right">Balance</th>
+              <th >Status</th>
+            </tr>
+              <tbody *ngFor="let i of reportData3; let itr=index;" >
+            <tr>
+              <!-- <td> {{i.acc_type_cd}}</td> -->
+              <td *ngIf="i.acc_type_cd==1">Savings Deposit</td>
+              <td *ngIf="i.acc_type_cd==2">Fixed Deposit</td>
+              <td *ngIf="i.acc_type_cd==3">DBS</td>
+              <td *ngIf="i.acc_type_cd==4">Cash Certificate</td>
+              <td *ngIf="i.acc_type_cd==5">Monthly Income Scheme</td>
+              <td *ngIf="i.acc_type_cd==6">Recurring Deposit</td>
+              <td *ngIf="i.acc_type_cd==7">Share Account</td>
+              <td *ngIf="i.acc_type_cd==8">Flexi Deposit</td>
+              <td *ngIf="i.acc_type_cd==9">Loan Suspense</td>
+              <td *ngIf="i.acc_type_cd==11">DSP</td>
+              <td>{{i.acc_num}}</td>
+              <td style="text-align:right">{{i.clr_bal | INRCurrency }}</td>
+              <td *ngIf="i.acc_status=='O'">Open</td>
+              <td *ngIf="i.acc_status=='C'">Closed</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-8">
+        <table id="trialbalance">
+          <tr>
+            <th>Loan ID</th>
+            <th  style="text-align:right">Curr Prn</th>
+            <th  style="text-align:right">Ovd Prn</th>
+            <th style="text-align:right">Curr Intt</th>
+            <th style="text-align:right">Ovd Intt</th>
+            <th style="text-align:right">Penal Intt</th>
+            <th style="text-align:right">Total Outstanding</th>
+          </tr>
+            <tbody *ngFor="let i of reportData2; let itr=index;"> 
+          <tr>
+            <td>{{i.loan_id}}</td>
+            <td style="text-align:right">{{i.curr_prn | INRCurrency}}</td>
+            <td style="text-align:right">{{i.ovd_prn  | INRCurrency}}</td>
+            <td style="text-align:right">{{i.curr_intt  | INRCurrency}}</td>
+            <td style="text-align:right">{{i.ovd_intt  | INRCurrency}}</td>
+            <td style="text-align:right">{{i.penal_intt  | INRCurrency}}</td>
+            <td style="text-align:right">{{i.penal_intt+i.ovd_intt+i.curr_intt+i.ovd_prn+i.curr_prn  | INRCurrency}}</td>
+          </tr>
+        </tbody>
+        </table>
+      </div>
+    </div>
+    
+    </div>
+  </div>
+</ng-template>
 <loading *ngIf="isLoading"></loading>
 <div class="row d-flex justify-content-center align-items-center"
   style="background-color: #78c2ad21; min-height: 90vh;">
   <ng-template #buttonDiv>
     <div
     class="col-xs-12 col-sm-12 col-md-11 col-lg-11 shadow mb-2 bg-white p-3 d-flex justify-content-center align-items-center">
+    <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" [disabled]="showNW" (click)="customerDtls(netWorth)">NetWorth Statement</button>
+
     <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="openModal(Delconfirm)" [disabled]="!isDelete">Delete</button>
     <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onResetClick()">Reset</button>
     <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onBackClick()">Back</button>

@@ -117,7 +117,7 @@ export class SavingIntPostComponent implements OnInit,AfterViewInit {
       this.isLoading=true;
       var dt={
        "ardb_cd": this.sys.ardbCD,
-       "ad_acc_type_cd":'1',
+       "ad_acc_type_cd":this.sys.ardbCD=='20'?1:this.sys.ardbCD=='26'?1:8,
        "as_acc_num": '%',
        "from_dt" : this.fromdate.toISOString(),
        "to_dt" : this.toDate.toISOString()
@@ -251,3 +251,4 @@ export class SavingIntPostComponent implements OnInit,AfterViewInit {
        
   }
 }
+

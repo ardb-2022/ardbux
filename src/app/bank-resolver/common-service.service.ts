@@ -63,7 +63,7 @@ export class CommonServiceService {
     var date1=new Date(this.datePipe.transform(from_date, 'yyyy-MM-dd'))
     var date2=new Date(this.datePipe.transform(to_date, 'yyyy-MM-dd'))
     this.diff = this.dateDiffInDays(date1,date2); 
-    console.log(this.diff)
+    //console.log(this.diff)
    
     return this.diff
   }
@@ -77,17 +77,17 @@ export class CommonServiceService {
 
   async getConfiginSysn() {
     // RestService.configuration = (await this.confSvc.getAllConfiguration() as BankConfiguration[]);
-    console.log(await this.confSvc.getAllConfiguration(CommonServiceService.serverIp) as BankConfig[])
+    // console.log(await this.confSvc.getAllConfiguration(CommonServiceService.serverIp) as BankConfig[])
     CommonServiceService.bankconfigurationList = (await this.confSvc.getAllConfiguration(CommonServiceService.serverIp) as BankConfig[]);
   }
   private getUrl(): string {
     // debugger;
    
     const __bName = localStorage.getItem('__bName');
-    console.log(CommonServiceService.bankconfigurationList);
+    // console.log(CommonServiceService.bankconfigurationList);
     
-        console.log( CommonServiceService.bankconfigurationList.
-          filter(e => e.bank_name.toLowerCase() === __bName.toLowerCase())[0]);
+    //     console.log( CommonServiceService.bankconfigurationList.
+     //     filter(e => e.bank_name.toLowerCase() === __bName.toLowerCase())[0]);
         
       const bank = CommonServiceService.bankconfigurationList.
         filter(e => e.bank_name.toLowerCase() ===
@@ -101,10 +101,10 @@ export class CommonServiceService {
     return url;
   }
   public addUpdDel<T>(ofwhat: string, data: T): Observable<T> {
-    console.log(data)
-    console.log(ofwhat)
-    console.log(this.getUrl());
-    console.log(this.getUrl() + ofwhat)
+    // console.log(data)
+    // console.log(ofwhat)
+    // console.log(this.getUrl());
+    // console.log(this.getUrl() + ofwhat)
     return this.http.post<T>((this.getUrl() + ofwhat), data);
   }
   public addUpdDelMaster<T>(ofwhat: string, data: T): Observable<T> {

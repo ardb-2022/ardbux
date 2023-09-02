@@ -299,8 +299,9 @@ export class AdduserComponent implements OnInit {
     // this.get_user.controls.select_user.value
     let login = new LOGIN_MASTER();
     login.user_id = this.get_user.controls.select_user.value;
-    login.brn_cd = this.f.branch.value;
+    login.brn_cd = this.sys.BranchCode;
     login.ardb_cd=this.sys.ardbCD,
+    
     this.svc.addUpdDel<any>('Sys/GetUserIDDtls', login).subscribe(
       res => {
         ;console.log(res)
@@ -367,7 +368,7 @@ console.log(this.defaultPass);
       this.showMsg =null;
       let login = new LOGIN_MASTER();
       login.user_id = this.f.userid.value;
-      login.brn_cd = this.f.branch.value;
+      login.brn_cd = this.sys.BranchCode;
       login.user_first_name=this.f.fname.value;
       login.user_middle_name=this.f.mname.value;
       login.user_last_name=this.f.lname.value;
@@ -416,7 +417,7 @@ console.log(this.defaultPass);
     this.showMsg =null;
     let login = new LOGIN_MASTER();
     login.user_id = this.f.userid.value;
-    login.brn_cd = this.f.branch.value;
+    login.brn_cd = this.sys.BranchCode;
     login.user_first_name=this.f.fname.value;
     login.user_middle_name=this.f.mname.value;
     login.user_last_name=this.f.lname.value;
@@ -501,7 +502,7 @@ console.log(this.defaultPass);
     this.showMsg =null;
     let login = new LOGIN_MASTER();
     login.user_id = this.f.userid.value;
-    login.brn_cd = this.f.branch.value;
+    login.brn_cd = this.sys.BranchCode;
     login.ardb_cd=this.sys.ardbCD;
     ;
     this.svc.addUpdDel('Sys/DeleteUserMaster', login).subscribe(

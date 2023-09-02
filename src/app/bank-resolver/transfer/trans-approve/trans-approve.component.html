@@ -1,4 +1,10 @@
-
+<ng-template #MakerChecker >
+  <div class="modal-body text-center" >
+    <p>a transaction created by a user cannot be approved by that user.</p>
+   <button mat-raised-button type="button" class=" btn btn-primary" (click)="this.modalRef.hide()" >Close</button>
+    
+  </div>
+</ng-template>
 <ng-template #contentbatch let-modal bd-example-modal-lg>
     <div class="modal-header">
       <h4 class="modal-title" id="modal-basic-title">Unapprove Transaction List</h4>
@@ -10,11 +16,13 @@
         <tr>
           <td>Trans Code</td>
           <td>Trf Cd</td>
-          <td>Option</td>
+          <td >Created By</td>
+          <td style="text-align:right;">Operation</td>
         </tr>
         <tr *ngFor="let item of unApprovedTransactionLst; let i = index;" title="Click to Select"  style="cursor: pointer;">
           <td>{{item.trans_cd}}</td>
           <td>{{item.trf_cd}}</td>
+          <td>{{item.created_by}}</td>
           <td><button mat-raised-button class="btn btn-primary float-right" (click)="Submit(item)">View/Edit</button></td>
           </tr>
       </table>

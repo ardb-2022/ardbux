@@ -447,6 +447,12 @@ export class VoucherComponent implements OnInit {
     this.VoucherF.controls[i].get('desc').setValue('');
     this.maccmaster1.length=0
   }
+  // else if(entry.acc_cd==26401){
+  //   this.HandleMessage(true, MessageType.Error, '('+entry.acc_cd+' - '+ entry.acc_name+')'+'  Can not be use in Voucher Screen');
+  //   this.VoucherF.controls[i].get('acc_cd').setValue('');
+  //   this.VoucherF.controls[i].get('desc').setValue('');
+  //   this.maccmaster1.length=0
+  // }
   else{this.VoucherF.controls[i].get('desc').setValue(entry.acc_name)
   this.VoucherF.controls[i].get('acc_cd').setValue(entry.acc_cd)
   this.maccmaster1.length=0}

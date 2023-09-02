@@ -104,6 +104,7 @@
      printSectionId="trial111" 
      ngxPrint>Print</button>
  <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
+   <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadexcel()">Export as EXCEL</button>
     
     </div>
     </div>
@@ -183,7 +184,7 @@
       This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions Pvt.Ltd. Kolkata
      </small></footer>
   </div>
-  <mat-paginator showFirstLastButtons [pageSizeOptions]="[ 10, 25, 100, this.reportData.length]" aria-label="Select page of users"></mat-paginator>
+  <!-- <mat-paginator showFirstLastButtons [pageSizeOptions]="[ 10, 25, 100, this.reportData.length]" aria-label="Select page of users"></mat-paginator> -->
   
 
 
@@ -340,6 +341,7 @@
  printSectionId="trial111" 
  ngxPrint>Print</button>
  <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
+ <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadexcel()">Export as EXCEL</button>
 
 </div>
 </div>

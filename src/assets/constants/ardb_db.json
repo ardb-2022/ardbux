@@ -117,13 +117,7 @@
       "dist_code": 704.0,
       "bank_name": "BMARDBUX"
     },
-    {
-      "ardB_CD": "99",
-      "name": "Ghatal Khirpai Branch ARDB Ltd.",
-      "dist_code": 318.0,
-      "bank_name": "GARDBUXBR"
-    }
-    ,
+    
     {
       "ardB_CD": "100",
       "name": "TEST ARDB Ltd.",

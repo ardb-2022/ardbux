@@ -61,7 +61,7 @@ export class LandingComponent implements OnInit {
     const param = new p_gen_param();
     param.brn_cd = this.sys.BranchCode;
     param.ardb_cd=localStorage.getItem('__ardb_cd')
-    console.log(param)
+    //console.log(param)
     this.svc.addUpdDel<any>('Common/GetDashBoardInfo', param).subscribe(
         res => {
           this.dashboardItem = res;
@@ -79,7 +79,7 @@ export class LandingComponent implements OnInit {
     if (this.comsv.customerList === undefined || this.comsv.customerList === null || this.comsv.customerList.length === 0) {
       this.svc.addUpdDel<any>('UCIC/GetCustomerDtls', cust).subscribe(
         res => {
-          console.log(res)
+          //console.log(res)
           this.isLoading = false;
           this.comsv.customerList = res;
         },

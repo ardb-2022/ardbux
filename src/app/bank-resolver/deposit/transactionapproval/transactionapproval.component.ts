@@ -28,6 +28,7 @@ export class TransactionapprovalComponent implements OnInit {
     private router: Router, private frmBldr: FormBuilder) { }
   static accType: mm_acc_type[] = [];
   static categories: mm_category[] = [];
+  @ViewChild('MakerChecker', { static: true }) MakerChecker: TemplateRef<any>;
   @ViewChild('content', { static: true }) content: TemplateRef<any>;
   @ViewChild('kycContent', { static: true }) kycContent: TemplateRef<any>;
   selectedAccountType: number;
@@ -64,10 +65,13 @@ export class TransactionapprovalComponent implements OnInit {
   acctypcd:any;
   accnum:any;
   typeCd:any;
+  createUser:any;
+  logUser:any;
   // cust: mm_customer;
   // tdDepTransRet: td_def_trans_trf[] = [];
 
   ngOnInit(): void {
+    this.logUser=localStorage.getItem('itemUX');
     setTimeout(() => {
       this.getAcctTypeMaster();
       this.getCategoryMaster();
@@ -649,6 +653,18 @@ export class TransactionapprovalComponent implements OnInit {
         // this.msg.sendCommonTransactionInfo(res[0]); // show transaction details
         this.setTransactionDtl(res[0]);
         this.isLoading = false;
+        if (this.selectedVm.td_def_trans_trf.created_by){
+          const inputString=this.selectedVm.td_def_trans_trf.created_by
+          const parts = inputString.split('/');
+          if (parts.length > 0) {
+            const result = parts[0];
+            this.createUser=result;
+            console.log(result); // This will output: username
+          } else {
+            this.createUser="no"
+            console.log("No '/' found in the string.");
+          }
+        }
       },
       err => { this.isLoading = false; }
     );
@@ -723,7 +739,20 @@ export class TransactionapprovalComponent implements OnInit {
           }
 
         });
-
+        this.vm.forEach(e=>{
+          const inputString=e.td_def_trans_trf.created_by
+          const parts = inputString.split('/');
+          var name;
+          if (parts.length > 0) {
+            const result = parts[0];
+            name=result;
+            console.log(result); // This will output: username
+          } else {
+           name=e.td_def_trans_trf.created_by
+            console.log("No '/' found in the string.");
+          }
+          e.td_def_trans_trf.created_by=name;
+        })
         this.uniqueAccTypes = this.uniqueAccTypes.sort((a, b) => (a.acc_type_cd < b.acc_type_cd ? -1 : 1));
         this.filteredVm = this.vm;
         this.filteredVm = this.filteredVm.sort((a, b) => (a.td_def_trans_trf.trans_cd < b.td_def_trans_trf.trans_cd ? -1 : 1));
@@ -736,17 +765,20 @@ export class TransactionapprovalComponent implements OnInit {
 
   public onApproveClick(): void {
     this.modalRef.hide();
-    if (this.selectedVm.td_def_trans_trf.trans_type.toLocaleLowerCase() === 'W') {
-      if (this.selectedVm.tm_deposit.acc_type_cd === 1 ||
-        this.selectedVm.tm_deposit.acc_type_cd === 7) {
-        if ((this.selectedVm.tm_deposit.clr_bal - this.selectedVm.td_def_trans_trf.amount) < 0) {
-          this.HandleMessage(true, MessageType.Warning, 'Balance Will Be Negative....So Operation Rejected.' +
-            'You First Approve The Deposit Vouchers Then Approve This Voucher.');
-          return;
+    if(this.createUser.toLowerCase()==this.logUser.toLowerCase()){
+      this.modalRef = this.modalService.show(this.MakerChecker, { class: 'modal-lg' });
+    }
+    else{
+      if (this.selectedVm.td_def_trans_trf.trans_type.toLocaleLowerCase() === 'W') {
+        if (this.selectedVm.tm_deposit.acc_type_cd === 1 ||
+          this.selectedVm.tm_deposit.acc_type_cd === 7) {
+          if ((this.selectedVm.tm_deposit.clr_bal - this.selectedVm.td_def_trans_trf.amount) < 0) {
+            this.HandleMessage(true, MessageType.Warning, 'Balance Will Be Negative....So Operation Rejected.' +
+              'You First Approve The Deposit Vouchers Then Approve This Voucher.');
+            return;
+          }
         }
       }
-    }
-    
     this.isLoading = true;
     const param = new p_gen_param();
     param.brn_cd = this.sys.BranchCode; // localStorage.getItem('__brnCd');
@@ -781,6 +813,7 @@ export class TransactionapprovalComponent implements OnInit {
       }
     );
   }
+}
 
   public onChangeAcctType(acctTypeCd: number): void {
     acctTypeCd = +acctTypeCd;

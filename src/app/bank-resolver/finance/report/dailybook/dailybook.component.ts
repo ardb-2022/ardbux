@@ -1,5 +1,5 @@
 import { SystemValues } from './../../../Models/SystemValues';
-import { Component, OnInit, ViewChild, TemplateRef, ChangeDetectorRef ,AfterViewInit} from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, ChangeDetectorRef ,AfterViewInit, ElementRef} from '@angular/core';
 import { RestService } from 'src/app/_service';
 import { WebDataRocksPivot } from 'src/app/webdatarocks/webdatarocks.angular4';
 import { tt_cash_account, p_report_param } from 'src/app/bank-resolver/Models';
@@ -27,9 +27,10 @@ import jspdf from 'jspdf';
 export class DailybookComponent implements OnInit ,AfterViewInit{
   @ViewChild('content', { static: true }) content: TemplateRef<any>;
   @ViewChild('DailyCashBook') child: WebDataRocksPivot;
+  @ViewChild('mattable') mattable: ElementRef;
   displayedColumns: string[] = ['dr_acc_cd', 'dr_particulars', 'dr_amt', 'dr_amt_tr','cr_acc_cd', 'cr_particulars', 'cr_amt', 'cr_amt_tr'];
   dataSource=new MatTableDataSource();
-
+  @ViewChild('myTable') myTable: ElementRef;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   //ReportUrl :SafeResourceUrl;
@@ -47,6 +48,11 @@ export class DailybookComponent implements OnInit ,AfterViewInit{
     backdrop: true, // enable backdrop shaded color
     ignoreBackdropClick: true // disable backdrop click to close the modal
   };
+  
+  items = [{ title: 'first' }, { title: 'second' }] // Content of the pages
+ 
+  length: number
+  pdf: jspdf
   itemsPerPage = 25;
   currentPage = 1;
   pagedItems = [];
@@ -481,50 +487,75 @@ export class DailybookComponent implements OnInit ,AfterViewInit{
     this.cd.detectChanges();
   }
 downloadexcel(){
-  this.exportAsConfig = {
-    type: 'xlsx',
-    // elementId: 'hiddenTab', 
-    elementIdOrContent:'mattable'
-  }
-  this.exportAsService.save(this.exportAsConfig, 'daybook').subscribe(() => {
-    // save started
-    console.log("hello")
-  });
-}
-downloadPDF(){
-  this.exportAsConfig = {
-    type: 'pdf',
-    // elementId: 'hiddenTab', 
-    elementIdOrContent:'mattable'
-  }
-  this.exportAsService.save(this.exportAsConfig, 'daybook').subscribe(() => {
-    // save started
-    console.log("hello")
-  });
-}
-exportAsPDF() {
-  const elementToPrint = document.getElementById('mattable'); // replace 'mattable' with the ID of your HTML div
-  html2canvas(elementToPrint).then((canvas) => {
-    const contentDataURL = canvas.toDataURL('image/png');
-    const pdf = new jspdf('landscape', 'px', 'a4');
-    const imgWidth = 610;
-    const pageHeight = 250;
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-    let heightLeft = imgHeight;
-    let position = 0;
-    pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
-    heightLeft -= pageHeight;
-    let pageCount = 1;
-    while (heightLeft >= 0) {
-      position = heightLeft - imgHeight-210;
-      pdf.addPage();
-      pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight; // add the gap height to the page height
-      pageCount++;
+    this.exportAsConfig = {
+      type: 'xlsx',
+      // elementId: 'hiddenTab', 
+      elementIdOrContent:'mattable'
     }
-    pdf.save('cashcumtrial.pdf'); // replace 'cashcumtrial' with the desired filename
-  });
-}
+    this.exportAsService.save(this.exportAsConfig, 'daybook').subscribe(() => {
+      // save started
+      console.log("hello")
+    });
+  }
+  
+
+  // async exportToPDF() {
+  //   const table = document.getElementById('myTable')
+  //   html2canvas(table, { scrollY: -window.scrollY }).then(canvas => {
+  //     const pdf = new jspdf('p', 'mm', 'a4');
+  //     const contentWidth = canvas.width / 6; // Adjust this as needed
+  //     const contentHeight = canvas.height / 6; // Adjust this as needed
+  //     const totalPages = Math.ceil(contentHeight / pdf.internal.pageSize.getHeight());
+
+  //     let yPosition = 0;
+  //     let pageHeight = pdf.internal.pageSize.getHeight();
+
+  //     for (let i = 0; i < totalPages; i++) {
+  //       if (i > 0) {
+  //         pdf.addPage();
+  //         pageHeight = pdf.internal.pageSize.getHeight();
+  //       }
+
+  //       let canvasOffset = -(i * pageHeight);
+        
+  //       if (canvasOffset < -contentHeight) {
+  //         canvasOffset = -contentHeight;
+  //       }
+
+  //       pdf.addImage(canvas, 'PNG', 0, yPosition, contentWidth, contentHeight);
+  //       yPosition -= pageHeight;
+  //     }
+
+  //     pdf.save('table.pdf');
+  //   });
+  // }
+
+
+
+
+// exportAsPDF() {
+//   const elementToPrint = document.getElementById('mattable'); // replace 'mattable' with the ID of your HTML div
+//   html2canvas(elementToPrint).then((canvas) => {
+//     const contentDataURL = canvas.toDataURL('image/png');
+//     const pdf = new jspdf('landscape', 'px', 'a4');
+//     const imgWidth = 610;
+//     const pageHeight = 300;
+//     const imgHeight = (canvas.height * imgWidth) / canvas.width;
+//     let heightLeft = imgHeight;
+//     let position = 0;
+//     pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
+//     heightLeft -= pageHeight;
+//     let pageCount = 1;
+//     while (heightLeft >= 0) {
+//       position = heightLeft - imgHeight-210;
+//       pdf.addPage();
+//       pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
+//       heightLeft -= pageHeight; // add the gap height to the page height
+//       pageCount++;
+//     }
+//     pdf.save('cashcumtrial.pdf'); // replace 'cashcumtrial' with the desired filename
+//   });
+// }
 ngAfterViewInit() {
   this.dataSource.paginator = this.paginator;
   this.dataSource.sort = this.sort;

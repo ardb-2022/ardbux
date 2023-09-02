@@ -36,7 +36,7 @@ export class ConfigurationService {
          
       this.http.post(masterApiUrl, null).subscribe(
         res => {
-          console.log(res)
+          // console.log(res)
           if (null !== res) {
             ConfigurationService.bankconfigurationList = (res as BankConfig[]);
           }

@@ -16,6 +16,7 @@ thead tr:nth-child(1) th{
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
   width: 100%;
+  font-size: 12px;
 }
 
 .customers td, .customers th {

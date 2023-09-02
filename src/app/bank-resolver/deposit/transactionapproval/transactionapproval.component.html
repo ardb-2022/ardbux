@@ -65,6 +65,7 @@
                     <th scope="col">Acc Type</th>
                     <th scope="col">Trf Type</th>
                     <th scope="col">Trans Type</th>
+                    <th scope="col">Created By</th>
                   </tr>
                 <!-- </thead> -->
                 <tbody>
@@ -81,6 +82,8 @@
                     <td *ngIf="unApprovedTran.td_def_trans_trf.trf_type=='T'">Transfer</td>
                     <td *ngIf="unApprovedTran.td_def_trans_trf.trans_type=='D'">Deposit</td>
                     <td *ngIf="unApprovedTran.td_def_trans_trf.trans_type=='W'">Withdraw</td>
+                    <td>{{unApprovedTran.td_def_trans_trf.created_by}}</td>
+
                   </tr>
                 </tbody>
               </table>
@@ -580,6 +583,13 @@
     <p>'Are you sure, you want to <b style="color: rgb(8, 148, 55);">APPROVE</b> this Transaction</p>
     <button mat-raised-button type="button" class="btn btn-light" (click)="this.modalRef.hide()" >No</button>&nbsp;
     <button mat-raised-button type="button" class=" btn btn-primary" (click)="onApproveClick()" >Yes</button>
+    
+  </div>
+</ng-template>
+<ng-template #MakerChecker >
+  <div class="modal-body text-center" >
+    <p>a transaction created by a user cannot be approved by that user.</p>
+   <button mat-raised-button type="button" class=" btn btn-primary" (click)="this.modalRef.hide()" >Close</button>
     
   </div>
 </ng-template>

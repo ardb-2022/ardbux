@@ -457,7 +457,7 @@ matmenuTrg:any=[];
     menuTrigger.openMenu();
   }
   hideButton(buttonId: any) {
-    console.log(buttonId);
+   // console.log(buttonId);
     if(this.userPermission.length>0){
       this.matmenuTrg=this.userPermission.filter(e=>e.identification==buttonId.target.id)
      if( this.matmenuTrg[0].permission=='N'){
@@ -488,7 +488,7 @@ matmenuTrg:any=[];
   }
   this.svc.addUpdDel<any>('Mst/GetRolePermission', data).subscribe(
     res => {
-      console.log(res);
+      //console.log(res);
       this.userPermission=res
       this.items=res
       

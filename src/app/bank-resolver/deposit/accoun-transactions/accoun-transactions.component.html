@@ -2,6 +2,8 @@
 <div class="row d-flex justify-content-center align-items-center" style="background-color: #78c2ad21;min-height: 75vh;">
   <div class="col-xs-12 col-sm-12 col-md-11 col-lg-11 shadow bg-white" style="min-height: 70vh;">
     <div class="mt-1 col-xs-12 col-sm-12 col-md-11 col-lg-11 d-flex justify-content-center align-items-center">
+      <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" [disabled]="showNW" (click)="openModal(netWorth)"
+       >NetWorth Statement</button>
       <!-- <button mat-raised-button type="button" [disabled]="disableSave" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onSaveClick()">Save</button> -->
       <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="openModal(Delconfirm)"
         *ngIf="editDeleteMode">Delete</button>
@@ -245,6 +247,9 @@
         <button type="button" class="btn btn-link" *ngIf="accTransFrm.controls.acc_type_cd.value == 11"
           (click)="openModal(PreContent1)">Previous Transaction
         </button>
+        <!-- <button type="button" class="btn btn-link"
+          (click)="openModal(netWorth)">NetWorth Statement
+        </button> -->
       </div>
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 ">
         <form [formGroup]="tdDefTransFrm" *ngIf="showTransactionDtl">
@@ -735,10 +740,10 @@
                       [disabled]="undefined !== l.gl_acc_code && l.gl_acc_code.length > 0"
                       class="form-control form-control-sm text-capitalize" id="debit_ac_name">
                   </div> -->
-
+                  <!-- (change)="checkDebitBalance(l)" -->
                   <div class="form-group col-2">
                     <small for="debit_amount">Amount</small>
-                    <input type="text" [(ngModel)]="l.amount" (change)="checkDebitBalance(l)"
+                    <input type="text" [(ngModel)]="l.amount" (change)="sumAmount()"
                       class="form-control form-control-sm text-capitalize" id="debit_amount">
                         
                   </div>
@@ -775,6 +780,8 @@
     <hr>
     <div *ngIf="undefined !== accNoEnteredForTransaction"
       class="mb-1 col-xs-12 col-sm-12 col-md-11 col-lg-11 d-flex justify-content-center align-items-center">
+    <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" [disabled]="showNW" (click)="openModal(netWorth)">NetWorth Statement</button>
+      
       <!-- <button mat-raised-button type="button" [disabled]="disableSave" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onSaveClick()">Save</button> -->
       <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onDeleteClick()"
         *ngIf="editDeleteMode">Delete</button>
@@ -1155,5 +1162,75 @@
     <button mat-raised-button type="button" class="btn btn-light" (click)="this.modalRef.hide()" >No</button>&nbsp;
     <button mat-raised-button type="button" class=" btn btn-primary" (click)="onDeleteClick()" >Yes</button>
     
+  </div>
+</ng-template>
+<ng-template #netWorth>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left customHeader">NetWorth Statement details for UCIC# {{coustCD}}({{custName}})
+    </h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="col-xs-12 col-sm-12 shadow-lg mb-4 bg-white p-3 mkScroll">
+    
+    <div class="row" >
+      <div class="col-4">
+        <table id="trialbalance">
+            <tr>
+              <th>Acc Type</th>
+              <th>Acc Num</th>
+              <th style="text-align:right">Balance</th>
+              <th >Status</th>
+            </tr>
+              <tbody *ngFor="let i of reportData1; let itr=index;" >
+            <tr>
+              <!-- <td> {{i.acc_type_cd}}</td> -->
+              <td *ngIf="i.acc_type_cd==1">Savings Deposit</td>
+              <td *ngIf="i.acc_type_cd==2">Fixed Deposit</td>
+              <td *ngIf="i.acc_type_cd==3">DBS</td>
+              <td *ngIf="i.acc_type_cd==4">Cash Certificate</td>
+              <td *ngIf="i.acc_type_cd==5">Monthly Income Scheme</td>
+              <td *ngIf="i.acc_type_cd==6">Recurring Deposit</td>
+              <td *ngIf="i.acc_type_cd==7">Share Account</td>
+              <td *ngIf="i.acc_type_cd==8">Flexi Deposit</td>
+              <td *ngIf="i.acc_type_cd==9">Loan Suspense</td>
+              <td *ngIf="i.acc_type_cd==11">DSP</td>
+              <td>{{i.acc_num}}</td>
+              <td style="text-align:right">{{i.clr_bal | INRCurrency }}</td>
+              <td *ngIf="i.acc_status=='O'">Open</td>
+              <td *ngIf="i.acc_status=='C'">Closed</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-8">
+        <table id="trialbalance">
+          <tr>
+            <th>Loan ID</th>
+            <th  style="text-align:right">Curr Prn</th>
+            <th  style="text-align:right">Ovd Prn</th>
+            <th style="text-align:right">Curr Intt</th>
+            <th style="text-align:right">Ovd Intt</th>
+            <th style="text-align:right">Penal Intt</th>
+            <th style="text-align:right">Total Outstanding</th>
+          </tr>
+            <tbody *ngFor="let i of reportData; let itr=index;"> 
+          <tr>
+            <td>{{i.loan_id}}</td>
+            <td style="text-align:right">{{i.curr_prn | INRCurrency}}</td>
+            <td style="text-align:right">{{i.ovd_prn  | INRCurrency}}</td>
+            <td style="text-align:right">{{i.curr_intt  | INRCurrency}}</td>
+            <td style="text-align:right">{{i.ovd_intt  | INRCurrency}}</td>
+            <td style="text-align:right">{{i.penal_intt  | INRCurrency}}</td>
+            <td style="text-align:right">{{i.penal_intt+i.ovd_intt+i.curr_intt+i.ovd_prn+i.curr_prn  | INRCurrency}}</td>
+          </tr>
+        </tbody>
+        </table>
+      </div>
+    </div>
+    
+    </div>
   </div>
 </ng-template>

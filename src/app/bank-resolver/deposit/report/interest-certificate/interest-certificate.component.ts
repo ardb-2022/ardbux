@@ -234,4 +234,15 @@ export class InterestCertificateComponent implements OnInit,AfterViewInit {
     }
     // this.getTotal()
   }
+  downloadexcel(){
+    this.exportAsConfig = {
+      type: 'xlsx',
+      // elementId: 'hiddenTab', 
+      elementIdOrContent:'trial111'
+    }
+    this.exportAsService.save(this.exportAsConfig, 'interest_certf').subscribe(() => {
+      // save started
+      console.log("hello")
+    });
+  }
 }

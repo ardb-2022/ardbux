@@ -1,6 +1,13 @@
+<ng-template #MakerChecker >
+  <div class="modal-body text-center" >
+    <p>a transaction created by a user cannot be approved by that user.</p>
+   <button mat-raised-button type="button" class=" btn btn-primary" (click)="this.modalRef.hide()" >Close</button>
+    
+  </div>
+</ng-template>
 <ng-template #Appconfirm >
   <div class="modal-body text-center" >
-    <p>'Are you sure, you want to <b style="color: rgb(8, 148, 55);">APPROVE</b> this Transaction</p>
+    <p>Are you sure, you want to <b style="color: rgb(8, 148, 55);">APPROVE</b> this Transaction</p>
     <button mat-raised-button type="button" class="btn btn-light" (click)="this.modalRef.hide()" >No</button>&nbsp;
     <button mat-raised-button type="button" class=" btn btn-primary" (click)="Approve()" >Yes</button>
     
@@ -85,12 +92,14 @@
         <th>Date</th>
         <th>Narration</th>
         <th>Type</th>
+        <th>Created By</th>
       </tr>
       <tr *ngFor="let item of tvnRetFilter; let i = index;"title="Click to Select"  (click)="OpenVoucher(item)" style="cursor: pointer;">
         <td>{{item.voucher_id}}</td>
         <td>{{item.voucher_dt.substr(0,10)}}</td>
         <td>{{item.narrationdtl}}</td>
         <td>{{item.transaction_type}}</td>
+        <td>{{item.created_by}}</td>
       </tr>
     </table>
   </div>

@@ -101,22 +101,22 @@ style="background-color: #78c2ad21; min-height: 90vh;">
                       <input type="text" [(ngModel)]="l.cust_acc_desc"  disabled
                         class="form-control form-control-sm text-capitalize" id="debit_ac_dsc">
                     </div> -->
-                    <div class="form-group col-3">
-                      <small for="debit_ac">Account Type / GL Code</small>
+                    <div class="form-group col-2">
+                      <small for="debit_ac">AccType/GL Cd</small>
                         <input type="text" [(ngModel)]="l.cust_acc_type" class="form-control form-control-sm" name="acc_type" id="debit_ac" (focusout)="getTypeValDr($event,i)">
                     </div>
-                    <div class="form-group col-3" *ngIf="showGlHeadDr">
+                    <div class="form-group col-4" *ngIf="showGlHeadDr">
                       <small for="debit_ac_name">GL Name</small>
-                      <input type="text" size="13" [(ngModel)]="l.cust_name" name="x-field-1" id="debit_ac_name" disabled>
+                      <input type="text" class="form-control form-control-sm text-capitalize" [(ngModel)]="l.cust_name" name="x-field-1" id="debit_ac_name" disabled>
                     </div>
-                    <div class="form-group col-3" *ngIf="!showGlHeadDr">  
+                    <div class="form-group col-4" *ngIf="!showGlHeadDr">  
                       <small for="debit_ac_name ">Acc Holder Name</small>
                     <div class="input-group">
                       <input type="text"  class="form-control form-control-sm " [disabled]="undefined !== l.gl_acc_code && l.gl_acc_code?.length > 0"
                       [(ngModel)]="l.cust_name" type="text" placeholder="Enter Acc# / Customer Name / Phone number"
                       (input)="onInputChangeDr(i)" name="x-field-1" autocomplete="new-field-1">
                       <div class="input-group-append">
-                         <button mat-raised-button class="btn btn-primary btn-sm" [disabled]="disabledOnNulldr" (click)="suggestCustomerDr(i)"><i class="fa fa-search"></i></button>
+                         <button  class="btn btn-primary btn-sm" [disabled]="disabledOnNulldr" (click)="suggestCustomerDr(i)"><i class="fa fa-search"></i></button>
                       </div>
                     </div>
                      
@@ -240,15 +240,15 @@ style="background-color: #78c2ad21; min-height: 90vh;">
                       </option>
                       </select>
                     </div> -->
-                    <div class="form-group col-3">
-                      <small for="debit_ac">Account Type / GL Code</small>
+                    <div class="form-group col-2">
+                      <small for="debit_ac">AccType/GL Cd</small>
                         <input type="text"  [(ngModel)]="l.cust_acc_type" class="form-control form-control-sm" name="acc_type" id="debit_ac" (focusout)="getTypeValCr($event,i)">
                     </div>
-                    <div class="form-group col-3" *ngIf="showGlHeadCr">
+                    <div class="form-group col-4" *ngIf="showGlHeadCr">
                       <small for="debit_ac_name">GL Name </small>
-                      <input type="text" size="13" [(ngModel)]="l.cust_name" name="x-field-1" id="debit_ac_name" disabled>
+                      <input type="text" class="form-control form-control-sm text-capitalize" [(ngModel)]="l.cust_name" name="x-field-1" id="debit_ac_name" disabled>
                     </div>
-                    <div class="form-group col-3" *ngIf="!showGlHeadCr">  
+                    <div class="form-group col-4" *ngIf="!showGlHeadCr">  
                       <small for="credit_ac_name">Acc Holder Name</small>
                       <div class="input-group">
                         <input type="text"  class="form-control form-control-sm " [disabled]="undefined !== l.gl_acc_code && l.gl_acc_code.length > 0"

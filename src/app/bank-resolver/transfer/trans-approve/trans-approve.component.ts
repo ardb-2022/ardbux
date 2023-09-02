@@ -22,6 +22,7 @@ export class TransApproveComponent implements OnInit {
   //td_deftrans = new td_def_trans_trf();
   get f() { return this.tmtransfer.controls; }
   @ViewChild('contentbatch', { static: true }) contentbatch: TemplateRef<any>;
+  @ViewChild('MakerChecker', { static: true }) MakerChecker: TemplateRef<any>;
   modalRef: BsModalRef;
   tmtransfer: FormGroup;
   td_deftranstrfList: td_def_trans_trf[] = [];
@@ -36,12 +37,15 @@ export class TransApproveComponent implements OnInit {
   isOpenFromDp = false;
   isRetrieve=true;
   getHead:any=[];
+  createUser:any;
+  logUser:any;
   config = {
     keyboard: false, // ensure esc press doesnt close the modal
     backdrop: true, // enable backdrop shaded color
     ignoreBackdropClick: true // disable backdrop click to close the modal
   };
   ngOnInit(): void {
+    this.logUser=localStorage.getItem('itemUX');
     this.tmtransfer = this.frmBldr.group({
       trf_dt : [],
       trf_cd : [],
@@ -134,6 +138,10 @@ export class TransApproveComponent implements OnInit {
    }
    else
    {
+    if(this.createUser.toLowerCase()==this.logUser.toLowerCase()){
+      this.modalRef = this.modalService.show(this.MakerChecker, this.config);
+    }
+    else{
     const tddeftranstrf= new p_gen_param();
     tddeftranstrf.ad_trans_cd=this.f.trans_cd.value;
     tddeftranstrf.gs_user_id=this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
@@ -154,6 +162,7 @@ export class TransApproveComponent implements OnInit {
     );
 
    }
+  }
   }
   clear()
   {
@@ -710,6 +719,19 @@ export class TransApproveComponent implements OnInit {
           this.isLoading=false;
           return;
         }
+      
+        if (res.tddeftrans){
+          const inputString=res.tddeftrans.created_by
+          const parts = inputString.split('/');
+          if (parts.length > 0) {
+            const result = parts[0];
+            this.createUser=result;
+            console.log(result); // This will output: username
+          } else {
+            this.createUser="no"
+            console.log("No '/' found in the string.");
+          }
+        }
         this.isRetrieve=true;
        this.tmtransfer.controls.trans_cd.disable();
         this.isLoading=false;
@@ -958,6 +980,20 @@ export class TransApproveComponent implements OnInit {
     this.svc.addUpdDel<any>('Common/GetUnapproveTransfer', tdDepTrans).subscribe(
       res => {
         this.unApprovedTransactionLst = res;
+        this.unApprovedTransactionLst.forEach(e=>{
+          const inputString=e.created_by
+          const parts = inputString.split('/');
+          var name;
+          if (parts.length > 0) {
+            const result = parts[0];
+            name=result;
+            console.log(result); // This will output: username
+          } else {
+           name=e.created_by
+            console.log("No '/' found in the string.");
+          }
+          e.created_by=name;
+        })
         this.modalRef = this.modalService.show(this.contentbatch, this.config);
       },
       err => { this.isLoading = false; }

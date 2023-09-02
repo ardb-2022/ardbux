@@ -29,6 +29,7 @@ export class LoanTransactionApprovalComponent implements OnInit {
     private frmBldr: FormBuilder) { }
 
   static accType: mm_acc_type[] = [];
+  @ViewChild('MakerChecker', { static: true }) MakerChecker: TemplateRef<any>;
   @ViewChild('content', { static: true }) content: TemplateRef<any>;
   @ViewChild('kycContent', { static: true }) kycContent: TemplateRef<any>;
   selectedAccountType: number;
@@ -57,7 +58,10 @@ export class LoanTransactionApprovalComponent implements OnInit {
   // tdDepTransRet: td_def_trans_trf[] = [];
   frmParticulars: any;
   trfDtls:boolean=false;
+  createUser:any;
+  logUser:any;
   ngOnInit(): void {
+    this.logUser=localStorage.getItem('itemUX');
     this.showINSTNO=false;
     this.transactionDtlsFrm = this.frmBldr.group({
       trans_dt: [''],
@@ -371,6 +375,18 @@ export class LoanTransactionApprovalComponent implements OnInit {
         //debugger;
         
         loanOpnDm = res;
+        if (loanOpnDm.tddeftrans){
+          const inputString=loanOpnDm.tddeftrans.created_by
+          const parts = inputString.split('/');
+          if (parts.length > 0) {
+            const result = parts[0];
+            this.createUser=result;
+            console.log(result); // This will output: username
+          } else {
+            this.createUser="no"
+            console.log("No '/' found in the string.");
+          }
+        }
         this.selectedVm.loan = loanOpnDm;
         // this.msg.sendCommonLoanTransactionInfo(res); // show transaction details
         this.loanOpenDm = res;
@@ -443,6 +459,20 @@ export class LoanTransactionApprovalComponent implements OnInit {
             this.uniqueAccTypes.push(vm.mm_acc_type);
           }
         });
+        this.vm.forEach(e=>{
+          const inputString=e.td_def_trans_trf.created_by
+          const parts = inputString.split('/');
+          var name;
+          if (parts.length > 0) {
+            const result = parts[0];
+            name=result;
+            console.log(result); // This will output: username
+          } else {
+           name=e.td_def_trans_trf.created_by
+            console.log("No '/' found in the string.");
+          }
+          e.td_def_trans_trf.created_by=name;
+        })
         this.uniqueAccTypes = this.uniqueAccTypes.sort((a, b) => (a.acc_type_cd < b.acc_type_cd ? -1 : 1));
         this.filteredVm = this.vm;
         this.filteredVm = this.filteredVm.sort((a, b) => (a.td_def_trans_trf.trans_cd < b.td_def_trans_trf.trans_cd ? -1 : 1));
@@ -524,6 +554,10 @@ export class LoanTransactionApprovalComponent implements OnInit {
   // }
   public onApproveClick(): void {
     this.modalRef.hide();
+    if(this.createUser.toLowerCase()==this.logUser.toLowerCase()){
+      this.modalRef = this.modalService.show(this.MakerChecker, { class: 'modal-lg' });
+    }
+    else{
     this.isLoading = true;
     debugger;
     console.log(this.transactionDtlsFrm.controls.loan_id.value + this.transactionDtlsFrm.controls.curr_prn_recov.value + this.transactionDtlsFrm.controls.ovd_prn_recov.value + this.transactionDtlsFrm.controls.ovd_intt_recov.value + this.transactionDtlsFrm.controls.adv_prn_recov.value + this.transactionDtlsFrm.controls.penal_intt_recov.value)
@@ -576,28 +610,7 @@ export class LoanTransactionApprovalComponent implements OnInit {
      
           this.approveLoanAccTransaction();
     }
-
-
-    // this.svc.addUpdDel<any>('Deposit/ApproveAccountTranaction', param).subscribe(
-    //   res => {
-    //     this.isLoading = false;
-    //     if (res === 0) {
-    //       this.selectedVm.td_def_trans_trf.approval_status = 'A';
-    //       this.HandleMessage(true, MessageType.Sucess, this.selectedVm.tm_deposit.acc_num
-    //         + '\'s Transaction with Transancation Cd ' + this.selectedVm.td_def_trans_trf.trans_cd
-    //         + ' is approved.');
-    //       setTimeout(() => {
-    //         this.onClickRefreshList();
-    //       }, 3000);
-    //     } else {
-    //       this.HandleMessage(true, MessageType.Error, JSON.stringify(res));
-    //     }
-    //   },
-    //   err => {
-    //     this.isLoading = false;
-    //     this.HandleMessage(true, MessageType.Error, err.error.text);
-    //   }
-    // );
+  }
 
   }
   private approveLoanAccTransaction(): void {

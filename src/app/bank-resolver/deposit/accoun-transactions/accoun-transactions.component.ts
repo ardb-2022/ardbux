@@ -48,6 +48,7 @@ export class AccounTransactionsComponent implements OnInit {
   @ViewChild('interestMsg', { static: true }) interestMsg: TemplateRef<any>;
   @ViewChild('afterMatRenewal', { static: true }) afterMatRenewal: TemplateRef<any>;
   @ViewChild('afterMatClose', { static: true }) afterMatClose: TemplateRef<any>;
+  @ViewChild('netWorth', { static: true }) netWorth: TemplateRef<any>;
 
   @ViewChild('effint', { static: true }) effint: ElementRef;
   operations: mm_operation[];
@@ -165,17 +166,25 @@ export class AccounTransactionsComponent implements OnInit {
   args:any
   categories:any;
   allcategories:any;
+  reportData:any=[];
+  reportData1:any=[];
+  coustCD:any;
+  custName:any
+  showNW:boolean;
   config = {
     keyboard: false,
     backdrop: true,
     ignoreBackdropClick: true,
     class: 'modal-xl'
   };
+
   // disableIntt:boolean=false;
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template, this.config);
   }
+  
   ngOnInit(): void {
+    this.showNW=true;
     
     this.isLoading = false;
     setTimeout(() => {
@@ -671,6 +680,7 @@ debugger
   }
 
   private resetAccDtlsFrmFormData(): void {
+    
     this.showRdInstalment = false;
     this.showMisInstalment = false;
     this.accDtlsFrm = this.frmBldr.group({
@@ -1026,6 +1036,7 @@ console.log(this.accDtlsFrm.controls.mat_amt.value);
 
   public SelectCustomer(cust: any): void {
     // this.optionClicked=true;
+    if(cust){this.showNW=false;}
     this.shownoresult = false;
     this.selectedCust = cust.acc_num
     console.log(cust)
@@ -1088,7 +1099,7 @@ getjoinholder(){
     acc.brn_cd = this.sys.BranchCode;
 
     acc.ardb_cd = this.sys.ardbCD;
-
+    this.custName=''
     this.svc.addUpdDel<any>('Deposit/GetDepositWithChild', acc).subscribe(
       res => {
         if(res[0].constitution_cd==101){
@@ -1099,6 +1110,7 @@ getjoinholder(){
           return false;
         }
         this.categories=res[0].catg_cd
+        this.custName=res[0].cust_name
         this.getCategoryMaster();
         debugger
         console.log(res, this.rdInstallamentOption)
@@ -1165,7 +1177,25 @@ getjoinholder(){
       res => {
         console.log(res);
         this.msg.sendcustomerCodeForKyc(res.tmdeposit.cust_cd);
-
+        if(res.tmdeposit.cust_cd){
+          this.coustCD=res.tmdeposit.cust_cd
+          this.reportData.length=0;
+          this.reportData1.length=0;
+          var dt={
+            "ardb_cd":this.sys.ardbCD,
+            "brn_cd":this.sys.BranchCode,
+            "cust_cd":res.tmdeposit.cust_cd
+          }
+        
+          this.isLoading=true
+          this.svc.addUpdDel('UCIC/GetLoanDtls',dt).subscribe(data=>{console.log(data)
+            this.reportData=data
+            this.svc.addUpdDel('UCIC/GetDepositDtls',dt).subscribe(data=>{console.log(data)
+              this.reportData1=data
+              this.isLoading=false
+            })
+          })
+        }
         this.joinHold=[];
         for (let i = 0; i <= res.tdaccholder.length; i++) {
           console.log(res);
@@ -2783,7 +2813,7 @@ getjoinholder(){
                         // amount: this.accNoEnteredForTransaction.prn_amt
                         // + this.accNoEnteredForTransaction.intt_amt,
                         amount: this.accNoEnteredForTransaction.prn_amt,
-                        curr_intt_recov: isMatured ? this.matureIntForMis : (this.accNoEnteredForTransaction.intt_amt * this.counter)-Number(this.preCloseMIS),
+                        curr_intt_recov: isMatured ? this.matureIntForMis :(this.accNoEnteredForTransaction.intt_amt * this.counter)>Number(this.preCloseMIS)?(-this.accNoEnteredForTransaction.intt_amt * this.counter)+Number(this.preCloseMIS):this.counter>0?Number(this.preCloseMIS)-(this.accNoEnteredForTransaction.intt_amt * this.counter):Number(this.preCloseMIS),
                         // ovd_intt_recov: isMatured?'':this.sys.PenalInttRtFrAccPreMatureClosing, //marker subjected to change
                         ovd_intt_recov: 0,
                         // curr_prn_recov: +result,
@@ -2794,6 +2824,7 @@ getjoinholder(){
                       });
                       this.mat_val = Number(temp_gen_param.ad_prn_amt) + Number(this.tdDefTransFrm.controls.interest.value);
                     }
+                    debugger
                     if(accTypCode==2 && (this.resbrnCD1[0].intt_trf_type=='H'||this.resbrnCD1[0].intt_trf_type=='Q'||this.resbrnCD1[0].intt_trf_type=='Y'))
                    {
                     this.fdSum=0
@@ -4273,7 +4304,7 @@ getjoinholder(){
             // toReturn.home_brn_cd=toReturn.acc_num.substring(0,3);
             // toReturn.intra_branch_trn=toReturn.acc_num.substring(0,3)!=this.sys.BranchCode?'Y':'N'
             saveTransaction.tddeftranstrf.push(tdDefTransAndTranfer);
-            this.checkDebitBalance(this.td_deftranstrfList[0])
+            // this.checkDebitBalance(this.td_deftranstrfList[0])
             debugger
           }
           else {
@@ -4449,7 +4480,7 @@ getjoinholder(){
             console.log(tdDefTransAndTranfer.particulars)
             //  debugger;
             updateTransaction.tddeftranstrf.push(tdDefTransAndTranfer);
-            this.checkDebitBalance(this.td_deftranstrfList[0])
+            // this.checkDebitBalance(this.td_deftranstrfList[0])
           }
           else {
             this.HandleMessage(true, MessageType.Error, 'Amount can not be null');
@@ -5195,6 +5226,7 @@ getjoinholder(){
   // }
 
   onResetClick(): void {
+    this.showNW=true;
     this.showInterestDtls=false
     this.showRdInstalment=false
     // this.HandleMessage(false);
@@ -5600,7 +5632,7 @@ getjoinholder(){
       
       this.HandleMessage(true, MessageType.Error, 'Insufficient Balance');
       tdDefTransTrnsfr.amount = 0;
-      // this.saveBtn.nativeElement.disabled=true
+     
       return;
     }
     else {
@@ -5681,7 +5713,6 @@ getjoinholder(){
         this.errorFlag=false;
       }
       
-      // this.saveBtn.nativeElement.disabled= false;
     }
   }
   else {
@@ -5739,7 +5770,6 @@ getjoinholder(){
     return;
   }
   
-    // this.sumTransfer();
   }
 }
 
@@ -5755,7 +5785,9 @@ getjoinholder(){
       this.td_deftranstrfList.push(new td_def_trans_trf());
     }
   }
-
+    sumAmount(){
+      this.sumTransfer()
+    }
   private sumTransfer(): void {
     this.TrfTotAmt = 0;
     this.td_deftranstrfList.forEach(e => {

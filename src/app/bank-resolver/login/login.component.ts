@@ -63,8 +63,8 @@ export class LoginComponent implements OnInit {
    
     // alert("hii")
     // const getmac = require('getmac')
-    // console.log(getmac)
-    // console.log(window.location.hostname)
+    // //console.log(getmac)
+    // //console.log(window.location.hostname)
   //  this.getPrivateIP()
     this.loginForm = this.formBuilder.group({
       ardbbrMst: ['', Validators.required],
@@ -107,12 +107,12 @@ export class LoginComponent implements OnInit {
         this.selectalluser=res
         this.filterUser=this.selectalluser.filter(x => x.login_status == 'Y')
       
-        console.log(this.filterUser);
+        //console.log(this.filterUser);
         for(let i=0;i<this.filterUser.length;i++){
           if(this.filterUser[i].user_id ==localStorage.getItem('itemUX')){
             this.filterUser[i].login_status='N';
           
-        console.log(this.filterUser);
+        //console.log(this.filterUser);
       
         this.filterUser.forEach(e => {
           e.ardb_cd=this.sys.ardbCD
@@ -121,7 +121,7 @@ export class LoginComponent implements OnInit {
     
          this.cms.addUpdDel('Sys/UpdateUserIdStatus', this.filterUser).subscribe(
           res => {
-            console.log(res)
+            //console.log(res)
             
           },)
          
@@ -141,16 +141,14 @@ export class LoginComponent implements OnInit {
  }
   getArdbCode(e: any) {
     
-    console.log(e);
-    console.log(this.ardbBrnMst);
+    //console.log(e);
+    //console.log(this.ardbBrnMst);
     let bankName=this.ardbBrnMst.filter(x=>x.ardB_CD==this.f.ardbbrMst.value)[0].bank_name
     // let bankName2=this.ardbBrnMst.filter(x=>x.ardB_CD=='100')[0].bank_name
     if(this.f.ardbbrMst.value=='100'){
         localStorage.setItem('__ardb_cd', '4');
     }
-    else if(this.f.ardbbrMst.value=='99'){
-      localStorage.setItem('__ardb_cd', '4');
-    }
+    
     else{
       localStorage.setItem('__ardb_cd',this.f.ardbbrMst.value);
     }
@@ -171,7 +169,7 @@ export class LoginComponent implements OnInit {
     // this.router.navigate([__bName + '/la']); // TODO remove this it will be after login
     const login = new LOGIN_MASTER();
     const toreturn = false;
-    login.ardb_cd = this.f.ardbbrMst.value=='100'?'4':this.f.ardbbrMst.value=='99'?'4':this.f.ardbbrMst.value;
+    login.ardb_cd = this.f.ardbbrMst.value=='100'?'4':this.f.ardbbrMst.value;
     login.user_id = this.f.username.value;
     login.password = this.f.password.value;
     login.brn_cd = this.f.branch.value;
@@ -199,7 +197,7 @@ export class LoginComponent implements OnInit {
     localStorage.setItem('BUX', this.f.branch.value)
     this.rstSvc.addUpdDel<any>('Mst/GetUserDtls', login).subscribe(
       res => {
-        console.log(res.length)
+        //console.log(res.length)
         // this.isLoading = false;
         if (res.length === 0) {
           this.showAlert = true;
@@ -207,7 +205,7 @@ export class LoginComponent implements OnInit {
           this.alertMsg = 'Invalid Credential !!!!!';
         }
         else {
-          console.log(res[0])
+          //console.log(res[0])
 
           if (res[0].login_status === "Y") {
             this.showAlert = true;
@@ -275,29 +273,29 @@ export class LoginComponent implements OnInit {
   private getSystemParam(): void {
     this.isLoading=true
     var dt={
-      "ardb_cd":this.f.ardbbrMst.value=='100'?'4':this.f.ardbbrMst.value=='99'?'4':this.f.ardbbrMst.value
+      "ardb_cd":this.f.ardbbrMst.value=='100'?'4':this.f.ardbbrMst.value
     }
    
     this.rstSvc.addUpdDel('Mst/GetSystemDate',dt).subscribe(data=>
       {
-        console.log(data)
+        //console.log(data)
         this.dtData=data
-        console.log(this.dtData.sys_date)
+        //console.log(this.dtData.sys_date)
         localStorage.setItem('__currentDate', this.dtData.sys_date); // Day initilaze
         localStorage.setItem('__prevDate',this.dtData.prev_date)
      
     this.rstSvc.addUpdDel('Mst/GetSystemParameter', null).subscribe(
       sysRes => {
         try {
-          console.log(sysRes);
+          //console.log(sysRes);
           const __bName = localStorage.getItem('__bName');
           this.systemParam = sysRes;
-          // console.log(this.systemParam.find(x => x.param_cd === '206').param_value)
+          // //console.log(this.systemParam.find(x => x.param_cd === '206').param_value)
 
           this.router.navigate([__bName + '/la']);
           this.http.get<{ ip: string }>('https://jsonip.com').subscribe(
             data => {
-              // console.log(data)
+              // //console.log(data)
               const getIP =  data.ip.split(",");
              localStorage.setItem('getIPAddress', getIP[0]); // feather
           // localStorage.setItem('__userId', this.f.username.value +'/'+data.ip); // "101"
@@ -306,7 +304,7 @@ export class LoginComponent implements OnInit {
             })
             
           localStorage.setItem('L2L', 'true');
-          // console.log(localStorage.getItem('ipAddress'))
+          // //console.log(localStorage.getItem('ipAddress'))
           // localStorage.setItem('__ardb_cd', this.f.ardbbrMst.value);
           localStorage.setItem('__dist_cd', this.ardbBrnMst.find(x=>x.ardB_CD == this.f.ardbbrMst.value).dist_code)
           localStorage.setItem('__brnCd', this.f.branch.value); // "101"
@@ -330,8 +328,8 @@ export class LoginComponent implements OnInit {
           
           this.f.ardbbrMst.value=='26'?localStorage.setItem('__neftPayDrAcc','401101000283' ):localStorage.setItem('__neftPayDrAcc','0' )
         
-    //  console.log(this.dtData.sys_date)
-        //  console.log(localStorage.getItem('__currentDate'))
+    //  //console.log(this.dtData.sys_date)
+        //  //console.log(localStorage.getItem('__currentDate'))
           this.msg.sendisLoggedInShowHeader(true);
           this.loginForm.disable();
         }
@@ -369,10 +367,10 @@ export class LoginComponent implements OnInit {
   private GetBranchMaster() {
     // this.isLoading = true;
     var dt = { "ardb_cd": this.f.ardbbrMst.value ?this.f.ardbbrMst.value:null };
-    console.log(dt)
+    //console.log(dt)
     this.rstSvc.addUpdDel('Mst/GetBranchMaster', dt).subscribe(
       res => {
-        console.log(res)
+        //console.log(res)
         // this.isLoading = false;
         this.brnDtls = res;
       },
@@ -386,7 +384,7 @@ export class LoginComponent implements OnInit {
     // this.isLoading = true;
     // this.rstSvc.addUpdDel('Mst/GetARDBMaster', null).subscribe(
     //   res => {
-    //     console.log(res)
+    //     //console.log(res)
     //     this.ardbBrnMst = res;
     //   },
     //   err => { 
@@ -394,7 +392,7 @@ export class LoginComponent implements OnInit {
     //   }
     // );
     this.rstSvc.getlbr(environment.ardbUrl,null).subscribe(data=>{
-      // console.log(data)
+      // //console.log(data)
       this.ardbBrnMst = data;
       // this.menuConfigs=data;
     })
@@ -405,7 +403,7 @@ export class LoginComponent implements OnInit {
       "ardb_cd": this.f.ardbbrMst.value,
       "user_id": e.target.value
     }
-    this.rstSvc.addUpdDel('Mst/GetUserType', dt).subscribe(data => { console.log(data)
+    this.rstSvc.addUpdDel('Mst/GetUserType', dt).subscribe(data => { //console.log(data)
        this.userData = data;
        localStorage.setItem('userType',this.userData[0].user_type)
        this.loginForm.patchValue({branch:this.userData[0].user_type != 'A' ?  this.userData[0].brn_cd : ''})
@@ -438,7 +436,7 @@ export class LoginComponent implements OnInit {
       
       this.http.get<{ ip: string }>('https://jsonip.com').subscribe(
         data => {
-          console.log(data)
+          ////console.log(data)
           this.ipAddress = data.ip;
           const myIP =  this.ipAddress.split(",");
           localStorage.setItem('ipAddress',myIP[0])
@@ -475,9 +473,9 @@ export class LoginComponent implements OnInit {
   }
 //   getPrivateIP(){
 //   //   this.rstSvc.addUpdDel('Loan/GetHostName1',null).subscribe(data => {
-//   //     console.log(data)
+//   //     //console.log(data)
 //   // })
-//   this.http.get('http://localhost/api.php').subscribe(data=>console.log(data))
+//   this.http.get('http://localhost/api.php').subscribe(data=>//console.log(data))
 // }
 //   getPrivateIP(){
 //     var RTCPeerConnection = window.RTCPeerConnection ;  
@@ -509,7 +507,7 @@ export class LoginComponent implements OnInit {
 //                 return addrs[k];  
 //             });  
 //             // document.getElementById('list').textContent = displayAddrs.join(" or perhaps ") || "n/a"; 
-//             console.log(displayAddrs)
+//             //console.log(displayAddrs)
 //            ;
 //         }  
       

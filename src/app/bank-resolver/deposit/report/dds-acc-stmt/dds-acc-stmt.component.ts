@@ -234,6 +234,17 @@ export class DdsAccStmtComponent implements OnInit ,AfterViewInit{
     }
     this.getTotal()
   }
+  downloadexcel(){
+    this.exportAsConfig = {
+      type: 'xlsx',
+      // elementId: 'hiddenTab', 
+      elementIdOrContent:'trial111'
+    }
+    this.exportAsService.save(this.exportAsConfig, 'acc_statment_dds').subscribe(() => {
+      // save started
+      console.log("hello")
+    });
+  }
   getTotal(){
     this.opcrSum=0
     this.opdrSum=0

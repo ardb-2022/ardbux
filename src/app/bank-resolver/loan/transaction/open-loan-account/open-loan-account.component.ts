@@ -45,7 +45,7 @@ export class OpenLoanAccountComponent implements OnInit {
               private msg: InAppMessageService,
 
   ) { }
-
+  @ViewChild('MakerChecker', { static: true }) MakerChecker: TemplateRef<any>;
   @ViewChild('kycContent', { static: true }) kycContent: TemplateRef<any>;
   actDesc:any;
   SecaccNum:any;
@@ -139,10 +139,11 @@ export class OpenLoanAccountComponent implements OnInit {
     backdrop: true, // enable backdrop shaded color
     ignoreBackdropClick: true // disable backdrop click to close the modal
   };
-
+  createUser1:any;
+  logUser:any;
   ngOnInit(): void {
     this.getsystemParam();
-    
+    this.logUser=localStorage.getItem('itemUX');
     this.branchCode = this.sys.BranchCode;
     this.createUser = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
     this.createDate = this.sys.CurrentDate;
@@ -920,6 +921,10 @@ removeSecurityDtlList()
       this.HandleMessage(true, MessageType.Warning, 'Loan Already Approved !!');
       return;
     }
+    // if(this.createUser1.toLowerCase()==this.logUser.toLowerCase()){
+    //   this.modalRef = this.modalService.show(this.MakerChecker, this.config);
+    // }
+    // else{
     this.lienAccount();
     this.tm_loan_all.approval_status = 'A';
     this.masterModel.tmlaonsanction[idx].approval_status = 'A';
@@ -927,6 +932,7 @@ removeSecurityDtlList()
     this.masterModel.tmlaonsanction[idx].approved_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
     this.masterModel.tmlaonsanctiondtls[idx].approval_status = 'A';
     this.saveData('A');
+    // }
   }
 
   lienAccount() {
@@ -1177,6 +1183,18 @@ removeSecurityDtlList()
 
         this.isLoading = false;
         this.masterModel = res;
+        if (this.masterModel.tmloanall){
+          const inputString=this.masterModel.tmloanall.created_by
+          const parts = inputString.split('/');
+          if (parts.length > 0) {
+            const result = parts[0];
+            this.createUser1=result;
+            console.log(result); // This will output: username
+          } else {
+            this.createUser1="no"
+            console.log("No '/' found in the string.");
+          }
+        }
         console.log(res)
         if (this.masterModel === undefined || this.masterModel === null) {
           this.HandleMessage(true, MessageType.Warning, 'No record found!!' );

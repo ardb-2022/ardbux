@@ -32,6 +32,7 @@ export class UTCustomerProfileComponent implements OnInit {
   get f() { return this.custMstrFrm.controls; }
   static existingCustomers: mm_customer[] = [];
   @ViewChild('kycContent', { static: true }) kycContent: TemplateRef<any>;
+  @ViewChild('netWorth', { static: true }) netWorth: TemplateRef<any>;
   lbr_status: any = [];
   modalRef: BsModalRef;
   selectedClick=false;
@@ -57,6 +58,8 @@ export class UTCustomerProfileComponent implements OnInit {
   fileToUpload: File = null;
   sucessMsgs: string[] = [];
   showNoResult=false;
+  reportData2:any=[];
+  reportData3:any=[]
   comType=[{val:1,name:'Hindu'},{val:2,name:'Muslim'},{val:3,name:'Others'}]
   castType=[{val:1,name:'General'},{val:2,name:'SC'},{val:3,name:'ST'},{val:4,name:'OBC'}]
   // image = new kyc_sig();
@@ -217,6 +220,9 @@ export class UTCustomerProfileComponent implements OnInit {
 
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template, this.config);
+  }
+  openModal2(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, {class: 'modal-xl'});
   }
   openUploadModal(template: TemplateRef<any>) {
     this.sucessMsgs = [];
@@ -480,7 +486,24 @@ export class UTCustomerProfileComponent implements OnInit {
     this.msg.sendcustomerCodeForKyc(this.selectedCustomer.cust_cd);
     this.onClearClick();
    this.selectedClick=true
-
+   if(this.selectedCustomer.cust_cd){
+    this.reportData2.length=0;
+    this.reportData3.length=0;
+    var dt={
+      "ardb_cd":this.sys.ardbCD,
+      "brn_cd":this.sys.BranchCode,
+      "cust_cd":this.selectedCustomer.cust_cd
+    }
+  
+    this.isLoading=true
+    this.svc.addUpdDel('UCIC/GetLoanDtls',dt).subscribe(data=>{console.log(data)
+      this.reportData2=data
+      this.svc.addUpdDel('UCIC/GetDepositDtls',dt).subscribe(data=>{console.log(data)
+        this.reportData3=data
+        this.isLoading=false
+      })
+    })
+  }
     // this.custName.unsubscribe()
     this.enableModifyAndDel = true;
     this.suggestedCustomer = null;

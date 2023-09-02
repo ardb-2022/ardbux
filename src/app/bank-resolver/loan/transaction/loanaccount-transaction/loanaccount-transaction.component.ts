@@ -50,6 +50,7 @@ export class LoanaccountTransactionComponent implements OnInit {
   @ViewChild('contentLoanStmt', { static: true }) contentLoanStmt: TemplateRef<any>;
   @ViewChild('custDtls', { static: true }) custDtls: TemplateRef<any>;
   @ViewChild('LoanChallan', { static: true }) LoanChallan: TemplateRef<any>;
+  @ViewChild('netWorth', { static: true }) netWorth: TemplateRef<any>;
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -167,6 +168,8 @@ export class LoanaccountTransactionComponent implements OnInit {
   custNm:any;
   addr:any;
   reportData: any = []
+  reportData2: any = []
+  reportData3: any = []
   fromdate: Date;
   toDate: Date;
   // suggestedCustomer: mm_customer[];
@@ -222,9 +225,11 @@ export class LoanaccountTransactionComponent implements OnInit {
   fdt:any;
   tdt:any;
   Share_fl_no:any;
+  showNW:boolean
   // editDeleteMode=false
   // showInstrumentDtl = false;
   ngOnInit(): void {
+    this.showNW=true;
     this.isLoading = false;
     var date = new Date();
     var n = date.toDateString();
@@ -605,6 +610,7 @@ export class LoanaccountTransactionComponent implements OnInit {
   }
   public SelectCustomer(cust: any): void {
     console.log(cust);
+    if(cust.loan_id){this.showNW=false}
     this.loanID = cust.loan_id;
     console.log(this.loanID)
     this.shownoresult=false;
@@ -2726,6 +2732,7 @@ debugger;
   }
 
   onResetClick(): void {
+    this.showNW=true;
     this.joinHold=[];
     this.subSidyAmt=0;
     this.suggestedCustomerCr = null;
@@ -3382,6 +3389,24 @@ debugger;
               this.guardian_name=this.suggestedCustomer1[0].guardian_name;
               this.acc_lfNo=this.acc2.tmloanall.loan_acc_no;
               this.l_cust_cd=this.suggestedCustomer1[0].cust_cd;debugger
+              if(this.l_cust_cd){
+                this.reportData2.length=0;
+                this.reportData3.length=0;
+                var dt={
+                  "ardb_cd":this.sys.ardbCD,
+                  "brn_cd":this.sys.BranchCode,
+                  "cust_cd":this.l_cust_cd
+                }
+              
+                this.isLoading=true
+                this.svc.addUpdDel('UCIC/GetLoanDtls',dt).subscribe(data=>{console.log(data)
+                  this.reportData2=data
+                  this.svc.addUpdDel('UCIC/GetDepositDtls',dt).subscribe(data=>{console.log(data)
+                    this.reportData3=data
+                    this.isLoading=false
+                  })
+                })
+              }
               if(this.sys.ardbCD=="26"){
                 this.l_case_no=this.acc2.tdloansancsetlist[0]?.tdloansancset.filter(e=>e.param_cd=='117')[0]?.param_value
               }

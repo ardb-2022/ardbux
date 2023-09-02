@@ -49,12 +49,14 @@ export class VoucherapprovalComponent implements OnInit {
   isLoading = false;
   fromdate: Date;
   showMsg: ShowMessage;
-
+  createUser:any;
+  logUser:any;
   sys = new SystemValues();
   constructor(private svc: RestService, private formBuilder: FormBuilder,
     private modalService: BsModalService,
               private router: Router) { }
   @ViewChild('content', { static: true }) content: TemplateRef<any>;
+  @ViewChild('MakerChecker', { static: true }) MakerChecker: TemplateRef<any>;
   @ViewChild('contentbatch', { static: true }) contentbatch: TemplateRef<any>;
   modalRef: BsModalRef;
   isOpenFromDp = false;
@@ -65,6 +67,7 @@ export class VoucherapprovalComponent implements OnInit {
     ignoreBackdropClick: true // disable backdrop click to close the modal
   };
   ngOnInit(): void {
+    this.logUser=localStorage.getItem('itemUX');
     this.fromdate=this.convertDate(localStorage.getItem('__currentDate'));
     this.reportcriteria = this.formBuilder.group({
       fromDate: [null, Validators.required],
@@ -166,9 +169,14 @@ export class VoucherapprovalComponent implements OnInit {
 
   }
   Approve() {
-    this.modalRef.hide()
-    this.UpdateVoucher();
-
+    this.modalRef.hide();
+    if(this.createUser.toLowerCase()==this.logUser.toLowerCase()){
+      this.modalRef = this.modalService.show(this.MakerChecker, this.config);
+    }
+    else{
+      this.UpdateVoucher();
+    }
+    debugger
   }
   Submit() {
     ;
@@ -393,6 +401,18 @@ export class VoucherapprovalComponent implements OnInit {
       res => {
         ;
         this.tvdRet = res;
+        if (this.tvdRet[0].created_by){
+          const inputString=this.tvdRet[0].created_by
+          const parts = inputString.split('/');
+          if (parts.length > 0) {
+            const result = parts[0];
+            this.createUser=result;
+            console.log(result); // This will output: username
+          } else {
+            this.createUser="no"
+            console.log("No '/' found in the string.");
+          }
+        }
         for (let x = 0; x < this.tvdRet.length; x++) {
           this.VoucherF = this.onVoucherCreation.get('VoucherF') as FormArray;
           this.VoucherF.push(this.editVoucherFromGroup(this.tvdRet[x].acc_cd, this.tvdRet[x].debit_credit_flag=='D'?'Debit':'Credit', this.tvdRet[x].cr_amount, this.tvdRet[x].dr_amount));
@@ -435,6 +455,20 @@ export class VoucherapprovalComponent implements OnInit {
         ;
         console.log(res)
         this.tvnRet = res;
+        this.tvnRet.forEach(e=>{
+          const inputString=e.created_by
+          const parts = inputString.split('/');
+          var name;
+          if (parts.length > 0) {
+            const result = parts[0];
+            name=result;
+            console.log(result); // This will output: username
+          } else {
+           name=e.created_by
+            console.log("No '/' found in the string.");
+          }
+          e.created_by=name;
+        })
         //this.tvnRetFilter = this.tvnRet.filter(x => x.approval_status == this.app_flg);
         this.tvnRetFilter = this.tvnRet.filter(x => x.approval_status == this.app_flg).sort((a , b) => (a.voucher_id < b.voucher_id ? -1 : 1));;
         
