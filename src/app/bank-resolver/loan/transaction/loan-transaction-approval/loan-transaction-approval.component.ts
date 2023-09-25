@@ -15,6 +15,7 @@ import { LoanOpenDM } from 'src/app/bank-resolver/Models/loan/LoanOpenDM';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { tm_denomination_trans } from 'src/app/bank-resolver/Models/deposit/tm_denomination_trans';
 import Utils from 'src/app/_utility/utils';
+import { mm_activity } from 'src/app/bank-resolver/Models/loan/mm_activity';
 
 
 @Component({
@@ -60,6 +61,9 @@ export class LoanTransactionApprovalComponent implements OnInit {
   trfDtls:boolean=false;
   createUser:any;
   logUser:any;
+  activityList: mm_activity[] = [];
+  activityName:any
+
   ngOnInit(): void {
     this.logUser=localStorage.getItem('itemUX');
     this.showINSTNO=false;
@@ -135,6 +139,7 @@ export class LoanTransactionApprovalComponent implements OnInit {
     });
     setTimeout(() => {
       this.getAcctTypeMaster();
+      this.getActivityList();
     }, 150);
   }
   openModal(template: TemplateRef<any>) {
@@ -235,7 +240,7 @@ export class LoanTransactionApprovalComponent implements OnInit {
             ovd_intt_recov: this.loanOpenDm.tddeftrans.ovd_intt_recov,
             remarks: this.loanOpenDm.tddeftrans.remarks,
             crop_cd: this.loanOpenDm.tddeftrans.crop_cd,
-            activity_cd: this.loanOpenDm.tddeftrans.activity_cd,
+            activity_cd: this.activityName,
             curr_numbert_rate: this.loanOpenDm.tddeftrans.curr_intt_rate,
             ovd_numbert_rate: this.loanOpenDm.tddeftrans.ovd_intt_rate,
             instl_no: this.loanOpenDm.tddeftrans.instl_no,
@@ -376,6 +381,12 @@ export class LoanTransactionApprovalComponent implements OnInit {
         
         loanOpnDm = res;
         if (loanOpnDm.tddeftrans){
+          if(loanOpnDm.tddeftrans.activity_cd){
+          this.activityName=this.activityList.filter(e=>e.activity_cd==loanOpnDm.tddeftrans.activity_cd)[0].activity_desc
+          }
+          else{
+            this.activityName='No Activity'
+          }
           const inputString=loanOpnDm.tddeftrans.created_by
           const parts = inputString.split('/');
           if (parts.length > 0) {
@@ -711,6 +722,24 @@ export class LoanTransactionApprovalComponent implements OnInit {
 
   onBackClick() {
     this.router.navigate([this.sys.BankName + '/la']);
+  }
+  getActivityList() {
+
+    if (this.activityList.length > 0) {
+      return;
+    }
+    this.activityList = [];
+
+    this.svc.addUpdDel<any>('Mst/GetActivityMaster', null).subscribe(
+      res => {
+
+        this.activityList = res;
+      },
+      err => {
+
+      }
+    );
+
   }
   // groupBy(xs, f) {
   //   const gc = xs.reduce((r, v, i, a, k = f(v)) => ((r[k] || (r[k] = [])).push(v), r), {})

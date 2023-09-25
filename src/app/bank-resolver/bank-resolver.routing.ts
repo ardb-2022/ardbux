@@ -153,6 +153,21 @@ import { RecovAdvPrnVillComponent } from './loan/report/recovery-register/recov-
 import { InterestSubsidySummaryComponent } from './loan/report/interest-subsidy-summary/interest-subsidy-summary.component';
 import { DcbrPrintComponent } from './loan/report/dcbr-print/dcbr-print.component';
 import { NpaSummaryComponent } from './loan/report/npa-summary/npa-summary.component';
+import { CommonServiceService } from './common-service.service';
+import { LockerRoutingModule } from './locker/locker-routing.module';
+import { LockerShouldbeRenewComponent } from './locker/report/locker-shouldbe-renew/locker-shouldbe-renew.component';
+import { LockerRenewDetailsComponent } from './locker/report/locker-renew-details/locker-renew-details.component';
+import { LockerDetailsComponent } from './locker/report/locker-details/locker-details.component';
+import { LockerViewComponent } from './locker/locker-view/locker-view.component';
+import { LockerApproveComponent } from './locker/locker-approve/locker-approve.component';
+import { LockerTransactionComponent } from './locker/locker-transaction/locker-transaction.component';
+import { LockerOpeningComponent } from './locker/locker-opening/locker-opening.component';
+import { LoakerRentMasterComponent } from './locker/loaker-rent-master/loaker-rent-master.component';
+import { LoakerDetailMasterComponent } from './locker/loaker-detail-master/loaker-detail-master.component';
+import { LockerComponent } from './locker/locker.component';
+import { DetailListSbcaConstWiseComponent } from './deposit/report/detail-list-sbca-const-wise/detail-list-sbca-const-wise.component';
+import { FortnightlyReturnComponent } from './loan/report/fortnightly-return/fortnightly-return.component';
+import { ConsoFortnightlyReturnComponent } from './loan/report/conso-fortnightly-return/conso-fortnightly-return.component';
 const routes: Routes = [
   { path: 'Admin', component: AdminPanelComponent },
   { path: 'admin', component: AdminPanelComponent },
@@ -233,6 +248,7 @@ const routes: Routes = [
       { path: 'DR_DLR', component: DetailListRDComponent, canActivate: [AuthGuard] },
       { path: 'DR_DLF', component: DetailListFDMISComponent, canActivate: [AuthGuard] },
       { path: 'DR_DLF_CONST', component: DetailListFdmisConstWiseComponent, canActivate: [AuthGuard] },
+      { path: 'DR_DL_SBCA_CONST', component: DetailListSbcaConstWiseComponent, canActivate: [AuthGuard] },
       { path: 'DR_ASS', component: AccStmtSBCAComponent, canActivate: [AuthGuard] },
       { path: 'DR_ASR', component: AccStmtRDComponent, canActivate: [AuthGuard] },
       { path: 'DR_ASF', component: AccStmtTDComponent, canActivate: [AuthGuard] },
@@ -267,7 +283,8 @@ const routes: Routes = [
       { path: 'LR_Disb_Cert', component: LoanDisbCertificateComponent, canActivate: [AuthGuard] },
       { path: 'LR_GM_DC', component: GMloanDCComponent, canActivate: [AuthGuard] },
       { path: 'LR_NPA_Sum', component: NpaSummaryComponent, canActivate: [AuthGuard] },
-      
+      { path: 'LR_FN_Return', component: FortnightlyReturnComponent, canActivate: [AuthGuard] },
+      { path: 'LR_Conso_FN_Return', component: ConsoFortnightlyReturnComponent, canActivate: [AuthGuard] },
       { path: 'LR_NPA_ALL', component: NpaALLComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecReg', component: RecoveryRegisterComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecRegFund', component: RecovFundComponent, canActivate: [AuthGuard] },
@@ -318,7 +335,7 @@ const routes: Routes = [
       { path: 'LR_DN_Block', component: DemandNoticeBlockWiseComponent, canActivate: [AuthGuard] },
       { path: 'LR_OverdueNotice', component: OverdueNoticeComponent, canActivate: [AuthGuard] },
       { path: 'LR_OverdueTransfer', component: OverdueTransferComponent, canActivate: [AuthGuard] },
-      { path: 'FR_ProfitLoss', component: ProfitLossAccComponent, canActivate: [AuthGuard] },
+      { path: 'FR_ProfitLoss', component: ProfitLossAccComponent},
       { path: 'FR_ConsoProfitLoss', component: ConsoProfitLossComponent, canActivate: [AuthGuard] },
       { path: 'FR_Trading', component: TradingAccComponent, canActivate: [AuthGuard] },
       { path: 'FR_WeeklyReturn', component: WeeklyReturnComponent, canActivate: [AuthGuard] },
@@ -330,7 +347,48 @@ const routes: Routes = [
       { path: 'I_Trns', component: InvestmentTransactionsComponent, canActivate: [AuthGuard] },
       { path: 'IR_Detail_list', component: IDetailListComponent, canActivate: [AuthGuard] },
       { path: 'IR_Near_maturity', component: INearMaturityComponent, canActivate: [AuthGuard] },
-      
+      {
+        path: 'locker', component: LockerComponent,
+        children: [
+          {
+            path: 'loc_dtls',component: LoakerDetailMasterComponent,
+            loadChildren: () => import('./locker/locker.module').then(m => m.LockerModule)
+          },
+          {
+            path: 'loc_rent',component: LoakerRentMasterComponent,
+            loadChildren: () => import('./locker/locker.module').then(m => m.LockerModule)
+          },
+          {
+            path: 'lock_open',component: LockerOpeningComponent,
+            loadChildren: () => import('./locker/locker.module').then(m => m.LockerModule)
+          },
+          {
+            path: 'lock_trans',component: LockerTransactionComponent,
+            loadChildren: () => import('./locker/locker.module').then(m => m.LockerModule)
+          },
+          {
+            path: 'lock_approve',component: LockerApproveComponent,
+            loadChildren: () => import('./locker/locker.module').then(m => m.LockerModule)
+          },
+          {
+            path: 'lock_view',component: LockerViewComponent,
+            loadChildren: () => import('./locker/locker.module').then(m => m.LockerModule)
+          }
+          ,
+          {
+            path: 'lock_dtls',component: LockerDetailsComponent,
+            loadChildren: () => import('./locker/locker.module').then(m => m.LockerModule)
+          },
+          {
+            path: 'lock_r_dtls',component: LockerRenewDetailsComponent,
+            loadChildren: () => import('./locker/locker.module').then(m => m.LockerModule)
+          },
+          {
+            path: 'lock_sb_renew',component: LockerShouldbeRenewComponent,
+            loadChildren: () => import('./locker/locker.module').then(m => m.LockerModule)
+          }
+        ]
+      },
       {
         path: 'finance', component: FinanceComponent,
         children: [
@@ -343,9 +401,9 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
+  imports: [RouterModule.forChild(routes),LockerRoutingModule],
   exports: [RouterModule],
-  // providers:[WINDOW_PROVIDERS]
+  providers:[CommonServiceService]
 })
 
 export class BankResolverRouting { }

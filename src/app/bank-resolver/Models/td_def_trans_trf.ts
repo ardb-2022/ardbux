@@ -74,4 +74,5 @@ export class td_def_trans_trf extends baseModel {
   public intra_branch_trn:string;
   public del_flag:string;
   public penal_intt_recov:string;
+  public agreement_no:string;
 }

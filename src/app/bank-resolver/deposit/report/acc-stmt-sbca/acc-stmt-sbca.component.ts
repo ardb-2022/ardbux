@@ -132,7 +132,7 @@ export class AccStmtSBCAComponent implements OnInit {
               return arr.indexOf(arr.find(t => t.acc_type_cd === thing.acc_type_cd)) === i;
             });
           this.AcctTypes = this.AcctTypes.sort((a, b) => (a.acc_type_cd > b.acc_type_cd ? 1 : -1));
-          this.AcctTypes =this.AcctTypes.filter(e=>e.acc_type_cd==1 || e.acc_type_cd==7||e.acc_type_cd==8||e.acc_type_cd==9)
+          this.AcctTypes =this.AcctTypes.filter(e=>e.acc_type_cd==1 || e.acc_type_cd==8||e.acc_type_cd==7||e.acc_type_cd==9||e.acc_type_cd==11)
         },
         err => { this.isLoading = false; }
       );
@@ -163,7 +163,7 @@ export class AccStmtSBCAComponent implements OnInit {
       const prm = new p_gen_param();
       prm.ad_acc_type_cd = (+this.reportcriteria.controls.acc_type_cd.value);
       prm.as_cust_name = this.reportcriteria.controls.acct_num.value.toLowerCase();
-      this.svc.addUpdDel<any>('Deposit/GetAccDtls', prm).subscribe(
+      this.svc.addUpdDel<any>('Deposit/GetAccDtlsAll', prm).subscribe(
         res => {
           this.isLoading=false
           if (undefined !== res && null !== res && res.length > 0) {

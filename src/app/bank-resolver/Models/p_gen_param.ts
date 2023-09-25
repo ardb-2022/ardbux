@@ -31,7 +31,7 @@ export class p_gen_param {
   gs_user_id: string;
   output: string;
   as_cust_name: string;
-  
+  as_locker_id:any;
   constructor(){
     this.ardb_cd = localStorage.getItem('__ardb_cd');
   }

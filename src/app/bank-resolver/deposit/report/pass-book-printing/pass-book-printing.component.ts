@@ -397,37 +397,35 @@ export class PassBookPrintingComponent implements OnInit {
       
       this.printData=this.passBookData.length>1?this.passBookData.slice():this.passBookData;
       // this.printData=this.passBookData.slice();
-      if(this.lastRowNo == 40){
+      if(this.lastRowNo == 35){
         this.modalRef = this.modalService.show(this.fullpageUpdate, this.config);
         console.log( this.printData);
-      if(this.printData.length>19){
-        this.printData.splice(20, 0, o);
-        // this.printData.splice(21, 0, o);
+      if(this.printData.length>16){
+        this.printData.splice(17, 0, o);
+        this.printData.splice(18, 0, o);
         // this.printData.splice(22, 0, o);
         // this.printData.splice(16, 0, o);
         console.log( this.printData);
-        this.lastRowNo=this.printData.length-1
+        this.lastRowNo=this.printData.length-2
       }
       else{
         this.lastRowNo=this.printData.length
         // this.updateLineNo();
         // this.updatePassbookStatus();
       }
-      if(this.printData.length >41) {
+      if(this.printData.length >37) {
         for(let i = 0; i< this.printData.length ; i ++) 
         {
-          if(i>40){
           this.afterPrint.push(this.printData[i]);
           this.restItem=this.afterPrint.length;
-          }
         }
-          this.printData.splice(41,this.printData.length-41);
+          this.printData.splice(37,this.printData.length-37);
           ;
       }
       
       else{
-        if(this.printData.length>19 && this.printData.length<41){
-          this.lastRowNo=this.printData.length-1
+        if(this.printData.length>16 && this.printData.length<37){
+          this.lastRowNo=this.printData.length-2
           // this.updateLineNo();
           // this.updatePassbookStatus();
         }
@@ -440,38 +438,28 @@ export class PassBookPrintingComponent implements OnInit {
         this.printData.unshift(o);
       } 
       console.log( this.printData);
-      if(this.printData.length>19){
-        this.printData.splice(20, 0, o);
-        // this.printData.splice(21, 0, o);
-        // this.printData.splice(22, 0, o);
-        // this.printData.splice(16, 0, o);
-        console.log( this.printData);
-        this.lastRowNo=this.printData.length-1
+      if(this.printData.length<16){
+        this.lastRowNo=this.printData.length
+      }
+      else if(this.printData.length>16 && this.printData.length<35){
+        this.printData.splice(17, 0, o);
+        this.printData.splice(18, 0, o);
+        this.lastRowNo=this.printData.length-2;
       }
       else{
-        this.lastRowNo=this.printData.length
-        // this.updateLineNo();
-        // this.updatePassbookStatus();
-      }
-      if(this.printData.length >41) {
+        this.printData.splice(17, 0, o);
+        this.printData.splice(18, 0, o);
+        this.lastRowNo=this.printData.length-2;
         for(let i = 0; i< this.printData.length ; i ++) 
         {
-          if(i>40){
+          if(i>36){
           this.afterPrint.push(this.printData[i]);
           this.restItem=this.afterPrint.length;
-          }
         }
-          this.printData.splice(41,this.printData.length-41);
-          ;
+        }
+          this.printData.splice(37,this.printData.length-37);
       }
       
-      else{
-        if(this.printData.length>19 && this.printData.length<41){
-          this.lastRowNo=this.printData.length-1
-          // this.updateLineNo();
-          // this.updatePassbookStatus();
-        }
-      }
       console.log(this.lastRowNo);
       
       
@@ -832,65 +820,54 @@ export class PassBookPrintingComponent implements OnInit {
       amount : null,
       balance : null,
       }
-    this.modalRef.hide();
-    this.printData=[];
-    for(let i = 0; i< this.afterPrint.length ; i ++) 
-      {
-        this.printData.push(this.afterPrint[i]);
-      }
-      ;
-      console.log( this.printData);
-      if(this.printData.length>0 && this.printData.length<19){
-        
-        this.restItem=0;
-        this.restItem=this.printData.length;
-
-      }
-      if(this.printData.length>19){
-        this.printData.splice(20, 0, o);
-        // this.printData.splice(21, 0, o);
-        // this.printData.splice(22, 0, o);
-
-        // this.printData.splice(16, 0, o);
-        console.log( this.printData);
-      }
-      else{
-        this.lastRowNo=0;
-        this.lastRowNo=this.printData.length
-        // this.updateLineNo();
-        // this.updatePassbookStatus();
-      }
-      ;
-      if(this.printData.length >41) {
-        this.afterPrint=[];
-        this.restItem=0;
-        for(let i = 0; i< this.printData.length ; i ++) 
-          { if(i>40){
-            this.afterPrint.push(this.printData[i]);
-            this.lastRowNo=this.afterPrint.length
-            this.restItem=this.afterPrint.length;
-
-          }
-          }
-          this.printData.splice(41,this.printData.length-41);
-          ;
-      }
-      else{
-        this.afterPrint=[];
-        
-        if(this.printData.length>19 && this.printData.length<41){
-        this.restItem=0;
-        this.lastRowNo=this.printData.length-1
-        this.restItem=this.printData.length-1;
-
-        // this.updateLineNo();
-        // this.updatePassbookStatus();
+      this.modalRef.hide();
+      this.printData=[];
+      for(let i = 0; i< this.afterPrint.length ; i ++) 
+        {
+          this.printData.push(this.afterPrint[i]);
         }
-      }
-      console.log(this.lastRowNo);
-      ;
-      
-      console.log(this.printData);
+        
+        console.log( this.printData);
+        if(this.printData.length>0 && this.printData.length<16){
+          
+          this.restItem=0;
+          this.restItem=this.printData.length;
+  
+        }
+        else if(this.printData.length>16 && this.printData.length<35){
+          this.printData.splice(17, 0, o);
+          this.printData.splice(18, 0, o);
+          this.restItem=0;
+          this.lastRowNo=this.printData.length-2
+          this.restItem=this.printData.length-2;
+          console.log( this.printData);
+        }
+       
+        
+        else if(this.printData.length >36) {
+          this.afterPrint=[];
+          this.restItem=0;
+          this.printData.splice(17, 0, o);
+          this.printData.splice(18, 0, o);
+          for(let i = 0; i< this.printData.length ; i ++) 
+            { if(i>36){
+              this.afterPrint.push(this.printData[i]);
+              this.lastRowNo=this.printData.length-2
+              this.restItem=this.printData.length-2
+  
+            }
+            }
+            this.printData.splice(37,this.printData.length-37);
+            ;
+        }
+        else{
+          this.afterPrint=[];
+         
+        }
+        console.log(this.lastRowNo);
+        ;
+        
+        console.log(this.printData);
   }
   public oniframeLoad(): void {
     this.counter++;

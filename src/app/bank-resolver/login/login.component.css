@@ -31,7 +31,6 @@ select {
     font-weight:400;
     padding: 2px 10px;
     width: 100%;
-    *width: 100%;
     /* *background: #58B14C; */
   }
   
@@ -43,7 +42,6 @@ select {
     font-weight: 400;
     padding: 2px 10px;
     width: 100%;
-    *width: 100%;
   }
  
   .log1{

@@ -105,7 +105,7 @@
   </div>
   <div id="fastPageRD"  style="width: 60%;padding-left: 3% " hidden>
     <div style="padding: 10px;">
-      <div style="margin-top: 60%; ">&nbsp;</div>
+      <div style="margin-top: 58%; ">&nbsp;</div>
       <div class="form-row">
           <div style="width: 40%;"><b>A/C No:  {{suggestedCustomer[0].acc_num}}</b></div>
           <div style="text-align: right;width: 20%;"><b>CIF:  {{masterModel.tmdeposit.cust_cd}}</b></div>
@@ -128,18 +128,22 @@
     </div>
       <div style="padding: 10px;">
           <div class="form-row">
-              <div style="width: 40%;"><b>Inst Amt/Month:  {{masterModel.tmdeposit.instl_amt}}</b> </div>
+              <div style="width: 40%;"><b>Inst Amt/Month:  {{masterModel.tmdeposit.instl_amt | number : '1.2-2'}}</b> </div>
               <div style="width: 20%;text-align: right;"><b>No of Inst:  {{masterModel.tmdeposit.instl_no}}(Month)</b> </div>
           </div>
           <div class="form-row" style="padding-top: 5px;">
             <div style="width: 40%;"><b>Opening Dt:  </b>{{masterModel.tmdeposit.opening_dt.substr(0,10)}} </div>
-            <div style="width: 20%;text-align: right;"><b>Rate of Intt:  {{masterModel.tmdeposit.intt_rt}}</b> </div>
+            <div style="width: 20%;text-align: right;"><b>Rate of Intt:  {{masterModel.tmdeposit.intt_rt}}%</b> </div>
           </div>
           <div class="form-row" style="padding-top: 5px;">
             <div style="width: 40%;"><b>Maturity Dt:  </b>{{masterModel.tmdeposit.mat_dt.substr(0,10)}} </div>
-            <div style="width: 20%;text-align: right;"><b>Maturity Amt:  {{RDmatValue}}</b></div>
+            <div style="width: 20%;text-align: right;"><b>Maturity Amt:  {{RDmatValue | number : '1.2-2'}}</b></div>
           </div>
-          <div class="form-row" style="padding-left: 42%;padding-top:15%;">
+          <div class="form-row" style="padding-top: 5px;" >
+            <div style="width: 40%;"><b>SI Debited From:  </b>{{standingIns}} </div>
+            <div style="width: 20%;text-align: right;">&nbsp;</div>
+          </div>
+          <div class="form-row" style="padding-left: 42%;padding-top:10%;">
             <div><b>Authorised Signatory</b></div>
           </div>
       </div>

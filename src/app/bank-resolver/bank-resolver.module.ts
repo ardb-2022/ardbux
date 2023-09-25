@@ -1,6 +1,6 @@
 import { LoginComponent } from './login/login.component';
 import { BankResolverComponent } from './bank-resolver.component';
-import { NgModule } from '@angular/core';
+import { NO_ERRORS_SCHEMA, NgModule } from '@angular/core';
 import {MatTableModule} from '@angular/material/table';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { MatDialogModule} from '@angular/material/dialog';
@@ -200,7 +200,12 @@ import { RecovAdvPrnVillComponent } from './loan/report/recovery-register/recov-
 import { InterestSubsidySummaryComponent } from './loan/report/interest-subsidy-summary/interest-subsidy-summary.component';
 import { DcbrPrintComponent } from './loan/report/dcbr-print/dcbr-print.component';
 import { NpaSummaryComponent } from './loan/report/npa-summary/npa-summary.component';
-
+import {MatRadioModule} from '@angular/material/radio';
+import { LockerComponent } from './locker/locker.component';
+import { MenuItemComponent } from './menu-item/menu-item.component';
+import { DetailListSbcaConstWiseComponent } from './deposit/report/detail-list-sbca-const-wise/detail-list-sbca-const-wise.component';
+import { FortnightlyReturnComponent } from './loan/report/fortnightly-return/fortnightly-return.component';
+import { ConsoFortnightlyReturnComponent } from './loan/report/conso-fortnightly-return/conso-fortnightly-return.component';
 @NgModule({
   declarations: [ 
     AmountToWordPipe,UserLoginStatusComponent,OpenInvestComponent,KeyoffDirective,
@@ -246,7 +251,8 @@ import { NpaSummaryComponent } from './loan/report/npa-summary/npa-summary.compo
          InterestSubsidyComponent, ConsoProfitLossComponent, UserPermissionComponent, UserTransferComponent, ConsoBalSheetComponent,
           ConsoCashAccNewComponent, LoanDisbCertificateComponent, CloseAccDtlsComponent, GMloanDCComponent, RecovVillageComponent,
            UserWiseTransactionComponent, UserWiseTransactionLoanComponent, GmLoanSubsidyComponent, LoanDisburseActWiseComponent,
-            YearendDemandRecoveryComponent, DemandNoticeBlockWiseComponent, RecovAdvPrnComponent, RecovAdvPrnVillComponent, InterestSubsidySummaryComponent, DcbrPrintComponent, NpaSummaryComponent
+            YearendDemandRecoveryComponent, DemandNoticeBlockWiseComponent, RecovAdvPrnComponent, RecovAdvPrnVillComponent, 
+            InterestSubsidySummaryComponent, DcbrPrintComponent, NpaSummaryComponent,LockerComponent, MenuItemComponent, DetailListSbcaConstWiseComponent, FortnightlyReturnComponent, ConsoFortnightlyReturnComponent
   ],
   imports: [
     MatAutocompleteModule,
@@ -256,7 +262,7 @@ import { NpaSummaryComponent } from './loan/report/npa-summary/npa-summary.compo
     ReactiveFormsModule, FormsModule, AutocompleteLibModule, MatExpansionModule, MatSelectModule,MatListModule,
     BsDatepickerModule.forRoot(), AccordionModule.forRoot(), MatSnackBarModule, MatTooltipModule,
     TypeaheadModule.forRoot(),
-    ExportAsModule,HttpClientModule,
+    ExportAsModule,HttpClientModule,MatRadioModule
   ],
   providers: [
     PaginationConfig,
@@ -265,6 +271,8 @@ import { NpaSummaryComponent } from './loan/report/npa-summary/npa-summary.compo
     // { provide: ErrorHandler, useClass: GlobalErrorHandler },
     // { provide: HTTP_INTERCEPTORS, useClass: ServerErrorInterceptor, multi: true  }
   ],
+  schemas:[NO_ERRORS_SCHEMA],
+  exports:[LoadingComponent]
 })
 
 export class BankResolverModule { 

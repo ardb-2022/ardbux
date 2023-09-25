@@ -15,6 +15,7 @@ import { mm_constitution } from '../../Models/deposit/mm_constitution';
 import { mm_oprational_intr } from '../../Models/deposit/mm_oprational_intr';
 import { tm_denomination_trans } from '../../Models/deposit/tm_denomination_trans';
 import { AccOpenDM } from '../../Models/deposit/AccOpenDM';
+import { td_accholder } from '../../Models/deposit/td_accholder';
 
 @Component({
   selector: 'app-transactionapproval',
@@ -67,6 +68,9 @@ export class TransactionapprovalComponent implements OnInit {
   typeCd:any;
   createUser:any;
   logUser:any;
+  kycForAllHolder:boolean=true;
+  AllHolder:td_accholder[];
+  acc_OWNER:any=null;
   // cust: mm_customer;
   // tdDepTransRet: td_def_trans_trf[] = [];
 
@@ -599,6 +603,18 @@ export class TransactionapprovalComponent implements OnInit {
     }
   }
   public selectTransaction(vm: TranApprovalVM): void {
+    if (vm.td_def_trans_trf.created_by){
+      const inputString=vm.td_def_trans_trf.created_by
+      const parts = inputString.split('/');
+      if (parts.length > 0) {
+        const result = parts[0];
+        this.createUser=result;
+        console.log(result); // This will output: username
+      } else {
+        this.createUser="no"
+        console.log("No '/' found in the string.");
+      }
+    }
     this.HandleMessage(false);
     console.log(vm.td_def_trans_trf)
     this.typeCd=vm.td_def_trans_trf.acc_type_cd
@@ -607,6 +623,7 @@ export class TransactionapprovalComponent implements OnInit {
     k.acc_num=vm.td_def_trans_trf.acc_num;
     this.msg.sendCommonAcctInfo(k)
     this.msg.sendcustomerCodeForKyc(k.cust_cd);
+    debugger
     this.additionalInformation = new AccOpenDM();
     this.selectedVm = vm;
     this.selectedTransactionCd = vm.td_def_trans_trf.trans_cd;
@@ -618,9 +635,10 @@ export class TransactionapprovalComponent implements OnInit {
 
   private getAdditionalInformationForAccount(tmDeposit: tm_deposit): void {
     this.fetchingAddInf = true;
+    this.acc_OWNER=tmDeposit.cust_cd;
     this.svc.addUpdDel<any>('Deposit/GetDepositAddlInfo', tmDeposit).subscribe(
       res => {
-        ////debugger;
+        debugger;
         this.fetchingAddInf = false;
         if (undefined !== res && null !== res) {
           this.additionalInformation = res;
@@ -635,12 +653,30 @@ export class TransactionapprovalComponent implements OnInit {
               }
             });
           }
+          if(res.tdaccholder.length>0){
+            this.kycForAllHolder=false;
+            this.AllHolder=res.tdaccholder;
+            debugger
+          }
+          else{
+            this.kycForAllHolder=true;
+            this.AllHolder=[];
+            this.msg.sendcustomerCodeForKyc(tmDeposit.cust_cd);
+          }
         }
       },
       err => { this.additionalInformation = new AccOpenDM(); this.fetchingAddInf = false; }
     );
   }
-
+  holderKYC(i:any){
+    if(i=="OWN"){
+    this.msg.sendcustomerCodeForKyc(this.acc_OWNER);
+    }
+    else{
+    this.msg.sendcustomerCodeForKyc(this.AllHolder[i].cust_cd)
+    }
+    debugger
+  }
   private getDepTrans(depTras: td_def_trans_trf): void {
     this.isLoading = true;
     // this.showCust = false; // this is done to forcibly rebind the screen
@@ -658,10 +694,10 @@ export class TransactionapprovalComponent implements OnInit {
           const parts = inputString.split('/');
           if (parts.length > 0) {
             const result = parts[0];
-            this.createUser=result;
+            this.selectedVm.td_def_trans_trf.created_by=result;
             console.log(result); // This will output: username
           } else {
-            this.createUser="no"
+            this.selectedVm.td_def_trans_trf.created_by="no"
             console.log("No '/' found in the string.");
           }
         }
@@ -679,6 +715,7 @@ export class TransactionapprovalComponent implements OnInit {
         this.setCustFrm(res[0]);
         this.msg.sendcustomerCodeForKyc(this.selectedVm.mm_customer.cust_cd);
         this.isLoading = false;
+        debugger
       },
       err => { this.isLoading = false; }
     );
@@ -765,6 +802,7 @@ export class TransactionapprovalComponent implements OnInit {
 
   public onApproveClick(): void {
     this.modalRef.hide();
+    debugger
     if(this.createUser.toLowerCase()==this.logUser.toLowerCase()){
       this.modalRef = this.modalService.show(this.MakerChecker, { class: 'modal-lg' });
     }

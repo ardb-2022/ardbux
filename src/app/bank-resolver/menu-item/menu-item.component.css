@@ -1,0 +1,10 @@
+.color_icon {
+    color: #34723A; /* Change 'red' to your desired color */
+  }
+  .menu_item_style {
+    color: #34723A; /* Change 'red' to your desired color */
+  }
+  .mat-menu-item:hover{
+    background-color: rgb(148 229 121 / 60%)!important;
+}
+  

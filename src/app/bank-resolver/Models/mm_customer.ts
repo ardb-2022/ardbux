@@ -9,6 +9,7 @@ export class mm_customer {
   public last_name: string;
   public cust_name: string;
   public guardian_name: string;
+  public father_name: string;
   public cust_dt: Date;
   public old_cust_cd: string;
   public dt_of_birth: Date;
@@ -53,6 +54,17 @@ export class mm_customer {
   public del_flag:string;
   public lbr_status:string;
   public is_weaker:string;
+  public aadhar: string;
+  public approval_status: string;
+  public approved_by: string;
+  public approved_dt: Date;
+  public pan_status: string;
+  public nationality: string;
+  public email_id: string;
+  public credit_agency: string;
+  public credit_score: Number;
+  public credit_score_dt: Date;
+
   constructor(){
     this.ardb_cd = localStorage.getItem('__ardb_cd');
   }

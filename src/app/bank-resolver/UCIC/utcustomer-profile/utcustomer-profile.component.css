@@ -80,3 +80,6 @@ small{
   background-color: #ffffff;
   color: rgb(9, 63, 2);
 }
+.mat-mdc-radio-button ~ .mat-mdc-radio-button {
+  margin-left: 16px;
+}

@@ -50,7 +50,9 @@ export class UserLoginStatusComponent implements OnInit {
         
         //  this.filterUser=this.selectalluser.filter(x => x.login_status == 'Y')
          console.log(this.filterUser.findIndex(x => x.value == localStorage.getItem('__userId')));
-         
+         this.filterUser.forEach(e => {
+          e.ardb_cd=`${e.user_first_name} ${e.user_middle_name==null?'':e.user_middle_name+' '}${e.user_last_name}`
+         });
          //   if(this.filterUser.login_status=='Y'){
          //     this.loginStatus=true;
  

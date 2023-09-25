@@ -27,12 +27,16 @@
             <table id="customers1">
               <tr>
                 <th> User ID</th>
+                <th> User Name</th>
                 <th>Login Status</th>
               </tr>
               <tbody  *ngFor="let title of filterUser let i=index;" >
                 <tr>
                   <td>
                     <option>{{title.user_id}}</option>
+                  </td>
+                  <td>
+                    <option>{{title.ardb_cd}}</option>
                   </td>
                   <td>
                     <input id="toggle" type="checkbox" [checked]="filterUser.login_status=='Y'?'true':'false'" [value]="title.login_status" (change)="onChange(title.login_status, $event.target.checked,i)" />

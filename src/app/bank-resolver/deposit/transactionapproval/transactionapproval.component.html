@@ -570,13 +570,25 @@
   <div class="modal-header">
     <h4 class="modal-title pull-left customHeader">KYC details for Acc# {{selectedVm.tm_deposit.acc_num}}
     </h4>
+    <button type="button" class="holderButton" (click)="holderKYC('OWN')">
+      <span aria-hidden="true">Acc Owner</span>
+    </button>
+     <div *ngFor="let holder of AllHolder; let i=index">
+      <button type="button" class="holderButton" (click)="holderKYC(i)">
+        <span aria-hidden="true">{{holder.acc_holder}}</span>
+      </button>
+     </div>
     <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body">
-    <app-kyc></app-kyc>
-  </div>
+    <div class="modal-body" [hidden]="!kycForAllHolder">
+      <app-kyc></app-kyc>
+    </div>
+    <div class="modal-body" [hidden]="kycForAllHolder">
+      <app-kyc></app-kyc>
+    </div>
+
 </ng-template>
 <ng-template #Appconfirm >
   <div class="modal-body text-center" >

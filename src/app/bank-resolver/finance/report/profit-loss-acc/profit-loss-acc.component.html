@@ -43,8 +43,8 @@ style="background-color: #78c2ad21; min-height: 20vh;">
    <button mat-raised-button type="button" 
      class="btn btn-rounded btn-primary m-1" 
      [useExistingCss]="true"
-     printSectionId="mattable" 
-     ngxPrint>Print</button>
+     printSectionId="mattable"
+     ngxPrint >Print</button>
    <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
    <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadexcel()">Export as EXCEL</button>
 
@@ -163,9 +163,23 @@ style="background-color: #78c2ad21; min-height: 20vh;">
     <!-- <td mat-footer-cell *matFooterCellDef >Hello</td> -->
     <!-- <td mat-footer-cell *matFooterCellDef >{{crSum | number : '1.2-2'}}</td> -->
   </ng-container>
+  <ng-container matColumnDef="col1">
+    <th mat-header-cell  *matHeaderCellDef>Expenditure </th>
+  </ng-container>
+  <ng-container matColumnDef="col2">
+    <th mat-header-cell *matHeaderCellDef> Dr Amount </th>
+  </ng-container>
+  <ng-container matColumnDef="col3">
+    <th mat-header-cell  *matHeaderCellDef> Revenue </th>
+  </ng-container>
+  <ng-container matColumnDef="col4">
+    <th mat-header-cell  *matHeaderCellDef> Cr Amount</th>
+  </ng-container>
 <tr mat-header-row *matHeaderRowDef="['mainHeader']"></tr>
-
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+<tr mat-header-row *matHeaderRowDef="['col1', 'col2','col3','col4']"
+class="example-second-header-row">
+</tr>
+  <!-- <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr> -->
 <tr mat-footer-row *matFooterRowDef="['disclaimer0','disclaimer','disclaimer1','disclaimer3']" class="example-second-footer-row"></tr>
 
   <tr mat-row *matRowDef="let element; columns: displayedColumns;"></tr>
@@ -175,6 +189,7 @@ style="background-color: #78c2ad21; min-height: 20vh;">
     This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions Pvt.Ltd. Kolkata
    </small>
  </footer>
+ 
 </div>
 <!-- <mat-paginator [length]="resultLength" showFirstLastButtons [pageSizeOptions]="[20,5,10,15,25,50,100,resultLength]" MatPaginator></mat-paginator> -->
 

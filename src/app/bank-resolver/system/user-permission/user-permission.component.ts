@@ -190,6 +190,7 @@ bName1=''
       this.svc.addUpdDel<any>('Mst/GetRoleMaster', dt).subscribe(
         res => {
           this.allRole=res
+          debugger
         })
 
   }

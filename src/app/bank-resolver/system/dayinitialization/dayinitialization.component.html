@@ -65,12 +65,15 @@ style="background-color: #78c2ad21; min-height: 20vh;">
     <tr >
       <td>Operation Date</td>
       <td>Branch</td>
-      <td>Close Flag</td>
+      <td>Open/Close</td>
+      <td>Closing Time</td>
     </tr>
     <tr *ngFor="let item of sdoRet; let i = index;"  style="cursor: pointer;">
       <td>{{item.operation_dt  | date}}</td>
       <td>{{item.ardb_cd}}</td>
       <td>{{item.cls_flg=='Y'?'Closed':'Opened'}}</td>
+      <td>{{item.closed_dt=='01/01/0001 00:00'?'Not Close..':item.closed_dt.substr(10,15)}}</td>
+
     </tr> 
   </table>
 </div>

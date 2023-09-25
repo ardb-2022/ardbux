@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
@@ -12,6 +12,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import { CommonServiceService } from 'src/app/bank-resolver/common-service.service';
+declare var window: any;
 @Component({
   selector: 'app-profit-loss-acc',
   templateUrl: './profit-loss-acc.component.html',
@@ -87,6 +88,7 @@ export class ProfitLossAccComponent implements OnInit {
        var time = date.toLocaleTimeString();
        this.today= n + " "+ time
   }
+
   onLoadScreen(content) {
     this.modalRef = this.modalService.show(content, this.config);
   }

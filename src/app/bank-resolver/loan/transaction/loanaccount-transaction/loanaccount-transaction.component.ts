@@ -571,9 +571,10 @@ export class LoanaccountTransactionComponent implements OnInit {
         res => {
           console.log(res)
           this.isLoading=false;
-          if(this.sys.ardbCD=='26'){
+          if(this.sys.ardbCD=='26'||this.sys.ardbCD=='4'){
             this.name='Outstanding'
           }
+          
           else{
             this.name='Phone'
 
@@ -929,7 +930,7 @@ export class LoanaccountTransactionComponent implements OnInit {
           debugger;
 
           this.sancdtls = acc.tmlaonsanctiondtls;
-          this.sancdtls.forEach(x => x.draw_limit = x.sanc_amt - acc.tmloanall.curr_prn);
+          this.sancdtls.forEach(x => x.draw_limit = x.sanc_amt - acc.tmloanall.disb_amt);
           if (acc.tddeftrans.trf_type === 'C') {
             // this.tm_denominationList = acc.tmdenominationtrans;
             // this.tm_denominationList.forEach(x => x.rupees_desc = this.denominationList.filter(y => y.value === x.rupees)[0].rupees);
@@ -1150,7 +1151,7 @@ export class LoanaccountTransactionComponent implements OnInit {
           });
           console.log(acc.tmloanall.last_intt_calc_dt)
           this.sancdtls = acc.tmlaonsanctiondtls;
-          this.sancdtls.forEach(x => x.draw_limit = x.sanc_amt - acc.tmloanall.curr_prn);
+          this.sancdtls.forEach(x => x.draw_limit = x.sanc_amt - acc.tmloanall.disb_amt);
           // for (let x = 0; x < acc.tmlaonsanctiondtls.length; x++) {
           //   this.sancdtls = this.sancDetails.get('sancdtls') as FormArray;
           //   this.sancdtls.push(this.frmBldr.group({
@@ -1351,7 +1352,7 @@ export class LoanaccountTransactionComponent implements OnInit {
             // // console.log(dt)
             // console.log(this.c.transform(dt,'dd/MM/yyyy hh:mm:ss'))
             this.sancdtls = acc.tmlaonsanctiondtls;
-            this.sancdtls.forEach(x => x.draw_limit = x.sanc_amt - acc.tmloanall.curr_prn);
+            this.sancdtls.forEach(x => x.draw_limit = x.sanc_amt - acc.tmloanall.disb_amt);
             // for (let x = 0; x < acc.tmlaonsanctiondtls.length; x++) {
             //   this.sancdtls = this.sancDetails.get('sancdtls') as FormArray;
             //   this.sancdtls.push(this.frmBldr.group({

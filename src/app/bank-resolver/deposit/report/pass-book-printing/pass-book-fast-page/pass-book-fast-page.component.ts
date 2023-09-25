@@ -85,6 +85,8 @@ export class PassBookFastPageComponent implements OnInit {
   systemParam: sm_parameter[] = [];
   RDinterest:any;
   RDmatValue:any;
+  standingIns:any;
+  standingInsFlg:boolean=false;
   constructor(private svc: RestService, private formBuilder: FormBuilder,
     public datepipe: DatePipe) { }
   ngOnInit(): void {
@@ -168,11 +170,21 @@ export class PassBookFastPageComponent implements OnInit {
     }
     this.svc.addUpdDel('Deposit/getAccountOpeningData',dt).subscribe(data=>{
       console.log(data);
+     if(data){
       this.masterModel = data;
       this.custCD=this.masterModel.tmdeposit.cust_cd
       debugger
       if(this.accType=="6"){
         this.calINTT()
+        if(this.masterModel.tmdeposit.cheque_facility_flag=='Y')
+        {
+          this.standingIns=this.masterModel.tmdeposit.user_acc_num;
+          this.standingInsFlg=true;
+        }
+        else{
+          this.standingInsFlg=false;
+
+        }
       }
       this.getCustomer()
      
@@ -184,6 +196,7 @@ export class PassBookFastPageComponent implements OnInit {
         this.joinHold+=( this.masterModel.tdaccholder.length==0?'': this.masterModel.tdaccholder[i].acc_holder+',')
         console.log(this.joinHold);
         }
+     }
         
     })
     this.suggestedCustomer=[]

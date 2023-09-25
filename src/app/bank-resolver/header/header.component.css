@@ -94,3 +94,26 @@ button[disabled]{
   background-color: #dbdbd8;
   color: #fffefe;
 }
+.btn{
+  font-weight: 500;
+  color: white;
+  font-size: 16px;
+}
+span.mat-menu-item:hover:not([disabled]), .mat-menu-item.cdk-program-focused:not([disabled]), .mat-menu-item.cdk-keyboard-focused:not([disabled]), .mat-menu-item-highlighted:not([disabled]) {
+  background: rgb(148 229 121 / 60%);
+}
+/* span.mat-menu-item .mat-icon {
+  color: #34723A;
+}
+span.mat-menu-item{
+  color: #34723A;
+} */
+.myDivClass>span>mat-menu-item >mat-icon{
+  color: #34723A;
+}
+.myDivClass>span>mat-menu-item:hover:not([disabled]), .mat-menu-item.cdk-program-focused:not([disabled]), .mat-menu-item.cdk-keyboard-focused:not([disabled]), .mat-menu-item-highlighted:not([disabled]){
+  background: rgb(148 229 121 / 60%);
+}
+.menu_item_style {
+    color: 34723A; /* Change 'red' to your desired color */
+  }

@@ -1,13 +1,13 @@
 import { AfterViewInit, Component,ViewChild , HostListener, OnDestroy, OnInit, TemplateRef} from '@angular/core';
-import { InAppMessageService, RestService } from 'src/app/_service';
+import { AuthenticationService, InAppMessageService, RestService } from 'src/app/_service';
 import { BankConfigMst, submenu, SystemValues, LOGIN_MASTER, MenuConfig } from '../Models';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-
 import { environment } from 'src/environments/environment';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { sd_day_operation } from '../Models/sd_day_operation';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -17,7 +17,7 @@ export class HeaderComponent implements OnInit,OnDestroy,AfterViewInit {
   currentRoute: any;
   objectKeys = Object.keys;
   constructor(private rstSvc: RestService, private router: Router, private svc:RestService, private modalService:BsModalService,
-              private msg: InAppMessageService) {
+              private msg: InAppMessageService,private auth:AuthenticationService,private http: HttpClient) {
                 this.showScreenTitle=false
                 this.selectedScreenToShow=''
                 this.router.events.subscribe(event => {
@@ -30,7 +30,7 @@ export class HeaderComponent implements OnInit,OnDestroy,AfterViewInit {
                 });
    
   }
-  
+ 
   @ViewChild('fast') public fast;
   @ViewChild('second') public second;
   @ViewChild('third') public third;
@@ -80,164 +80,79 @@ matmenuTrg:any=[];
   dynamicLink3:any;
   showOpenYear:boolean=false;
   items: any[];
- 
+  showLocker:boolean=true;
+  menuItems:any[]=[]
+  AllItem:any[]=[]
+  allMenu:any;
+  roleCD:any;
   ngOnInit(): void {
-   
+  // this.getUser()
   this.getLogdUser()
    //console.log(localStorage.getItem('__currentDate')==localStorage.getItem('__prevDate'))
    
     setInterval(()=>{
       this.currTm= ' '+ '| '+ new Date().toString().substring(16,24)+ ' '
       this.currDt= new Date().toString().substring(0,15) 
-      // if(this.router.url.includes('la'))
+      // if(this.route.url.includes('la'))
       //    this.showScreenTitle=false
     ,1000})
     
-    //console.log(new Date())
     this.ardbName=localStorage.getItem('ardb_name')
     this.bankName = localStorage.getItem('__bName');
-    this.getBankConfigMaster();
-    this.getMenu();
-    this.rstSvc.getlbr(environment.menuUrl,null).subscribe(data=>{
-      //console.log(data)
-      this.menuConfigs=data;
-    })
+    
     debugger
     this.retrieve();
-    this.createDynamicLink();
-    // this.bankName=this.titleService.getTitle()
+
   }
-  createDynamicLink(){
-    if(this.sys.ardbCD=='26'){
-      this.dynamicLink='LR_BMLoanStmt';
-      this.dynamicLink2='LR_GM_DC';
-      this.dynamicLink3='LR_Int_Subsidy';
-      // this.dynamicLink2='LR_Disb_Cert'
-    }
-    else if(this.sys.ardbCD=='4'){
-      this.dynamicLink='LR_BMLoanStmt';
-      this.dynamicLink2='LR_GM_DC';
-      this.dynamicLink3='LR_GM_Int_Subsidy';
-    }
-    else{
-      this.dynamicLink='LR_BMLoanStmt';
-      this.dynamicLink2='LR_GM_DC';
-      this.dynamicLink3='LR_Int_Subsidy';
+  
+  callMenu(){
+   
+      this.isLoading=true;
+      var dt={
+        "ardb_cd":this.sys.ardbCD,
+        "role_cd":this.roleCD
       }
+      this.svc.addUpdDel('Mst/GetMenuPermission', dt).subscribe(
+        res => {
+          console.log(res);
+          this.allMenu=res
+          this.AllItem=this.allMenu.menu_module;
+          this.menuItems=[]
+          const customOrder = ['UCIC', 'Finance', 'Deposit', 'Loans', 'System', 'Transfer', 'Investment', 'Locker'];
+          this.menuItems = this.AllItem.sort((a, b) => {
+            const menuNameA = a.menu_name;
+            const menuNameB = b.menu_name;
+            const indexA = customOrder.indexOf(menuNameA);
+            const indexB = customOrder.indexOf(menuNameB);
+            
+            return indexA - indexB;
+          });
+          console.log(this.menuItems);
+          debugger
+       this.isLoading=false
+          
+        })
+       
   }
   getLogdUser(){
-    // Getuserdetails
-    // this.isLoading=true;
+    this.isLoading=true;
     let login = new LOGIN_MASTER();
     login.user_id = localStorage.getItem('__userId');
-    login.brn_cd = localStorage.getItem('__brnCd');
+    // login.brn_cd = this.sys.BranchCode;
     login.ardb_cd=this.sys.ardbCD,
     
     this.svc.addUpdDel('Sys/GetUserIDStatus', login).subscribe(
       res => {
-        
+        if(res){
         this.selectalluser=res
-        this.filterUser=this.selectalluser.filter(x => x.user_id ==localStorage.getItem('__userId'))
-        //console.log(this.filterUser[0])
         
-        //   if(this.filterUser.login_status=='Y'){
-        //     this.loginStatus=true;
-
-        //   }
-        //   else{
-        //     this.loginStatus=false
-        //   }
-        // //console.log(this.loginStatus)
-        //   ;
-        
-        //console.log(res);
+        // this.roleCD=1
+        // if(this.roleCD>0){this.callMenu()}
+      }
       })
  }
-  // @HostListener('mouseout')
-  // onMouseOut() {
-  //   this.menuConfigs.forEach(lv1 => {
-  //     lv1.show = false;
-  //     lv1.childMenuConfigs.forEach(lv2 => {
-  //       // lv2.show = false;
-  //     });
-  //   });
-  // }
 
-  @HostListener('click')
-  clicked() {
-    this.inside = true;
-  }
-  @HostListener('document:click')
-  clickedOut() {
-    if (!this.inside) {
-      this.menuConfigs.forEach(lv1 => {
-        lv1.show = false;
-        lv1.childMenuConfigs.forEach(lv2 => {
-          lv2.show = false;
-        });
-      });
-    }
-    this.inside = false;
-  }
-
-  toggleCollapsed(): void {
-    this.collapsed = !this.collapsed;
-  }
-  over(menu: MenuConfig): void {
-    if(menu.childMenuConfigs){
-      if (null === this.currentMenu || 
-      undefined === this.currentMenu) {
-      menu.show = true;
-      this.currentMenu = menu;
-    } else if (this.currentMenu.level_no < menu.level_no) {
-      const diff = this.currentMenu.level_no - menu.level_no;
-      //console.log(diff)
-       switch (diff) {
-        case 1:
-        case -1:
-          this.currentMenu.childMenuConfigs.forEach(lv2 => {
-            lv2.show = false;
-          });
-          this.currentMenu.childMenuConfigs.forEach(lv3 => {
-            lv3.childMenuConfigs.forEach(lv4 => {
-              lv4.show = false;
-            });
-          })
-          
-          break;
-        case 2:
-          case -2:
-          this.currentMenu.childMenuConfigs.forEach(lv2 => {
-            lv2.childMenuConfigs.forEach(lv3 => {
-              lv3.show = false;
-            });
-          });
-          break;
-          case 3:
-            case -3:
-          this.currentMenu.childMenuConfigs.forEach(lv3 => {
-            lv3.childMenuConfigs.forEach(lv4 => {
-              lv4.show = false;
-            });
-          });
-      }
-      menu.show = !menu.show;
-    } else {
-      ////debugger;
-      this.hideMenu();
-      
-      menu.show = true;
-      this.currentMenu = menu;
-    }
-  }
-  else{
-    const diff = this.currentMenu.level_no - menu.level_no;
-    //console.log(diff)
-    //debugger
-    this.gotoNewScreen(menu)
-  }
-  }
-
+  
   private hideMenu(): void {
     this.inside = false;
     this.menuConfigs.forEach(lv1 => {
@@ -253,99 +168,8 @@ matmenuTrg:any=[];
       // });
     // });
   }
-  // changeScreen(){
-    
-  //   this.selectedScreenToShow=this.menuConfigs[0].childMenuConfigs[0].childMenuConfigs[0].menu_name
-  //   this.showScreenTitle = true;
-  //   //console.log(this.selectedScreenToShow)
-  // }
+  
 
-  gotoNewScreen(menu: MenuConfig): void {
-    // //console.log(menu)
-    this.hideMenu();
-    this.showScreenTitle = true;
-    this.selectedScreenToShow = ''; // reset values;
-    this.selectedScreenToShow = menu.menu_name;
-    //console.log(this.selectedScreenToShow)
-    // if(menu.childMenuConfigs.length==0)
-    if(!menu.childMenuConfigs){
-      //console.log(this.userType)
-      this.router.navigate([this.bankName + '/' + menu.ref_page]);
-
-    }
-    // window.open(this.bankName + '/' + menu.ref_page);
-    else{
-      
-      this.over(menu)
-    }
-  }
-  out(menu: MenuConfig): void {
-    menu.show = false;
-  }
-
-  /** this is the new menu call from db */
-  getMenu() {
-    const menuConfig = new MenuConfig(); let rcvdMenuConfigs: MenuConfig[];
-    menuConfig.bank_config_id = 1;
-    // this.rstSvc.addUpdDel<any>('Admin/GetMenuConfig', menuConfig).subscribe(
-    //   res => {
-    //     if (null !== res && undefined !== res) {
-    //       // res = res as MenuConfig[];
-    //       rcvdMenuConfigs = res;
-    //       //console.log(res);
-    //       if (undefined !== res && null !== res) {
-    //         // create the hirarchal data
-    //         this.menuConfigs = rcvdMenuConfigs.filter(e => e.level_no === 1);
-    //         this.menuConfigs.forEach(frstLvlEle => {
-    //           if (frstLvlEle.is_screen === 'N') {
-    //             const scndLvlMenus = rcvdMenuConfigs.filter(e =>
-    //               e.parent_menu_id === frstLvlEle.menu_id);
-    //             frstLvlEle.childMenuConfigs.push(...scndLvlMenus);
-
-    //             scndLvlMenus.forEach(scndLvlEle => {
-    //               if (scndLvlEle.is_screen === 'N') {
-    //                 const thrdLvlMenus = rcvdMenuConfigs.filter(e =>
-    //                   e.parent_menu_id === scndLvlEle.menu_id);
-    //                 scndLvlEle.childMenuConfigs.push(...thrdLvlMenus);
-
-    //                 thrdLvlMenus.forEach(thrdLvlEle => {
-    //                   if (thrdLvlEle.is_screen === 'N') {
-    //                     const forthLvlMenus = rcvdMenuConfigs.filter(e =>
-    //                       e.parent_menu_id === thrdLvlEle.menu_id);
-    //                     thrdLvlEle.childMenuConfigs.push(...forthLvlMenus);
-
-
-    //                   }
-    //                 });
-    //               }
-    //             });
-    //           }
-    //         });
-
-    //         // //console.log(firtLvlMenus);
-    //       } else {
-    //         // todo need to check if the menu doesnt come then what
-    //       }
-    //     }
-    //   },
-    //   err => { }
-    // );
-  }
-
-  getBankConfigMaster() {
-    // this.rstSvc.getAll<BankConfigMst>('BankConfigMst').subscribe(
-    //   res => {
-    //     //console.log(res);
-    //     this.bankConfig = res;
-    //     this.bankFullName = this.bankConfig.bankname;
-    //     this.showMenu = true;
-    //     this.showChildMenu = false;
-    //     this.showSubMenu = false;
-    //     // TODO roles if required.
-    //   },
-    //   err => { }
-    // );
-  }
 
   logout() {
     localStorage.removeItem('L2L');
@@ -399,43 +223,7 @@ matmenuTrg:any=[];
   decline(): void {
     this.modalRef?.hide();
   }
-  // showChildMenuFor(menu: mainmenu): void {
-  //   this.childMenu = menu;
-  //   this.subMenu = null;
-  //   this.showMenu = false;
-  //   this.showChildMenu = true;
-  //   this.showSubMenu = false;
-  //   this.router.navigate([this.bankName + '/la']);
-  // }
-
-  // showSubChildMenuFor(submenu: submenu): void {
-  //   this.subMenu = submenu;
-  //   this.showMenu = false;
-  //   this.showChildMenu = false;
-  //   this.showSubMenu = true;
-  //   this.router.navigate([this.bankName + '/la']);
-  // }
-
-  // gotoScreen(screen: screenlist): void {
-  //   this.showScreenTitle = true;
-  //   this.selectedScreenToShow = ''; // reset values;
-  //   this.selectedScreenToShow = screen.screen;
-  //   this.router.navigate([this.bankName + '/' + screen.value]);
-  // }
-
-  back(fromwhere: string) {
-    if (fromwhere === 'sub') {
-      this.showMenu = false;
-      this.showChildMenu = true;
-      this.showSubMenu = false;
-    } else if (fromwhere === 'child') {
-      this.showMenu = true;
-      this.showChildMenu = false;
-      this.showSubMenu = false;
-    }
-    this.hideScreenTitle();
-    this.router.navigate([this.bankName + '/la']);
-  }
+ 
 
   private hideScreenTitle(): void {
     this.showScreenTitle = false;
@@ -446,56 +234,33 @@ matmenuTrg:any=[];
     // this.subscription.unsubscribe();
   }
   ngAfterViewInit(){
-    this.isLoading=true
+    // this.isLoading=true
     setTimeout(() => {
-      this.getPermission();
-      this.isLoading=false
-    }, 1000);
+      // this.getPermission();
+      //  this.isLoading=false
+    }, 5000);
 
   }
   openMyMenu(menuTrigger: MatMenuTrigger) {
     menuTrigger.openMenu();
   }
-  hideButton(buttonId: any) {
-   // console.log(buttonId);
-    if(this.userPermission.length>0){
-      this.matmenuTrg=this.userPermission.filter(e=>e.identification==buttonId.target.id)
-     if( this.matmenuTrg[0].permission=='N'){
-      const input = document.getElementById(buttonId.target.id) as HTMLInputElement | null;
-      
-      input.disabled=true
-     }
-    }
-   
-    this.isLoading=false;  
-    
-      }
- abc(){
-  if(this.userPermission.length>0){
-    for(let i=0;i<this.userPermission.length;i++){
-      var input = document.getElementById(this.userPermission[i].identification) as HTMLInputElement | null;
-      if(this.userPermission[i].permission=='N'){
-        input.style.display="none";
-       }
-      }
-  }
- }
- getPermission(){
-  this.isLoading=true;
-  var data = {
-    "ardb_cd": this.sys.ardbCD,
-    "role_cd":this.userType=='S'?2:this.userType=='G'?3:1
-  }
-  this.svc.addUpdDel<any>('Mst/GetRolePermission', data).subscribe(
-    res => {
-      //console.log(res);
-      this.userPermission=res
-      this.items=res
+
+//  getPermission(){
+//   this.isLoading=true;
+//   var data = {
+//     "ardb_cd": this.sys.ardbCD,
+//     "role_cd":this.userType=='S'?2:this.userType=='G'?3:1
+//   }
+//   this.svc.addUpdDel<any>('Mst/GetRolePermission', data).subscribe(
+//     res => {
+//       //console.log(res);
+//       this.userPermission=res
+//       this.items=res
       
       
-    })
+//     })
   
- }
+//  }
 
 
 
@@ -531,6 +296,9 @@ matmenuTrg:any=[];
             res => {
               ;//console.log(res)
               this.userType=res[0].user_type
+              this.roleCD=this.userType=='A'?1:this.userType=='S'?2:this.userType=='G'?3:4
+              debugger
+              if(this.roleCD>0){this.callMenu()}
               //console.log(this.sdoRet.filter(x=>x.brn_cd==this.sys.BranchCode)[0].cls_flg=="Y")
               // if(this.sdoRet.filter(x=>x.brn_cd==this.sys.BranchCode)[0].cls_flg=="Y"){
               //   this.hideMenuOnComplete=true
@@ -555,7 +323,7 @@ matmenuTrg:any=[];
               this.hideMenuOnComplete=false
               if(res.length>0){
                 debugger
-                this.isLoading = false;
+                // this.isLoading = false;
                 
 
               }
@@ -574,5 +342,10 @@ matmenuTrg:any=[];
 var parts = datestring.match(/(\d+)/g);
 return new Date(parseInt(parts[2]), parseInt(parts[1])-1, parseInt(parts[0]));
 }
-
+openNewTab() {
+  this.auth.report=true;
+  debugger
+  const urlToOpen = `http://36.255.3.143/ardb.SynergicBanking/${this.bankName}/FR_ProfitLoss`;
+  window.open(urlToOpen);
+}
 }

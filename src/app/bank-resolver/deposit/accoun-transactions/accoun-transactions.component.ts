@@ -20,6 +20,7 @@ import { mm_oprational_intr } from '../../Models/deposit/mm_oprational_intr';
 import { LoanOpenDM } from '../../Models/loan/LoanOpenDM';
 import { Observable } from 'rxjs/internal/Observable';
 import { INRCurrencyPipe } from'src/app/_utility/filter';
+import { td_accholder } from '../../Models/deposit/td_accholder';
 
  
 @Component({
@@ -177,7 +178,9 @@ export class AccounTransactionsComponent implements OnInit {
     ignoreBackdropClick: true,
     class: 'modal-xl'
   };
-
+  kycForAllHolder:boolean=true;
+  AllHolder:td_accholder[];
+  acc_OWNER:any=null;
   // disableIntt:boolean=false;
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template, this.config);
@@ -1176,7 +1179,19 @@ getjoinholder(){
     this.svc.addUpdDel<any>('Deposit/getAccountOpeningData', acc).subscribe(
       res => {
         console.log(res);
+        this.acc_OWNER=res.tmdeposit.cust_cd;
         this.msg.sendcustomerCodeForKyc(res.tmdeposit.cust_cd);
+        if(res.tdaccholder.length>0){
+          this.kycForAllHolder=false;
+          this.AllHolder=res.tdaccholder;
+          debugger
+        }
+        else{
+          this.kycForAllHolder=true;
+          this.AllHolder=[];
+          this.msg.sendcustomerCodeForKyc(res.tmdeposit.cust_cd);
+        }
+        debugger
         if(res.tmdeposit.cust_cd){
           this.coustCD=res.tmdeposit.cust_cd
           this.reportData.length=0;
@@ -1203,13 +1218,22 @@ getjoinholder(){
         this.joinHold+=(res.tdaccholder.length==0?'':res.tdaccholder[i].acc_holder+',')
         console.log(this.joinHold);
         }
+        
        
       },
       err => { this.isLoading = false; }
     );
 
   }
-
+  holderKYC(i:any){
+    if(i=="OWN"){
+    this.msg.sendcustomerCodeForKyc(this.acc_OWNER);
+    }
+    else{
+    this.msg.sendcustomerCodeForKyc(this.AllHolder[i].cust_cd)
+    }
+    debugger
+  }
   private getPreviousTransactionDtl(acc: tm_depositall): void {
     //////////////debugger;
     this.preTransactionDtlForSelectedAcc = [];
@@ -4121,7 +4145,7 @@ getjoinholder(){
       // }
       console.log(this.TrfTotAmt+" "+this.td.amount.value)
       debugger;
-      if(this.f.acc_type_cd.value == 11 && this.td.trf_type.value === 'T' && this.showtransdetails == true && this.TrfTotAmt !== (+this.tdDefTransFrm.controls.amount.value+(+this.tdDefTransFrm.controls.curr_prn_recov.value))){
+      if(this.f.acc_type_cd.value == 11 && this.td.trf_type.value === 'T' && this.showtransdetails == true && this.TrfTotAmt !== (+this.tdDefTransFrm.controls.amount.value+(+this.tdDefTransFrm.controls.curr_intt_recov.value))){
        
        debugger;
         this.HandleMessage(true, MessageType.Error,
@@ -4162,7 +4186,7 @@ getjoinholder(){
             // debugger;
             console.log(this.tdDefTransFrm.controls.amount.value+(+this.tdDefTransFrm.controls.curr_intt_recov.value))
             debugger;
-            if (this.tdDefTransFrm.controls.amount.value+this.tdDefTransFrm.controls.curr_intt_recov.value != this.TrfTotAmt) {
+            if (this.tdDefTransFrm.controls.amount.value+Number(this.tdDefTransFrm.controls.curr_intt_recov.value) != this.TrfTotAmt) {
               this.HandleMessage(true, MessageType.Error,
                 `Transfer total amount ₹${this.TrfTotAmt}, ` +
                 ` do not match with the amount ₹${this.tdDefTransFrm.controls.td_def_mat_amt.value}`);

@@ -66,10 +66,10 @@ table {
   #mattable{
     font-size:large
   }
-  .notice{
+  .noticeLogo{
     
     position: absolute;
-    opacity: 23%;
+    opacity: 30%!important;
     left: 30%;
     /* margin-left: 26%;
     margin-top: 10%; */

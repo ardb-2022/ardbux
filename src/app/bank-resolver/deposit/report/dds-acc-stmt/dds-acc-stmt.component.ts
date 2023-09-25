@@ -24,7 +24,7 @@ export class DdsAccStmtComponent implements OnInit ,AfterViewInit{
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource = new MatTableDataSource()
-  displayedColumns: string[] = ['paid_dt','paid_amt'];
+  displayedColumns: string[] = ['paid_dt','paid_amt','bal'];
   allAgent:any[]=[];
   modalRef: BsModalRef;
   isOpenFromDp = false;
@@ -122,7 +122,7 @@ export class DdsAccStmtComponent implements OnInit ,AfterViewInit{
       prm.ad_acc_type_cd = 11;
       prm.as_cust_name = this.reportcriteria.controls.acct_num.value.toLowerCase();
       debugger
-      this.svc.addUpdDel<any>('Deposit/GetAccDtls', prm).subscribe(
+      this.svc.addUpdDel<any>('Deposit/GetAccDtlsAll', prm).subscribe(
         res => {
           this.isLoading=false
           if (undefined !== res && null !== res && res.length > 0) {
@@ -181,6 +181,26 @@ export class DdsAccStmtComponent implements OnInit ,AfterViewInit{
         this.comser.SnackBar_Nodata()
       } 
       this.total_bal=this.reportData[0].clr_bal
+      for(let i=0;i<this.reportData.length;i++){
+        if(i==0){
+          this.reportData[i].clr_bal=this.reportData[i].paid_amt
+        }
+        else{
+          this.reportData[i].clr_bal=this.reportData[i-1].clr_bal;
+          this.reportData[i].clr_bal+=this.reportData[i].paid_amt;
+        }
+      }
+      // this.reportData.forEach(e=>{
+      //   if(e==0){
+      //     e.clr_bal=e.paid_amt
+      //   }
+      //   else{
+      //     e.clr_bal=(e.length-1).clr_bal
+      //     +=e.paid_amt
+      //   }
+        
+      // })
+      
       this.dataSource.data=this.reportData
       this.agentCD=this.allAgent.filter(e=>e.agent_cd==this.reportData[0].agent_cd)[0].agent_name
       this.opening_bal=this.reportData[0].opng_bal;
@@ -194,10 +214,7 @@ export class DdsAccStmtComponent implements OnInit ,AfterViewInit{
       // this.setPage(2);
       // this.setPage(1);
       this.modalRef.hide();
-      this.reportData.forEach(e=>{
-        this.opcrSum+=e.paid_amt
-        this.opdrSum+=e.dr_amt
-      })
+      
       },
       err => {
          this.isLoading = false;

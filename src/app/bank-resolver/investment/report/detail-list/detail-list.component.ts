@@ -204,7 +204,7 @@ export class IDetailListComponent implements OnInit,AfterViewInit  {
           this.totProvinttamt+=this.reportData[i].constype.tot_cons_mat_intt_balance
           this.allconscount+=this.reportData[i].constype.tot_cons_count
         }
-        this.totmatamt=this.totprnamt+this.totinttamt
+        this.totmatamt=this.totprnamt+this.totProvinttamt
 
         this.pageLength=this.reportData.length
         this.dataSource.data=this.reportData

@@ -24,6 +24,8 @@ import { Subscription } from 'rxjs';
 export class UTCustomerProfileComponent implements OnInit {
   @ViewChild('kycAddressNo',{static:true}) kycAddressNo:ElementRef;
   @ViewChild('kycPhotoNo',{static:true}) kycPhotoNo:ElementRef;
+  @ViewChild('pan',{static:true}) pan:ElementRef;
+  @ViewChild('aadhar',{static:true}) aadhar:ElementRef;
   _isDisabled = false;
 
   constructor(private datePipe: DatePipe, private frmBldr: FormBuilder,
@@ -51,6 +53,7 @@ export class UTCustomerProfileComponent implements OnInit {
   blocks: mm_block[] = [];
   serviceAreas: mm_service_area[] = [];
   villages: mm_vill[] = [];
+  villages1: mm_vill[] = [];
   states: mm_state[] = [];
   districts: mm_dist[] = [];
   categories: mm_category[] = [];
@@ -59,7 +62,9 @@ export class UTCustomerProfileComponent implements OnInit {
   sucessMsgs: string[] = [];
   showNoResult=false;
   reportData2:any=[];
-  reportData3:any=[]
+  reportData3:any=[];
+  vill:any;
+  showHideVill:boolean=false
   comType=[{val:1,name:'Hindu'},{val:2,name:'Muslim'},{val:3,name:'Others'}]
   castType=[{val:1,name:'General'},{val:2,name:'SC'},{val:3,name:'ST'},{val:4,name:'OBC'}]
   // image = new kyc_sig();
@@ -74,6 +79,7 @@ export class UTCustomerProfileComponent implements OnInit {
   selectedServiceArea: mm_service_area;
   isOpenDOBdp = false;
   isOpenDODdp = false;
+  CreditScoreDT=false;
   SIGNATURE: kyc_sig;
   PHOTO: kyc_sig;
   KYC: kyc_sig;
@@ -148,6 +154,7 @@ export class UTCustomerProfileComponent implements OnInit {
     this.svc.getlbr(environment.relUrl, null).subscribe(data => {
       console.log(data)
       this.lbr_status = data
+      debugger
     })
     // form defination
     this.custMstrFrm = this.frmBldr.group({
@@ -159,7 +166,8 @@ export class UTCustomerProfileComponent implements OnInit {
       middle_name: [null],
       last_name: [null, Validators.required],
       cust_name: ['', { disabled: true }],
-      guardian_name: [null, Validators.required],
+      guardian_name: [null],
+      father_name: [null, Validators.required],
       cust_dt: [null],
       old_cust_cd: [null],
       dt_of_birth: [null, Validators.required],
@@ -175,6 +183,7 @@ export class UTCustomerProfileComponent implements OnInit {
       dist: [this.sys.dist_cd],
       pin: [null, [Validators.maxLength(6)]],
       vill_cd: [null, Validators.required],
+      vill_name: [null, Validators.required],
       block_cd: [null, { disabled: true }, Validators.required],
       block_cd_desc: [null, { disabled: true }],
       service_area_cd: [null, { disabled: true }, Validators.required],
@@ -198,9 +207,21 @@ export class UTCustomerProfileComponent implements OnInit {
       kyc_address_type: [''],
       kyc_address_no: [''],
       org_status: [''],
-      org_reg_no: ['']
-    });
+      org_reg_no: [''],
+      nationality: [null, Validators.required],
+      email_id: [''],
+      aadhar: ['', Validators.required],
+      pan_status: [{ value: 'P' }, Validators.required],
+      credit_agency: [''],
+      credit_score: [null],
+      credit_score_dt: [''],
+      approve_status: [''],
+      approve_by: [''],
+      approve_dt: [''],
 
+      
+    });
+    
     setTimeout(() => {
       this.getTitleMaster();
       this.getCategoryMaster();
@@ -214,8 +235,11 @@ export class UTCustomerProfileComponent implements OnInit {
       this.f.status.setValue('A');
       this.f.state.disable()
       this.sys.ardbCD=='26'?this.f.dist.setValue(20):this.sys.dist_cd//set Purba Burdwan dist
+      this.f.pan_status.setValue('P');
+      this.f.nationality.setValue('INDIAN');
       // this.f.dist.disable()
     }, 150);
+    
   }
 
   openModal(template: TemplateRef<any>) {
@@ -279,6 +303,7 @@ export class UTCustomerProfileComponent implements OnInit {
       res => {
         console.log(res)
         this.villages = res;
+        debugger
         this.villages.sort((a,b) => (a.vill_name > b.vill_name) ? 1 : ((b.vill_name > a.vill_name) ? -1 : 0))
       },
       err => { }
@@ -292,12 +317,16 @@ export class UTCustomerProfileComponent implements OnInit {
       selectedVillage.block_cd)[0];
     this.selectedServiceArea = this.serviceAreas.filter(e => e.service_area_cd ===
       selectedVillage.service_area_cd)[0];
+      
     this.custMstrFrm.patchValue({
+      vill_cd:selectedVillage.vill_cd,
+      vill_name:selectedVillage.vill_name,
       service_area_cd: this.selectedServiceArea.service_area_cd,
       service_area_cd_desc: this.selectedServiceArea.service_area_name,
       block_cd: this.selectedBlock.block_cd,
       block_cd_desc: this.selectedBlock.block_name
     });
+    this.showHideVill=false;
   }
 
   private getBlockMster(): void {
@@ -313,7 +342,21 @@ export class UTCustomerProfileComponent implements OnInit {
       err => { }
     );
   }
-
+  onshow(i:any)
+  {
+    if(i.target.value==''){
+      this.showHideVill=false
+    }
+    else{
+      this.villages1=this.villages.filter(e=>e.vill_name.toLowerCase().includes(i.target.value.toLowerCase())==true)
+      this.showHideVill=true
+    }
+    debugger
+    }
+  getGuardian(){
+    this.custMstrFrm.controls.guardian_name.setValue(this.custMstrFrm.controls.father_name.value);
+    this.custMstrFrm.controls.lbr.setValue('Father');
+  }
   private getServiceAreaMaster(): void {
     var dt = {
       "ardb_cd": this.sys.ardbCD,
@@ -534,6 +577,7 @@ export class UTCustomerProfileComponent implements OnInit {
       dist: cust.dist,
       pin: cust.pin,
       vill_cd: cust.vill_cd,
+      vill_name: this.villages.filter(e => e.vill_cd === cust.vill_cd)[0].vill_name,
       block_cd: cust.block_cd,
       block_cd_desc: this.selectedBlock!=undefined ? this.selectedBlock.block_name:'',
       service_area_cd: cust.service_area_cd,
@@ -560,8 +604,18 @@ export class UTCustomerProfileComponent implements OnInit {
       kyc_address_type: cust.kyc_address_type,
       kyc_address_no: cust.kyc_address_no,
       org_status: cust.org_status,
-      org_reg_no: cust.org_reg_no
+      org_reg_no: cust.org_reg_no,
+      father_name : cust.father_name,
+      nationality:cust.nationality,
+      email_id:cust.email_id,
+      aadhar:cust.aadhar,
+      pan_status:cust.pan_status,
+      credit_agency:cust.credit_agency,
+      credit_score:cust.credit_score==0?null:cust.credit_score,
+      credit_score_dt:(null !== cust.credit_score_dt && '01/01/0001 00:00' === cust.credit_score_dt.toString()) ? null
+      : cust.credit_score_dt,
     });
+    debugger
     this.retrieveClicked = false
     this.f.state.disable();
     // this.f.dist.disable()
@@ -808,6 +862,8 @@ debugger
     this.f.state.setValue(19);
     this.f.state.disable()
     this.f.dist.setValue(this.sys.dist_cd);
+    this.f.pan_status.setValue('P');
+    this.f.nationality.setValue('INDIAN');
     // this.f.dist.disable()
   }
 
@@ -870,6 +926,18 @@ debugger
       cust.org_status = this.f.org_status.value;
       cust.org_reg_no = +this.f.org_reg_no.value;
       cust.ardb_cd = this.sys.ardbCD;
+      
+      cust.father_name = this.f.father_name.value?this.f.father_name.value.toUpperCase():this.f.father_name.value;
+      cust.nationality=this.f.nationality.value.toUpperCase();
+      cust.email_id=this.f.email_id.value;
+      cust.aadhar=this.f.aadhar.value;
+      cust.pan_status=this.f.pan_status.value;
+      cust.credit_agency=this.f.credit_agency.value;
+      cust.credit_score=this.f.credit_score.value?this.f.credit_score.value:0;
+      cust.credit_score_dt=this.f.credit_score_dt.value;
+      cust.approval_status= "U";
+      cust.approved_by=null;
+      cust.approved_dt=null;
       // cust.modified_dt = new Date();
       // cust.created_dt = cust.created_dt?cust.created_dt : new Date();
 
@@ -1001,6 +1069,13 @@ debugger
     //   status: (this.f.date_of_death.value!='0001-01-01T00:00:00'||this.f.date_of_death.value!=null || this.f.date_of_death.value!='') ? 'D':'A'
     // })
   }
+  changeCreditDt() {
+    console.log(this.f.credit_score_dt.value)
+    this.CreditScoreDT = !this.CreditScoreDT
+    // this.custMstrFrm.patchValue({
+    //   status: (this.f.date_of_death.value!='0001-01-01T00:00:00'||this.f.date_of_death.value!=null || this.f.date_of_death.value!='') ? 'D':'A'
+    // })
+  }
 
   @HostListener('document:click', ['$event'])
   onClickEvent(event: MouseEvent) {
@@ -1038,6 +1113,17 @@ debugger
         this.chkPanexistance(this.f.kyc_photo_type.value == 'P' ? 'UCIC/Checkpancard' : 'UCIC/Checkaadharcard',this.f.kyc_photo_type.value,_flag);
         }
     }
+  else if(_flag == 'PAN'){
+    this.isLoading = true;
+    this.chkPanAadhar('UCIC/Checkpancard',_flag);
+    
+    }
+    else if(_flag == 'AAD'){
+      this.isLoading = true;
+      this.chkPanAadhar('UCIC/Checkaadharcard',_flag);
+      
+      }  
+
   else {
        if(this.f.kyc_address_type.value == 'P' || this.f.kyc_address_type.value == 'G'){
                 this.isLoading = true;
@@ -1048,6 +1134,7 @@ debugger
   chkPanexistance(_flag,_type,_mode){
     var dt = {
          'ardb_cd':this.sys.ardbCD,
+         'cust_cd': this.f.cust_cd.value?this.f.cust_cd.value:1,
          'kyc_photo_no': this.f.kyc_photo_no.value,
          'kyc_photo_type':this.f.kyc_photo_type.value,
          'kyc_address_type':this.f.kyc_address_type.value,
@@ -1074,4 +1161,55 @@ debugger
 
 
   }
+  chkPanAadhar(API_URL,_FLAG){
+    var pan = {
+         'ardb_cd':this.sys.ardbCD,
+         'cust_cd': this.f.cust_cd.value?this.f.cust_cd.value:1,
+         'kyc_photo_no': this.f.kyc_photo_no.value,
+         'kyc_photo_type':this.f.kyc_photo_type.value,
+         'kyc_address_type':this.f.kyc_address_type.value,
+         'kyc_address_no':this.f.kyc_address_no.value,
+         'pan':this.f.pan.value
+    }
+    var aadhar = {
+      'ardb_cd':this.sys.ardbCD,
+      'cust_cd': this.f.cust_cd.value?this.f.cust_cd.value:1,
+      'kyc_photo_no': this.f.kyc_photo_no.value,
+      'kyc_photo_type':this.f.kyc_photo_type.value,
+      'kyc_address_type':this.f.kyc_address_type.value,
+      'kyc_address_no':this.f.kyc_address_no.value,
+      'aadhar':this.f.aadhar.value
+ }
+    this.svc.addUpdDel<any>(API_URL, _FLAG == 'PAN'?pan:aadhar).subscribe(
+      res => {
+                console.log(res);
+                this.isLoading = false;
+                if(res > 0){
+                      this.showMsgs.length = 0;
+                      _FLAG == 'PAN' ? this.pan.nativeElement.focus() : this.aadhar.nativeElement.focus()
+                     this.HandleMessage(true, MessageType.Error, _FLAG == 'PAN' ? 'This pan card number is already exist for another customer' 
+                     :'This Aadhar number is already exist for another customer');  
+                     this._isDisabled= true;
+                     if(_FLAG == 'PAN')  {
+                      this.f.pan.setValue('');
+                     }
+                     else{
+                      this.f.aadhar.setValue('');
+                     }            
+                }      
+                else{
+                  this.showMsgs.length = 0;
+                  this._isDisabled= false;              
+                }  
+      } 
+    )
+      
+
+
+  }
 }
+
+
+
+
+

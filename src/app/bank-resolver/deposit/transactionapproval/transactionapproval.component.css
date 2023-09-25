@@ -38,3 +38,9 @@ thead tr:nth-child(1) th{
   background-color: #34723a;
   color: white;
 }
+.holderButton{
+  background-color: #34703a;
+  color: white;
+  border-radius: 30px;
+  margin-left:14px;
+}

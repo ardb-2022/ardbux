@@ -19,13 +19,20 @@
     rel="stylesheet"> -->
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <script src=
-  "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
-      </script>
 </head>
 
 <body style="overflow-x: hidden!important;" class="mat-typography">
   <app-root></app-root>
 </body>
-
+<script>
+  $(document).ready(function() {
+    // Get the number of pages in your content (you'll need to customize this)
+    var totalPages = 5; // Change this to the actual number of pages
+    
+    // Add page numbers to the .page div
+    for (var i = 1; i <= totalPages; i++) {
+      $('.page').append('<div class="page-number">Page ' + i + '</div>');
+    }
+  });
+  </script>
 </html>

@@ -54,6 +54,7 @@ export class LoginComponent implements OnInit {
      }
 
   ngOnInit(): void {
+    this.encriptPass()
     localStorage.removeItem('ardb_name');
     localStorage.removeItem('L2L');
     if (this.router.url.includes('/login')) {
@@ -93,6 +94,15 @@ export class LoginComponent implements OnInit {
     }, 300);
 
   }
+  encriptPass(){
+    const text = "Partha@123";
+
+    // Convert the text to hexadecimal
+    const hexText = Array.from(text, char => char.charCodeAt(0).toString(16)).join('');
+    
+    console.log(hexText);
+    debugger
+    }
 
   getLogdUser(){
     let login = new LOGIN_MASTER();
@@ -169,9 +179,10 @@ export class LoginComponent implements OnInit {
     // this.router.navigate([__bName + '/la']); // TODO remove this it will be after login
     const login = new LOGIN_MASTER();
     const toreturn = false;
+    const hexText: string = Array.from(this.f.password.value, (char: string) => char.charCodeAt(0).toString(16)).join('');
     login.ardb_cd = this.f.ardbbrMst.value=='100'?'4':this.f.ardbbrMst.value;
     login.user_id = this.f.username.value;
-    login.password = this.f.password.value;
+    login.password = hexText;
     login.brn_cd = this.f.branch.value;
     this.nm = this.ardbBrnMst.find(x => x.ardB_CD == this.f.ardbbrMst.value)
     
@@ -185,7 +196,7 @@ export class LoginComponent implements OnInit {
       localStorage.setItem('ardb_addr', ardb_addrs)
     }
     if( this.f.ardbbrMst.value=='4'){
-      let ardb_addrs=` Ghatal : : Kushpata, Paschim Medinipur, WestBengal`
+      let ardb_addrs=` Ghatal : Kushpata, Paschim Medinipur, WestBengal`
       localStorage.setItem('ardb_addr', ardb_addrs)
     }
     else{
@@ -323,8 +334,6 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('__lastDt', this.systemParam.find(x => x.param_cd === '210').param_value);
           localStorage.setItem('__PrevStatus', this.systemParam.find(x => x.param_cd === '215').param_value);
           localStorage.setItem('__FinYearClose', this.systemParam.find(x => x.param_cd === '214').param_value);
-          debugger
-          
           
           this.f.ardbbrMst.value=='26'?localStorage.setItem('__neftPayDrAcc','401101000283' ):localStorage.setItem('__neftPayDrAcc','0' )
         

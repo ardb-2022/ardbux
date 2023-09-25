@@ -24,7 +24,8 @@ export class BankResolverComponent implements OnInit,OnDestroy {
               private router: Router,
               private rstSvc: RestService,
               private titleService: Title) {
-    // console.log(window.location)
+                // window.addEventListener('keypress', () => this.resetTimer());
+                // window.addEventListener('mousemove', () => this.resetTimer());
 
     this.subscription = this.msg.getisLoggedInShowHeader().subscribe(
       res => {
@@ -81,23 +82,19 @@ export class BankResolverComponent implements OnInit,OnDestroy {
       }
     });
   }
-  @HostListener('document:mousemove')
-  @HostListener('document:keyup')
-  @HostListener('document:click')
-  @HostListener('document:wheel')
-  resetTimer() {
+  
+  // resetTimer() {
     
-    if (!this.router.url.includes('/login')) {
-      // debugger
-      this.restartIdleLogoutTimer();
-    }
-  }
-  restartIdleLogoutTimer() {
-    clearTimeout(this.idleLogoutTimer);
-    this.idleLogoutTimer = setTimeout(() => {
-      this.logoutUser();
-    }, 10*60*1000);
-  }
+  //   if (!this.router.url.includes('/login')) {
+  //     this.restartIdleLogoutTimer();
+  //   }
+  // }
+  // restartIdleLogoutTimer() {
+  //   clearTimeout(this.idleLogoutTimer);
+  //   this.idleLogoutTimer = setTimeout(() => {
+  //     this.logoutUser();
+  //   }, 60*1000);
+  // }
 
   logoutUser() {
     // debugger;
