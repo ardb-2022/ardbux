@@ -3,9 +3,10 @@ import { BankConfiguration } from './Models/bankConfiguration';
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { InAppMessageService, RestService } from '../_service';
+import { AuthenticationService, InAppMessageService, RestService } from '../_service';
 import { Title } from '@angular/platform-browser';
 import { LOGIN_MASTER, SystemValues } from './Models';
+import { IdleService } from '../_service/idle.service';
 @Component({
   selector: 'app-bank-resolver',
   templateUrl: './bank-resolver.component.html',
@@ -23,7 +24,7 @@ export class BankResolverComponent implements OnInit,OnDestroy {
               private msg: InAppMessageService,
               private router: Router,
               private rstSvc: RestService,
-              private titleService: Title) {
+              private titleService: Title,private idleService: IdleService,private authService: AuthenticationService) {
                 // window.addEventListener('keypress', () => this.resetTimer());
                 // window.addEventListener('mousemove', () => this.resetTimer());
 
@@ -58,6 +59,13 @@ export class BankResolverComponent implements OnInit,OnDestroy {
 
   ngOnInit(): void {
     this.getBankName();
+    this.idleService.onIdle().subscribe(() => {
+      if (this.authService.isLoggedIn()) {
+        // this.authService.logout();
+        this.logoutUser() ;
+        // Perform additional actions like showing a modal or redirecting to the login page.
+      }
+    });
   }
 
   private getBankName(): void {
@@ -97,19 +105,20 @@ export class BankResolverComponent implements OnInit,OnDestroy {
   // }
 
   logoutUser() {
-    // debugger;
-
+    debugger;
+    this.authService.isAuthenticated = false;
     // alert("hello")
     // console.log(JSON.stringify(this.sys));
     if (null !== this.sys.BranchCode && null !== this.sys.UserId) {
 
       this.updateUsrStatus();
-      localStorage.removeItem('__brnName');
-      localStorage.removeItem('__brnCd');
-      localStorage.removeItem('__currentDate');
-      localStorage.removeItem('__cashaccountCD');
-      localStorage.removeItem('__ddsPeriod');
-      localStorage.removeItem('__userId');
+      // localStorage.removeItem('__brnName');
+      // localStorage.removeItem('__brnCd');
+      // localStorage.removeItem('__currentDate');
+      // localStorage.removeItem('__cashaccountCD');
+      // localStorage.removeItem('__ddsPeriod');
+      // localStorage.removeItem('__userId');
+      localStorage.clear();
       this.msg.sendisLoggedInShowHeader(true);
       const bankName = localStorage.getItem('__bName');
       this.router.navigate([bankName + '/login']);

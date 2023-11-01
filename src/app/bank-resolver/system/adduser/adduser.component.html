@@ -67,7 +67,8 @@ style="background-color: #78c2ad21; min-height: 20vh;">
   <form [formGroup]="addUser" autocomplete="chrome-off" >
     <div class="form-row" style="text-align:center;">
        <h4>Personal Information:</h4>
-       <h5 *ngIf="f.cpassword.errors?.confirmedValidator" class="text-danger">Password and Confirm Password must be match.</h5>
+       <div id="error-message" style="color: red;"></div>
+       <h4 *ngIf="f.cpassword.errors?.confirmedValidator" class="text-danger">Password and Confirm Password must be match.</h4>
     </div>
     <div class="form-row">
       <div class="form-group  col-3">
@@ -84,13 +85,14 @@ style="background-color: #78c2ad21; min-height: 20vh;">
         <div class="form-group  col-2">
             <small for="password">Password<span class="text-danger">*</span></small>
             <div class="input-group">
-              <input [type]="show_button ? 'text' : 'password'" class="form-control form-control-sm " formControlName="password" id="password"> 
+              <input [type]="show_button ? 'text' : 'password'" (keyup)="passCheck($event)" class="form-control form-control-sm " formControlName="password" id="password"> 
               <div class="input-group-append">
                <button type="button" class=" btn btn-primary btn-sm" (click)="showPassword()">
                 <i [class]="show_eye ? 'fa fa-eye' : 'fa fa-eye-slash'"></i>
                </button> 
 
               </div>
+            
             </div>
             <small [hidden]="pass" (click)="showCpass()"><u class="cpass">Change Your Password?</u></small>
         </div>

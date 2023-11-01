@@ -19,6 +19,8 @@ import { CommonServiceService } from 'src/app/bank-resolver/common-service.servi
 import { sm_parameter } from 'src/app/bank-resolver/Models/sm_parameter';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
+import { LoanOpenDM } from 'src/app/bank-resolver/Models/loan/LoanOpenDM';
+import { tm_loan_all } from 'src/app/bank-resolver/Models/loan/tm_loan_all';
 @Component({
   selector: 'app-demand-notice-block-wise',
   templateUrl: './demand-notice-block-wise.component.html',
@@ -65,7 +67,7 @@ export class DemandNoticeBlockWiseComponent implements OnInit {
   ardbName=localStorage.getItem('ardb_name')
   ardbcd=localStorage.getItem('__ardb_cd')
   branchName=this.sys.BranchName
-
+  joinHold:any=[];
   pageChange: any;
   opdrSum=0;
   opcrSum=0;
@@ -150,7 +152,7 @@ export class DemandNoticeBlockWiseComponent implements OnInit {
     })
    
     this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    // this.dataSource.sort = this.sort;
     this.fromdate = this.sys.CurrentDate;
     this.toDate = this.sys.CurrentDate;
     this.reportcriteria = this.formBuilder.group({
@@ -335,6 +337,15 @@ export class DemandNoticeBlockWiseComponent implements OnInit {
   }
   public SubmitReport() {
     this.getBlockName();
+    if(this.ardbcd=="26"){
+      this.toDate = this.reportcriteria.controls.toDate.value;
+      console.log(this.datePipe.transform(this. toDate, 'dd/MM/yyyy'))
+      this.convertDt=this.datePipe.transform(this. toDate, 'dd/MM/yyyy')
+      this.lastDate=this.convertDt
+    }
+    else{
+      this.lastDate=this.lastDate
+    }
     this.comser.getDay(this.reportcriteria.controls.fromDate.value,this.reportcriteria.controls.toDate.value)
     this.converDttoDt=''
     if (this.reportcriteria.invalid) {
@@ -370,6 +381,7 @@ export class DemandNoticeBlockWiseComponent implements OnInit {
         this.converDttoDt+='/'
 
     }
+    debugger
     // const str = this.reportcriteria.controls.fromDate.value;
     // const darr = str.split("/");    // ["29", "1", "2016"]
     // const dobj = new Date(parseInt(darr[2]),parseInt(darr[1])-1,parseInt(darr[0]));
@@ -389,8 +401,13 @@ export class DemandNoticeBlockWiseComponent implements OnInit {
         this.svc.addUpdDel('Loan/GetDemandNoticeBlockwise',dt).subscribe(data=>{console.log(data)
         this.reportData=data;
         this.reportData.forEach(p => {
-          p.ardb_cd=this.villages.filter(e=>e.vill_cd==p.ardb_cd)[0].vill_name;
-          p.cust_address=this.allServiceArea.filter(e=>e.service_area_cd==p.cust_address)[0].service_area_name;
+          p.ardb_cd=this.villages.filter(e=>e.vill_cd==p.ardb_cd)[0]?.vill_name;
+          if(this.sys.ardbCD=="26"){
+            p.brn_cd=this.allServiceArea.filter(e=>e.service_area_cd==p.brn_cd)[0]?.service_area_name;
+          }
+          else{
+             p.cust_address=this.allServiceArea.filter(e=>e.service_area_cd==p.cust_address)[0]?.service_area_name;
+          }
         })
         debugger
         this.isLoading=false;
@@ -398,6 +415,8 @@ export class DemandNoticeBlockWiseComponent implements OnInit {
           this.comser.SnackBar_Nodata()
         }
         this.dataSource.data=this.reportData;
+        this.dataSource.paginator = this.paginator;
+
 
       },
       err => {
@@ -421,7 +440,17 @@ export class DemandNoticeBlockWiseComponent implements OnInit {
   public closeAlert() {
     this.showAlert = false;
   }
-
+  // getLoanData(){
+  //   const acc1 = new tm_loan_all();
+  //       let acc = new LoanOpenDM();
+  //       acc1.loan_id = '' + this.f.acct_num.value;
+  //       acc1.brn_cd = this.sys.BranchCode;
+  //       acc1.acc_cd = +this.sys.ardbCD
+  //       this.svc.addUpdDel<any>('Loan/GetLoanData', acc1).subscribe(
+  //         res => {
+  //           acc=res
+  //         })
+  // }
 
   closeScreen() {
     this.router.navigate([this.sys.BankName + '/la']);
@@ -435,3 +464,6 @@ export class DemandNoticeBlockWiseComponent implements OnInit {
     }
   }
 }
+
+
+

@@ -42,6 +42,7 @@ export class LoginComponent implements OnInit {
   filterUser:any=[];
   selectalluser:any=[];
   sys = new SystemValues();
+  wrongAttamt:any;
   constructor(private router: Router,
     private formBuilder: FormBuilder,
     private rstSvc: RestService,
@@ -54,7 +55,8 @@ export class LoginComponent implements OnInit {
      }
 
   ngOnInit(): void {
-    this.encriptPass()
+    this.wrongAttamt=localStorage.getItem('W_attempt')
+    this.encriptPass();
     localStorage.removeItem('ardb_name');
     localStorage.removeItem('L2L');
     if (this.router.url.includes('/login')) {
@@ -213,7 +215,15 @@ export class LoginComponent implements OnInit {
         if (res.length === 0) {
           this.showAlert = true;
           this.isLoading=false;
-          this.alertMsg = 'Invalid Credential !!!!!';
+          this.alertMsg = 'Invalid UserName Or Password!';
+          this.wrongAttamt?this.wrongAttamt:0
+          this.wrongAttamt+=1;
+          localStorage.setItem('W_attempt',  this.wrongAttamt);
+          if(this.wrongAttamt>3){
+            this.loginForm.invalid;
+          }
+
+          debugger
         }
         else {
           //console.log(res[0])
@@ -257,7 +267,7 @@ export class LoginComponent implements OnInit {
     );
     
   }
-
+  
   closeAlert() {
     this.showAlert = false;
   }

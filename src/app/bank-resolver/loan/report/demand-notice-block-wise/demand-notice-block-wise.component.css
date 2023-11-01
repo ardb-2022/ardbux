@@ -68,9 +68,11 @@ table {
   }
   .noticeLogo{
     
-    position: absolute;
-    opacity: 30%!important;
-    left: 30%;
+    position: absolute!important;
+    opacity: 40%!important;
+    left: 30%!important;
     /* margin-left: 26%;
     margin-top: 10%; */
   }
+
+ 

@@ -85,7 +85,7 @@ export class DcbrPrintComponent implements OnInit {
   bName=''
   selectedValue=''
   selectedValue1=''
-  displayedColumns: string[] = ['vill_name','loan_id','party_name','guardian_name','phone','disb_dt','outstanding_prn','curr_prn','ovd_prn','curr_intt','ovd_intt','penal_intt','total','blank1','blank2','blank3','blank4','blank5','blank6','blank7','blank8']
+  displayedColumns: string[] = ['block_name','vill_name','loan_id','party_name','guardian_name','phone','disb_dt','outstanding_prn','curr_prn','ovd_prn','curr_intt','ovd_intt','penal_intt','total','blank1','blank2','blank3','blank4','blank5','blank6','blank7','blank8']
   displayedColumns2: string[] = ['block_name','vill_name','loan_id','lf_no','party_name','guardian_name','phone','disb_dt','intt_rt','disb_amt','outstanding_prn','curr_prn','ovd_prn','curr_intt','ovd_intt','penal_intt','total','blank1','blank2','blank3','blank4','blank5','blank6','blank7','blank8']
   
   dataSource = new MatTableDataSource()
@@ -451,7 +451,7 @@ debugger
         // this.pageChange.click()
         // this.setPage(2);
         // this.setPage(1)
-        // this.modalRef.hide();
+        this.modalRef.hide();
         this.reportData.forEach(e => {
           this.totOutstanding+=e.outstanding_prn
           this.ovdInttSum+=e.ovd_intt
@@ -525,6 +525,7 @@ debugger
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+    this.getTotal()
   }
   // applyFilter(event:Event){
   //   const filterValue=(event.target as HTMLInputElement).value

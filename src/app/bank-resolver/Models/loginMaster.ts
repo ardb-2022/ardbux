@@ -18,5 +18,9 @@ export class LOGIN_MASTER {
   user_first_name:string;
   user_middle_name:string;
   user_last_name:string;
-  ardb_cd:string
+  ardb_cd:string;
+  created_by:string;
+  created_dt:string;
+  modified_by:string;
+  modified_dt:string;
 }

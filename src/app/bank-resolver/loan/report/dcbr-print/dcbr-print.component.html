@@ -97,9 +97,13 @@
             <td mat-cell *matCellDef="let row" style="text-align: center;">  {{row.block_name}} </td>
           </ng-container> -->
           <!-- Fruit Column -->
+          <ng-container matColumnDef="block_name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Block </th>
+            <td mat-cell *matCellDef="let row" style="text-align: center;">{{row.block_name}}</td>
+          </ng-container>
           <ng-container matColumnDef="vill_name">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Village / Block </th>
-            <td mat-cell *matCellDef="let row" style="text-align: center;"> {{row.vill_name}}<br>{{row.block_name}}</td>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Village  </th>
+            <td mat-cell *matCellDef="let row" style="text-align: center;"> {{row.vill_name}}</td>
           </ng-container>
           <!-- Fruit Column -->
           <ng-container matColumnDef="loan_id">
@@ -203,7 +207,7 @@
           </ng-container>
           <!-- Header column -->
           <ng-container matColumnDef="Header">
-            <th mat-header-cell *matHeaderCellDef colspan="21">
+            <th mat-header-cell *matHeaderCellDef colspan="22">
               <div class="justify-content-center" style="text-align:center">
                 <h4>{{ardbName}} {{branchName}}</h4>
                 <h4>Run Date & Time : {{today}} </h4>
@@ -215,7 +219,7 @@
             </th>
           </ng-container>
          <!-- Footer column -->
-          <!-- <ng-container matColumnDef="Total">
+          <ng-container matColumnDef="Total">
             <td mat-footer-cell *matFooterCellDef colspan="7" style="text-align: center; border-right:1 px solid rgb(172,170,170)!important;">
               <b>Total</b>
             </td>
@@ -255,12 +259,12 @@
             <td mat-footer-cell *matFooterCellDef colspan="" style="text-align: center;border-right:1 px solid rgb(172,170,170)!important;" >
                <b>{{totalSum | currency:"INR"}}</b>
             </td>
-           </ng-container> -->
+           </ng-container>
           <tr mat-header-row *matHeaderRowDef="['Header']"
            class="example-second-header-row">
           </tr>
           <ng-container matColumnDef="header0" >
-            <td mat-header-cell *matHeaderCellDef  style="text-align:left;font-weight: 800;" colspan="7">
+            <td mat-header-cell *matHeaderCellDef  style="text-align:left;font-weight: 800;" colspan="8">
              
             </td>
           </ng-container>
@@ -297,7 +301,7 @@
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-          <!-- <tr mat-footer-row *matFooterRowDef="['Total','Total0','Total1','Total2','Total3','Total4','Total5','Total6']" class="example-second-footer-row"></tr> -->
+          <tr mat-footer-row *matFooterRowDef="['Total','Total0','Total1','Total2','Total3','Total4','Total5','Total6']" class="example-second-footer-row"></tr>
           
           <!-- Row shown when there is no matching data. -->
           
@@ -669,236 +673,7 @@
           This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions Pvt.Ltd. Kolkata
          </small></footer>
       </div>
-
-
-
-      <pagination hidden style="float:right;" [totalItems]="reportData?.length" [itemsPerPage]="itemsPerPage"
-        [boundaryLinks]="true" [directionLinks]="true" [maxSize]="5" [(ngModel)]="currentPage" name="currentPage"
-        (pageChanged)="pageChanged($event)" (pageBoundsCorrection)="pageChanged($event)"></pagination>
-      <table hidden class="p-3" id="trial">
-        <tr *ngIf="reportData">
-          <th colspan="7"></th>
-          <th colspan="7" style="text-align: center;">Demand</th>
-        </tr>
-        <tr *ngIf="reportData">
-          <!-- <th></th> -->
-          <th>Block</th>
-          <th>Village</th>
-          <th>Loan ID</th>
-          <th>Name</th>
-          <!-- <th>Ledger Folio</th> -->
-          <!-- <th >UCIC</th> -->
-          <th style="text-align:center">Disbursement Date</th>
-          <th>Purpose</th>
-          <th style="text-align:right"> Outstanding Principal</th>
-          <th style="text-align:right"> Current Principal</th>
-          <th style="text-align:right"> Overdue Principal</th>
-          <th style="text-align:right"> Current Interest</th>
-          <th style="text-align:right"> Overdue Interest</th>
-          <th style="text-align:right"> Penal Interest </th>
-          <th style="text-align:right"> Total </th>
-          <!-- <th style="text-align:right">Intt Rt</th> -->
-        </tr>
-        <tbody *ngFor="let i of pagedItems let itr=index;">
-          <tr>
-            <td>{{i.block_name}}</td>
-            <td>{{i.vill_name}}</td>
-            <td>{{i.loan_id}}</td>
-            <td>{{i.party_name}}</td>
-            <!-- <td>{{i.loan_acc_no}}</td> -->
-            <td style="text-align:center">{{i.disb_dt.substr(0,10)}}</td>
-            <td>{{i.activity_cd}}</td>
-            <!-- <td >{{i.party_cd}}</td> -->
-            <td style="text-align:right">{{i.outstanding_prn | number : '1.2-2'}}</td>
-            <td style="text-align:right">{{i.curr_prn | number : '1.2-2'}}</td>
-            <td style="text-align:right">{{i.ovd_prn | number : '1.2-2'}}</td>
-            <td style="text-align:right">{{i.curr_intt | number : '1.2-2'}}</td>
-            <td style="text-align:right">{{i.ovd_intt | number : '1.2-2'}}</td>
-            <td style="text-align:right">{{i.penal_intt | number : '1.2-2'}}</td>
-            <td style="text-align:right">{{i.ovd_intt+i.penal_intt+i.curr_intt+i.ovd_prn+i.curr_prn | number : '1.2-2'}}
-            </td>
-  
-  
-          </tr>
-          <tr *ngIf="i.loan_id==lastLoanID">
-            <td colspan="7" style="text-align:right;font-weight:700;">
-              Total:
-            </td>
-            <td style="text-align:right;font-weight:700;">{{currPrnSum | number : '1.2-2'}}</td>
-            <td style="text-align:right;font-weight:700;">{{ovdPrnSum | number : '1.2-2'}}</td>
-            <td style="text-align:right;font-weight:700;">{{currInttSum | number : '1.2-2'}}</td>
-            <td style="text-align:right;font-weight:700;">{{ovdInttSum | number : '1.2-2'}}</td>
-            <td style="text-align:right;font-weight:700;">{{penalInttSum | number : '1.2-2'}}</td>
-            <td style="text-align:right;font-weight:700;">{{totalSum | number : '1.2-2'}}</td>
-          </tr>
-          <!-- <tr *ngIf="i.acc_num==lastAccNum">
-        <td colspan="5" style="text-align:right;font-weight:700;">Total</td>
-        <td style="text-align:right;font-weight:700;">{{currPrnSum | number : '1.2-2'}}</td>
-        <td style="text-align:right;font-weight:700;">{{ovdPrnSum | number : '1.2-2'}}</td>
-        <td style="text-align:right;font-weight:700;">{{totPrn | number : '1.2-2'}}</td>
-        <td style="text-align:right;font-weight:700;">{{currInttSum | number : '1.2-2'}}</td>
-        <td style="text-align:right;font-weight:700;">{{ovdInttSum | number : '1.2-2'}}</td>
-        <td style="text-align:right;font-weight:700;"></td>
-      </tr> -->
-  
-          <!-- <tr *ngIf="itr==reportData.length-1">
-        <td  colspan="2" style="text-align:right;font-weight:800">Total</td>
-        <td  style="text-align:right;font-weight:800">{{clrSum | number : '1.2-2'}}</td>
-        <td  style="text-align:right;font-weight:800">{{currSum | number : '1.2-2'}}</td>
-        <td  style="text-align:right;font-weight:800">{{prnSum | number : '1.2-2'}}</td>
-        <td  style="text-align:right;font-weight:800">{{penalSum | number : '1.2-2'}}</td>
-        <td  colspan="3" style="text-align:right;font-weight:800"></td>
-        <td  style="text-align:right;font-weight:800">{{inttSum | number : '1.2-2'}}</td>
-        <td  style="text-align:right;font-weight:800"></td>
-    
-         <td  style="text-align:right;font-weight:800"></td> 
-       </tr> -->
-  
-  
-  
-        </tbody>
-        <tfoot style="text-align:left">
-          <tr>
-            <td colspan="9"> <small>
-                This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions, Kolkata
-              </small> </td>
-          </tr>
-        </tfoot>
-      </table>
-      <div hidden id="hiddenTab">
-        <div class="justify-content-center" style="text-align:center">
-          <h4>{{ardbName}} {{branchName}}</h4>
-  
-          <h4>Run Date & Time : {{today}} </h4> <br>
-          <!-- <h6> <u> Near Maturity Details from {{reportcriteria.controls.fromDate.value?.toDateString()}} to {{ this.reportcriteria.controls.toDate.value?.toDateString()}}</u></h6> -->
-          <h4> <u> Member-wise Demand List from {{reportcriteria.controls.fromDate.value?.toDateString() | date:
-              'dd/MM/yyyy'}} to
-              {{reportcriteria.controls.toDate.value?.toDateString() | date: 'dd/MM/yyyy'}}</u></h4>
-          <!-- <p>
-          <b>
-            Loan Type : {{reportcriteria.controls.acc_type_cd.value}} {{loanNm}}</b>
-        </p> -->
-  
-  
-        </div>
-        <table class="p-3" id="trial1" class="mkSmall">
-          <thead>
-            <tr *ngIf="reportData">
-              <th colspan="7"></th>
-              <th colspan="7" style="text-align: center;"> Demand</th>
-            </tr>
-            <tr *ngIf="reportData">
-              <!-- <th></th> -->
-              <th>Block</th>
-              <th>Village</th>
-              <th>Loan ID</th>
-              <th>Name</th>
-              <!-- <th>Ledger Folio</th> -->
-              <!-- <th >UCIC</th> -->
-              <th style="text-align:center">Disbursement Date</th>
-              <th>Purpose</th>
-              <th style="text-align:right"> Outstanding Principal</th>
-              <th style="text-align:right"> Current Principal</th>
-              <th style="text-align:right"> Overdue Principal</th>
-              <th style="text-align:right"> Current Interest</th>
-              <th style="text-align:right"> Overdue Interest</th>
-              <th style="text-align:right"> Penal Interest </th>
-              <th style="text-align:right"> Total </th>
-              <!-- <th style="text-align:right">Intt Rt</th> -->
-            </tr>
-          </thead>
-  
-  
-          <!-- <tbody *ngFor="let i of reportData; let itr=index;">
-            <tr>
-              <td>{{i.block_name}}</td>
-              <td>{{i.vill_name}}</td>
-              <td>{{i.loan_id}}</td>
-              <td>{{i.party_name}}</td>
-            
-              <td>{{i.activity_cd}}</td>
-          
-              <td style="text-align:right">{{i.outstanding_prn | number : '1.2-2'}}</td>
-              <td style="text-align:right">{{i.curr_prn | number : '1.2-2'}}</td>
-              <td style="text-align:right">{{i.ovd_prn | number : '1.2-2'}}</td>
-              <td style="text-align:right">{{i.curr_intt | number : '1.2-2'}}</td>
-              <td style="text-align:right">{{i.ovd_intt | number : '1.2-2'}}</td>
-              <td style="text-align:right">{{i.penal_intt | number : '1.2-2'}}</td>
-              <td style="text-align:right">{{i.ovd_intt+i.penal_intt+i.curr_intt+i.ovd_prn+i.curr_prn | number : '1.2-2'}}
-              </td>
-  
-  
-            </tr>
-            <tr *ngIf="i.loan_id==lastLoanID">
-              <td colspan="7" style="font-weight:700;text-align:center;"> 
-                Total:
-              </td>
-              <td style="text-align:right;font-weight:700;">{{currPrnSum | number : '1.2-2'}}</td>
-              <td style="text-align:right;font-weight:700;">{{ovdPrnSum | number : '1.2-2'}}</td>
-              <td style="text-align:right;font-weight:700;">{{currInttSum | number : '1.2-2'}}</td>
-              <td style="text-align:right;font-weight:700;">{{ovdInttSum | number : '1.2-2'}}</td>
-              <td style="text-align:right;font-weight:700;">{{penalInttSum | number : '1.2-2'}}</td>
-              <td style="text-align:right;font-weight:700;">{{totalSum | number : '1.2-2'}}</td>
-  
-            </tr>
-            <tr *ngIf="i.acc_num==lastAccNum">
-           <td colspan="5" style="text-align:right;font-weight:700;">Total</td>
-           <td style="text-align:right;font-weight:700;">{{currPrnSum | number : '1.2-2'}}</td>
-           <td style="text-align:right;font-weight:700;">{{ovdPrnSum | number : '1.2-2'}}</td>
-           <td style="text-align:right;font-weight:700;">{{totPrn | number : '1.2-2'}}</td>
-           <td style="text-align:right;font-weight:700;">{{currInttSum | number : '1.2-2'}}</td>
-           <td style="text-align:right;font-weight:700;">{{ovdInttSum | number : '1.2-2'}}</td>
-           <td style="text-align:right;font-weight:700;"></td>
-         </tr> -->
-  
-          <!-- <tr *ngIf="itr==reportData.length-1">
-           <td  colspan="2" style="text-align:right;font-weight:800">Total</td>
-           <td  style="text-align:right;font-weight:800">{{clrSum | number : '1.2-2'}}</td>
-           <td  style="text-align:right;font-weight:800">{{currSum | number : '1.2-2'}}</td>
-           <td  style="text-align:right;font-weight:800">{{prnSum | number : '1.2-2'}}</td>
-           <td  style="text-align:right;font-weight:800">{{penalSum | number : '1.2-2'}}</td>
-           <td  colspan="3" style="text-align:right;font-weight:800"></td>
-           <td  style="text-align:right;font-weight:800">{{inttSum | number : '1.2-2'}}</td>
-           <td  style="text-align:right;font-weight:800"></td>
-       
-            <td  style="text-align:right;font-weight:800"></td> 
-          </tr> -->
-  
-  
-  
-  
-          <!-- <tr *ngIf="i.acc_num==lastAccNum">
-        <td colspan="5" style="text-align:right;font-weight:700;">Total</td>
-        <td style="text-align:right;font-weight:700;">{{currPrnSum | number : '1.2-2'}}</td>
-        <td style="text-align:right;font-weight:700;">{{ovdPrnSum | number : '1.2-2'}}</td>
-        <td style="text-align:right;font-weight:700;">{{totPrn | number : '1.2-2'}}</td>
-        <td style="text-align:right;font-weight:700;">{{currInttSum | number : '1.2-2'}}</td>
-        <td style="text-align:right;font-weight:700;">{{ovdInttSum | number : '1.2-2'}}</td>
-        <td style="text-align:right;font-weight:700;"></td>
-      </tr>
-  
-          </tbody> -->
-          <tfoot>
-            <tr>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-            </tr>
-            <tr>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-            </tr>
-  
-          </tfoot>
-        </table>
-        <footer>
-          <small>
-            This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions Pvt.Ltd. Kolkata
-          </small>
-        </footer>
-        <!-- <br><br><br><br>
-    <small>This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions, Kolkata</small> -->
-      </div>
-      <button mat-raised-button hidden id="chngPage" (click)="setPage(1)"></button>
+ 
     </div>
   
     <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 shadow-sm mb-4 bg-white p-3">

@@ -72,8 +72,9 @@
      printSectionId="trial111" 
      ngxPrint>Print</button>
    <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
- <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadexcel()">Export as EXCEL</button>
-    
+   <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadexcel()">Export as EXCEL</button>
+   <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadpdf()">Export as PDF</button>
+ 
     
     </div>
     </div>
@@ -92,7 +93,7 @@
       
         <ng-container matColumnDef="slNo" >
             <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
-            <td mat-cell *matCellDef="let row; let i=index;"> {{i+1}} </td>
+            <td mat-cell *matCellDef="let row; let i=index;"> {{row.ardb_cd}} </td>
           </ng-container>
       <!-- Fruit Column -->
       <ng-container matColumnDef="acc_num" >
@@ -179,7 +180,7 @@
      
     
   </div>
-  <mat-paginator showFirstLastButtons [pageSizeOptions]="[550,1000,pageLength]" aria-label="Select page of users"></mat-paginator>
+  <mat-paginator showFirstLastButtons [pageSizeOptions]="[500,1000,pageLength]" aria-label="Select page of users"></mat-paginator>
   
   
    <!-- <pagination style="float:right;"

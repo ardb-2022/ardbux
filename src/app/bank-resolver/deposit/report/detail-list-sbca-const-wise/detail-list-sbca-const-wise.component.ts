@@ -180,18 +180,19 @@ export class DetailListSbcaConstWiseComponent implements OnInit,AfterViewInit {
         if(this.reportData.length==0){
           this.comSer.SnackBar_Nodata()
         } 
-        this.pageLength=this.reportData.length
-        this.dataSource.data=this.reportData
-        if(this.reportData.length<50){
-          this.pagedItems=this.reportData
+        else{
+          for(let i=0;i<this.reportData.length;i++){
+            this.reportData[i].ardb_cd=i+1;
+
+          }
+          
+          this.pageLength=this.reportData.length
+          this.dataSource.data=this.reportData
         }
-        this.itemsPerPage=this.reportData.length % 50 <=0 ? this.reportData.length: this.reportData.length % 50
-  
+       
+        
         this.isLoading=false
-        this.pageChange=document.getElementById('chngPage');
-        this.pageChange.click()
-        this.setPage(2);
-        this.setPage(1)
+       
         // this.lastcustcd=this.reportData[this.reportData.length-1].cust_cd
         this.reportData.forEach(e=>{
           this.suminstL_AMT+=e.balance;
@@ -270,6 +271,17 @@ export class DetailListSbcaConstWiseComponent implements OnInit,AfterViewInit {
   downloadexcel(){
     this.exportAsConfig = {
       type: 'xlsx',
+      // elementId: 'hiddenTab', 
+      elementIdOrContent:'trial111'
+    }
+    this.exportAsService.save(this.exportAsConfig, 'Detail_List_SBCA_Const').subscribe(() => {
+      // save started
+      console.log("hello")
+    });
+  }
+  downloadpdf(){
+    this.exportAsConfig = {
+      type: 'pdf',
       // elementId: 'hiddenTab', 
       elementIdOrContent:'trial111'
     }

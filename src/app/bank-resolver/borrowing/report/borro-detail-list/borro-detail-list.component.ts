@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-import { SystemValues, mm_customer, p_report_param, mm_operation } from 'src/app/bank-resolver/Models';
+import { SystemValues, mm_customer, p_report_param, mm_operation, mm_acc_type } from 'src/app/bank-resolver/Models';
 import { p_gen_param } from 'src/app/bank-resolver/Models/p_gen_param';
 import { tt_trial_balance } from 'src/app/bank-resolver/Models/tt_trial_balance';
 import { RestService } from 'src/app/_service';
@@ -14,13 +14,14 @@ import { MatTableDataSource } from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import { CommonServiceService } from 'src/app/bank-resolver/common-service.service';
+
 @Component({
-  selector: 'app-detaillist-all',
-  templateUrl: './detaillist-all.component.html',
-  styleUrls: ['./detaillist-all.component.css'],
+  selector: 'app-borro-detail-list',
+  templateUrl: './borro-detail-list.component.html',
+  styleUrls: ['./borro-detail-list.component.css'],
   providers:[ExportAsService]
 })
-export class DetaillistAllComponent implements OnInit {
+export class BorroDetailListComponent implements OnInit {
 
   public static operations: mm_operation[] = [];
   @ViewChild('content', { static: true }) content: TemplateRef<any>;
@@ -38,9 +39,8 @@ export class DetaillistAllComponent implements OnInit {
   trailbalance: tt_trial_balance[] = [];
   resultLength=0
   filteredArray:any=[]
-ownFund:any[]=[]
-broFund:any[]=[]
-  AcctTypes: mm_operation[];
+  inttRTArray:any=[]
+  AcctTypes:  mm_acc_type[] = [];
   prp = new p_report_param();
   reportcriteria: FormGroup;
   closeResult = '';
@@ -99,16 +99,15 @@ broFund:any[]=[]
   inputEl:any
   bName1=''
   filteredArray1:any=[]
-  fundTypeButton:boolean=true;
-
+  Array1:any=[]
+  Array2:any=[]
+  Array3:any=[]
+  showSubTable:boolean=false;
+  showMainTable:boolean=false;
   selectItems=[
     {
       value:'Block',
       name:'Block'
-    },
-    {
-      value:'Acc Type',
-      name:'Acc Type'
     },
     {
       value:'Activity',
@@ -138,10 +137,6 @@ broFund:any[]=[]
       name:'Block'
     },
     {
-      value:'Acc Type',
-      name:'Acc Type'
-    },
-    {
       value:'Activity',
       name:'Activity'
     },
@@ -164,36 +159,34 @@ broFund:any[]=[]
     }
   ]
   // displayedColumns: string[] = ['block_name','acc_name','party_name', 'acc_num', 'list_dt', 'curr_intt_rate','ovd_intt_rate','curr_prn','ovd_prn','plus','curr_intt','ovd_intt','computed_till_dt'];
-  displayedColumns: string[] = ['SL_NO','block_name','acc_name','activity','party_name', 'acc_num', 'list_dt','plus','curr_prn','ovd_prn','curr_intt','ovd_intt','pnl_intt','computed_till_dt'];
+  displayedColumns: string[] = ['party_name', 'acc_num', 'list_dt','curr_intt_rt','plus','curr_prn','ovd_prn','curr_intt','ovd_intt','pnl_intt','computed_till_dt'];
+  displayedColumns2: string[] = ['intt_rt','curr_prn','ovd_prn','tot_prn','curr_intt','ovd_intt','tot_intt'];
+ 
   dataSource = new MatTableDataSource()
+  dataSource2 = new MatTableDataSource()
   searchfilter= new MatTableDataSource()
 
   constructor(private svc: RestService, private formBuilder: FormBuilder,
     private modalService: BsModalService, private _domSanitizer: DomSanitizer,private exportAsService: ExportAsService, private cd: ChangeDetectorRef,
     private router: Router, private comser:CommonServiceService) { }
   ngOnInit(): void {
-    if(this.sys.ardbCD=='20'){
-      this.getOperationMaster();
-      this.fundTypeButton=false;
-    }
-    else{
-       this.fundTypeButton=true;
-    }
+    this.showMainTable=true;
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    this.dataSource2.sort = this.sort;
+    this.isLoading=true;
     this.fromdate = this.sys.CurrentDate;
     // this.todate = this.sys.CurrentDate;
     this.reportcriteria = this.formBuilder.group({
-      fromDate: [null, Validators.required]
+      fromDate: [null, Validators.required],
+      acc_type_cd: [null, Validators.required]
     });
-     
+    this.getAccountTypeList();
     this.onLoadScreen(this.content);
     var date = new Date();
     var n = date.toDateString();
     var time = date.toLocaleTimeString();
     this.today= n + " "+ time
-    this.isLoading=false
-
   }
  onLoadScreen(content) {
   
@@ -203,113 +196,27 @@ broFund:any[]=[]
     this.currentPage = page;
     this.cd.detectChanges();
   }
-  getOperationMaster(){
+  
+  getAccountTypeList() {
+
+    if (this.AcctTypes.length > 0) {
+      return;
+    }
+    this.AcctTypes = [];
+
     this.isLoading = true;
-    if (undefined !== DetaillistAllComponent.operations &&
-      null !== DetaillistAllComponent.operations &&
-      DetaillistAllComponent.operations.length > 0) {
-      this.isLoading = false;
-      this.AcctTypes = DetaillistAllComponent.operations.filter(e => e.module_type === 'LOAN')
-        .filter((thing, i, arr) => {
-          return arr.indexOf(arr.find(t => t.acc_type_cd === thing.acc_type_cd)) === i;
-        });
-      this.AcctTypes = this.AcctTypes.sort((a, b) => (a.acc_type_cd > b.acc_type_cd ? 1 : -1));
-      if(this.sys.ardbCD=='20'){
-        for(let e=0;e<this.AcctTypes.length;e++){
-          if(this.AcctTypes[e].acc_type_cd==20415 || this.AcctTypes[e].acc_type_cd==20416 || this.AcctTypes[e].acc_type_cd==20417 || this.AcctTypes[e].acc_type_cd==20419 || this.AcctTypes[e].acc_type_cd==20438 || this.AcctTypes[e].acc_type_cd==20441 || this.AcctTypes[e].acc_type_cd==20449 || this.AcctTypes[e].acc_type_cd==20466 || this.AcctTypes[e].acc_type_cd==20513 || this.AcctTypes[e].acc_type_cd==20453){
-          this.ownFund.push(this.AcctTypes[e])
-        }
-        else if(this.AcctTypes[e].acc_type_cd==20411 || this.AcctTypes[e].acc_type_cd==20412 || this.AcctTypes[e].acc_type_cd==20413 || this.AcctTypes[e].acc_type_cd==20420 || this.AcctTypes[e].acc_type_cd==20435 || this.AcctTypes[e].acc_type_cd==20456 || this.AcctTypes[e].acc_type_cd==20433 || this.AcctTypes[e].acc_type_cd==20463 || this.AcctTypes[e].acc_type_cd==20443){
-          this.broFund.push(this.AcctTypes[e])
-        }
+    this.svc.addUpdDel<any>('Mst/GetAccountTypeMaster', null).subscribe(
+      res => {
+
+        this.isLoading = false;
+        this.AcctTypes = res;
+        this.AcctTypes = this.AcctTypes.filter(c => c.dep_loan_flag === 'B');
+        this.AcctTypes = this.AcctTypes.sort((a, b) => (a.acc_type_cd > b.acc_type_cd) ? 1 : -1);
+      },
+      err => {
+        this.isLoading = false;
       }
-        debugger
-        console.log( this.ownFund,this.broFund);
-      }
-    } else {
-      this.svc.addUpdDel<mm_operation[]>('Mst/GetOperationDtls', null).subscribe(
-        res => {
-
-         if(res){
-          DetaillistAllComponent.operations = res;
-          this.isLoading = false;
-          this.AcctTypes = DetaillistAllComponent.operations.filter(e => e.module_type === 'LOAN')
-            .filter((thing, i, arr) => {
-              return arr.indexOf(arr.find(t => t.acc_type_cd === thing.acc_type_cd)) === i;
-            });
-          this.AcctTypes = this.AcctTypes.sort((a, b) => (a.acc_type_cd > b.acc_type_cd ? 1 : -1));
-          if(this.sys.ardbCD=='20'){
-            for(let e=0;e<this.AcctTypes.length;e++){
-              if(this.AcctTypes[e].acc_type_cd==20415 || this.AcctTypes[e].acc_type_cd==20416 || this.AcctTypes[e].acc_type_cd==20417 || this.AcctTypes[e].acc_type_cd==20419 || this.AcctTypes[e].acc_type_cd==20438 || this.AcctTypes[e].acc_type_cd==20441 || this.AcctTypes[e].acc_type_cd==20449 || this.AcctTypes[e].acc_type_cd==20466 || this.AcctTypes[e].acc_type_cd==20513 || this.AcctTypes[e].acc_type_cd==20453){
-              this.ownFund.push(this.AcctTypes[e])
-            }
-            else if(this.AcctTypes[e].acc_type_cd==20411 || this.AcctTypes[e].acc_type_cd==20412 || this.AcctTypes[e].acc_type_cd==20413 || this.AcctTypes[e].acc_type_cd==20420 || this.AcctTypes[e].acc_type_cd==20435 || this.AcctTypes[e].acc_type_cd==20456 || this.AcctTypes[e].acc_type_cd==20433 || this.AcctTypes[e].acc_type_cd==20463 || this.AcctTypes[e].acc_type_cd==20443){
-              this.broFund.push(this.AcctTypes[e])
-            }
-          }
-            debugger
-            console.log( this.ownFund,this.broFund);
-          }
-         }
-          
-        },
-        err => { this.isLoading = false; }
-      );
-    }
-  }
-  showOwn(){
-    this.reportData=[];
-    this.dataSource.data=[];
-    this.ovdInttSum=0;
-    this.currInttSum=0;
-    this.currPrnSum=0;
-    this.ovdPrnSum=0;
-    this.totOutStanding=0;
-    this.totPenal=0;
-    for(let p=0;p<this.reportData2.length;p++){
-    for(let i=0;i<this.ownFund.length;i++){
-      if(this.reportData2[p].acc_name==this.ownFund[i].acc_type_desc)
-      this.reportData.push(this.reportData2[p]);
-    }
-  }
-  this.dataSource.data=this.reportData;
-  this.reportData.forEach(e => {
-    this.ovdInttSum+=e.ovd_intt;
-    this.currInttSum+=e.curr_intt;
-    this.currPrnSum+=e.curr_prn;
-    this.ovdPrnSum+=e.ovd_prn;
-    this.totOutStanding+=e.ovd_prn+e.curr_prn;
-    this.totPenal+=e.penal_intt;
-
-  });
-    debugger
-  }
-  showBro(){
-    this.reportData=[];
-    this.dataSource.data=[];
-    this.ovdInttSum=0;
-    this.currInttSum=0;
-    this.currPrnSum=0;
-    this.ovdPrnSum=0;
-    this.totOutStanding=0;
-    this.totPenal=0;
-    for(let p=0;p<this.reportData2.length;p++){
-    for(let i=0;i<this.broFund.length;i++){
-      if(this.reportData2[p].acc_name==this.broFund[i].acc_type_desc)
-      this.reportData.push(this.reportData2[p]);
-    }
-  }
-  this.dataSource.data=this.reportData;
-  this.reportData.forEach(e => {
-    this.ovdInttSum+=e.ovd_intt;
-    this.currInttSum+=e.curr_intt;
-    this.currPrnSum+=e.curr_prn;
-    this.ovdPrnSum+=e.ovd_prn;
-    this.totOutStanding+=e.ovd_prn+e.curr_prn;
-    this.totPenal+=e.penal_intt;
-
-  });
-    debugger
+    );
   }
   public SubmitReport() {
     if (this.reportcriteria.invalid) {
@@ -328,38 +235,28 @@ broFund:any[]=[]
       this.ovdPrnSum=0
       this.totOutStanding=0
       this.totPenal=0
-      // this.loanNm=this.AcctTypes.filter(e=>e.acc_type_cd==this.reportcriteria.controls.acc_type_cd.value)[0].acc_type_desc
-      // console.log(this.loanNm)
+      this.loanNm=this.AcctTypes.filter(e=>e.acc_type_cd==this.reportcriteria.controls.acc_type_cd.value)[0].acc_type_desc
+      console.log(this.loanNm)
       this.fromdate = this.reportcriteria.controls.fromDate.value;
       var dt={
         "ardb_cd":this.sys.ardbCD,
         "brn_cd":this.sys.BranchCode,
+        "acc_cd":this.reportcriteria.controls.acc_type_cd.value,
         "adt_dt":this.fromdate.toISOString()
       }
-      this.svc.addUpdDel('Loan/PopulateLoanDetailedListAll',dt).subscribe(data=>{console.log(data)
+      this.svc.addUpdDel('Borrowing/PopulateBorrowingDetailedList',dt).subscribe(data=>{console.log(data)
         this.reportData=data
-        this.reportData2=data
-        this.itemsPerPage=this.reportData.length % 50 <=0 ? this.reportData.length: this.reportData.length % 50
         this.isLoading=false
-        // if(this.reportData.length<50){
-        //   this.pagedItems=this.reportData
-        // }
         if(this.reportData.length==0){
           this.comser.SnackBar_Nodata()
         } 
         this.dataSource.data=this.reportData
-        // for(let i=0;i<50;i++)
-        // this.dataSource.data.push(this.reportData)
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         this.resultLength=this.reportData.length
-        // this.pageChange=document.getElementById('chngPage');
-        // this.pageChange.click()
-        // this.setPage(2);
-        // this.setPage(1)
-        // this.modalRef.hide();
-        this.lastAccNum=this.reportData[this.reportData.length-1].acc_num
+
         this.reportData.forEach(e => {
+          
           this.ovdInttSum+=e.ovd_intt
           this.currInttSum+=e.curr_intt
           this.currPrnSum+=e.curr_prn
@@ -375,20 +272,63 @@ broFund:any[]=[]
           this.dummytotOutStanding+=e.ovd_prn+e.curr_prn
           this.dummytotPenal+=e.penal_intt
         });
+        
       },err => {
         this.isLoading = false;
         this.comser.SnackBar_Error(); 
        })
+       this.svc.addUpdDel('Borrowing/PopulateBorrowingDLRatewise',dt).subscribe(data=>{console.log(data)
+        this.reportData2=data
+        if(this.reportData2.length==0){
+          this.comser.SnackBar_Nodata()
+        } 
+        this.dataSource2.data=this.reportData2
+        this.dataSource2.sort = this.sort;
+        
+        
+      },err => {
+        this.comser.SnackBar_Error(); 
+       })
+       
+      
+      
     }
   }
-  // public oniframeLoad(): void {
-  //   this.counter++;
-  //   this.isLoading = true;
-  //   if(this.counter==2){
-  //     this.isLoading=false;
-  //     this.counter=0;
-  //   this.modalRef.hide();
-  // }}
+  callDtlList(){
+    this.showMainTable=true;
+      this.showSubTable=false;
+  }
+  callSunopsis(){
+      this.showMainTable=false;
+      this.showSubTable=true;
+      // for(let i=0;i<this.inttRTArray.length;i++){
+      //   this.reportData.forEach(e => {
+      //     if(e.curr_intt_rate==this.inttRTArray[i].curr_intt_rate){
+
+      //     }
+      //   })
+      // }
+      // this.reportData.forEach(e => {
+      //   this.inttRTArray.push(e.curr_intt_rate)
+      //   this.ovdInttSum+=e.ovd_intt
+      //   this.currInttSum+=e.curr_intt
+      //   this.currPrnSum+=e.curr_prn
+      //   this.ovdPrnSum+=e.ovd_prn
+      //   this.totOutStanding+=e.ovd_prn+e.curr_prn
+      //   this.totPenal+=e.penal_intt
+      // });
+  }
+  public oniframeLoad(): void {
+    this.counter++;
+    this.isLoading = true;
+    // debugger
+    if(this.counter==2){
+      this.isLoading=false;
+      this.counter=0;
+    }
+    // this.isLoading=false;
+    this.modalRef.hide();
+  }
   public closeAlert() {
     this.showAlert = false;
   }
@@ -405,11 +345,11 @@ broFund:any[]=[]
   }
   downloadexcel(){
     this.exportAsConfig = {
-      type: 'xlsx',
+      type: 'csv',
       // elementId: 'hiddenTab', 
-      elementIdOrContent:'mattable'
+      elementIdOrContent:'hiddenTab'
     }
-    this.exportAsService.save(this.exportAsConfig, 'Detail_List').subscribe(() => {
+    this.exportAsService.save(this.exportAsConfig, 'cashcumtrial').subscribe(() => {
       // save started
       console.log("hello")
     });
@@ -445,11 +385,8 @@ broFund:any[]=[]
       case "Block": 
       this.filteredArray=this.reportData.filter(e=>e.block_name?.toLowerCase().includes(filterValue.toLowerCase())==true)
         break;
-        case "Acc Type": 
-    this.filteredArray=this.reportData.filter(e=>e.acc_name?.toLowerCase().includes(filterValue.toLowerCase())==true)
-      break;
       case "Activity": 
-    this.filteredArray=this.reportData.filter(e=>e.activity_name?.toLowerCase().includes(filterValue.toLowerCase())==true)
+    this.filteredArray=this.reportData.filter(e=>e.acc_name?.toLowerCase().includes(filterValue.toLowerCase())==true)
       break;
       case "Interest Upto": 
       this.filteredArray=this.reportData.filter(e=>e.computed_till_dt?.toString().includes(filterValue)==true)
@@ -490,14 +427,9 @@ broFund:any[]=[]
       //  console.log(this.blockNames)
      
         break;
-      case "Acc Type": 
-      for(let i=0;i<this.reportData.length;i++){
-        this.firstGroup[i]=this.reportData[i].acc_name
-     }
-     break;
       case "Activity": 
       for(let i=0;i<this.reportData.length;i++){
-        this.firstGroup[i]=this.reportData[i].activity_name
+        this.firstGroup[i]=this.reportData[i].acc_name
      }
     // this.filteredArray=this.reportData.filter(e=>e.activity_cd?.toLowerCase().includes(filterValue.toLowerCase())==true)
       break;
@@ -540,11 +472,8 @@ broFund:any[]=[]
       case "Block": 
       this.filteredArray=this.reportData.filter(e=>e.block_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
         break;
-      case "Acc Type": 
-    this.filteredArray=this.reportData.filter(e=>e.acc_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
-      break;
       case "Activity": 
-    this.filteredArray=this.reportData.filter(e=>e.activity_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
+    this.filteredArray=this.reportData.filter(e=>e.acc_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
       break;
       case "Party Name":
     this.filteredArray=this.reportData.filter(e=>e.party_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
@@ -576,15 +505,10 @@ broFund:any[]=[]
       //  console.log(this.blockNames)
      
         break;
-      case "Acc Type": 
+      case "Activity": 
       for(let i=0;i<this.filteredArray1.length;i++){
         this.secondGroup[i]=this.filteredArray1[i].acc_name
      }
-     break;
-     case "Activity": 
-     for(let i=0;i<this.filteredArray1.length;i++){
-       this.secondGroup[i]=this.filteredArray1[i].activity_name
-    }
     // this.filteredArray=this.reportData.filter(e=>e.activity_cd?.toLowerCase().includes(filterValue.toLowerCase())==true)
       break;
       case "Party Name":
@@ -626,11 +550,8 @@ debugger
       case "Block": 
       this.filteredArray=this.filteredArray1.filter(e=>e.block_name?.toLowerCase().includes(this.bName1.toLowerCase())==true)
         break;
-        case "Acc Type": 
-    this.filteredArray=this.filteredArray1.filter(e=>e.acc_name?.toLowerCase().includes(this.bName1.toLowerCase())==true)
-      break;
       case "Activity": 
-    this.filteredArray=this.filteredArray1.filter(e=>e.activity_name?.toLowerCase().includes(this.bName1.toLowerCase())==true)
+    this.filteredArray=this.filteredArray1.filter(e=>e.acc_name?.toLowerCase().includes(this.bName1.toLowerCase())==true)
       break;
       case "Party Name":
     this.filteredArray=this.filteredArray1.filter(e=>e.party_name?.toLowerCase().includes(this.bName1.toLowerCase())==true)
@@ -656,9 +577,6 @@ debugger
     this.filteredArray=this.dataSource.data
     switch(this.selectedValue){
       case "Activity": 
-    this.filteredArray=this.filteredArray.filter(e=>e.activity_name?.toLowerCase().includes(filterValue.toLowerCase())==true)
-      break;
-      case "Acc Type": 
     this.filteredArray=this.filteredArray.filter(e=>e.acc_name?.toLowerCase().includes(filterValue.toLowerCase())==true)
       break;
       case "Interest Upto": 

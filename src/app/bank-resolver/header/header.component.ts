@@ -1,6 +1,6 @@
 import { AfterViewInit, Component,ViewChild , HostListener, OnDestroy, OnInit, TemplateRef} from '@angular/core';
 import { AuthenticationService, InAppMessageService, RestService } from 'src/app/_service';
-import { BankConfigMst, submenu, SystemValues, LOGIN_MASTER, MenuConfig } from '../Models';
+import { BankConfigMst, submenu, SystemValues, LOGIN_MASTER, MenuConfig, ShowMessage, MessageType } from '../Models';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -8,6 +8,7 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { sd_day_operation } from '../Models/sd_day_operation';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { HttpClient } from '@angular/common/http';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -16,7 +17,7 @@ import { HttpClient } from '@angular/common/http';
 export class HeaderComponent implements OnInit,OnDestroy,AfterViewInit {
   currentRoute: any;
   objectKeys = Object.keys;
-  constructor(private rstSvc: RestService, private router: Router, private svc:RestService, private modalService:BsModalService,
+  constructor(private rstSvc: RestService,private formBuilder: FormBuilder, private router: Router, private svc:RestService, private modalService:BsModalService,
               private msg: InAppMessageService,private auth:AuthenticationService,private http: HttpClient) {
                 this.showScreenTitle=false
                 this.selectedScreenToShow=''
@@ -36,6 +37,7 @@ export class HeaderComponent implements OnInit,OnDestroy,AfterViewInit {
   @ViewChild('third') public third;
   @ViewChild('foth') public foth;
   @ViewChild('template2', { static: true }) template2: TemplateRef<any>;
+  @ViewChild('PassValidity', { static: true }) PassValidity: TemplateRef<any>;
   @ViewChild(MatMenuTrigger) menuTrigger: MatMenuTrigger;
   @ViewChild(MatMenu) menu: MatMenu;
   @ViewChild('menuItem') menuItem: MatMenuItem;
@@ -50,7 +52,7 @@ export class HeaderComponent implements OnInit,OnDestroy,AfterViewInit {
   userPermission:any[]=[];
   brnCD=localStorage.getItem('__brnCd');
   bankFullName: string;
-  // childMenu: mainmenu;
+  showMsg: ShowMessage;
   subMenu: submenu;
   showMenu = false;
   showChildMenu = false;
@@ -61,7 +63,7 @@ export class HeaderComponent implements OnInit,OnDestroy,AfterViewInit {
   selectedScreenToShow: string;
   sys = new SystemValues();
   show = false;
-  // menuConfigs: any;
+  PassCH: FormGroup;
   currentMenu: MenuConfig;
   inside = false;
   menuConfigs:any=[];
@@ -85,7 +87,23 @@ matmenuTrg:any=[];
   AllItem:any[]=[]
   allMenu:any;
   roleCD:any;
+  expDay:string='10/11/2023';
+  withinExp:Number;
+  passchange:boolean=false;
+  show_eye: Boolean = false;
+  show_button: Boolean = false;
+  combinationCheck:Boolean = false;
+  equalityCheck:Boolean = false;
+  passSave:boolean=false;
+  Npassword:any;
+  Cpassword:any;
   ngOnInit(): void {
+    this.PassCH = this.formBuilder.group({
+      Npassword:['', Validators.required],
+      Cpassword: ['', Validators.required]
+    })
+    this.currUser=localStorage.getItem('__userId');
+    this.CheckPasswordValidity();
   // this.getUser()
   this.getLogdUser()
    //console.log(localStorage.getItem('__currentDate')==localStorage.getItem('__prevDate'))
@@ -118,7 +136,7 @@ matmenuTrg:any=[];
           this.allMenu=res
           this.AllItem=this.allMenu.menu_module;
           this.menuItems=[]
-          const customOrder = ['UCIC', 'Finance', 'Deposit', 'Loans', 'System', 'Transfer', 'Investment', 'Locker'];
+          const customOrder = ['UCIC', 'Finance', 'Deposit', 'Loans', 'System', 'Transfer', 'Investment', 'Locker','Borrowing'];
           this.menuItems = this.AllItem.sort((a, b) => {
             const menuNameA = a.menu_name;
             const menuNameB = b.menu_name;
@@ -185,15 +203,43 @@ matmenuTrg:any=[];
     localStorage.removeItem('__userId');
     localStorage.removeItem('ardb_name');
     localStorage.removeItem('__ardb_cd');
+    localStorage.removeItem('W_attempt');
 
     this.msg.sendisLoggedInShowHeader(false);
     this.router.navigate([this.bankName + '/login']);
   }
   openModal(template: TemplateRef<any>) {
-    this.currUser=localStorage.getItem('__userId');
     this.modalRef = this.modalService.show(template, {class: 'modal-sm modal-dialog-centered'});
   }
-
+  openModalPassCheck(PassValidity: TemplateRef<any>) {
+    // this.expDay=localStorage.getItem('PassExpDay');
+    this.modalRef = this.modalService.show(PassValidity, {class: 'modal-lg modal-dialog-centered'});
+  }
+  showPassword() {
+    this.show_button = !this.show_button;
+    this.show_eye = !this.show_eye;
+  }
+  CheckPasswordValidity(){
+    const curDate=new Date();
+    const expDate = new Date(this.expDay);
+    const timeDifference = expDate.getTime() - curDate.getTime();
+    const differenceInDays = Math.floor(timeDifference / (1000 * 3600 * 24));
+    console.log(differenceInDays);
+    this.withinExp=differenceInDays+1;
+    if(differenceInDays>3){
+      return
+    }
+    else{
+      return
+      // this.openModalPassCheck(this.PassValidity)
+    } 
+  }
+  showChangePass(){
+    this.passchange=true;
+  }
+  saveNewPass(){
+    alert("save")
+  }
   private updateUsrStatus(): void {
     // alert("hii")
     const usr = new LOGIN_MASTER();
@@ -348,4 +394,73 @@ openNewTab() {
   const urlToOpen = `http://36.255.3.143/ardb.SynergicBanking/${this.bankName}/FR_ProfitLoss`;
   window.open(urlToOpen);
 }
+    CpassCheck(i:any){
+      const ConfPassword = i.target.value;
+      this.PassCH.controls.Npassword.value;
+      if( this.PassCH.controls.Npassword.value!=ConfPassword){
+        this.equalityCheck = true;
+      }else{
+        this.equalityCheck = false;
+      }
+      debugger
+    }
+    passCheck(i:any){
+      const password = i.target.value;
+      const hasMinimumLength: boolean = password.length >= 8;
+      const hasUppercase: boolean = /[A-Z]/.test(password);
+      const hasNumber: boolean = /\d/.test(password);
+      if(password.length<1){
+        this.combinationCheck = false;
+        this.equalityCheck = false;
+
+      }
+      else{
+        if (hasMinimumLength && hasUppercase && hasNumber) {
+          this.Npassword=password;
+          this.combinationCheck = false;
+          this.equalityCheck = false;
+          this.passSave=true;// Clear error message if conditions are met
+      } else {
+        this.combinationCheck = true;
+        // this.equalityCheck = true;
+          this.passSave = false;
+      }
+     }
+    }
+    update_user_dtl(){
+      this.isLoading=true;
+      this.showMsg =null;
+      let login = new LOGIN_MASTER();
+      // login.user_id = this.u.userid.value;
+      // login.brn_cd = this.u.branch.value;
+      // login.user_first_name=this.u.fname.value;
+      // login.user_middle_name=this.u.mname.value;
+      // login.user_last_name=this.u.lname.value;
+      // login.user_type=this.u.utype.value;
+      // login.password=this.defaultPass;
+      // login.login_status=this.u.logsts.value;
+      // login.ardb_cd=this.sys.ardbCD;
+      login.modified_by=this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+      //login.login_status='N';
+      ;
+      // this.checkPassword();
+      this.svc.addUpdDel('Sys/UpdateUserMaster', login).subscribe(
+        res => {
+          ;
+          this.isLoading=false;
+          this.HandleMessage(true, MessageType.Sucess,'Sucessfully Updated the User Details' );
+          // this.initialize();
+          
+        },
+        err => {this.isLoading=false; ; this.HandleMessage(true, MessageType.Error,'Updation Failed!!' );
+        
+      }
+      )
+    }
+    private HandleMessage(show: boolean, type: MessageType = null, message: string = null) {
+      this.showMsg = new ShowMessage();
+      this.showMsg.Show = show;
+      this.showMsg.Type = type;
+      this.showMsg.Message = message;
+    }
 }

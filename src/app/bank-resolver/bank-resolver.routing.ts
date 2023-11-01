@@ -168,6 +168,13 @@ import { LockerComponent } from './locker/locker.component';
 import { DetailListSbcaConstWiseComponent } from './deposit/report/detail-list-sbca-const-wise/detail-list-sbca-const-wise.component';
 import { FortnightlyReturnComponent } from './loan/report/fortnightly-return/fortnightly-return.component';
 import { ConsoFortnightlyReturnComponent } from './loan/report/conso-fortnightly-return/conso-fortnightly-return.component';
+import { BorrowingComponent } from './borrowing/borrowing.component';
+import { OpenBorrowingComponent } from './borrowing/open-borrowing/open-borrowing.component';
+import { TransBorrowingComponent } from './borrowing/trans-borrowing/trans-borrowing.component';
+import { ApproveBorrowingComponent } from './borrowing/approve-borrowing/approve-borrowing.component';
+import { ViewBorrowingComponent } from './borrowing/view-borrowing/view-borrowing.component';
+import { BorroDetailListComponent } from './borrowing/report/borro-detail-list/borro-detail-list.component';
+import { DcbrVillWiseComponent } from './loan/report/dcbr-vill-wise/dcbr-vill-wise.component';
 const routes: Routes = [
   { path: 'Admin', component: AdminPanelComponent },
   { path: 'admin', component: AdminPanelComponent },
@@ -265,6 +272,7 @@ const routes: Routes = [
       { path: 'LR_AMLst', component: ActwiseLstComponent, canActivate: [AuthGuard] },
       { path: 'LR_BMLst', component: BlockwiseLstComponent, canActivate: [AuthGuard] },
       { path: 'LR_DCBR_P', component: DcbrPrintComponent, canActivate: [AuthGuard] },
+      { path: 'LR_DCBR_VILL_WISE', component: DcbrVillWiseComponent, canActivate: [AuthGuard] },
       { path: 'LR_RELst', component: RecovListComponent, canActivate: [AuthGuard] },
       { path: 'LR_DisReg', component: LoanDisbursementRegisterComponent, canActivate: [AuthGuard] },
       { path: 'LR_DisNorm', component: LoanDisburseNormalComponent, canActivate: [AuthGuard] },
@@ -386,6 +394,31 @@ const routes: Routes = [
           {
             path: 'lock_sb_renew',component: LockerShouldbeRenewComponent,
             loadChildren: () => import('./locker/locker.module').then(m => m.LockerModule)
+          }
+        ]
+      },
+      {
+        path: 'borrowing', component: BorrowingComponent,
+        children: [
+          {
+            path: 'borr_open',component: OpenBorrowingComponent,
+            loadChildren: () => import('./borrowing/borrowing.module').then(m => m.BorrowingModule)
+          },
+          {
+            path: 'borr_trans',component: TransBorrowingComponent,
+            loadChildren: () => import('./borrowing/borrowing.module').then(m => m.BorrowingModule)
+          },
+          {
+            path: 'borr_appr',component: ApproveBorrowingComponent,
+            loadChildren: () => import('./borrowing/borrowing.module').then(m => m.BorrowingModule)
+          },
+          {
+            path: 'borr_view',component: ViewBorrowingComponent,
+            loadChildren: () => import('./borrowing/borrowing.module').then(m => m.BorrowingModule)
+          },
+          {
+            path: 'report/borr_dtl_list',component: BorroDetailListComponent,
+            loadChildren: () => import('./borrowing/borrowing.module').then(m => m.BorrowingModule)
           }
         ]
       },

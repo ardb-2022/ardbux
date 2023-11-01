@@ -95,9 +95,7 @@ button[disabled]{
   color: #fffefe;
 }
 .btn{
-  font-weight: 500;
   color: white;
-  font-size: 16px;
 }
 span.mat-menu-item:hover:not([disabled]), .mat-menu-item.cdk-program-focused:not([disabled]), .mat-menu-item.cdk-keyboard-focused:not([disabled]), .mat-menu-item-highlighted:not([disabled]) {
   background: rgb(148 229 121 / 60%);

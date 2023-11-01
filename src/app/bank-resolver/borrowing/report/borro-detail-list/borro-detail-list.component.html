@@ -27,7 +27,19 @@
           </div>
           </div>
         </div>
-        
+        <div >
+          <!-- <small for="acct_num" >Account Number</small>
+          <input type="text"class="form-control form-control-sm "
+          formControlName="acct_num" id="acct_num" placeholder="Loan Type"
+           name="x-field-1" autocomplete="new-field-1"> -->
+           <small for="acc_type_cd">Borrowing Type</small>
+           <select id="acc_type_cd" class="form-control form-control-sm" formControlName="acc_type_cd">
+             <option *ngIf="AcctTypes" disabled>Choose</option>
+             <option  (change)="takeLoanVal(acctType)" *ngFor="let acctType of AcctTypes" [value]="acctType.acc_type_cd">
+               {{acctType.acc_type_cd +' ' + acctType.acc_type_desc}}
+             </option>
+           </select>
+        </div>
       </form>
     </div>
     <div class="modal-footer">
@@ -47,169 +59,116 @@
      printSectionId="mattable" 
      ngxPrint>Print</button>
    <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
- <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadexcel()">Export as EXCEL</button>
+   <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" [hidden]="showSubTable" (click)="callSunopsis()">Synopsis</button>
+   <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" [hidden]="showMainTable" (click)="callDtlList()">Back to Detail List</button>
     
     </div>
     </div>
   <!-- {{ReportUrl}} -->
   
   <div class="col-xs-12 col-sm-12 shadow-lg mb-4 bg-white p-3 mkScroll">
-    <!-- <div class="justify-content-center" style="text-align:center" *ngIf="reportData">
-      <h6>{{ardbName}} {{branchName}}</h6>
-  
-      <h6>Run Date & Time : {{today}} </h6> <br>
-      <h6> <u> Detail List as on  {{reportcriteria.controls.fromDate.value?.toDateString() | date: 'dd/MM/yyyy'}}</u></h6>
-      <p>
-        <b>
-          Loan Type : {{loanNm}}</b>
-      </p>
-  
-   </div> -->
-   <br>
-   <mat-accordion>
-    <mat-expansion-panel hideToggle>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          General Search
-        </mat-panel-title>
-        <mat-panel-description>
-          Click here to search any field
-        </mat-panel-description>
-      </mat-expansion-panel-header>
-      <div class="row">
-        <div class="col-12">
-          <mat-form-field appearance="outline" style="width:100%">
-            <mat-label>Search Demand List</mat-label>
-            <input matInput id="myInput" (keyup)="applyFilter0($event)" placeholder="Ex. abc / 123">
-          </mat-form-field> &nbsp;
-         </div>
-      </div>
-    </mat-expansion-panel> <br>
-    <mat-expansion-panel hideToggle>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Field-specific Search
-        </mat-panel-title>
-        <mat-panel-description>
-          Click here to search field-wise values
-        </mat-panel-description>
-      </mat-expansion-panel-header> 
-      <div class="row">
-        <div class="col-3">
-          <mat-form-field appearance="outline" style="width:100%">
-            <mat-label>Search {{selectedValue1}} </mat-label>
-            <mat-select name="fieldName" [(ngModel)]="selectedValue1" (selectionChange)="showFirstGroup()">
-              <mat-option *ngFor="let selectedItem1 of selectItems1" [value]="selectedItem1.value">
-                {{selectedItem1.name}}
-              </mat-option>
-             
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="col-3">
-         <mat-form-field appearance="outline" style="width:100%">
-           <mat-label>Search {{selectedValue1}} {{bName}}</mat-label>
-           <!-- <input matInput id="myInput2" (keyup)="applyFilter($event)" placeholder="Block Name"> -->
-           <!-- <mat-select name="fieldName" [(ngModel)]="selectedValue1" (selectionChange)="showFirstGroup()"> -->
-            <mat-select name="fieldName" [(ngModel)]="bName"  (selectionChange)="searchFirstGroup()">
-            <mat-option *ngFor="let first of firstGroup" [value]="first">
-              {{first}}
-            </mat-option>
-           
-          </mat-select>
-         </mat-form-field> &nbsp;
-        </div>
-        <div class="col-3">
-          <mat-form-field appearance="outline" style="width:100%">
-            <mat-label>Search {{selectedValue}} under {{bName}} </mat-label>
-            <mat-select name="fieldName" [disabled]="!bName" [(ngModel)]="selectedValue" (selectionChange)="showSecondGroup()">
-              <mat-option *ngFor="let selectedItem of selectItems" [value]="selectedItem.value">
-                {{selectedItem.name}}
-              </mat-option>
-             
-            </mat-select>
-          </mat-form-field>
-        </div>
-      
-        <div class="col-3">
-         <mat-form-field appearance="outline" style="width:100%">
-           <mat-label>Search {{bName1}} in {{selectedValue}} </mat-label>
-           <!-- <input matInput id="myInput1" (keyup)="applyFilter1($event)" placeholder="Activity"> -->
-           <mat-select name="fieldName" [disabled]="!selectedValue" [(ngModel)]="bName1" (selectionChange)="searchSecondGroup()">
-            <mat-option *ngFor="let second of secondGroup" [value]="second">
-              {{second}}
-            </mat-option>
-           
-          </mat-select>
-         </mat-form-field> &nbsp;
-        </div>
-        
-        
-       </div>
-       <div class="row">
-        <div class="col-4"></div>
-        <div class="col-4"></div>
-        <div class="col-4 " style="text-align:right">
-          <button mat-raised-button (click)="resetList()" class="btn btn-primary mt-2" > Reset</button>
     
-         </div>
+   <br>
+  
+    <div class="mat-elevation-z8" id="mattable2" *ngIf="showSubTable" >
+      <table mat-table cdkDropListGroup [dataSource]="dataSource2" class="mat-elevation-z8" matSort>
+        <ng-container matColumnDef="mainHeader">
+          <th mat-header-cell colspan="11" *matHeaderCellDef>
+            <div class="justify-content-center" style="text-align:center" *ngIf="reportData">
+              <h4>{{ardbName}} ({{branchName}})</h4>
+          
+              <h4>Run Date & Time : {{today}} </h4> 
+              <h4> <u>Borrowing Detail List Synopsis as on  {{reportcriteria.controls.fromDate.value?.toDateString() | date: 'dd/MM/yyyy'}}</u></h4>
+              <p>
+                <b>
+                  Borrowing Type : {{loanNm}}</b>
+              </p>
+          
+           </div>
+         </th>
+        </ng-container>
+        <ng-container matColumnDef="intt_rt">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header  style="padding-left: 5%!important;">Curr Intt Rate</th>
+           <td mat-cell *matCellDef="let element" style="text-align:center!important;"> {{element.curr_intt_rate}} </td>
+        </ng-container>
+        <ng-container matColumnDef="curr_prn">
+   
+          <th mat-header-cell *matHeaderCellDef mat-sort-header style="padding-left: 5%!important;"> Current Principal
+          </th>
+        
+          <td mat-cell *matCellDef="let element" style="text-align:right"> {{element.curr_prn| currency:'INR'}} </td>
+        </ng-container>
+        <ng-container matColumnDef="ovd_prn">
          
-       </div>
-    </mat-expansion-panel>
-    </mat-accordion> <br>
-  <div class="justify-content-center" [hidden]="fundTypeButton">
-    <button mat-raised-button (click)="showOwn()" class="btn btn-primary mt-2" > Show Own-Fund</button>&nbsp;&nbsp;&nbsp;
-    <button mat-raised-button (click)="showBro()" class="btn btn-primary mt-2" > show Bro-Fund</button>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header style="padding-left: 5%!important;"> Overdue Principal
+          </th>
+        
+          <td mat-cell *matCellDef="let element" style="text-align:right"> {{element.ovd_prn | currency:'INR'}} </td>
+        </ng-container>
+        
+        <ng-container matColumnDef="tot_prn">
+         
+          <th mat-header-cell *matHeaderCellDef mat-sort-header style="padding-left: 5%!important;"> Total Principal
+          </th>
+        
+          <td mat-cell *matCellDef="let element" style="text-align:right"> {{element.ovd_prn+element.curr_prn | currency:'INR'}} </td>
+        </ng-container>
+        <ng-container matColumnDef="curr_intt">
+         
+          <th mat-header-cell *matHeaderCellDef mat-sort-header style="padding-left: 5%!important;"> Current Interest
+          </th>
+        
+          <td mat-cell *matCellDef="let element" style="text-align:right"> {{element.curr_intt| currency:'INR'}} </td>
+        </ng-container>
+        <ng-container matColumnDef="ovd_intt">
+         
+          <th mat-header-cell *matHeaderCellDef mat-sort-header style="padding-left: 5%!important;"> Overdue Interest
+          </th>
+        
+          <td mat-cell *matCellDef="let element" style="text-align:right"> {{element.ovd_intt| currency:'INR'}} </td>
+        </ng-container>
+        <ng-container matColumnDef="tot_intt">
+         
+          <th mat-header-cell *matHeaderCellDef mat-sort-header style="padding-left: 5%!important;"> Total Interest
+          </th>
+        
+          <td mat-cell *matCellDef="let element" style="text-align:right"> {{element.ovd_intt+element.curr_intt| currency:'INR'}} </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="['mainHeader']"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
+        <tr mat-row *matRowDef="let element; columns: displayedColumns2;"></tr>
+      </table>
+      <footer>
+        <small>
+          This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions Pvt.Ltd. Kolkata
+         </small>
+        </footer>
+    </div>
 
-  </div>
-  <div class="mat-elevation-z8" id="mattable">
-  <table mat-table cdkDropListGroup [dataSource]="dataSource" class="mat-elevation-z8" matSort >
-  <!-- Position Column -->
+
+
+  <div class="mat-elevation-z8" id="mattable" *ngIf="showMainTable">
+  <table mat-table cdkDropListGroup [dataSource]="dataSource" class="mat-elevation-z8" matSort>
   <ng-container matColumnDef="mainHeader">
-    <th mat-header-cell colspan="20" *matHeaderCellDef>
+    <th mat-header-cell colspan="11" *matHeaderCellDef>
       <div class="justify-content-center" style="text-align:center" *ngIf="reportData">
         <h4>{{ardbName}} ({{branchName}})</h4>
     
         <h4>Run Date & Time : {{today}} </h4> <br>
-        <h4> <u> Detail List as on  {{reportcriteria.controls.fromDate.value?.toDateString() | date: 'dd/MM/yyyy'}}</u></h4>
-        
+        <h4> <u>Borrowing Detail List as on  {{reportcriteria.controls.fromDate.value?.toDateString() | date: 'dd/MM/yyyy'}}</u></h4>
+        <p>
+          <b>
+            Borrowing Type : {{loanNm}}</b>
+        </p>
     
      </div>
    </th>
   </ng-container>
-  <ng-container matColumnDef="SL_NO">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align:center!important;max-width:15px;">Sl No</th>
-   <td mat-cell *matCellDef="let element let i=index"> {{i+1}} </td>
-  </ng-container>
-  <ng-container matColumnDef="block_name">
-  
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Block
-    
-    </th>
-   
-    
-    <td mat-cell *matCellDef="let element"> {{element.block_name}} </td>
-  </ng-container>
-  <ng-container matColumnDef="acc_name" style="width: 100%;">
-  
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Loan Type
-    
-    </th>
-   <td mat-cell *matCellDef="let element"> {{element.acc_name}} </td>
-  </ng-container>
-  <ng-container matColumnDef="activity">
-  
-    <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align:center!important;max-width:40px;">Activity
-    
-    </th>
-   
-    
-    <td mat-cell *matCellDef="let element"> {{element.activity_name}} </td>
-  </ng-container>
+ 
   
   <ng-container matColumnDef="party_name">
   
-    <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align:center!important;max-width:45px;">Party Name
+    <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align:center!important;">Bank Name
     
     </th>
    
@@ -220,7 +179,7 @@
   <!-- Name Column -->
   <ng-container matColumnDef="acc_num">
   
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Loan ID
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Borrowing ID
     </th>
   
     <td mat-cell *matCellDef="let element" style="text-align:center"> {{element.acc_num}} </td>
@@ -254,23 +213,30 @@
   
     <td mat-cell *matCellDef="let element" style="text-align:center"> {{element.ovd_intt_rate | number : '1.2-2'}}% </td>
   </ng-container> -->
+  <ng-container matColumnDef="curr_intt_rt">
+   
+    <th mat-header-cell *matHeaderCellDef mat-sort-header >Curr Interest
+    </th>
+  
+    <td mat-cell *matCellDef="let element" style="text-align:center"> {{element.curr_intt_rate}}% </td>
+  </ng-container>
   <ng-container matColumnDef="plus">
    
-    <th mat-header-cell *matHeaderCellDef mat-sort-header >OutStanding
+    <th mat-header-cell *matHeaderCellDef mat-sort-header style="padding-left: 2%!important;">OutStanding
     </th>
   
     <td mat-cell *matCellDef="let element" style="text-align:right"> {{element.ovd_prn+element.curr_prn| currency:'INR'}} </td>
   </ng-container>
   <ng-container matColumnDef="curr_prn">
    
-    <th mat-header-cell *matHeaderCellDef mat-sort-header > Curr Prn
+    <th mat-header-cell *matHeaderCellDef mat-sort-header style="padding-left: 2%!important;"> Curr Prn
     </th>
   
     <td mat-cell *matCellDef="let element" style="text-align:right"> {{element.curr_prn| currency:'INR'}} </td>
   </ng-container>
   <ng-container matColumnDef="ovd_prn">
    
-    <th mat-header-cell *matHeaderCellDef mat-sort-header > Ovd Prn
+    <th mat-header-cell *matHeaderCellDef mat-sort-header style="padding-left: 2%!important;"> Ovd Prn
     </th>
   
     <td mat-cell *matCellDef="let element" style="text-align:right"> {{element.ovd_prn | currency:'INR'}} </td>
@@ -279,21 +245,21 @@
   
   <ng-container matColumnDef="curr_intt">
    
-    <th mat-header-cell *matHeaderCellDef mat-sort-header > Curr Intt
+    <th mat-header-cell *matHeaderCellDef mat-sort-header style="padding-left: 2%!important;"> Curr Intt
     </th>
   
     <td mat-cell *matCellDef="let element" style="text-align:right"> {{element.curr_intt| currency:'INR'}} </td>
   </ng-container>
   <ng-container matColumnDef="ovd_intt">
    
-    <th mat-header-cell *matHeaderCellDef mat-sort-header > Ovd Intt
+    <th mat-header-cell *matHeaderCellDef mat-sort-header style="padding-left: 2%!important;"> Ovd Intt
     </th>
   
     <td mat-cell *matCellDef="let element" style="text-align:right"> {{element.ovd_intt| currency:'INR'}} </td>
   </ng-container>
   <ng-container matColumnDef="pnl_intt">
    
-    <th mat-header-cell *matHeaderCellDef mat-sort-header > Penal Intt
+    <th mat-header-cell *matHeaderCellDef mat-sort-header style="padding-left: 2%!important;"> Penal Intt
     </th>
   
     <td mat-cell *matCellDef="let element" style="text-align:right"> {{element.penal_intt| currency:'INR'}} </td>
@@ -313,7 +279,7 @@
     <!-- <td mat-footer-cell *matFooterCellDef >{{crSum | number : '1.2-2'}}</td> -->
   
   <ng-container matColumnDef="disclaimer1">
-    <td mat-footer-cell *matFooterCellDef colspan="7" 
+    <td mat-footer-cell *matFooterCellDef colspan="4" 
     style="font-size: small;
       text-align: center;
       font-weight: 450;">
@@ -569,7 +535,6 @@
    printSectionId="mattable" 
    ngxPrint>Print</button>
    <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
- <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadexcel()">Export as EXCEL</button>
   
   </div>
   </div>

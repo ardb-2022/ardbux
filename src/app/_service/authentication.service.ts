@@ -8,9 +8,16 @@ import { SystemValues } from '../bank-resolver/Models';
 export class AuthenticationService implements CanActivate {
   constructor(private router: Router) { }
   report:boolean;
+  isAuthenticated:boolean = false;
+
+  isLoggedIn(): boolean {
+    return this.isAuthenticated;
+  }
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     const sys = new SystemValues();
-    if (sys.IsUsrLoggedIn ) { return true; }
+    if (sys.IsUsrLoggedIn ) { 
+      this.isAuthenticated = true;
+      return true;  }
     else if(this.report){
       debugger
       return true;}
@@ -20,6 +27,7 @@ export class AuthenticationService implements CanActivate {
     localStorage.clear();
     
     localStorage.setItem('__bName', bankName);
+    this.isAuthenticated = false;
     // this.router.navigate([bankName + '/login']);
     return false;
    }

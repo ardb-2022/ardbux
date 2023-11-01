@@ -206,6 +206,8 @@ import { MenuItemComponent } from './menu-item/menu-item.component';
 import { DetailListSbcaConstWiseComponent } from './deposit/report/detail-list-sbca-const-wise/detail-list-sbca-const-wise.component';
 import { FortnightlyReturnComponent } from './loan/report/fortnightly-return/fortnightly-return.component';
 import { ConsoFortnightlyReturnComponent } from './loan/report/conso-fortnightly-return/conso-fortnightly-return.component';
+import { BorrowingComponent } from './borrowing/borrowing.component';
+import { DcbrVillWiseComponent } from './loan/report/dcbr-vill-wise/dcbr-vill-wise.component';
 @NgModule({
   declarations: [ 
     AmountToWordPipe,UserLoginStatusComponent,OpenInvestComponent,KeyoffDirective,
@@ -252,7 +254,8 @@ import { ConsoFortnightlyReturnComponent } from './loan/report/conso-fortnightly
           ConsoCashAccNewComponent, LoanDisbCertificateComponent, CloseAccDtlsComponent, GMloanDCComponent, RecovVillageComponent,
            UserWiseTransactionComponent, UserWiseTransactionLoanComponent, GmLoanSubsidyComponent, LoanDisburseActWiseComponent,
             YearendDemandRecoveryComponent, DemandNoticeBlockWiseComponent, RecovAdvPrnComponent, RecovAdvPrnVillComponent, 
-            InterestSubsidySummaryComponent, DcbrPrintComponent, NpaSummaryComponent,LockerComponent, MenuItemComponent, DetailListSbcaConstWiseComponent, FortnightlyReturnComponent, ConsoFortnightlyReturnComponent
+            InterestSubsidySummaryComponent, DcbrPrintComponent, NpaSummaryComponent,LockerComponent, MenuItemComponent, 
+            DetailListSbcaConstWiseComponent, FortnightlyReturnComponent, ConsoFortnightlyReturnComponent, BorrowingComponent, DcbrVillWiseComponent
   ],
   imports: [
     MatAutocompleteModule,

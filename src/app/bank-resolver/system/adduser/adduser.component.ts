@@ -47,10 +47,15 @@ export class AdduserComponent implements OnInit {
   getUserDtl:boolean=true;
   getusername:any;
   currentUID:any;
+  errorMSG:any;
+  saveFlag:any='U';
   constructor(private router: Router,private formBuilder: FormBuilder,private svc: RestService) { }
   
   
   ngOnInit(): void {
+    this.errorMSG=document.getElementById('error-message') as HTMLDivElement;
+    debugger
+      this.errorMSG.textContent='';
     
     this.currentUID= localStorage.getItem('__userId');
     this.upd_s_User = this.formBuilder.group({
@@ -263,7 +268,7 @@ export class AdduserComponent implements OnInit {
   new()
   {
     this.initialize();
-    
+    this.saveFlag='N';
     this.addUser.controls.password.enable();
     this.addUser.controls.branch.enable();
     this.showCpassword=true;
@@ -339,10 +344,27 @@ export class AdduserComponent implements OnInit {
   defPass(){
   this.defaultPass='12345';
   this.HandleMessage(true, MessageType.Warning,'Password set to be a Default !12345, after Click Update User');
-console.log(this.defaultPass);
-
+  console.log(this.defaultPass);
   }
-
+  passCheck(i:any){
+    const password = i.target.value;
+    const hasMinimumLength: boolean = password.length >= 8;
+    const hasUppercase: boolean = /[A-Z]/.test(password);
+    const hasNumber: boolean = /\d/.test(password);
+    if(password.length<1){
+      this.errorMSG.textContent='';
+    }
+    else{
+      if (hasMinimumLength && hasUppercase && hasNumber) {
+        this.errorMSG.textContent = ''; // Clear error message if conditions are met
+    } else {
+        this.errorMSG.textContent = 'Password must have at least 8 characters, one uppercase letter, and one number.';
+        debugger
+        this.isSave = false;this.isModify = false;
+      }
+    }
+    
+  }
   retrieve ()
   {
     this.selected_user=true;
@@ -375,13 +397,21 @@ console.log(this.defaultPass);
       login.user_type=this.f.utype.value;
       login.password=this.f.password.value;
       login.login_status='N';
+      login.created_by=this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+      // login.modified_by=this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
       // login.ardb_cd=localStorage.getItem('__bName').toLocaleLowerCase()=="ardbtestux"?"100":this.sys.ardbCD
       login.ardb_cd=this.sys.ardbCD;
-      ;
+      
       // this.checkPassword();
       this.svc.addUpdDel('Sys/InsertUserMaster', login).subscribe(
         res => {
-          ;console.log(res)
+          let login = new LOGIN_MASTER();
+          login.LM_ID=Number(res)
+          if(login.LM_ID==-1){
+            this.isLoading=false;
+            this.HandleMessage(true, MessageType.Error,'Duplicate User Not Allow' );
+          }else{
+            ;console.log(res)
           this.isLoading=false;
           this.HandleMessage(true, MessageType.Sucess,'Sucessfully Saved the User Details' );
           // this.initialize();
@@ -391,6 +421,8 @@ console.log(this.defaultPass);
           this.isModify = false;
           this.isSave = false;
           this.isClear = true;
+          }
+          
         },
         err => {this.isLoading=false; ; this.HandleMessage(true, MessageType.Error,'Insertion Failed!!' );
                 this.isDel = false;
@@ -408,7 +440,7 @@ console.log(this.defaultPass);
   checkPassword(){
     if(this.f.password!==this.f.cpassword){
       this.HandleMessage(true, MessageType.Error,'Password and Confirm Password should be Equal' );
-      this.isModify=false;
+      this.isModify=false;this.isSave = false;
     }
   }
   updateuser()
@@ -425,6 +457,7 @@ console.log(this.defaultPass);
     login.password=this.f.password.value;
     login.login_status=this.f.logsts.value;
     login.ardb_cd=this.sys.ardbCD;
+    login.modified_by=this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
     //login.login_status='N';
     ;
     // this.checkPassword();
@@ -465,6 +498,7 @@ console.log(this.defaultPass);
     login.password=this.defaultPass;
     login.login_status=this.u.logsts.value;
     login.ardb_cd=this.sys.ardbCD;
+    login.modified_by=this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
     //login.login_status='N';
     ;
     // this.checkPassword();
@@ -572,6 +606,14 @@ console.log(this.defaultPass);
         if (control.value !== matchingControl.value) {
             matchingControl.setErrors({ confirmedValidator: true });
             this.isModify=false;
+            // if(this.saveFlag=='N'){
+            //     this.isModify=true;
+            //     this.isSave=false;
+            //   }
+            //   else{
+            //     this.isSave=true;
+            //     this.isModify=false;
+            //   }
         } 
         else {
             matchingControl.setErrors(null);
@@ -579,11 +621,24 @@ console.log(this.defaultPass);
               this.isModify=true;
             }
             else{
-              this.isModify=false;
+              if(this.errorMSG.textContent==''){
+                this.isModify=false;
+                this.isSave=true;}
+              else{this.isModify=false;}
+              
             }
+           
             
         }
     }
 }
 
 }
+// if(this.saveFlag=='N'){
+//   this.isModify=true;
+//   this.isSave=false;
+// }
+// else{
+//   this.isSave=true;
+//   this.isModify=false;
+// }

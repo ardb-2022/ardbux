@@ -181,6 +181,8 @@ export class AccounTransactionsComponent implements OnInit {
   kycForAllHolder:boolean=true;
   AllHolder:td_accholder[];
   acc_OWNER:any=null;
+  paidRDinstlNo:Number;
+  RDAllInstlPaid:boolean=false;
   // disableIntt:boolean=false;
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template, this.config);
@@ -1379,13 +1381,23 @@ getjoinholder(){
             this.rdInstallemntsForSelectedAcc = [];
             this.rdInstallemntsForSelectedAcc = Utils.ChkArrNotEmptyRetrnEmptyArr(rdInstallamentRes);
             let i = 1;
+            this.paidRDinstlNo=0
             this.rdInstallemntsForSelectedAcc.forEach(e => {
               if (e.status.toLocaleLowerCase() === 'p') {
+                this.paidRDinstlNo=Number(this.paidRDinstlNo)+1;
                 this.rdInstallamentOption.push(acc.instl_amt * i);
                 i = i + 1;
               }
             });
+            if(this.rdInstallemntsForSelectedAcc.length == this.paidRDinstlNo){
+              this.RDAllInstlPaid=true;
+            }
+            else{
+              this.RDAllInstlPaid=false;
+            }
+            debugger
           },
+          
           rdInstallamentErr => { console.log(rdInstallamentErr); }
         );
         break;
@@ -2412,43 +2424,51 @@ getjoinholder(){
       this.showTransMode = true
       this.hideOnClose = true;
       this.showAmtDrpDn = true;
-      } else if (selectedOperation.oprn_desc.toLocaleLowerCase() === 'rd installment') {
-        var rd={
-          "ardb_cd":this.sys.ardbCD,
-          "brn_cd":this.sys.BranchCode
+      } 
+      else if (selectedOperation.oprn_desc.toLocaleLowerCase() === 'rd installment') {
+        if(this.RDAllInstlPaid){
+          this.HandleMessage(true, MessageType.Error, `A/C ${this.f.acct_num.value} had already paid all the Installment..`);
+          this.showTransactionDtl=false;
+          return
         }
-        this.svc.addUpdDel('Deposit/PopulateActiveSIList',rd).subscribe(data=>{console.log(data)
-        this.StandingRD=data
-        if(this.StandingRD.length>0){
-          debugger
-          this.StandingArr=this.StandingRD.filter(e=>e.acc_type_to.toLowerCase()=='recurring deposit')
-          debugger
-          console.log(this.StandingArr.filter(p=>p.acc_num_to == this.f.acct_num.value))
-          this.StandingArr2=this.StandingArr.filter(p=>p.acc_num_to==this.f.acct_num.value)[0]
-          debugger
-          if(this.StandingArr2){
-            this.HandleMessage(true, MessageType.Error, `A/C ${this.f.acct_num.value} have already Standing Instraction, Transaction Not Permited from this screen !!!`);
-            this.showTransactionDtl=false;
-            return
+        else{
+          var rd={
+            "ardb_cd":this.sys.ardbCD,
+            "brn_cd":this.sys.BranchCode
           }
-        }
-      })
-        
+          this.svc.addUpdDel('Deposit/PopulateActiveSIList',rd).subscribe(data=>{console.log(data)
+          this.StandingRD=data
+          if(this.StandingRD.length>0){
+            debugger
+            this.StandingArr=this.StandingRD.filter(e=>e.acc_type_to.toLowerCase()=='recurring deposit')
+            debugger
+            console.log(this.StandingArr.filter(p=>p.acc_num_to == this.f.acct_num.value))
+            this.StandingArr2=this.StandingArr.filter(p=>p.acc_num_to==this.f.acct_num.value)[0]
+            debugger
+            if(this.StandingArr2){
+              this.HandleMessage(true, MessageType.Error, `A/C ${this.f.acct_num.value} have already Standing Instraction, Transaction Not Permited from this screen !!!`);
+              this.showTransactionDtl=false;
+              return
+            }
+          }
+        })
+          
+          debugger
+          
+          this.transType.key = 'D';
+          this.transType.Description = 'Deposit';
+          
+          this.tdDefTransFrm.patchValue({
+            trans_type: this.transType.Description,
+            trans_type_key: this.transType.key,
+          
+          amount: this.accNoEnteredForTransaction.instl_amt
+          });
+          this.hideOnClose = true;
+          this.showAmtDrpDn = true;
         debugger
-        
-        this.transType.key = 'D';
-        this.transType.Description = 'Deposit';
-        
-        this.tdDefTransFrm.patchValue({
-          trans_type: this.transType.Description,
-          trans_type_key: this.transType.key,
-        
-        amount: this.accNoEnteredForTransaction.instl_amt
-        });
-        this.hideOnClose = true;
-        this.showAmtDrpDn = true;
-      debugger
-    }
+        }
+      }
      else if (selectedOperation.oprn_desc.toLocaleLowerCase() === 'close') {
       if (this.resBrnCd != this.sys.BranchCode) {
         this.HandleMessage(true, MessageType.Error, 'Account CLOSE will only be possible on Home Branch.');

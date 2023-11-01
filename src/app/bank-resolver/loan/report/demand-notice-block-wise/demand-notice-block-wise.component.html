@@ -145,7 +145,8 @@
                     <table style="width: 100%;">
                     <tr>
                       <td colspan="6" >{{translatedData?.name}} - {{data?.cust_name }}</td> 
-                      <td colspan="6" style="text-align: right;">{{translatedData.member_code}} - {{data?.brn_cd}}</td> 
+                      <td colspan="6" style="text-align: right;"> {{translatedData.ledger_no}} - {{data?.loan_case_no}}</td> 
+                      
   
                     </tr>
                     <tr>
@@ -154,19 +155,23 @@
                       <!-- <td colspan="6">{{translatedData?.village}} - {{data?.block_name}}, {{translatedData?.block}} - {{this.blocks1[0].block_name}} </td>   -->
                         <td colspan="6" style="text-align: right;">{{translatedData.loan_id}} -{{data?.loan_id}} </td>   
                     </tr>
-                   
+                    <tr *ngIf="this.ardbcd=='26'">  
+                      <td colspan="6" >{{translatedData?.join_holder}} - {{data?.cust_address}}</td> 
+
+                      <td colspan="6" style="text-align: right;">{{translatedData.member_code}} - </td>   
+                  </tr>
                     <tr>  
-                        <td colspan="6" >{{translatedData?.village}} - {{data?.ardb_cd}},  {{translatedData?.gp}} - {{data?.cust_address}}</td> 
+                        <td colspan="6" >{{translatedData?.village}} - {{data?.ardb_cd}},  {{translatedData?.gp}} - <span *ngIf="this.ardbcd!='26'">{{data?.cust_address}}</span><span *ngIf="this.ardbcd=='26'">{{data?.brn_cd}}</span></td> 
   
-                        <td colspan="6" style="text-align: right;"> {{translatedData.ledger_no}} - {{data?.loan_case_no}}</td>   
+                        <td colspan="6" style="text-align: right;"> {{translatedData.loan_date}} - {{data?.disb_dt.substr(0,10)}}</td>   
                     </tr>
                     <tr>  
                       <td colspan="6" >{{translatedData?.block}} - {{this.blocks1[0].block_name}}</td> 
-
-                      <td colspan="6" style="text-align: right;"> {{translatedData.loan_date}} - {{data?.disb_dt.substr(0,10)}}</td>   
-                  </tr>
+                      <td *ngIf="this.ardbcd!='26'" colspan="6" style="text-align: right;">{{translatedData.member_code}} - {{data?.brn_cd}}</td>
+                    </tr>
+                    
                 </table>
-               
+               <br><br>
                 
                 <b> {{translatedData?.notice_flag}} </b>
                 </div>
@@ -177,15 +182,52 @@
                   </tr>
               </table>
                 <div style="padding:5px;">
-                  {{translatedData?.salutation}}, <br> {{translatedData?.salutation_sub}}, <br> {{translatedData?.body_pre}} {{reportData?data?.activity_name:''}} {{translatedData?.body_mid}} 
-                  ................................
-                  {{translatedData?.body_post}} 
+                 <p> {{translatedData?.salutation}}, <br> {{translatedData?.salutation_sub}}, <br> {{translatedData?.body_pre}} {{reportData?data?.activity_name:''}} {{translatedData?.body_mid}} 
+                  <span *ngIf="ardbcd!='26'">................................</span>
+                  <span *ngIf="ardbcd=='26'">{{converDttoDt}}</span>
+                  {{translatedData?.body_post}} </p>
                  <br>
-                <br>
-                <table style="border-style:dotted; width: 100%; ">
-                      
+                <div class="row" style="margin-left: 10%; margin-right: 10%;font-weight: 600;">
+                  <div class="col-12" style="border:1px solid rgb(182, 181, 181); padding:10px; text-align: center;">
+                    <b>{{translatedData?.installment_amt}}</b>
+                </div> 
+                  <div class="col-6" style="border:1px solid rgb(182, 181, 181); padding:10px"> 
+                      <div class="row">
+                        <div class="col-6 pull-left">{{translatedData?.prn}}:</div>
+                        <div class="col-6 pull-right">{{reportData?data?.ovd_prn:0 |currency:"INR"}}</div>
+                      </div>
+                      <div class="row">
+                        <div class="col-6 pull-left"> {{translatedData?.intt}}:</div>
+                        <div class="col-6 pull-right"> {{reportData?data?.ovd_intt:0 |currency:"INR"}}</div>
+                      </div>
+                      <div class="row">
+                        <div class="col-6 pull-left">{{translatedData?.penal_amt}}: </div>
+                        <div class="col-6 pull-right">{{reportData?data?.penal_intt:0 |currency:"INR"}} </div>
+                    </div>
+                    </div>
+                    <div class="col-6" style="border:1px solid rgb(182, 181, 181); padding:10px"> 
+                      <div class="row">
+                        <div class="col-6 pull-left">{{translatedData?.curr_prn}}:</div>
+                        <div class="col-6 pull-right">{{reportData?data?.curr_prn:0 |currency:"INR"}}</div>
+                      </div>
+                      <div class="row">
+                        <div class="col-6 pull-left"> {{translatedData?.curr_intt}}:</div>
+                        <div class="col-6 pull-right"> {{reportData?data?.curr_intt:0 |currency:"INR"}}</div>
+                      </div>
+                      <div class="row">
+                          <b><div class="col-12 pull-right">{{converDttoDt}} </div></b>
+                      </div>
+                    </div>
+                    <div class="col-12" style="border:1px solid rgb(182, 181, 181); padding:10px; text-align: center;">
+                      <b>{{translatedData?.total}}: {{data?.curr_intt + data?.curr_prn + data?.ovd_prn + data?.ovd_intt + data?.penal_intt|currency:"INR"}}</b>
+                  </div>
+               </div>
+                <!-- <table style="border-style:solid; width: 100%; ">
+                      <tr><td>{{translatedData?.installment_amt}}</td></tr>
                       <tr>
-                        <td>{{translatedData?.installment_amt}}</td>
+
+                      </tr>
+                      <tr>
                           <td>
                               {{translatedData?.prn}}: <b>{{reportData?data?.ovd_prn:0}}</b>
                           </td>
@@ -203,8 +245,9 @@
                       <tr>
                         <td>{{converDttoDt}}</td>
                       </tr>
-                  </table><br>
-               <br>   {{translatedData?.foot_pre}} <br> {{translatedData?.foot_mid}} <br> {{translatedData?.foot_post}} 
+                  </table> -->
+                  
+               <br>   {{translatedData?.foot_pre}} <br> {{translatedData?.foot_mid}} <br><span *ngIf="ardbcd!='26'">{{translatedData?.foot_post}}</span>  <span *ngIf="ardbcd=='26'">{{translatedData?.bmardb_post}}</span>
           
                <div class="pull-right bt-5" style="padding-bottom: 30px;">
                   <p style="text-align: center;">{{translatedData?.regards_pre}}</p><br><br>
@@ -224,7 +267,7 @@
           
        </div>
   
-       <!-- <mat-paginator [pageSizeOptions]="[5, 10, 25, 100, this.reportData?.length]" aria-label="Select page of users"></mat-paginator> -->
+       <mat-paginator [pageSizeOptions]="[200, 500, this.reportData?.length>2000?2000:this.reportData?.length-100,this.reportData?.length]" aria-label="Select page of users"></mat-paginator>
        
         
       </div>
