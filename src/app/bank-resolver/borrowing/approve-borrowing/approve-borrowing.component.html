@@ -164,7 +164,7 @@
                     <input type="text" class="form-control form-control-sm" formControlName="ovd_intt" id="ovd_intt" disabled>
                   </div> -->
                   
-                  <div class="form-group col-4">
+                  <div class="form-group col-4" [hidden]="loanOpenDm?.tddeftrans?.trans_type == 'R'?true:false">
                     <small for="loan_id">Borrowing Id</small>
                     <input type="text" class="form-control form-control-sm text-danger" formControlName="loan_id" id="loan_id"
                       disabled>
@@ -196,36 +196,36 @@
                     <small for="ovd_intt">Ovd Intt Rt.</small>
                     <input type="text" class="form-control form-control-sm" formControlName="ovd_intt" id="ovd_intt" disabled>
                   </div>
-                  <div class="form-group col-4">
+                  <div class="form-group col-4" [hidden]="loanOpenDm?.tddeftrans?.trans_type == 'R'?true:false">
                     <small for="instl_no">Installment No</small>
                     <input type="text" class="form-control form-control-sm" formControlName="instl_no" id="instl_no" disabled>
                   </div>
-                  <div class="form-group col-4">
+                  <div class="form-group col-4" [hidden]="loanOpenDm?.tddeftrans?.trans_type == 'R'?true:false">
                     <small for="instl_start_dt">Instl St Dt.</small>
                     <input type="text" class="form-control form-control-sm" formControlName="instl_start_dt" id="instl_start_dt" disabled>
                   </div>
-                  <!-- <div class="form-group col-6">
+                  <div class="form-group col-6" [hidden]="loanOpenDm?.tddeftrans?.trans_type == 'B'?true:false">
                     <small for="curr_prn_recov">Curr Prn Recov</small>
                     <input type="text" class="form-control form-control-sm" formControlName="curr_prn_recov" id="curr_prn_recov"
                       disabled>
                   </div>
-                  <div class="form-group col-6">
+                  <div class="form-group col-6" [hidden]="loanOpenDm?.tddeftrans?.trans_type == 'B'?true:false">
                     <small for="ovd_prn_recov">Ovd Prn Recov</small>
                     <input type="text" class="form-control form-control-sm" formControlName="ovd_prn_recov" id="ovd_prn_recov"
                       disabled>
                   </div>
-                  <div class="form-group col-6">
+                  <div class="form-group col-6" [hidden]="loanOpenDm?.tddeftrans?.trans_type == 'B'?true:false">
                     <small for="curr_intt_recov">Curr Intt Recov</small>
                     <input type="text" class="form-control form-control-sm" formControlName="curr_intt_recov" id="curr_intt_recov"
                       disabled>
                   </div>
-                  <div class="form-group col-6">
+                  <div class="form-group col-6" [hidden]="loanOpenDm?.tddeftrans?.trans_type == 'B'?true:false">
                     <small for="ovd_intt_recov">Ovd Intt Recov</small>
                     <input type="text" class="form-control form-control-sm" formControlName="ovd_intt_recov" id="ovd_intt_recov"
                       disabled>
                   </div>
                   
-                  <div class="form-group col-6">
+                  <!-- <div class="form-group col-6">
                     <small for="mis_advance_recov">Saleble Form</small>
                     <input type="text" class="form-control form-control-sm" formControlName="mis_advance_recov"
                       id="mis_advance_recov " disabled>

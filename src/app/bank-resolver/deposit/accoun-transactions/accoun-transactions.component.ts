@@ -172,6 +172,7 @@ export class AccounTransactionsComponent implements OnInit {
   coustCD:any;
   custName:any
   showNW:boolean;
+  custUCIC:number=0
   config = {
     keyboard: false,
     backdrop: true,
@@ -1104,7 +1105,8 @@ getjoinholder(){
     acc.brn_cd = this.sys.BranchCode;
 
     acc.ardb_cd = this.sys.ardbCD;
-    this.custName=''
+    this.custName='';
+    this.custUCIC=0
     this.svc.addUpdDel<any>('Deposit/GetDepositWithChild', acc).subscribe(
       res => {
         if(res[0].constitution_cd==101){
@@ -1127,6 +1129,7 @@ getjoinholder(){
         console.log(this.resBrnCatgCd)
         this.resBrnCd = this.resBrnCd[0].brn_cd
         console.log(this.resBrnCd)
+        this.custUCIC=res[0].cust_cd
         //////////////debugger;
         this.isLoading = false;
         let foundOneUnclosed = false;
@@ -5281,7 +5284,7 @@ getjoinholder(){
     this.resetClicked = true;
     this.disabledOnNull = true
     this.shownoresult = false;
-
+    this.custUCIC=0
     this.trftype = ''
     // console.log(this.f.acct_num.value.length)
     // this.f.acct_num.value.length=0

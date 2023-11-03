@@ -93,4 +93,8 @@ small {
     overflow-y: auto;
     overflow-x: hidden;
   }
+  .suggestionsTrfGl{
+    max-height: 154px;
+    overflow: scroll;
+  }
   

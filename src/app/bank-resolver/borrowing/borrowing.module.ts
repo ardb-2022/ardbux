@@ -18,10 +18,11 @@ import { TransBorrowingComponent } from './trans-borrowing/trans-borrowing.compo
 import {INRCurrencyPipe} from '../../_utility/filter';
 import { ApproveBorrowingComponent } from './approve-borrowing/approve-borrowing.component';
 import { ViewBorrowingComponent } from './view-borrowing/view-borrowing.component';
-import { BorroDetailListComponent } from './report/borro-detail-list/borro-detail-list.component'
+import { BorroDetailListComponent } from './report/borro-detail-list/borro-detail-list.component';
+import { CalculateBorrInttComponent } from './calculate-borr-intt/calculate-borr-intt.component'
 
 @NgModule({
-  declarations: [OpenBorrowingComponent, TransBorrowingComponent, ApproveBorrowingComponent, ViewBorrowingComponent, BorroDetailListComponent],
+  declarations: [OpenBorrowingComponent, TransBorrowingComponent, ApproveBorrowingComponent, ViewBorrowingComponent, BorroDetailListComponent, CalculateBorrInttComponent],
   imports: [
     CommonModule,
     BorrowingRoutingModule,

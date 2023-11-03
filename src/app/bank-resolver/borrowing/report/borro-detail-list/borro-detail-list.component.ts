@@ -159,7 +159,7 @@ export class BorroDetailListComponent implements OnInit {
     }
   ]
   // displayedColumns: string[] = ['block_name','acc_name','party_name', 'acc_num', 'list_dt', 'curr_intt_rate','ovd_intt_rate','curr_prn','ovd_prn','plus','curr_intt','ovd_intt','computed_till_dt'];
-  displayedColumns: string[] = ['party_name', 'acc_num', 'list_dt','curr_intt_rt','plus','curr_prn','ovd_prn','curr_intt','ovd_intt','pnl_intt','computed_till_dt'];
+  displayedColumns: string[] = ['party_name', 'acc_num', 'list_dt','repayment_start_dt','instl_no','curr_intt_rt','plus','curr_prn','ovd_prn','curr_intt','ovd_intt','pnl_intt','computed_till_dt'];
   displayedColumns2: string[] = ['intt_rt','curr_prn','ovd_prn','tot_prn','curr_intt','ovd_intt','tot_intt'];
  
   dataSource = new MatTableDataSource()

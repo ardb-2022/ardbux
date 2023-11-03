@@ -195,8 +195,88 @@ export class ApproveBorrowingComponent implements OnInit {
          console.log(this.transactionDtlsFrm.controls.adv_prn_recov.value)
          console.log(this.transactionDtlsFrm.controls.penal_intt_recov.value)
 
-        
-        //  else{
+        if(this.loanOpenDm.tddeftrans.trans_type == 'R'){
+          this.transactionDtlsFrm.patchValue({
+            trans_dt: this.loanOpenDm.tddeftrans.trans_dt.toString().substr(0, 10),
+            trans_cd: this.loanOpenDm.tddeftrans.trans_cd,
+            acc_type_cd: accType.acc_type_desc,
+            party: this.bankData.filter(e=>e.bank_cd==1)[0].bank_name ,
+            // curr_prn: this.loanOpenDm.tmloanall.curr_prn,
+            // ovd_prn: this.loanOpenDm.tmloanall.ovd_prn,
+            curr_intt: this.loanOpenDm.tddeftrans.curr_intt_rate,
+            ovd_intt: this.loanOpenDm.tddeftrans.ovd_intt_rate,
+            // loan_id: this.loanOpenDm.tmloanall.loan_id,
+            // tot_Prn: this.loanOpenDm.tmloanall.curr_prn + this.loanOpenDm.tmloanall.ovd_prn,
+            // share_holding: this.loanOpenDm.tmloanall.tot_share_holding,
+            audit_fees: this.loanOpenDm.tddeftrans.audit_fees_recov,
+            mis_adv: this.loanOpenDm.tddeftrans.mis_advance_recov,
+            intt_till_dt: this.loanOpenDm.tddeftrans.intt_till_dt,
+            instrument_no: this.loanOpenDm.tddeftrans.instrument_num,
+            audit_fees_recc: this.loanOpenDm.tddeftrans.audit_fees_recov,
+            acc_num: this.loanOpenDm.tddeftrans.acc_num,
+            // trans_type: this.loanOpenDm.tddeftrans.trans_type === 'R' ? 'Recovery' :
+            //   this.loanOpenDm.tddeftrans.trans_type === 'D' ? 'Disbursement' :
+            //     this.loanOpenDm.tddeftrans.trans_type === 'I' ? 'Interest Payment' : null,
+            trans_mode: this.loanOpenDm.tddeftrans.trans_mode === 'R' ? 'Renewal' :
+              this.loanOpenDm.tddeftrans.trans_mode === 'C' ? 'Close' :
+                this.loanOpenDm.tddeftrans.trans_mode === 'I' ? 'Interest Payment' :
+                  this.loanOpenDm.tddeftrans.trans_mode === 'W' ? 'Withdrawal Slip' :
+                    this.loanOpenDm.tddeftrans.trans_mode === 'V' ? 'Voucher' :
+                      this.loanOpenDm.tddeftrans.trans_mode === 'O' ? 'Open' : 
+                        this.loanOpenDm.tddeftrans.trans_mode === 'Q' ? 'Cheque' : null,
+            amount: this.loanOpenDm.tddeftrans.amount,
+            instrument_dt: this.loanOpenDm.tddeftrans.instrument_dt.toString() === '0001-01-01T00:00:00' ? null :
+              this.loanOpenDm.tddeftrans.instrument_dt.toString().substr(0, 10),
+            instrument_num: this.loanOpenDm.tddeftrans.instrument_num === 0 ? null :
+              this.loanOpenDm.tddeftrans.instrument_num,
+            paid_to: this.loanOpenDm.tddeftrans.paid_to,
+            token_num: this.loanOpenDm.tddeftrans.token_num,
+            approval_status: this.loanOpenDm.tddeftrans.approval_status === 'U' ? 'Unapproved' :
+              this.loanOpenDm.tddeftrans.approval_status === 'A' ? 'Approved' : '',
+            approved_by: this.loanOpenDm.tddeftrans.approved_by,
+            approved_dt: this.loanOpenDm.tddeftrans.approved_dt.toString().substr(0, 10),
+
+            particulars: this.loanOpenDm.tddeftrans.trans_type == 'R' ? (this.loanOpenDm.tddeftrans.particulars == 'M' ? 'Manual' : this.loanOpenDm.tddeftrans.particulars == 'OTS' ? 'OTS':'Auto') : 'S',
+            tr_acc_type_cd: this.loanOpenDm.tddeftrans.tr_acc_type_cd,
+            tr_acc_num: this.loanOpenDm.tddeftrans.tr_acc_num,
+            voucher_dt: this.loanOpenDm.tddeftrans.voucher_dt.toString().substr(0, 10),
+            voucher_id: this.loanOpenDm.tddeftrans.voucher_id,
+            trf_type: this.loanOpenDm.tddeftrans.trf_type === 'C' ? 'Cash' :
+              this.loanOpenDm.tddeftrans.trf_type === 'T' ? 'Transfer' : '',
+            tr_acc_cd: this.loanOpenDm.tddeftrans.tr_acc_cd,
+            acc_cd: this.loanOpenDm.tddeftrans.acc_cd,
+            share_amt: this.loanOpenDm.tddeftrans.share_amt,
+            sum_assured: this.loanOpenDm.tddeftrans.sum_assured,
+            paid_amt: this.loanOpenDm.tddeftrans.paid_amt,
+            curr_prn_recov: this.loanOpenDm.tddeftrans.curr_prn_recov,
+            ovd_prn_recov: this.loanOpenDm.tddeftrans.ovd_prn_recov,
+            curr_intt_recov: this.loanOpenDm.tddeftrans.curr_intt_recov,
+            ovd_intt_recov: this.loanOpenDm.tddeftrans.ovd_intt_recov,
+            remarks: this.loanOpenDm.tddeftrans.remarks,
+            crop_cd: this.loanOpenDm.tddeftrans.crop_cd,
+            activity_cd: this.activityName,
+            curr_numbert_rate: this.loanOpenDm.tddeftrans.curr_intt_rate,
+            ovd_numbert_rate: this.loanOpenDm.tddeftrans.ovd_intt_rate,
+            instl_no: this.loanOpenDm.tddeftrans.instl_no,
+            instl_start_dt: this.loanOpenDm.tddeftrans.instl_start_dt.toString().substr(0, 10),
+            periodicity: this.loanOpenDm.tddeftrans.periodicity,
+            disb_id: this.loanOpenDm.tddeftrans.disb_id,
+            comp_unit_no: this.loanOpenDm.tddeftrans.comp_unit_no,
+            ongoing_unit_no: this.loanOpenDm.tddeftrans.ongoing_unit_no,
+            mis_advance_recov: this.loanOpenDm.tddeftrans.mis_advance_recov,
+            audit_fees_recov: this.loanOpenDm.tddeftrans.audit_fees_recov,
+            sector_cd: this.loanOpenDm.tddeftrans.sector_cd,
+            spl_prog_cd: this.loanOpenDm.tddeftrans.spl_prog_cd,
+            borrower_cr_cd: this.loanOpenDm.tddeftrans.borrower_cr_cd,
+            numbert_till_dt: this.loanOpenDm.tddeftrans.intt_till_dt,
+            acc_name: this.loanOpenDm.tddeftrans.acc_name,
+            brn_cd: this.loanOpenDm.tddeftrans.brn_cd,
+            trans_type: 'Recovery',
+            penal_intt_recov: this.loanOpenDm.tddeftrans.penal_intt_recov,
+            adv_prn_recov:this.loanOpenDm.tddeftrans.adv_prn_recov
+          })
+        }
+         else{
           this.transactionDtlsFrm.patchValue({
             trans_dt: this.loanOpenDm.tddeftrans.trans_dt.toString().substr(0, 10),
             trans_cd: this.loanOpenDm.tddeftrans.trans_cd,
@@ -276,7 +356,7 @@ export class ApproveBorrowingComponent implements OnInit {
             penal_intt_recov: this.loanOpenDm.tddeftrans.penal_intt_recov,
             adv_prn_recov:this.loanOpenDm.tddeftrans.adv_prn_recov
           });
-          
+        }
        
           this.getDenominationOrTransferDtl(this.loanOpenDm.tddeftrans);
           if(this.loanOpenDm.tddeftrans.trans_type == 'R' && this.transactionDtlsFrm.controls.paid_amt.value !=(this.transactionDtlsFrm.controls.curr_intt_recov.value + this.transactionDtlsFrm.controls.curr_prn_recov.value + this.transactionDtlsFrm.controls.ovd_prn_recov.value + this.transactionDtlsFrm.controls.ovd_intt_recov.value + this.transactionDtlsFrm.controls.adv_prn_recov.value + this.transactionDtlsFrm.controls.penal_intt_recov.value)){
@@ -378,7 +458,13 @@ export class ApproveBorrowingComponent implements OnInit {
     this.selectedTransactionMode = vm.td_def_trans_trf.trans_mode;
     // this.getTranAcctInfo(vm.td_def_trans_trf.acc_num);
     this.getDepTrans(vm.td_def_trans_trf);
-    this.showINSTNO=true;
+    if(vm.td_def_trans_trf.trans_type == 'B'){
+      this.showINSTNO=true;
+    }
+    else{
+      this.showINSTNO=false;
+     }
+    
   }
   private getDepTrans(depTras: td_def_trans_trf): void {
     //debugger;
@@ -648,7 +734,7 @@ export class ApproveBorrowingComponent implements OnInit {
     trnParam.ad_trans_cd =this.transactionDtlsFrm.controls.trans_cd.value!=null? this.selectedVm.td_def_trans_trf.trans_cd:null;
 
     // const dt = this.sys.CurrentDate;
-    trnParam.adt_trans_dt = this.sys.CurrentDate;
+    trnParam.adt_trans_dt = this.loanOpenDm.tddeftrans.trans_dt;
     // trnParam.ad_acc_type_cd = this.selectedVm.mm_acc_type.acc_type_cd;
     // trnParam.as_acc_num = this.selectedVm.td_def_trans_trf.acc_num;
     // trnParam.flag = this.selectedVm.td_def_trans_trf.trans_type === 'R' ? 'D' : 'W';
@@ -656,6 +742,7 @@ export class ApproveBorrowingComponent implements OnInit {
     trnParam.ardb_cd = this.sys.ardbCD;
     trnParam.ad_acc_type_cd = this.selectedVm.loan.tmloanall.acc_cd;
     trnParam.as_acc_num = this.selectedVm.loan.tmloanall.loan_id;
+    debugger
     this.svc.addUpdDel<any>('Borrowing/ApproveBorrowingTranaction', trnParam).subscribe(
       res => {
         debugger

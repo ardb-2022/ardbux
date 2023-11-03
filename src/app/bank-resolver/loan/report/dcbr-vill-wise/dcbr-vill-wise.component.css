@@ -159,3 +159,8 @@ thead tfoot{
   text-align: center;
 }
 
+@media print {
+  @page {
+      orientation: landscape !important;
+  }
+}

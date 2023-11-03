@@ -693,9 +693,10 @@ this.operationType = 'R';
 }
 
 clearData() {
-this.operationType = '';
+  this.disableAll = 'N'
+this.operationType = 'R';
 this.disableLoanId=true
-this.closeAlertMsg();
+// this.closeAlertMsg();
 // this.disablePersonal = 'Y';
 this.initializeModels();
 this.allLoanDtls=[]
@@ -708,7 +709,6 @@ this.disabledJointOnNull=true;
 this.accName=true;
 this.SecaccCD=false;
 this.newtm_deposit=null;
-
 
 }
 
@@ -1043,8 +1043,10 @@ this.tm_loan_all=res;
 // }
 // }
 console.log(res)
-if (this.tm_loan_all.curr_intt_rate === undefined || this.tm_loan_all.curr_intt_rate === null) {
-this.HandleMessage(true, MessageType.Warning, 'No record found!!' );
+if (this.tm_loan_all.acc_cd==0) {
+  this.HandleMessage(true, MessageType.Warning, 'No record found!!')
+this.clearData();
+return
 }
 else {
 if (res) {
@@ -1233,7 +1235,6 @@ this.showMsg.Show = show;
 this.showMsg.Type = type;
 this.showMsg.Message = message;
 
-this.disableAll = 'Y';
 }
 
 

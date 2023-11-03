@@ -268,13 +268,27 @@
           <form [formGroup]="tdDefTransFrm" *ngIf="showTransactionDtl">
             <h4 class="customHeader mt-2">Transaction Details</h4>
             <div class="form-row">
-              <div class="form-group col-2">
+              <div class="form-group col-1">
                 <small for="amount">Trans Code</small>
                 <input type="text" class="form-control form-control-sm" formControlName="trans_cd" id="trans_cd" disabled>
               </div>
               <div class="form-group col-2" *ngIf="isRecovery">
+                <small for="intt_recov_dt">Trans Dt <span class="text-danger">*</span></small>
+                <div class="input-group">
+                  <input type="text"  placeholder="dd/mm/yyyy" class="form-control form-control-sm"  bsDatepicker
+                    formControlName="trans_dt" 
+                    [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }"
+                    [isOpen]="isOpentrnsdt">
+                  <div class="input-group-append">
+                    <button mat-raised-button class="btn btn-outline-secondary btn-sm"  type="button" (click)="isOpentrnsdt = !isOpentrnsdt">
+                      <i class="fa fa-calendar" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-2" *ngIf="isRecovery">
                 <small for="recov_type">Recovery Type<span class="text-danger">*</span></small>
-                <select id="recov_type" class="form-control form-control-sm" formControlName="recov_type"
+                <select id="recov_type" class="form-control form-control-sm" formControlName="recov_type" disabled
                   (change)="onRecovTypeChange()">
                   <option disabled>Choose</option>
                   <!-- <option value="A" [selected]="true">Auto</option> -->
@@ -309,8 +323,7 @@
               
               <div class="form-group col-3">
                 <small for="amount">Amount <span class="text-danger">*</span> </small>
-                <input type="text" class="form-control form-control-sm" formControlName="amount" id="amount"
-                  (change)="onAmtChng()">
+                <input disabled type="text" class="form-control form-control-sm" formControlName="amount" id="amount">
               </div>
               <div class="form-group col-2" *ngIf="isDisburs && showInstrumentDtl">
                 <small for="instrument_num">Instrument</small>
@@ -386,7 +399,7 @@
                 <div class="form-group col-5" *ngIf="isRecovery">
                   <small for="curr_prn_recov">Current Principal Recov</small>
                   <input type="text" class="form-control form-control-sm" formControlName="curr_prn_recov"
-                    id="curr_prn_recov" (focusout)="checkValidity(1)">
+                    id="curr_prn_recov" (keyup)="amountChange()">
                 </div>
                 <div class="form-group col-2">
                   <small for="curr_intt_rate">Rate of Curr Int</small>
@@ -396,7 +409,7 @@
                 <div class="form-group col-5" *ngIf="isRecovery">
                   <small for="ovd_prn_recov">Overdue Principal Recov</small>
                   <input type="text" class="form-control form-control-sm" formControlName="ovd_prn_recov"
-                    id="ovd_prn_recov" (focusout)="checkValidity(2)">
+                    id="ovd_prn_recov" (keyup)="amountChange()">
                 </div>
                 
                 
@@ -408,7 +421,7 @@
                 <div class="form-group col-5" *ngIf="isRecovery">
                   <small for="curr_intt_recov">Current Interest Recov</small>
                   <input type="text" class="form-control form-control-sm" formControlName="curr_intt_recov"
-                    id="curr_intt_recov" (focusout)="checkValidity(4)">
+                    id="curr_intt_recov" (keyup)="amountChange()">
                 </div>
                 <div class="form-group col-2">
                   <small for="ovd_intt_rate">Rate of Ovd Int</small>
@@ -418,7 +431,7 @@
                 <div class="form-group col-5" *ngIf="isRecovery">
                   <small for="ovd_intt_recov">Overdue Interest Recov</small>
                   <input type="text" class="form-control form-control-sm" formControlName="ovd_intt_recov"
-                    id="ovd_intt_recov" (focusout)="checkValidity(5)">
+                    id="ovd_intt_recov" (keyup)="amountChange()">
                 </div>
                 <!-- <div class="form-group col-4" *ngIf="isRecovery">
                   <small for="penal_intt_recov">Penal Interest Recov</small>

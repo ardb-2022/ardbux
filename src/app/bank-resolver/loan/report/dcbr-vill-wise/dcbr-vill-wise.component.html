@@ -84,6 +84,7 @@
      class="btn btn-rounded btn-primary m-1" 
      [useExistingCss]="true"
      printSectionId="mattable" 
+     [printStyle]="{ '@page': { size: 'landscape !important' } }"
      ngxPrint>Print</button>
  <button mat-raised-button type="button" [hidden]="LandingCall" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
  <!-- <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadexcel()">Export as EXCEL</button> -->
@@ -120,9 +121,9 @@
         <div style="font-size:17px;"><b>({{blkDtls.activitytype.activity}} -> {{row.demandblock.block}})</b></div>
             <ng-container style="padding-bottom:30px;">
                     <tr mat-cell>
-                        <th mat-header-cell >Loan ID</th> 
-                        <th mat-header-cell >LF No</th>
+                        <th mat-header-cell >Loan ID / LF No</th> 
                         <th mat-header-cell >Party Name</th>
+                        <th mat-header-cell >Guardian Name</th>
                         <th mat-header-cell >Disb Date/ intt Rt/ Disb Amt</th>
                         <th mat-header-cell >Outstanding Principal</th>
                         <th mat-header-cell> Current Principal</th>
@@ -142,9 +143,9 @@
                       </tr>
                       <tbody  *ngFor="let e1 of blkDtls.demandlist let ind=index">
                         <tr>
-                           <td mat-cell>{{e1.loan_id}}</td>
-                           <td mat-cell>{{e1.loan_acc_no}} </td>
+                           <td mat-cell>{{e1.loan_id}}<br>{{e1.loan_acc_no}}</td>
                            <td mat-cell>{{e1.party_name}} </td>
+                           <td mat-cell>{{e1.guardian_name}} </td>
                            <td mat-cell>{{e1.disb_dt.substr(0,10)}}<br>{{e1.upto_1}}%<br>{{e1.disb_amt| currency:"INR"}} </td>
                            <td mat-cell>{{e1.outstanding_prn| currency:"INR"}} </td>
                            <td mat-cell>{{e1.curr_prn | currency:"INR"}} </td>
@@ -259,6 +260,7 @@
    class="btn btn-rounded btn-primary m-1" 
    [useExistingCss]="true"
    printSectionId="mattable" 
+   [printStyle]="{ '@page': { size: 'landscape !important' } }"
    ngxPrint>Print</button>
  <button mat-raised-button type="button" [hidden]="LandingCall" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
  <!-- <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadexcel()">Export as EXCEL</button> -->

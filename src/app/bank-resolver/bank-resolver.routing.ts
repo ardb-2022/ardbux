@@ -175,6 +175,7 @@ import { ApproveBorrowingComponent } from './borrowing/approve-borrowing/approve
 import { ViewBorrowingComponent } from './borrowing/view-borrowing/view-borrowing.component';
 import { BorroDetailListComponent } from './borrowing/report/borro-detail-list/borro-detail-list.component';
 import { DcbrVillWiseComponent } from './loan/report/dcbr-vill-wise/dcbr-vill-wise.component';
+import { CalculateBorrInttComponent } from './borrowing/calculate-borr-intt/calculate-borr-intt.component';
 const routes: Routes = [
   { path: 'Admin', component: AdminPanelComponent },
   { path: 'admin', component: AdminPanelComponent },
@@ -414,6 +415,10 @@ const routes: Routes = [
           },
           {
             path: 'borr_view',component: ViewBorrowingComponent,
+            loadChildren: () => import('./borrowing/borrowing.module').then(m => m.BorrowingModule)
+          },
+          {
+            path: 'borr_intt_cal',component: CalculateBorrInttComponent,
             loadChildren: () => import('./borrowing/borrowing.module').then(m => m.BorrowingModule)
           },
           {

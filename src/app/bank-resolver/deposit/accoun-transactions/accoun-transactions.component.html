@@ -115,8 +115,11 @@
             <div class="form-group col-12">
               <small for="cust_name">Name</small>
               <span class="badge badge-warning pull-right" *ngIf="joinHold!=''"> 
-                 JOINT HOLDER:-{{joinHold}}
-                </span>
+                JOINT HOLDER:-{{joinHold}}
+               </span>
+               <span class="badge badge-warning pull-right" *ngIf="custUCIC!=0"> 
+                UCIC:-{{custUCIC}}
+               </span>
               <input type="text" class="form-control form-control-sm" formControlName="cust_name" id="cust_name"
                 placeholder="Name" disabled>
             </div>

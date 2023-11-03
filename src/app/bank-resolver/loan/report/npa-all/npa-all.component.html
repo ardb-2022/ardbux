@@ -63,8 +63,11 @@
       <div>
        <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="closeScreen()" >Close</button>
        <button mat-raised-button type="button" 
-       class="btn btn-rounded btn-primary m-1" 
-       (click)="openPDF()">Print</button>
+        class="btn btn-rounded btn-primary m-1" 
+        [useExistingCss]="true"
+        printSectionId="hiddenTab" 
+        [printStyle]="{ '@page': { size: 'landscape !important' } }"
+        ngxPrint>Print</button>
        <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadexcel()">Export as EXCEL</button>
 
         <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
@@ -438,6 +441,7 @@
      class="btn btn-rounded btn-primary m-1" 
      [useExistingCss]="true"
      printSectionId="hiddenTab" 
+     [printStyle]="{ '@page': { size: 'landscape !important' } }"
      ngxPrint>Print</button>
      <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadexcel()">Export as EXCEL</button>
 

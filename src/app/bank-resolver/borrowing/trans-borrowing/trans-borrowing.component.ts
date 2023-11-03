@@ -82,6 +82,7 @@ export class TransBorrowingComponent implements OnInit {
   isRecovery = false;
   isDisburs = false;
   isOpenToDp = false;
+  isOpentrnsdt = false;
   isDelete = false;
   TrfTotAmt = 0;
   strtDt: any;
@@ -705,6 +706,7 @@ export class TransBorrowingComponent implements OnInit {
     this.disableOperation = true;
     this.showTranferType = true;
     this.isOpenToDp = false;
+    this.isOpentrnsdt = false;
     this.isLoading = true;
     this.showMsg = null;
     const acc1 = new tm_loan_all();
@@ -1310,6 +1312,8 @@ export class TransBorrowingComponent implements OnInit {
     this.transType = new DynamicSelect();
     if (this.f.oprn_cd.value.toLowerCase() == 'recovery') {
       this.isOpenToDp = false;
+    this.isOpentrnsdt = false;
+
       this.td.intt_till_dt = this.td.intt_recov_dt;
       this.showRemarks = false;
       // this.td.curr_prn_recov.disable();
@@ -1862,6 +1866,7 @@ debugger;
                   tdDefTransAndTranfer.acc_cd = +e.gl_acc_code;
                   tdDefTransAndTranfer.remarks = 'X';
                   tdDefTransAndTranfer.disb_id = ++i;
+                  tdDefTransAndTranfer.trans_dt=this.td.trans_dt.value;
                 }
                 tdDefTransAndTranfer.amount = e.amount;
                 ////////debugger;
@@ -1875,7 +1880,7 @@ debugger;
                 tmTrnsfr.trans_cd = this.td.trans_cd.value;
               }
               tmTrnsfr.brn_cd = this.sys.BranchCode;
-              tmTrnsfr.trf_dt = this.sys.CurrentDate;
+              tmTrnsfr.trf_dt = this.td.trans_dt.value;
               tmTrnsfr.created_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
               tmTrnsfr.approval_status = 'U';
               saveTransaction.tmtransfer.push(tmTrnsfr);
@@ -1958,8 +1963,8 @@ debugger;
                   // marker
                   ////////debugger;
                   // this.unApprovedTransactionLst.push(tdDefTrans);
-                  const loanId = this.td.acc_num.value;
-                  this.HandleMessage(true, MessageType.Sucess, `Transaction for Loan Id ${loanId}, updated successfully !!!!`);
+                  const loanId = this.f.acct_num.value;
+                  this.HandleMessage(true, MessageType.Sucess, `Transaction with interest rate ${loanId}, updated successfully !!!!`);
                   this.isLoading = false;
                    if(this.isRecovery){
                     this.modalRef = this.modalService.show(this.LoanChallan, { class: 'modal-sm' });
@@ -2135,7 +2140,7 @@ debugger;
           tmTrnsfr.trans_cd = this.td.trans_cd.value;
         }
         tmTrnsfr.brn_cd = this.sys.BranchCode;
-        tmTrnsfr.trf_dt = this.sys.CurrentDate;
+        tmTrnsfr.trf_dt = this.td.trans_dt.value;
         tmTrnsfr.created_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
         tmTrnsfr.approval_status = 'U';
         saveTransaction.tmtransfer.push(tmTrnsfr);
@@ -2285,7 +2290,7 @@ debugger;
               // total_due:this.fd.curr_intt.value + this.fd.ovd_intt.value + this.fd.penal_intt.value + this.fd.ovd_principal.value + this.fd.curr_principal.value - this.td.ovd_prn_recov.value - this.td.curr_prn_recov.value -this.td.curr_intt_recov.value - this.td.ovd_intt_recov.value - this.td.penal_intt_recov.value
               })
             }
-            this.HandleMessage(true, MessageType.Sucess, 'Saved successfully, your transaction code is -' + res);
+            this.HandleMessage(true, MessageType.Sucess, 'Saved successfully, your transaction code is -:' + res);
             // if(this.isRecovery){
             //   this.modalRef = this.modalService.show(this.LoanChallan, { class: 'modal-sm' });
             // }
@@ -2356,7 +2361,7 @@ debugger;
       toReturn.trans_cd = this.td.trans_cd.value;
     }
     toReturn.brn_cd = this.sys.BranchCode;
-    toReturn.trans_dt = this.sys.CurrentDate;
+    toReturn.trans_dt = this.td.trans_dt.value;
     toReturn.acc_type_cd = this.td.acc_type_cd.value;
     // toReturn.acc_num = this.td.acc_num.value;
     toReturn.acc_num = this.loanID;
@@ -2444,7 +2449,7 @@ debugger;
     if (this.td.trans_cd.value > 0) {
       toReturn.trans_cd = this.td.trans_cd.value;
     }
-    toReturn.trans_dt = this.sys.CurrentDate;
+    toReturn.trans_dt = this.td.trans_dt.value;
     toReturn.trans_mode = 'V';
     toReturn.paid_to = null;
     toReturn.token_num = null;
@@ -2492,8 +2497,9 @@ debugger;
     this.showTransactionDtl = false;
   //  
       this.td.trf_type.enable();
-      this.td.amount.enable();
+      // this.td.amount.enable();
       this.td.trans_mode.enable();
+      this.td.trans_dt.enable();
       this.td.instrument_num.enable();
       this.td.instrument_dt.enable();
       this.td.share.enable();
@@ -2503,6 +2509,10 @@ debugger;
       this.td.insurence.enable()
       this.disableOnSaveEdit=false
     
+      this.td.curr_prn_recov.enable();
+      this.td.ovd_prn_recov.enable();
+      this.td.curr_intt_recov.enable();
+      this.td.ovd_intt_rate.enable();
       this.td.recov_type.enable();
       this.td.intt_recov_dt.enable();
       this.td.remarks_on_manual.enable();
@@ -2866,7 +2876,18 @@ debugger;
       this.td_deftranstrfList.push(new td_def_trans_trf());
     }
   }
-
+  amountChange(){
+    
+    this.td.amount.setValue(
+    (this.td.curr_intt_recov.value!=null?Number(this.td.curr_intt_recov.value):0 )+
+    (this.td.ovd_intt_recov.value!=null?Number(this.td.ovd_intt_recov.value):0) +
+    (this.td.curr_prn_recov.value!=null?Number(this.td.curr_prn_recov.value):0) +
+    (this.td.ovd_prn_recov.value!=null?Number(this.td.ovd_prn_recov.value):0)
+      )
+      console.log( this.td.amount.value);
+      
+    debugger
+  }
   private sumTransfer(): void {
     this.TrfTotAmt = 0;
     this.td_deftranstrfList.forEach(e => {

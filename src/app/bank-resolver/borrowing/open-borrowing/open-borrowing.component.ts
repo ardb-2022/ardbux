@@ -143,7 +143,7 @@ isMod:boolean=false;
 isDel:boolean=false;
 isSave:boolean=false;
 transferTypeList = [
-  { trf_type: 'C', trf_type_desc: 'Cash' },
+  // { trf_type: 'C', trf_type_desc: 'Cash' },
   { trf_type: 'T', trf_type_desc: 'Transfer' }];
 
 transferTypeListTemp = this.transferTypeList;
@@ -183,7 +183,7 @@ getBankName(){
       console.log(res)
       this.bankData=res
       debugger
-      this.bankData=this.bankData.filter(e=>e.bank_cd==1)
+      this.bankData=this.bankData.filter(e=>this.sys.ardbCD=='4'?e.bank_cd==1:e.bank_cd==2)
       debugger
     },
     err => { }
@@ -881,8 +881,9 @@ GetLoanAccountNumberAndInsertData() {
           return;
           }
           else{
-          this.HandleMessage(true, MessageType.Sucess, 'Borrowing Account Created Successfully. BorrowingId: ' + this.tm_loan_all.loan_id);
+          this.HandleMessage(true, MessageType.Sucess, 'Borrowing Account Created Successfully. BorrowingId: ' + this.tm_loan_all.loan_id+', Trans Code is'+Number(val));
           this.td_deftrans.trans_cd = Number(val);
+          this.clearData();
           }
           },
           err => {
@@ -1146,7 +1147,6 @@ setTdDepTrans(){
   this.td_deftrans.particulars=this.td_deftranstrfList[0].particulars;
   this.td_deftrans.remarks=this.td_deftranstrfList[0].particulars;
   this.td_deftrans.trans_type='B'
-  this.td_deftrans.trans_dt=this.sys.CurrentDate;
   this.td_deftrans.trans_mode='W';
   this.td_deftrans.tr_acc_cd=10000;
 debugger
@@ -1178,12 +1178,12 @@ if (this.td_deftrans.trf_type === 'T') {
   this.td_deftranstrfList[0].particulars = 'BY BORROWING DISBURSEMENT';
   this.td_deftranstrfList[0].approval_status = 'U';
   this.td_deftranstrfList[0].brn_cd = this.branchCode;
-  this.td_deftranstrfList[0].trans_dt = this.sys.CurrentDate;
+  this.td_deftranstrfList[0].trans_dt = this.td_deftrans.trans_dt;
   this.td_deftranstrfList[0].created_by = this.createUser;
   // this.td_deftranstrfList[0].amount = ;
 
       this.tm_transferList[0].brn_cd = this.branchCode;
-      this.tm_transferList[0].trf_dt = this.sys.CurrentDate;
+      this.tm_transferList[0].trf_dt = this.td_deftrans.trans_dt;
       this.tm_transferList[0].approval_status = 'U';
       if (this.operationType === 'N') {
         this.tm_transferList[0].created_by = this.createUser;

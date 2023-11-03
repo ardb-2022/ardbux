@@ -158,7 +158,7 @@ export class LoginComponent implements OnInit {
     let bankName=this.ardbBrnMst.filter(x=>x.ardB_CD==this.f.ardbbrMst.value)[0].bank_name
     // let bankName2=this.ardbBrnMst.filter(x=>x.ardB_CD=='100')[0].bank_name
     if(this.f.ardbbrMst.value=='100'){
-        localStorage.setItem('__ardb_cd', '4');
+        localStorage.setItem('__ardb_cd', '26');
     }
     
     else{
@@ -182,7 +182,7 @@ export class LoginComponent implements OnInit {
     const login = new LOGIN_MASTER();
     const toreturn = false;
     const hexText: string = Array.from(this.f.password.value, (char: string) => char.charCodeAt(0).toString(16)).join('');
-    login.ardb_cd = this.f.ardbbrMst.value=='100'?'4':this.f.ardbbrMst.value;
+    login.ardb_cd = this.f.ardbbrMst.value=='100'?'26':this.f.ardbbrMst.value;
     login.user_id = this.f.username.value;
     login.password = hexText;
     login.brn_cd = this.f.branch.value;
@@ -294,7 +294,7 @@ export class LoginComponent implements OnInit {
   private getSystemParam(): void {
     this.isLoading=true
     var dt={
-      "ardb_cd":this.f.ardbbrMst.value=='100'?'4':this.f.ardbbrMst.value
+      "ardb_cd":this.f.ardbbrMst.value=='100'?'26':this.f.ardbbrMst.value
     }
    
     this.rstSvc.addUpdDel('Mst/GetSystemDate',dt).subscribe(data=>

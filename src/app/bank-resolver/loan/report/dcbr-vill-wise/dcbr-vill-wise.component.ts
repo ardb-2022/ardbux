@@ -155,8 +155,10 @@ export class DcbrVillWiseComponent implements OnInit {
     this.cd.detectChanges();
   }
   public SubmitReport() {
-    this.comser.getDay(this.reportcriteria.controls.fromDate.value,this.reportcriteria.controls.toDate.value)
+    console.log(this.reportcriteria.controls.fromDate.value,this.reportcriteria.controls.toDate.value);
     
+    this.comser.getDay(this.reportcriteria.controls.fromDate.value,this.reportcriteria.controls.toDate.value)
+    debugger
           this.isLoading=true;
           this.totovdInttSum=0;
           this.totcurrInttSum=0;
@@ -169,10 +171,11 @@ export class DcbrVillWiseComponent implements OnInit {
       var dt={
         "ardb_cd":this.sys.ardbCD,
         "brn_cd":this.sys.BranchCode,
-        "from_dt":this.sys.CurrentDate.toISOString(),
-        "to_dt":this.sys.CurrentDate.toISOString(),
+        "from_dt":this.reportcriteria.controls.fromDate.value.toISOString(),
+        "to_dt":this.reportcriteria.controls.toDate.value.toISOString(),
         "fund_type":this.reportcriteria.controls.fundType.value
       }
+      debugger
       this.svc.addUpdDel('Loan/GetDemandListVillWise',dt).subscribe(data=>{console.log(data)
         this.reportData=data
         if(this.reportData.length==0){
