@@ -151,7 +151,7 @@ export class DetailListComponent implements OnInit {
     }
   ]
   // displayedColumns: string[] = ['block_name','acc_name','party_name', 'acc_num', 'list_dt', 'curr_intt_rate','ovd_intt_rate','curr_prn','ovd_prn','plus','curr_intt','ovd_intt','computed_till_dt'];
-  displayedColumns: string[] = ['block_name','acc_name','party_name', 'acc_num', 'list_dt','plus','curr_prn','ovd_prn','curr_intt','ovd_intt','pnl_intt','computed_till_dt'];
+  displayedColumns: string[] = ['sl_no','block_name','acc_name','party_name', 'acc_num', 'list_dt','plus','curr_prn','ovd_prn','curr_intt','ovd_intt','pnl_intt','computed_till_dt'];
   dataSource = new MatTableDataSource()
   searchfilter= new MatTableDataSource()
 

@@ -184,7 +184,7 @@ export class PassBookPrintingComponent implements OnInit {
     this.suggestedCustomer = null;
   }
   getMY(d:any){
-    const [day, month, year, hour, minute] = d.split(/[/: ]/);
+    const [day, month, year,  hour = '00', minute = '00'] = d.split(/[/: ]/);
     const dateObject = new Date(year, month - 1, day, hour, minute);
     const formattedDate = dateObject.toLocaleString('en-US', { month: 'long', year: 'numeric' });
     console.log(formattedDate); 
@@ -223,7 +223,7 @@ export class PassBookPrintingComponent implements OnInit {
         console.log(data);
         this.reportData=data
         for (let i = 0; i < this.reportData.length; i++) {
-         this.reportData[i].ardb_cd=this.getMY(this.reportData[i].trans_dt)
+         this.reportData[i].ardb_cd=this.getMY(this.reportData[i].particulars)
          
         }
         

@@ -435,7 +435,7 @@
               <small for="penal_rt">Penal Intt. Rate</small>
               <input type="text" class="form-control form-control-sm" formControlName="penal_rt" id="penal_rt">
             </div>
-            <div class="form-group col-2 mksml" *ngIf="showOnClose && !isMat && effInt">
+            <div class="form-group col-2 mksml" *ngIf="showOnClose && !isMat">
               <small for="eff_intt">Eff.Intt. Rate</small>
               <input type="text" formControlName="eff_int" #effint (keyup)="inttCalOnClose()" [value]="effInt"
                 class="form-control form-control-sm mksml" id="eff_intt">

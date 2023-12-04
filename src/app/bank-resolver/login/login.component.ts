@@ -60,7 +60,7 @@ export class LoginComponent implements OnInit {
     localStorage.removeItem('ardb_name');
     localStorage.removeItem('L2L');
     if (this.router.url.includes('/login')) {
-      this.getLogdUser();
+      // this.getLogdUser();
       //  this.updateLoginStatus();
     }
    
@@ -83,14 +83,14 @@ export class LoginComponent implements OnInit {
       this.GetBranchMaster();
       this.GetARDBMaster();
       const sys = new SystemValues();
-      if (null !== sys.UserId && sys.UserId.length > 0) {
-        const usr = new LOGIN_MASTER();
-        usr.brn_cd = sys.BranchCode;
-        usr.user_id = sys.UserId;
-        usr.login_status = 'N';
+      // if (null !== sys.UserId && sys.UserId.length > 0) {
+      //   const usr = new LOGIN_MASTER();
+      //   usr.brn_cd = sys.BranchCode;
+      //   usr.user_id = sys.UserId;
+      //   usr.login_status = 'N';
 
-        this.updateUsrStatus(usr);
-      }
+      //   this.updateUsrStatus(usr);
+      // }
       localStorage.removeItem('__userId');
       this.isLoading = false
     }, 300);
@@ -158,7 +158,7 @@ export class LoginComponent implements OnInit {
     let bankName=this.ardbBrnMst.filter(x=>x.ardB_CD==this.f.ardbbrMst.value)[0].bank_name
     // let bankName2=this.ardbBrnMst.filter(x=>x.ardB_CD=='100')[0].bank_name
     if(this.f.ardbbrMst.value=='100'){
-        localStorage.setItem('__ardb_cd', '26');
+        localStorage.setItem('__ardb_cd', '2');
     }
     
     else{
@@ -182,7 +182,7 @@ export class LoginComponent implements OnInit {
     const login = new LOGIN_MASTER();
     const toreturn = false;
     const hexText: string = Array.from(this.f.password.value, (char: string) => char.charCodeAt(0).toString(16)).join('');
-    login.ardb_cd = this.f.ardbbrMst.value=='100'?'26':this.f.ardbbrMst.value;
+    login.ardb_cd = this.f.ardbbrMst.value=='100'?'2':this.f.ardbbrMst.value;
     login.user_id = this.f.username.value;
     login.password = hexText;
     login.brn_cd = this.f.branch.value;
@@ -232,7 +232,7 @@ export class LoginComponent implements OnInit {
             this.showAlert = true;
             this.isLoading=false;
             this.alertMsg = 'User id already logged in another machine;';
-            this.showUnlockUsr = true;
+            // this.showUnlockUsr = true;
             // alert(this.showUnlockUsr)
             this.usrToUnlock = res[0];
             return;
@@ -286,7 +286,9 @@ export class LoginComponent implements OnInit {
 
   private updateUsrStatus(usr: any): void {
     this.rstSvc.addUpdDel('Mst/Updateuserstatus', usr).subscribe(
+      
       res => {
+        debugger
       },
       err => { }
     );
@@ -294,7 +296,7 @@ export class LoginComponent implements OnInit {
   private getSystemParam(): void {
     this.isLoading=true
     var dt={
-      "ardb_cd":this.f.ardbbrMst.value=='100'?'26':this.f.ardbbrMst.value
+      "ardb_cd":this.f.ardbbrMst.value=='100'?'2':this.f.ardbbrMst.value
     }
    
     this.rstSvc.addUpdDel('Mst/GetSystemDate',dt).subscribe(data=>
@@ -422,13 +424,17 @@ export class LoginComponent implements OnInit {
       "ardb_cd": this.f.ardbbrMst.value,
       "user_id": e.target.value
     }
+    this.isLoading=true;
     this.rstSvc.addUpdDel('Mst/GetUserType', dt).subscribe(data => { //console.log(data)
        this.userData = data;
-       localStorage.setItem('userType',this.userData[0].user_type)
+       if(this.userData){
+        this.isLoading=false;
+        localStorage.setItem('userType',this.userData[0].user_type)
        this.loginForm.patchValue({branch:this.userData[0].user_type != 'A' ?  this.userData[0].brn_cd : ''})
        this.userData[0].user_type != 'A' ? this.f.branch.disable() : this.f.branch.enable();
        this.showAlert = this.userData[0].login_status == 'Y' ? true : false;
        this.alertMsg = this.userData[0].login_status == 'Y' ? 'User id already logged in another machine' : '';
+       }
        // if (this.userData[0].user_type != 'A') {
       //   this.loginForm.patchValue({
       //     branch: this.userData[0].brn_cd

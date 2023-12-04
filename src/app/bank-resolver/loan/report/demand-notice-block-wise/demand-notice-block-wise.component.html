@@ -184,7 +184,7 @@
                 <div style="padding:5px;">
                  <p> {{translatedData?.salutation}}, <br> {{translatedData?.salutation_sub}}, <br> {{translatedData?.body_pre}} {{reportData?data?.activity_name:''}} {{translatedData?.body_mid}} 
                   <span *ngIf="ardbcd!='26'">................................</span>
-                  <span *ngIf="ardbcd=='26'">{{converDttoDt}}</span>
+                  <span *ngIf="ardbcd=='26'">{{convertDt}}</span>
                   {{translatedData?.body_post}} </p>
                  <br>
                 <div class="row" style="margin-left: 10%; margin-right: 10%;font-weight: 600;">
@@ -214,7 +214,7 @@
                         <div class="col-6 pull-left"> {{translatedData?.curr_intt}}:</div>
                         <div class="col-6 pull-right"> {{reportData?data?.curr_intt:0 |currency:"INR"}}</div>
                       </div>
-                      <div class="row">
+                      <div class="row" *ngIf="ardbcd!='26'">
                           <b><div class="col-12 pull-right">{{converDttoDt}} </div></b>
                       </div>
                     </div>
@@ -247,7 +247,10 @@
                       </tr>
                   </table> -->
                   
-               <br>   {{translatedData?.foot_pre}} <br> {{translatedData?.foot_mid}} <br><span *ngIf="ardbcd!='26'">{{translatedData?.foot_post}}</span>  <span *ngIf="ardbcd=='26'">{{translatedData?.bmardb_post}}</span>
+               <br>  <span *ngIf="ardbcd!='26'">{{translatedData?.foot_pre}} <br> {{translatedData?.foot_mid}}</span>
+               <span *ngIf="ardbcd=='26'">{{translatedData?.foot_pre_BM}} {{convertDtFrm}} {{translatedData?.foot_mid_BM}}</span>  <br>
+               <span *ngIf="ardbcd!='26'">{{translatedData?.foot_post}}</span>  
+               <span *ngIf="ardbcd=='26'">{{translatedData?.bmardb_post}}</span>
           
                <div class="pull-right bt-5" style="padding-bottom: 30px;">
                   <p style="text-align: center;">{{translatedData?.regards_pre}}</p><br><br>

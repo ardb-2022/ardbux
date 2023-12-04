@@ -25,6 +25,7 @@ export class UpdatePassbookComponent implements OnInit {
     ignoreBackdropClick: true, // disable backdrop click to close the modal
     class: 'modal-lg'
   };
+  accTypeCD:any;
   passBookData:any[]=[];
   reportcriteria: FormGroup;
   closeResult = '';
@@ -165,6 +166,7 @@ export class UpdatePassbookComponent implements OnInit {
       this.isLoading=true
       this.fromdate = this.reportcriteria.controls.fromDate.value;
       this.toDate = this.reportcriteria.controls.toDate.value;
+      this.accTypeCD=this.reportcriteria.controls.acc_type_cd.value
       var dt={
         "ardb_cd":this.sys.ardbCD,
         "brn_cd":this.sys.BranchCode,

@@ -95,7 +95,7 @@
   .boxData .bottomSec .imgSec{float: left;}
   .boxData .bottomSec .amount{float: right; font-size: 24px; color: #fff; font-weight: 700; line-height: 24px; padding-top: 25px;}
   
-  .bgColor1{background-color: #058370d9;max-width: 300px;
+  /* .bgColor1{background-color: #058370d9;max-width: 300px;
     border-radius: 24px;}
   .bgColor2{background-color: #af9f09d9;max-width: 300px;
     border-radius: 24px;}
@@ -111,8 +111,24 @@
   .bgColor7{background-color: #9e6d73d9;max-width: 300px;
     border-radius: 24px;}
   .bgColor8{background-color: #772c2cd9;max-width: 300px;
-    border-radius: 24px;}
-
+    border-radius: 24px;} */
+    .bgColor1{background-color: #0e660273;max-width: 300px;
+      border-radius: 24px;}
+    .bgColor2{background-color: #4d026673;max-width: 300px;
+      border-radius: 24px;}
+    .bgColor6{background-color: #b97d3e87;max-width: 300px;
+      border-radius: 24px;}
+    .bgColor4{background-color: #a11c1c8f;max-width: 300px;
+      border-radius: 24px;}
+  
+    .bgColor5{background-color: #8d005475;max-width: 300px;
+      border-radius: 24px;}
+    .bgColor3{background-color: #a6b10596;max-width: 300px;
+      border-radius: 24px;}
+    .bgColor7{background-color: #0093ab73;max-width: 300px;
+      border-radius: 24px;}
+    .bgColor8{background-color: #3e3a81a8;max-width: 300px;
+      border-radius: 24px;}
 
   h2{font-size: 18px; color: #ffffff; font-weight: 400;}
   mat-card{
@@ -163,7 +179,8 @@
     padding:15px;
     top: -30px;
     border-radius: 15px;
-    background-color: #ffc5c5;
+    /* background-color: #9bcd98; */
+    background-color: #efebebdb;
     float: left;
     -moz-border-radius: 15px; 
     -webkit-border-radius: 15px; 
@@ -177,7 +194,8 @@
     padding:15px;
     top: -30px;
     border-radius: 15px;
-    background-color:#dfabff;
+    /* background-color: #b99cca; */
+    background-color:#efebebdb;
     float: left;
     -moz-border-radius: 15px; 
     -webkit-border-radius: 15px; 
@@ -190,7 +208,8 @@
     padding:15px;
     top: -30px;
     border-radius: 15px;
-    background-color:#f0f5b3;
+    /* background-color:#bbc549; */
+    background-color:#efebebdb;
     float: left;
     -moz-border-radius: 15px; 
     -webkit-border-radius: 15px; 
@@ -202,7 +221,8 @@
     padding:15px;
     top: -30px;
     border-radius: 15px;
-    background-color: #99e39c;
+    /* background-color: #d16868e3; */
+    background-color: #efebebdb;
     float: left;
     -moz-border-radius: 15px; 
     -webkit-border-radius: 15px; 
@@ -215,7 +235,8 @@
     padding:15px;
     top: -30px;
     border-radius: 15px;
-    background-color:#8ee1fc;
+    /* background-color:#dd9fb0; */
+    background-color:#efebebdb;
     float: left;
     -moz-border-radius: 15px; 
     -webkit-border-radius: 15px; 
@@ -228,7 +249,8 @@
     padding:15px;
     top: -30px;
     border-radius: 15px;
-    background-color:#f9da8c;
+    /* background-color:#e1c47b; */
+    background-color:#efebebdb;
     float: left;
     -moz-border-radius: 15px; 
     -webkit-border-radius: 15px; 
@@ -240,7 +262,8 @@
     padding:15px;
     top: -30px;
     border-radius: 15px;
-    background-color: #97f6d1;
+    /* background-color: #6ecba7; */
+    background-color: #efebebdb;
     float: left;
     -moz-border-radius: 15px; 
     -webkit-border-radius: 15px; 
@@ -252,7 +275,8 @@
     padding:15px;
     top: -30px;
     border-radius: 15px;
-    background-color: #e3f0a1;
+    /* background-color: #8688d5; */
+    background-color: #efebebdb;
     float: left;
     -moz-border-radius: 15px; 
     -webkit-border-radius: 15px; 

@@ -109,6 +109,9 @@
               <div class="form-row">
                 <div class="form-group col-12">
                   <small for="cust_name">Customer Name</small>
+                  <span class="badge badge-warning pull-right" *ngIf="joinHold!=''"> 
+                    JOINT HOLDER:-{{joinHold}}
+                   </span>
                   <input type="text" class="form-control form-control-sm" formControlName="cust_name" id="cust_name"
                    disabled>
                 </div>

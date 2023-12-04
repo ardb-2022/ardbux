@@ -63,6 +63,7 @@ export class HeaderComponent implements OnInit,OnDestroy,AfterViewInit {
   selectedScreenToShow: string;
   sys = new SystemValues();
   show = false;
+  userInfo:any;
   PassCH: FormGroup;
   currentMenu: MenuConfig;
   inside = false;
@@ -340,11 +341,15 @@ matmenuTrg:any=[];
         this.sdoRet=res
         this.svc.addUpdDel<any>('Sys/GetUserIDDtls', login).subscribe(
             res => {
+              this.userInfo=res[0]
               ;//console.log(res)
               this.userType=res[0].user_type
               this.roleCD=this.userType=='A'?1:this.userType=='S'?2:this.userType=='G'?3:4
               debugger
-              if(this.roleCD>0){this.callMenu()}
+              if(this.roleCD>0){
+                this.callMenu()
+                this.updateLogStatus()
+              }
               //console.log(this.sdoRet.filter(x=>x.brn_cd==this.sys.BranchCode)[0].cls_flg=="Y")
               // if(this.sdoRet.filter(x=>x.brn_cd==this.sys.BranchCode)[0].cls_flg=="Y"){
               //   this.hideMenuOnComplete=true
@@ -387,6 +392,16 @@ matmenuTrg:any=[];
 {
 var parts = datestring.match(/(\d+)/g);
 return new Date(parseInt(parts[2]), parseInt(parts[1])-1, parseInt(parts[0]));
+}
+updateLogStatus(){
+  if(this.userInfo){
+    this.userInfo.login_status='Y';
+    this.userInfo.ip=localStorage.getItem("ipAddress");
+    debugger
+    this.svc.addUpdDel('Mst/Updateuserstatus', this.userInfo).subscribe(
+      res => {debugger})
+  }
+  
 }
 openNewTab() {
   this.auth.report=true;

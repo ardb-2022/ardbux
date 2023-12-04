@@ -130,13 +130,15 @@
             <div class="form-row">
               <div class="form-group col-8">
                 <small for="party">Party </small>
-                <span class="badge badge-warning pull-right" *ngIf="showINSTNO"> 
-                  Installment No: {{this.selectedVm.loan?.tmloanall?.instl_no}} ({{this.selectedVm.loan?.tmloanall?.piriodicity=='Y'?"Yearly":"Monthly"}})
+                <span class="badge badge-warning pull-right" *ngIf="joinHold!=''"> 
+                  JOINT HOLDER:-{{joinHold}}
                  </span>
+                
                 <input type="text" class="form-control form-control-sm" formControlName="party" id="party" disabled>
               </div>
               <div class="form-group col-4">
                 <small for="approval_status">Approval Status</small>
+                
                 <input type="text" class="form-control form-control-sm" formControlName="approval_status" id="approval_status"
                   disabled>
               </div>
@@ -150,6 +152,9 @@
               </div>
               <div class="form-group col-6">
                 <small for="acc_type_cd">Account Type</small>
+                <span class="badge badge-warning pull-right" *ngIf="showINSTNO"> 
+                  Installment No: {{this.selectedVm.loan?.tmloanall?.instl_no}} {{this.selectedVm.loan?.tmloanall?.piriodicity=='Y'?"Yearly":"Monthly"}}
+                 </span>
                 <input type="text" class="form-control form-control-sm" formControlName="acc_type_cd"
                 id="acc_type_cd" disabled>
               </div>
@@ -239,16 +244,28 @@
                     <input type="text" class="form-control form-control-sm" formControlName="share_holding" id="share_holding "
                       disabled>
                   </div>
-                  <div class="form-group col-12 bg-warning">
+                  <div class="form-group col-6 bg-warning mt-1">
                     <small for="paid_amt">Paid Amount</small>
                     <input type="text" class="form-control form-control-sm" formControlName="paid_amt" id="paid_amt "
+                      disabled>
+                  </div>
+                  <div class="form-group col-6 bg-warning mt-1">
+                    <small for="ongoing_unit_no">Legal Charge</small>
+                    <input type="text" class="form-control form-control-sm" formControlName="ongoing_unit_no" id="ongoing_unit_no "
                       disabled>
                   </div>
                   <!-- <div class="form-group col-6 bg-warning">
                     <small for="mis_adv">MIS advance</small>
                     <input type="text" class="form-control form-control-sm" formControlName="mis_adv" id="mis_adv " disabled>
                   </div> -->
-
+                  <div class="form-group col-6">
+                    <small for="curr_intt_rate">Curr Intt Rt. </small>
+                    <input type="text" class="form-control form-control-sm" formControlName="curr_intt_rate" id="curr_intt_rate" disabled>
+                  </div>
+                  <div class="form-group col-6">
+                    <small for="ovd_intt_rate">Ovd Intt Rt. </small>
+                    <input type="text" class="form-control form-control-sm" formControlName="ovd_intt_rate" id="ovd_intt_rate" disabled>
+                  </div>
                   <div class="form-group col-6">
                     <small for="amount">Amount </small>
                     <input type="text" class="form-control form-control-sm" formControlName="amount" id="amount" disabled>

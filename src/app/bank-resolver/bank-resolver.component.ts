@@ -19,6 +19,7 @@ export class BankResolverComponent implements OnInit,OnDestroy {
   showHeader = false;
   showTitle = true;
   sys = new SystemValues();
+
   constructor(private route: ActivatedRoute,
               private confSvc: ConfigurationService,
               private msg: InAppMessageService,
@@ -62,7 +63,10 @@ export class BankResolverComponent implements OnInit,OnDestroy {
     this.idleService.onIdle().subscribe(() => {
       if (this.authService.isLoggedIn()) {
         // this.authService.logout();
-        this.logoutUser() ;
+        if (this.router.url.includes('/login')) {
+        alert("You have Idle more than 5 Min...")
+        }
+        else{this.logoutUser() ;}
         // Perform additional actions like showing a modal or redirecting to the login page.
       }
     });
@@ -107,32 +111,27 @@ export class BankResolverComponent implements OnInit,OnDestroy {
   logoutUser() {
     debugger;
     this.authService.isAuthenticated = false;
-    // alert("hello")
-    // console.log(JSON.stringify(this.sys));
-    if (null !== this.sys.BranchCode && null !== this.sys.UserId) {
+    debugger
+    
 
       this.updateUsrStatus();
-      // localStorage.removeItem('__brnName');
-      // localStorage.removeItem('__brnCd');
-      // localStorage.removeItem('__currentDate');
-      // localStorage.removeItem('__cashaccountCD');
-      // localStorage.removeItem('__ddsPeriod');
-      // localStorage.removeItem('__userId');
-      localStorage.clear();
-      this.msg.sendisLoggedInShowHeader(true);
-      const bankName = localStorage.getItem('__bName');
-      this.router.navigate([bankName + '/login']);
-    }
+      
+    
   }
   private updateUsrStatus(): void {
     
     const usr = new LOGIN_MASTER();
-    usr.ardb_cd=this.sys.ardbCD
-    usr.brn_cd = this.sys.BranchCode;
-    usr.user_id = this.sys.UserId;
+    usr.ardb_cd=localStorage.getItem('__ardb_cd');
+    usr.brn_cd = localStorage.getItem('__brnCd');
+    usr.user_id = localStorage.getItem('__userId');
     usr.login_status = 'N';
     this.rstSvc.addUpdDel('Mst/Updateuserstatus', usr).subscribe(
-      res => { },
+      res => {debugger 
+        localStorage.clear();
+        this.msg.sendisLoggedInShowHeader(true);
+        const bankName = localStorage.getItem('__bName');
+        this.router.navigate([bankName + '/login']);
+      },
       err => { }
     );
   }

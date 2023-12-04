@@ -287,6 +287,12 @@
     margin-top: 0!important;
     margin-bottom: 0!important;
   }
+  .amountToWord{
+    font-family: 'cursive';
+    text-transform: uppercase; 
+    color:rgb(0, 0, 0);
+    padding-right: 10px;
+  }
   @media print {
     .table-container {
       display: inline-block;

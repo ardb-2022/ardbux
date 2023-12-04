@@ -99,6 +99,7 @@ export class DemandNoticeBlockWiseComponent implements OnInit {
   calc=''
   convertDt:any;
   converDttoDt=''
+  convertDtFrm=''
   getArdb:any=[]
   disabledOnNull = true;
   loanId: any;
@@ -338,6 +339,8 @@ export class DemandNoticeBlockWiseComponent implements OnInit {
   public SubmitReport() {
     this.getBlockName();
     if(this.ardbcd=="26"){
+    this.convertDtFrm=''
+    this.convertDtFrm=this.datePipe.transform(this.reportcriteria.controls.fromDate.value, 'dd/MM/yyyy')
       this.toDate = this.reportcriteria.controls.toDate.value;
       console.log(this.datePipe.transform(this. toDate, 'dd/MM/yyyy'))
       this.convertDt=this.datePipe.transform(this. toDate, 'dd/MM/yyyy')
@@ -347,7 +350,7 @@ export class DemandNoticeBlockWiseComponent implements OnInit {
       this.lastDate=this.lastDate
     }
     this.comser.getDay(this.reportcriteria.controls.fromDate.value,this.reportcriteria.controls.toDate.value)
-    this.converDttoDt=''
+    
     if (this.reportcriteria.invalid) {
       this.showAlert = true;
       this.alertMsg = 'Invalid Input.';

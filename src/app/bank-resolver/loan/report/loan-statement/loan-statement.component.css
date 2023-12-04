@@ -150,7 +150,8 @@ table{
 
 .mat-column-disclaimer14{
   border-right: 1px solid rgb(172, 170, 170);
-}.mat-column-disclaimer15{
+}
+/* .mat-column-disclaimer15{
   border-right: 1px solid rgb(172, 170, 170);
 }
 .mat-column-disclaimer16{
@@ -164,7 +165,7 @@ table{
 }
 .mat-column-disclaimer19{
   border-right: 1px solid rgb(172, 170, 170);
-}
+} */
 
 
 td,th{

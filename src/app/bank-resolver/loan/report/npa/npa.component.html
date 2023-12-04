@@ -317,7 +317,7 @@
       <!-- Footer column -->
       <ng-container matColumnDef="Total">
         <td mat-footer-cell *matFooterCellDef colspan="6" style="text-align:center;">
-          <b>Total</b>
+          <b>Total(Count-{{this.reportData?.length}})</b>
         </td>
       </ng-container>
       <ng-container matColumnDef="disclaimer0">
@@ -412,7 +412,7 @@
        </small>
       </footer>
   </div>
-  <!-- <mat-paginator [pageSizeOptions]="[5, 10, 25, 100, this.reportData?.length]" aria-label="Select page of users"></mat-paginator> -->
+  <mat-paginator [pageSizeOptions]="[100,500,1000, this.reportData?.length]" aria-label="Select page of users"></mat-paginator>
   
 
 

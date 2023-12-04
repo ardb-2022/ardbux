@@ -276,7 +276,7 @@
                 <small for="intt_recov_dt">Trans Dt <span class="text-danger">*</span></small>
                 <div class="input-group">
                   <input type="text"  placeholder="dd/mm/yyyy" class="form-control form-control-sm"  bsDatepicker
-                    formControlName="trans_dt" 
+                    formControlName="trans_dt" (ngModelChange)="SetTrans_DT()"
                     [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }"
                     [isOpen]="isOpentrnsdt">
                   <div class="input-group-append">

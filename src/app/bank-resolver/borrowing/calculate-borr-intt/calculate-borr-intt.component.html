@@ -28,7 +28,7 @@
               <small for="date_of_payment">As on Date<span class="text-danger">*</span></small>
                 <div class="input-group">
                 <input type="text" placeholder="dd/mm/yyyy" class="form-control" 
-                [(ngModel)]="asOnDate"  bsDatepicker
+                [(ngModel)]="asOnDate"  bsDatepicker (ngModelChange)="SetTrans_DT()"
                 [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }"
                 [isOpen]="isOpenFromDp">
                 <div class="input-group-append">

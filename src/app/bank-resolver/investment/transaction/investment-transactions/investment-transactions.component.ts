@@ -467,16 +467,16 @@ enable(e:any){
     console.log(InvestmentTransactionsComponent.operations);
 
     this.isLoading = true;
-    if (undefined !== InvestmentTransactionsComponent.operations &&
-      null !== InvestmentTransactionsComponent.operations &&
-      InvestmentTransactionsComponent.operations.length > 0) {
-      this.isLoading = false;
-      this.AcctTypes = InvestmentTransactionsComponent.operations.filter(e => e.module_type === 'INVESTMENT')
-        .filter((thing, i, arr) => {
-          return arr.indexOf(arr.find(t => t.acc_type_cd === thing.acc_type_cd)) === i;
-        });
-      this.AcctTypes = this.AcctTypes.sort((a, b) => (a.acc_type_cd > b.acc_type_cd ? 1 : -1));
-    } else {
+    // if (undefined !== InvestmentTransactionsComponent.operations &&
+    //   null !== InvestmentTransactionsComponent.operations &&
+    //   InvestmentTransactionsComponent.operations.length > 0) {
+    //   this.isLoading = false;
+    //   this.AcctTypes = InvestmentTransactionsComponent.operations.filter(e => e.module_type === 'INVESTMENT')
+    //     .filter((thing, i, arr) => {
+    //       return arr.indexOf(arr.find(t => t.acc_type_cd === thing.acc_type_cd)) === i;
+    //     });
+    //   this.AcctTypes = this.AcctTypes.sort((a, b) => (a.acc_type_cd > b.acc_type_cd ? 1 : -1));
+    // } else {
       this.svc.addUpdDel<mm_operation[]>('Mst/GetOperationDtls', null).subscribe(
         res => {
           console.log(res)
@@ -491,7 +491,7 @@ enable(e:any){
         },
         err => { this.isLoading = false; }
       );
-    }
+    // }
     console.log(this.AcctTypes);
 
   }

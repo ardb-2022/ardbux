@@ -141,7 +141,7 @@
           <div class="justify-content-center" style="text-align:center">
             <h4>{{ardbName}} ({{branchName}})</h4>
             <h4>Run Date & Time : {{today}} </h4> <br>
-            <h4> <u> Loan Statement from {{reportcriteria.controls.fromDate.value | date: 'dd/MM/yyyy'}} to
+            <h4> <u> Loan Ledger from {{reportcriteria.controls.fromDate.value | date: 'dd/MM/yyyy'}} to
                 {{reportcriteria.controls.toDate.value | date: 'dd/MM/yyyy'}}</u></h4>
             <p>
               <b>
@@ -491,9 +491,9 @@
         <!-- <td mat-footer-cell *matFooterCellDef >Hello</td> -->
         <!-- <td mat-footer-cell *matFooterCellDef >{{crSum | number : '1.2-2'}}</td> -->
       </ng-container>
-      <ng-container matColumnDef="disclaimer15" >
+      <ng-container matColumnDef="disclaimer15">
         <td mat-footer-cell *matFooterCellDef  style="font-weight: 800;text-align:center">
-          {{currPrnSum | number : '1.2-2'}}
+         
         </td>
         
         <!-- <td mat-footer-cell *matFooterCellDef >Hello</td> -->
@@ -501,7 +501,7 @@
       </ng-container>
       <ng-container matColumnDef="disclaimer16">
         <td mat-footer-cell *matFooterCellDef  style="font-weight: 800;text-align:center">
-          {{ovdPrnSum | number : '1.2-2'}}
+        
         </td>
         
         <!-- <td mat-footer-cell *matFooterCellDef >Hello</td> -->
@@ -509,7 +509,7 @@
       </ng-container>
       <ng-container matColumnDef="disclaimer17" >
         <td mat-footer-cell *matFooterCellDef style="font-weight: 800;text-align:center">
-          {{currInttSum | number : '1.2-2'}}
+          
         </td>
         
         <!-- <td mat-footer-cell *matFooterCellDef >Hello</td> -->
@@ -517,7 +517,7 @@
       </ng-container>
       <ng-container matColumnDef="disclaimer18" >
         <td mat-footer-cell *matFooterCellDef  style="font-weight: 800;text-align:center">
-          {{ovdInttSum | number : '1.2-2'}}
+          
         </td>
         
         <!-- <td mat-footer-cell *matFooterCellDef >Hello</td> -->
@@ -525,7 +525,7 @@
       </ng-container>
       <ng-container matColumnDef="disclaimer19" >
         <td mat-footer-cell *matFooterCellDef  style="font-weight: 800;text-align:center">
-          {{penalInttSum | number : '1.2-2'}}
+         
         </td>
         
         <!-- <td mat-footer-cell *matFooterCellDef >Hello</td> -->

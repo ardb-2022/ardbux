@@ -565,7 +565,7 @@ export class UTCustomerProfileComponent implements OnInit {
       cust_dt: cust.cust_dt,
       old_cust_cd: cust.old_cust_cd,
       dt_of_birth: dob, // formatDate(new Date(cust.dt_of_birth), 'yyyy-MM-dd', 'en'),
-      age: cust.age,
+      // age: cust.age,
       sex: cust.sex,
       marital_status: cust.marital_status,
       catg_cd: cust.catg_cd,

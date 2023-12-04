@@ -142,8 +142,10 @@
               <table class="table table-sm table-hover">
                 <thead>
                   <tr>
-                    <th scope="col">Date</th>
-                    <th scope="col">Particulars</th>
+                    <th *ngIf="accTypeCD=='6'" scope="col">Trans Date</th>
+                    <th *ngIf="accTypeCD=='1' || accTypeCD=='8'" scope="col">Date</th>
+                    <th *ngIf="accTypeCD=='6'" scope="col">Payment For</th>
+                    <th *ngIf="accTypeCD=='1' || accTypeCD=='8'" scope="col">Particulars</th>
                     <th scope="col">Instument No</th>
                     <th scope="col">Withdrawal</th>
                     <th scope="col">Deposit</th>

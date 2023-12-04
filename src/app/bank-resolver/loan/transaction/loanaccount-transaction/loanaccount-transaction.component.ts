@@ -30,6 +30,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import { tm_subsidy } from 'src/app/bank-resolver/Models/loan/tm_subsidy';
+import { mm_activity } from 'src/app/bank-resolver/Models/loan/mm_activity';
 @Component({
   selector: 'app-loanaccount-transaction',
   templateUrl: './loanaccount-transaction.component.html',
@@ -50,6 +51,7 @@ export class LoanaccountTransactionComponent implements OnInit {
   @ViewChild('contentLoanStmt', { static: true }) contentLoanStmt: TemplateRef<any>;
   @ViewChild('custDtls', { static: true }) custDtls: TemplateRef<any>;
   @ViewChild('LoanChallan', { static: true }) LoanChallan: TemplateRef<any>;
+  @ViewChild('ContaiLoanChallan', { static: true }) ContaiLoanChallan: TemplateRef<any>;
   @ViewChild('netWorth', { static: true }) netWorth: TemplateRef<any>;
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -75,6 +77,7 @@ export class LoanaccountTransactionComponent implements OnInit {
   ReportUrl: SafeResourceUrl;
   UrlString = '';
   // sancdtls: FormArray;
+  activityList: mm_activity[] = [];
   showTransMode = false;
   showTransactionDtl = false;
   hideOnClose = false;
@@ -216,8 +219,11 @@ export class LoanaccountTransactionComponent implements OnInit {
   p_i:any;
   t_cd:any;
   i_n_dt:any;
+  l_ch:any;
   partyName:any;
-  ln_id:any;
+  ln_id:any; 
+  pps:any;
+
   aCD:any
   acDesc:any;
   trns_type:any;
@@ -225,7 +231,9 @@ export class LoanaccountTransactionComponent implements OnInit {
   fdt:any;
   tdt:any;
   Share_fl_no:any;
-  showNW:boolean
+  showNW:boolean;
+  outPrn:Number=0;
+  outIntt:Number=0;
   // editDeleteMode=false
   // showInstrumentDtl = false;
   ngOnInit(): void {
@@ -346,7 +354,7 @@ export class LoanaccountTransactionComponent implements OnInit {
       this.GetUnapprovedDepTrans();
       this.getDenominationList();
       this.getInstallmentType();
-      
+      this.getActivityList();
     }, 150);
   }
   // addVoucherFromGroup(): FormGroup {
@@ -627,21 +635,22 @@ export class LoanaccountTransactionComponent implements OnInit {
     this.onAccountNumTabOff();
     this.suggestedCustomer = [];
     this.getSubsidy();
+    this.td.ongoing_unit_no.enable();
 
   }
 
   private getOperationMaster(): void {
 
     this.isLoading = true;
-    if (undefined !== AccounTransactionsComponent.operations && null !== AccounTransactionsComponent.operations && AccounTransactionsComponent.operations.length > 0) {
-      this.isLoading = false;
-      this.AcctTypes = AccounTransactionsComponent.operations.filter(e => e.module_type === 'LOAN')
-        .filter((thing, i, arr) => {
-          return arr.indexOf(arr.find(t => t.acc_type_cd === thing.acc_type_cd)) === i;
-        });
-      this.AcctTypes = this.AcctTypes.sort((a, b) => (a.acc_type_cd > b.acc_type_cd ? 1 : -1));
+    // if (undefined !== AccounTransactionsComponent.operations && null !== AccounTransactionsComponent.operations && AccounTransactionsComponent.operations.length > 0) {
+    //   this.isLoading = false;
+    //   this.AcctTypes = AccounTransactionsComponent.operations.filter(e => e.module_type === 'LOAN')
+    //     .filter((thing, i, arr) => {
+    //       return arr.indexOf(arr.find(t => t.acc_type_cd === thing.acc_type_cd)) === i;
+    //     });
+    //   this.AcctTypes = this.AcctTypes.sort((a, b) => (a.acc_type_cd > b.acc_type_cd ? 1 : -1));
       // console.log(this.AcctTypes)
-    } else {
+    // } else {
       this.svc.addUpdDel<mm_operation[]>('Mst/GetOperationDtls', null).subscribe(
         res => {
           console.log(res)
@@ -655,7 +664,7 @@ export class LoanaccountTransactionComponent implements OnInit {
         },
         err => { this.isLoading = false; }
       );
-    }
+    // }
   }
 
   public onAcctTypeChange(): void {
@@ -748,6 +757,8 @@ export class LoanaccountTransactionComponent implements OnInit {
           console.log(acc.tddeftrans.trans_type)
           debugger
           this.accNoEnteredForTransaction = acc.tmloanall;
+          this.outIntt=(+acc.tmloanall.curr_intt) + (+acc.tmloanall.ovd_intt) +(+acc.tmloanall.penal_intt)
+          this.outPrn=+(+acc.tmloanall.curr_prn) + (+acc.tmloanall.ovd_prn)
           this.accDtlsFrm.patchValue({
             cust_name: acc.tmloanall.cust_name,
             intt_recev: acc.tmloanall.curr_intt + acc.tmloanall.ovd_intt + acc.tmloanall.penal_intt,
@@ -796,7 +807,7 @@ export class LoanaccountTransactionComponent implements OnInit {
 
           //Challan Value set Retrive time
           this.t_cd=acc.tddeftrans.trans_cd;
-          this.t_a=acc.tddeftrans?.amount;
+          this.t_a=(+acc.tddeftrans?.amount)+(acc.tddeftrans?.ongoing_unit_no);
                 // this.s_a=saveTransaction.tddeftrans?.share_amt;
                 this.c_p=acc.tddeftrans?.curr_prn_recov;
                 this.c_i=acc.tddeftrans?.curr_intt_recov;
@@ -808,11 +819,13 @@ export class LoanaccountTransactionComponent implements OnInit {
                 this.trns_type=acc.tddeftrans?.trf_type;
                 this.ln_id=acc.tddeftrans?.acc_num;
                 this.aCD=acc.tmloanall.acc_cd;
+                this.l_ch=acc.tddeftrans?.ongoing_unit_no;
                 this.acDesc=this.AcctTypes.filter(e=>e.acc_type_cd==this.aCD)[0].acc_type_desc;
                 
           debugger;
 
           this.tdDefTransFrm.patchValue({
+            ongoing_unit_no:acc.tddeftrans.ongoing_unit_no,
             trans_cd: acc.tddeftrans.trans_cd,
             trans_dt: acc.tddeftrans.trans_dt,
             acc_num: acc.tmloanall.loan_id,
@@ -930,7 +943,12 @@ export class LoanaccountTransactionComponent implements OnInit {
           debugger;
 
           this.sancdtls = acc.tmlaonsanctiondtls;
-          this.sancdtls.forEach(x => x.draw_limit = x.sanc_amt - acc.tmloanall.disb_amt);
+          if(this.sys.ardbCD=='26' && acc.tmloanall.acc_cd==20416){
+            this.sancdtls.forEach(x => x.draw_limit = x.sanc_amt - (acc.tmloanall.curr_prn+acc.tmloanall.ovd_prn));
+           }
+            else{
+            this.sancdtls.forEach(x => x.draw_limit = x.sanc_amt - acc.tmloanall.disb_amt);
+            }
           if (acc.tddeftrans.trf_type === 'C') {
             // this.tm_denominationList = acc.tmdenominationtrans;
             // this.tm_denominationList.forEach(x => x.rupees_desc = this.denominationList.filter(y => y.value === x.rupees)[0].rupees);
@@ -970,6 +988,7 @@ export class LoanaccountTransactionComponent implements OnInit {
             this.f.oprn_cd.disable();
           }
           else {
+            this.td.ongoing_unit_no.enable();
             this.showTransactionDtl = true;
             this.isDisburs = false;
             this.showTranferType = true;
@@ -1113,6 +1132,8 @@ export class LoanaccountTransactionComponent implements OnInit {
           this.disableOperation = false;
           this.accNoEnteredForTransaction = acc.tmloanall;
           console.log(acc.tmloanall.penal_intt)
+          this.outIntt=(+acc.tmloanall.curr_intt) + (+acc.tmloanall.ovd_intt) +(+acc.tmloanall.penal_intt)
+          this.outPrn=+(+acc.tmloanall.curr_prn) + (+acc.tmloanall.ovd_prn)
           // debugger;
           this.accDtlsFrm.patchValue({
             cust_name: acc.tmloanall.cust_name,
@@ -1151,7 +1172,12 @@ export class LoanaccountTransactionComponent implements OnInit {
           });
           console.log(acc.tmloanall.last_intt_calc_dt)
           this.sancdtls = acc.tmlaonsanctiondtls;
-          this.sancdtls.forEach(x => x.draw_limit = x.sanc_amt - acc.tmloanall.disb_amt);
+          if(this.sys.ardbCD=='26' && acc.tmloanall.acc_cd==20416){
+            this.sancdtls.forEach(x => x.draw_limit = x.sanc_amt - (acc.tmloanall.curr_prn+acc.tmloanall.ovd_prn));
+           }
+            else{
+            this.sancdtls.forEach(x => x.draw_limit = x.sanc_amt - acc.tmloanall.disb_amt);
+            }
           // for (let x = 0; x < acc.tmlaonsanctiondtls.length; x++) {
           //   this.sancdtls = this.sancDetails.get('sancdtls') as FormArray;
           //   this.sancdtls.push(this.frmBldr.group({
@@ -1305,6 +1331,8 @@ export class LoanaccountTransactionComponent implements OnInit {
             dt.setDate(dt.getDate() - 1)
             console.log(acc.tmloanall.penal_intt);
             // debugger;
+            this.outIntt=(+acc.tmloanall.curr_intt) + (+acc.tmloanall.ovd_intt) +(+acc.tmloanall.penal_intt)
+          this.outPrn=+(+acc.tmloanall.curr_prn) + (+acc.tmloanall.ovd_prn)
             console.log(this.c.transform(dt, 'dd/MM/yyyy hh:mm:ss'))
             this.accDtlsFrm.patchValue({
               cust_name: acc.tmloanall.cust_name,
@@ -1352,7 +1380,12 @@ export class LoanaccountTransactionComponent implements OnInit {
             // // console.log(dt)
             // console.log(this.c.transform(dt,'dd/MM/yyyy hh:mm:ss'))
             this.sancdtls = acc.tmlaonsanctiondtls;
+            if(this.sys.ardbCD=='26' && acc.tmloanall.acc_cd==20416){
+            this.sancdtls.forEach(x => x.draw_limit = x.sanc_amt - (acc.tmloanall.curr_prn+acc.tmloanall.ovd_prn));
+           }
+            else{
             this.sancdtls.forEach(x => x.draw_limit = x.sanc_amt - acc.tmloanall.disb_amt);
+            }
             // for (let x = 0; x < acc.tmlaonsanctiondtls.length; x++) {
             //   this.sancdtls = this.sancDetails.get('sancdtls') as FormArray;
             //   this.sancdtls.push(this.frmBldr.group({
@@ -1423,7 +1456,7 @@ export class LoanaccountTransactionComponent implements OnInit {
       this.td.ovd_prn_recov.disable();
       this.td.ovd_intt_recov.disable();
       this.td.amount.setValue('');
-      // this.td.curr_prn_recov.setValue('');
+      this.td.ongoing_unit_no.setValue(0);
       // this.td.curr_intt_recov.setValue('this.currIntt');
       // this.td.ovd_prn_recov.setValue(this.ovdPrn);
       // this.td.ovd_intt_recov.setValue(this.ovdIntt);
@@ -1793,7 +1826,10 @@ export class LoanaccountTransactionComponent implements OnInit {
           if(this.td.recov_type.value=='A'){
             debugger;
             if(!this.td.amount.value)
-            { this.accDtlsFrm.patchValue({
+            { 
+              this.outPrn=(+inttRet.ovd_prn_recov) - (+this.tdDefTransFrm.controls.ovd_prn_recov.value) + inttRet.curr_prn_recov - (+this.tdDefTransFrm.controls.curr_prn_recov.value)
+              this.outIntt=(+inttRet.curr_intt_recov) + (+inttRet.ovd_intt_recov) + (+inttRet.penal_intt_recov) - (+this.tdDefTransFrm.controls.curr_intt_recov.value) - (+this.tdDefTransFrm.controls.penal_intt_recov.value) -  (+this.tdDefTransFrm.controls.ovd_intt_recov.value)
+              this.accDtlsFrm.patchValue({
               curr_principal: inttRet.curr_prn_recov - (+this.tdDefTransFrm.controls.curr_prn_recov.value),
               penal_intt: (+inttRet.penal_intt_recov)- (+this.tdDefTransFrm.controls.penal_intt_recov.value),
               // intt_recev: inttRet.curr_intt_recov+inttRet.ovd_intt_recov+inttRet.penal_intt_recov,
@@ -1824,6 +1860,8 @@ export class LoanaccountTransactionComponent implements OnInit {
           }
           else{
             debugger;
+            this.outPrn=(+inttRet.ovd_prn_recov) - (+this.tdDefTransFrm.controls.ovd_prn_recov.value) + inttRet.curr_prn_recov - (+this.tdDefTransFrm.controls.curr_prn_recov.value)
+            this.outIntt=(+inttRet.curr_intt_recov) + (+inttRet.ovd_intt_recov) + (+inttRet.penal_intt_recov) - (+this.tdDefTransFrm.controls.curr_intt_recov.value) - (+this.tdDefTransFrm.controls.penal_intt_recov.value) -  (+this.tdDefTransFrm.controls.ovd_intt_recov.value)
             this.accDtlsFrm.patchValue({
               curr_principal: inttRet.curr_prn_recov - (+this.tdDefTransFrm.controls.curr_prn_recov.value),
               penal_intt: (+inttRet.penal_intt_recov)- (+this.tdDefTransFrm.controls.penal_intt_recov.value),
@@ -1846,6 +1884,8 @@ export class LoanaccountTransactionComponent implements OnInit {
           }
           }
           else{
+            this.outPrn=(inttRet.curr_prn_recov - (+this.tdDefTransFrm.controls.curr_prn_recov.value))+((+inttRet.ovd_prn_recov) - (+this.tdDefTransFrm.controls.ovd_prn_recov.value))
+             
             this.accDtlsFrm.patchValue({
               curr_principal: inttRet.curr_prn_recov - (+this.tdDefTransFrm.controls.curr_prn_recov.value),
               penal_intt: (+inttRet.penal_intt_recov)- (+this.tdDefTransFrm.controls.penal_intt_recov.value),
@@ -1957,10 +1997,27 @@ if(this.isRecovery){
     Number(this.td.adv_prn_recov.value?this.td.adv_prn_recov.value:0) + 
     Number(this.td.curr_intt_recov.value?this.td.curr_intt_recov.value:0) + 
     Number(this.td.ovd_intt_recov.value?this.td.ovd_intt_recov.value:0) + 
-    Number(this.td.penal_intt_recov.value?this.td.penal_intt_recov.value:0)
+    Number(this.td.penal_intt_recov.value?this.td.penal_intt_recov.value:0)+
+    Number(this.td.ongoing_unit_no.value?this.td.ongoing_unit_no.value:0)
+
    console.log(this.recov_sum)
    debugger; 
-   if (this.td.trf_type.value === 'T' && this.TrfTotAmt !== (+this.td.amount.value) && this.TrfTotAmt !=this.recov_sum) {
+   if(this.td.ongoing_unit_no.value>0){
+    if (this.td.trf_type.value === 'T' && this.TrfTotAmt !== ((+this.td.amount.value)+(+this.td.ongoing_unit_no.value)) && this.TrfTotAmt !=this.recov_sum) {
+      this.HandleMessage(true, MessageType.Error,
+        `Transfer total amount ₹${this.TrfTotAmt}, ` +
+        ` does not match with transaction amount ₹${(+this.td.amount.value)+(+this.td.ongoing_unit_no.value)}`);
+      return;
+    }
+    if (this.td.trf_type.value === 'C' && ((+this.td.amount.value)+(+this.td.ongoing_unit_no.value)) !=this.recov_sum) {
+      this.HandleMessage(true, MessageType.Error,
+        `Transfer total amount ₹${this.recov_sum}, ` +
+        ` does not match with transaction amount ₹${(+this.td.amount.value)+(+this.td.ongoing_unit_no.value)}`);
+      return;
+    }
+   }
+   else{
+    if (this.td.trf_type.value === 'T' && this.TrfTotAmt !== (+this.td.amount.value) && this.TrfTotAmt !=this.recov_sum) {
       this.HandleMessage(true, MessageType.Error,
         `Transfer total amount ₹${this.TrfTotAmt}, ` +
         ` does not match with transaction amount ₹${this.td.amount.value}`);
@@ -1972,6 +2029,8 @@ if(this.isRecovery){
         ` does not match with transaction amount ₹${this.td.amount.value}`);
       return;
     }
+   }
+   
 }
 if(this.isDisburs){
   if (this.td.trf_type.value === 'T' && this.TrfTotAmt !== (+this.td.paid_amount.value)) {
@@ -1988,6 +2047,7 @@ this.o_p=null;
 this.o_i=null;
 this.a_p=null;
 this.p_i=null;
+this.l_ch=null
 // this.i_n_dt=this.td.intt_recov_dt.value;
 this.i_n_dt=null;
 
@@ -2081,7 +2141,7 @@ debugger;
             ////////debugger;
           
             if (this.td.trans_cd.value > 0) {
-              this.t_a=saveTransaction.tddeftrans?.amount;
+              this.t_a=(saveTransaction.tddeftrans?.amount)+(saveTransaction.tddeftrans?.ongoing_unit_no);
                 // this.s_a=saveTransaction.tddeftrans?.share_amt;
                 this.c_p=saveTransaction.tddeftrans?.curr_prn_recov;
                 this.c_i=saveTransaction.tddeftrans?.curr_intt_recov;
@@ -2091,7 +2151,7 @@ debugger;
                 this.p_i=saveTransaction.tddeftrans?.penal_intt_recov;
                 // this.i_n_dt=this.td.intt_recov_dt.value;
                 this.i_n_dt=this.td.no_of_day.value!=0? this.c.transform(this.td.intt_recov_dt.value, 'dd/MM/yyyy hh:mm:ss'):this.td.intt_recov_dt.value;
-              
+                  this.l_ch=saveTransaction.tddeftrans?.ongoing_unit_no;
               debugger
               this.svc.addUpdDel<LoanOpenDM>('Common/UpdateTransactionDetails', saveTransaction).subscribe(
                 res => {
@@ -2135,7 +2195,8 @@ debugger;
                        if (undefined !== res) {
                          inttRet = res;
                          this.inttRetForUpdate=res
-     
+                         this.outIntt=(+this.inttRetForUpdate.curr_intt_recov) + (+this.inttRetForUpdate.ovd_intt_recov) + (+this.inttRetForUpdate.penal_intt_recov) - this.td.curr_intt_recov.value - this.td.ovd_intt_recov.value - this.td.penal_intt_recov.value
+                         this.outPrn=+(+this.inttRetForUpdate.curr_prn_recov-(+this.td.curr_prn_recov.value) - (+this.td.adv_prn_recov.value)) + ((+this.inttRetForUpdate.ovd_prn_recov)-(+this.td.ovd_prn_recov.value))
                  this.accDtlsFrm.patchValue({
                    ovd_principal:+this.inttRetForUpdate.ovd_prn_recov-(+this.td.ovd_prn_recov.value),
                    curr_principal:+this.inttRetForUpdate.curr_prn_recov-(+this.td.curr_prn_recov.value) - (+this.td.adv_prn_recov.value),
@@ -2147,6 +2208,12 @@ debugger;
                    total_due: (+this.inttRetForUpdate.curr_intt_recov) + (+this.inttRetForUpdate.ovd_intt_recov) + (+this.inttRetForUpdate.penal_intt_recov) - this.td.curr_intt_recov.value - this.td.ovd_intt_recov.value - this.td.penal_intt_recov.value + +this.inttRetForUpdate.curr_prn_recov-(+this.td.curr_prn_recov.value) - (+this.td.adv_prn_recov.value) + this.inttRetForUpdate.ovd_prn_recov-(+this.td.ovd_prn_recov.value) ,
                  
                   })
+                  if(this.sys.ardbCD=='2'){
+                    this.modalRef = this.modalService.show(this.ContaiLoanChallan, { class: 'modal-xl' });
+                  }
+                  else{
+                    this.modalRef = this.modalService.show(this.LoanChallan, { class: 'modal-sm' });
+                  }
                }
                })
                }
@@ -2173,9 +2240,7 @@ debugger;
                   const loanId = this.td.acc_num.value;
                   this.HandleMessage(true, MessageType.Sucess, `Transaction for Loan Id ${loanId}, updated successfully !!!!`);
                   this.isLoading = false;
-                   if(this.isRecovery){
-                    this.modalRef = this.modalService.show(this.LoanChallan, { class: 'modal-sm' });
-                  }
+                  
                   // this.onResetClick();
                   // this.tdDefTransFrm.reset();
                   // this.accTransFrm.reset();
@@ -2188,7 +2253,7 @@ debugger;
               );
             }
             else {
-              this.t_a=saveTransaction.tddeftrans?.amount;
+              this.t_a=(saveTransaction.tddeftrans?.amount)+(saveTransaction.tddeftrans?.ongoing_unit_no);
                 // this.s_a=saveTransaction.tddeftrans?.share_amt;
                 this.c_p=saveTransaction.tddeftrans?.curr_prn_recov;
                 this.c_i=saveTransaction.tddeftrans?.curr_intt_recov;
@@ -2198,7 +2263,7 @@ debugger;
                 this.p_i=saveTransaction.tddeftrans?.penal_intt_recov;
                 // this.i_n_dt=this.td.intt_recov_dt.value;
                 this.i_n_dt=this.td.no_of_day.value!=0? this.c.transform(this.td.intt_recov_dt.value, 'dd/MM/yyyy hh:mm:ss'):this.td.intt_recov_dt.value;
-
+                this.l_ch=saveTransaction.tddeftrans?.ongoing_unit_no;
                 
                 // this.i_n_dt=saveTransaction.tddeftrans?.intt_till_dt
                 debugger
@@ -2236,6 +2301,9 @@ debugger;
                   console.log(this.unApprovedTransactionLst);
                   debugger;
                   if(this.isRecovery){
+                    this.outIntt=this.fd.curr_intt.value + this.fd.ovd_intt.value + this.fd.penal_intt.value - this.td.curr_intt_recov.value - this.td.ovd_intt_recov.value - this.td.penal_intt_recov.value
+                    // this.outPrn=((+this.inttRetForUpdate.curr_prn_recov)-(+this.td.curr_prn_recov.value) - (+this.td.adv_prn_recov.value)) + ((+this.inttRetForUpdate.ovd_prn_recov)-(+this.td.ovd_prn_recov.value))
+                    this.outPrn=(this.fd.ovd_principal.value-(+this.td.ovd_prn_recov.value))+(+this.fd.curr_principal.value-(+this.td.curr_prn_recov.value) - (+this.td.adv_prn_recov.value))
                     debugger;
                     this.accDtlsFrm.patchValue({
                       ovd_principal:+this.fd.ovd_principal.value-(+this.td.ovd_prn_recov.value),
@@ -2244,13 +2312,22 @@ debugger;
                       ovd_intt:+this.fd.ovd_intt.value-(+this.td.ovd_intt_recov.value),
                       penal_intt:+this.fd.penal_intt.value-(+this.td.penal_intt_recov.value),
                       intt_recev:this.fd.curr_intt.value + this.fd.ovd_intt.value + this.fd.penal_intt.value - this.td.curr_intt_recov.value - this.td.ovd_intt_recov.value - this.td.penal_intt_recov.value,
-                      principal:+this.inttRetForUpdate.curr_prn_recov-(+this.td.curr_prn_recov.value) - (+this.td.adv_prn_recov.value) + this.inttRetForUpdate.ovd_prn_recov-(+this.td.ovd_prn_recov.value),
                       total_due: this.fd.curr_intt.value + this.fd.ovd_intt.value + this.fd.penal_intt.value + this.fd.ovd_principal.value + this.fd.curr_principal.value - this.td.ovd_prn_recov.value - this.td.curr_prn_recov.value -this.td.curr_intt_recov.value - this.td.ovd_intt_recov.value - this.td.penal_intt_recov.value- (+this.td.adv_prn_recov.value),
-                      })
-                    this.accDtlsFrm.patchValue({
-                      principal: this.fd.ovd_principal.value + this.fd.curr_principal.value
+                      principal: (this.fd.ovd_principal.value-(+this.td.ovd_prn_recov.value))+(+this.fd.curr_principal.value-(+this.td.curr_prn_recov.value) - (+this.td.adv_prn_recov.value))
+                      
                     })
+                      // principal:+this.inttRetForUpdate.curr_prn_recov-(+this.td.curr_prn_recov.value) - (+this.td.adv_prn_recov.value) + this.inttRetForUpdate.ovd_prn_recov-(+this.td.ovd_prn_recov.value),
+
+                    // this.accDtlsFrm.patchValue({
+                    //   principal: this.fd.ovd_principal.value + this.fd.curr_principal.value
+                    // })
                     debugger
+                    if(this.sys.ardbCD=='2'){
+                      this.modalRef = this.modalService.show(this.ContaiLoanChallan, { class: 'modal-xl' });
+                    }
+                    else{
+                      this.modalRef = this.modalService.show(this.LoanChallan, { class: 'modal-sm' });
+                    }
                   }
                   if(this.isDisburs){
                     this.accDtlsFrm.patchValue({
@@ -2274,9 +2351,7 @@ debugger;
 
                   })
                   // 
-                  if(this.isRecovery){
-                    this.modalRef = this.modalService.show(this.LoanChallan, { class: 'modal-sm' });
-                  }
+                  
                
                   //  
                   
@@ -2425,7 +2500,9 @@ debugger;
                   if (undefined !== res) {
                     inttRet = res;
                     this.inttRetForUpdate=res
-
+                    this.outIntt=(+this.inttRetForUpdate.curr_intt_recov) + (+this.inttRetForUpdate.ovd_intt_recov) + (+this.inttRetForUpdate.penal_intt_recov) - this.td.curr_intt_recov.value - this.td.ovd_intt_recov.value - this.td.penal_intt_recov.value
+                    this.outPrn=+this.inttRetForUpdate.curr_prn_recov-(+this.td.curr_prn_recov.value) - (+this.td.adv_prn_recov.value) + this.inttRetForUpdate.ovd_prn_recov-(+this.td.ovd_prn_recov.value)
+                    
             this.accDtlsFrm.patchValue({
               ovd_principal:+this.inttRetForUpdate.ovd_prn_recov-(+this.td.ovd_prn_recov.value),
               curr_principal:+this.inttRetForUpdate.curr_prn_recov-(+this.td.curr_prn_recov.value) - (+this.td.adv_prn_recov.value),
@@ -2507,6 +2584,9 @@ debugger;
             console.log(this.unApprovedTransactionLst)
             // debugger;
             if(this.isRecovery){
+              this.outIntt=this.fd.curr_intt.value + this.fd.ovd_intt.value + this.fd.penal_intt.value - this.td.curr_intt_recov.value - this.td.ovd_intt_recov.value - this.td.penal_intt_recov.value
+              this.outPrn=((+this.fd.curr_principal.value)+(+this.fd.ovd_principal.value))-((+this.td.ovd_prn_recov.value)+(+this.td.adv_prn_recov.value)+(+this.td.curr_prn_recov.value))
+                    
               this.accDtlsFrm.patchValue({
                 ovd_principal:+this.fd.ovd_principal.value-(+this.td.ovd_prn_recov.value),
                 curr_principal:+this.fd.curr_principal.value-(+this.td.curr_prn_recov.value) - (+this.td.adv_prn_recov.value),
@@ -2522,6 +2602,12 @@ debugger;
                 //   this.accDtlsFrm.controls.principal.setValue(((+this.fd.curr_principal.value)+(+this.fd.ovd_principal.value))-((+this.td.ovd_prn_recov.value)+(+this.td.adv_prn_recov.value)+(+this.td.curr_prn_recov.value)))
                 // }
                 debugger
+                if(this.sys.ardbCD=='2' ){
+                  this.modalRef = this.modalService.show(this.ContaiLoanChallan, { class: 'modal-xl' });
+                }
+                else{
+                  this.modalRef = this.modalService.show(this.LoanChallan, { class: 'modal-sm' });
+                }
             }
             if(this.isDisburs){
               this.accDtlsFrm.patchValue({
@@ -2541,9 +2627,7 @@ debugger;
               })
             }
             this.HandleMessage(true, MessageType.Sucess, 'Saved successfully, your transaction code is -' + res);
-            if(this.isRecovery){
-              this.modalRef = this.modalService.show(this.LoanChallan, { class: 'modal-sm' });
-            }
+            
            this.tdDefTransFrm.patchValue({
               trans_cd: res
             });
@@ -2648,6 +2732,8 @@ debugger;
       toReturn.voucher_id = 0,
       toReturn.mis_advance_recov = 0,
       toReturn.audit_fees_recov = 0;
+      toReturn.ongoing_unit_no = this.td.ongoing_unit_no.value;
+
     }
     else {
       var dt = this.sys.CurrentDate
@@ -2657,6 +2743,8 @@ debugger;
       toReturn.curr_intt_recov = 0;
       toReturn.ovd_prn_recov = 0;
       toReturn.ovd_intt_recov = 0;
+      toReturn.ongoing_unit_no = 0;
+
       toReturn.intt_till_dt =this.accDtlsFrm.controls.total_due.value==0? Utils.convertStringToDt(this.c.transform(dt, 'dd/MM/yyyy hh:mm:ss')):this.inttTillDt;
       toReturn.paid_amt = +this.td.paid_amount.value;
       toReturn.share_amt = this.td.share.value,
@@ -2681,7 +2769,6 @@ debugger;
     toReturn.periodicity = this.td.periodicity.value ? Number(this.installmenttypeList.filter(x => x.desc_type === this.perVal)[0].ins_type) : 0; //marker
     toReturn.disb_id = 0;
     toReturn.comp_unit_no = 0;
-    toReturn.ongoing_unit_no = 0;
     // toReturn.mis_advance_recov = 0;
     // toReturn.audit_fees_recov = 0;
     toReturn.sector_cd = (undefined !== this.sancdtls && this.sancdtls.length > 0) ?
@@ -2763,9 +2850,9 @@ debugger;
       this.td.comm.enable();
       this.td.svcchrg.enable();
       this.td.saleform.enable();
-      this.td.insurence.enable()
-      this.disableOnSaveEdit=false
-    
+      this.td.insurence.enable();
+      this.disableOnSaveEdit=false;
+      this.td.ongoing_unit_no.enable();
       this.td.recov_type.enable();
       this.td.intt_recov_dt.enable();
       this.td.remarks_on_manual.enable();
@@ -3066,12 +3153,17 @@ debugger;
     }
     //marker
     if(tdDefTransTrnsfr.gl_acc_code){
-      if((+tdDefTransTrnsfr.amount)>this.tdDefTransFrm.controls.amount.value && this.isRecovery){
+      if(this.td.ongoing_unit_no.value > 0){
+
+      }
+      else{
+        if((+tdDefTransTrnsfr.amount)!=this.tdDefTransFrm.controls.amount.value && this.isRecovery){
         this.HandleMessage(true, MessageType.Error, 'Entered amount does not match with recovery amount..!!');
         tdDefTransTrnsfr.amount = 0;
         this.TrfTotAmt=0;
         return;
-    }
+    }}
+      
   }
     if(tdDefTransTrnsfr.cust_acc_number){
       if((+tdDefTransTrnsfr.amount)>tdDefTransTrnsfr.clr_bal && this.isRecovery){
@@ -3127,12 +3219,21 @@ debugger;
     this.td_deftranstrfList.forEach(e => {
       this.TrfTotAmt += (+e.amount);
     });
-
-    if ((+this.td.amount.value) < this.TrfTotAmt) {
-      this.HandleMessage(true, MessageType.Error, 'Total Amount can not be more than Transaction amount');
-      this.td_deftranstrfList[(this.td_deftranstrfList.length - 1)].amount = 0;
-      this.TrfTotAmt = 0;
+    if(this.isRecovery && this.td.ongoing_unit_no.value>0){
+      if ((+this.td.amount.value)+this.td.ongoing_unit_no.value != this.TrfTotAmt) {
+        this.HandleMessage(true, MessageType.Error, 'Total Amount missmatch with Transaction amount');
+        this.td_deftranstrfList[(this.td_deftranstrfList.length - 1)].amount = 0;
+        this.TrfTotAmt = 0;
+      }
     }
+    else{
+      if ((+this.td.amount.value) < this.TrfTotAmt) {
+        this.HandleMessage(true, MessageType.Error, 'Total Amount can not be more than Transaction amount');
+        this.td_deftranstrfList[(this.td_deftranstrfList.length - 1)].amount = 0;
+        this.TrfTotAmt = 0;
+      }
+    }
+    
   }
 
   public removeTransfer(tdDefTransTrnsfr: td_def_trans_trf): void {
@@ -3370,11 +3471,14 @@ debugger;
             console.log(res)
             if (undefined !== res && null !== res && res.length > 0) {
               this.suggestedCustomer1 = res;
+              this.suggestedCustomer1=this.suggestedCustomer1.filter(e=>e.cust_cd===this.acc2.tmloanall.party_cd)
               this.memberCD= this.suggestedCustomer1[0].old_cust_cd;
 
               let BLOCK=res.filter(e=>e.cust_cd===this.acc2.tmloanall.party_cd)
               this.selectedBlock[0] = this.blocks.filter(e => e.block_cd === BLOCK[0].block_cd)[0];
               console.log(this.blocks);
+              // this.l_cust_cd=this.suggestedCustomer1.filter(e=>e.cust_cd===this.acc2.tmloanall.party_cd)[0].cust_cd
+
               debugger
               // console.log(this.selectedBlock[0].block_name);
               // console.log(this.suggestedCustomer1[0].phone);
@@ -3386,10 +3490,12 @@ debugger;
               this.acc_phone=this.suggestedCustomer1[0].phone;
               this.present_address=this.suggestedCustomer1[0].present_address;
               this.member_id=this.suggestedCustomer1[0].old_cust_cd;
-              this.m_id=this.member_id
+              this.m_id=this.member_id;
+              this.pps=this.activityList.filter(e=>e.activity_cd==this.acc2.tmloanall.activity_cd)[0].activity_desc
               this.guardian_name=this.suggestedCustomer1[0].guardian_name;
               this.acc_lfNo=this.acc2.tmloanall.loan_acc_no;
               this.l_cust_cd=this.suggestedCustomer1[0].cust_cd;debugger
+              debugger
               if(this.l_cust_cd){
                 this.reportData2.length=0;
                 this.reportData3.length=0;
@@ -3472,10 +3578,34 @@ debugger;
       return new Date(parseInt(parts[2]), parseInt(parts[1])-1, parseInt(parts[0]));
       }
     printChallan(){
-      this.modalRef = this.modalService.show(this.LoanChallan, { class: 'modal-xl' });
-    }
+      if(this.sys.ardbCD=='2'){
+        this.modalRef = this.modalService.show(this.ContaiLoanChallan, { class: 'modal-xl' });
+      }
+      else{
+        this.modalRef = this.modalService.show(this.LoanChallan, { class: 'modal-sm' });
+      }}
+
+      getActivityList() {
+
+        if (this.activityList.length > 0) {
+          return;
+        }
+        this.activityList = [];
+    
+        this.svc.addUpdDel<any>('Mst/GetActivityMaster', null).subscribe(
+          res => {
+    
+            this.activityList = res;
+          },
+          err => {
+    
+          }
+        );
+    
+      }
 
 }
+
 export class DynamicSelect {
   key: any;
   Description: any;

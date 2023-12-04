@@ -176,6 +176,9 @@ import { ViewBorrowingComponent } from './borrowing/view-borrowing/view-borrowin
 import { BorroDetailListComponent } from './borrowing/report/borro-detail-list/borro-detail-list.component';
 import { DcbrVillWiseComponent } from './loan/report/dcbr-vill-wise/dcbr-vill-wise.component';
 import { CalculateBorrInttComponent } from './borrowing/calculate-borr-intt/calculate-borr-intt.component';
+import { ContaiUCICprofileComponent } from './UCIC/contai-ucicprofile/contai-ucicprofile.component';
+import { GoldTestAndValuationReportComponent } from './loan/transaction/gold-test-and-valuation-report/gold-test-and-valuation-report.component';
+import { DemandNoticeContaiComponent } from './loan/report/demand-notice-contai/demand-notice-contai.component';
 const routes: Routes = [
   { path: 'Admin', component: AdminPanelComponent },
   { path: 'admin', component: AdminPanelComponent },
@@ -202,6 +205,7 @@ const routes: Routes = [
       { path: '', redirectTo: 'login', pathMatch: 'full' },
       { path: 'login', component: LoginComponent },
       { path: 'la', component: LandingComponent, canActivate: [AuthGuard] },
+      { path: 'UT_Contai_CustomerProfile', component: ContaiUCICprofileComponent, canActivate: [AuthGuard] },
       { path: 'UT_CustomerProfile', component: UTCustomerProfileComponent, canActivate: [AuthGuard] },
       { path: 'UT_SelfHelp', component: UTSelfHelpComponent, canActivate: [AuthGuard] },
       { path: 'UR_MemberList', component: MemberListComponent, canActivate: [AuthGuard] },
@@ -240,6 +244,7 @@ const routes: Routes = [
       { path: 'UM_UpLogStatus', component: UserLoginStatusComponent, canActivate: [AuthGuard] },
       { path: 'UM_UPermission', component: UserPermissionComponent, canActivate: [AuthGuard] },
       
+      { path: 'LT_GoldTest', component: GoldTestAndValuationReportComponent, canActivate: [AuthGuard] },
       { path: 'LT_OpenLoanAcc', component: OpenLoanAccountComponent, canActivate: [AuthGuard] },
       { path: 'LT_LoanTrans', component: LoanaccountTransactionComponent, canActivate: [AuthGuard] },
       { path: 'LT_CalcIntt', component: LoanAccwiseinttcalcComponent, canActivate: [AuthGuard] },
@@ -341,6 +346,7 @@ const routes: Routes = [
       { path: 'TT_TransApprove', component: TransApproveComponent, canActivate: [AuthGuard] },
       { path: 'FR_BalanceSheet', component: BalanaceSheetComponent, canActivate: [AuthGuard] },
       { path: 'LR_DemandNotice', component: DemandNoticeComponent, canActivate: [AuthGuard] },
+      { path: 'LR_CT_DemandNotice', component: DemandNoticeContaiComponent, canActivate: [AuthGuard] },
       { path: 'LR_DN_Block', component: DemandNoticeBlockWiseComponent, canActivate: [AuthGuard] },
       { path: 'LR_OverdueNotice', component: OverdueNoticeComponent, canActivate: [AuthGuard] },
       { path: 'LR_OverdueTransfer', component: OverdueTransferComponent, canActivate: [AuthGuard] },

@@ -6,7 +6,7 @@ import { Subject, Observable } from 'rxjs';
 })
 export class IdleService {
   private idleTimer: any;
-  private readonly idleDuration = 300000; // 5 minutes in milliseconds
+  private readonly idleDuration = 600000; // 5 minutes in milliseconds
   private idleSubject = new Subject<void>();
 
   constructor() {
@@ -25,6 +25,7 @@ export class IdleService {
   }
 
   onIdle(): Observable<void> {
+    debugger
     return this.idleSubject.asObservable();
   }
 }

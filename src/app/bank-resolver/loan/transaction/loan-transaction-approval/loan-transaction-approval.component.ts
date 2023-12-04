@@ -16,6 +16,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { tm_denomination_trans } from 'src/app/bank-resolver/Models/deposit/tm_denomination_trans';
 import Utils from 'src/app/_utility/utils';
 import { mm_activity } from 'src/app/bank-resolver/Models/loan/mm_activity';
+import { td_accholder } from 'src/app/bank-resolver/Models/deposit/td_accholder';
 
 
 @Component({
@@ -63,7 +64,8 @@ export class LoanTransactionApprovalComponent implements OnInit {
   logUser:any;
   activityList: mm_activity[] = [];
   activityName:any
-
+  AllHolder:td_accholder[];
+  joinHold:any=[];
   ngOnInit(): void {
     this.logUser=localStorage.getItem('itemUX');
     this.showINSTNO=false;
@@ -156,6 +158,8 @@ export class LoanTransactionApprovalComponent implements OnInit {
     this.showINSTNO=false;
     this.trfDtls=false;
     this.totalOfDenomination=0;
+    this.AllHolder=[];
+            this.joinHold=[];
 
     
   }
@@ -241,8 +245,8 @@ export class LoanTransactionApprovalComponent implements OnInit {
             remarks: this.loanOpenDm.tddeftrans.remarks,
             crop_cd: this.loanOpenDm.tddeftrans.crop_cd,
             activity_cd: this.activityName,
-            curr_numbert_rate: this.loanOpenDm.tddeftrans.curr_intt_rate,
-            ovd_numbert_rate: this.loanOpenDm.tddeftrans.ovd_intt_rate,
+            curr_intt_rate: this.loanOpenDm.tddeftrans.curr_intt_rate,
+            ovd_intt_rate: this.loanOpenDm.tddeftrans.ovd_intt_rate,
             instl_no: this.loanOpenDm.tddeftrans.instl_no,
             instl_start_dt: this.loanOpenDm.tddeftrans.instl_start_dt.toString().substr(0, 10),
             periodicity: this.loanOpenDm.tddeftrans.periodicity,
@@ -380,6 +384,19 @@ export class LoanTransactionApprovalComponent implements OnInit {
         //debugger;
         
         loanOpnDm = res;
+        this.AllHolder=loanOpnDm.tdaccholder
+        if(this.AllHolder.length>0){
+          for (let i = 0; i < this.AllHolder.length; i++) {
+            console.log(res);
+            
+          this.joinHold+=(this.AllHolder.length==0?'':this.AllHolder[i]?.acc_holder+',')
+          console.log(this.joinHold);
+          }
+        }
+        else{
+          this.AllHolder=[];
+            this.joinHold=[];
+        }
         if (loanOpnDm.tddeftrans){
           if(loanOpnDm.tddeftrans.activity_cd){
           this.activityName=this.activityList.filter(e=>e.activity_cd==loanOpnDm.tddeftrans.activity_cd)[0].activity_desc

@@ -231,6 +231,7 @@ export class OpenInvestComponent implements OnInit {
     this.getOperationalInstr();
     // this.newAccount();
     this.getRelations();
+    this.newAccount();
     // console.log(this.constitutionDtParser('YEAR=1;Month=10;Days=25;'));
   }
 

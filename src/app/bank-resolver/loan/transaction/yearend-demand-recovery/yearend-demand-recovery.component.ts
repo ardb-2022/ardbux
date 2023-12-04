@@ -625,15 +625,15 @@ export class YearendDemandRecoveryComponent implements OnInit {
   private getOperationMaster(): void {
 
     this.isLoading = true;
-    if (undefined !== AccounTransactionsComponent.operations && null !== AccounTransactionsComponent.operations && AccounTransactionsComponent.operations.length > 0) {
-      this.isLoading = false;
-      this.AcctTypes = AccounTransactionsComponent.operations.filter(e => e.module_type === 'LOAN')
-        .filter((thing, i, arr) => {
-          return arr.indexOf(arr.find(t => t.acc_type_cd === thing.acc_type_cd)) === i;
-        });
-      this.AcctTypes = this.AcctTypes.sort((a, b) => (a.acc_type_cd > b.acc_type_cd ? 1 : -1));
+    // if (undefined !== AccounTransactionsComponent.operations && null !== AccounTransactionsComponent.operations && AccounTransactionsComponent.operations.length > 0) {
+    //   this.isLoading = false;
+    //   this.AcctTypes = AccounTransactionsComponent.operations.filter(e => e.module_type === 'LOAN')
+    //     .filter((thing, i, arr) => {
+    //       return arr.indexOf(arr.find(t => t.acc_type_cd === thing.acc_type_cd)) === i;
+    //     });
+    //   this.AcctTypes = this.AcctTypes.sort((a, b) => (a.acc_type_cd > b.acc_type_cd ? 1 : -1));
       // console.log(this.AcctTypes)
-    } else {
+    // } else {
       this.svc.addUpdDel<mm_operation[]>('Mst/GetOperationDtls', null).subscribe(
         res => {
           console.log(res)
@@ -648,7 +648,7 @@ export class YearendDemandRecoveryComponent implements OnInit {
         },
         err => { this.isLoading = false; }
       );
-    }
+    // }
     debugger
   }
 
@@ -673,9 +673,12 @@ export class YearendDemandRecoveryComponent implements OnInit {
     this.disableOperation = false;
     this.showTransactionDtl = false;
     this.f.oprn_cd.enable();
-    this.f.oprn_cd.reset() //marker
+    this.f.oprn_cd.reset() 
     this.takeDataForCancel();
     this.editDeleteMode = false;
+  }
+  onCancel2() {
+    this.modalRef.hide();
   }
   Submit() {
     debugger;

@@ -71,6 +71,8 @@ export class TransactionapprovalComponent implements OnInit {
   kycForAllHolder:boolean=true;
   AllHolder:td_accholder[];
   acc_OWNER:any=null;
+  joinHold:any=[];
+
   // cust: mm_customer;
   // tdDepTransRet: td_def_trans_trf[] = [];
 
@@ -580,6 +582,8 @@ export class TransactionapprovalComponent implements OnInit {
     this.getAcctTypeMaster();
     this.tranferDetails = [];
     this.totalOfDenomination = 0;
+    this.AllHolder=[];
+            this.joinHold=[];
   }
 
   private getAcctTypeMaster(): void {
@@ -656,11 +660,19 @@ export class TransactionapprovalComponent implements OnInit {
           if(res.tdaccholder.length>0){
             this.kycForAllHolder=false;
             this.AllHolder=res.tdaccholder;
+            
+              for (let i = 0; i <= this.AllHolder.length; i++) {
+                console.log(res);
+                
+              this.joinHold+=(this.AllHolder.length==0?'':this.AllHolder[i].acc_holder+',')
+              console.log(this.joinHold);
+              }
             debugger
           }
           else{
             this.kycForAllHolder=true;
             this.AllHolder=[];
+            this.joinHold=[];
             this.msg.sendcustomerCodeForKyc(tmDeposit.cust_cd);
           }
         }

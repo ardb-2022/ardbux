@@ -64,6 +64,15 @@ export class mm_customer {
   public credit_agency: string;
   public credit_score: Number;
   public credit_score_dt: Date;
+  public po:Number;
+  public ps:Number;
+  public kyc_other_type: string;
+  public kyc_other_no: string;
+  public mis_folio_no: string;
+  public sb_folio_no: string;
+  public fd_folio_no: string;
+  public td_folio_no: string;
+  public rd_folio_no: string;
 
   constructor(){
     this.ardb_cd = localStorage.getItem('__ardb_cd');

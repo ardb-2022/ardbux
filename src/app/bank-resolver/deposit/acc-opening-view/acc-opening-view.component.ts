@@ -412,7 +412,8 @@ export class AccOpeningViewComponent implements OnInit {
     this.tm_deposit = this.masterModel.tmdeposit;
     this.td_signatoryList = this.masterModel.tdsignatory;
     console.log(this.td_signatoryList);
-debugger
+    this.tm_deposit.cust_name
+      
     this.setCustDtls(this.tm_deposit.cust_cd);
     this.setAccountType(this.tm_deposit.acc_type_cd);
     this.setIntTfrType(this.tm_deposit.intt_trf_type);
@@ -464,9 +465,10 @@ debugger
     if (this.customerList === undefined || this.customerList === null || this.customerList.length === 0) {
       this.svc.addUpdDel<any>('UCIC/GetCustomerDtls', cust).subscribe(
         res => {
-
+          debugger
           this.isLoading = false;
           this.customerList = res;
+          
         },
         err => {
           this.isLoading = false;
@@ -1001,12 +1003,14 @@ debugger
           if (undefined !== res && null !== res && res.length > 0) {
             this.suggestedCustomer = res
             this.showNoResult=false
+            
           } else {
             this.showNoResult=true
             this.suggestedCustomer = [];
             this.HandleMessage(true, MessageType.Warning, 'The Account#'+ this.masterModel.tmdeposit.acc_num +' does not match with any active account !!');
             return;
           }
+
         },
         err => { this.isLoading = false; }
       );
@@ -1215,7 +1219,24 @@ debugger
         res => {
 
           this.suggestedCustomer = res;
-
+          if(this.suggestedCustomer){
+            if(this.td_signatoryList){
+              const fromIndex = this.td_signatoryList.findIndex(obj => obj.signatory_name == this.suggestedCustomer[0].cust_name);
+              const toIndex = 0;
+              debugger
+              const element =  this.td_signatoryList.splice(fromIndex, 1)[0];
+              console.log(element); // ['css']
+      
+              this.td_signatoryList.splice(toIndex, 0, element);
+      
+              console.log( this.td_signatoryList); // 👉️ ['js', 'ts', 'css']
+            }
+            else{
+              
+              alert('Add Main Acc Holder Signature Fast..')
+            }
+      debugger
+          }
           if (this.suggestedCustomer !== undefined && this.suggestedCustomer != null && this.suggestedCustomer.length > 0) {
             temp_mm_cust = this.suggestedCustomer.filter(c => c.cust_cd.toString() === cust_cd.toString())[0];
             this.suggestedCustomer = null;
@@ -1302,8 +1323,17 @@ debugger
       this.td_signatoryList[0].signatory_name = temp_mm_cust.cust_name;
       this.td_signatoryList[0].brn_cd = this.branchCode;
     }
+    if(this.masterModel.tdsignatory[0]==undefined){
+      const sig: td_signatory[]=[];
+      this.td_signatoryList=sig
+      debugger
+      this.masterModel.tdsignatory=this.td_signatoryList
+    }
+    
     console.log(this.masterModel.tmdeposit);
+
     debugger
+    
   }
 
   setCategoryDesc(category: number) {

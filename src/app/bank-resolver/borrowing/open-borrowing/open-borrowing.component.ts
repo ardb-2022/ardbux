@@ -148,7 +148,7 @@ transferTypeList = [
 
 transferTypeListTemp = this.transferTypeList;
 ngOnInit(): void {
-  this.operationType = 'N'
+  
 this.getsystemParam();
 this.logUser=localStorage.getItem('itemUX');
 this.branchCode = this.sys.BranchCode;
@@ -395,6 +395,23 @@ this.HandleMessage(true, MessageType.Warning, 'Installment start date should be 
 }
 
 }
+SetTrans_DT(){
+  const cDt = this.sys.CurrentDate.getTime();
+  console.log(this.td_deftrans.trans_dt)
+  // const opDt = Utils.convertStringToDt(this.td_deftrans.trans_dt.toString()).getTime();
+  const opDt = this.td_deftrans.trans_dt.getTime();
+  // const o = Utils.convertStringToDt(this.td.opening_dt.value);
+  const diffDays =(opDt-cDt ) / (1000 * 3600 * 24);
+  this.diff = diffDays
+  console.log(cDt + " " + opDt + " " + diffDays)
+  debugger
+  if(this.diff>1){
+  this.HandleMessage(true, MessageType.Warning, 'Transaction date should be Lower than Operation Date!!' );
+    this.td_deftrans.trans_dt=null
+   debugger
+  }
+  
+  }
 // private  convertDate(datestring:string):Date
 //   {
 //   var parts = datestring.match(/(\d+)/g);
@@ -706,7 +723,7 @@ retrieveData() {
 clearData() {
 this.operationType = 'N';
 this.disableLoanId=true
-this.closeAlertMsg();
+// this.closeAlertMsg();
 // this.disablePersonal = 'Y';
 this.initializeModels();
 this.allLoanDtls=[]
@@ -875,7 +892,7 @@ GetLoanAccountNumberAndInsertData() {
           let val = '';
           this.isLoading = false;
           val = res;
-          if (val === '' || val == null) {
+          if (val == '' || val == null || val == '0') {
           // this.showAlertMsg('ERROR', 'Loan Account Number not created !!');
           this.HandleMessage(true, MessageType.Error, 'Borrowing Account not created !!');
           return;
@@ -884,6 +901,7 @@ GetLoanAccountNumberAndInsertData() {
           this.HandleMessage(true, MessageType.Sucess, 'Borrowing Account Created Successfully. BorrowingId: ' + this.tm_loan_all.loan_id+', Trans Code is'+Number(val));
           this.td_deftrans.trans_cd = Number(val);
           this.clearData();
+          
           }
           },
           err => {

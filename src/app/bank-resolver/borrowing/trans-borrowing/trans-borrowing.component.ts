@@ -56,6 +56,7 @@ export class TransBorrowingComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   cust_acc_type:any;
+  diff:any;
   blocks: mm_block[] = [];
   selectedBlock:any[]=[];
   acc2 = new LoanOpenDM();
@@ -1360,7 +1361,23 @@ export class TransBorrowingComponent implements OnInit {
     }
   }
 
-
+  SetTrans_DT(){
+    const cDt = this.sys.CurrentDate.getTime();
+    console.log(this.td.trans_dt.value)
+    // const opDt = Utils.convertStringToDt(this.td.trans_dt.value.toString()).getTime();
+    const opDt = this.td.trans_dt.value.getTime();
+    // const o = Utils.convertStringToDt(this.td.opening_dt.value);
+    const diffDays =(opDt-cDt ) / (1000 * 3600 * 24);
+    this.diff = diffDays
+    console.log(cDt + " " + opDt + " " + diffDays)
+    debugger
+    if(this.diff>1){
+    this.HandleMessage(true, MessageType.Warning, 'Transaction date should be Lower than Operation Date!!' );
+      this.td.trans_dt.setValue('');
+     debugger
+    }
+    
+    }
   onRecovTypeChange(): void {
     debugger;
     console.log(this.td.recov_type.value)

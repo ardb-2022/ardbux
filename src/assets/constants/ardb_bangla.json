@@ -6,6 +6,13 @@
       "trans":"দক্ষিণ ২৪ পরগনা"
     },
     {
+      "ardB_CD": "2",
+      "name": "Contai ARDB Ltd.",
+      "dist_code": 19.0,
+      "trans":"কন্টাই"
+    },
+        
+    {
       "ardB_CD": "3",
       "name": "Tamluk ARDB Ltd.",
       "dist_code": 317.0,

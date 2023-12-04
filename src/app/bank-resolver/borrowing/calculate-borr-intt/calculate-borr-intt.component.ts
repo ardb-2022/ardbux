@@ -23,13 +23,30 @@ export class CalculateBorrInttComponent implements OnInit {
     showMsg: ShowMessage;
     isOpenFromDp = false;
     asOnDate : any;
-
+    diff:any
   ngOnInit(): void {
     console.log(window.location.hostname)
 
     this.getAccountTypeList();
-    this.asOnDate =this.sys.CurrentDate;
+    // this.asOnDate =this.sys.CurrentDate;
   }
+  SetTrans_DT(){
+    const cDt = this.sys.CurrentDate.getTime();
+    console.log(this.asOnDate)
+    // const opDt = Utils.convertStringToDt(this.asOnDate.toString()).getTime();
+    const opDt = this.asOnDate.getTime();
+    // const o = Utils.convertStringToDt(this.td.opening_dt.value);
+    const diffDays =(opDt-cDt ) / (1000 * 3600 * 24);
+    this.diff = diffDays
+    console.log(cDt + " " + opDt + " " + diffDays)
+    debugger
+    if(this.diff>1){
+    this.HandleMessage(true, MessageType.Warning, 'Calculation date should not be Future Date!!' );
+      this.asOnDate=null
+     debugger
+    }
+    
+    }
 
   onBackClick() {
     this.router.navigate([this.sys.BankName + '/la']);
