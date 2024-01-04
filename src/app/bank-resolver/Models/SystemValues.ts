@@ -33,7 +33,7 @@ export class SystemValues {
     this.__brnCd = localStorage.getItem('__brnCd');
     this.__brnName = localStorage.getItem('__brnName');
     this.__currentDate = localStorage.getItem('__currentDate');
-    console.log(this.__currentDate)
+    // console.log(this.__currentDate)
     this.__cashaccountCD = localStorage.getItem('__cashaccountCD');
     // this.__suspanceccountCD = localStorage.getItem('__suspanceccountCD');
     this.__suspanceccountCD = '10000';

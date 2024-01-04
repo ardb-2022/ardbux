@@ -171,13 +171,13 @@
           <td  *ngIf="accType=='6'">{{i.ardb_cd}}</td>
           <td *ngIf="accType!='6'">{{i.particulars}}</td>
           <td *ngIf="accType!='6'">{{i.instrument_num}}</td>
-          <td *ngIf="accType!='6'">
+          <td  style="text-align:right;" *ngIf="accType!='6'">
             {{i.trans_type=='W'?i.amount:0 | number : '1.2-2'}}
            </td>
-           <td *ngIf="accType!='6'">
+           <td  style="text-align:right;" *ngIf="accType!='6'">
            {{i.trans_type=='D'?i.amount:0 | number : '1.2-2'}}
            </td>
-          <td  *ngIf="accType=='6'">{{i.amount | number : '1.2-2'}}</td>
+          <td  style="text-align:right;" *ngIf="accType=='6'">{{i.amount | number : '1.2-2'}}</td>
 
           <td style="text-align: right;">{{i.balance | number : '1.2-2'}}</td>
 
@@ -194,7 +194,7 @@
         
        </tfoot>
     </table>
-    <div id="hiddenTabRD" >
+    <div id="hiddenTabRD" hidden>
       <br><br>
       <table style="width: 60%;font-size: large;" class="mkSmallRD">
         <tbody *ngFor="let i of printData; let itr=index;">
@@ -240,43 +240,25 @@
           <tr *ngIf="i.trans_type!==null">
             <td style="width:16%;">{{i.trans_dt==null?'':i.trans_dt.substr(0,10)}}</td>
             <td style="max-width: 170px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{i.particulars}}</td>
-            <!-- <td style="width:16%;">{{i.instrument_num}}</td> -->
-            <!-- <td  style="width: 10%;"></td> -->
+            
             <td  style="width: 12%; text-align: right; padding-right:3%;">
               {{(i.trans_type=='W'?i.amount:i.trans_type==null?'':'') | number : '1.2-2'}}
              </td>
              <td style="text-align: right;">
              {{(i.trans_type=='D'?i.amount:i.trans_type==null?'':'')| number : '1.2-2'}}
              </td>
-            <!-- <td style="text-align: right;">{{i.withdrawal | number : '1.2-2'}}</td>
-            <td style="text-align: right;width: 12%;">{{i.deposit | number : '1.2-2'}}</td> -->
-            <td style="text-align: right; padding-right: 2%;">{{i.balance | number : '1.2-2'}}</td>
-
-
-            <!-- <td style="text-align:right">{{i.balance | number : '1.2-2'}}</td> -->
-          </tr>
-          <!-- <tr style="font-weight:700;" *ngIf="itr == reportData.length-1">
-   
-      <td colspan="3" style="text-align: right;font-weight: 700;">Total: </td>
-      <td style="text-align: right;font-weight: 700;">{{opdrSum | number : '1.2-2'}}</td>
-      <td style="text-align: right;font-weight: 700;">{{opcrSum | number : '1.2-2'}}</td>
-      
-    </tr> -->
-          <!-- <tr *ngIf="i.cust_cd==lastcustcd">
-     <td colspan="8" style="text-align:right;font-weight:800">Total</td>
-     <td colspan="8" style="text-align:right;font-weight:800">{{opdrSum | number : '1.2-2'}}</td>
-    </tr> -->
+           <td style="text-align: right; padding-right: 2%;">{{i.balance | number : '1.2-2'}}</td>
+            </tr>
+          
 
         </tbody>
         
 
       </table>
-      <!-- <br><br><br><br>
-<small>This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions, Kolkata</small> -->
-    </div>
+     </div>
     <div id="hiddenTabGhatal" hidden>
       <br><br>
-      <table  class="mkSmallG" style=" margin: 37px 50px 0px 50px;">
+      <!-- <table  class="mkSmallG" style=" margin: 37px 50px 0px 50px;">
         <tbody *ngFor="let i of printDataGhatal; let itr=index;">
           <tr *ngIf="i.trans_type==null">
            <td style="margin-top: 30px;">&nbsp;</td>
@@ -284,40 +266,46 @@
           <tr *ngIf="i.trans_type!==null">
             <td style="width:16%;">{{i.trans_dt==null?'':i.trans_dt.substr(0,10)}}</td>
             <td style="max-width: 170px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{i.particulars}}</td>
-            <!-- <td style="width:16%;">{{i.instrument_num}}</td> -->
-            <!-- <td  style="width: 10%;"></td> -->
+            
             <td  style="width: 11%; text-align: right; padding-right:2%;">
               {{(i.trans_type=='W'?i.amount:i.trans_type==null?'':'') | number : '1.2-2'}}
              </td>
              <td style="text-align: right; width: 14%;">
              {{(i.trans_type=='D'?i.amount:i.trans_type==null?'':'')| number : '1.2-2'}}
              </td>
-            <!-- <td style="text-align: right;">{{i.withdrawal | number : '1.2-2'}}</td>
-            <td style="text-align: right;width: 12%;">{{i.deposit | number : '1.2-2'}}</td> -->
             <td style="text-align: right; padding-right: 7%;width: 25%;">{{i.balance | number : '1.2-2'}}</td>
 
-
-            <!-- <td style="text-align:right">{{i.balance | number : '1.2-2'}}</td> -->
           </tr>
-          <!-- <tr style="font-weight:700;" *ngIf="itr == reportData.length-1">
-   
-      <td colspan="3" style="text-align: right;font-weight: 700;">Total: </td>
-      <td style="text-align: right;font-weight: 700;">{{opdrSum | number : '1.2-2'}}</td>
-      <td style="text-align: right;font-weight: 700;">{{opcrSum | number : '1.2-2'}}</td>
-      
-    </tr> -->
-          <!-- <tr *ngIf="i.cust_cd==lastcustcd">
-     <td colspan="8" style="text-align:right;font-weight:800">Total</td>
-     <td colspan="8" style="text-align:right;font-weight:800">{{opdrSum | number : '1.2-2'}}</td>
-    </tr> -->
+          
+
+        </tbody>
+        
+
+      </table> -->
+      <table  class="mkSmall">
+        <tbody *ngFor="let i of printDataGhatal; let itr=index;">
+          <tr *ngIf="i.trans_type==null">
+           <td style="margin-top: 26px;">&nbsp;</td>
+          </tr>
+          <tr *ngIf="i.trans_type!==null">
+            <td style="width:16%;">{{i.trans_dt==null?'':i.trans_dt.substr(0,10)}}</td>
+            <td style="max-width: 170px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{i.particulars}}</td>
+            
+            <td  style="width: 12%; text-align: right; padding-right:3%;">
+              {{(i.trans_type=='W'?i.amount:i.trans_type==null?'':'') | number : '1.2-2'}}
+             </td>
+             <td style="text-align: right;">
+             {{(i.trans_type=='D'?i.amount:i.trans_type==null?'':'')| number : '1.2-2'}}
+             </td>
+           <td style="text-align: right; padding-right: 2%;">{{i.balance | number : '1.2-2'}}</td>
+            </tr>
+          
 
         </tbody>
         
 
       </table>
-      <!-- <br><br><br><br>
-<small>This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions, Kolkata</small> -->
-    </div>
+      </div>
     <button mat-raised-button hidden id="chngPage" (click)="setPage(1)"></button>
   </div>
   

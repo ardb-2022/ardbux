@@ -48,7 +48,7 @@
               <small for="fundType">Fund Type</small>
             <select id="fundType" class="form-control form-control-sm" formControlName="fundType">
                 <option disabled>Choose any one</option>
-                <option value="O">Owned Fund</option>
+                <option value="O">Deposit Scheme Fund</option>
                 <option value="N">Borrowed Fund</option>
             </select>
             </div>
@@ -103,7 +103,7 @@
         <h4>{{ardbName}} {{branchName}}</h4>
         <h4>Run Date & Time : {{today}} </h4>
         <h4> <u> Recovery Register from {{reportcriteria.controls.fromDate.value?.toDateString() | date: 'dd/MM/yyyy'}} to {{reportcriteria.controls.toDate.value?.toDateString() | date: 'dd/MM/yyyy'}}</u></h4>
-        <h4><b>Fund Type: {{reportcriteria.controls.fundType.value== 'O' ? 'Owned Fund' : 'Borrowed Fund'}}</b></h4>
+        <h4><b>Fund Type: {{reportcriteria.controls.fundType.value== 'O' ? 'Deposit Scheme Fund' : 'Borrowed Fund'}}</b></h4>
     </div>
    </th>
   </ng-container>

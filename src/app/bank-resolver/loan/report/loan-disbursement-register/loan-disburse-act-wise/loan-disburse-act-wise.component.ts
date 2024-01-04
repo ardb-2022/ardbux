@@ -121,6 +121,10 @@ export class LoanDisburseActWiseComponent implements OnInit {
     name:'Loan Type'
   },
   {
+    value:'Fund Type',
+    name:'Fund Type'
+  },
+  {
     value:'Loan ID',
     name:'Loan ID'
   },
@@ -141,6 +145,10 @@ selectItems1=[
   {
     value:'Loan Type',
     name:'Loan Type'
+  },
+  {
+    value:'Fund Type',
+    name:'Fund Type'
   },
   {
     value:'Loan ID',
@@ -360,6 +368,11 @@ selectItems1=[
       for(let i=0;i<this.reportData.length;i++){
         this.firstGroup[i]=this.reportData[i].acc_desc
      }
+     break;
+     case "Fund Type": 
+     for(let i=0;i<this.reportData.length;i++){
+       this.firstGroup[i]=this.reportData[i].fund_type
+    }
     // this.filteredArray=this.reportData.filter(e=>e.activity_cd?.toLowerCase().includes(filterValue.toLowerCase())==true)
       break;
       case "Party Name":
@@ -396,6 +409,9 @@ selectItems1=[
       case "Loan Type": 
       this.filteredArray=this.reportData.filter(e=>e.acc_desc?.toLowerCase().includes(this.bName.toLowerCase())==true)
       break;
+      case "Fund Type": 
+      this.filteredArray=this.reportData.filter(e=>e.fund_type?.toLowerCase().includes(this.bName.toLowerCase())==true)
+      break;
    
       case "Party Name":
     this.filteredArray=this.reportData.filter(e=>e.cust_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
@@ -425,6 +441,11 @@ selectItems1=[
       case "Loan Type": 
       for(let i=0;i<this.filteredArray1.length;i++){
         this.secondGroup[i]=this.filteredArray1[i].acc_desc
+     }
+     break;
+      case "Fund Type": 
+      for(let i=0;i<this.filteredArray1.length;i++){
+        this.secondGroup[i]=this.filteredArray1[i].fund_type
      }
     // this.filteredArray=this.reportData.filter(e=>e.activity_cd?.toLowerCase().includes(filterValue.toLowerCase())==true)
       break;
@@ -463,6 +484,9 @@ debugger
       case "Loan Type": 
     this.filteredArray=this.filteredArray1.filter(e=>e.acc_desc?.toLowerCase().includes(this.bName1.toLowerCase())==true)
       break;
+      case "Fund Type": 
+    this.filteredArray=this.filteredArray1.filter(e=>e.fund_type?.toLowerCase().includes(this.bName1.toLowerCase())==true)
+      break;
       case "Party Name":
     this.filteredArray=this.filteredArray1.filter(e=>e.cust_name?.toLowerCase().includes(this.bName1.toLowerCase())==true)
      break;
@@ -490,6 +514,9 @@ debugger
           break;
       case "Loan Type": 
       this.filteredArray=this.reportData.filter(e=>e.acc_desc?.toLowerCase().includes(this.bName.toLowerCase())==true)
+          break;
+          case "Fund Type": 
+      this.filteredArray=this.reportData.filter(e=>e.fund_type?.toLowerCase().includes(this.bName.toLowerCase())==true)
           break;
       case "Party Name":
       this.filteredArray=this.reportData.filter(e=>e.cust_name.toLowerCase().includes(this.bName.toLowerCase())==true)
@@ -524,6 +551,9 @@ debugger
         break;
       case "Loan Type": 
       this.filteredArray=this.reportData.filter(e=>e.acc_desc?.toLowerCase().includes(this.bName.toLowerCase())==true)
+      break;
+      case "Fund Type": 
+      this.filteredArray=this.reportData.filter(e=>e.fund_type?.toLowerCase().includes(this.bName.toLowerCase())==true)
       break;
       case "Party Name":
       this.filteredArray=this.filteredArray.filter(e=>e.cust_name.toLowerCase().includes(this.bName.toLowerCase())==true)

@@ -95,6 +95,7 @@ export class VoucherprintComponent implements OnInit {
   // }
   public closeAlert() {
     this.showAlert = false;
+    this.modalRefSearch.hide()
   }
   public SubmitReport() {
     if (this.reportcriteria.invalid) {
@@ -128,15 +129,23 @@ export class VoucherprintComponent implements OnInit {
         this.tvn = res;
         this.tvn1 = res;
         console.log(this.tvn)
-        
+        debugger
         for (let x = 0; x < this.tvn.length; x++) {
-          
+          const dt=this.tvn[x].vd
          this.tvn[x].vd= this.tvn[x].vd.sort((a, b) => (a.debit_credit_flag < b.debit_credit_flag ? 1 : -1))//(a.acc_cd < b.acc_cd ? -1 : 1))
          if(this.tvn[x].vd.length==0){
           this.nullVD=x
           debugger
           // this.nullVD=this.tvn.length
           this.tvn.splice(this.nullVD, 1)
+          }
+          else{
+            debugger
+            for (let y = 0; y <dt.length; y++){
+              dt[0].ardb_cd+=dt[y].dr_amount
+              dt[0].brn_cd+=dt[y].cr_amount
+            }
+            debugger
           }
         }
         console.log(this.nullVD);
@@ -261,18 +270,20 @@ closeScreen()
 }
 submitSearch(){
  
-  if(this.searchcriteria.controls.searchText.value && !this.searchcriteria.controls.searchDate.value)
-  this.tvn=this.tvn1.filter(e=>e.voucher_id.toString().includes(this.searchcriteria.controls.searchText.value))
+  if(this.searchcriteria.controls.searchText.value && this.searchcriteria.controls.searchDate.value)
+  {
+  this.tvn=this.tvn1.filter(e=>e.voucher_id.toString()==this.searchcriteria.controls.searchText.value)
+  debugger
+}
   else if(!this.searchcriteria.controls.searchText.value && this.searchcriteria.controls.searchDate.value){
    this.tvn=this.tvn1.filter(e=>e.voucher_dt.toString().substring(0,10)==this.searchcriteria.controls.searchDate.value.toString().substring(0,10))
-  
-   console.log(this.tvn1[0].voucher_dt,this.searchcriteria.controls.searchDate.value)
+  console.log(this.tvn1[0].voucher_dt,this.searchcriteria.controls.searchDate.value)
   }
-  else if(this.searchcriteria.controls.searchText.value && this.searchcriteria.controls.searchDate.value)
-  {
-    this.tvn=this.tvn1.filter(e=>e.voucher_dt.toString().substring(0,10)==this.searchcriteria.controls.searchDate.value.toString().substring(0,10) && e.voucher_id.toString().includes(this.searchcriteria.controls.searchText.value))
-    console.log(this.tvn1[0].voucher_dt,this.searchcriteria.controls.searchDate.value)
-  }
+  // else if(this.searchcriteria.controls.searchText.value && !this.searchcriteria.controls.searchDate.value)
+  // {
+  //   this.tvn=this.tvn1.filter(e=>e.voucher_dt.toString().substring(0,10)==this.searchcriteria.controls.searchDate.value.toString().substring(0,10) && e.voucher_id.toString().includes(this.searchcriteria.controls.searchText.value))
+  //   console.log(this.tvn1[0].voucher_dt,this.searchcriteria.controls.searchDate.value)
+  // }
   
   this.modalRefSearch.hide()
   console.log(this.tvn1)

@@ -1083,18 +1083,22 @@ export class AccOpeningComponent implements OnInit {
     this.p_gen_param.ardb_cd=this.sys.ardbCD;
 
     this.isLoading = true;
+    debugger
     this.svc.addUpdDel<any>('Deposit/PopulateAccountNumber', this.p_gen_param).subscribe(
       res => {
-
+        debugger
+      if(res){
+        debugger
         let val = '0';
         this.isLoading = false;
         val = res;
-        debugger
-        this.masterModel.tmdeposit.acc_num = val.toString();
+        this.masterModel.tmdeposit.acc_num = val;
         this.masterModel.tmdeposit.brn_cd = this.branchCode;
-
+        debugger
 
         this.InsertAccountOpenData();
+      }
+        
       },
       err => {
         this.isLoading = false;

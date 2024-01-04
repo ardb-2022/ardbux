@@ -7,7 +7,7 @@ table{
 }*/
 .mkScroll{
     height:auto;
-    max-height:450px;
+    max-height:550px;
     overflow:auto
 }
 th,td{
@@ -175,3 +175,10 @@ thead tfoot{
   bottom: 0px !important;
 } } 
   /*  */
+  
+  tr.fixedHeader{
+    position: sticky;
+    /* position: -webkit-sticky; */
+    top: -17px;
+    background-color: inherit;
+  }

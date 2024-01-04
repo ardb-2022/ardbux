@@ -100,7 +100,7 @@
             <select id="oprn_cd" [attr.disabled]="(null == operations || disableOperation) ? '' : null"
               class="form-control form-control-sm" formControlName="oprn_cd" (change)="onOperationTypeChange()">
               <option *ngIf="operations" disabled>Choose</option>
-              <option *ngFor="let oper of operations" [value]="oper.oprn_cd">{{oper.oprn_desc}}</option>
+              <option *ngFor="let oper of operations" [disabled]="showLockType && (oper.oprn_desc=='Renewal' || oper.oprn_desc=='Close')" [value]="oper.oprn_cd">{{oper.oprn_desc}}</option>
             </select>
           </div>
         </div>
@@ -110,10 +110,18 @@
     <div class="row" *ngIf="undefined !== accNoEnteredForTransaction">
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 ">
         <form [formGroup]="accDtlsFrm">
-          <h4 class="customHeader mt-2">Account Details</h4>
+          <h4 class="customHeader mt-2">Account Details &nbsp;&nbsp;&nbsp;
+            <span class="badge badge-light " *ngIf="new_acc_status"> 
+              NEW ACCOUNT
+             </span>
+             <span class="badge badge-light " *ngIf="!new_acc_status"> 
+              REGULAR ACCOUNT
+             </span>
+          </h4>
           <div class="form-row">
             <div class="form-group col-12">
               <small for="cust_name">Name</small>
+              
               <span class="badge badge-warning pull-right" *ngIf="joinHold!=''"> 
                 JOINT HOLDER:-{{joinHold}}
                </span>
@@ -274,7 +282,7 @@
               <input type="text" disabled class="form-control form-control-sm" formControlName="acc_num" id="acc_num">
             </div>
             <div class="form-group col-3">
-              <small for="trans_type">Transaction Type <span class="text-danger">*</span> </small>
+              <small for="trans_type">Operation Type <span class="text-danger">*</span> </small>
               <input type="text" class="form-control form-control-sm" formControlName="trans_type_key" hidden
                 id="trans_type_key">
               <input type="text" class="form-control form-control-sm" formControlName="trans_type" disabled
@@ -347,7 +355,7 @@
             <!-- {{this.f.acc_type_cd.value}} {{accNoEnteredForTransaction.ShowClose}}
             *ngIf="showTransfrTyp" -->
             <div class="form-group col-2" >
-              <small for="trf_type">Transfer Type <span class="text-danger">*</span></small>
+              <small for="trf_type">Transaction Type <span class="text-danger">*</span></small>
               <select id="trf_type" class="form-control form-control-sm" formControlName="trf_type"
                 (change)="onTransTypeChange()">
                 <option *ngIf="operations" disabled>Choose</option>

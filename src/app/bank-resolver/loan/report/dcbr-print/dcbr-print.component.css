@@ -397,3 +397,9 @@ table{
     background-color: #555
   } */
   /*  */
+  tr.fixedHeader{
+    position: sticky;
+    /* position: -webkit-sticky; */
+    top: -17px;
+    background-color: inherit;
+  }

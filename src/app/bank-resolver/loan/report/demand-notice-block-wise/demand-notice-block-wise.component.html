@@ -155,19 +155,19 @@
                       <!-- <td colspan="6">{{translatedData?.village}} - {{data?.block_name}}, {{translatedData?.block}} - {{this.blocks1[0].block_name}} </td>   -->
                         <td colspan="6" style="text-align: right;">{{translatedData.loan_id}} -{{data?.loan_id}} </td>   
                     </tr>
-                    <tr *ngIf="this.ardbcd=='26'">  
+                    <tr *ngIf="ardbcd=='26'">  
                       <td colspan="6" >{{translatedData?.join_holder}} - {{data?.cust_address}}</td> 
 
-                      <td colspan="6" style="text-align: right;">{{translatedData.member_code}} - </td>   
+                      <td colspan="6" style="text-align: right;">{{translatedData.member_code}} - {{data?.brn_cd}}</td>   
                   </tr>
                     <tr>  
-                        <td colspan="6" >{{translatedData?.village}} - {{data?.ardb_cd}},  {{translatedData?.gp}} - <span *ngIf="this.ardbcd!='26'">{{data?.cust_address}}</span><span *ngIf="this.ardbcd=='26'">{{data?.brn_cd}}</span></td> 
-  
+                        <td *ngIf="ardbcd!='26'" colspan="6" >{{translatedData?.village}} - {{data?.ardb_cd}},  {{translatedData?.gp}} - <span *ngIf="this.ardbcd!='26'">{{data?.cust_address}}</span></td> 
+                        <td *ngIf="ardbcd=='26'" colspan="6">{{translatedData?.address}} - {{data?.ardb_cd}}</td>
                         <td colspan="6" style="text-align: right;"> {{translatedData.loan_date}} - {{data?.disb_dt.substr(0,10)}}</td>   
                     </tr>
                     <tr>  
-                      <td colspan="6" >{{translatedData?.block}} - {{this.blocks1[0].block_name}}</td> 
-                      <td *ngIf="this.ardbcd!='26'" colspan="6" style="text-align: right;">{{translatedData.member_code}} - {{data?.brn_cd}}</td>
+                      <td colspan="6" >{{translatedData?.block}} - {{blocks1[0].block_name}}</td> 
+                      <td *ngIf="ardbcd!='26'" colspan="6" style="text-align: right;">{{translatedData.member_code}} - {{data?.brn_cd}}</td>
                     </tr>
                     
                 </table>
@@ -201,7 +201,9 @@
                         <div class="col-6 pull-right"> {{reportData?data?.ovd_intt:0 |currency:"INR"}}</div>
                       </div>
                       <div class="row">
-                        <div class="col-6 pull-left">{{translatedData?.penal_amt}}: </div>
+                        <div *ngIf="ardbcd=='4'" class="col-6 pull-left">{{translatedData?.G_penal_amt}}: </div>
+                        <div *ngIf="ardbcd!='4'&& ardbcd!='26'" class="col-6 pull-left">{{translatedData?.penal_amt}}: </div>
+                        <div *ngIf="ardbcd=='26'" class="col-6 pull-left">{{translatedData?.BM_penal}}: </div>
                         <div class="col-6 pull-right">{{reportData?data?.penal_intt:0 |currency:"INR"}} </div>
                     </div>
                     </div>

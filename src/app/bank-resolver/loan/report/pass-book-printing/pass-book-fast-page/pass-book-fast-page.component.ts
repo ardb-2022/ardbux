@@ -89,6 +89,9 @@ export class LoanPassBookFastPageComponent implements OnInit {
   accountTypeList: mm_acc_type[] = [];
   loan_case_dtls:any;
   loan_case_no:any;
+  IBSD_AC:any;
+  IBSD_AMT:any;
+  SHARE_AMT:any;
   customer:[]=[]
   constructor(public pServ: PrintServiceService,private svc: RestService, private formBuilder: FormBuilder,
     private modalService: BsModalService,public datepipe: DatePipe,
@@ -135,12 +138,20 @@ export class LoanPassBookFastPageComponent implements OnInit {
     );
   }
   loadFastPageData(){
-    
+    this.IBSD_AC=null;
+    this.IBSD_AMT=null;
       this.custCD=this.masterModel.tmloanall.party_cd
       this.acc_cd=this.masterModel.tmloanall.acc_cd
       if(this.acc_cd===20411 && this.masterModel.tdloansancsetlist.length>0){
-        this.loan_case_dtls=this.masterModel.tdloansancsetlist[0].tdloansancset.filter(x => x.param_cd==(this.systemParam.find(x => x.param_cd == '926').param_value))
-        this.loan_case_no=this.loan_case_dtls[0].param_value
+        if(this.sys.ardbCD=='2'){
+          this.loan_case_dtls=this.masterModel.tdloansancsetlist[0]?.tdloansancset.filter(x => x.param_cd == '500')
+          this.IBSD_AC=this.masterModel.tdloansancsetlist[0]?.tdloansancset.filter(x => x.param_cd == '116')[0]?.param_value
+          this.IBSD_AMT=this.masterModel.tdloansancsetlist[0]?.tdloansancset.filter(x => x.param_cd == '259')[0]?.param_value
+        }
+        else{
+          this.loan_case_dtls=this.masterModel.tdloansancsetlist[0]?.tdloansancset.filter(x => x.param_cd==(this.systemParam.find(x => x.param_cd == '926').param_value))
+        }
+        this.loan_case_no=this.loan_case_dtls[0]?.param_value
       }
       else{
         this.loan_case_dtls=null
@@ -149,7 +160,8 @@ export class LoanPassBookFastPageComponent implements OnInit {
 
       
       debugger
-      this.getCustomer()
+      this.getCustomer();
+      this.getShareAC();
       
     
     this.accountTypeList=this.accountTypeList.filter(c => c.acc_type_cd == this.acc_cd)
@@ -170,6 +182,29 @@ export class LoanPassBookFastPageComponent implements OnInit {
     // })
     
     
+  }
+  getShareAC(){
+    const dt={
+      "acc_num":this.custCD,
+      "acc_type_cd": 7,
+      "ardb_cd": this.sys.ardbCD,
+      "brn_cd": this.sys.BranchCode,
+    }
+    this.SHARE_AMT=0;
+    this.isLoading = true;
+    this.svc.addUpdDel<any>('Deposit/GetDepositWithChild', dt).subscribe(
+      res => {
+        debugger
+      if(res.length>0){
+        this.isLoading=false;
+        this.SHARE_AMT=res[0]?.clr_bal
+      }
+      else{
+        this.isLoading=false;
+        this.SHARE_AMT=0;
+      }
+      debugger
+    })
   }
   getAccountTypeList() {
 
@@ -201,7 +236,8 @@ export class LoanPassBookFastPageComponent implements OnInit {
                 this.masterModel = data;
                 if(this.masterModel.tmloanall.acc_cd>0){
                   this.customerBrn_CD=this.masterModel.tmloanall.brn_cd;
-                  this.onLoadScreen(this.content2);
+                  // this.onLoadScreen(this.content2);
+                  this.onLoadScreen();
                 }
               })   
       }
@@ -234,7 +270,7 @@ export class LoanPassBookFastPageComponent implements OnInit {
             }
           })
   }
-  onLoadScreen(content2) {
+  onLoadScreen() {
     this.loadFastPageData();
     // this.modalRef = this.modalService.show(content2, this.config);
     

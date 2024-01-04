@@ -1561,7 +1561,7 @@ export class OnetimesettlementComponent implements OnInit {
     if (undefined === this.td.trf_type.value
       || null === this.td.trf_type.value
       || this.td.trf_type.value === '') {
-      this.HandleMessage(true, MessageType.Error, 'Please choose transfer type.');
+      this.HandleMessage(true, MessageType.Error, 'Please choose tranaction type.');
       return;
     }
 

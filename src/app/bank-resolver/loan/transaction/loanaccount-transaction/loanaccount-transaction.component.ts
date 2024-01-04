@@ -76,7 +76,9 @@ export class LoanaccountTransactionComponent implements OnInit {
   sancDetails: FormGroup;
   ReportUrl: SafeResourceUrl;
   UrlString = '';
+  pnlInttRt:any;
   // sancdtls: FormArray;
+  systemParam:any[]=[]
   activityList: mm_activity[] = [];
   showTransMode = false;
   showTransactionDtl = false;
@@ -237,6 +239,7 @@ export class LoanaccountTransactionComponent implements OnInit {
   // editDeleteMode=false
   // showInstrumentDtl = false;
   ngOnInit(): void {
+    
     this.showNW=true;
     this.isLoading = false;
     var date = new Date();
@@ -261,7 +264,8 @@ export class LoanaccountTransactionComponent implements OnInit {
       total_due: [''],
       disb_amt: [''],
       disb_dt: [''],
-      penal_intt: ['']
+      penal_intt: [''],
+      loan_status:['']
     });
     this.tdDefTransFrm = this.frmBldr.group({
       trans_dt: [''],
@@ -344,7 +348,7 @@ export class LoanaccountTransactionComponent implements OnInit {
     this.td_deftranstrfList = td_deftranstrf;
     const temp_deftranstrf = new td_def_trans_trf();
     this.td_deftranstrfList.push(temp_deftranstrf);
-
+    this.getSystemValue();
 
     setTimeout(() => {
       this.getBlockMster();
@@ -365,6 +369,17 @@ export class LoanaccountTransactionComponent implements OnInit {
   //     'draw_amt':''
   //   });
   // }
+  getSystemValue(){
+    this.svc.addUpdDel('Mst/GetSystemParameter', null).subscribe(
+      sysRes => {
+        this.systemParam = sysRes;
+        if(this.systemParam){
+          this.systemParam.find(x => x.param_cd === '913').param_value
+          this.pnlInttRt=this.systemParam.find(x => x.param_cd === '913').param_value
+          debugger
+        }
+      })
+  }
   processInterest(): void {
     const temp_gen_param = new p_gen_param();
 
@@ -579,13 +594,12 @@ export class LoanaccountTransactionComponent implements OnInit {
         res => {
           console.log(res)
           this.isLoading=false;
-          if(this.sys.ardbCD=='26'||this.sys.ardbCD=='4'){
-            this.name='Outstanding'
+          if(this.sys.ardbCD=='20'){
+            this.name='Phone'
           }
           
-          else{
-            this.name='Phone'
-
+          else{ 
+            this.name='Outstanding'
           }
           if (undefined !== res && null !== res && res.length > 0) {
             // console.log('here')
@@ -765,6 +779,7 @@ export class LoanaccountTransactionComponent implements OnInit {
             curr_principal: acc.tmloanall.curr_prn,
             curr_intt: acc.tmloanall.curr_intt,
             curr_intt_rate: acc.tmloanall.curr_intt_rate,
+            loan_status: acc.tmloanall.loan_status=='C'?'CLOSED':'OPEN',
             ovd_principal: acc.tmloanall.ovd_prn,
             ovd_intt: acc.tmloanall.ovd_intt,
             ovd_intt_rate: acc.tmloanall.ovd_intt_rate,
@@ -1064,6 +1079,12 @@ export class LoanaccountTransactionComponent implements OnInit {
       //   break;
     // }
   }
+  getTextColor(): string {
+    const loanStatus = this.accDtlsFrm.get('loan_status').value;
+
+    // Return 'red' if loan_status is 'CLOSED', 'green' otherwise
+    return loanStatus === 'CLOSED' ? 'red' : 'green';
+  }
   takeDataForCancel() {
 
     this.f.oprn_cd.enable();
@@ -1141,6 +1162,7 @@ export class LoanaccountTransactionComponent implements OnInit {
             curr_principal: acc.tmloanall.curr_prn,
             curr_intt: acc.tmloanall.curr_intt,
             curr_intt_rate: acc.tmloanall.curr_intt_rate,
+            loan_status: acc.tmloanall.loan_status=='C'?'CLOSED':'OPEN',
             ovd_principal: acc.tmloanall.ovd_prn,
             ovd_intt: acc.tmloanall.ovd_intt,
             ovd_intt_rate: acc.tmloanall.ovd_intt_rate,
@@ -1340,6 +1362,7 @@ export class LoanaccountTransactionComponent implements OnInit {
               curr_principal: acc.tmloanall.curr_prn,
               curr_intt: acc.tmloanall.curr_intt,
               curr_intt_rate: acc.tmloanall.curr_intt_rate,
+              loan_status: acc.tmloanall.loan_status=='C'?'CLOSED':'OPEN',
               ovd_principal: acc.tmloanall.ovd_prn,
               ovd_intt: acc.tmloanall.ovd_intt,
               ovd_intt_rate: acc.tmloanall.ovd_intt_rate,
@@ -1629,10 +1652,16 @@ export class LoanaccountTransactionComponent implements OnInit {
   }
 
   onAmtChng(): void {
+    const selectedOperation = this.operations.filter(e => e.oprn_cd === +this.f.oprn_cd.value)[0];
 
     this.HandleMessage(false);
     if ((+this.td.amount.value) < 0) {
       this.HandleMessage(true, MessageType.Error, 'Amount can not be negative.');
+      this.td.amount.setValue('');
+      return;
+    }
+    if((+this.td.amount.value) >(+this.fd.total_due.value)&&selectedOperation.oprn_desc.toLocaleLowerCase() === 'recovery'){
+      this.HandleMessage(true, MessageType.Error, 'Amount can not be greaterthan due amount.');
       this.td.amount.setValue('');
       return;
     }

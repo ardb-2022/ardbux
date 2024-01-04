@@ -57,6 +57,7 @@ export class LoanPassBookPrintingComponent implements OnInit {
   fd: any;
   td: any;
   dt: any;
+  printID:any;
   fromdate: Date;
   toDate: Date;
   suggestedCustomer: mm_customer[];
@@ -115,7 +116,17 @@ export class LoanPassBookPrintingComponent implements OnInit {
        var n = date.toDateString();
     // get the time as a string
        var time = date.toLocaleTimeString();
-       this.today= n + " "+ time
+       this.today= n + " "+ time;
+       if(this.sys.ardbCD=="26"){
+        this.printID="hiddenTab"
+         
+       }
+       else if(this.sys.ardbCD=="2"){
+         this.printID="hiddenTabContai"
+       }
+       else{
+         this.printID="hiddenTab"
+       }
   }
   
   onLoadScreen(content) {

@@ -48,7 +48,7 @@
             <small for="fundType">Fund Type</small>
             <select id="fundType" class="form-control form-control-sm" formControlName="fundType">
               <option disabled>Choose</option>
-              <option value="O">Owned Fund</option>
+              <option value="O">Deposit Scheme Fund</option>
               <option value="N">Borrowed Fund</option>
   
             </select>
@@ -300,7 +300,7 @@
           </ng-container>
         <tr mat-header-row *matHeaderRowDef="['header0','header1','header2','header3','header4','header5']"></tr>
           
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr class="fixedHeader" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
           <tr mat-footer-row *matFooterRowDef="['Total','Total0','Total1','Total2','Total3','Total4','Total5','Total6']" class="example-second-footer-row"></tr>

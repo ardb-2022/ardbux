@@ -218,7 +218,7 @@ export class UTCustomerProfileComponent implements OnInit {
       approve_status: [''],
       approve_by: [''],
       approve_dt: [''],
-
+      office_address:['']
       
     });
     
@@ -517,7 +517,9 @@ export class UTCustomerProfileComponent implements OnInit {
       this.f.pin.setValue('');
     }
   }
-
+  setPerAdd(add:any){
+    this.custMstrFrm.controls.permanent_address.setValue(add.target.value);
+  }
   public SelectCustomer(cust: mm_customer): void {
     // this.f.status.disable();
     // ;
@@ -585,6 +587,7 @@ export class UTCustomerProfileComponent implements OnInit {
       occupation: cust.occupation,
       phone: cust.phone,
       present_address: cust.present_address,
+      office_address: cust.office_address,
       farmer_type: cust.farmer_type,
       email: cust.email,
       monthly_income: cust.monthly_income,
@@ -634,8 +637,8 @@ export class UTCustomerProfileComponent implements OnInit {
 
     if (newCustomer) {
       console.log('s');
-      
-      cust.del_flag = 'N'
+      if(this.custMstrFrm.controls.phone.value && this.custMstrFrm.controls.sms_flag.value){
+        cust.del_flag = 'N'
       console.log(cust)
       this.svc.addUpdDel<any>('UCIC/InsertCustomerDtls', cust).subscribe(
         res => {
@@ -657,12 +660,19 @@ export class UTCustomerProfileComponent implements OnInit {
         },
         err => { this.isLoading = false; }
       );
+      }
+      else{
+        this.HandleMessage(true, MessageType.Warning,'Could not create Customer, phone and SMS flage are mendetory' );
+        document.getElementById('phone').focus();
+      }
+      
     }
     else {
 
       // cust.modified_by = this.sys.UserId;
       cust.ardb_cd = this.selectedCustomer.ardb_cd;
       console.log(cust)
+      
       this.svc.addUpdDel<any>('UCIC/UpdateCustomerDtls', cust).subscribe(
         res => {
           if (null !== res && res > 0) {
@@ -906,6 +916,7 @@ debugger
       cust.occupation = this.f.occupation.value;
       cust.phone = this.f.phone.value;
       cust.present_address = this.f.present_address.value;
+      cust.office_address = this.f.office_address.value;
       cust.farmer_type = this.f.farmer_type.value;
       cust.lbr_status = this.f.lbr.value;
       cust.email = this.f.email.value;

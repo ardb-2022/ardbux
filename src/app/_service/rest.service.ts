@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 export class RestService {
   // static configuration: BankConfiguration[] = [];
   static bankconfigurationList: BankConfig[] = [];
-  static serverIp = '36.255.3.143';
+  static serverIp = 'cfs2022.in';
 
 
   constructor(private http: HttpClient, private confSvc: ConfigurationService,
@@ -31,7 +31,9 @@ export class RestService {
   
   async getConfiginSysn() {
     // RestService.configuration = (await this.confSvc.getAllConfiguration() as BankConfiguration[]);
-    // console.log(await this.confSvc.getAllConfiguration(RestService.serverIp) as BankConfig[])
+    console.log(await this.confSvc.getAllConfiguration(RestService.serverIp) as BankConfig[])
+    console.log(RestService.serverIp);
+    
     RestService.bankconfigurationList = (await this.confSvc.getAllConfiguration(RestService.serverIp) as BankConfig[]);
   }
 
@@ -67,7 +69,7 @@ export class RestService {
         __bName.toLowerCase())[0];
       if (undefined === bank || null === bank) { 
       } else {
-      return 'http://' + bank.server_ip + '/' + __bName + '/api/';
+      return 'https://' + bank.server_ip + '/' + __bName + '/api/';
       // return 'http://' + bank.server_ip + '/' + 'ARDBTESTUX' + '/api/';
       }
     }
@@ -78,7 +80,7 @@ export class RestService {
   private getMasterUrl(): string {
     // const url = 'http://' + RestService.serverIp + '/MasterConfig/api/';   // PRD
     // const url = 'http://' + RestService.serverIp + '/devMasterConfig/api/';  // DEV
-    const url = 'http://' + RestService.serverIp + '/ardbMasterConfig/api/';  // DEV
+    const url = 'https://' + RestService.serverIp + '/ardbMasterConfig/api/';  // DEV
     // url = 'https://localhost:5001/api/';
     return url;
   }
@@ -106,7 +108,7 @@ export class RestService {
       && RestService.bankconfigurationList.length > 0) {
       ip = RestService.bankconfigurationList.filter(e => e.bank_name.toLowerCase() === __bName.toLowerCase())[0].server_ip;
     }
-    url = 'http://' + ip + '/' + __bName + 'Rpt/';
+    url = 'https://' + ip + '/' + __bName + 'Rpt/';
     return url;
   }
   public getAll<T>(ofwhat: string): Observable<T> {

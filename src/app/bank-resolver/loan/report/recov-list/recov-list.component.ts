@@ -173,7 +173,9 @@ notvalidate:boolean=false;
 bName1=''
   constructor(private svc: RestService, private formBuilder: FormBuilder,private exportAsService: ExportAsService, private cd: ChangeDetectorRef,
     private modalService: BsModalService, private _domSanitizer: DomSanitizer, private comser: CommonServiceService,
-    private router: Router) { }
+    private router: Router) { 
+      
+    }
   ngOnInit(): void {
     this.fromdate = this.sys.CurrentDate;
     this.toDate = this.sys.CurrentDate;
@@ -657,4 +659,6 @@ bName1=''
     this.selectedValue1=''
     this.bName1=''
   }
+  
+  
 }

@@ -104,7 +104,7 @@
         </mat-panel-description>
       </mat-expansion-panel-header> 
       <div class="row">
-        <div class="col-3">
+        <div class="col-2">
           <mat-form-field appearance="outline" style="width:100%">
             <mat-label>Search {{selectedValue1}} </mat-label>
             <mat-select name="fieldName" [(ngModel)]="selectedValue1" (selectionChange)="showFirstGroup()">
@@ -115,7 +115,7 @@
             </mat-select>
           </mat-form-field>
         </div>
-        <div class="col-3">
+        <div class="col-2">
          <mat-form-field appearance="outline" style="width:100%">
            <mat-label>Search {{selectedValue1}} {{bName}}</mat-label>
            <!-- <input matInput id="myInput2" (keyup)="applyFilter($event)" placeholder="Block Name"> -->
@@ -128,7 +128,7 @@
           </mat-select>
          </mat-form-field> &nbsp;
         </div>
-        <div class="col-3">
+        <div class="col-2">
           <mat-form-field appearance="outline" style="width:100%">
             <mat-label>Search {{selectedValue}} under {{bName}} </mat-label>
             <mat-select name="fieldName" [disabled]="!bName" [(ngModel)]="selectedValue" (selectionChange)="showSecondGroup()">
@@ -140,13 +140,37 @@
           </mat-form-field>
         </div>
       
-        <div class="col-3">
+        <div class="col-2">
          <mat-form-field appearance="outline" style="width:100%">
            <mat-label>Search {{bName1}} in {{selectedValue}} </mat-label>
            <!-- <input matInput id="myInput1" (keyup)="applyFilter1($event)" placeholder="Activity"> -->
            <mat-select name="fieldName" [disabled]="!selectedValue" [(ngModel)]="bName1" (selectionChange)="searchSecondGroup()">
             <mat-option *ngFor="let second of secondGroup" [value]="second">
               {{second}}
+            </mat-option>
+           
+          </mat-select>
+         </mat-form-field> &nbsp;
+        </div>
+        <div class="col-2">
+          <mat-form-field appearance="outline" style="width:100%">
+            <mat-label>Search {{selectedValue2}} under {{bName1}} </mat-label>
+            <mat-select name="fieldName" [disabled]="!bName1" [(ngModel)]="selectedValue2" (selectionChange)="show3rdGroup()">
+              <mat-option *ngFor="let selectedItem of selectItems" [value]="selectedItem.value">
+                {{selectedItem.name}}
+              </mat-option>
+             
+            </mat-select>
+          </mat-form-field>
+        </div>
+      
+        <div class="col-2">
+         <mat-form-field appearance="outline" style="width:100%">
+           <mat-label>Search {{bName2}} in {{selectedValue2}} </mat-label>
+           <!-- <input matInput id="myInput1" (keyup)="applyFilter1($event)" placeholder="Activity"> -->
+           <mat-select name="fieldName" [disabled]="!selectedValue2" [(ngModel)]="bName2" (selectionChange)="search3rdGroup()">
+            <mat-option *ngFor="let third of thirdGroup" [value]="third">
+              {{third}}
             </mat-option>
            
           </mat-select>
@@ -171,7 +195,7 @@
   <table mat-table cdkDropListGroup [dataSource]="dataSource" class="mat-elevation-z8" matSort>
   <!-- Position Column -->
   <ng-container matColumnDef="mainHeader">
-    <th mat-header-cell colspan="20" *matHeaderCellDef>
+    <th mat-header-cell colspan="22" *matHeaderCellDef>
       <div class="justify-content-center" style="text-align:center" *ngIf="reportData">
         <h4>{{ardbName}} ({{branchName}})</h4>
         <h4>Run Date & Time : {{today}} </h4>
@@ -189,31 +213,33 @@
   <td mat-cell *matCellDef="let element; let i=index;"> {{i+1}} </td>
   </ng-container>
   <ng-container matColumnDef="block_name">
-
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Block
-    
     </th>
-   
-    
-    <td mat-cell *matCellDef="let element"> {{element.block_name}} </td>
+   <td mat-cell *matCellDef="let element"> {{element.block_name}} </td>
+  </ng-container>
+  <ng-container matColumnDef="gp_name">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Service Area
+    </th>
+   <td mat-cell *matCellDef="let element"> {{element.gp_name}} </td>
+  </ng-container>
+  <ng-container matColumnDef="vill_name">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Village
+    </th>
+   <td mat-cell *matCellDef="let element"> {{element.vill_name}} </td>
   </ng-container>
   <ng-container matColumnDef="acc_name">
   
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Activity
     
     </th>
-   
-    
-    <td mat-cell *matCellDef="let element"> {{element.acc_name}} </td>
+   <td mat-cell *matCellDef="let element"> {{element.acc_name}} </td>
   </ng-container>
   <ng-container matColumnDef="party_name">
   
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Party Name
     
     </th>
-   
-    
-    <td mat-cell *matCellDef="let element"> {{element.party_name}} </td>
+   <td mat-cell *matCellDef="let element"> {{element.party_name}} </td>
   </ng-container>
   
   <!-- Name Column -->
@@ -233,9 +259,7 @@
      <th mat-header-cell *matHeaderCellDef mat-sort-header>Issue DT
      
      </th>
-   
-     
-     <td mat-cell *matCellDef="let element" style="text-align:center"> {{element.list_dt.substr(0,10)}} </td>
+   <td mat-cell *matCellDef="let element" style="text-align:center"> {{element.list_dt.substr(0,10)}} </td>
    </ng-container>
   
    <!-- Name Column -->
@@ -298,7 +322,7 @@
   </ng-container>
   
   <ng-container matColumnDef="disclaimer1">
-    <td mat-footer-cell *matFooterCellDef colspan="8" style="font-weight: 800;text-align:center">
+    <td mat-footer-cell *matFooterCellDef colspan="10" style="font-weight: 800;text-align:center">
     Total
     </td>
   

@@ -44,6 +44,7 @@ export class TransactionapprovalComponent implements OnInit {
   tdDepTransGroup: any;
   custTitle: string;
   uniqueAccTypes: mm_acc_type[] = [];
+  renewData: td_def_trans_trf[] = [];
   modalRef: BsModalRef;
   sys = new SystemValues();
   toFltrTrnCd = '';
@@ -56,6 +57,7 @@ export class TransactionapprovalComponent implements OnInit {
   operationalInstrList: mm_oprational_intr[] = [];
   selectedAcctDtls: tm_deposit;
   transactionDtlsFrm: FormGroup;
+  renewDtlsFrm:FormGroup;
   showDenominationDtl = false;
   // showTransferDtl = false;
   totalOfDenomination = 0;
@@ -195,6 +197,15 @@ export class TransactionapprovalComponent implements OnInit {
       acc_name: [''],
       brn_cd: [''],
     });
+    this.renewDtlsFrm = this.frmBldr.group({
+      dep_period: [''],
+      opening_dt: [''],
+      instl_no: [''],
+      prn_amt: [''],
+      curr_intt_recov: [''],
+      intt_rt: [''],
+      tot_amount: [''],
+    });
   }
 
   private resetAccDtlsFrmData(): void {
@@ -255,7 +266,7 @@ export class TransactionapprovalComponent implements OnInit {
       this.svc.addUpdDel<mm_acc_type[]>('Mst/GetAccountTypeMaster', null).subscribe(
         res => {
           const accType = res.filter(e => e.acc_type_cd === transactionDtl.acc_type_cd)[0];
-
+          
           this.transactionDtlsFrm.patchValue({
             trans_dt: transactionDtl.trans_dt.toString().substr(0, 10),
             trans_cd: transactionDtl.trans_cd,
@@ -664,7 +675,7 @@ export class TransactionapprovalComponent implements OnInit {
               for (let i = 0; i <= this.AllHolder.length; i++) {
                 console.log(res);
                 
-              this.joinHold+=(this.AllHolder.length==0?'':this.AllHolder[i].acc_holder+',')
+              this.joinHold+=(this.AllHolder.length==0?'':this.AllHolder[i]?.acc_holder+',')
               console.log(this.joinHold);
               }
             debugger
@@ -690,6 +701,7 @@ export class TransactionapprovalComponent implements OnInit {
     debugger
   }
   private getDepTrans(depTras: td_def_trans_trf): void {
+    this.getRenewDtls(depTras);
     this.isLoading = true;
     // this.showCust = false; // this is done to forcibly rebind the screen
     // const defTransaction = new td_def_trans_trf();
@@ -716,6 +728,26 @@ export class TransactionapprovalComponent implements OnInit {
       },
       err => { this.isLoading = false; }
     );
+  }
+  private getRenewDtls(depTras: td_def_trans_trf){
+    this.svc.addUpdDel<any>('Deposit/GetAccountOpeningTempData', depTras).subscribe(
+      res => {
+        const allData=res;
+        const renewData=allData.tmdepositrenew;
+        if(renewData.acc_num!=null){
+          debugger
+          this.renewDtlsFrm.patchValue({
+            dep_period:renewData.dep_period,
+            opening_dt:renewData.created_dt.substr(0,10),
+            intt_rt:renewData.intt_rt,
+            prn_amt:renewData.prn_amt,
+            curr_intt_recov:renewData.intt_amt,
+            instl_no:renewData.instl_no,
+            tot_amount:renewData.intt_amt+renewData.prn_amt
+          });
+        }
+         
+      })
   }
   private getCustInfo(CustCd: number): void {
     this.isLoading = true;

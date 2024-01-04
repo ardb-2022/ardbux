@@ -287,6 +287,10 @@ export class TransTransactionComponent implements OnInit {
       this.HandleMessage(true, MessageType.Error, 'This Transaction is already approved !!!');
       return;
     }
+    else if (this.f.particulars.value == null || this.f.particulars.value == ''|| this.f.particulars.value == undefined) {
+      this.HandleMessage(true, MessageType.Error, 'Please write a valid particulars and save again !!!');
+      return;
+    }
     else {
       this.InsertTransferData();
       ////debugger;

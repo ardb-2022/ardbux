@@ -1425,7 +1425,12 @@ removeSecurityDtlList()
       this.tm_loan_all.ovd_intt_rate = 0;
     }
     else{
-      this.tm_loan_all.ovd_intt_rate = this.tm_loan_all.curr_intt_rate + this.penalIntt;
+      if(this.sys.ardbCD=='2'){
+        this.tm_loan_all.ovd_intt_rate = this.tm_loan_all.curr_intt_rate
+      }
+      else{
+        this.tm_loan_all.ovd_intt_rate = this.tm_loan_all.curr_intt_rate + this.penalIntt;
+      }
 
     }
     // if (this.tm_loan_all.ovd_intt_rate === undefined ||

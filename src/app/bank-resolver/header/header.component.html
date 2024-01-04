@@ -20,11 +20,11 @@
     <span *ngFor="let item of menuItems">
       <!-- Handle branch node buttons here -->
       <span *ngIf="item.childMenuConfigs && item.childMenuConfigs.length > 0">
-        <button [hidden]="item.permission=='N'" mat-button class="btn" [matMenuTriggerFor]="menu.childMenu"><mat-icon>{{item.iconName}}</mat-icon>
+        <button [hidden]="item?.permission=='N'" mat-button class="btn" [matMenuTriggerFor]="menu?.childMenu"><mat-icon>{{item?.iconName}}</mat-icon>
           {{item.menu_name}}
           <mat-icon>expand_more</mat-icon>
         </button>
-        <app-menu-item #menu [items]="item.childMenuConfigs"></app-menu-item>
+        <app-menu-item #menu [items]="item?.childMenuConfigs"></app-menu-item>
         <label class = "vertical"></label>
       </span>
       <!-- Leaf node buttons here -->
@@ -48,7 +48,7 @@
         <a class="nav-link" (click)="goToHome()">  <mat-icon class="hm">home</mat-icon>Home </a>
     
         <a class="nav-link"  (click)="openModal(template)">  <mat-icon class="lo">logout</mat-icon>Logout </a>
-      
+        <!-- <a class="nav-link"  (click)="openNewTab()">  <mat-icon class="lo">logout</mat-icon>PLLL </a> -->
    </nav>
 </div>
 

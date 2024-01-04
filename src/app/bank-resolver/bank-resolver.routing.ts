@@ -179,6 +179,16 @@ import { CalculateBorrInttComponent } from './borrowing/calculate-borr-intt/calc
 import { ContaiUCICprofileComponent } from './UCIC/contai-ucicprofile/contai-ucicprofile.component';
 import { GoldTestAndValuationReportComponent } from './loan/transaction/gold-test-and-valuation-report/gold-test-and-valuation-report.component';
 import { DemandNoticeContaiComponent } from './loan/report/demand-notice-contai/demand-notice-contai.component';
+import { UcicMergeComponent } from './UCIC/ucic-merge/ucic-merge.component';
+import { CTloanDCComponent } from './loan/report/ctloan-dc/ctloan-dc.component';
+import { RecoveryExportComponent } from './loan/transaction/recoveryExportImport/recovery-export/recovery-export.component';
+import { RecoveryImportComponent } from './loan/transaction/recoveryExportImport/recovery-import/recovery-import.component';
+import { RecoveryIndiPostComponent } from './loan/transaction/recoveryExportImport/recovery-indi-post/recovery-indi-post.component';
+import { ContaiComponent } from './deposit/report/passbook-print/contai/contai.component';
+import { ContaiFastPageComponent } from './deposit/report/passbook-print/contai/contai-fast-page/fast-page.component';
+import { GhatalComponent } from './deposit/report/passbook-print/ghatal/ghatal.component';
+import { GhatalFastPageComponent } from './deposit/report/passbook-print/ghatal/ghatal-fast-page/ghatal-fast-page.component';
+
 const routes: Routes = [
   { path: 'Admin', component: AdminPanelComponent },
   { path: 'admin', component: AdminPanelComponent },
@@ -202,11 +212,12 @@ const routes: Routes = [
   {
     path: ':bankName', component: BankResolverComponent,
     children: [
-      { path: '', redirectTo: 'login', pathMatch: 'full' },
+      { path: '', redirectTo: 'login', pathMatch: 'full'},
       { path: 'login', component: LoginComponent },
       { path: 'la', component: LandingComponent, canActivate: [AuthGuard] },
       { path: 'UT_Contai_CustomerProfile', component: ContaiUCICprofileComponent, canActivate: [AuthGuard] },
       { path: 'UT_CustomerProfile', component: UTCustomerProfileComponent, canActivate: [AuthGuard] },
+      { path: 'UT_UCIC_MRG', component: UcicMergeComponent, canActivate: [AuthGuard] },
       { path: 'UT_SelfHelp', component: UTSelfHelpComponent, canActivate: [AuthGuard] },
       { path: 'UR_MemberList', component: MemberListComponent, canActivate: [AuthGuard] },
       { path: 'FT_Voucher', component: VoucherComponent, canActivate: [AuthGuard] },
@@ -252,6 +263,9 @@ const routes: Routes = [
       { path: 'LT_OTS', component: OnetimesettlementComponent, canActivate: [AuthGuard] },
       { path: 'LT_YDR', component: YearendDemandRecoveryComponent, canActivate: [AuthGuard] },
       { path: 'LT_LoanAprv', component: LoanTransactionApprovalComponent, canActivate: [AuthGuard] },
+      { path: 'LT_RECOV_EXPORT', component: RecoveryExportComponent, canActivate: [AuthGuard] },
+      { path: 'LT_RECOV_IMPORT', component: RecoveryImportComponent, canActivate: [AuthGuard] },
+      { path: 'LT_RECOV_INDPOST', component: RecoveryIndiPostComponent, canActivate: [AuthGuard] },
       { path: 'LM_Kccmember', component: KccmemberdtlsComponent, canActivate: [AuthGuard] },
       { path: 'DT_AccLockUnlock', component: LienAccLockUnlockComponent, canActivate: [AuthGuard] },
       { path: 'UR_Networth', component: NetworthStatementComponent, canActivate: [AuthGuard] },
@@ -296,6 +310,7 @@ const routes: Routes = [
       { path: 'LR_GM_Int_Subsidy', component: GmLoanSubsidyComponent, canActivate: [AuthGuard] },
       { path: 'LR_Disb_Cert', component: LoanDisbCertificateComponent, canActivate: [AuthGuard] },
       { path: 'LR_GM_DC', component: GMloanDCComponent, canActivate: [AuthGuard] },
+      { path: 'LR_CT_DC', component: CTloanDCComponent, canActivate: [AuthGuard] },
       { path: 'LR_NPA_Sum', component: NpaSummaryComponent, canActivate: [AuthGuard] },
       { path: 'LR_FN_Return', component: FortnightlyReturnComponent, canActivate: [AuthGuard] },
       { path: 'LR_Conso_FN_Return', component: ConsoFortnightlyReturnComponent, canActivate: [AuthGuard] },
@@ -323,9 +338,13 @@ const routes: Routes = [
       { path: 'DR_PCertificate', component: PrintCertificateComponent, canActivate: [AuthGuard] },
       { path: 'DR_InttCertificate', component: InterestCertificateComponent, canActivate: [AuthGuard] },
       { path: 'DR_PbkPrn', component: PassBookPrintingComponent,
-      children: [
-      { path: 'DR_PassBookFastPage', component: PassBookFastPageComponent},
-        ], canActivate: [AuthGuard] },
+      children: [{ path: 'DR_PassBookFastPage', component: PassBookFastPageComponent},], canActivate: [AuthGuard] },
+      { path: 'DR_contai_PbkPrn', component: ContaiComponent,
+      children: [{ path: 'DR_contai_PassBookFastPage', component: ContaiFastPageComponent},], canActivate: [AuthGuard] },
+      { path: 'DR_ghatal_PbkPrn', component: GhatalComponent,
+      children: [{ path: 'DR_ghatal_PassBookFastPage', component: GhatalFastPageComponent},], canActivate: [AuthGuard] },
+      
+      
       { path: 'DR_UpbkPrnSts', component: UpdatePassbookComponent, canActivate: [AuthGuard]},
 
 

@@ -211,6 +211,15 @@ import { DcbrVillWiseComponent } from './loan/report/dcbr-vill-wise/dcbr-vill-wi
 import { ContaiUCICprofileComponent } from './UCIC/contai-ucicprofile/contai-ucicprofile.component';
 import { GoldTestAndValuationReportComponent } from './loan/transaction/gold-test-and-valuation-report/gold-test-and-valuation-report.component';
 import { DemandNoticeContaiComponent } from './loan/report/demand-notice-contai/demand-notice-contai.component';
+import { UcicMergeComponent } from './UCIC/ucic-merge/ucic-merge.component';
+import { CTloanDCComponent } from './loan/report/ctloan-dc/ctloan-dc.component';
+import { RecoveryExportComponent } from './loan/transaction/recoveryExportImport/recovery-export/recovery-export.component';
+import { RecoveryImportComponent } from './loan/transaction/recoveryExportImport/recovery-import/recovery-import.component';
+import { RecoveryIndiPostComponent } from './loan/transaction/recoveryExportImport/recovery-indi-post/recovery-indi-post.component';
+import { ContaiComponent } from './deposit/report/passbook-print/contai/contai.component';
+import { ContaiFastPageComponent } from './deposit/report/passbook-print/contai/contai-fast-page/fast-page.component';
+import { GhatalComponent } from './deposit/report/passbook-print/ghatal/ghatal.component';
+import { GhatalFastPageComponent } from './deposit/report/passbook-print/ghatal/ghatal-fast-page/ghatal-fast-page.component';
 @NgModule({
   declarations: [ 
     AmountToWordPipe,UserLoginStatusComponent,OpenInvestComponent,KeyoffDirective,
@@ -258,7 +267,8 @@ import { DemandNoticeContaiComponent } from './loan/report/demand-notice-contai/
            UserWiseTransactionComponent, UserWiseTransactionLoanComponent, GmLoanSubsidyComponent, LoanDisburseActWiseComponent,
             YearendDemandRecoveryComponent, DemandNoticeBlockWiseComponent, RecovAdvPrnComponent, RecovAdvPrnVillComponent, 
             InterestSubsidySummaryComponent, DcbrPrintComponent, NpaSummaryComponent,LockerComponent, MenuItemComponent, 
-            DetailListSbcaConstWiseComponent, FortnightlyReturnComponent, ConsoFortnightlyReturnComponent, BorrowingComponent, DcbrVillWiseComponent, ContaiUCICprofileComponent, GoldTestAndValuationReportComponent, DemandNoticeContaiComponent
+            DetailListSbcaConstWiseComponent, FortnightlyReturnComponent, ConsoFortnightlyReturnComponent, BorrowingComponent, DcbrVillWiseComponent, 
+            ContaiUCICprofileComponent, GoldTestAndValuationReportComponent, DemandNoticeContaiComponent, UcicMergeComponent, CTloanDCComponent, RecoveryExportComponent, RecoveryImportComponent, RecoveryIndiPostComponent, ContaiComponent, ContaiFastPageComponent, GhatalComponent, GhatalFastPageComponent
   ],
   imports: [
     MatAutocompleteModule,

@@ -27,6 +27,8 @@ export class ContaiUCICprofileComponent implements OnInit {
 
  @ViewChild('kycAddressNo',{static:true}) kycAddressNo:ElementRef;
   @ViewChild('kycPhotoNo',{static:true}) kycPhotoNo:ElementRef;
+  @ViewChild('pan',{static:true}) pan:ElementRef;
+  @ViewChild('aadhar',{static:true}) aadhar:ElementRef;
   _isDisabled = false;
 
   constructor(private datePipe: DatePipe, private frmBldr: FormBuilder,
@@ -228,7 +230,9 @@ export class ContaiUCICprofileComponent implements OnInit {
       approve_status: [''],
       approve_by: [''],
       approve_dt: [''],
-      created_dt:['']
+      created_dt:[''],
+      office_address:['']
+
     });
 
     setTimeout(() => {
@@ -395,7 +399,8 @@ debugger
       po:selectedVillage.po_id,
       ps:selectedVillage.ps_id,
       pin:this.selectedPO.pin,
-      present_address:add
+      present_address:add,
+      permanent_address:add
     });
   }
 
@@ -628,6 +633,7 @@ debugger
       occupation: cust.occupation,
       phone: cust.phone,
       present_address: cust.present_address,
+      office_address: cust.office_address,
       farmer_type: cust.farmer_type,
       email: cust.email, 
       fd_folio_no: cust.fd_folio_no, 
@@ -691,7 +697,7 @@ debugger
 
     if (newCustomer) {
       console.log('s');
-      
+      if(this.custMstrFrm.controls.phone.value && this.custMstrFrm.controls.sms_flag.value){
       cust.del_flag = 'N'
       console.log(cust)
       this.svc.addUpdDel<any>('UCIC/InsertCustomerDtls', cust).subscribe(
@@ -713,13 +719,20 @@ debugger
           }
         },
         err => { this.isLoading = false; }
-      );
+      )}
+      else{
+        this.HandleMessage(true, MessageType.Warning,'Could not create Customer, phone and SMS flage are mendetory' );
+        document.getElementById('phone').focus();
+      }
     }
     else {
 
       // cust.modified_by = this.sys.UserId;
       cust.ardb_cd = this.selectedCustomer.ardb_cd;
       console.log(cust)
+      if(cust.brn_cd!=this.sys.BranchCode){
+        debugger
+      }
       this.svc.addUpdDel<any>('UCIC/UpdateCustomerDtls', cust).subscribe(
         res => {
           if (null !== res && res > 0) {
@@ -768,7 +781,7 @@ debugger
       }
     }
     if(this.f.kyc_photo_type.value == 'P' || this.f.kyc_photo_type.value == 'G'){
-
+debugger
       this.f.kyc_photo_type.value == 'P' && this.f.kyc_photo_no.value.length != 10 ? 
       this.HandleMessage(true,MessageType.Error,'Pan No is Invalid') : 
       this.f.kyc_photo_type.value == 'G' && this.f.kyc_photo_no.value.length != 12 ? 
@@ -779,6 +792,7 @@ debugger
       false: true;  
     }
     if(this.f.kyc_address_type.value == 'P' || this.f.kyc_address_type.value == 'G'){
+      debugger
       this.f.kyc_address_type.value == 'P' && this.f.kyc_address_no.value.length != 10 ? 
       this.HandleMessage(true,MessageType.Error,'Pan No is Invalid') : 
       this.f.kyc_address_type.value == 'G' && this.f.kyc_address_no.value.length != 12 ? 
@@ -789,17 +803,17 @@ debugger
       false : this.f.kyc_address_type.value == 'G' && this.f.kyc_address_no.value.length != 12 ? 
       false: true;  
     }
-    if(this.f.kyc_other_type.value == 'P' || this.f.kyc_other_type.value == 'G'){
+//     if(this.f.kyc_other_type.value == 'P' || this.f.kyc_other_type.value == 'G'){
+// debugger
+//       this.f.kyc_other_type.value == 'P' && this.f.kyc_other_no.value.length != 10 ? 
+//       this.HandleMessage(true,MessageType.Error,'Pan No is Invalid') : 
+//       this.f.kyc_other_type.value == 'G' && this.f.kyc_other_no.value.length != 12 ? 
+//       this.HandleMessage(true,MessageType.Error,'Aadhar No is Invalid') : '';
 
-      this.f.kyc_other_type.value == 'P' && this.f.kyc_other_no.value.length != 10 ? 
-      this.HandleMessage(true,MessageType.Error,'Pan No is Invalid') : 
-      this.f.kyc_other_type.value == 'G' && this.f.kyc_other_no.value.length != 12 ? 
-      this.HandleMessage(true,MessageType.Error,'Aadhar No is Invalid') : '';
-
-      trReturn =  this.f.kyc_other_type.value == 'P' && this.f.kyc_other_no.value.length != 10 ?  
-      false : this.f.kyc_other_type.value == 'G' && this.f.kyc_other_no.value.length != 12 ? 
-      false: true;  
-    }
+//       trReturn =  this.f.kyc_other_type.value == 'P' && this.f.kyc_other_no.value.length != 10 ?  
+//       false : this.f.kyc_other_type.value == 'G' && this.f.kyc_other_no.value.length != 12 ? 
+//       false: true;  
+//     }
     // // ;
     if(this.retrieveClicked==true && this.f.cust_name.value==null){
       this.HandleMessage(true,MessageType.Error,'Empty search field')
@@ -947,7 +961,7 @@ debugger
   mapFormGrpToCustMaster(): mm_customer {
     const cust = new mm_customer();
     try {
-      cust.brn_cd = this.sys.BranchCode; // '101';
+      cust.brn_cd = this.sys.BranchCode; // '101';//partha
       cust.cust_cd = (null === this.f.cust_cd.value || '' === this.f.cust_cd.value)
         ? 0 : +this.f.cust_cd.value;
       cust.cust_type = this.f.cust_type.value;
@@ -985,6 +999,7 @@ debugger
       cust.occupation = this.f.occupation.value;
       cust.phone = this.f.phone.value;
       cust.present_address = this.f.present_address.value;
+      cust.office_address = this.f.office_address.value;
       cust.farmer_type = this.f.farmer_type.value;
       cust.lbr_status = this.f.lbr.value;
       cust.email = this.f.email.value;
@@ -1169,11 +1184,116 @@ debugger
       status: e == '0001-01-01T00:00:00' || e == null ? 'A' : 'D'
     })
   }
+  // setNull(_flag){
+  //   this.custMstrFrm.patchValue({
+  //     kyc_photo_no:_flag == 'PIN' ? '' : this.f.kyc_photo_no.value,
+  //     kyc_address_no:_flag == 'AIN' ? '' : this.f.kyc_address_no.value,
+  //     kyc_other_no:_flag == 'OIN' ? '' : this.f.kyc_other_no.value
+
+  //   })
+  // }
+  // noSpecialChars(e,_flag){
+  //   if(_flag == 'AIN' && this.f.kyc_address_type.value == 'G'){
+  //     if(Utils.preventAlphabet(e.target.value,e.key))
+  //         e.preventDefault();
+  //    }
+  //    else if(_flag == 'PIN' && this.f.kyc_photo_type.value=='G'){
+  //     if(Utils.preventAlphabet(e.target.value,e.key))
+  //     e.preventDefault();
+  //    }
+  //    else if(_flag == 'OIN' && this.f.kyc_other_type.value=='G'){
+  //     if(Utils.preventAlphabet(e.target.value,e.key))
+  //     e.preventDefault();
+  //    }
+  // }
+  // CheckExistance(_flag){
+  //   if(_flag == 'PIN'){
+  //     if(this.f.kyc_photo_type.value == 'P' || this.f.kyc_photo_type.value == 'G'){
+  //       this.isLoading = true;
+  //       this.chkPanexistance(this.f.kyc_photo_type.value == 'P' ? 'UCIC/Checkpancard' : 'UCIC/Checkaadharcard',this.f.kyc_photo_type.value,_flag);
+  //       }
+  //   }
+  //   else if(_flag == 'AIN'){
+  //     if(this.f.kyc_address_type.value == 'P' || this.f.kyc_address_type.value == 'G'){
+  //       this.isLoading = true;
+  //       this.chkPanexistance(this.f.kyc_address_type.value == 'P' ? 'UCIC/Checkpancard' : 'UCIC/Checkaadharcard',this.f.kyc_address_type.value,_flag);
+  //       }
+  //   }
+  //    else if(_flag == 'PAN'){
+  //     debugger
+  //       this.isLoading = true;
+  //         this.chkPanexistance('UCIC/Checkpancard',"P",_flag);
+         
+  //     }
+  //     else if(_flag == 'AAD'){
+  //       this.isLoading = true;
+  //       this.chkPanexistance('UCIC/Checkaadharcard',"G",_flag);
+  //     }
+  // }
+  // chkPanexistance(_flag,_type,_mode){
+  //   var dt = {
+  //        'ardb_cd':this.sys.ardbCD,
+  //        'kyc_photo_no': _mode == 'PAN'?this.f.pan.value:this.f.kyc_photo_no.value,
+  //        'kyc_photo_type':_mode == 'PAN'?'P':this.f.kyc_photo_type.value,
+  //        'kyc_address_type':_mode == 'AAD'?'G':this.f.kyc_address_type.value,
+  //        'kyc_address_no':_mode == 'AAD'?this.f.aadhar.value:this.f.kyc_address_no.value,
+  //        'kyc_other_type':this.f.kyc_other_type.value,
+  //        'kyc_other_no':this.f.kyc_other_no.value,
+  //        'cust_cd':this.f.cust_cd?this.f.cust_cd:0
+  //   }
+  //   this.svc.addUpdDel<any>(_flag, dt).subscribe(
+  //     res => {
+  //               console.log(res);
+  //               this.isLoading = false;
+  //               if(res > 0){
+  //                     this.showMsgs.length = 0;
+  //                    _mode == 'PIN' ? this.kycPhotoNo.nativeElement.focus() : this.kycAddressNo.nativeElement.focus()
+  //                    this.HandleMessage(true, MessageType.Error, _type == 'P' ? `This pan card number is already exist for another customer, his/her UCIC is ${res} ` 
+  //                    :`This Aadhar number is already exist for another customer, his/her UCIC is ${res}`);
+  //                    this._isDisabled= true;
+  //                    if( _mode == 'PIN'){
+  //                     this.f.kyc_photo_type.setValue('');
+  //                     this.f.kyc_photo_no.setValue('');
+  //                    }
+  //                    if( _mode == 'AIN'){
+  //                     this.f.kyc_address_type.setValue('');
+  //                     this.f.kyc_address_no.setValue('');
+  //                    }
+  //                    if(_mode == 'PAN'){
+  //                     this.f.kyc_photo_type.setValue('');
+  //                     this.f.kyc_photo_no.setValue('');
+  //                     this.f.pan.setValue('')
+  //                   }
+  //                   if(_mode == 'AAD'){
+  //                     this.f.kyc_address_type.setValue('');
+  //                     this.f.kyc_address_no.setValue('');
+  //                     this.f.aadhar.setValue('');
+  //                   }
+  //               }      
+  //               else{
+                  
+  //                 if(_mode == 'PAN'){
+  //                   this.f.kyc_photo_type.setValue('P');
+  //                   this.f.kyc_photo_no.setValue(this.f.pan.value);
+  //                 }
+  //                 if(_mode == 'AAD'){
+  //                   this.f.kyc_address_type.setValue('G');
+  //                   this.f.kyc_address_no.setValue(this.f.aadhar.value);
+  //                 }
+                
+  //                 this.showMsgs.length = 0;
+  //                 this._isDisabled= false;              
+  //               }  
+  //     } 
+  //   )
+      
+
+
+  // }
   setNull(_flag){
     this.custMstrFrm.patchValue({
       kyc_photo_no:_flag == 'PIN' ? '' : this.f.kyc_photo_no.value,
-      kyc_address_no:_flag == 'AIN' ? '' : this.f.kyc_address_no.value,
-      kyc_other_no:_flag == 'OIN' ? '' : this.f.kyc_other_no.value
+      kyc_address_no:_flag == 'AIN' ? '' : this.f.kyc_address_no.value
 
     })
   }
@@ -1186,10 +1306,6 @@ debugger
       if(Utils.preventAlphabet(e.target.value,e.key))
       e.preventDefault();
      }
-     else if(_flag == 'OIN' && this.f.kyc_other_type.value=='G'){
-      if(Utils.preventAlphabet(e.target.value,e.key))
-      e.preventDefault();
-     }
   }
   CheckExistance(_flag){
     if(_flag == 'PIN'){
@@ -1198,32 +1314,32 @@ debugger
         this.chkPanexistance(this.f.kyc_photo_type.value == 'P' ? 'UCIC/Checkpancard' : 'UCIC/Checkaadharcard',this.f.kyc_photo_type.value,_flag);
         }
     }
-    else if(_flag == 'AIN'){
-      if(this.f.kyc_address_type.value == 'P' || this.f.kyc_address_type.value == 'G'){
-        this.isLoading = true;
-        this.chkPanexistance(this.f.kyc_address_type.value == 'P' ? 'UCIC/Checkpancard' : 'UCIC/Checkaadharcard',this.f.kyc_address_type.value,_flag);
-        }
+  else if(_flag == 'PAN'){
+    this.isLoading = true;
+    this.chkPanAadhar('UCIC/Checkpancard',_flag);
+    
     }
-     else if(_flag == 'PAN'){
-      debugger
-        this.isLoading = true;
-          this.chkPanexistance('UCIC/Checkpancard',"P",_flag);
-         
-      }
-      else if(_flag == 'AAD'){
-        this.isLoading = true;
-        this.chkPanexistance('UCIC/Checkaadharcard',"G",_flag);
+    else if(_flag == 'AAD'){
+      this.isLoading = true;
+      this.chkPanAadhar('UCIC/Checkaadharcard',_flag);
+      
+      }  
+
+  else {
+       if(this.f.kyc_address_type.value == 'P' || this.f.kyc_address_type.value == 'G'){
+                this.isLoading = true;
+                 this.chkPanexistance(this.f.kyc_address_type.value == 'P' ?'UCIC/Checkpancard' : 'UCIC/Checkaadharcard',this.f.kyc_address_type.value,_flag);
+        }
       }
   }
   chkPanexistance(_flag,_type,_mode){
     var dt = {
          'ardb_cd':this.sys.ardbCD,
-         'kyc_photo_no': _mode == 'PAN'?this.f.pan.value:this.f.kyc_photo_no.value,
-         'kyc_photo_type':_mode == 'PAN'?'P':this.f.kyc_photo_type.value,
-         'kyc_address_type':_mode == 'AAD'?'G':this.f.kyc_address_type.value,
-         'kyc_address_no':_mode == 'AAD'?this.f.aadhar.value:this.f.kyc_address_no.value,
-         'kyc_other_type':this.f.kyc_other_type.value,
-         'kyc_other_no':this.f.kyc_other_no.value
+         'cust_cd': this.f.cust_cd.value?this.f.cust_cd.value:1,
+         'kyc_photo_no': this.f.kyc_photo_no.value,
+         'kyc_photo_type':this.f.kyc_photo_type.value,
+         'kyc_address_type':this.f.kyc_address_type.value,
+         'kyc_address_no':this.f.kyc_address_no.value
     }
     this.svc.addUpdDel<any>(_flag, dt).subscribe(
       res => {
@@ -1232,39 +1348,11 @@ debugger
                 if(res > 0){
                       this.showMsgs.length = 0;
                      _mode == 'PIN' ? this.kycPhotoNo.nativeElement.focus() : this.kycAddressNo.nativeElement.focus()
-                     this.HandleMessage(true, MessageType.Error, _type == 'P' ? 'This pan card number is already exist for another customer' 
-                     :'This Aadhar number is already exist for another customer');  
-                     this._isDisabled= true;
-                     if( _mode == 'PIN'){
-                      this.f.kyc_photo_type.setValue('');
-                      this.f.kyc_photo_no.setValue('');
-                     }
-                     if( _mode == 'AIN'){
-                      this.f.kyc_address_type.setValue('');
-                      this.f.kyc_address_no.setValue('');
-                     }
-                     if(_mode == 'PAN'){
-                      this.f.kyc_photo_type.setValue('');
-                      this.f.kyc_photo_no.setValue('');
-                      this.f.pan.setValue('')
-                    }
-                    if(_mode == 'AAD'){
-                      this.f.kyc_address_type.setValue('');
-                      this.f.kyc_address_no.setValue('');
-                      this.f.aadhar.setValue('');
-                    }
+                     this.HandleMessage(true, MessageType.Error, _type == 'P' ? `This pan card number is already exist for another customer, UCIC is ${res}}` 
+                     :`This Aadhar number is already exist for another customerUCIC is ${res}`);  
+                     this._isDisabled= true;              
                 }      
                 else{
-                  
-                  if(_mode == 'PAN'){
-                    this.f.kyc_photo_type.setValue('P');
-                    this.f.kyc_photo_no.setValue(this.f.pan.value);
-                  }
-                  if(_mode == 'AAD'){
-                    this.f.kyc_address_type.setValue('G');
-                    this.f.kyc_address_no.setValue(this.f.aadhar.value);
-                  }
-                
                   this.showMsgs.length = 0;
                   this._isDisabled= false;              
                 }  
@@ -1274,6 +1362,63 @@ debugger
 
 
   }
+  chkPanAadhar(API_URL,_FLAG){
+    var pan = {
+         'ardb_cd':this.sys.ardbCD,
+         'cust_cd': this.f.cust_cd.value?this.f.cust_cd.value:1,
+         'kyc_photo_no': this.f.kyc_photo_no.value,
+         'kyc_photo_type':this.f.kyc_photo_type.value,
+         'kyc_address_type':this.f.kyc_address_type.value,
+         'kyc_address_no':this.f.kyc_address_no.value,
+         'pan':this.f.pan.value
+    }
+    var aadhar = {
+      'ardb_cd':this.sys.ardbCD,
+      'cust_cd': this.f.cust_cd.value?this.f.cust_cd.value:1,
+      'kyc_photo_no': this.f.kyc_photo_no.value,
+      'kyc_photo_type':this.f.kyc_photo_type.value,
+      'kyc_address_type':this.f.kyc_address_type.value,
+      'kyc_address_no':this.f.kyc_address_no.value,
+      'aadhar':this.f.aadhar.value
+ }
+    this.svc.addUpdDel<any>(API_URL, _FLAG == 'PAN'?pan:aadhar).subscribe(
+      res => {
+                console.log(res);
+                this.isLoading = false;
+                if(res > 0){
+                      this.showMsgs.length = 0;
+                      _FLAG == 'PAN' ? this.pan.nativeElement.focus() : this.aadhar.nativeElement.focus()
+                     this.HandleMessage(true, MessageType.Error, _FLAG == 'PAN' ? `This pan card number is already exist for another customer, UCIC is ${res}`
+                     :`This Aadhar number is already exist for another customer, UCIC is ${res}`);  
+                     this._isDisabled= true;
+                     if(_FLAG == 'PAN')  {
+                      this.f.pan.setValue('');
+                     }
+                     else{
+                      this.f.aadhar.setValue('');
+                     }            
+                }      
+                else{
+                  if(_FLAG == 'PAN'){
+                    this.f.kyc_photo_type.setValue('P');
+                    this.f.kyc_photo_no.setValue(this.f.pan.value);
+                  }
+                  if(_FLAG == 'AAD'){
+                    this.f.kyc_address_type.setValue('G');
+                    this.f.kyc_address_no.setValue(this.f.aadhar.value);
+                  }
+                  this.showMsgs.length = 0;
+                  this._isDisabled= false;              
+                }  
+      } 
+    )
+      
+
+
+  }
+
+
+
   changeCreditDt() {
     console.log(this.f.credit_score_dt.value)
     this.CreditScoreDT = !this.CreditScoreDT

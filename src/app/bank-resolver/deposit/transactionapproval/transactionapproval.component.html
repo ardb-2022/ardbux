@@ -359,6 +359,53 @@
       </div>
       <div class="col-4">
         <div class="12">
+          <form [formGroup]="renewDtlsFrm">
+            <h4 class="customHeader">Renewal Details</h4>
+            <div class="form-row">
+              <div class="form-group col-6">
+                <small for="dep_period">Deposit Period</small>
+                <input type="text" class="form-control form-control-sm" formControlName="dep_period" id="dep_period"
+                   disabled>
+              </div>
+              <div class="form-group col-3">
+                <small for="opening_dt">Opening Date</small>
+                <input type="text" class="form-control form-control-sm" formControlName="opening_dt" id="opening_dt"
+                  disabled>
+              </div>
+              <div class="form-group col-3">
+                <small for="instl_no">No of Installment</small>
+                <input type="text" class="form-control form-control-sm" formControlName="instl_no" id="instl_no" disabled>
+              </div>
+              <div class="form-group col-3">
+                <small for="intt_rt">Rate of intt</small>
+                <input type="text" class="form-control form-control-sm" formControlName="intt_rt" id="intt_rt"
+                   disabled>
+              </div>
+              <div class="form-group col-3">
+                <small for="prn_amt">Principal Amount</small>
+                <input type="text" class="form-control form-control-sm" formControlName="prn_amt" id="prn_amt"
+                  disabled>
+              </div>
+              <div class="form-group col-3">
+                <small for="curr_intt_recov">Interest</small>
+                <input type="text" class="form-control form-control-sm" formControlName="curr_intt_recov" id="curr_intt_recov"
+                  disabled>
+              </div>
+              
+              <!-- <div class="form-group col-3">
+                <small for="curr_prn_recov">Bonus Amt.</small>
+                <input type="text" class="form-control form-control-sm" formControlName="curr_prn_recov" id="curr_prn_recov" disabled>
+              </div> -->
+              <div class="form-group col-3">
+                <small for="tot_amount">Maturity Amount</small>
+                <input type="text" class="form-control form-control-sm" formControlName="tot_amount" id="tot_amount" disabled>
+              </div>
+            </div>
+            
+          </form>
+          <hr>
+        </div>
+        <div class="12">
           <!-- Mst/GetAccountTypeMaster -->
           <!-- <app-transaction-details></app-transaction-details> -->
           <form [formGroup]="transactionDtlsFrm">
@@ -418,7 +465,7 @@
                 <input type="text" class="form-control form-control-sm" formControlName="paid_to" id="paid_to" disabled>
               </div>
               <div class="form-group col-6">
-                <small for="trf_type">Transfer Type</small>
+                <small for="trf_type">Transaction Type</small>
                 <input type="text" class="form-control form-control-sm" formControlName="trf_type" id="trf_type" disabled>
               </div>
             </div>

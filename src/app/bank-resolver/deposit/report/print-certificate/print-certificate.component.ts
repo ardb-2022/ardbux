@@ -239,9 +239,26 @@ export class PrintCertificateComponent implements OnInit {
           console.log(m);
           y=y.substr(5-y.length)
           console.log(y);
-          if(+y>0){ this.Deposit_Period =y+' -Year'}
-          else if(+m>0){this.Deposit_Period = m+' -Months'}
-          else if(+d>0){ this.Deposit_Period = d+' -Days'}
+          debugger
+          this.Deposit_Period = "";
+
+          if (+y !== 0) {
+            this.Deposit_Period += y + "-Year, ";
+          }
+          
+          if (+m !== 0) {
+            this.Deposit_Period += m + "-Month, ";
+          }
+          
+          if (+d !== 0) {
+            this.Deposit_Period += d + "-Day";
+          }
+          console.log(this.Deposit_Period);
+          
+          // this.Deposit_Period =(+y>0)?y+' -Year':''+(+m>0)?m+' -Months':''+(+d>0)?d+' -Days':''
+          // else if(+m>0){this.Deposit_Period = m+' -Months'}
+          // else if(+d>0){ this.Deposit_Period = d+' -Days'}
+          debugger
         if(this.masterModel.tmdeposit.cheque_facility_flag=='Y'){
           this.sbAcc='Flexi A/C -'+this.masterModel.tmdeposit.user_acc_num
         }

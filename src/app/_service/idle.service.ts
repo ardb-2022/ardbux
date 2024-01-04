@@ -25,7 +25,7 @@ export class IdleService {
   }
 
   onIdle(): Observable<void> {
-    debugger
+    // debugger
     return this.idleSubject.asObservable();
   }
 }

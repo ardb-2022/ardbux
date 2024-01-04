@@ -73,6 +73,10 @@ export class mm_customer {
   public fd_folio_no: string;
   public td_folio_no: string;
   public rd_folio_no: string;
+  public merge_flag:string;
+  public unique_flag:string;
+  public merged_by:string;
+  public office_address:string;
 
   constructor(){
     this.ardb_cd = localStorage.getItem('__ardb_cd');

@@ -2,16 +2,17 @@
   {
     "name": "MasterConfig",
     "description": "MasterConfig",
-    "apiUrl": "http://36.255.3.143/MasterConfig/"
+    "apiUrl": "https://cfs2022.in/MasterConfig/"
   },
   {
     "name": "VCCB",
     "description": "Vidyasagar Coperative Bank",
-    "apiUrl": "http://36.255.3.143/VCCB/"
+    "apiUrl": "https://cfs2022.in/VCCB/"
   },
   {
     "name": "BSKU",
     "description": "BETAI SAMABAY KRISHI UNNAYAN SAMITY Ltd",
-    "apiUrl": "http://36.255.3.143/BSKU/"
+    "apiUrl": "https://cfs2022.in/BSKU/"
   }
 ]
+

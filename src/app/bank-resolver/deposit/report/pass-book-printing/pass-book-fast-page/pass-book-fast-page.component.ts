@@ -95,7 +95,7 @@ export class PassBookFastPageComponent implements OnInit {
       this.printID="fastPageRD"
     }else{
       this.sys.ardbCD=="4"?this.printID="fastPageGhatal":this.printID="fastPage"
-
+      // Ghatal
     }
     debugger
     // this.branchName = localStorage.getItem('__bName');

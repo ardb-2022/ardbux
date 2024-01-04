@@ -397,6 +397,9 @@ updateLogStatus(){
   if(this.userInfo){
     this.userInfo.login_status='Y';
     this.userInfo.ip=localStorage.getItem("ipAddress");
+    // this.userInfo.forEach(e => {
+    //   e.brn_cd=localStorage.getItem('BUX')
+    //  });
     debugger
     this.svc.addUpdDel('Mst/Updateuserstatus', this.userInfo).subscribe(
       res => {debugger})
@@ -406,7 +409,7 @@ updateLogStatus(){
 openNewTab() {
   this.auth.report=true;
   debugger
-  const urlToOpen = `http://36.255.3.143/ardb.SynergicBanking/${this.bankName}/FR_ProfitLoss`;
+  const urlToOpen = `http://localhost:4200/${this.bankName}/FR_ProfitLoss`;
   window.open(urlToOpen);
 }
     CpassCheck(i:any){

@@ -1406,7 +1406,7 @@ debugger
         if (undefined === this.tdDefTransFrmC.controls.trf_type.value
             || null === this.tdDefTransFrmC.controls.trf_type.value
             || this.tdDefTransFrmC.controls.trf_type.value === '') {
-            this.HandleMessage(true, MessageType.Error, 'Please choose transfer type.');
+            this.HandleMessage(true, MessageType.Error, 'Please choose tranaction type.');
             
           }
           else{
@@ -1514,7 +1514,7 @@ debugger
     if (undefined === this.td.trf_type.value
         || null === this.td.trf_type.value
         || this.td.trf_type.value === '') {
-        this.HandleMessage(true, MessageType.Error, 'Please choose transfer type.');
+        this.HandleMessage(true, MessageType.Error, 'Please choose tranaction type.');
         return;
       }
       this.isLoading = true; 

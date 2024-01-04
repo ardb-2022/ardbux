@@ -566,4 +566,10 @@
   footer a:hover {
     color: #ffc39e;
   }
- 
+  .log4{
+    position: absolute;
+    height: 89px;
+    max-height: fit-content;
+    top: 121px;
+    left: 43%;
+  }

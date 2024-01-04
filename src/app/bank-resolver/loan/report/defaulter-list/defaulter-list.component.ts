@@ -38,7 +38,7 @@ export class DefaulterListComponent implements OnInit {
     ignoreBackdropClick: true // disable backdrop click to close the modal
   };
   trailbalance: tt_trial_balance[] = [];
-  displayedColumns: string[] = ['SLNO','block_name','acc_name','party_name', 'acc_num', 'list_dt', 'curr_intt_rate','ovd_intt_rate','curr_prn','ovd_prn','plus','curr_intt','ovd_intt','computed_till_dt'];
+  displayedColumns: string[] = ['SLNO','block_name','gp_name','vill_name','acc_name','party_name', 'acc_num', 'list_dt', 'curr_intt_rate','ovd_intt_rate','curr_prn','ovd_prn','plus','curr_intt','ovd_intt','computed_till_dt'];
   dataSource = new MatTableDataSource()
   AcctTypes: mm_operation[];
   prp = new p_report_param();
@@ -58,12 +58,15 @@ export class DefaulterListComponent implements OnInit {
   dt: any;
   bName=''
   bName1=''
+  bName2=''
   selectedValue=''
   selectedValue1=''
   selectedValue2=''
+  selectedValue3=''
   fromdate: Date;
   firstGroup:any=[]
   secondGroup:any=[]
+  thirdGroup:any=[]
   // todate: Date;
   exportAsConfig:ExportAsConfig;
   itemsPerPage = 50;
@@ -76,6 +79,14 @@ export class DefaulterListComponent implements OnInit {
     {
       value:'Block',
       name:'Block'
+    },
+    {
+      value:'GP',
+      name:'GP'
+    },
+    {
+      value:'Village',
+      name:'Village'
     },
     {
       value:'Activity',
@@ -103,6 +114,14 @@ export class DefaulterListComponent implements OnInit {
     {
       value:'Block',
       name:'Block'
+    },
+    {
+      value:'GP',
+      name:'GP'
+    },
+    {
+      value:'Village',
+      name:'Village'
     },
     {
       value:'Activity',
@@ -183,6 +202,7 @@ export class DefaulterListComponent implements OnInit {
   inputEl:any
   
   filteredArray1:any=[]
+  filteredArray2:any=[]
   
   constructor(private svc: RestService, private formBuilder: FormBuilder,
     private modalService: BsModalService, private _domSanitizer: DomSanitizer,private exportAsService: ExportAsService, private cd: ChangeDetectorRef,
@@ -362,12 +382,27 @@ export class DefaulterListComponent implements OnInit {
     this.dataSource.data=this.reportData
     this.bName=''
     this.bName1=''
+    this.bName2=''
     this.selectedValue=''
     this.firstGroup.length=0
     switch(this.selectedValue1){
      case "Block": 
       for(let i=0;i<this.reportData.length;i++){
         this.firstGroup[i]=this.reportData[i].block_name
+     }
+      //  console.log(this.blockNames)
+     
+        break;
+        case "GP": 
+      for(let i=0;i<this.reportData.length;i++){
+        this.firstGroup[i]=this.reportData[i].gp_name
+     }
+      //  console.log(this.blockNames)
+     
+        break;
+        case "Village": 
+      for(let i=0;i<this.reportData.length;i++){
+        this.firstGroup[i]=this.reportData[i].vill_name
      }
       //  console.log(this.blockNames)
      
@@ -417,6 +452,12 @@ export class DefaulterListComponent implements OnInit {
       case "Block": 
       this.filteredArray=this.reportData.filter(e=>e.block_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
         break;
+        case "GP": 
+      this.filteredArray=this.reportData.filter(e=>e.gp_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
+        break;
+        case "Village": 
+      this.filteredArray=this.reportData.filter(e=>e.vill_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
+        break;
       case "Activity": 
     this.filteredArray=this.reportData.filter(e=>e.acc_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
       break;
@@ -447,8 +488,16 @@ export class DefaulterListComponent implements OnInit {
       for(let i=0;i<this.filteredArray1.length;i++){
         this.secondGroup[i]=this.filteredArray1[i].block_name
      }
-      //  console.log(this.blockNames)
-     
+        break;
+        case "GP": 
+      for(let i=0;i<this.filteredArray1.length;i++){
+        this.secondGroup[i]=this.filteredArray1[i].gp_name
+     }
+        break;
+        case "Village": 
+      for(let i=0;i<this.filteredArray1.length;i++){
+        this.secondGroup[i]=this.filteredArray1[i].vill_name
+     }
         break;
       case "Activity": 
       for(let i=0;i<this.filteredArray1.length;i++){
@@ -495,6 +544,12 @@ debugger
       case "Block": 
       this.filteredArray=this.filteredArray1.filter(e=>e.block_name?.toLowerCase().includes(this.bName1.toLowerCase())==true)
         break;
+        case "GP": 
+      this.filteredArray=this.filteredArray1.filter(e=>e.gp_name?.toLowerCase().includes(this.bName1.toLowerCase())==true)
+        break;
+        case "Village": 
+      this.filteredArray=this.filteredArray1.filter(e=>e.vill_name?.toLowerCase().includes(this.bName1.toLowerCase())==true)
+        break;
       case "Activity": 
     this.filteredArray=this.filteredArray1.filter(e=>e.acc_name?.toLowerCase().includes(this.bName1.toLowerCase())==true)
       break;
@@ -515,6 +570,100 @@ debugger
     debugger;
     console.log(this.filteredArray1)
     this.dataSource.data=this.filteredArray
+    this.getTotal()
+  }
+  show3rdGroup(){
+    this.dataSource.data=this.filteredArray
+    this.thirdGroup.length=0;
+    this.bName2=''
+    switch(this.selectedValue2){
+       case "Block": 
+      for(let i=0;i<this.filteredArray.length;i++){
+        this.thirdGroup[i]=this.filteredArray[i].block_name
+     }
+        break;
+        case "GP": 
+      for(let i=0;i<this.filteredArray.length;i++){
+        this.thirdGroup[i]=this.filteredArray[i].gp_name
+     }
+        break;
+        case "Village": 
+      for(let i=0;i<this.filteredArray.length;i++){
+        this.thirdGroup[i]=this.filteredArray[i].vill_name
+     }
+        break;
+      case "Activity": 
+      for(let i=0;i<this.filteredArray.length;i++){
+        this.thirdGroup[i]=this.filteredArray[i].acc_name
+     }
+    // this.filteredArray=this.reportData.filter(e=>e.activity_cd?.toLowerCase().includes(filterValue.toLowerCase())==true)
+      break;
+      case "Party Name":
+        for(let i=0;i<this.filteredArray.length;i++){
+          this.thirdGroup[i]=this.filteredArray[i].party_name
+       }
+    // this.filteredArray=this.reportData.filter(e=>e.party_name?.toLowerCase().includes(filterValue.toLowerCase())==true)
+     break;
+     case "Interest Upto":
+      for(let i=0;i<this.filteredArray.length;i++){
+        this.thirdGroup[i]=this.filteredArray[i].computed_till_dt
+     }
+      // this.filteredArray=this.reportData.filter(e=>e.vill_name?.toLowerCase().includes(filterValue.toLowerCase())==true)
+       break;
+       case "Loan ID":
+        for(let i=0;i<this.filteredArray.length;i++){
+          this.thirdGroup[i]=this.filteredArray[i].acc_num
+       }
+        // this.filteredArray=this.reportData.filter(e=>e.loan_id?.toLowerCase().includes(filterValue.toLowerCase())==true)
+         break;
+         case "Issue DT":
+          for(let i=0;i<this.filteredArray.length;i++){
+            this.thirdGroup[i]=this.filteredArray[i].list_dt
+         }
+          // this.filteredArray=this.reportData.filter(e=>e.loan_id?.toLowerCase().includes(filterValue.toLowerCase())==true)
+           break;
+
+    }
+    this.thirdGroup=Array.from(new Set(this.thirdGroup))
+    this.thirdGroup=this.thirdGroup.sort()
+    this.getTotal()
+  }
+  search3rdGroup(){
+    this.isLoading=true
+    setTimeout(()=>{this.isLoading=false},500)
+    console.log(this.filteredArray)
+    console.log(this.filteredArray2)
+debugger
+    switch(this.selectedValue2){
+      case "Block": 
+      this.filteredArray2=this.filteredArray.filter(e=>e.block_name?.toLowerCase().includes(this.bName2.toLowerCase())==true)
+        break;
+        case "GP": 
+      this.filteredArray2=this.filteredArray.filter(e=>e.gp_name?.toLowerCase().includes(this.bName2.toLowerCase())==true)
+        break;
+        case "Village": 
+      this.filteredArray2=this.filteredArray.filter(e=>e.vill_name?.toLowerCase().includes(this.bName2.toLowerCase())==true)
+        break;
+      case "Activity": 
+    this.filteredArray2=this.filteredArray.filter(e=>e.acc_name?.toLowerCase().includes(this.bName2.toLowerCase())==true)
+      break;
+      case "Party Name":
+    this.filteredArray2=this.filteredArray.filter(e=>e.party_name?.toLowerCase().includes(this.bName2.toLowerCase())==true)
+     break;
+     case "Interest Upto":
+      this.filteredArray2=this.filteredArray.filter(e=>e.computed_till_dt.includes(this.bName2)==true)
+       break;
+       case "Issue DT":
+        this.filteredArray2=this.filteredArray.filter(e=>e.list_dt.includes(this.bName2)==true)
+         break;
+       case "Loan ID":
+        this.filteredArray2=this.filteredArray.filter(e=>e.acc_num?.toLowerCase().includes(this.bName2.toLowerCase())==true)
+         break;
+
+    }
+    debugger;
+    console.log(this.filteredArray2)
+    this.dataSource.data=this.filteredArray2
     this.getTotal()
   }
   downloadexcel(){
@@ -559,6 +708,12 @@ debugger
     switch(this.selectedValue1){
       case "Block": 
       this.filteredArray=this.reportData.filter(e=>e.block_name?.toLowerCase().includes(filterValue.toLowerCase())==true)
+        break;
+        case "GP": 
+      this.filteredArray=this.reportData.filter(e=>e.gp_name?.toLowerCase().includes(filterValue.toLowerCase())==true)
+        break;
+        case "Village": 
+      this.filteredArray=this.reportData.filter(e=>e.vill_name?.toLowerCase().includes(filterValue.toLowerCase())==true)
         break;
       case "Activity": 
     this.filteredArray=this.reportData.filter(e=>e.acc_name?.toLowerCase().includes(filterValue.toLowerCase())==true)
@@ -617,7 +772,7 @@ debugger
   searchRange(){
     this.filteredArray=this.dataSource.data
 
-    switch(this.selectedValue2){
+    switch(this.selectedValue3){
       case '1': 
     this.filteredArray=this.filteredArray.filter(e=>e.curr_prn>=(+this.fromVal) && e.curr_prn<=(+this.toVal))
       break;
@@ -684,6 +839,8 @@ debugger
    this.selectedValue='';
    this.bName=''
    this.selectedValue1=''
+   this.selectedValue2=''
+   this.bName2=''
     
     
   }

@@ -403,12 +403,25 @@ export class DemandNoticeBlockWiseComponent implements OnInit {
       // this.svc.addUpdDel('Loan/GetDemandList',dt).subscribe(data=>{console.log(data)
         this.svc.addUpdDel('Loan/GetDemandNoticeBlockwise',dt).subscribe(data=>{console.log(data)
         this.reportData=data;
+        
+debugger
         this.reportData.forEach(p => {
-          p.ardb_cd=this.villages.filter(e=>e.vill_cd==p.ardb_cd)[0]?.vill_name;
           if(this.sys.ardbCD=="26"){
-            p.brn_cd=this.allServiceArea.filter(e=>e.service_area_cd==p.brn_cd)[0]?.service_area_name;
+            // p.brn_cd=this.allServiceArea.filter(e=>e.service_area_cd==p.brn_cd)[0]?.service_area_name;
+            const abc = p.activity_name;
+            let [cName, cAddress] = abc.split('$');
+    
+            // Trim any leading or trailing whitespaces in the address
+            p.activity_name = cName.trim();
+            p.ardb_cd = cAddress.trim();
+            
+            // Now cName contains the name and cAddress contains the address
+            console.log("cName:", cName);
+            console.log("cAddress:", cAddress);
           }
           else{
+          p.ardb_cd=this.villages.filter(e=>e.vill_cd==p.ardb_cd && e.service_area_cd==p.cust_address)[0]?.vill_name;
+
              p.cust_address=this.allServiceArea.filter(e=>e.service_area_cd==p.cust_address)[0]?.service_area_name;
           }
         })

@@ -1328,7 +1328,7 @@ processInstallmentNo() {
       if (this.tm_deposit.intt_trf_type === undefined ||
         this.tm_deposit.intt_trf_type === null) {
         this.tm_deposit.prn_amt = 0;
-        this.showAlertMsg('Warning', 'Interest Transfer Type can not be blank');
+        this.showAlertMsg('Warning', 'Interest Transaction Type can not be blank');
         return;
       }
 

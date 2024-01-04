@@ -43,6 +43,8 @@ export class LoginComponent implements OnInit {
   selectalluser:any=[];
   sys = new SystemValues();
   wrongAttamt:any;
+  bankFullName:any;
+  footer:any;
   constructor(private router: Router,
     private formBuilder: FormBuilder,
     private rstSvc: RestService,
@@ -128,7 +130,7 @@ export class LoginComponent implements OnInit {
       
         this.filterUser.forEach(e => {
           e.ardb_cd=this.sys.ardbCD
-          e.brn_cd=this.sys.BranchCode
+          e.brn_cd=localStorage.getItem('BUX')
          });
     
          this.cms.addUpdDel('Sys/UpdateUserIdStatus', this.filterUser).subscribe(
@@ -152,11 +154,13 @@ export class LoginComponent implements OnInit {
    
  }
   getArdbCode(e: any) {
-    
+    debugger
     //console.log(e);
     //console.log(this.ardbBrnMst);
     let bankName=this.ardbBrnMst.filter(x=>x.ardB_CD==this.f.ardbbrMst.value)[0].bank_name
+   this.bankFullName=this.ardbBrnMst.filter(x=>x.ardB_CD==this.f.ardbbrMst.value)[0].full_name
     // let bankName2=this.ardbBrnMst.filter(x=>x.ardB_CD=='100')[0].bank_name
+    debugger
     if(this.f.ardbbrMst.value=='100'){
         localStorage.setItem('__ardb_cd', '2');
     }
@@ -189,8 +193,9 @@ export class LoginComponent implements OnInit {
     this.nm = this.ardbBrnMst.find(x => x.ardB_CD == this.f.ardbbrMst.value)
     
     this.nm.name = this.nm.name.substr(0,this.nm.name.length-10)
-    this.nm.name = this.nm.name +' Co-Operative Agriculture & Rural Development Bank Ltd.'
-    localStorage.setItem('ardb_name', this.nm.name)
+    // this.nm.name = this.nm.name +' Co-Operative Agriculture & Rural Development Bank Ltd.'
+    localStorage.setItem('ardb_name', this.bankFullName)
+    localStorage.setItem('report_footer', 'This Report Is Generated Through CFS-2022 ')
    
     if( this.f.ardbbrMst.value=='26'){
       let ardb_addrs=` H.O.: Old Court Compound, PO+PS- Burdwan, Purba Bardhaman- 713101 
@@ -389,6 +394,7 @@ export class LoginComponent implements OnInit {
     // this.isLoading = true;
     var dt = { "ardb_cd": this.f.ardbbrMst.value ?this.f.ardbbrMst.value:null };
     //console.log(dt)
+    // https://cfs2022.in/CTARDBUX/api/Mst/GetBranchMaster
     this.rstSvc.addUpdDel('Mst/GetBranchMaster', dt).subscribe(
       res => {
         //console.log(res)
@@ -421,7 +427,7 @@ export class LoginComponent implements OnInit {
   onfocusOut(e: any) {
 
     var dt = {
-      "ardb_cd": this.f.ardbbrMst.value,
+      "ardb_cd": this.f.ardbbrMst.value=='100'?'2':this.f.ardbbrMst.value,
       "user_id": e.target.value
     }
     this.isLoading=true;
@@ -429,11 +435,11 @@ export class LoginComponent implements OnInit {
        this.userData = data;
        if(this.userData){
         this.isLoading=false;
-        localStorage.setItem('userType',this.userData[0].user_type)
-       this.loginForm.patchValue({branch:this.userData[0].user_type != 'A' ?  this.userData[0].brn_cd : ''})
-       this.userData[0].user_type != 'A' ? this.f.branch.disable() : this.f.branch.enable();
-       this.showAlert = this.userData[0].login_status == 'Y' ? true : false;
-       this.alertMsg = this.userData[0].login_status == 'Y' ? 'User id already logged in another machine' : '';
+        localStorage.setItem('userType',this.userData[0]?.user_type)
+       this.loginForm.patchValue({branch:this.userData[0]?.user_type != 'A' ?  this.userData[0]?.brn_cd : ''})
+       this.userData[0]?.user_type != 'A' ? this.f.branch.disable() : this.f.branch.enable();
+       this.showAlert = this.userData[0]?.login_status == 'Y' ? true : false;
+       this.alertMsg = this.userData[0]?.login_status == 'Y' ? 'User id already logged in another machine' : '';
        }
        // if (this.userData[0].user_type != 'A') {
       //   this.loginForm.patchValue({

@@ -701,7 +701,7 @@ export class PassBookPrintingComponent implements OnInit {
     
   }
   PrintNext(){
-    if(this.sys.ardbCD=="26"||this.sys.ardbCD=="20"){
+    if(this.sys.ardbCD=="26"||this.sys.ardbCD=="20"||this.sys.ardbCD=="4"){
       const o = {
         trans_dt  : null,
         particulars   : null,

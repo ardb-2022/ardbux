@@ -115,3 +115,6 @@ span.mat-menu-item{
 .menu_item_style {
     color: 34723A; /* Change 'red' to your desired color */
   }
+  .mat-button{
+    padding: 0 8px!important; 
+  }

@@ -4,4 +4,6 @@ export class ddsExport extends baseModel{
   public agent_cd:string;
   public brn_cd: string;
   public agent_name:string;
+  public machine_type:string;
+  public block_cd:string;
 }

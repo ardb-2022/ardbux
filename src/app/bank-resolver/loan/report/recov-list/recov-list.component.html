@@ -47,7 +47,7 @@
             <small for="fundType">Fund Type</small>
             <select id="fundType" class="form-control form-control-sm" formControlName="fundType">
               <option disabled>Choose</option>
-              <option value="O">Owned Fund</option>
+              <option value="O">Deposit Scheme Fund</option>
               <option value="N">Borrowed Fund</option>
             </select>
           </div>
@@ -174,7 +174,19 @@
       
       
       <div class="mat-elevation-z8" id="matTable">
-        <table mat-table style="font-size:small" [dataSource]="dataSource" matSort>
+        <table mat-table style="font-size:small" [dataSource]="dataSource" matSort onscroll="abc()">
+          <ng-container matColumnDef="Header">
+            <th mat-header-cell *matHeaderCellDef colspan="20">
+              <div class="justify-content-center" style="text-align:center">
+                <br><h4>{{ardbName}} ({{branchName}})</h4>
+                
+                <h4>Run Date & Time : {{today}} </h4>
+                <h4><u> Member-wise Demand Collection List from {{reportcriteria.controls.fromDate.value?.toDateString() | date: 'dd/MM/yyyy'}} to
+                  {{reportcriteria.controls.toDate.value?.toDateString() | date: 'dd/MM/yyyy'}}</u></h4>
+            </div>
+            </th>
+            </ng-container>
+          
           <ng-container matColumnDef="block_name">
 
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Block
@@ -484,20 +496,10 @@
           </ng-container>
        -->
           <!-- Header column -->
-          <ng-container matColumnDef="Header">
-            <th mat-header-cell *matHeaderCellDef colspan="17">
-              <div class="justify-content-center" style="text-align:center">
-                <br><h4>{{ardbName}} ({{branchName}})</h4>
-                
-                <h4>Run Date & Time : {{today}} </h4>
-                <h4><u> Member-wise Demand Collection List from {{reportcriteria.controls.fromDate.value?.toDateString() | date: 'dd/MM/yyyy'}} to
-                  {{reportcriteria.controls.toDate.value?.toDateString() | date: 'dd/MM/yyyy'}}</u></h4>
-            </div>
-            </th>
-          </ng-container>
-          <tr mat-header-row *matHeaderRowDef="['Header']"
+          
+          <!-- <tr mat-header-row *matHeaderRowDef="['Header']"
           class="example-second-header-row">
-         </tr>
+         </tr> -->
          <ng-container matColumnDef="header2" >
           <td mat-header-cell *matHeaderCellDef  style="text-align:left;font-weight: 800;" colspan="7">
            
@@ -522,8 +524,9 @@
           <!-- <td mat-footer-cell *matFooterCellDef >Hello</td> -->
           <!-- <td mat-footer-cell *matFooterCellDef >{{crSum | number : '1.2-2'}}</td> -->
         </ng-container>
-      <tr mat-header-row *matHeaderRowDef="['header2','header0','header1']"></tr>
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-header-row *matHeaderRowDef="['Header']" ></tr>
+          <tr mat-header-row *matHeaderRowDef="['header2','header0','header1']"></tr>
+          <tr class="fixedHeader" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
           <!-- Row shown when there is no matching data. -->
           <tr class="mat-row" *matNoDataRow>

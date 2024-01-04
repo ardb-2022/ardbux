@@ -184,6 +184,9 @@ export class AccounTransactionsComponent implements OnInit {
   acc_OWNER:any=null;
   paidRDinstlNo:Number;
   RDAllInstlPaid:boolean=false;
+  accOpenDt:any;
+  new_acc_status:boolean=false;
+  showLockType:boolean=false;
   // disableIntt:boolean=false;
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template, this.config);
@@ -1130,6 +1133,8 @@ getjoinholder(){
         this.resBrnCd = this.resBrnCd[0].brn_cd
         console.log(this.resBrnCd)
         this.custUCIC=res[0].cust_cd
+        this.accOpenDt=res[0].opening_dt;
+        this.setAccFlag(this.accOpenDt,this.sys.CurrentDate)
         //////////////debugger;
         this.isLoading = false;
         let foundOneUnclosed = false;
@@ -1319,12 +1324,22 @@ getjoinholder(){
     //   this.onResetClick();
     //   return false;
     // }
-
+    // acc.acc_type_cd === 5 ||
+    if(acc.acc_type_cd === 5 && acc.lock_mode){
+      if(acc.lock_mode.toUpperCase() === 'L'){
+        this.showLockType=true;
+        this.HandleMessage(true, MessageType.Warning,
+          `Account number ${this.f.acct_num.value} is locked. Renew and Close Operation are not Permissible. `);
+      }
+      else{
+        this.showLockType=false;
+      }
+    }
     if (acc.acc_type_cd === 1 ||
       acc.acc_type_cd === 2 ||
       acc.acc_type_cd === 3 ||
       acc.acc_type_cd === 4 ||
-      acc.acc_type_cd === 5 ||
+      
       acc.acc_type_cd === 6) {
       /* check if account is not Locked */
       if (null !== acc.lock_mode
@@ -1636,21 +1651,22 @@ getjoinholder(){
     }
     else{
       debugger
-      if((this.sys.ardbCD=='2') && Number(this.f.acc_type_cd.value) == 4 && this.aftmatInt)
-      debugger
-      {
-        this.tdDefTransFrm.patchValue({
-          ovd_intt_recov: 0,
-          curr_prn_recov: 0,
-          bonus_amt: 0,
-          amount: (+this.accNoEnteredForTransaction.prn_amt),
-          curr_intt_recov:(+this.accNoEnteredForTransaction.intt_amt)+(+this.aftmatInt),
-          td_def_mat_amt:this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt+(+this.aftmatInt)
-          });
-      }
+      if(this.sys.ardbCD=='2'&& Number(this.f.acc_type_cd.value) == 4 && this.sys.ardbCD=='2' )
+        {
+                              debugger
+                              this.tdDefTransFrm.patchValue({
+                                ovd_intt_recov: 0,
+                                curr_prn_recov: 0,
+                                bonus_amt: 0,
+                                amount: (+this.accNoEnteredForTransaction.prn_amt),
+                                curr_intt_recov:this.afMat1?(+this.accNoEnteredForTransaction.intt_amt)+(+this.aftmatInt):(+this.closeInt),
+                                td_def_mat_amt:this.afMat1?this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt+(+this.aftmatInt):this.accNoEnteredForTransaction.prn_amt +(+this.closeInt)
+                                });
+                            }
+                
       if(this.sys.ardbCD=='26' && Number(this.f.acc_type_cd.value) == 4 && this.closeInt)
-      debugger
       {
+        debugger
         this.tdDefTransFrm.patchValue({
           ovd_intt_recov: 0,
           curr_prn_recov: 0,
@@ -2542,12 +2558,30 @@ getjoinholder(){
             temp_gen_param.ad_intt_rt = 4 //Need to be change in future
             temp_gen_param.as_intt_type = "O" //Need to be change in future
             temp_gen_param.adt_temp_dt = this.sys.CurrentDate;
-
-            this.svc.addUpdDel<any>('Deposit/F_CALCTDINTT_REG', temp_gen_param).subscribe(
-              res => {
+            this.isLoading=true;
+            // const data = await this.svc.addUpdDel<any>('Deposit/F_CALCTDINTT_REG', temp_gen_param).subscribe(
+              const data = await this.svc.addUpdDel<any>('Deposit/F_CALCTDINTT_REG', temp_gen_param).toPromise()
+              if(data) {
+                this.isLoading=false;
                 debugger
-                console.log(res)
-                this.aftmatInt = res;
+                console.log(data)
+                this.aftmatInt = data;
+                if(data){
+                  debugger
+                  if(Number(this.f.acc_type_cd.value) == 4 && this.sys.ardbCD=='2' ){
+                              debugger
+                              this.showOnClose = true;
+                              this.tdDefTransFrm.patchValue({
+                                ovd_intt_recov: 0,
+                                curr_prn_recov: 0,
+                                bonus_amt: 0,
+                                amount: (+this.accNoEnteredForTransaction.prn_amt),
+                                curr_intt_recov:(+this.accNoEnteredForTransaction.intt_amt)+(+this.aftmatInt),
+                                td_def_mat_amt:this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt+(+this.aftmatInt)
+                                });
+                                
+                            }
+                }
       //             if (this.sys.ardbCD!='20' && (accTypCode == 2||accTypCode == 3)) {
 
       //           //  if (accTypCode == 2||accTypCode == 4) {
@@ -2561,7 +2595,7 @@ getjoinholder(){
       //             // this.accDtlsFrm.controls.intt_amt.setValue(this.accNoEnteredForTransaction.intt_amt+this.matInt)
                   
                 // }
-              })
+              }
             }
             
       debugger
@@ -2584,6 +2618,7 @@ getjoinholder(){
 
 
       }
+      debugger
       this.transType.key = 'W';
       this.transType.Description = 'Close';
       this.accNoEnteredForTransaction.ShowClose = true;
@@ -2599,7 +2634,7 @@ getjoinholder(){
       });
 
       if (accTypCode === 2 || accTypCode === 3 ||
-        accTypCode === 4 || accTypCode === 5 ||
+        accTypCode === 4  || accTypCode === 5 ||
         accTypCode === 6) {
         console.log("inside fd")
         console.log(this.resbrnCD1)
@@ -2660,7 +2695,7 @@ getjoinholder(){
               debugger
           
        }
-        else{
+        
           if(accTypCode === 5 ||accTypCode === 6){
             temp_gen_param.ad_intt_rt = this.accNoEnteredForTransaction.intt_rt - this.sys.PenalInttRtFrAccPreMatureClosing
             this.effInt = temp_gen_param.ad_intt_rt > 0 ? temp_gen_param.ad_intt_rt : 0
@@ -2688,51 +2723,61 @@ getjoinholder(){
                       
                       if (temp_gen_param.ad_acc_type_cd != 5 && temp_gen_param.ad_acc_type_cd != 6) {
                         console.log("hello")
+                       
+                        //PARTHA
+                        debugger
+
                         if(this.afMat1){
-                          this.tdDefTransFrm.patchValue({
-                            ovd_intt_recov: 0,
-                            curr_prn_recov: 0,
-                            bonus_amt: 0,
-                            amount: (+this.accNoEnteredForTransaction.prn_amt),
-                            curr_intt_recov:this.accNoEnteredForTransaction.intt_amt,
-                            // curr_intt_recov:this.accNoEnteredForTransaction.intt_amt+this.aftmatInt,
-                            td_def_mat_amt:this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt
-                            // td_def_mat_amt:this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt+this.aftmatInt
-                          });
-                          debugger
+                         
+                            this.tdDefTransFrm.patchValue({
+                              ovd_intt_recov: 0,
+                              curr_prn_recov: 0,
+                              bonus_amt: 0,
+                              amount: (+this.accNoEnteredForTransaction.prn_amt),
+                              curr_intt_recov:this.accNoEnteredForTransaction.intt_amt,
+                              // curr_intt_recov:this.accNoEnteredForTransaction.intt_amt+this.aftmatInt,
+                              td_def_mat_amt:this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt
+                              // td_def_mat_amt:this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt+this.aftmatInt
+                            });
+                            debugger
+                          
+                          
                         }
                         else{
-                          this.tdDefTransFrm.patchValue({
-                            // amount: (this.accNoEnteredForTransaction.prn_amt +
-                            //   (this.accNoEnteredForTransaction.intt_amt > 0 ?
-                            //   this.accNoEnteredForTransaction.intt_amt :
-                            //   (0.015 * this.accNoEnteredForTransaction.prn_amt))).toFixed(2),
-                            amount: (this.accNoEnteredForTransaction.prn_amt),
-                            // curr_intt_recov: (this.accNoEnteredForTransaction.intt_amt > 0 ?
-                            //   this.accNoEnteredForTransaction.intt_amt :
-                            //   (0.015 * this.accNoEnteredForTransaction.prn_amt)).toFixed(2),
+                         debugger
+                            this.tdDefTransFrm.patchValue({
+                              // amount: (this.accNoEnteredForTransaction.prn_amt +
+                              //   (this.accNoEnteredForTransaction.intt_amt > 0 ?
+                              //   this.accNoEnteredForTransaction.intt_amt :
+                              //   (0.015 * this.accNoEnteredForTransaction.prn_amt))).toFixed(2),
+                              amount: (this.accNoEnteredForTransaction.prn_amt),
+                              // curr_intt_recov: (this.accNoEnteredForTransaction.intt_amt > 0 ?
+                              //   this.accNoEnteredForTransaction.intt_amt :
+                              //   (0.015 * this.accNoEnteredForTransaction.prn_amt)).toFixed(2),
+                            
+                              curr_intt_recov: isMatured ? this.accNoEnteredForTransaction.intt_amt : this.closeInt?this.closeInt:0,
+          
+                    //           curr_intt_recov:
+                    //           this.closeInt
+                    // ,
+                              // ovd_intt_recov: isMatured? '':this.sys.PenalInttRtFrAccPreMatureClosing,
+                              ovd_intt_recov: 0,
+                              bonus_amt: 0,
+                              // curr_prn_recov: isMatured ? (this.sys.DepositBonusRate *
+                              //   this.accNoEnteredForTransaction.prn_amt).toFixed(2) : '',
+                              curr_prn_recov: 0,
+                              // td_def_mat_amt: (this.accNoEnteredForTransaction.prn_amt +
+                              //   (this.accNoEnteredForTransaction.intt_amt > 0 ?
+                              //     this.accNoEnteredForTransaction.intt_amt :
+                              //     (  temp_gen_param.ad_intt_rt* this.accNoEnteredForTransaction.prn_amt))).toFixed(2)
+                            
+                              td_def_mat_amt: isMatured ? this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt : this.accNoEnteredForTransaction.prn_amt + this.closeInt?this.closeInt:0
+                             
+                              // td_def_mat_amt: this.accNoEnteredForTransaction.prn_amt + this.closeInt
+          
+                            });
                           
-                            curr_intt_recov: isMatured ? this.accNoEnteredForTransaction.intt_amt : this.closeInt,
-        
-                  //           curr_intt_recov:
-                  //           this.closeInt
-                  // ,
-                            // ovd_intt_recov: isMatured? '':this.sys.PenalInttRtFrAccPreMatureClosing,
-                            ovd_intt_recov: 0,
-                            bonus_amt: 0,
-                            // curr_prn_recov: isMatured ? (this.sys.DepositBonusRate *
-                            //   this.accNoEnteredForTransaction.prn_amt).toFixed(2) : '',
-                            curr_prn_recov: 0,
-                            // td_def_mat_amt: (this.accNoEnteredForTransaction.prn_amt +
-                            //   (this.accNoEnteredForTransaction.intt_amt > 0 ?
-                            //     this.accNoEnteredForTransaction.intt_amt :
-                            //     (  temp_gen_param.ad_intt_rt* this.accNoEnteredForTransaction.prn_amt))).toFixed(2)
                           
-                            td_def_mat_amt: isMatured ? this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt : this.accNoEnteredForTransaction.prn_amt + this.closeInt
-                           
-                            // td_def_mat_amt: this.accNoEnteredForTransaction.prn_amt + this.closeInt
-        
-                          });
                         }
                         
       
@@ -2764,8 +2809,10 @@ getjoinholder(){
                     })
               }
             })
+          
+            
           }
-        }
+        
         
         
           
@@ -3593,6 +3640,7 @@ getjoinholder(){
      
       this.svc.addUpdDel<any>('Deposit/F_CALCTDINTT_REG', temp_gen_param).subscribe(
         res => {
+          debugger
           console.log(res)
           this.closeInt = res;
           console.log(res)
@@ -4178,21 +4226,21 @@ getjoinholder(){
 
     const accTypeCd = +this.f.acc_type_cd.value;
     
-    if ((+this.td.amount.value) <= 0) {
+    if ((accTypeCd !== 1 && accTypeCd !== 7 && accTypeCd !== 8 && accTypeCd !== 9)&&(+this.td.amount.value) <= 0) {
       this.HandleMessage(true, MessageType.Error, 'Amount can not be blank');
       return;
     }
     if (this.td.trf_type.value === 'T' && (this.TrfTotAmt==0||this.TrfTotAmt==null||this.TrfTotAmt==undefined)&& (accTypeCd==1||accTypeCd==8)){
-      this.HandleMessage(true, MessageType.Error, 'Please select correct transfer type or put transfer value');
+      this.HandleMessage(true, MessageType.Error, 'Please select correct Transaction  type or put Transaction  value');
       return;
     }
 
-    /** do not check transfer type for FD renewal which doesnt have balance */
+    /** do not check Transaction  type for FD renewal which doesnt have balance */
     if (accTypeCd !== 2 && !this.showBalance) {
       if (undefined === this.td.trf_type.value
         || null === this.td.trf_type.value
         || this.td.trf_type.value === '') {
-        this.HandleMessage(true, MessageType.Error, 'Please choose transfer type.');
+        this.HandleMessage(true, MessageType.Error, 'Please choose Transaction  type.');
         return;
       }
     }
@@ -4392,8 +4440,10 @@ getjoinholder(){
             debugger
           }
           else {
-            this.HandleMessage(true, MessageType.Error, 'Amount can not be null');
-            return
+            if(this.accDtlsFrm.controls.mat_amt.value!=this.tdDefTransFrm.controls.amount.value){
+              this.HandleMessage(true, MessageType.Error, 'Amount can not be null');
+              return
+            }
           }
 
           
@@ -4567,8 +4617,11 @@ getjoinholder(){
             // this.checkDebitBalance(this.td_deftranstrfList[0])
           }
           else {
-            this.HandleMessage(true, MessageType.Error, 'Amount can not be null');
-            return
+            if(this.accDtlsFrm.controls.mat_amt.value!=this.tdDefTransFrm.controls.amount.value){
+              this.HandleMessage(true, MessageType.Error, 'Amount can not be null');
+              return
+            }
+            
           }
 
         });
@@ -5455,14 +5508,17 @@ getjoinholder(){
     // console.log(this.suggestedCustomerCr.length)
     console.log(this.selectedCust)
     console.log(acc_num.substring(0, 3))
-    if (this.selectedCust != acc_num) {
-      this.td_deftranstrfList[indx].cust_acc_number = acc_num;
+    this.td_deftranstrfList[indx].cust_acc_number = acc_num;
       this.td_deftranstrfList[indx].cust_name = cust_name;
       this.setDebitAccDtls(this.td_deftranstrfList[indx]);
-    }
-    else {
-      this.HandleMessage(true, MessageType.Error, "You cannot choose the same account!");
-    }
+    // if (this.selectedCust != acc_num) {PMAITY
+    //   this.td_deftranstrfList[indx].cust_acc_number = acc_num;
+    //   this.td_deftranstrfList[indx].cust_name = cust_name;
+    //   this.setDebitAccDtls(this.td_deftranstrfList[indx]);
+    // }
+    // else {
+    //   this.HandleMessage(true, MessageType.Error, "You cannot choose the same account!");
+    // }
   }
 
   setDebitAccDtls(tdDefTransTrnsfr: td_def_trans_trf) {
@@ -5968,8 +6024,32 @@ getjoinholder(){
     }
   
   }
- 
   
+ 
+  setAccFlag(openDT:any, currDt:any){
+    if(openDT){
+      const [day, month, yearTime] = openDT?.split(/[\/\s:]/); // Splitting by '/', space, and ':'
+      const [year, hours, minutes] = yearTime.split(' ');
+      
+      const date1=new Date(`${year}/${month}/${day} 00:00`)
+      debugger
+      const formattedDate1 = this.datepipe.transform(date1, 'yyyy-MM-dd');
+      const formattedDate2 = this.datepipe.transform(currDt, 'yyyy-MM-dd');
+  
+      const diff = Math.abs(new Date(formattedDate2).getTime() - new Date(formattedDate1).getTime());
+  
+      const diffDays = Math.ceil(diff / (1000 * 60 * 60 * 24));
+      debugger
+      if(diffDays>180){
+        this.new_acc_status=false;
+      }
+      else{this.new_acc_status=true;}
+      debugger
+      console.log(`Difference in months: ${diffDays}`);
+    }
+    else{this.new_acc_status=false}
+    
+  }
 
   
 }

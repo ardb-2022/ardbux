@@ -27,8 +27,11 @@ export class DetailListSBCAComponent implements OnInit,AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource = new MatTableDataSource()
+  dataSource2 = new MatTableDataSource()
   
   displayedColumns: string[] = ['constitution'];
+  displayedColumns2: string[] = ['SLNO','acc_num','cust_name','opening_dt','balance'];
+  // displayedColumns7: string[] = ['constitution7'];
   // displayedColumns: string[] = ['acc_num','cust_name/guardian_name', 'opening_dt', 'balance'];
   public static operations: mm_operation[] = [];
   AcctTypes: mm_operation[];
@@ -42,6 +45,7 @@ export class DetailListSBCAComponent implements OnInit,AfterViewInit {
     backdrop: true, // enable backdrop shaded color
     ignoreBackdropClick: true // disable backdrop click to close the modal
   };
+  printedId:any
   trailbalance: tt_trial_balance[] = [];
   prp = new p_report_param();
   reportcriteria: FormGroup;
@@ -91,8 +95,8 @@ export class DetailListSBCAComponent implements OnInit,AfterViewInit {
     this.reportcriteria = this.formBuilder.group({
       fromDate: [null, Validators.required],
       toDate: [null, null],
-      acc_type_cd: [null, Validators.required]
-      // constitution_cd: [{ disabled: true }, Validators.required]
+      acc_type_cd: [null, Validators.required],
+      constitution_cd: [{ disabled: true }]
     });
     this.getOperationMaster();
     this.getConstitutionList();
@@ -199,7 +203,7 @@ export class DetailListSBCAComponent implements OnInit,AfterViewInit {
         // 'const_cd' : this.reportcriteria.controls.constitution_cd.value,
         'from_dt' : this.fromdate.toISOString()
       }
-      
+      this.printedId=this.reportcriteria.controls.acc_type_cd.value=="7"?"trial777":"trial111"
       this.svc.addUpdDel('Deposit/PopulateDLSavingsAll',dt).subscribe(data=>{
         this.sendData()
         console.log(data)
@@ -207,14 +211,35 @@ export class DetailListSBCAComponent implements OnInit,AfterViewInit {
         if(this.reportData.length==0){
           this.comSer.SnackBar_Nodata()
         } 
-        for(let i=0;i<this.reportData.length;i++){
-          this.opdrSum+=this.reportData[i].constype.tot_cons_balance
-          this.allconscount+=this.reportData[i].constype.tot_cons_count
+        if(this.reportcriteria.controls.acc_type_cd.value=="7"){
+          for(let i=0;i<this.reportData.length;i++){
+            if(this.reportData[i]?.constype.constitution_cd==this.reportcriteria.controls.constitution_cd.value)
+            {
+              this.constType=this.reportData[i]?.constype.constitution_desc;
+                this.opdrSum=this.reportData[i]?.constype.tot_cons_balance;
+                this.allconscount=this.reportData[i]?.constype.tot_cons_count;
+              this.dataSource2.data=this.reportData[i]?.ttsbcadtllist;
+            }
+            else{
+              this.showAlert = true;
+              // this.HandleMessage(true, MessageType.Error, 'Please select correct transfer type or put transfer value');
+              this.alertMsg = 'No data foud with this Constitution';
+              this.dataSource2.data=[];
+            }
+          }
+          
+
         }
-        this.pageLength=this.reportData.length
-        this.dataSource.data=this.reportData
-        if(this.reportData.length<50){
-          this.pagedItems=this.reportData
+        else{
+          for(let i=0;i<this.reportData.length;i++){
+            this.opdrSum+=this.reportData[i].constype.tot_cons_balance
+            this.allconscount+=this.reportData[i].constype.tot_cons_count
+          }
+          this.pageLength=this.reportData.length
+          this.dataSource.data=this.reportData
+          if(this.reportData.length<50){
+            this.pagedItems=this.reportData
+          }
         }
       this.isLoading=false
         
@@ -264,7 +289,7 @@ export class DetailListSBCAComponent implements OnInit,AfterViewInit {
     this.exportAsConfig = {
       type: 'xlsx',
       // elementId: 'hiddenTab', 
-      elementIdOrContent:'trial111'
+      elementIdOrContent:this.printedId
     }
     this.exportAsService.save(this.exportAsConfig, 'Detail_List_SBCA').subscribe(() => {
       // save started
@@ -274,6 +299,8 @@ export class DetailListSBCAComponent implements OnInit,AfterViewInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    this.dataSource2.paginator = this.paginator;
+    this.dataSource2.sort = this.sort;
   }
 
   applyFilter(event: Event) {

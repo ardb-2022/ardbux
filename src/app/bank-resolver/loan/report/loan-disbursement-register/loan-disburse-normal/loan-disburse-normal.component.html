@@ -120,7 +120,7 @@
                       <tbody>
                         <tr *ngFor="let blkDtls of element.tmloanall">
                           <td mat-cell>{{blkDtls.acc_desc}} </td>
-                          <td mat-cell>{{blkDtls.fund_type=='N'?'Borrowed Fund':blkDtls.fund_type=='O'?'Owned Fund':''}}</td>
+                          <td mat-cell>{{blkDtls.fund_type=='N'?'Borrowed Fund':blkDtls.fund_type=='O'?'Deposit Scheme Fund':''}}</td>
                           <td mat-cell>{{blkDtls.activity_name}}</td>
                           <td mat-cell>{{blkDtls.trans_dt.substr(0,10)}} </td>
                           <td mat-cell>{{blkDtls.loan_id }} </td>

@@ -584,7 +584,7 @@
             <div class="col-12">
               <b>Loan Account:</b> {{acDesc}}
               <br>
-              <b>Lonee Name:</b> {{partyName}}
+              <b>Loanee Name:</b> {{partyName}}
               <br>
               <b>Address:</b> {{present_address}}
             </div>
@@ -679,7 +679,7 @@
             <div class="col-12">
               <b>Loan Account:</b> {{acDesc}}
               <br>
-              <b>Lonee Name:</b> {{partyName}}
+              <b>Loanee Name:</b> {{partyName}}
               <br>
               <b>Address:</b> {{present_address}}
             </div>
@@ -793,7 +793,7 @@
             <div class="col-8">
               <b>Loan Account:</b> {{acDesc}}
               <br>
-              <b>Lonee Name:</b> {{partyName}}
+              <b>Loanee Name:</b> {{partyName}}
               <br>
               <b>Address:</b> {{present_address}}
             </div>
@@ -905,7 +905,7 @@
             <div class="col-8">
               <b>Loan Account:</b> {{acDesc}}
               <br>
-              <b>Lonee Name:</b> {{partyName}}
+              <b>Loanee Name:</b> {{partyName}}
               <br>
               <b>Address:</b> {{present_address}}
             </div>
@@ -1037,8 +1037,8 @@
               <td *ngIf="i.acc_type_cd==11">DSP</td>
               <td>{{i.acc_num}}</td>
               <td style="text-align:right">{{i.clr_bal | INRCurrency }}</td>
-              <td *ngIf="i.acc_status=='O'">Open</td>
-              <td *ngIf="i.acc_status=='C'">Closed</td>
+              <td *ngIf="i.acc_status=='O'" style="color: rgb(4, 104, 4);">Open</td>
+              <td *ngIf="i.acc_status=='C'" style="color: rgb(187, 6, 6);">Closed</td>
             </tr>
           </tbody>
         </table>
@@ -1053,6 +1053,7 @@
             <th style="text-align:right">Ovd Intt</th>
             <th style="text-align:right">Penal Intt</th>
             <th style="text-align:right">Total Outstanding</th>
+            <th >Status</th>
           </tr>
             <tbody *ngFor="let i of reportData2; let itr=index;"> 
           <tr>
@@ -1063,6 +1064,8 @@
             <td style="text-align:right">{{i.ovd_intt  | INRCurrency}}</td>
             <td style="text-align:right">{{i.penal_intt  | INRCurrency}}</td>
             <td style="text-align:right">{{i.penal_intt+i.ovd_intt+i.curr_intt+i.ovd_prn+i.curr_prn  | INRCurrency}}</td>
+            <td *ngIf="i.loan_status=='O'" style="color: rgb(4, 104, 4);">Open</td>
+            <td *ngIf="i.loan_status=='C'" style="color: rgb(187, 6, 6);">Closed</td>
           </tr>
         </tbody>
         </table>
@@ -1266,9 +1269,14 @@
                   <input type="text" class="form-control form-control-sm" formControlName="ovd_intt" id="ovd_intt"
                     disabled>
                 </div>
-                <div class="form-group col-2">
+                <div class="form-group col-2" hidden>
                   <small for="ovd_intt_rate">Ovd Interest Rt</small>
                   <input type="text" class="form-control form-control-sm" formControlName="ovd_intt_rate"
+                    id="ovd_intt_rate" disabled>
+                </div>
+                <div class="form-group col-2">
+                  <small for="ovd_intt_rate">Pnl Interest Rt</small>
+                  <input type="text" class="form-control form-control-sm" [value]="pnlInttRt"
                     id="ovd_intt_rate" disabled>
                 </div>
                 <div class="form-group col-6">
@@ -1281,7 +1289,11 @@
                   <input type="text" class="form-control form-control-sm" formControlName="penal_intt" id="penal_intt"
                     disabled>
                 </div>
-                <div class="form-group col-2"></div>
+                <div class="form-group col-2">
+                  <small for="loan_status">Loan Status</small>
+                  <input type="text" class="form-control form-control-sm" [style.color]="getTextColor()" formControlName="loan_status"  id="loan_status"
+                    disabled>
+                </div>
                 <div class="form-group col-6">
                   <small for="curr_bal">Total Due</small>
                   <input type="text" class="form-control form-control-sm" formControlName="total_due" id="total_due"
@@ -1365,7 +1377,7 @@
               </select>
             </div>
             <div class="form-group col-2" *ngIf="showTranferType">
-              <small for="trf_type">Transfer Type<span class="text-danger">*</span></small>
+              <small for="trf_type">Transaction Type<span class="text-danger">*</span></small>
               <select id="trf_type" class="form-control form-control-sm" formControlName="trf_type"
                 (change)="onTransTypeChange()">
                 <option *ngIf="operations" disabled>Choose</option>
@@ -1446,9 +1458,14 @@
               <input type="text" disabled class="form-control form-control-sm" formControlName="curr_intt_rate"
                 id="curr_intt_rate">
             </div>
-            <div class="form-group col-4">
+            <div class="form-group col-4" hidden>
               <small for="ovd_intt_rate">Ovd Intt Rate</small>
               <input type="text" disabled class="form-control form-control-sm" formControlName="ovd_intt_rate"
+                id="ovd_intt_rate">
+            </div>
+            <div class="form-group col-4">
+              <small for="ovd_intt_rate">Pnl Intt Rate</small>
+              <input type="text" disabled class="form-control form-control-sm" [value]="pnlInttRt"
                 id="ovd_intt_rate">
             </div>
             <div class="form-group col-4" *ngIf="isDisburs">

@@ -19,7 +19,8 @@ import {
 })
 export class CommonServiceService {
   static bankconfigurationList: BankConfig[] = [];
-  static serverIp = '36.255.3.143';
+  // static serverIp = '36.255.3.143';
+  static serverIp = 'cfs2022.in';
   customerList: mm_customer[] = [];
   accOpen:boolean=false;
   accClose:boolean=false;
@@ -92,12 +93,12 @@ export class CommonServiceService {
       const bank = CommonServiceService.bankconfigurationList.
         filter(e => e.bank_name.toLowerCase() ===
         __bName.toLowerCase())[0];
-     return 'http://' + CommonServiceService.serverIp + '/' + __bName + '/api/';
+     return 'https://' + CommonServiceService.serverIp + '/' + __bName + '/api/';
       
 
   }
   private getMasterUrl(): string {
-    const url = 'http://' + CommonServiceService.serverIp + '/ardbMasterConfig/api/';
+    const url = 'https://' + CommonServiceService.serverIp + '/ardbMasterConfig/api/';
     return url;
   }
   public addUpdDel<T>(ofwhat: string, data: T): Observable<T> {
