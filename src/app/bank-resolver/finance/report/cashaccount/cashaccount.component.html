@@ -188,7 +188,7 @@
       <ng-container matColumnDef="Payment">
         <th mat-header-cell *matHeaderCellDef colspan="3"><b>Payment</b></th>
       </ng-container>
-     
+      
         
       <tr mat-header-row *matHeaderRowDef="['Header']"
        class="example-second-header-row">
@@ -196,7 +196,6 @@
       <tr mat-header-row *matHeaderRowDef="['Receipt', 'Payment']"
           class="example-second-header-row">
       </tr>
-      
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       
@@ -209,14 +208,20 @@
               <td style="width: 9px;"></td>
             </tr>
           </table>
+          <table style="margin-top: 7%;">
+            <tr>
+              <td style="width: 50%;text-align: center;"><b >ACCOUNTANT</b></td>
+              <td style="width: 50%;text-align: center;"><b >MANAGER</b></td>
+            </tr>
+          </table>
     <footer>
       <small>
-        This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions Pvt.Ltd. Kolkata
+        This Report Is Generated Through CFS-2022, Kolkata
         (NOTE:This report generates by taking account of both approved and unapproved vouchers.) 
       </small> 
        <!-- <ng-container matColumnDef="disclaimer">
         <td mat-footer-cell *matFooterCellDef colspan="2">
-          This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions, Kolkata
+          This Report Is Generated Through CFS-2022, Kolkata
       
         </td>
        </ng-container> -->

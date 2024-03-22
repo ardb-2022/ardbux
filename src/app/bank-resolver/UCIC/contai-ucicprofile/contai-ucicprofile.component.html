@@ -6,8 +6,8 @@
   <div class="col-xs-12 col-sm-12 col-md-11 col-lg-11 mb-2 bg-white p-1">
     <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onClearClick()">New</button>
     <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onRetrieveClick()">Retrieve</button>
-    <!-- <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" [disabled]="!enableModifyAndDel"
-      (click)="onModifyClick()">Modify</button> -->
+    <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" [disabled]="showNW" (click)="openModal2(netWorth)"
+       >NetWorth Statement</button>
     <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" [disabled]="f.cust_type.value ==='' || f.first_name.value ===''
       || f.guardian_name.value ===''" (click)="openModal(kycContent)">Kyc</button>
     <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" [disabled]="f.cust_type.value ==='' || f.first_name.value ===''
@@ -64,7 +64,7 @@
           </div>
        
         <ng-container>
-          <div class="suggestions border p-2 " style="width: 150%;"
+          <div class="suggestions border p-2 " style="width: 220%;"
           *ngIf="suggestedCustomer && suggestedCustomer!=null">
 
 
@@ -119,7 +119,7 @@
           </select>
         </div>
         <div class="form-group col-1">
-          <small for="title">Title</small>
+          <small for="title">Title <span class="text-danger">*</span></small>
           <select id="title" class="form-control form-control-sm" formControlName="title">
             <option *ngIf="titles" disabled>Choose</option>
             <option *ngFor="let title of titles" [value]="title.title_code">{{title.title}}</option>
@@ -267,7 +267,7 @@
         </div>
         <div class="form-group col-2">
           <small for="phone">Phone Number <span class="text-danger">*</span> </small>
-          <input type="tel" class="form-control form-control-sm" formControlName="phone" id="phone"
+          <input type="tel" class="form-control form-control-sm" (change)="setSMSflag()" formControlName="phone" id="phone"
             placeholder="Phone Number" maxlength="12">
         </div>
         <div class="form-group col-1 mt-4">
@@ -338,7 +338,7 @@
         <div class="form-group col-3">
         <!-- <mat-form-field class="example-full-width"> -->
           <small>Search Village</small>
-          <input type="text"  class="form-control form-control-sm"
+          <input type="text"  class="form-control form-control-sm" style="border: 1px solid"
                  aria-label="Number"
                  matInput
                  formControlName="vill_cd"
@@ -370,14 +370,14 @@
       <div class="form-row">
         <div class="form-group col-12">
           <small for="present_address">Present Address <span class="text-danger">*</span> </small>
-          <input type="text" class="form-control form-control-sm mkUpper" disabled id="present_address" formControlName="present_address"
+          <input type="text" class="form-control form-control-sm mkUpper"  id="present_address" formControlName="present_address"
             placeholder="Address">
         </div>
       </div> 
       <div class="form-row">
         <div class="form-group col-12">
           <small for="permanent_address">Permanent Address <span class="text-danger">*</span> </small>
-          <input type="text" class="form-control form-control-sm mkUpper"  id="permanent_address" formControlName="permanent_address"
+          <input type="text" class="form-control form-control-sm mkUpper" id="permanent_address" formControlName="permanent_address"
             placeholder="Address">
         </div>
       </div> 
@@ -717,5 +717,77 @@
       </div>
     </div>
 
+  </div>
+</ng-template>
+<ng-template #netWorth >
+  <div class="modal-header">
+    <h4 class="modal-title pull-left customHeader">NetWorth Statement details for UCIC# {{selectedCustomer.cust_cd}}({{selectedCustomer.cust_name}})
+    </h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="col-xs-12 col-sm-12 shadow-lg mb-4 bg-white p-3 mkScroll">
+    
+    <div class="row" >
+      <div class="col-4">
+        <table id="trialbalance">
+            <tr>
+              <th>Acc Type</th>
+              <th>Acc Num</th>
+              <th style="text-align:right">Balance</th>
+              <th >Status</th>
+            </tr>
+              <tbody *ngFor="let i of reportData1; let itr=index;" >
+            <tr>
+              <td> {{i.acc_type_cd}}</td>
+              <!-- <td *ngIf="i.acc_type_cd==1">Savings Deposit</td>
+              <td *ngIf="i.acc_type_cd==2">Fixed Deposit</td>
+              <td *ngIf="i.acc_type_cd==3">DBS</td>
+              <td *ngIf="i.acc_type_cd==4">Cash Certificate</td>
+              <td *ngIf="i.acc_type_cd==5">Monthly Income Scheme</td>
+              <td *ngIf="i.acc_type_cd==6">Recurring Deposit</td>
+              <td *ngIf="i.acc_type_cd==7">Share Account</td>
+              <td *ngIf="i.acc_type_cd==8">Flexi Deposit</td>
+              <td *ngIf="i.acc_type_cd==9">Loan Suspense</td>
+              <td *ngIf="i.acc_type_cd==11">DSP</td> -->
+              <td>{{i.acc_num}}</td>
+              <td style="text-align:right">{{i.clr_bal | INRCurrency }}</td>
+              <td *ngIf="i.acc_status=='O'">Open</td>
+              <td *ngIf="i.acc_status=='C'">Closed</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-8">
+        <table id="trialbalance">
+          <tr>
+            <th>Loan Type</th>
+            <th>Loan ID</th>
+            <th  style="text-align:right">Curr Prn</th>
+            <th  style="text-align:right">Ovd Prn</th>
+            <th style="text-align:right">Curr Intt</th>
+            <th style="text-align:right">Ovd Intt</th>
+            <th style="text-align:right">Penal Intt</th>
+            <th style="text-align:right">Total Outstanding</th>
+          </tr>
+            <tbody *ngFor="let i of reportData; let itr=index;"> 
+          <tr>
+            <td>{{i.acc_desc}}</td>
+            <td>{{i.loan_id}}</td>
+            <td style="text-align:right">{{i.curr_prn | INRCurrency}}</td>
+            <td style="text-align:right">{{i.ovd_prn  | INRCurrency}}</td>
+            <td style="text-align:right">{{i.curr_intt  | INRCurrency}}</td>
+            <td style="text-align:right">{{i.ovd_intt  | INRCurrency}}</td>
+            <td style="text-align:right">{{i.penal_intt  | INRCurrency}}</td>
+            <td style="text-align:right">{{i.penal_intt+i.ovd_intt+i.curr_intt+i.ovd_prn+i.curr_prn  | INRCurrency}}</td>
+          </tr>
+        </tbody>
+        </table>
+      </div>
+    </div>
+    
+    </div>
   </div>
 </ng-template>

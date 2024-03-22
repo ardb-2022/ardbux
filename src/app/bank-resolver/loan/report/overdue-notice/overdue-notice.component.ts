@@ -123,6 +123,7 @@ export class OverdueNoticeComponent implements OnInit {
   lastDate:any;
   converDtfrmDt:any;
   YearFastDate:any;
+  LastYearDay:any=''
   filteredOptions: Observable<string[]>;
   constructor(private svc: RestService, private formBuilder: FormBuilder,private exportAsService: ExportAsService, private cd: ChangeDetectorRef,
     private modalService: BsModalService, private _domSanitizer: DomSanitizer, private rstSvc:RestService, private datePipe:DatePipe,
@@ -191,6 +192,7 @@ export class OverdueNoticeComponent implements OnInit {
     const inputDateStr = localStorage.getItem('__lastDt')
     const [day, month, year] = inputDateStr.split('/');
     const fastYearDay = `0${Number(day)-30}/0${Number(month)+1}/${Number(year)-1}`;
+     this.LastYearDay = `${day}/${month}/${Number(year)-1}`;
     this.YearFastDate=fastYearDay;
     
     const date2 = new Date(`${Number(year)-1}-${month}-${day}T18:30:00.000Z`);
@@ -212,6 +214,7 @@ export class OverdueNoticeComponent implements OnInit {
       res => {
 
         this.activityList = res;
+        this.activityList = this.activityList.sort((a, b) => (a.activity_cd > b.activity_cd) ? 1 : -1);
         debugger
       },
       err => {
@@ -259,6 +262,7 @@ export class OverdueNoticeComponent implements OnInit {
     this.svc.addUpdDel<any>('Mst/GetBlockMaster', dt).subscribe(
       res => {
         this.blocks=res;
+        this.blocks = this.blocks.sort((a, b) => (a.block_name > b.block_name) ? 1 : -1);
       })
   }
   getVillageMaster(): void {
@@ -441,6 +445,7 @@ export class OverdueNoticeComponent implements OnInit {
     // console.log(this.calc)
     var dt={
       "ardb_cd":this.sys.ardbCD,
+      "brn_cd": this.sys.BranchCode,
       "from_dt":this.reportcriteria.controls.fromDate.value.toISOString(),
       "to_dt":this.reportcriteria.controls.toDate.value.toISOString(),
       "block_cd":this.reportcriteria.controls.block.value,
@@ -450,7 +455,7 @@ export class OverdueNoticeComponent implements OnInit {
       this.showAlert = false;
       
       // this.svc.addUpdDel('Loan/GetDemandList',dt).subscribe(data=>{console.log(data)
-        this.svc.addUpdDel('Loan/GetDemandNoticeBlockwise',dt).subscribe(data=>{console.log(data)
+        this.svc.addUpdDel(this.sys.ardbCD=='2'?'Loan/GetOvdNoticeBlockwise':'Loan/GetDemandNoticeBlockwise',dt).subscribe(data=>{console.log(data)
         this.reportData2=data;
         debugger
         const acti=this.reportcriteria.controls.activity_cd.value;
@@ -466,14 +471,29 @@ export class OverdueNoticeComponent implements OnInit {
             p.ardb_cd = cAddress.trim();
             const ab = p.ovd_intt+p.ovd_prn;
             debugger
+            if((+ab)>0 ){
+              debugger
+              this.reportData.push(p)
+            }
+          }
+          else{
+          if(this.sys.ardbCD=="2"){
+            const ab = p.ovd_intt+p.ovd_prn;
             if((+ab)>0 && p.activity_name==acti){
               debugger
               this.reportData.push(p)
             }
           }
           else{
+            const ab = p.ovd_intt+p.ovd_prn;
+            if((+ab)>0 && p.activity_name==acti){
+              debugger
+              this.reportData.push(p)
+            }
              p.cust_address=this.allServiceArea.filter(e=>e.service_area_cd==p.cust_address)[0]?.service_area_name;
+          
           }
+        }
           
         })
         debugger

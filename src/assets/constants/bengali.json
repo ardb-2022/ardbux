@@ -12,7 +12,7 @@
     "party_code":"সদস্য নং",
     "loan_id":"লোন আইডি",
     "loan_date":"ঋণের তারিখ",
-    "ledger_no":"লেজার নং",
+    "ledger_no":"খাতা নং",
     "phone":"ফোন নং",
     "intt_rt":"সুদের হার",
     "total_loan_amt":"মোট ঋণের পরিমাণ",

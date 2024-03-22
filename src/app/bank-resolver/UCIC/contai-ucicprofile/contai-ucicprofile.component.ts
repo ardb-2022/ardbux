@@ -1,6 +1,7 @@
 import {
   mm_title, mm_category, mm_state, mm_dist, mm_vill,
-  mm_kyc, mm_service_area, mm_block, mm_customer, ShowMessage, MessageType, SystemValues, kyc_sig
+  mm_kyc, mm_service_area, mm_block, mm_customer, ShowMessage, 
+  MessageType, SystemValues, kyc_sig, mm_acc_type
 } from './../../Models';
 import { Component, OnInit, ViewChild, ElementRef, TemplateRef, HostListener } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -29,6 +30,7 @@ export class ContaiUCICprofileComponent implements OnInit {
   @ViewChild('kycPhotoNo',{static:true}) kycPhotoNo:ElementRef;
   @ViewChild('pan',{static:true}) pan:ElementRef;
   @ViewChild('aadhar',{static:true}) aadhar:ElementRef;
+  @ViewChild('netWorth', { static: true }) netWorth: TemplateRef<any>;
   _isDisabled = false;
 
   constructor(private datePipe: DatePipe, private frmBldr: FormBuilder,
@@ -37,12 +39,19 @@ export class ContaiUCICprofileComponent implements OnInit {
   get f() { return this.custMstrFrm.controls; }
   static existingCustomers: mm_customer[] = [];
   @ViewChild('kycContent', { static: true }) kycContent: TemplateRef<any>;
+  accountTypeList: mm_acc_type[] = [];
+  accountTypeList2: mm_acc_type[] = [];
   lbr_status: any = [];
+  reportData:any=[];
+  reportData1:any=[];
+  showNW:boolean=true;
+  coustCD:any='';
   modalRef: BsModalRef;
   selectedClick=false;
   date = new Date()
   sys = new SystemValues();
   retrieveClicked = false;
+  newClicked:boolean=false
   selectedCustomer: mm_customer;
   enableModifyAndDel = false;
   showMsgs: ShowMessage[] = [];
@@ -94,6 +103,12 @@ export class ContaiUCICprofileComponent implements OnInit {
     ignoreBackdropClick: true,
     class: 'modal-lg'
   };
+  config2 = {
+    keyboard: false,
+    backdrop: true,
+    ignoreBackdropClick: true,
+    class: 'modal-xl'
+  };
   filteredOptions: Observable<string[]>;
   // public onModifyClick(): void {
   //   this.validateControls();
@@ -130,8 +145,8 @@ export class ContaiUCICprofileComponent implements OnInit {
   relStatus:any;
   
   ngOnInit(): void {
-
-   
+    this.showNW=true;
+    this.getAccountTypeList();
 
     /**       */
     // const prm = new p_gen_param();
@@ -255,9 +270,27 @@ export class ContaiUCICprofileComponent implements OnInit {
       // this.f.dist.disable()
     }, 150);
   }
+  getAccountTypeList() {
+    if (this.accountTypeList.length > 0) {
+      return;
+    }
+    this.accountTypeList = [];
+    this.accountTypeList2 = [];
 
+    this.svc.addUpdDel<any>('Mst/GetAccountTypeMaster', null).subscribe(
+      res => {
+
+        this.accountTypeList2 = res;
+        this.accountTypeList = res;
+        this.accountTypeList = this.accountTypeList.filter(c => c.dep_loan_flag === 'D');
+        this.accountTypeList = this.accountTypeList.sort((a, b) => (a.acc_type_cd > b.acc_type_cd) ? 1 : -1);
+      });
+  }
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template, this.config);
+  }
+  openModal2(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, this.config2);
   }
   openUploadModal(template: TemplateRef<any>) {
     this.sucessMsgs = [];
@@ -383,12 +416,28 @@ export class ContaiUCICprofileComponent implements OnInit {
     debugger
     this.selectedBlock = this.blocks.filter(e => e.block_cd ===
       selectedVillage.block_cd)[0];
+
+      console.log(this.blocks.filter(e => e.block_cd ===
+        selectedVillage.block_cd));
+      
     this.selectedServiceArea = this.serviceAreas.filter(e => e.service_area_cd ===
-      selectedVillage.service_area_cd)[0];
+      selectedVillage.service_area_cd )[0];
+
+      console.log(this.serviceAreas.filter(e => e.service_area_cd ===
+        selectedVillage.service_area_cd ))
+
       this.selectedPS = this.ps.filter(e => e.ps_id ==
         selectedVillage.ps_id)[0];
-      this.selectedPO = this.po.filter(e => e.service_area_cd ==
-      selectedVillage.service_area_cd)[0];
+
+        console.log(this.ps.filter(e => e.ps_id ==
+          selectedVillage.ps_id));
+        
+      this.selectedPO = this.po.filter(e => e.po_id ==
+      selectedVillage.po_id)[0];
+
+      console.log(this.po.filter(e => e.po_id ==
+        selectedVillage.po_id));
+      
       const add=`Village: ${selectedVillage.vill_name}, Post Office: ${this.selectedPO.po_name}, Pin: ${this.selectedPO.pin}, GP: ${this.selectedServiceArea.service_area_name}, PS: ${this.selectedPS.ps_name}, Block: ${this.selectedBlock.block_name}`
 debugger
         this.custMstrFrm.patchValue({
@@ -413,6 +462,7 @@ debugger
       res => {
         console.log(res)
         this.blocks = res;
+        this.blocks = this.blocks.sort((a, b) => (a.block_name > b.block_name) ? 1 : -1);
       },
       err => { }
     );
@@ -452,7 +502,13 @@ debugger
       cust_name: cust_name
     });
   }
-
+  setSMSflag(){
+    debugger
+    if(this.newClicked){
+      debugger
+      this.f.sms_flag.setValue('Y');
+    }
+  }
   public onRetrieveClick(): void {
     // this.custName.unsubscribe()
   
@@ -467,6 +523,7 @@ debugger
     this.f.cust_name.enable();
     this.retrieveClicked = true;
     this.selectedClick=false;
+    this.newClicked=false;
     
     // if (loadingReq) {
 
@@ -580,7 +637,7 @@ debugger
   }
 
   public SelectCustomer(cust: mm_customer): void {
-   
+    this.coustCD=cust.cust_cd
     // this.f.status.disable();
     // ;
     // var dt_Death = Utils.convertDtToString(cust.date_of_death);
@@ -591,6 +648,7 @@ debugger
     this.msg.sendcustomerCodeForKyc(this.selectedCustomer.cust_cd);
     this.onClearClick();
     this.selectedClick=true
+    this.newClicked=false;
 
     // this.custName.unsubscribe()
     this.enableModifyAndDel = true;
@@ -645,10 +703,8 @@ debugger
       date_of_death: (null !== cust.date_of_death && '01/01/0001 00:00' === cust.date_of_death.toString()) ? null
         : cust.date_of_death,
       sms_flag: cust.sms_flag == 'Y' ? cust.sms_flag : null,
-      // sms_flag: cust.sms_flag,
       lbr: cust.lbr_status,
       is_weaker: cust.is_weaker == 'Y' ? cust.is_weaker : null,
-      // is_weaker:cust.is_weaker,
       status: cust.status,
       pan: cust.pan,
       nominee: cust.nominee,
@@ -675,9 +731,34 @@ debugger
     this.retrieveClicked = false
     this.f.state.disable();
     if(cust.cust_cd){
+      this.showNW=false
       this.custOpernDate=true
+        this.reportData.length=0;
+        this.reportData1.length=0;
+        var dt={
+          "ardb_cd":this.sys.ardbCD,
+          "brn_cd":this.sys.BranchCode,
+          "cust_cd":cust.cust_cd
+        }
+      
+        this.isLoading=true
+        this.svc.addUpdDel('UCIC/GetLoanDtls',dt).subscribe(data=>{console.log(data)
+          this.reportData=data
+          for(let i=0;i<this.reportData.length;i++){
+            this.reportData[i].acc_desc= this.accountTypeList2.filter(c => c.acc_type_cd == this.reportData[i].acc_cd)[0]?.acc_type_desc;
+          }
+          this.svc.addUpdDel('UCIC/GetDepositDtls',dt).subscribe(data=>{console.log(data)
+            this.reportData1=data;
+            for(let i=0;i<this.reportData1.length;i++){
+              this.reportData1[i].acc_type_cd= this.accountTypeList.filter(c => c.acc_type_cd == this.reportData1[i].acc_type_cd)[0].acc_type_desc;
+            }
+            this.isLoading=false
+          })
+        })
+      
      }
      else{
+      this.showNW=true
       this.custOpernDate=false
   
      }
@@ -697,7 +778,7 @@ debugger
 
     if (newCustomer) {
       console.log('s');
-      if(this.custMstrFrm.controls.phone.value && this.custMstrFrm.controls.sms_flag.value){
+      if(this.custMstrFrm.controls.phone.value ){
       cust.del_flag = 'N'
       console.log(cust)
       this.svc.addUpdDel<any>('UCIC/InsertCustomerDtls', cust).subscribe(
@@ -721,7 +802,7 @@ debugger
         err => { this.isLoading = false; }
       )}
       else{
-        this.HandleMessage(true, MessageType.Warning,'Could not create Customer, phone and SMS flage are mendetory' );
+        this.HandleMessage(true, MessageType.Warning,'Could not create Customer, phone number are mendetory' );
         document.getElementById('phone').focus();
       }
     }
@@ -923,11 +1004,14 @@ debugger
   }
 
   public onClearClick(): void {
+    this.showNW=true;
+    this.coustCD=''
     this.custOpernDate=false
     this._isDisabled= false;
    this.selectedClick=true
    this.disabledOnNull=true;
    this.retrieveClicked=false
+   this.newClicked=true
     this.custMstrFrm.reset();
     this.showMsgs = [];
     this.showNoResult=false;

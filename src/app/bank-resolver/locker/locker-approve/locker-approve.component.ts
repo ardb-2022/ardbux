@@ -651,7 +651,8 @@ export class LockerApproveComponent implements OnInit {
     console.log(acc.ardb_cd)
     this.svc.addUpdDel<tm_deposit>('Deposit/GetDepositView', acc).subscribe(
       res => {
-        acc = res[0];
+        if(res){
+          acc = res[0];
         console.log(acc)
         this.acctypcd=acc.acc_type_cd;
         this.accnum=acc.acc_num
@@ -660,6 +661,7 @@ export class LockerApproveComponent implements OnInit {
         this.setAccDtlsFrmData(acc);
         this.refresh = true;
         this.isLoading = false;
+        }
       },
       err => { this.isLoading = false; }
     );
@@ -716,7 +718,7 @@ this.svc.addUpdDel<any>('Locker/GetLockerOpeningData', dt).subscribe(
         tdDepTransRet.forEach(element => {
           const vm = new TranApprovalVM();
           vm.mm_acc_type = LockerApproveComponent.accType.
-            filter(e => e.acc_type_cd === element.acc_type_cd && e.dep_loan_flag === 'X')[0];
+            filter(e => e.acc_type_cd === element.acc_type_cd && e.dep_loan_flag === 'K')[0];
           vm.td_def_trans_trf = element;
           this.vm.push(vm);
           debugger
@@ -725,7 +727,7 @@ this.svc.addUpdDel<any>('Locker/GetLockerOpeningData', dt).subscribe(
           if (undefined === isAcctTypePresent) {
             this.uniqueAccTypes.push(vm.mm_acc_type);
           }
-
+          debugger
         });
 
         this.uniqueAccTypes = this.uniqueAccTypes.sort((a, b) => (a.acc_type_cd < b.acc_type_cd ? -1 : 1));

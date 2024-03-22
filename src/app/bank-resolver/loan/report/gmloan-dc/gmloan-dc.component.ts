@@ -126,6 +126,7 @@ export class GMloanDCComponent implements OnInit {
       res => {
 
         this.activityList = res;
+        this.activityList = this.activityList.sort((a, b) => (a.activity_cd > b.activity_cd) ? 1 : -1);
         debugger
       },
       err => {

@@ -127,7 +127,9 @@ export class OnetimesettlementComponent implements OnInit {
   showTrans=true;
   acc_nm='undefined'
   accCd:any;
-
+  hidegl:boolean=true;
+  glHead:any;
+  acc2 = new LoanOpenDM();
   // showInstrumentDtl = false;
   ngOnInit(): void {
     this.isLoading = false;
@@ -480,7 +482,7 @@ export class OnetimesettlementComponent implements OnInit {
     this.shownoresult = false;
     
     this.f.acct_num.setValue(cust.loan_id);
-    this.td.trf_type.setValue('T');
+    this.td.trf_type.setValue('C');
     this.onTransTypeChange()
     this.onAccountNumTabOff();
     this.suggestedCustomer = [];
@@ -538,7 +540,7 @@ export class OnetimesettlementComponent implements OnInit {
     this.showTransactionDtl = false;
     this.f.oprn_cd.disable();
     this.f.oprn_cd.reset() //marker
-    this.f.oprn_cd.setValue(52); //marker
+    // this.f.oprn_cd.setValue(52); //marker
     this.onOperationTypeChange(); //marker
     this.takeDataForCancel();
     this.editDeleteMode = false;
@@ -565,6 +567,7 @@ export class OnetimesettlementComponent implements OnInit {
       res => {
         ////////////debugger;
         acc = res;
+        this.acc2=res;
         console.log(res)
         if (undefined === acc || acc.tmloanall.loan_id == null) {
           this.accTransFrm.patchValue({
@@ -731,24 +734,10 @@ export class OnetimesettlementComponent implements OnInit {
             // this.f.oprn_cd.enable();
             for (let i = 0; i < this.td_deftranstrfList.length; i++) {
               if (this.td_deftranstrfList[i].acc_num === '0000') {
-                this.td_deftranstrfList[i].cust_acc_type = this.td_deftranstrfList[i].acc_type_cd.toString();
-                // this.td_deftranstrfList[i].gl_acc_code = this.td_deftranstrfList[i].acc_type_cd.toString();
-                this.td_deftranstrfList[i].cust_acc_number = this.td_deftranstrfList[i].acc_num;
-                let temp_acc_type = this.maccmaster.filter(x => x.acc_cd.toString()  === this.td_deftranstrfList[i].cust_acc_type)[0];
-                this.td_deftranstrfList[i].cust_name=temp_acc_type.acc_name
-                // console.log(this.acc_nm);
-                // debugger;
-                console.log(this.td_deftranstrfList);
+                this.td_deftranstrfList[i].gl_acc_code = this.td_deftranstrfList[i].acc_type_cd.toString();
                 this.checkAndSetDebitAccType('gl_acc', this.td_deftranstrfList[i]);
-
               }
               else {
-                let temp_acc_type = this.maccmaster.filter(x => x.acc_cd.toString()  === this.td_deftranstrfList[i].cust_acc_type)[0];
-                this.acc_nm=temp_acc_type.acc_name
-                this.td_deftranstrfList[i].cust_name=temp_acc_type.acc_name
-
-                console.log(this.acc_nm)
-                // debugger;
                 this.td_deftranstrfList[i].cust_acc_type = this.td_deftranstrfList[i].acc_type_cd.toString();
                 this.td_deftranstrfList[i].cust_acc_number = this.td_deftranstrfList[i].acc_num;
                 this.checkAndSetDebitAccType('cust_acc', this.td_deftranstrfList[i]);
@@ -1004,7 +993,7 @@ export class OnetimesettlementComponent implements OnInit {
       this.TrfTotAmt = 0;
       this.disableOperation = false; //marker
       this.f.oprn_cd.disable();
-      this.td.trf_type.setValue('T');
+      // this.td.trf_type.setValue('C');
       this.onTransTypeChange()
       // this.accDtlsFrm.controls.amount.enable();
       // this.accDtlsFrm.controls.remarks_on_manual.enable()
@@ -1019,7 +1008,7 @@ export class OnetimesettlementComponent implements OnInit {
     else {
       this.f.oprn_cd.disable();
       this.f.oprn_cd.reset() //marker
-      this.td.trf_type.setValue('T');
+      // this.td.trf_type.setValue('C');
       this.onTransTypeChange()
       console.log(this.f.oprn_cd.value)
       this.disableOperation = true;
@@ -1142,10 +1131,10 @@ export class OnetimesettlementComponent implements OnInit {
             //     'draw_amt':acc.tmlaonsanctiondtls[x].sanc_amt}));
             // }
             this.f.oprn_cd.disable();
-            this.f.oprn_cd.setValue(52) //marker
+            // this.f.oprn_cd.setValue() //marker
             this.onOperationTypeChange() //marker
             this.td.recov_type.setValue('M');
-            this.td.trf_type.setValue('T');
+            // this.td.trf_type.setValue('C');
             this.onTransTypeChange()
             this.onRecovTypeChange()
             this.td.recov_type.disable()
@@ -1170,7 +1159,9 @@ export class OnetimesettlementComponent implements OnInit {
     this.showTranferType = true;
     this.hideOnClose = false;
     this.showTransactionDtl = true;
-    const selectedOperation = this.operations.filter(e => e.oprn_cd === +this.f.oprn_cd.value)[0];
+    debugger
+    const selectedOperation = this.operations.filter(e => e.oprn_desc === 'Recovery')[0];
+    this.f.oprn_cd.setValue(selectedOperation.oprn_cd)
     this.transType = new DynamicSelect();
     if (selectedOperation.oprn_desc.toLocaleLowerCase() === 'disbursement') {
       console.log(this.strtDt)
@@ -1392,11 +1383,37 @@ export class OnetimesettlementComponent implements OnInit {
     }
 
   }
+  formatDate(dateString) {
+    const date = new Date(dateString);
+    
+    // Get individual date components
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-indexed, so we add 1
+    const year = date.getFullYear();
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+
+    // Construct formatted date string
+    const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
+
+    return formattedDate;
+}
+  private convertDate(datestring:string):Date
+      {
+      var parts = datestring.match(/(\d+)/g);
+      return new Date(parseInt(parts[2]), parseInt(parts[1])-1, parseInt(parts[0]));
+      }
   onRecoveryTillDateChng(ev: any): void {
+    
     console.log(ev)
     console.log(this.inttTillDt)
-    // var dt1=this.c.transform(this.td.intt_recov_dt.value,'dd/MM/yyyy hh:mm:ss')
-    var dt1 = this.c.transform(ev, 'dd/MM/yyyy hh:mm:ss')
+
+    const dt1 = this.formatDate(ev);
+    console.log(dt1);
+
+    // var dt1=this.dtpipe.transform(this.td.intt_recov_dt.value,'dd/MM/yyyy hh:mm:ss')
+    // var dt1 = this.dtpipe.transform(ev, 'dd/MM/yyyy hh:mm:ss')
+      // this.i_n_dt=dt1;//partha
     var dt2 = this.inttTillDt
     // console.log(dt1, dt2)
     // console.log(this.dayDiff(this.td.intt_recov_dt.value, this.td.intt_till_dt.value))
@@ -1413,14 +1430,32 @@ export class OnetimesettlementComponent implements OnInit {
           ovd_prn_recov: '',
           ovd_intt_recov: ''
         });
+        return;
       }
       else {
+        debugger
+        const fyearlstfDT= localStorage.getItem('__lastDt');
+        const lstfDT=this.convertDate(fyearlstfDT).toLocaleString();
+        const dt = this.formatDate(lstfDT);
+        console.log(dt);
+        // var dt = this.dtpipe.transform(lstfDT, 'dd/MM/yyyy hh:mm:ss')
+        console.log(this.dayDiff(dt1, dt))
+        if(this.dayDiff(dt1 ,dt)>0){
+          debugger
+          this.HandleMessage(true, MessageType.Error, 'Interest can not be calculated after ' + fyearlstfDT);
+        this.tdDefTransFrm.patchValue({
+          intt_recov_dt:Utils.convertStringToDt(fyearlstfDT),
+          no_of_day: 0,
+          curr_prn_recov: '',
+          curr_intt_recov: '',
+          ovd_prn_recov: '',
+          ovd_intt_recov: ''
+        });
+        return
+        }
         console.log(dt1 + " " + dt2)
         this.PopulateRecoveryDetails(3);
-        if (this.td.amount.value > 0)
-          this.PopulateRecoveryDetails(2);
-
-        // this.geteffectiveinttrt();
+       
         this.tdDefTransFrm.patchValue({
           // no_of_day: this.dayDiff(this.td.intt_recov_dt.value, this.td.intt_till_dt.value)
           no_of_day: this.dayDiff(dt1, dt2)
@@ -1532,9 +1567,29 @@ export class OnetimesettlementComponent implements OnInit {
   }
 
 
-
+  hidetab(e){
+    if(!e.target.value.length){
+      // debugger;
+      this.acc_master.length=0
+      this.acc_master=null
+      this.glHead=document.getElementById('debit_gl_ac')
+      this.glHead.value=''
+      this.hidegl=true
+    }
+  }
+  setGLCode(acc_cd: string, acc_name: string, indx: number, c: any){
+    this.acc_master = null;
+    this.hidegl=true;
+    // console.log(this.suggestedCustomerCr.length)
+    
+      this.td_deftranstrfList[indx].gl_acc_code = acc_cd;
+      this.td_deftranstrfList[indx].gl_acc_desc = acc_name;
+      // this.setDebitAccDtls(this.td_deftranstrfList[indx]);
+    
+    
+  }
   onSaveClick(): void {
-    this.td.trf_type.setValue('T');
+    // this.td.trf_type.setValue('C');
     this.onTransTypeChange()
     if ((+this.td.amount.value) <= 0) {
       this.HandleMessage(true, MessageType.Error, 'Amount can not be blank');
@@ -1682,7 +1737,7 @@ export class OnetimesettlementComponent implements OnInit {
                   this.td.amount.disable()
                   this.disableOnSaveEdit = true;
                   if (this.isDisburs) {
-                    this.td.trans_mode.disable();
+                    // this.td.trans_mode.disable();
                     this.td.instrument_num.disable();
                     this.td.instrument_dt.disable();
                     this.td.share.disable();
@@ -1715,11 +1770,11 @@ export class OnetimesettlementComponent implements OnInit {
             else {
               this.disableOnSaveEdit = true;
               this.tdDefTransFrm.disable();
-              this.td.trf_type.disable();
+              // this.td.trf_type.disable();
               this.td.amount.disable()
               if (this.isDisburs) {
                 // ////debugger;
-                this.td.trans_mode.disable();
+                // this.td.trans_mode.disable();
                 this.td.instrument_num.disable();
                 this.td.instrument_dt.disable();
                 this.td.share.disable();
@@ -1806,31 +1861,34 @@ export class OnetimesettlementComponent implements OnInit {
             saveTransaction.tmdenominationtrans[i].trans_cd = this.td.trans_cd.value; //marker
           }
         }
-      } else if (this.td.trf_type.value === 'T') {
+      } 
+      
+      else if (this.td.trf_type.value === 'T') {
         let i = 0;
         this.td_deftranstrfList.forEach(e => {
           const tdDefTransAndTranfer = this.mappTddefTransAndTransFrFromFrm();
           if (e.trans_type === 'cust_acc') {
-            // tdDefTransAndTranfer.acc_type_cd = +e.cust_acc_type;
+            tdDefTransAndTranfer.acc_type_cd = +e.cust_acc_type;
             tdDefTransAndTranfer.acc_num = e.cust_acc_number;
             tdDefTransAndTranfer.acc_name = e.cust_name;
             tdDefTransAndTranfer.instrument_num = e.instrument_num;
-            // tdDefTransAndTranfer.acc_cd = e.acc_cd;
+            tdDefTransAndTranfer.acc_cd = e.acc_cd;
             tdDefTransAndTranfer.remarks = 'D';
             tdDefTransAndTranfer.disb_id = ++i;
           } else {
-            // tdDefTransAndTranfer.acc_type_cd = +e.gl_acc_code;
+            tdDefTransAndTranfer.acc_type_cd = +e.gl_acc_code;
             tdDefTransAndTranfer.acc_num = '0000';
-            tdDefTransAndTranfer.acc_name = e.cust_acc_number;
-            // tdDefTransAndTranfer.acc_name = e.gl_acc_desc;
+            tdDefTransAndTranfer.acc_name = e.gl_acc_desc;
             tdDefTransAndTranfer.instrument_num = e.instrument_num;
-            // tdDefTransAndTranfer.acc_cd = this.accCD;
+            tdDefTransAndTranfer.acc_cd = +e.gl_acc_code;
             tdDefTransAndTranfer.remarks = 'X';
             tdDefTransAndTranfer.disb_id = ++i;
           }
           tdDefTransAndTranfer.amount = e.amount;
-          ////////////debugger;
+          ////////debugger;
           saveTransaction.tddeftranstrf.push(tdDefTransAndTranfer);
+          
+          
         });
 
         const tmTrnsfr = new tm_transfer();
@@ -1851,10 +1909,10 @@ export class OnetimesettlementComponent implements OnInit {
             this.disableOnSaveEdit = true;
             this.tdDefTransFrm.disable();
             this.tdDefTransFrm.disable();
-            this.td.trf_type.disable();
+            // this.td.trf_type.disable();
             this.td.amount.disable()
             if (this.isDisburs) {
-              this.td.trans_mode.disable();
+              // this.td.trans_mode.disable();
               this.td.instrument_num.disable();
               this.td.instrument_dt.disable();
               this.td.share.disable();
@@ -1886,11 +1944,11 @@ export class OnetimesettlementComponent implements OnInit {
       else {
         this.tdDefTransFrm.disable();
         this.tdDefTransFrm.disable();
-        this.td.trf_type.disable();
+        // this.td.trf_type.disable();
         this.td.amount.disable()
         this.disableOnSaveEdit = true;
         if (this.isDisburs) {
-          this.td.trans_mode.disable();
+          // this.td.trans_mode.disable();
           this.td.instrument_num.disable();
           this.td.instrument_dt.disable();
           this.td.share.disable();
@@ -2066,8 +2124,6 @@ export class OnetimesettlementComponent implements OnInit {
   }
 
   mappTddefTransAndTransFrFromFrm(): td_def_trans_trf {
-    console.log(this.accCd);
-    debugger;
     const selectedOperation = this.operations.filter(e => e.oprn_cd === +this.f.oprn_cd.value)[0];
     const toReturn = new td_def_trans_trf();
     const accTypeCd = +this.f.acc_type_cd.value;
@@ -2080,23 +2136,9 @@ export class OnetimesettlementComponent implements OnInit {
     toReturn.paid_to = null;
     toReturn.token_num = null;
     toReturn.trf_type = this.td.trf_type.value;
-    toReturn.acc_cd=this.accCd;
-    toReturn.acc_type_cd=this.accCd
-    console.log(toReturn);
-    debugger
-    switch (selectedOperation.oprn_desc.toLocaleLowerCase()) {
-      case 'disbursement':
-        toReturn.trans_type = 'D';
-        toReturn.particulars = 'BY TRANSFER FROM ' + this.td.acc_num.value;
-        toReturn.tr_acc_cd = 10000;
-        break;
-      case 'recovery':
-        toReturn.trans_type = 'W';
-        // toReturn.particulars = 'TO TRANSFER TO' + this.td.acc_num.value;
-        toReturn.particulars = 'TO TRANSFER TO LOAN ID - ' + this.loanID;
-        toReturn.tr_acc_cd = 10000;
-        break;
-    }
+    toReturn.trans_type = 'W';
+    toReturn.particulars = 'TO TRANSFER TO LOAN ID - ' + this.loanID;
+    toReturn.tr_acc_cd = 10000;
     toReturn.instrument_dt = !this.td.instrument_dt.value ? null : this.td.instrument_dt.value;
     toReturn.paid_to = null;
     toReturn.token_num = null;
@@ -2348,7 +2390,10 @@ export class OnetimesettlementComponent implements OnInit {
         if (this.acc_master === undefined || this.acc_master === null || this.acc_master.length === 0) {
           this.isLoading = true;
           let temp_acc_master = new m_acc_master();
-          this.svc.addUpdDel<any>('Mst/GetAccountMaster', null).subscribe(
+          var dt = {
+            "ardb_cd": this.sys.ardbCD
+          }
+          this.svc.addUpdDel<any>('Mst/GetAccountMaster', dt).subscribe(
             res => {
 
               this.acc_master = res;

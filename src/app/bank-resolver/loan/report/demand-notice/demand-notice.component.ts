@@ -204,6 +204,7 @@ export class DemandNoticeComponent implements OnInit {
     this.svc.addUpdDel<any>('Mst/GetBlockMaster', dt).subscribe(
       res => {
         this.blocks=res;
+        this.blocks = this.blocks.sort((a, b) => (a.block_name > b.block_name) ? 1 : -1);
       })
   }
   getVillageMaster(): void {

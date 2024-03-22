@@ -72,6 +72,7 @@ export class ServiceareamasterComponent implements OnInit {
     this.svc.addUpdDel<any>('Mst/GetBlockMaster', dt).subscribe(
       res => {
         this.block=res;
+        this.block = this.block.sort((a, b) => (a.block_name > b.block_name) ? 1 : -1);
       },
       err => {"Error from server side"}
     );

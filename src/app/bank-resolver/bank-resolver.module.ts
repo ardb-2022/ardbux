@@ -220,6 +220,16 @@ import { ContaiComponent } from './deposit/report/passbook-print/contai/contai.c
 import { ContaiFastPageComponent } from './deposit/report/passbook-print/contai/contai-fast-page/fast-page.component';
 import { GhatalComponent } from './deposit/report/passbook-print/ghatal/ghatal.component';
 import { GhatalFastPageComponent } from './deposit/report/passbook-print/ghatal/ghatal-fast-page/ghatal-fast-page.component';
+import { GoldLoanReportComponent } from './loan/report/gold-loan-report/gold-loan-report.component';
+import { GoldLoanAsOnDateComponent } from './loan/report/gold-loan-as-on-date/gold-loan-as-on-date.component';
+import { GoldLoanCurrDateComponent } from './loan/report/gold-loan-curr-date/gold-loan-curr-date.component';
+import { GroupWiseComponent } from './loan/report/recovery-register/group-wise/group-wise.component';
+import { NpaAllWithGroupComponent } from './loan/report/npa-all-with-group/npa-all-with-group.component';
+import { DcbrGroupWiseComponent } from './loan/report/dcbr-group-wise/dcbr-group-wise.component';
+import { TamlukComponent } from './deposit/report/passbook-print/tamluk/tamluk.component';
+import { TamlukFastPageComponent } from './deposit/report/passbook-print/tamluk/tamluk-fast-page/tamluk-fast-page.component';
+import { VillMasterContaiComponent } from './loan/masters/vill-master-contai/vill-master-contai.component';
+import { RecovSummaryComponent } from './loan/report/recovery-register/recov-summary/recov-summary.component';
 @NgModule({
   declarations: [ 
     AmountToWordPipe,UserLoginStatusComponent,OpenInvestComponent,KeyoffDirective,
@@ -268,7 +278,7 @@ import { GhatalFastPageComponent } from './deposit/report/passbook-print/ghatal/
             YearendDemandRecoveryComponent, DemandNoticeBlockWiseComponent, RecovAdvPrnComponent, RecovAdvPrnVillComponent, 
             InterestSubsidySummaryComponent, DcbrPrintComponent, NpaSummaryComponent,LockerComponent, MenuItemComponent, 
             DetailListSbcaConstWiseComponent, FortnightlyReturnComponent, ConsoFortnightlyReturnComponent, BorrowingComponent, DcbrVillWiseComponent, 
-            ContaiUCICprofileComponent, GoldTestAndValuationReportComponent, DemandNoticeContaiComponent, UcicMergeComponent, CTloanDCComponent, RecoveryExportComponent, RecoveryImportComponent, RecoveryIndiPostComponent, ContaiComponent, ContaiFastPageComponent, GhatalComponent, GhatalFastPageComponent
+            ContaiUCICprofileComponent, GoldTestAndValuationReportComponent, DemandNoticeContaiComponent, UcicMergeComponent, CTloanDCComponent, RecoveryExportComponent, RecoveryImportComponent, RecoveryIndiPostComponent, ContaiComponent, ContaiFastPageComponent, GhatalComponent, GhatalFastPageComponent, GoldLoanReportComponent, GoldLoanAsOnDateComponent, GoldLoanCurrDateComponent, GroupWiseComponent, NpaAllWithGroupComponent, DcbrGroupWiseComponent, TamlukComponent, TamlukFastPageComponent, VillMasterContaiComponent, RecovSummaryComponent
   ],
   imports: [
     MatAutocompleteModule,

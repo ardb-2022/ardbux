@@ -75,8 +75,11 @@ export class GoldTestAndValuationReportComponent implements OnInit {
   ardbCD=localStorage.getItem('__ardb_cd');
   branchName=this.sys.BranchName;
   today:any;
+  currDate:any=this.sys.CurrentDate;
   singleData:any;
   listData:any[]=[]
+  goldDueDt:any;
+  dsave:boolean=false
   constructor(private svc: RestService,
     private modalService: BsModalService,
     private router: Router,
@@ -111,6 +114,45 @@ ngOnInit(): void {
   this.disableAll='Y';
   this.goldDM=new LoanJewelryDM();
   this.clearData()
+  console.log((this.sys.CurrentDate));
+
+  const inputDateString = this.sys.CurrentDate.toString();
+  debugger
+  const resultDateString = this.addDaysAndFormat(inputDateString);
+  this.goldDueDt=resultDateString
+  console.log(resultDateString);
+  
+  
+}
+setDueDT(i:any){
+  debugger
+  const resultDateString = this.addDaysAndFormat(i);
+  this.goldDueDt=resultDateString
+  console.log(resultDateString);
+  debugger
+}
+addDaysAndFormat(dateString: string): string {
+  // Parse the input date string
+  const inputDate = new Date(dateString);
+
+  // Add 365 days to the date
+  const resultDate = new Date(inputDate);
+  resultDate.setDate(resultDate.getDate() + 365);
+
+  // Format the result in IST
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    timeZone: 'Asia/Kolkata', // IST timezone
+  };
+
+  const resultString = resultDate.toLocaleString('en-IN', options);
+
+  return resultString;
 }
 newAccount(){
   this.GoldTest.controls.cust_name.enable();
@@ -132,7 +174,7 @@ retrieveData(){
 
 }
 clearData(){
-  this.GoldTest.controls.cust_name.disable();
+  this.GoldTest.controls.cust_name.enable();
   this.GoldTest.controls.value_dt.disable();
   this.GoldTest.controls.loan_id.disable();
   this.GoldTest.controls.due_date.disable();
@@ -154,6 +196,8 @@ clearData(){
   this.tot_act_rate=0;
   this.tot_eligibility=0;
   this.tot_sanction=0;
+  this.dsave=false;
+
 }
 backScreen(){
   this.router.navigate([this.sys.BankName + '/la']);
@@ -195,6 +239,7 @@ if(this.modifyClicked){
 
     
   }
+  debugger
     this.tot_desc_no=parseFloat(this.tot_desc_no.toFixed(2))
     this.tot_gross_we= parseFloat(this.tot_gross_we.toFixed(2))
     this.tot_alloy_stone_we=parseFloat(this.tot_alloy_stone_we.toFixed(2))
@@ -203,7 +248,7 @@ if(this.modifyClicked){
     this.tot_act_we=parseFloat(this.tot_act_we.toFixed(2))
     this.tot_act_rate=parseFloat(this.tot_act_rate.toFixed(2))
     this.tot_net_value=parseFloat(this.tot_net_value.toFixed(2))
- debugger
+ 
   this.tot_eligibility=this.tot_net_value-((this.tot_net_value*25)/100);
 
 }
@@ -218,22 +263,29 @@ else{
   }
   if(i==3){
     this.tot_alloy_stone_we+=(+k.alloy_stone_we);
+    this.tdJewelry[ind].net_we=(Number(this.tdJewelry[ind].gross_we)-Number(this.tdJewelry[ind].alloy_stone_we)).toFixed(2).toString()
+    this.tot_net_we+=Number(this.tdJewelry[ind].net_we);
   }
   if(i==4){
-    this.tot_net_we+=(+k.net_we);
+    this.tot_net_we+=(+k.act_we);
   }
   if(i==5){
     this.tot_purity_we+=(+k.purity_we);
+    this.tdJewelry[ind].act_we=(Number(Number(this.tdJewelry[ind].net_we)*Number(this.tdJewelry[ind].purity_we))/22).toFixed(2).toString()
+    this.tot_act_we+=Number(this.tdJewelry[ind].act_we);
   }
   if(i==6){
     this.tot_act_we+=(+k.act_we);
   }
   if(i==7){
     this.tot_act_rate+=(+k.act_rate);
+    this.tdJewelry[ind].net_value=(Number(this.tdJewelry[ind].act_rate)*Number(this.tdJewelry[ind].act_we)).toFixed(2).toString()
+    this.tot_net_value+=Number(this.tdJewelry[ind].net_value);
+    this.tot_eligibility=this.tot_net_value-((this.tot_net_value*25)/100)
   }
   if(i==8){
-    this.tot_net_value+=(+k.net_value);
-    this.tot_eligibility=this.tot_net_value-((this.tot_net_value*25)/100)
+    // this.tot_net_value+=(+k.net_value);
+    // this.tot_eligibility=this.tot_net_value-((this.tot_net_value*25)/100)
   }
   this.tot_desc_no=parseFloat(this.tot_desc_no.toFixed(2))
   this.tot_gross_we= parseFloat(this.tot_gross_we.toFixed(2))
@@ -248,22 +300,43 @@ else{
 
   debugger
 }
-removeJewelry() {
-  if (this.tdJewelry !== undefined && this.tdJewelry.length > 1) {
-    debugger
-    this.tot_desc_no-=(+this.tdJewelry[this.tdJewelry.length-1].desc_no?+this.tdJewelry[this.tdJewelry.length-1].desc_no:0);
-    this.tot_gross_we-=(+this.tdJewelry[this.tdJewelry.length-1].gross_we?+this.tdJewelry[this.tdJewelry.length-1].gross_we:0);
-    this.tot_alloy_stone_we-=(+this.tdJewelry[this.tdJewelry.length-1].alloy_stone_we?+this.tdJewelry[this.tdJewelry.length-1].alloy_stone_we:0);
-    this.tot_net_we-=(+this.tdJewelry[this.tdJewelry.length-1].net_we?+this.tdJewelry[this.tdJewelry.length-1].net_we:0);
-    this.tot_purity_we-=(+this.tdJewelry[this.tdJewelry.length-1].purity_we?+this.tdJewelry[this.tdJewelry.length-1].purity_we:0);
-    this.tot_act_we-=(+this.tdJewelry[this.tdJewelry.length-1].act_we?+this.tdJewelry[this.tdJewelry.length-1].act_we:0);
-    this.tot_net_value-=(+this.tdJewelry[this.tdJewelry.length-1].net_value?+this.tdJewelry[this.tdJewelry.length-1].net_value:0);
-    this.tot_act_rate-=(+this.tdJewelry[this.tdJewelry.length-1].act_rate?+this.tdJewelry[this.tdJewelry.length-1].act_rate:0);
-    debugger
-    
-    this.tdJewelry.pop();
-    
+removeJewelry(i:any) {
+  if ( this.tdJewelry.length == 1) {
+     
+    this.tot_desc_no=0
+    this.tot_gross_we=0
+    this.tot_alloy_stone_we=0
+    this.tot_net_we=0
+    this.tot_purity_we=0
+    this.tot_act_we=0
+    this.tot_act_rate=0
+    this.tot_net_value=0
+    this.tot_eligibility=0
+    this.tdJewelry.splice(i, 1)
   }
+  else{
+    this.tot_desc_no=0
+    this.tot_gross_we=0
+    this.tot_alloy_stone_we=0
+    this.tot_net_we=0
+    this.tot_purity_we=0
+    this.tot_act_we=0
+    this.tot_act_rate=0
+    this.tot_net_value=0
+    this.tot_eligibility=0
+    this.tdJewelry.splice(i, 1)
+    for(let k=0;k<this.tdJewelry.length;k++){
+      debugger
+      this.tot_desc_no+=(+this.tdJewelry[k].desc_no?+this.tdJewelry[k].desc_no:0);
+      this.tot_gross_we+=(+this.tdJewelry[k].gross_we?+this.tdJewelry[k].gross_we:0);
+      this.tot_alloy_stone_we+=(+this.tdJewelry[k].alloy_stone_we?+this.tdJewelry[k].alloy_stone_we:0);
+      this.tot_net_we+=(+this.tdJewelry[k].net_we?+this.tdJewelry[k].net_we:0);
+      this.tot_purity_we+=(+this.tdJewelry[k].purity_we?+this.tdJewelry[k].purity_we:0);
+      this.tot_act_we+=(+this.tdJewelry[k].act_we?+this.tdJewelry[k].act_we:0);
+      this.tot_net_value+=(+this.tdJewelry[k].net_value?+this.tdJewelry[k].net_value:0);
+      this.tot_act_rate+=(+this.tdJewelry[k].act_rate?+this.tdJewelry[k].act_rate:0);
+      debugger
+    }
     this.tot_desc_no=parseFloat(this.tot_desc_no.toFixed(2))
     this.tot_gross_we= parseFloat(this.tot_gross_we.toFixed(2))
     this.tot_alloy_stone_we=parseFloat(this.tot_alloy_stone_we.toFixed(2))
@@ -273,6 +346,40 @@ removeJewelry() {
     this.tot_act_rate=parseFloat(this.tot_act_rate.toFixed(2))
     this.tot_net_value=parseFloat(this.tot_net_value.toFixed(2))
     this.tot_eligibility=this.tot_net_value-((this.tot_net_value*25)/100)
+   
+  }
+  // else if(this.tdJewelry.length ==1){
+  //   debugger
+  //   this.tot_desc_no-=(+this.tdJewelry[i].desc_no?+this.tdJewelry[i].desc_no:0);
+  //   this.tot_gross_we-=(+this.tdJewelry[i].gross_we?+this.tdJewelry[i].gross_we:0);
+  //   this.tot_alloy_stone_we-=(+this.tdJewelry[i].alloy_stone_we?+this.tdJewelry[i].alloy_stone_we:0);
+  //   this.tot_net_we-=(+this.tdJewelry[i].net_we?+this.tdJewelry[i].net_we:0);
+  //   this.tot_purity_we-=(+this.tdJewelry[i].purity_we?+this.tdJewelry[i].purity_we:0);
+  //   this.tot_act_we-=(+this.tdJewelry[i].act_we?+this.tdJewelry[i].act_we:0);
+  //   this.tot_net_value-=(+this.tdJewelry[i].net_value?+this.tdJewelry[i].net_value:0);
+  //   this.tot_act_rate-=(+this.tdJewelry[i].act_rate?+this.tdJewelry[i].act_rate:0);
+  //   debugger
+    
+  //   this.tdJewelry.pop();
+  //   this.tot_desc_no=0
+  //   this.tot_gross_we=0
+  //   this.tot_alloy_stone_we=0
+  //   this.tot_net_we=0
+  //   this.tot_purity_we=0
+  //   this.tot_act_we=0
+  //   this.tot_act_rate=0
+  //   this.tot_net_value=0
+  //   this.tot_eligibility=0
+  // }
+  //   this.tot_desc_no=parseFloat(this.tot_desc_no.toFixed(2))
+  //   this.tot_gross_we= parseFloat(this.tot_gross_we.toFixed(2))
+  //   this.tot_alloy_stone_we=parseFloat(this.tot_alloy_stone_we.toFixed(2))
+  //   this.tot_net_we=parseFloat(this.tot_net_we.toFixed(2))
+  //   this.tot_purity_we=parseFloat(this.tot_purity_we.toFixed(2))
+  //   this.tot_act_we=parseFloat(this.tot_act_we.toFixed(2))
+  //   this.tot_act_rate=parseFloat(this.tot_act_rate.toFixed(2))
+  //   this.tot_net_value=parseFloat(this.tot_net_value.toFixed(2))
+  //   this.tot_eligibility=this.tot_net_value-((this.tot_net_value*25)/100)
 
 }
 getValuationDesc(){
@@ -355,8 +462,40 @@ public SelectCustomer(cust: mm_customer): void {
   this.GoldTest.controls.lge_page.enable();
   this.addJewelry();
   // this.newClicked = false
+  this.currDate=this.sys.CurrentDate;
+  const inputDateString = this.sys.CurrentDate.toString();
+  debugger
+  const resultDateString = this.addDaysAndFormat(inputDateString);
+  this.goldDueDt=resultDateString
+  console.log(resultDateString);
+  
 }
+convtDueDt(i:any){
+  const dateString = i;
 
+  // Parse the input date string
+  const parts = dateString.split(/[\/, :]/);
+  const day = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10) - 1; // Months are zero-based
+  const year = parseInt(parts[2], 10);
+  const hour = parseInt(parts[4], 10); // Adjust index for hour
+  const minute = parseInt(parts[5], 10);
+  const second = parseInt(parts[6], 10); // Include seconds
+  
+  // Create a new Date object
+  const date = new Date(year, month, day, hour, minute, second);
+  
+  // Subtract one day (24 hours) in milliseconds
+  const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
+  const oneDayBeforeDate = new Date(date.getTime() - oneDayInMilliseconds);
+  
+  // Get ISO string with timezone offset
+  const isoStringWithOffset = oneDayBeforeDate.toISOString();
+  
+  // Convert ISO string to UTC format
+  const isoStringUTC = new Date(isoStringWithOffset).toISOString();
+return isoStringUTC;
+}
 saveData(){
   this.isLoading=true;
   var dt={
@@ -368,7 +507,7 @@ saveData(){
     "value_dt": this.f.value_dt.value,
     "loan_id": this.f.loan_id.value,
     "lge_page": this.f.lge_page.value,
-    "due_dt": this.f.due_date.value,
+    "due_dt": this.convtDueDt(this.f.due_date.value),
     "cust_name": this.f.cust_name.value,
     "present_address": this.f.present_address.value,
     "modified_by":null,
@@ -390,25 +529,42 @@ saveData(){
       res4 => {
         debugger
         if(res4==0){
-          // this.f.valuation_no.setValue(res3);
+          this.dsave=true;// this.f.valuation_no.setValue(res3);
           debugger
           this.HandleMessage(true, MessageType.Sucess, `Transaction for Gold Valuation Id ${this.f.valuation_no.value}, Update sucessfully !!!!`);
           this.isLoading = false;
         }
-        this.isLoading = false;
-      }
+        else{
+          this.dsave=false;
+          this.HandleMessage(true, MessageType.Error, `Transaction for Gold Valuation Id ${this.f.valuation_no.value}, Updation Error !!!!`);
+          this.isLoading = false;
+        }
+      },
+      err => { this.HandleMessage(true, MessageType.Error, err);
+          this.dsave=false;
+          this.isLoading = false; }
     )
   }
   else{
     this.svc.addUpdDel<any>('Loan/InsertLoanValuationData', this.goldDM).subscribe(
       res3 => {
         if(res3){
+          this.dsave=true;
           this.f.valuation_no.setValue(res3);
           debugger
           this.HandleMessage(true, MessageType.Sucess, `Transaction for Gold Valuation Id ${res3}, Insert sucessfully !!!!`);
           this.isLoading = false;
         }
+        else{
+          this.dsave=false;
+          this.HandleMessage(true, MessageType.Error, `Error !!!! while Insertion for Gold Valuation. `);
+          this.isLoading = false;
+        }
     
+      },
+      err => { this.HandleMessage(true, MessageType.Error, err);
+        this.isLoading = false;
+        this.dsave=false;
       }
     )
   }

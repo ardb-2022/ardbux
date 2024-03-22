@@ -95,6 +95,7 @@ export class VillageMasterComponent implements OnInit {
       res => {
         console.log(res)
         this.serviceArea = res
+        this.serviceArea = this.serviceArea.sort((a, b) => (a.service_area_cd > b.service_area_cd) ? 1 : -1);
         // console.log(this.blocks.sort((a , b) => (a.block_cd < b.block_cd ? -1 : 1)))
         // this.blocks = this.blocks.sort((a , b) => (a.block_cd < b.block_cd ? -1 : 1));
       },
@@ -110,6 +111,7 @@ export class VillageMasterComponent implements OnInit {
       res => {
         console.log(res)
         this.blocks = res
+        this.blocks = this.blocks.sort((a, b) => (a.block_name > b.block_name) ? 1 : -1);
         // console.log(this.blocks.sort((a , b) => (a.block_cd < b.block_cd ? -1 : 1)))
         // this.blocks = this.blocks.sort((a , b) => (a.block_cd < b.block_cd ? -1 : 1));
       },

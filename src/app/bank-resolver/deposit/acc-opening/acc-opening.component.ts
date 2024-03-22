@@ -23,6 +23,8 @@ import { Router } from '@angular/router';
 import { tt_denomination } from '../../Models/deposit/tt_denomination';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs/internal/Observable';
+import { tap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-acc-opening',
@@ -38,6 +40,7 @@ export class AccOpeningComponent implements OnInit {
     private modalService: BsModalService,
     private router: Router,
     private msg: InAppMessageService,
+    private http: HttpClient
   ) { }
 
   static accTypes: mm_acc_type[] = [];
@@ -435,7 +438,7 @@ export class AccOpeningComponent implements OnInit {
     //  console.log(this.accDtlsFrm.get('home_brn_cd').value)
     if (this.tm_deposit.user_acc_num.length > 0) {
       const prm = new p_gen_param();
-      prm.ad_acc_type_cd = (this.sys.ardbCD=="20" || this.sys.ardbCD=="26")? 1:8;
+      prm.ad_acc_type_cd = (this.sys.ardbCD=="20" || this.sys.ardbCD=="26"|| this.sys.ardbCD=="10")? 1:8;
       prm.as_cust_name = this.tm_deposit.user_acc_num.toLowerCase();
       console.log(prm.ardb_cd);
 
@@ -706,48 +709,61 @@ export class AccOpeningComponent implements OnInit {
   }
 
   saveData() {
-    
-   console.log(this.tm_deposit);
-    
-    if (this.operationType !== 'I' && this.operationType !== 'U') {
-      // this.showAlertMsg('WARNING', 'Record not Created or Updated to Save');
-      this.HandleMessage(true, MessageType.Warning, 'Record not Created or Updated to Save');
-      return;
-    }
-    if((this.tm_deposit.oprn_instr_cd == 2 || this.tm_deposit.oprn_instr_cd == 3) && this.td_accholderList.length == 1){
-      if(this.td_accholderList[0].acc_holder == null && this.td_accholderList[0].acc_num == null && this.td_accholderList[0].relationId == null){
-        this.HandleMessage(true, MessageType.Warning, 'Joint holder details are mandatory for operational instruction type "All Joint" and "Either Or Survivour"');
+    if(this.tm_deposit.prn_amt){
+        console.log(this.tm_deposit);
+        if((this.tm_deposit.acc_type_cd == 2 || 
+          this.tm_deposit.acc_type_cd == 3 || 
+          this.tm_deposit.acc_type_cd == 4 || 
+          this.tm_deposit.acc_type_cd == 5 || 
+          this.tm_deposit.acc_type_cd == 6) && this.tm_deposit.intt_rt>15){
+          this.HandleMessage(true, MessageType.Warning, 'Rate of interest can not gater than 15%');
+          return;
+        }
+      if (this.operationType !== 'I' && this.operationType !== 'U') {
+        // this.showAlertMsg('WARNING', 'Record not Created or Updated to Save');
+        this.HandleMessage(true, MessageType.Warning, 'Record not Created or Updated to Save');
+        return;
+      }
+      if((this.tm_deposit.oprn_instr_cd == 2 || this.tm_deposit.oprn_instr_cd == 3) && this.td_accholderList.length == 1){
+        if(this.td_accholderList[0].acc_holder == null && this.td_accholderList[0].acc_num == null && this.td_accholderList[0].relationId == null){
+          this.HandleMessage(true, MessageType.Warning, 'Joint holder details are mandatory for operational instruction type "All Joint" and "Either Or Survivour"');
+          return;
+        }
+      }
+      if((this.tm_deposit.acc_type_cd == 2 || 
+        this.tm_deposit.acc_type_cd == 3 || 
+        this.tm_deposit.acc_type_cd == 4 || 
+        this.tm_deposit.acc_type_cd == 5 || 
+        this.tm_deposit.acc_type_cd == 6) && (this.tm_deposit.standing_instr_flag == "1")){
+      if(this.tm_deposit.user_acc_num == undefined || this.tm_deposit.user_acc_num == null){
+        this.HandleMessage(true, MessageType.Warning, "This customer don't have a savings account to take the auto close facility, please choose either 'auto renew' or 'none'");
         return;
       }
     }
-    if((this.tm_deposit.acc_type_cd == 2 || 
-      this.tm_deposit.acc_type_cd == 3 || 
-      this.tm_deposit.acc_type_cd == 4 || 
-      this.tm_deposit.acc_type_cd == 5 || 
-      this.tm_deposit.acc_type_cd == 6) && (this.tm_deposit.standing_instr_flag == "1")){
-    if(this.tm_deposit.user_acc_num == undefined || this.tm_deposit.user_acc_num == null){
-      this.HandleMessage(true, MessageType.Warning, "This customer don't have a savings account to take the auto close facility, please choose either 'auto renew' or 'none'");
+      this.validateData();
+      if (this.tm_deposit.acc_num === null || this.operationType === 'I') {
+        this.tm_deposit.acc_status = 'O';
+        this.tm_deposit.created_by = this.createUser;
+        this.tm_deposit.created_dt = this.createDate;
+        this.tm_deposit.modified_by = this.updateUser;
+        this.tm_deposit.modified_dt = this.updateDate;
+  
+        this.getNewAccountNoAndSaveData();
+      }
+      else {
+        this.tm_deposit.modified_by = this.updateUser;
+        this.tm_deposit.modified_dt = this.updateDate;
+        this.InsertAccountOpenData();
+      }
+  
+      this.disableAll = true;
+      this.disableAccountTypeAndNo = false;
+    }
+    else{
+      this.HandleMessage(true, MessageType.Warning, "Account can not Open without Principal Amount");
       return;
     }
-  }
-    this.validateData();
-    if (this.tm_deposit.acc_num === null || this.operationType === 'I') {
-      this.tm_deposit.acc_status = 'O';
-      this.tm_deposit.created_by = this.createUser;
-      this.tm_deposit.created_dt = this.createDate;
-      this.tm_deposit.modified_by = this.updateUser;
-      this.tm_deposit.modified_dt = this.updateDate;
 
-      this.getNewAccountNoAndSaveData();
-    }
-    else {
-      this.tm_deposit.modified_by = this.updateUser;
-      this.tm_deposit.modified_dt = this.updateDate;
-      this.InsertAccountOpenData();
-    }
-
-    this.disableAll = true;
-    this.disableAccountTypeAndNo = false;
   }
 
   validateData() {
@@ -1070,42 +1086,73 @@ export class AccOpeningComponent implements OnInit {
   }
 
   getNewAccountNoAndSaveData() {
-
-    if(this.sys.ardbCD=="4" && this.masterModel.tmdeposit.acc_type_cd==9){
-      this.p_gen_param.ls_cons_cd = this.ddsAgent; // Integer
+    const param={
+      "ls_cons_cd":(this.sys.ardbCD=="4" && this.masterModel.tmdeposit.acc_type_cd==9)?this.ddsAgent:this.masterModel.tmdeposit.constitution_cd,
+      "brn_cd":this.branchCode,
+      "gs_acc_type_cd":this.masterModel.tmdeposit.acc_type_cd,
+      "ls_catg_cd":this.masterModel.tmdeposit.category_cd,
+      "ardb_cd":this.sys.ardbCD
     }
-    else{
-      this.p_gen_param.ls_cons_cd = this.masterModel.tmdeposit.constitution_cd; // Integer
-    }
-    this.p_gen_param.brn_cd = this.branchCode; // String
-    this.p_gen_param.gs_acc_type_cd = this.masterModel.tmdeposit.acc_type_cd; // Integer
-    this.p_gen_param.ls_catg_cd = this.masterModel.tmdeposit.category_cd; // Integer
-    this.p_gen_param.ardb_cd=this.sys.ardbCD;
+    // if(this.sys.ardbCD=="4" && this.masterModel.tmdeposit.acc_type_cd==9){
+    //   this.p_gen_param.ls_cons_cd = this.ddsAgent; // Integer
+    // }
+    // else{
+    //   this.p_gen_param.ls_cons_cd = this.masterModel.tmdeposit.constitution_cd; // Integer
+    // }
+    // this.p_gen_param.brn_cd = this.branchCode; // String
+    // this.p_gen_param.gs_acc_type_cd = this.masterModel.tmdeposit.acc_type_cd; // Integer
+    // this.p_gen_param.ls_catg_cd = this.masterModel.tmdeposit.category_cd; // Integer
+    // this.p_gen_param.ardb_cd=this.sys.ardbCD;
 
     this.isLoading = true;
     debugger
-    this.svc.addUpdDel<any>('Deposit/PopulateAccountNumber', this.p_gen_param).subscribe(
-      res => {
-        debugger
-      if(res){
-        debugger
-        let val = '0';
-        this.isLoading = false;
-        val = res;
-        this.masterModel.tmdeposit.acc_num = val;
+    // console.log(this.svc.addUpdDel<any>('Deposit/PopulateAccountNumber', param).subscribe(response => console.log('API Response:', response)));
+    // debugger
+    this.svc.addUpdDel<any>('Deposit/PopulateAccountNumber', param).toPromise()
+  .then((res: any) => {
+    this.isLoading = false;
+    console.log(res);
+        this.masterModel.tmdeposit.acc_num = res;
         this.masterModel.tmdeposit.brn_cd = this.branchCode;
         debugger
 
         this.InsertAccountOpenData();
-      }
-        
-      },
-      err => {
+    debugger
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    console.log(error.error.text)
         this.isLoading = false;
+        this.masterModel.tmdeposit.acc_num = error.error.text;
+        this.masterModel.tmdeposit.brn_cd = this.branchCode;
+        debugger
 
-      }
+        this.InsertAccountOpenData();
+  });
+    // this.svc.addUpdDel<any>('Deposit/PopulateAccountNumber', param).subscribe(
+    //   (res:any) => {
+    //     console.log(res);
+        
+    //     debugger
+    //   if(res){
+    //     debugger
+    //     let val = '0';
+    //     this.isLoading = false;
+    //     // val = res;
+    //     this.masterModel.tmdeposit.acc_num = res.toString();
+    //     this.masterModel.tmdeposit.brn_cd = this.branchCode;
+    //     debugger
 
-    );
+    //     this.InsertAccountOpenData();
+    //   }
+        
+    //   },
+    //   err => {
+    //     this.isLoading = false;
+
+    //   }
+
+    // );
 
   }
 
@@ -2213,7 +2260,7 @@ export class AccOpeningComponent implements OnInit {
     const temp_deposit = new tm_deposit();
     temp_deposit.brn_cd = this.branchCode;
     temp_deposit.acc_num = this.tm_deposit.user_acc_num;
-    temp_deposit.acc_type_cd = (this.sys.ardbCD=="20" || this.sys.ardbCD=="26")? 1:8;
+    temp_deposit.acc_type_cd = (this.sys.ardbCD=="20" || this.sys.ardbCD=="26"|| this.sys.ardbCD=="10")? 1:8;
     temp_deposit.ardb_cd=this.sys.ardbCD;
     this.isLoading = true;
     this.svc.addUpdDel<any>('Deposit/GetDeposit', temp_deposit).subscribe(

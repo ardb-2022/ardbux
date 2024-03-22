@@ -188,6 +188,16 @@ import { ContaiComponent } from './deposit/report/passbook-print/contai/contai.c
 import { ContaiFastPageComponent } from './deposit/report/passbook-print/contai/contai-fast-page/fast-page.component';
 import { GhatalComponent } from './deposit/report/passbook-print/ghatal/ghatal.component';
 import { GhatalFastPageComponent } from './deposit/report/passbook-print/ghatal/ghatal-fast-page/ghatal-fast-page.component';
+import { GoldLoanReportComponent } from './loan/report/gold-loan-report/gold-loan-report.component';
+import { GoldLoanAsOnDateComponent } from './loan/report/gold-loan-as-on-date/gold-loan-as-on-date.component';
+import { GoldLoanCurrDateComponent } from './loan/report/gold-loan-curr-date/gold-loan-curr-date.component';
+import { GroupWiseComponent } from './loan/report/recovery-register/group-wise/group-wise.component';
+import { NpaAllWithGroupComponent } from './loan/report/npa-all-with-group/npa-all-with-group.component';
+import { DcbrGroupWiseComponent } from './loan/report/dcbr-group-wise/dcbr-group-wise.component';
+import { TamlukComponent } from './deposit/report/passbook-print/tamluk/tamluk.component';
+import { TamlukFastPageComponent } from './deposit/report/passbook-print/tamluk/tamluk-fast-page/tamluk-fast-page.component';
+import { VillMasterContaiComponent } from './loan/masters/vill-master-contai/vill-master-contai.component';
+import { RecovSummaryComponent } from './loan/report/recovery-register/recov-summary/recov-summary.component';
 
 const routes: Routes = [
   { path: 'Admin', component: AdminPanelComponent },
@@ -293,6 +303,7 @@ const routes: Routes = [
       { path: 'LR_BMLst', component: BlockwiseLstComponent, canActivate: [AuthGuard] },
       { path: 'LR_DCBR_P', component: DcbrPrintComponent, canActivate: [AuthGuard] },
       { path: 'LR_DCBR_VILL_WISE', component: DcbrVillWiseComponent, canActivate: [AuthGuard] },
+      { path: 'LR_DCBR_GROUP_WISE', component: DcbrGroupWiseComponent, canActivate: [AuthGuard] },
       { path: 'LR_RELst', component: RecovListComponent, canActivate: [AuthGuard] },
       { path: 'LR_DisReg', component: LoanDisbursementRegisterComponent, canActivate: [AuthGuard] },
       { path: 'LR_DisNorm', component: LoanDisburseNormalComponent, canActivate: [AuthGuard] },
@@ -304,6 +315,7 @@ const routes: Routes = [
       { path: 'LM_Blkentry', component: BlockMasterComponent, canActivate: [AuthGuard] },
       { path: 'Service_Area', component: ServiceareamasterComponent, canActivate: [AuthGuard] },
       { path: 'LM_Villentry', component: VillageMasterComponent, canActivate: [AuthGuard] },
+      { path: 'LM_Villentry_contai', component: VillMasterContaiComponent, canActivate: [AuthGuard] },
       { path: 'LR_NPA', component: NpaComponent, canActivate: [AuthGuard] },
       { path: 'LR_Int_Subsidy', component: InterestSubsidyComponent, canActivate: [AuthGuard] },
       { path: 'LR_Int_Subsidy_Sum', component: InterestSubsidySummaryComponent, canActivate: [AuthGuard] },
@@ -315,11 +327,17 @@ const routes: Routes = [
       { path: 'LR_FN_Return', component: FortnightlyReturnComponent, canActivate: [AuthGuard] },
       { path: 'LR_Conso_FN_Return', component: ConsoFortnightlyReturnComponent, canActivate: [AuthGuard] },
       { path: 'LR_NPA_ALL', component: NpaALLComponent, canActivate: [AuthGuard] },
+      { path: 'LR_NPA_ALL_GROUP', component: NpaAllWithGroupComponent, canActivate: [AuthGuard] },
+      { path: 'LR_GOLD_REP', component: GoldLoanReportComponent, canActivate: [AuthGuard] },
+      { path: 'LR_GOLD_REP_ASON', component: GoldLoanAsOnDateComponent, canActivate: [AuthGuard] },
+      { path: 'LR_GOLD_REP_CURR', component: GoldLoanCurrDateComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecReg', component: RecoveryRegisterComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecRegFund', component: RecovFundComponent, canActivate: [AuthGuard] },
+      { path: 'LR_RecRegGP', component: GroupWiseComponent },
       { path: 'LR_RecRegVill', component: RecovVillageComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecRegBlock', component: RecovBlockComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecRegNorm', component: RecovNormalComponent, canActivate: [AuthGuard] },
+      { path: 'LR_RecRegSumm', component: RecovSummaryComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecAdvPrnBlock', component: RecovAdvPrnComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecAdvPrnVill', component: RecovAdvPrnVillComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecInterest', component: RecovInterestComponent, canActivate: [AuthGuard] },
@@ -337,12 +355,17 @@ const routes: Routes = [
       { path: 'DR_NeftOut', component: NeftOutwardReportComponent, canActivate: [AuthGuard] },
       { path: 'DR_PCertificate', component: PrintCertificateComponent, canActivate: [AuthGuard] },
       { path: 'DR_InttCertificate', component: InterestCertificateComponent, canActivate: [AuthGuard] },
+      
       { path: 'DR_PbkPrn', component: PassBookPrintingComponent,
-      children: [{ path: 'DR_PassBookFastPage', component: PassBookFastPageComponent},], canActivate: [AuthGuard] },
+        children: [{ path: 'DR_PassBookFastPage', component: PassBookFastPageComponent},], canActivate: [AuthGuard] },
       { path: 'DR_contai_PbkPrn', component: ContaiComponent,
-      children: [{ path: 'DR_contai_PassBookFastPage', component: ContaiFastPageComponent},], canActivate: [AuthGuard] },
+        children: [{ path: 'DR_contai_PassBookFastPage', component: ContaiFastPageComponent},], canActivate: [AuthGuard] },
+      
+      { path: 'DR_tamluk_PbkPrn', component: TamlukComponent,
+        children: [{ path: 'DR_tamluk_PassBookFastPage', component: TamlukFastPageComponent},], canActivate: [AuthGuard] },
+      
       { path: 'DR_ghatal_PbkPrn', component: GhatalComponent,
-      children: [{ path: 'DR_ghatal_PassBookFastPage', component: GhatalFastPageComponent},], canActivate: [AuthGuard] },
+          children: [{ path: 'DR_ghatal_PassBookFastPage', component: GhatalFastPageComponent},], canActivate: [AuthGuard] },
       
       
       { path: 'DR_UpbkPrnSts', component: UpdatePassbookComponent, canActivate: [AuthGuard]},

@@ -3139,6 +3139,7 @@ debugger;
       res => {
         console.log(res)
         this.blocks = res;
+        this.blocks = this.blocks.sort((a, b) => (a.block_name > b.block_name) ? 1 : -1);
       },
       err => { }
     );

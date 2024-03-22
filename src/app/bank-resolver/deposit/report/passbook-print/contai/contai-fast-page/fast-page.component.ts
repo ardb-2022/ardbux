@@ -92,10 +92,10 @@ export class ContaiFastPageComponent implements OnInit {
     public datepipe: DatePipe) { }
   ngOnInit(): void {
     this.getsystemParam();
-    if(this.accType=="6" && this.sys.ardbCD=="26" ){
+    if(this.accType=="6" ){
       this.printID="fastPageRD"
     }else{
-      this.sys.ardbCD=="4"?this.printID="fastPage":this.printID="fastPage"
+      this.printID="fastPage"
       // Ghatal
     }
     debugger

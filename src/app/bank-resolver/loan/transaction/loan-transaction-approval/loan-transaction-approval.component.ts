@@ -605,7 +605,23 @@ export class LoanTransactionApprovalComponent implements OnInit {
     // param.gs_user_type = this.sys.u;
     param.gs_user_id = this.sys.UserId;
     param.commit_roll_flag = 1;
-    if (this.selectedVm.td_def_trans_trf.trans_type === 'R') {
+    var dxEMI={
+      "loan_id":this.selectedVm.loan.tmloanall.loan_id,
+      "brn_cd":this.sys.BranchCode,
+      "gs_user_id":this.sys.UserId,
+      "ardb_cd":this.sys.ardbCD,
+      "commit_roll_flag":1,
+      "prn_amt":this.selectedVm.loan.tddeftrans.curr_prn_recov,
+      "intt_amt":this.selectedVm.loan.tddeftrans.curr_intt_recov,
+      "recov_amt":this.selectedVm.loan.tddeftrans.amount,
+      "intt_dt":this.selectedVm.loan.tddeftrans.intt_till_dt
+      }
+      console.log(dxEMI);
+      
+       debugger     
+    // this.svc.addUpdDel<any>(this.selectedVm.loan.tmloanall.emi_formula_no==1?'Loan/CalculateLoanInterestEmi':'Loan/CalculateLoanInterest', this.selectedVm.loan.tmloanall.emi_formula_no==1?dxEMI:param).subscribe(
+    //   res => {})
+    if (this.selectedVm.loan.tddeftrans.trans_type === 'R') {
       if(this.selectedVm.loan.tddeftrans.paid_to=='YEAREND'){
         this.svc.addUpdDel<any>('Loan/CalculateLoanInterestYearend', param).subscribe(
           loanRes => {
@@ -620,7 +636,7 @@ export class LoanTransactionApprovalComponent implements OnInit {
         );
       }
       else{
-        this.svc.addUpdDel<any>('Loan/CalculateLoanInterest', param).subscribe(
+        this.svc.addUpdDel<any>(this.selectedVm.loan.tmloanall.emi_formula_no==1?'Loan/CalculateLoanInterestEmi':'Loan/CalculateLoanInterest', this.selectedVm.loan.tmloanall.emi_formula_no==1?dxEMI:param).subscribe(
           loanRes => {
             this.isLoading = false;
             
@@ -751,6 +767,7 @@ export class LoanTransactionApprovalComponent implements OnInit {
       res => {
 
         this.activityList = res;
+        this.activityList = this.activityList.sort((a, b) => (a.activity_cd > b.activity_cd) ? 1 : -1);
       },
       err => {
 

@@ -56,7 +56,7 @@
      <button mat-raised-button type="button" 
      class="btn btn-rounded btn-primary m-1" 
      [useExistingCss]="true"
-     printSectionId="mattable" 
+     [printSectionId]="showMainTable?'mattable':'mattable2'"
      ngxPrint>Print</button>
    <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
    <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" [hidden]="showSubTable" (click)="callSunopsis()">Synopsis</button>
@@ -134,13 +134,79 @@
         
           <td mat-cell *matCellDef="let element" style="text-align:right"> {{element.ovd_intt+element.curr_intt| currency:'INR'}} </td>
         </ng-container>
+        <ng-container matColumnDef="disclaimer1" >
+          <td mat-footer-cell *matFooterCellDef  
+          style="font-size: small;
+            text-align: center;
+            font-weight: 450;">
+            Total
+          </td>
+          
+        </ng-container>
+        <ng-container matColumnDef="disclaimer2" >
+          <td mat-footer-cell *matFooterCellDef  
+          style="font-size: small;
+            text-align: right;
+            font-weight: 450;">
+            {{dummycurrPrnSum | currency:'INR'}}
+          </td>
+          
+        </ng-container>
+        <ng-container matColumnDef="disclaimer3">
+          <td mat-footer-cell *matFooterCellDef 
+          style="font-size: small;
+            text-align: right;
+            font-weight: 450;">
+            {{dummyovdPrnSum | currency:'INR'}}
+          </td>
+          
+        </ng-container>
+        <ng-container matColumnDef="disclaimer4" >
+          <td mat-footer-cell *matFooterCellDef 
+          style="font-size: small;
+            text-align: right;
+            font-weight: 450;">
+            {{dummytotOutStanding | currency:'INR'}}
+          </td>
+          
+        </ng-container>
+        
+        <ng-container matColumnDef="disclaimer5" >
+          <td mat-footer-cell *matFooterCellDef  
+          style="font-size: small;
+            text-align: right;
+            font-weight: 450;">
+            {{dummycurrInttSum | currency:'INR'}}
+          </td>
+          
+        </ng-container>
+        <ng-container matColumnDef="disclaimer6">
+          <td mat-footer-cell *matFooterCellDef 
+          style="font-size: small;
+            text-align: right;
+            font-weight: 450;">
+            {{dummyovdInttSum | currency:'INR'}}
+          </td>
+          
+        </ng-container>
+        <ng-container matColumnDef="disclaimer7">
+          <td mat-footer-cell *matFooterCellDef  
+          style="font-size: small;
+            text-align: right;
+            font-weight: 450;">
+            {{dummytotPenal| currency:'INR'}}
+          </td>
+          
+        </ng-container>
+       
+        <tr mat-footer-row *matFooterRowDef="['disclaimer1','disclaimer2','disclaimer3','disclaimer4','disclaimer5','disclaimer6','disclaimer7']" class="example-second-footer-row"></tr>
         <tr mat-header-row *matHeaderRowDef="['mainHeader']"></tr>
         <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
         <tr mat-row *matRowDef="let element; columns: displayedColumns2;"></tr>
       </table>
       <footer>
         <small>
-          This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions Pvt.Ltd. Kolkata
+          This Report Is Generated Through CFS-2022, Kolkata
          </small>
         </footer>
     </div>
@@ -376,7 +442,7 @@
    </table>
   <footer>
   <small>
-    This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions Pvt.Ltd. Kolkata
+    This Report Is Generated Through CFS-2022, Kolkata
    </small>
   </footer>
   </div>
@@ -452,7 +518,7 @@
     <tfoot style="text-align:left">
       <tr>
         <td colspan="9"> <small>
-          This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions Pvt.Ltd. Kolkata
+          This Report Is Generated Through CFS-2022, Kolkata
          </small> </td>
       </tr> </tfoot>
    </table>
@@ -529,11 +595,11 @@
   </table>
   <footer>
     <small>
-      This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions Pvt.Ltd. Kolkata
+      This Report Is Generated Through CFS-2022, Kolkata
      </small> 
    </footer>
   <!-- <br><br><br><br>
-  <small>This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions, Kolkata</small> -->
+  <small>This Report Is Generated Through CFS-2022, Kolkata</small> -->
    </div>
   <button mat-raised-button hidden id="chngPage" (click)="setPage(1)"></button>
   </div>

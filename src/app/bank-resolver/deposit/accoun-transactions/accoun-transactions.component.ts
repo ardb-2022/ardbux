@@ -30,6 +30,7 @@ import { td_accholder } from '../../Models/deposit/td_accholder';
   providers: [DatePipe, INRCurrencyPipe]
 })
 export class AccounTransactionsComponent implements OnInit {
+  td_def_trans_trf: any;
   constructor(private INRCurrency: INRCurrencyPipe,private svc: RestService, private msg: InAppMessageService,
     private frmBldr: FormBuilder, public datepipe: DatePipe, private router: Router,private  dcml:DecimalPipe,
     private modalService: BsModalService) { }
@@ -63,6 +64,7 @@ export class AccounTransactionsComponent implements OnInit {
   errorFlag:boolean=false;
   resetClicked = false;
   closeInt: any;
+  custBrnCd:any;
   MIScloseInt:any;
   matInt: any;
   Formatamount:any
@@ -89,6 +91,7 @@ export class AccounTransactionsComponent implements OnInit {
   td_deftranstrfList: td_def_trans_trf[] = [];
   tm_transferList: tm_transfer[] = [];
   accountTypeList: mm_acc_type[] = [];
+  accountTypeList2: mm_acc_type[] = [];
   acc_master: m_acc_master[] = [];
   acc_master1: m_acc_master[] = [];
   tm_deposit = new tm_deposit();
@@ -602,14 +605,16 @@ debugger
     prm.brn_cd = this.sys.BranchCode;
     prm.ad_acc_type_cd = this.f.acc_type_cd.value;
     debugger
+    this.isLoading=true;
     const data = await this.svc.addUpdDel<any>('Deposit/F_CALC_SB_INTT', prm).toPromise()
     debugger
     if(data>=0){
       debugger
+      this.isLoading=false;
         this.showCloseInterest = this.f.acc_type_cd.value==1 || this.f.acc_type_cd.value==8 ? true : false;
   
         this.tdDefTransFrm.patchValue({
-          closeIntrest: (+data),
+          closeIntrest:this.sys.ardbCD=='4'&& this.f.acc_type_cd.value==8? 0:(+data),
         });
   
         if(this.sys.ardbCD=='26'){
@@ -625,7 +630,7 @@ debugger
         }
         else{
           this.tdDefTransFrm.patchValue({
-            amount: (this.accNoEnteredForTransaction.curr_bal + Number(this.td.closeIntrest.value)).toFixed(2),
+            amount: (this.accNoEnteredForTransaction.curr_bal ),
             td_def_mat_amt:(this.accNoEnteredForTransaction.curr_bal + Number(this.td.closeIntrest.value)).toFixed(2),
             paid_to: 'SELF',
             particulars: 'To Closing',
@@ -1112,34 +1117,35 @@ getjoinholder(){
     this.custUCIC=0
     this.svc.addUpdDel<any>('Deposit/GetDepositWithChild', acc).subscribe(
       res => {
-        if(res[0].constitution_cd==101){
+        if(res[0]?.constitution_cd==101){
           this.HandleMessage(true, MessageType.Error,
             ' Deposit and Withdrawal Operation was not POSSIBLE!! for this Account Number :' + this.f.acct_num.value  );
           this.onResetClick();
           this.isLoading = false;
           return false;
         }
-        this.categories=res[0].catg_cd
-        this.custName=res[0].cust_name
+        this.categories=res[0]?.catg_cd
+        this.custName=res[0]?.cust_name
         this.getCategoryMaster();
         debugger
         console.log(res, this.rdInstallamentOption)
         this.resBrnCd = res;
         this.resbrnCD1 = res;
         this.resBrnCatgCd = res;
-        this.constCd = this.resBrnCd[0].constitution_cd
-        this.resBrnCatgCd = this.resBrnCd[0].catg_cd;
+        this.constCd = this.resBrnCd[0]?.constitution_cd
+        this.resBrnCatgCd = this.resBrnCd[0]?.catg_cd;
         console.log(this.resBrnCatgCd)
-        this.resBrnCd = this.resBrnCd[0].brn_cd
+        this.resBrnCd = this.resBrnCd[0]?.brn_cd
         console.log(this.resBrnCd)
-        this.custUCIC=res[0].cust_cd
-        this.accOpenDt=res[0].opening_dt;
+        this.custUCIC=res[0]?.cust_cd
+        this.accOpenDt=res[0]?.opening_dt;
         this.setAccFlag(this.accOpenDt,this.sys.CurrentDate)
         //////////////debugger;
         this.isLoading = false;
         let foundOneUnclosed = false;
         if (undefined !== res && null !== res && res.length > 0) {
           debugger
+          this.custBrnCd=res[0]?.brn_cd;
           res.forEach(element => {
             
             if (element.acc_status === null || element.acc_status.toUpperCase() !== 'C') {
@@ -1215,8 +1221,14 @@ getjoinholder(){
           this.isLoading=true
           this.svc.addUpdDel('UCIC/GetLoanDtls',dt).subscribe(data=>{console.log(data)
             this.reportData=data
+            for(let i=0;i<this.reportData.length;i++){
+              this.reportData[i].acc_desc= this.accountTypeList2.filter(c => c.acc_type_cd == this.reportData[i].acc_cd)[0]?.acc_type_desc;
+            }
             this.svc.addUpdDel('UCIC/GetDepositDtls',dt).subscribe(data=>{console.log(data)
-              this.reportData1=data
+              this.reportData1=data;
+              for(let i=0;i<this.reportData1.length;i++){
+                this.reportData1[i].acc_type_cd= this.accountTypeList.filter(c => c.acc_type_cd == this.reportData1[i].acc_type_cd)[0].acc_type_desc;
+              }
               this.isLoading=false
             })
           })
@@ -1325,7 +1337,7 @@ getjoinholder(){
     //   return false;
     // }
     // acc.acc_type_cd === 5 ||
-    if(acc.acc_type_cd === 5 && acc.lock_mode){
+    if((acc.acc_type_cd === 2||acc.acc_type_cd === 3||acc.acc_type_cd === 4|| acc.acc_type_cd === 5 ||acc.acc_type_cd === 6 ) && acc.lock_mode){
       if(acc.lock_mode.toUpperCase() === 'L'){
         this.showLockType=true;
         this.HandleMessage(true, MessageType.Warning,
@@ -1335,12 +1347,7 @@ getjoinholder(){
         this.showLockType=false;
       }
     }
-    if (acc.acc_type_cd === 1 ||
-      acc.acc_type_cd === 2 ||
-      acc.acc_type_cd === 3 ||
-      acc.acc_type_cd === 4 ||
-      
-      acc.acc_type_cd === 6) {
+    if (acc.acc_type_cd === 1 || acc.acc_type_cd === 8 ) {
       /* check if account is not Locked */
       if (null !== acc.lock_mode
         && acc.lock_mode.toUpperCase() === 'L') {
@@ -1584,7 +1591,7 @@ getjoinholder(){
             null !== this.unApprovedTransactionLstOfAcc &&
             this.unApprovedTransactionLstOfAcc.length > 0) {
             this.modalRef = this.modalService.show(this.unappconfirm,
-              { class: 'modal-lg', keyboard: false, backdrop: true, ignoreBackdropClick: false });
+              { class: 'modal-lg', keyboard: false, backdrop: true, ignoreBackdropClick: true });
           }
           else{
             this.svc.addUpdDel<any>('Common/GetapprovedDepTrans', tdDepTrans).subscribe(
@@ -1651,7 +1658,7 @@ getjoinholder(){
     }
     else{
       debugger
-      if(this.sys.ardbCD=='2'&& Number(this.f.acc_type_cd.value) == 4 && this.sys.ardbCD=='2' )
+      if((this.sys.ardbCD!='4'&& this.sys.ardbCD!='20' && this.sys.ardbCD!='26')&& Number(this.f.acc_type_cd.value) == 4  )
         {
                               debugger
                               this.tdDefTransFrm.patchValue({
@@ -1676,6 +1683,7 @@ getjoinholder(){
           td_def_mat_amt:this.accNoEnteredForTransaction.prn_amt + this.closeInt
           });
       }
+      
     }
     
     
@@ -1988,7 +1996,7 @@ getjoinholder(){
                 trans_mode1: 'Renewal',
                 cert_no:res.tmdepositrenew.cert_no
               })
-              this.tdDefTransFrm.controls.intt_trf_type.disable()
+              // this.tdDefTransFrm.controls.intt_trf_type.disable()
               this.mat_val = Number(this.tdDefTransFrm.controls.amount.value)
 
             }
@@ -2516,6 +2524,7 @@ getjoinholder(){
         debugger
         }
       }
+      //Account Close
      else if (selectedOperation.oprn_desc.toLocaleLowerCase() === 'close') {
       if (this.resBrnCd != this.sys.BranchCode) {
         this.HandleMessage(true, MessageType.Error, 'Account CLOSE will only be possible on Home Branch.');
@@ -2546,7 +2555,18 @@ getjoinholder(){
        this.aftmatInt=0;
        if((this.sys.ardbCD!='20'&& this.sys.ardbCD!='26') && ( this.afMat1 == true && (accTypCode === 2 || accTypCode === 4) )) {
          debugger
-         
+         if(this.diff1==0){
+          this.showOnClose = true;
+          this.tdDefTransFrm.patchValue({
+            ovd_intt_recov: 0,
+            curr_prn_recov: 0,
+            bonus_amt: 0,
+            amount: (+this.accNoEnteredForTransaction.prn_amt),
+            curr_intt_recov:(+this.accNoEnteredForTransaction.intt_amt),
+            td_def_mat_amt:this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt
+            });
+         }
+         else{
           this.modalRefClose = this.modalService.show(this.afterMatClose,
             { class: 'modal-lg', keyboard: false, backdrop: true, ignoreBackdropClick: true })
         
@@ -2597,6 +2617,8 @@ getjoinholder(){
                 // }
               }
             }
+         }
+          
             
       debugger
       if (cDt >= matDt) {
@@ -2771,13 +2793,13 @@ getjoinholder(){
                               //     this.accNoEnteredForTransaction.intt_amt :
                               //     (  temp_gen_param.ad_intt_rt* this.accNoEnteredForTransaction.prn_amt))).toFixed(2)
                             
-                              td_def_mat_amt: isMatured ? this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt : this.accNoEnteredForTransaction.prn_amt + this.closeInt?this.closeInt:0
+                              td_def_mat_amt: isMatured ? this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt :this.closeInt?this.closeInt+ this.accNoEnteredForTransaction.prn_amt  :0
                              
                               // td_def_mat_amt: this.accNoEnteredForTransaction.prn_amt + this.closeInt
           
                             });
                           
-                          
+                          debugger
                         }
                         
       
@@ -3118,6 +3140,7 @@ getjoinholder(){
        debugger 
       this.inttCalOnClose();
       console.log(this.rdInClose);
+      this.rdInClose=this.rdInClose?this.rdInClose:0;
       
       debugger
       this.accNoEnteredForTransaction.ShowClose = true;
@@ -3152,9 +3175,9 @@ getjoinholder(){
         this.showTransMode = false; //marker
         this.showTransModeForR = true; //marker
         // this.showTransModeForR=false //marker
-        console.log(this.selectedCust.substring(0, 3) + " " + this.sys.BranchCode)
+        console.log(this.selectedCust.substring(0, 3) + " " + this.sys.BranchCode+"  "+this.custBrnCd)
         /** hide transfer type for renewal of FD */
-        if (this.selectedCust.substring(0, 3) != this.sys.BranchCode) {
+        if (this.custBrnCd != this.sys.BranchCode) {
           this.HandleMessage(true, MessageType.Error, 'Account Renewal will only be possible on Home Branch.');
           this.onResetClick();
 
@@ -3231,7 +3254,7 @@ getjoinholder(){
             this.td.intt_trf_type.disable();
           }
           //PARTHA
-          if (accTypCode === 5 || (accTypCode==2 && this.resbrnCD1[0].intt_trf_type=='H') || (accTypCode==2 && this.resbrnCD1[0].intt_trf_type=='Q') || (accTypCode==2 && this.resbrnCD1[0].intt_trf_type=='Y')) { // Special logic for MIS on renewal
+          if (accTypCode === 5 || (accTypCode==2 && this.resbrnCD1[0]?.intt_trf_type=='H') || (accTypCode==2 && this.resbrnCD1[0]?.intt_trf_type=='Q') || (accTypCode==2 && this.resbrnCD1[0]?.intt_trf_type=='Y')) { // Special logic for MIS on renewal
             console.log(this.diff)
             debugger
             this.tdDefTransFrm.patchValue({
@@ -3239,7 +3262,7 @@ getjoinholder(){
             })
             // if(accTypCode === 5)
             // {}
-            this.tdDefTransFrm.controls.intt_trf_type.disable()
+            // this.tdDefTransFrm.controls.intt_trf_type.disable()
             const misInstalments = new td_intt_dtls();
             misInstalments.ardb_cd = this.sys.ardbCD
             misInstalments.brn_cd = this.sys.BranchCode;
@@ -3637,9 +3660,10 @@ getjoinholder(){
     
       this.effInt = temp_gen_param.ad_intt_rt > 0 ? temp_gen_param.ad_intt_rt : 0
      //marker to change the interest on calculation 
-     
+     this.isLoading=true;
       this.svc.addUpdDel<any>('Deposit/F_CALCTDINTT_REG', temp_gen_param).subscribe(
         res => {
+          this.isLoading=false;
           debugger
           console.log(res)
           this.closeInt = res;
@@ -3692,11 +3716,12 @@ getjoinholder(){
       this.effInt = temp_gen_param.ad_intt_rt > 0 ? temp_gen_param.ad_intt_rt : 0
       // this.effInt=res_rt
       // temp_gen_param.ad_intt_rt=this.effInt
+      this.isLoading=true;
       this.svc.addUpdDel<any>('Deposit/F_CALCTDINTT_REG', temp_gen_param).subscribe(
         result => {
           console.log(result)
 
-
+          this.isLoading=false;
           this.tdDefTransFrm.patchValue({
 
             // amount: this.accNoEnteredForTransaction.prn_amt
@@ -3729,16 +3754,66 @@ getjoinholder(){
                         this.isLoading=false
                         this.rdInClose=res
                       this.tdDefTransFrm.patchValue({
-                        ovd_intt_recov: this.td.ovd_intt_recov.value,
-                        curr_intt_recov: res.toFixed(2),
-                        td_def_mat_amt: ((this.accNoEnteredForTransaction.prn_amt+res)-(+this.td.ovd_intt_recov.value?+this.td.ovd_intt_recov.value:0)),
+                        ovd_intt_recov: this.td.ovd_intt_recov.value?this.td.ovd_intt_recov.value:0,
+                        // curr_intt_recov: res.toFixed(2),
+                        curr_intt_recov: this.td.curr_intt_recov.value?this.td.curr_intt_recov.value:0,
+                        td_def_mat_amt: ((+this.accNoEnteredForTransaction.prn_amt)-(+this.td.ovd_intt_recov.value?this.td.ovd_intt_recov.value:0)),
                       });
+                      this.isLoading=false;
                     }
                   },
                   err => { console.log(err); }
                 );
       }
+      else if(this.f.acc_type_cd.value==6){
+        this.isLoading=true;
+        let param = new p_gen_param();
+      param.as_acc_num = this.accNoEnteredForTransaction.acc_num;
+      param.ad_instl_amt = this.accNoEnteredForTransaction.instl_amt;
+      console.log(param.ad_instl_amt)
+      param.an_instl_no = this.counter;
+      param.an_intt_rate = (+this.tdDefTransFrm.controls.eff_int.value)
+
+      param.ardb_cd = this.sys.ardbCD;
+      param.ai_period = this.diff;
+      // this.effInt=param.an_intt_rate
+      this.svc.addUpdDel<any>('Deposit/F_CALCRDINTT_REG', param).subscribe(
+        res => {
+          console.log(res)
+          this.rdInClose = res;
+          if (undefined !== res
+            && null !== res
+            && res > 0) {
+            this.tdDefTransFrm.patchValue({
+              // eff_int:this.effInt,
+              curr_intt_recov: res.toFixed(2),
+              amount: param.ad_instl_amt * this.counter,
+              //  curr_intt_recov: res,
+              ovd_intt_recov: 0,
+              bonus_amt: 0,
+              curr_prn_recov: 0,
+              td_def_mat_amt: param.ad_instl_amt * this.counter + res
+            })
+            this.isLoading=false;
+          }
+          else{
+            this.isLoading=false; 
+          }
+
+          param = new p_gen_param();
+          param.as_acc_num = this.accNoEnteredForTransaction.acc_num;
+          param.ardb_cd = this.sys.ardbCD;
+        },
+        err => { console.log(err); }
+      );
+    //marker for default penalty, bonus
+
+      this.td.td_def_mat_amt.setValue((this.td.amount.value +
+        (+this.td.curr_intt_recov.value) - (+this.td.ovd_intt_recov.value)
+        + (+this.td.curr_prn_recov.value)).toFixed(2));
+      }
       else{
+        this.isLoading=true
       let param = new p_gen_param();
       param.as_acc_num = this.accNoEnteredForTransaction.acc_num;
       param.ad_instl_amt = this.accNoEnteredForTransaction.instl_amt;
@@ -3766,26 +3841,14 @@ getjoinholder(){
               curr_prn_recov: 0,
               td_def_mat_amt: param.ad_instl_amt * this.counter + res
             })
+            this.isLoading=false;
           }
-
+          else{
+            this.isLoading=false;
+          }
           param = new p_gen_param();
           param.as_acc_num = this.accNoEnteredForTransaction.acc_num;
           param.ardb_cd = this.sys.ardbCD;
-          // this.svc.addUpdDel<any>('Deposit/F_CAL_RD_PENALTY', param).subscribe(
-          //   res => {
-          //     console.log(res)
-          //     if (undefined !== res
-          //       && null !== res
-          //       && res > 0) {
-          //       this.tdDefTransFrm.patchValue({
-          //         ovd_intt_recov: res.toFixed(2)
-          //       });
-          //     }
-          //   },
-          //   err => { console.log(err); }
-          // );
-
-          // if premature closing show warning of how many days month and yr left
 
         },
         err => { console.log(err); }
@@ -3858,8 +3921,9 @@ getjoinholder(){
     debugger
     console.log(this.tdDefTransFrm.controls.amount.value +" "+this.tdDefTransFrm.controls.closeIntrest.value)
     if(this.f.acc_type_cd.value==1 || this.f.acc_type_cd.value==8){
-    this.tdDefTransFrm.patchValue({
-      amount:(+this.accDtlsFrm.controls.clr_bal.value) + (+this.tdDefTransFrm.controls.closeIntrest.value),
+    this.tdDefTransFrm.patchValue({//PARTHA***
+      // amount:(+this.accDtlsFrm.controls.clr_bal.value) + (+this.tdDefTransFrm.controls.closeIntrest.value),
+      amount:(+this.accDtlsFrm.controls.clr_bal.value),
       td_def_mat_amt:(+this.accDtlsFrm.controls.clr_bal.value) + (+this.tdDefTransFrm.controls.closeIntrest.value)
     })
   }
@@ -4068,7 +4132,7 @@ getjoinholder(){
       else { minBal = +this.sys.MinBalanceWithOutCheque; }
       debugger
 
-      if ((this.sys.ardbCD=='4' && accTypeCd === 9 )
+      if ((accTypeCd === 9 )
       && this.td.trans_type_key.value === 'W') {
         debugger
         if ((+this.td.amount.value) > this.accNoEnteredForTransaction.clr_bal) {
@@ -4140,7 +4204,7 @@ getjoinholder(){
         this.matInt=0
       }
       //to br change line 3956
-      const mat_amt = (accTypeCd==2 && (this.accNoEnteredForTransaction.intt_trf_type != 'O' && !this.afterMatRenewal))?this.accNoEnteredForTransaction.prn_amt+this.fdSum:
+      const mat_amt = (accTypeCd==2 && (this.accNoEnteredForTransaction.intt_trf_type != 'O' && this.afterMatRenewal))?this.accNoEnteredForTransaction.prn_amt+this.fdSum:
       (this.afterMatRenewal && accTypeCd==2 )?this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt+this.matInt:
       (accTypeCd==5)?this.accNoEnteredForTransaction.prn_amt+this.forB:
       (this.afterMatRenewal && accTypeCd==4)?this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt+this.matInt
@@ -4230,13 +4294,28 @@ getjoinholder(){
       this.HandleMessage(true, MessageType.Error, 'Amount can not be blank');
       return;
     }
-    if (this.td.trf_type.value === 'T' && (this.TrfTotAmt==0||this.TrfTotAmt==null||this.TrfTotAmt==undefined)&& (accTypeCd==1||accTypeCd==8)){
+    else if (this.td.trf_type.value === 'T' && (this.TrfTotAmt==0||this.TrfTotAmt==null||this.TrfTotAmt==undefined)&& (accTypeCd==1||accTypeCd==8)){
       this.HandleMessage(true, MessageType.Error, 'Please select correct Transaction  type or put Transaction  value');
       return;
     }
-
+    // else if (this.td.trf_type.value === 'T' ){
+    //   this.td_def_trans_trf.forEach(e=>{
+    //     if (e.cust_acc_type){
+    //       if(e.cust_acc_number){
+    //         this.HandleMessage(true, MessageType.Error, 'Please select customer in transfer screen..');
+    //         return;
+    //       }
+    //     }
+    //   })
+    // }
+    else if(this.td.trf_type.value === 'T' && (this.accTransFrm.controls.acc_type_cd.value==9||this.accTransFrm.controls.acc_type_cd.value==1||this.accTransFrm.controls.acc_type_cd.value==8)){
+        if(this.td.amount.value!=this.TrfTotAmt){
+          this.HandleMessage(true, MessageType.Error, 'Total Amount can not be more than Transaction amount');
+          return;
+        }
+      }
     /** do not check Transaction  type for FD renewal which doesnt have balance */
-    if (accTypeCd !== 2 && !this.showBalance) {
+    else if (accTypeCd !== 2 && !this.showBalance) {
       if (undefined === this.td.trf_type.value
         || null === this.td.trf_type.value
         || this.td.trf_type.value === '') {
@@ -4244,7 +4323,7 @@ getjoinholder(){
         return;
       }
     }
-    if (accTypeCd !== 2 && !this.showBalance) {
+    else if (accTypeCd !== 2 && !this.showBalance) {
       // if (this.td.trf_type.value === 'C' && this.denominationGrandTotal !== (+this.td.amount.value)) {
       //   this.HandleMessage(true, MessageType.Error,
       //     `Denomination total amount ₹${this.denominationGrandTotal}, ` +
@@ -4265,10 +4344,10 @@ getjoinholder(){
       if (this.td.trf_type.value === 'T' && this.showtransdetails == true && this.TrfTotAmt !== (+this.td.amount.value)) {
         debugger;
         console.log(this.tdDefTransFrm.controls.acc_type_cd.value)
-        if (accTypeCd == 1) {
+        if (accTypeCd == 1 && this.tdDefTransFrm.controls.closeIntrest.value>0) {
           // console.log("here in 1 or 8")
           // if(this.TrfTotAmt!=(this.tdDefTransFrm.controls.amount.value+this.tdDefTransFrm.controls.closeIntrest.value))
-          if (this.TrfTotAmt != (this.tdDefTransFrm.controls.amount.value)) {
+          if (this.TrfTotAmt != ((+this.tdDefTransFrm.controls.amount.value) + (+this.tdDefTransFrm.controls.closeIntrest.value))) {
             console.log(this.tdDefTransFrm.controls.amount.value + " " + this.tdDefTransFrm.controls.closeIntrest.value)
             this.HandleMessage(true, MessageType.Error,
               `Transfer total amount ₹${this.TrfTotAmt}, ` +
@@ -4280,7 +4359,7 @@ getjoinholder(){
         else {
           debugger
           console.log(this.tdDefTransFrm.controls.amount.value + " " + this.tdDefTransFrm.controls.closeIntrest.value)
-          if (accTypeCd == 6) {
+          if (accTypeCd == 6 || accTypeCd==4) {
             // console.log("here inside 2354")
             if (this.tdDefTransFrm.controls.td_def_mat_amt.value != this.TrfTotAmt) {
               this.HandleMessage(true, MessageType.Error,
@@ -4301,6 +4380,15 @@ getjoinholder(){
               return;
             }
           }
+          if (accTypeCd==7) {
+      
+            this.HandleMessage(true, MessageType.Error,
+              `Transfer total amount ₹${this.TrfTotAmt}, ` +
+              ` do not match with Transaction amount ₹${this.td.amount.value}`);
+            return;
+          
+     }
+         
           // this.HandleMessage(true, MessageType.Error,
           //   `Transfer total amount ₹${this.TrfTotAmt}, ` +
           //   ` does not match with transaction amount ₹${this.td.amount.value}`);
@@ -4330,6 +4418,7 @@ getjoinholder(){
           }
         }
      }
+     
     }
     if (accTypeCd == 6 && this.td.amount.value % this.accDtlsFrm.controls.instl_amt.value != 0) {
       console.log(this.td.acc_cd.value + " " + this.td.amount.value + " " + this.accDtlsFrm.controls.instl_amt.value)
@@ -4431,8 +4520,8 @@ getjoinholder(){
             } //marker
             tdDefTransAndTranfer.amount = e.amount;
             console.log(tdDefTransAndTranfer);
-            tdDefTransAndTranfer.home_brn_cd = tdDefTransAndTranfer.acc_num.substring(0, 3);
-            tdDefTransAndTranfer.intra_branch_trn = tdDefTransAndTranfer.acc_num.substring(0, 3) != this.sys.BranchCode ? 'Y' : 'N'
+            tdDefTransAndTranfer.home_brn_cd = tdDefTransAndTranfer.brn_cd;
+            tdDefTransAndTranfer.intra_branch_trn = tdDefTransAndTranfer.brn_cd != this.sys.BranchCode ? 'Y' : 'N'
             // toReturn.home_brn_cd=toReturn.acc_num.substring(0,3);
             // toReturn.intra_branch_trn=toReturn.acc_num.substring(0,3)!=this.sys.BranchCode?'Y':'N'
             saveTransaction.tddeftranstrf.push(tdDefTransAndTranfer);
@@ -4609,8 +4698,8 @@ getjoinholder(){
               // //debugger;
             }
             tdDefTransAndTranfer.amount = e.amount;
-            tdDefTransAndTranfer.home_brn_cd = tdDefTransAndTranfer.acc_num.substring(0, 3);
-            tdDefTransAndTranfer.intra_branch_trn = tdDefTransAndTranfer.acc_num.substring(0, 3) != this.sys.BranchCode ? 'Y' : 'N'
+            tdDefTransAndTranfer.home_brn_cd = this.sys.ardbCD=='2'? tdDefTransAndTranfer.acc_num.substring(2, 3):tdDefTransAndTranfer.acc_num.substring(0, 3);
+            tdDefTransAndTranfer.intra_branch_trn = this.sys.ardbCD=='2'? tdDefTransAndTranfer.acc_num.substring(2, 3):tdDefTransAndTranfer.acc_num.substring(0, 3) != this.sys.BranchCode ? 'Y' : 'N'
             console.log(tdDefTransAndTranfer.particulars)
             //  debugger;
             updateTransaction.tddeftranstrf.push(tdDefTransAndTranfer);
@@ -5363,6 +5452,7 @@ getjoinholder(){
   // }
 
   onResetClick(): void {
+    // this.showMsg = null;
     this.showNW=true;
     this.showInterestDtls=false
     this.showRdInstalment=false
@@ -5458,10 +5548,12 @@ getjoinholder(){
       return;
     }
     this.accountTypeList = [];
+    this.accountTypeList2 = [];
 
     this.svc.addUpdDel<any>('Mst/GetAccountTypeMaster', null).subscribe(
       res => {
 
+        this.accountTypeList2 = res;
         this.accountTypeList = res;
         this.accountTypeList = this.accountTypeList.filter(c => c.dep_loan_flag === 'D');
         this.accountTypeList = this.accountTypeList.sort((a, b) => (a.acc_type_cd > b.acc_type_cd) ? 1 : -1);
@@ -5507,7 +5599,6 @@ getjoinholder(){
     this.suggestedCustomerCr = null;
     // console.log(this.suggestedCustomerCr.length)
     console.log(this.selectedCust)
-    console.log(acc_num.substring(0, 3))
     this.td_deftranstrfList[indx].cust_acc_number = acc_num;
       this.td_deftranstrfList[indx].cust_name = cust_name;
       this.setDebitAccDtls(this.td_deftranstrfList[indx]);
@@ -5933,6 +6024,13 @@ getjoinholder(){
     this.td_deftranstrfList.forEach(e => {
       this.TrfTotAmt += (+e.amount);
     });
+    // if(this.TrfTotAmt>0 && (this.accTransFrm.controls.acc_type_cd.value==9||this.accTransFrm.controls.acc_type_cd.value==1||this.accTransFrm.controls.acc_type_cd.value==8)){
+    //   if(this.td.amount.value!=this.TrfTotAmt){
+    //     this.TrfTotAmt=0;
+    //     this.td_deftranstrfList[0].amount=0;
+    //     this.HandleMessage(true, MessageType.Error, 'Total Amount can not be more than Transaction amount');
+    //   }
+    // }
     // console.log(this.td.amount.value+" "+this.TrfTotAmt)
     // if ((+this.td.amount.value) < this.TrfTotAmt) {
     //   this.HandleMessage(true, MessageType.Error, 'Total Amount can not be more than Transaction amount');

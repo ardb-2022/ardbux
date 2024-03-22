@@ -11,7 +11,7 @@
 
 /* You can add global styles to this file, and also import other style files */
 /* .daseboard_home{flex: 1 0 auto; padding: 25px 25px; background: url("assets/images/bgCus.png") no-repeat center top; background-size: cover;align-items: center;} */
-.daseboard_home{flex: 1 0 auto; padding: 25px 25px; background: url("assets/images/bgCus1.png") no-repeat center top; background-size: cover;align-items: center;}
+.daseboard_home{flex: 1 0 auto; padding: 25px 25px; background: url("assets/images/bgCus1.jpg") no-repeat center top; background-size: cover;align-items: center;}
 /* cyrillic-ext */
 @font-face {
   font-family: 'Roboto';

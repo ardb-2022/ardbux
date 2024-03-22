@@ -75,7 +75,7 @@
     </div>
     <div class="modal-footer">
       <!-- <button mat-raised-button class="btn btn-default" (click)="modalRef.hide();disableOperation=false;showTransactionDtl=false;">Cancel</button> -->
-      <button mat-raised-button class="btn btn-default" (click)="onCancel()">Cancel</button> &nbsp;
+      <!-- <button mat-raised-button class="btn btn-default" (click)="onCancel()">Cancel</button> &nbsp; -->
       <button mat-raised-button class="btn btn-primary float-right" (click)="Submit()">View/Edit</button>
     </div>
   </ng-template>
@@ -532,7 +532,7 @@
              </table>
           <!-- <footer>
             <small>
-              This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions Pvt.Ltd. Kolkata
+              This Report Is Generated Through CFS-2022, Kolkata
              </small>
            </footer> -->
           </div>
@@ -1040,8 +1040,8 @@
       class="col-xs-12 col-sm-12 col-md-11 col-lg-11 shadow mb-2 bg-white p-3 d-flex justify-content-center align-items-center">
       <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="openModal(Delconfirm)" [disabled]="!isDelete">Delete</button>
       <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onResetClick()">Reset</button>
+      <!-- <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onResetClick()">Clear</button> -->
       <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onBackClick()">Back</button>
-      <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1">Cancel</button>
       <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onSaveClick()">Save</button>
   
       <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" style="position: absolute;right: 10px;" (click)="printChallan()">Print Challan</button>

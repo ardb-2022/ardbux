@@ -110,7 +110,7 @@ export class OpenLoanAccountComponent implements OnInit {
   td_accholder: td_accholder[] = [];
   tm_loan_sanction: tm_loan_sanction[] = [];
   tm_loan_sanction_dtls: tm_loan_sanction_dtls[] = [];
-
+  repaymentFormulaList:any[]=[]
   td_loan_sanc_set_list: td_loan_sanc_set[] = [];
 
   sys = new SystemValues();
@@ -128,10 +128,11 @@ export class OpenLoanAccountComponent implements OnInit {
     { id: 10,val: 'Wife' },
   ];
 
-  repaymentFormulaList = [
-    { id: 1, val: 'EMI' },
-    { id: 2, val: 'REDUCING' },
-  ];
+  // repaymentFormulaList = [
+  //   { id: 1, val: 'EMI' },
+  //   { id: 2, val: 'REDUCING' },
+  // ];
+  
 
   modalRef: BsModalRef;
   config = {
@@ -142,6 +143,7 @@ export class OpenLoanAccountComponent implements OnInit {
   createUser1:any;
   logUser:any;
   ngOnInit(): void {
+    this.getRepFormula();
     this.getsystemParam();
     this.logUser=localStorage.getItem('itemUX');
     this.branchCode = this.sys.BranchCode;
@@ -164,6 +166,13 @@ export class OpenLoanAccountComponent implements OnInit {
     this.initializeModels();
     this.newAccount();
 
+  }
+  getRepFormula(){
+    this.svc.addUpdDel<any>('Loan/GetEmiFormula', null).subscribe(
+      emi => {
+        this.repaymentFormulaList=emi
+        console.log(this.repaymentFormulaList);
+       })
   }
   getsystemParam(){
     this.svc.addUpdDel<any>('Mst/GetSystemParameter', null).subscribe(
@@ -432,6 +441,7 @@ setActivity(){//PARTHA
       res => {
 
         this.activityList = res;
+        this.activityList = this.activityList.sort((a, b) => (a.activity_cd > b.activity_cd) ? 1 : -1);
       },
       err => {
 
@@ -753,7 +763,7 @@ removeSecurityDtlList()
   public setRepaymentFormula(formula: number): void {
 
     this.tm_loan_all.emi_formula_no = Number(formula);
-    this.tm_loan_all.emiFormulaDesc = this.repaymentFormulaList.filter(x => x.id.toString() === formula.toString())[0].val;
+    this.tm_loan_all.emiFormulaDesc = this.repaymentFormulaList.filter(x => x.formula_no == formula)[0].formula_desc;
   }
 
   public setSectorType(sec: string, idx: number): void {

@@ -142,7 +142,7 @@ export class LoanPassBookFastPageComponent implements OnInit {
     this.IBSD_AMT=null;
       this.custCD=this.masterModel.tmloanall.party_cd
       this.acc_cd=this.masterModel.tmloanall.acc_cd
-      if(this.acc_cd===20411 && this.masterModel.tdloansancsetlist.length>0){
+      if((this.acc_cd===20411 ||this.acc_cd===23301) && (this.masterModel.tdloansancsetlist.length>0)){
         if(this.sys.ardbCD=='2'){
           this.loan_case_dtls=this.masterModel.tdloansancsetlist[0]?.tdloansancset.filter(x => x.param_cd == '500')
           this.IBSD_AC=this.masterModel.tdloansancsetlist[0]?.tdloansancset.filter(x => x.param_cd == '116')[0]?.param_value

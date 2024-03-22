@@ -5,6 +5,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { InAppMessageService, RestService } from 'src/app/_service';
 import { MessageType, ShowMessage, SystemValues, mm_ifsc_code, td_outward_payment, m_acc_master, mm_acc_type, mm_customer, tm_deposit } from '../../Models';
 import { p_gen_param } from '../../Models/p_gen_param';
+import { sm_parameter } from '../../Models/sm_parameter';
 
 @Component({
   selector: 'app-neft-outward',
@@ -44,6 +45,8 @@ export class NeftOutwardComponent implements OnInit {
   acc_master2: any = [];
   allNEFT:any;
   accountTypeList: mm_acc_type[] = [];
+  systemParam: sm_parameter[] = [];
+  iciciACC:any
   __ifsc = '';
   __ifscbank = '';
   __ifscbranch = '';
@@ -57,19 +60,36 @@ export class NeftOutwardComponent implements OnInit {
   };
   val:any;
   ngOnInit(): void {
-    //this.neftPayRet = new td_outward_payment();
+    this.getsystemParam();
+    this.getAccountTypeList();
+    this.clearData();
     this.branchCode = this.sys.BranchCode;
     this.userName = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
     this.neftPayRet.brn_cd = this.sys.BranchCode;
     this.neftPayRet.trans_dt = this.sys.CurrentDate;
-    this.neftPayRet.dr_acc_no = this.sys.NeftPayDrAcc;
+    
     this.neftPayRet.date_of_payment = this.sys.CurrentDate;
     this.neftPayRet.ardb_cd=this.sys.ardbCD
-    this.getAccountTypeList();
-    this.clearData();
+    
     // this.reportCriteria=this.formBuilder.group({
     //      neftID:['',Validators.required]
     // })
+  }
+  getsystemParam(){
+    this.isLoading=true
+    
+    this.svc.addUpdDel<any>('Mst/GetSystemParameter', null).subscribe(
+      sysRes => {
+        if(sysRes){
+          this.systemParam=sysRes
+          console.log(this.systemParam);
+          debugger
+          this.iciciACC=this.systemParam.find(x => x.param_cd === '099')?.param_value;
+          this.neftPayRet.dr_acc_no = this.iciciACC;
+          debugger
+          this.isLoading=false;
+        }
+       })
   }
   setCharge(amt : number){
    let param = new p_gen_param();
@@ -213,10 +233,9 @@ export class NeftOutwardComponent implements OnInit {
     this.disableSave=false;
     this.isRetrieve = true;
     this.neftPayRet = new td_outward_payment();
-    // this.neftPayRet=null;
+    this.neftPayRet.dr_acc_no = this.iciciACC;
     this.neftPayRet.brn_cd = this.sys.BranchCode;
     this.neftPayRet.trans_dt = this.sys.CurrentDate;
-    this.neftPayRet.dr_acc_no=this.sys.NeftPayDrAcc;
     this.neftPayRet.date_of_payment=this.sys.CurrentDate;
     this.neftPayRet.bene_ifsc_code='';
     this.neftPayRet.credit_narration='';
@@ -234,8 +253,8 @@ export class NeftOutwardComponent implements OnInit {
     this.neftPayRet = new td_outward_payment();
     this.neftPayRet.brn_cd = this.sys.BranchCode;
     this.neftPayRet.trans_dt = this.sys.CurrentDate;
-    this.neftPayRet.dr_acc_no=this.sys.NeftPayDrAcc;
     this.neftPayRet.date_of_payment=this.sys.CurrentDate;
+    this.neftPayRet.dr_acc_no = this.iciciACC;
     this.neftPayRet.bene_ifsc_code='';
     this.neftPayRet.credit_narration='';
     this.neftPayRet.charge_ded=0;
@@ -323,7 +342,6 @@ export class NeftOutwardComponent implements OnInit {
           this.neftPayRet.bene_ifsc_code = '';
           this.neftPayRet.brn_cd = this.sys.BranchCode;
           this.neftPayRet.trans_dt = this.sys.CurrentDate;
-          this.neftPayRet.dr_acc_no=this.sys.NeftPayDrAcc;
           this.neftPayRet.date_of_payment=this.sys.CurrentDate;
           this.neftPayRet.charge_ded=0;
           this.neftPayRet.credit_narration='';
@@ -721,7 +739,7 @@ debugger;
         this.accountTypeList = this.accountTypeList.sort((a, b) => (a.acc_type_cd > b.acc_type_cd) ? 1 : -1);
       },
       err => {
-
+        this.HandleMessage(true, MessageType.Error, 'can not get account type');
       }
     );
   }

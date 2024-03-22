@@ -143,16 +143,18 @@
           <select id="subsidy" class="form-control form-control-sm" formControlName="subsidy">
             <option selected disabled>Choose...</option>
             <option *ngFor="let sub of subsidyData" [value]="sub.sub_id">{{sub.sub_desc}}</option>
-            <!-- <option value="N">Nominal Member</option>
-      <option value="C">Customer</option> -->
           </select>
         </div>
 
 
         <div class="form-group col-4">
           <small for="subsidy_type">Implemented</small>
-          <input type="text" class="form-control form-control-sm text-capitalize" formControlName="subsidy_type"
-            id="subsidy_type">
+          <select id="subsidy_type" class="form-control form-control-sm" formControlName="subsidy_type">
+            <option selected disabled>Choose...</option>
+            <option value="Y">YES</option>
+            <option value="N">NO</option>
+          </select>
+          
         </div>
 
       </div>

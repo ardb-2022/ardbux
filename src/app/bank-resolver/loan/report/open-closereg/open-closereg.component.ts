@@ -26,8 +26,8 @@ export class OpenCloseregComponent implements OnInit,AfterViewInit {
   // @ViewChild(MatSort) sort2: MatSort;
   dataSource_c = new MatTableDataSource()
   dataSource_o = new MatTableDataSource()
-  displayedColumns_c: string[] = ['trans_dt','cust_name', 'loan_id','sanc_dt','sanc_amt','curr_rt','ovd_rt','closing_amt','closing_intt'];
-  displayedColumns_o: string[] = ['trans_dt','cust_name', 'loan_id','sanc_dt','sanc_amt','disb_amt','instl_no','curr_rt','ovd_rt'];
+  displayedColumns_c: string[] = ['trans_dt','cust_name','acc_desc', 'loan_id','sanc_dt','sanc_amt','curr_rt','ovd_rt','closing_amt','closing_intt'];
+  displayedColumns_o: string[] = ['trans_dt','cust_name','acc_desc', 'loan_id','sanc_dt','sanc_amt','disb_amt','instl_no','curr_rt','ovd_rt'];
   notvalidate:boolean=false;
   date_msg:any;
   modalRef: BsModalRef;

@@ -104,6 +104,11 @@
               <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
               <td mat-cell *matCellDef="let data let i=index"> 
                 <div class="justify-content-center" style="text-align:center;padding-top: 40px;" *ngIf="data">
+                  
+                  <div  *ngIf="ardbcd!='26'&&ardbcd!='20'&&ardbcd!='4'">
+                    <h4>{{ardbName}} ({{branchName}})</h4>
+                    <h4>Run Date & Time : {{today}} </h4> 
+                  </div>
                   <div *ngIf="ardbcd=='26'">
                     <h4> <b>{{getArdb}} {{translatedData?.heading}} </b> </h4>
                   <h5> <b>{{translatedData?.bmaddr?.bm_branch}} </b> </h5> 

@@ -298,17 +298,17 @@ export class UcicMergeComponent implements OnInit {
       this.isLoading=true;
       this.svc.addUpdDel<any>('UCIC/InsertCustomerMerge', this.suggestedCustomer2).subscribe(
         res => {
-          console.log(res);
+          console.log(res >= 0);
           
           this.isLoading=false;
-          this.HandleMessage(true, MessageType.Sucess, 'Selected all UCIC Marged with UCIC:'+this.uniqueUCIC+' Successfuly!!!!!!!!!!');
+          this.HandleMessage(true, MessageType.Sucess, 'Selected all UCIC Marged with UCIC:'+this.uniqueUCIC+' Successfuly');
           this.suggestedCustomer = [];
           this.suggestedCustomer2 = [];
         },
         err => {
           ;
           this.isLoading=false;
-          this.HandleMessage(true, MessageType.Error, 'UCIC Marged Failed!!!!!!!!!!');
+          this.HandleMessage(true, MessageType.Error, 'UCIC Marged Failed!!!');
         }
       );
 

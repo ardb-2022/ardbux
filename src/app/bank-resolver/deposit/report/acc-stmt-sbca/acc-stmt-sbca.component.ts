@@ -81,7 +81,8 @@ export class AccStmtSBCAComponent implements OnInit {
   today:any
   cName:any
   cAddress:any
-  cAcc:any
+  cAcc:any;
+  accountTypeName:any;
   filteredArray:any=[]
   constructor(private svc: RestService, private formBuilder: FormBuilder,
     private modalService: BsModalService, private _domSanitizer: DomSanitizer,private exportAsService: ExportAsService, private cd: ChangeDetectorRef,
@@ -142,10 +143,13 @@ export class AccStmtSBCAComponent implements OnInit {
   }
 
   public onAccountTypeChange(): void {
+    this.accountTypeName=''
     this.reportcriteria.controls.acct_num.setValue('');
     this.suggestedCustomer = null;
     if (+this.reportcriteria.controls.acc_type_cd.value > 0) {
       this.reportcriteria.controls.acct_num.enable();
+      
+      this.accountTypeName=this.AcctTypes.filter(x=>x.acc_type_cd==this.reportcriteria.controls.acc_type_cd.value)[0].acc_type_desc
     }
   }
   onChangeNull(){
@@ -239,6 +243,7 @@ export class AccStmtSBCAComponent implements OnInit {
       this.showAlert = false;
     }
   }
+  
   public oniframeLoad(): void {
     this.counter++;
     if(this.counter==2)

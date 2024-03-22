@@ -615,6 +615,7 @@ export class OpenInvestComponent implements OnInit {
 
 
   clearData() {
+    this.tm_deposit.opening_dt=null;
     this.operationType = '';
     this.disabledOnNull=true;
     this.suggestedCustomer=null
@@ -1206,8 +1207,7 @@ debugger
           this.operationType = '';
           // this.showAlertMsg('INFORMATION', 'Account Record Created Successfully [Account Number:' +
           //   this.masterModel.tmdepositInv.acc_num + '] [Trans Code: ' + this.td_deftrans.trans_cd + ']');
-          this.HandleMessage(true, MessageType.Sucess, 'Account Record Created Successfully [Account Number:' +
-            this.masterModel.tmdepositInv.acc_num + '] [Trans Code: ' + this.td_deftrans.trans_cd + ']');
+          this.HandleMessage(true, MessageType.Sucess, 'Account Record Created Successfully [Trans Code: ' + this.td_deftrans.trans_cd + ']');
         },
         err => {
 

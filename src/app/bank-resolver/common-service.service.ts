@@ -37,7 +37,7 @@ export class CommonServiceService {
     private router: Router) { 
       this.getConfiginSysn();
     }
-
+    
   SnackBar_Error() {
     this._snackBar.open('Error!!!', 'Close', {
       horizontalPosition: this.horizontalPosition,

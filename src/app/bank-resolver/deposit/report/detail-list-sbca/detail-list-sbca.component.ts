@@ -176,7 +176,8 @@ export class DetailListSBCAComponent implements OnInit,AfterViewInit {
   }
  sendData(){
   console.log(this.accType)
-  this.accType=this.reportcriteria.controls.acc_type_cd.value == '1'?'Savings Deposit':(this.reportcriteria.controls.acc_type_cd.value == '8'?'Flexi Account':(this.reportcriteria.controls.acc_type_cd.value == '9'?'Loan Suspense':'Share'))
+  
+  this.accType=this.AcctTypes.filter(p=>p.acc_type_cd==this.reportcriteria.controls.acc_type_cd.value)[0].acc_type_desc
   // this.constType=this.constitutionList.filter(e=>e.constitution_cd==this.reportcriteria.controls.constitution_cd.value)[0].constitution_desc
   // console.log(this.reportcriteria.controls.constitution_cd.value+' '+this.reportcriteria.controls.acc_type_cd.value)
  }
@@ -219,13 +220,15 @@ export class DetailListSBCAComponent implements OnInit,AfterViewInit {
                 this.opdrSum=this.reportData[i]?.constype.tot_cons_balance;
                 this.allconscount=this.reportData[i]?.constype.tot_cons_count;
               this.dataSource2.data=this.reportData[i]?.ttsbcadtllist;
+              debugger
             }
-            else{
-              this.showAlert = true;
-              // this.HandleMessage(true, MessageType.Error, 'Please select correct transfer type or put transfer value');
-              this.alertMsg = 'No data foud with this Constitution';
-              this.dataSource2.data=[];
-            }
+            // else{
+            //   debugger
+            //   this.showAlert = true;
+            //   // this.HandleMessage(true, MessageType.Error, 'Please select correct transfer type or put transfer value');
+            //   this.alertMsg = 'No data foud with this Constitution';
+            //   this.dataSource2.data=[];
+            // }
           }
           
 
@@ -324,4 +327,5 @@ export class DetailListSBCAComponent implements OnInit,AfterViewInit {
       // this.crSum+=this.filteredArray[i].cr_amount
     }
   }
+  
 }

@@ -96,7 +96,9 @@ export class BlockMasterComponent implements OnInit {
       res => {
         console.log(res)
         this.blocks = res
+        this.blocks = this.blocks.sort((a, b) => (a.block_name > b.block_name) ? 1 : -1);
         this.blocks1=res
+        this.blocks1 = this.blocks1.sort((a, b) => (a.block_name > b.block_name) ? 1 : -1);
         //  this.b_name=this.blocks.filter(e=>e.block_cd==this.addBlock.controls.code.value)[0].block_name
         console.log(this.addBlock.controls.code.value)
         this.blocks=this.blocks1.filter(e=>e.block_cd.includes(this.addBlock.controls.code.value) || e.block_name.toLowerCase().includes(this.addBlock.controls.code.value.toLowerCase()))

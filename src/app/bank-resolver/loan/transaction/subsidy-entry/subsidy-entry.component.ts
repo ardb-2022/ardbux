@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { tm_subsidy } from 'src/app/bank-resolver/Models/loan/tm_subsidy';
 import { RestService } from 'src/app/_service';
 import Utils from 'src/app/_utility/utils';
-import { LOGIN_MASTER, MessageType, mm_customer, ShowMessage, SystemValues } from '../../../Models';
+import { LOGIN_MASTER, MessageType, mm_customer, mm_operation, ShowMessage, SystemValues } from '../../../Models';
 import { m_branch } from '../../../Models/m_branch';
 import { DatePipe } from '@angular/common'
 import { environment } from 'src/environments/environment';
@@ -18,7 +18,7 @@ import { p_gen_param } from 'src/app/bank-resolver/Models/p_gen_param';
 export class SubsidyEntryComponent implements OnInit {
 
   brnDtls: m_branch[] = [];
-
+  private static operations: mm_operation[] = [];
   isLoading = false;
   loanSubsidy: FormGroup;
   showMsg: ShowMessage;
@@ -37,10 +37,12 @@ export class SubsidyEntryComponent implements OnInit {
   shownoresult = false;
   disabledOnNull = true;
   editDeleteMode=false;
+  AcctTypes: mm_operation[];
   constructor(public datepipe: DatePipe, private router: Router, private formBuilder: FormBuilder, private svc: RestService) { }
 
   ngOnInit(): void {
     // this.GetBranchMaster();
+    this.getOperationMaster()
     this.getSubsidyType()
     this.loanSubsidy = this.formBuilder.group({
       loan_id: [''],
@@ -388,11 +390,42 @@ export class SubsidyEntryComponent implements OnInit {
     this.retrieve()
 
   }
+  private getOperationMaster(): void {
+
+    this.isLoading = true;
+    // if (undefined !== AccounTransactionsComponent.operations && null !== AccounTransactionsComponent.operations && AccounTransactionsComponent.operations.length > 0) {
+    //   this.isLoading = false;
+    //   this.AcctTypes = AccounTransactionsComponent.operations.filter(e => e.module_type === 'LOAN')
+    //     .filter((thing, i, arr) => {
+    //       return arr.indexOf(arr.find(t => t.acc_type_cd === thing.acc_type_cd)) === i;
+    //     });
+    //   this.AcctTypes = this.AcctTypes.sort((a, b) => (a.acc_type_cd > b.acc_type_cd ? 1 : -1));
+      // console.log(this.AcctTypes)
+    // } else {
+      this.svc.addUpdDel<mm_operation[]>('Mst/GetOperationDtls', null).subscribe(
+        res => {
+          console.log(res)
+          SubsidyEntryComponent.operations = res;
+          debugger
+          this.isLoading = false;
+          this.AcctTypes = SubsidyEntryComponent.operations.filter(e => e.module_type === 'LOAN')
+            .filter((thing, i, arr) => {
+              return arr.indexOf(arr.find(t => t.acc_type_cd == 20411|| t.acc_type_cd == 23301)) === i;
+            });
+            console.log(this.AcctTypes);
+            
+          // this.AcctTypes = this.AcctTypes.find(el => el.acc_type_cd == '23301')[0];
+        },
+        err => { this.isLoading = false; }
+      );
+    // }
+    debugger
+  }
   public suggestCustomer(): void {
     this.isLoading = true;
     if (this.f.loan_id.value.length > 0) {
       const prm = new p_gen_param();
-      prm.ad_acc_type_cd = 20411;
+      prm.ad_acc_type_cd = this.AcctTypes[0].acc_type_cd;
       prm.as_cust_name = this.f.loan_id.value.toLowerCase();
       this.svc.addUpdDel<any>('Loan/GetLoanDtls', prm).subscribe(
         res => {

@@ -4,7 +4,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { CommonServiceService } from 'src/app/bank-resolver/common-service.service';
-import { mm_customer, SystemValues } from 'src/app/bank-resolver/Models';
+import { mm_acc_type, mm_customer, SystemValues } from 'src/app/bank-resolver/Models';
 import { p_gen_param } from 'src/app/bank-resolver/Models/p_gen_param';
 import { RestService } from 'src/app/_service';
 @Component({
@@ -43,13 +43,17 @@ export class NetworthStatementComponent implements OnInit {
   memberID:any;
   reportData:any=[];
   reportData1:any=[];
+  accountTypeList: mm_acc_type[] = [];
+  accountTypeList2: mm_acc_type[] = [];
   ardbName=localStorage.getItem('ardb_name');
   branchName=this.sys.BranchName;
+  ardbCD:any=this.sys.ardbCD;
   showWait=false
   ngOnInit(): void {
     this.reportcriteria = this.formBuilder.group({
       cust_name: [null, Validators.required]
     });
+    this.getAccountTypeList();
     this.onLoadScreen(this.content);
     var date = new Date();
     var n = date.toDateString();
@@ -61,6 +65,22 @@ export class NetworthStatementComponent implements OnInit {
   }
   onLoadScreen(content) {
     this.modalRef = this.modalService.show(content, this.config);
+  }
+  getAccountTypeList() {
+    if (this.accountTypeList.length > 0) {
+      return;
+    }
+    this.accountTypeList = [];
+    this.accountTypeList2 = [];
+
+    this.svc.addUpdDel<any>('Mst/GetAccountTypeMaster', null).subscribe(
+      res => {
+
+        this.accountTypeList = res;
+        this.accountTypeList2 = res;
+        this.accountTypeList = this.accountTypeList.filter(c => c.dep_loan_flag === 'D');
+        this.accountTypeList = this.accountTypeList.sort((a, b) => (a.acc_type_cd > b.acc_type_cd) ? 1 : -1);
+      });
   }
   public getMember(cust_cd): void {
     this.showWait=true;
@@ -137,8 +157,15 @@ export class NetworthStatementComponent implements OnInit {
       this.showAlert = false;
       this.svc.addUpdDel('UCIC/GetLoanDtls',dt).subscribe(data=>{console.log(data)
         this.reportData=data
+        for(let i=0;i<this.reportData.length;i++){
+          this.reportData[i].acc_desc= this.accountTypeList2.filter(c => c.acc_type_cd == this.reportData[i].acc_cd)[0]?.acc_type_desc;
+        }
         this.svc.addUpdDel('UCIC/GetDepositDtls',dt).subscribe(data=>{console.log(data)
           this.reportData1=data
+          for(let i=0;i<this.reportData1.length;i++){
+            this.reportData1[i].acc_type_cd= this.accountTypeList.filter(c => c.acc_type_cd == this.reportData1[i].acc_type_cd)[0].acc_type_desc;
+          }
+          debugger
           // this.reportData1 = this.reportData1.sort((a, b) => (a.acc_type_cd > b.acc_type_cd) ? 1 : -1);
           if(this.reportData.length==0 && this.reportData1.length==0){
             this.comser.SnackBar_Nodata()

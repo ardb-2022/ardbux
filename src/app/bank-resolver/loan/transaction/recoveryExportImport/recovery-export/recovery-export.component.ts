@@ -73,6 +73,7 @@ export class RecoveryExportComponent implements OnInit {
     this.svc.addUpdDel<any>('Mst/GetBlockMaster', dt).subscribe(
       res => {
         this.blocks=res;
+        this.blocks = this.blocks.sort((a, b) => (a.block_name > b.block_name) ? 1 : -1);
       })
   }
   private onLoadScreen(content) {
@@ -189,9 +190,9 @@ export class RecoveryExportComponent implements OnInit {
               }
             
           })
-          this.agentPass = this.getExportData[0].password
-          this.agentCD = this.getExportData[0].agent_cd
-          this.agentOpenDt = this.getExportData[0].opening_dt
+          this.agentPass = this.getExportData[0]?.password
+          this.agentCD = this.getExportData[0]?.agent_cd
+          this.agentOpenDt = this.getExportData[0]?.opening_dt
           this.agentName = this.blocks.filter(e=>e.block_cd==this.exportEntryForm.controls.block_cd.value)[0].block_name
         })
         this.modalRef.hide();

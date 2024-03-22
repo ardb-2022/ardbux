@@ -230,7 +230,7 @@
         <div class="form-group col-2">
           <small for="catg_cd">Category <span class="text-danger">*</span></small>
           <select id="catg_cd" class="form-control form-control-sm" formControlName="catg_cd">
-            <option *ngIf="categories" disabled>Choose</option>
+            <option *ngIf="categories">Choose</option>
             <option *ngFor="let category of categories" [value]="category.catg_cd" >{{category.catg_desc}}</option>
           </select>
         </div>
@@ -299,7 +299,7 @@
       <div class="form-row">
         <div class="form-group col-2">
           <small for="state">State</small>
-          <select id="state" class="form-control form-control-sm" disabled formControlName="state">
+          <select id="state" class="form-control form-control-sm"  formControlName="state">
             <option *ngIf="states" disabled>Choose</option>
             <option *ngFor="let state of states" [value]="state.state_cd">{{state.state_name}}</option>
           </select>

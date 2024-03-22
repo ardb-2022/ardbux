@@ -56,6 +56,15 @@
               </mat-form-field>
             </div>
              -->
+             <div class="col-12" *ngIf="sys.ardbCD=='20'">
+              <small for="activity_cd">Activity</small>
+                <select id="activity_cd" class="form-control form-control-sm" formControlName="activity_cd">
+                  <option *ngIf="activityList" disabled>Choose</option>
+                  <option *ngFor="let acti of activityList" [value]="acti.activity_desc">
+                    {{acti.activity_cd +' ' + acti.activity_desc}}
+                  </option>
+                </select>
+             </div>
             <div class="col-6">
               <small for="fromDate">From Date</small>
               <div class="input-group">
@@ -109,6 +118,7 @@
           <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Abc/123" #input>
         </mat-form-field>
         
+        
         <div id="mattable">
           <table mat-table [dataSource]="dataSource" matSort >
               
@@ -118,6 +128,10 @@
                 <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
                 <td mat-cell *matCellDef="let data let i=index"> 
                   <div class="justify-content-center" style="text-align:center;padding-top: 40px;" *ngIf="data">
+                    <div  *ngIf="ardbcd!='26'&&ardbcd!='20'&&ardbcd!='4'">
+                      <h4>{{ardbName}} ({{branchName}})</h4>
+                      <h4>Run Date & Time : {{today}} </h4> 
+                    </div>
                     <div *ngIf="ardbcd=='26'">
                       <h6> <b>{{getArdb}} {{translatedData?.heading}} </b> </h6>
                     <h6> <b>{{translatedData?.bmaddr?.bm_branch}} </b> </h6> 
@@ -161,8 +175,8 @@
                       <td colspan="6" style="text-align: right;">{{translatedData.member_code}} - {{data?.brn_cd}}</td>   
                   </tr>
                     <tr>  
-                        <td *ngIf="ardbcd!='26'" colspan="6" >{{translatedData?.village}} - {{data?.ardb_cd}},  {{translatedData?.gp}} - <span *ngIf="this.ardbcd!='26'">{{data?.cust_address}}</span></td> 
-                        <td *ngIf="ardbcd=='26'" colspan="6">{{translatedData?.address}} - {{data?.ardb_cd}}</td>
+                        <td *ngIf="ardbcd!='26'&&ardbcd!='20'&& ardbcd!='11'" colspan="6" >{{translatedData?.village}} - {{data?.ardb_cd}},  {{translatedData?.gp}} - <span *ngIf="this.ardbcd!='26'">{{data?.cust_address}}</span></td> 
+                        <td *ngIf="ardbcd=='26'||ardbcd=='20'||ardbcd=='11'" colspan="6">{{translatedData?.address}} - {{data?.ardb_cd}}</td>
                         <td colspan="6" style="text-align: right;"> {{translatedData.loan_date}} - {{data?.disb_dt.substr(0,10)}}</td>   
                     </tr>
                     <tr>  
@@ -183,8 +197,8 @@
               </table>
                 <div style="padding:5px;">
                  <p> {{translatedData?.salutation}}, <br> {{translatedData?.salutation_sub}}, <br> {{translatedData?.body_pre}} {{reportData?data?.activity_name:''}} {{translatedData?.body_mid}} 
-                  <span *ngIf="ardbcd!='26'">................................</span>
-                  <span *ngIf="ardbcd=='26'">{{convertDt}}</span>
+                  <span *ngIf="ardbcd!='26'&& ardbcd!='20'">................................</span>
+                  <span *ngIf="ardbcd=='26'||ardbcd=='20'">{{convertDt}}</span>
                   {{translatedData?.body_post}} </p>
                  <br>
                 <div class="row" style="margin-left: 10%; margin-right: 10%;font-weight: 600;">
@@ -216,7 +230,7 @@
                         <div class="col-6 pull-left"> {{translatedData?.curr_intt}}:</div>
                         <div class="col-6 pull-right"> {{reportData?data?.curr_intt:0 |currency:"INR"}}</div>
                       </div>
-                      <div class="row" *ngIf="ardbcd!='26'">
+                      <div class="row" *ngIf="ardbcd=='4'">
                           <b><div class="col-12 pull-right">{{converDttoDt}} </div></b>
                       </div>
                     </div>

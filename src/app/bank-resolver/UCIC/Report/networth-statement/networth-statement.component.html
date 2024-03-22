@@ -105,7 +105,7 @@
   <table class="p-3" id="trialbalance">
     <tr>
       <th>UCIC</th>
-      <th>Type</th>
+      <!-- <th>Type</th> -->
       <th>Member ID</th>
       <th >Name</th>
       <th >Address</th>
@@ -113,8 +113,8 @@
     <tbody>
       <tr>
         <td>{{custCD}}</td>
-        <td *ngIf="custType=='M'">Member</td>
-        <td *ngIf="custType=='N'">Non-Member</td>
+        <!-- <td *ngIf="custType=='M'">Member</td>
+        <td *ngIf="custType=='N'">Non-Member</td> -->
         <td>{{memberID}}</td>
         <td>{{custName}}</td>
         <td>{{custAddr}}</td>
@@ -133,17 +133,17 @@
           </tr>
             <tbody *ngFor="let i of reportData1; let itr=index;" >
           <tr>
-            <!-- <td> {{i.acc_type_cd}}</td> -->
-            <td *ngIf="i.acc_type_cd==1">Savings Deposit</td>
+            <td> {{i.acc_type_cd}}</td>
+            <!-- <td *ngIf="i.acc_type_cd==1">Savings Deposit</td>
             <td *ngIf="i.acc_type_cd==2">Fixed Deposit</td>
             <td *ngIf="i.acc_type_cd==3">DBS</td>
             <td *ngIf="i.acc_type_cd==4">Cash Certificate</td>
             <td *ngIf="i.acc_type_cd==5">Monthly Income Scheme</td>
             <td *ngIf="i.acc_type_cd==6">Recurring Deposit</td>
             <td *ngIf="i.acc_type_cd==7">Share Account</td>
-            <td *ngIf="i.acc_type_cd==8">Flexi Deposit</td>
-            <td *ngIf="i.acc_type_cd==9">Loan Suspense</td>
-            <td *ngIf="i.acc_type_cd==11">DSP</td>
+            <td *ngIf="i.acc_type_cd==8">{{ardbCD=='2'?'Suspense Deposit':'Flexi Deposit'}}</td>
+            <td *ngIf="i.acc_type_cd==9">{{ardbCD=='2'?'IBSD Suspense':'Loan Suspense'}}</td>
+            <td *ngIf="i.acc_type_cd==11">DSP</td> -->
             <td>{{i.acc_num}}</td>
             <td style="text-align:right">{{i.clr_bal | INRCurrency }}</td>
             <td *ngIf="i.acc_status=='O'">Open</td>
@@ -153,7 +153,7 @@
         <tfoot>
           <tr>
             <td colspan="9"> <small>
-              This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions, Kolkata
+              This Report Is Generated Through CFS-2022, Kolkata
              </small> </td>
           </tr>
          </tfoot>
@@ -162,6 +162,7 @@
     <div class="column">
       <table id="trialbalance">
         <tr>
+          <th>Loan Type</th>
           <th>Loan ID</th>
           <th  style="text-align:right">Curr Prn</th>
           <th  style="text-align:right">Ovd Prn</th>
@@ -169,9 +170,11 @@
           <th style="text-align:right">Ovd Intt</th>
           <th style="text-align:right">Penal Intt</th>
           <th style="text-align:right">Total Outstanding</th>
+          <th>Status</th>
         </tr>
           <tbody *ngFor="let i of reportData; let itr=index;"> 
         <tr>
+          <td>{{i.acc_desc}}</td>
           <td>{{i.loan_id}}</td>
           <td style="text-align:right">{{i.curr_prn | INRCurrency}}</td>
           <td style="text-align:right">{{i.ovd_prn  | INRCurrency}}</td>
@@ -179,6 +182,8 @@
           <td style="text-align:right">{{i.ovd_intt  | INRCurrency}}</td>
           <td style="text-align:right">{{i.penal_intt  | INRCurrency}}</td>
           <td style="text-align:right">{{i.penal_intt+i.ovd_intt+i.curr_intt+i.ovd_prn+i.curr_prn  | INRCurrency}}</td>
+          <td *ngIf="i.loan_status=='O'" style="color: rgb(4, 104, 4);">Open</td>
+          <td *ngIf="i.loan_status=='C'" style="color: rgb(187, 6, 6);">Closed</td>
         </tr>
       </tbody>
       </table>
@@ -192,7 +197,7 @@
     <table class="p-3 mkSmall1" id="trialbalance">
       <tr>
         <th>UCIC</th>
-        <th>Type</th>
+        <!-- <th>Type</th> -->
         <th>Member ID</th>
         <th>Name</th>
         <th>Address</th>
@@ -200,8 +205,8 @@
       <tbody>
         <tr>
           <td>{{custCD}}</td>
-          <td *ngIf="custType=='M'">Member</td>
-          <td *ngIf="custType=='N'">Non-Member</td>
+          <!-- <td *ngIf="custType=='M'">Member</td>
+          <td *ngIf="custType=='N'">Non-Member</td> -->
           <td>{{memberID}}</td>
           <td>{{custName}}</td>
           <td>{{custAddr}}</td>
@@ -220,7 +225,8 @@
             </tr>
               <tbody *ngFor="let i of reportData1; let itr=index;" >
             <tr>
-            <td *ngIf="i.acc_type_cd==1">Savings Deposit</td>
+            <td >{{i.acc_type_cd}}</td>
+            <!-- <td *ngIf="i.acc_type_cd==1">Savings Deposit</td>
             <td *ngIf="i.acc_type_cd==2">Fixed Deposit</td>
             <td *ngIf="i.acc_type_cd==3">DBS</td>
             <td *ngIf="i.acc_type_cd==4">Cash Certificate</td>
@@ -229,11 +235,12 @@
             <td *ngIf="i.acc_type_cd==7">Share Account</td>
             <td *ngIf="i.acc_type_cd==8">Flexi Deposit</td>
             <td *ngIf="i.acc_type_cd==9">Loan Suspense</td>
-            <td *ngIf="i.acc_type_cd==11">DSP</td>
+            <td *ngIf="i.acc_type_cd==11">DSP</td> -->
             <td>{{i.acc_num}}</td>
             <td style="text-align:right">{{i.clr_bal | INRCurrency}}</td>
-            <td *ngIf="i.acc_status=='O'">Open</td>
-            <td *ngIf="i.acc_status=='C'">Closed</td>
+            
+            <td *ngIf="i.acc_status=='O'" style="color: rgb(4, 104, 4);">Open</td>
+              <td *ngIf="i.acc_status=='C'" style="color: rgb(187, 6, 6);">Closed</td>
           </tr>
           </tbody>
           <tfoot>
@@ -255,6 +262,7 @@
             <th style="text-align:right">Ovd Intt</th>
             <th style="text-align:right">Penal Intt</th>
             <th style="text-align:right">Total Outstanding</th>
+            <th> Status</th>
           </tr>
             <tbody *ngFor="let i of reportData; let itr=index;"> 
           <tr>
@@ -265,6 +273,8 @@
             <td style="text-align:right">{{i.ovd_intt  | INRCurrency}}</td>
             <td style="text-align:right">{{i.penal_intt  | INRCurrency}}</td>
             <td style="text-align:right">{{i.penal_intt+i.ovd_intt+i.curr_intt+i.ovd_prn+i.curr_prn  | INRCurrency}}</td>
+            <td *ngIf="i.acc_status=='O'" style="color: rgb(4, 104, 4);">Open</td>
+            <td *ngIf="i.acc_status=='C'" style="color: rgb(187, 6, 6);">Closed</td>
           </tr>
         </tbody>
         </table>
@@ -272,7 +282,7 @@
     </div>
     <footer>
       <small>
-        This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions, Kolkata
+        This Report Is Generated Through CFS-2022, Kolkata
        </small> 
      </footer>
   </div>

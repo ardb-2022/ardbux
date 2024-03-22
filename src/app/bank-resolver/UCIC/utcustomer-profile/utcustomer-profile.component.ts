@@ -1,6 +1,6 @@
 import {
   mm_title, mm_category, mm_state, mm_dist, mm_vill,
-  mm_kyc, mm_service_area, mm_block, mm_customer, ShowMessage, MessageType, SystemValues, kyc_sig
+  mm_kyc, mm_service_area, mm_block, mm_customer, ShowMessage, MessageType, SystemValues, kyc_sig, mm_acc_type
 } from './../../Models';
 import { Component, OnInit, ViewChild, ElementRef, TemplateRef, HostListener } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -35,7 +35,10 @@ export class UTCustomerProfileComponent implements OnInit {
   static existingCustomers: mm_customer[] = [];
   @ViewChild('kycContent', { static: true }) kycContent: TemplateRef<any>;
   @ViewChild('netWorth', { static: true }) netWorth: TemplateRef<any>;
+  accountTypeList: mm_acc_type[] = [];
   lbr_status: any = [];
+  showNW:boolean;
+  coustCD:any='';
   modalRef: BsModalRef;
   selectedClick=false;
   date = new Date()
@@ -126,27 +129,8 @@ export class UTCustomerProfileComponent implements OnInit {
   relStatus:any;
   
   ngOnInit(): void {
-
-   
-
-    /**       */
-    // const prm = new p_gen_param();
-    // prm.as_cust_name = '';
-    // prm.ardb_cd=this.sys.ardbCD;
-    //     this.svc.addUpdDel<any>('Deposit/GetCustDtls', prm).subscribe(
-    //       res => {
-    //         console.log(res)
-    //         if (undefined !== res && null !== res && res.length > 0) {
-    //           this.suggestedCustomer = res.slice(0, 10);
-    //         } else {
-    //           this.suggestedCustomer = [];
-    //         }
-    //       },
-    //       err => { this.isLoading = false; }
-    //     );
-
-    /**       */
-
+    this.showNW=true;
+    this.getAccountTypeList();
     this.operation = 'New';
     this.svc.getlbr(environment.relUrl,null).subscribe(data => {
       this.relStatus=data;
@@ -233,7 +217,7 @@ export class UTCustomerProfileComponent implements OnInit {
       this.getServiceAreaMaster();
       // this.onRetrieveClick();
       this.f.status.setValue('A');
-      this.f.state.disable()
+      // this.f.state.disable()
       this.sys.ardbCD=='26'?this.f.dist.setValue(20):this.sys.dist_cd//set Purba Burdwan dist
       this.f.pan_status.setValue('P');
       this.f.nationality.setValue('INDIAN');
@@ -241,7 +225,20 @@ export class UTCustomerProfileComponent implements OnInit {
     }, 150);
     
   }
+  getAccountTypeList() {
+    if (this.accountTypeList.length > 0) {
+      return;
+    }
+    this.accountTypeList = [];
 
+    this.svc.addUpdDel<any>('Mst/GetAccountTypeMaster', null).subscribe(
+      res => {
+
+        this.accountTypeList = res;
+        this.accountTypeList = this.accountTypeList.filter(c => c.dep_loan_flag === 'D');
+        this.accountTypeList = this.accountTypeList.sort((a, b) => (a.acc_type_cd > b.acc_type_cd) ? 1 : -1);
+      });
+  }
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template, this.config);
   }
@@ -338,6 +335,7 @@ export class UTCustomerProfileComponent implements OnInit {
       res => {
         console.log(res)
         this.blocks = res;
+        this.blocks = this.blocks.sort((a, b) => (a.block_name > b.block_name) ? 1 : -1);
       },
       err => { }
     );
@@ -549,6 +547,7 @@ export class UTCustomerProfileComponent implements OnInit {
       })
     })
   }
+  debugger
     // this.custName.unsubscribe()
     this.enableModifyAndDel = true;
     this.suggestedCustomer = null;
@@ -579,7 +578,8 @@ export class UTCustomerProfileComponent implements OnInit {
       dist: cust.dist,
       pin: cust.pin,
       vill_cd: cust.vill_cd,
-      vill_name: this.villages.filter(e => e.vill_cd === cust.vill_cd)[0].vill_name,
+      // vill_name: cust.vill_cd?this.villages.filter(e => (e.vill_cd == cust.vill_cd)&&(e.block_cd == cust.block_cd)&&(e.service_area_cd === cust.service_area_cd))[0].vill_name:'',
+      vill_name: cust.vill_cd?this.villages.filter(e => e.vill_cd == cust.vill_cd)[0].vill_name:'',
       block_cd: cust.block_cd,
       block_cd_desc: this.selectedBlock!=undefined ? this.selectedBlock.block_name:'',
       service_area_cd: cust.service_area_cd,
@@ -620,7 +620,7 @@ export class UTCustomerProfileComponent implements OnInit {
     });
     debugger
     this.retrieveClicked = false
-    this.f.state.disable();
+    // this.f.state.disable();
     // this.f.dist.disable()
   }
 
@@ -637,7 +637,7 @@ export class UTCustomerProfileComponent implements OnInit {
 
     if (newCustomer) {
       console.log('s');
-      if(this.custMstrFrm.controls.phone.value && this.custMstrFrm.controls.sms_flag.value){
+      if(this.custMstrFrm.controls.phone.value){
         cust.del_flag = 'N'
       console.log(cust)
       this.svc.addUpdDel<any>('UCIC/InsertCustomerDtls', cust).subscribe(
@@ -662,7 +662,8 @@ export class UTCustomerProfileComponent implements OnInit {
       );
       }
       else{
-        this.HandleMessage(true, MessageType.Warning,'Could not create Customer, phone and SMS flage are mendetory' );
+        this.isLoading=false;
+        this.HandleMessage(true, MessageType.Warning,'Could not create Customer, phone number is mendetory' );
         document.getElementById('phone').focus();
       }
       
@@ -870,7 +871,7 @@ debugger
     // this.f.cust_name.setValue('')
     this.f.status.disable()
     this.f.state.setValue(19);
-    this.f.state.disable()
+    // this.f.state.disable()
     this.f.dist.setValue(this.sys.dist_cd);
     this.f.pan_status.setValue('P');
     this.f.nationality.setValue('INDIAN');
@@ -1158,8 +1159,8 @@ debugger
                 if(res > 0){
                       this.showMsgs.length = 0;
                      _mode == 'PIN' ? this.kycPhotoNo.nativeElement.focus() : this.kycAddressNo.nativeElement.focus()
-                     this.HandleMessage(true, MessageType.Error, _type == 'P' ? 'This pan card number is already exist for another customer' 
-                     :'This Aadhar number is already exist for another customer');  
+                     this.HandleMessage(true, MessageType.Error, _type == 'P' ? `This pan card number is already exist for another customer, UCIC is ${res}}` 
+                     :`This Aadhar number is already exist for another customerUCIC is ${res}`);  
                      this._isDisabled= true;              
                 }      
                 else{
@@ -1198,8 +1199,8 @@ debugger
                 if(res > 0){
                       this.showMsgs.length = 0;
                       _FLAG == 'PAN' ? this.pan.nativeElement.focus() : this.aadhar.nativeElement.focus()
-                     this.HandleMessage(true, MessageType.Error, _FLAG == 'PAN' ? 'This pan card number is already exist for another customer' 
-                     :'This Aadhar number is already exist for another customer');  
+                     this.HandleMessage(true, MessageType.Error, _FLAG == 'PAN' ? `This pan card number is already exist for another customer, UCIC is ${res}`
+                     :`This Aadhar number is already exist for another customer, UCIC is ${res}`);  
                      this._isDisabled= true;
                      if(_FLAG == 'PAN')  {
                       this.f.pan.setValue('');
@@ -1209,6 +1210,14 @@ debugger
                      }            
                 }      
                 else{
+                  if(_FLAG == 'PAN'){
+                    this.f.kyc_photo_type.setValue('P');
+                    this.f.kyc_photo_no.setValue(this.f.pan.value);
+                  }
+                  if(_FLAG == 'AAD'){
+                    this.f.kyc_address_type.setValue('G');
+                    this.f.kyc_address_no.setValue(this.f.aadhar.value);
+                  }
                   this.showMsgs.length = 0;
                   this._isDisabled= false;              
                 }  

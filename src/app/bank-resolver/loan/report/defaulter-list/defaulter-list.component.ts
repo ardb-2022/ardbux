@@ -38,7 +38,7 @@ export class DefaulterListComponent implements OnInit {
     ignoreBackdropClick: true // disable backdrop click to close the modal
   };
   trailbalance: tt_trial_balance[] = [];
-  displayedColumns: string[] = ['SLNO','block_name','gp_name','vill_name','acc_name','party_name', 'acc_num', 'list_dt', 'curr_intt_rate','ovd_intt_rate','curr_prn','ovd_prn','plus','curr_intt','ovd_intt','computed_till_dt'];
+  displayedColumns: string[] = ['SLNO','block_name','gp_name','vill_name','party_name', 'acc_num', 'list_dt', 'curr_intt_rate','curr_prn','ovd_prn','plus','curr_intt','ovd_intt','penal_intt','total','computed_till_dt'];
   dataSource = new MatTableDataSource()
   AcctTypes: mm_operation[];
   prp = new p_report_param();
@@ -191,12 +191,15 @@ export class DefaulterListComponent implements OnInit {
   ovdPrnSum=0
   currPrnSum=0
   totPrn=0;
-
+  total=0
+  penalInttSum=0
+  dummypenalInttSum=0
   dummycurrInttSum=0
   dummyovdInttSum=0
   dummyovdPrnSum=0
   dummycurrPrnSum=0
   dummytotPrn=0;
+  dummytotal=0;
   loanNm: string;
   searchfilter= new MatTableDataSource()
   inputEl:any
@@ -280,10 +283,14 @@ export class DefaulterListComponent implements OnInit {
 
     else {
       this.ovdInttSum=0
+      this.penalInttSum=0
+      this.dummypenalInttSum=0
       this.currInttSum=0
       this.currPrnSum=0
       this.ovdPrnSum+=0
       this.totPrn=0
+      this.total=0
+      this.dummytotal=0
       this.modalRef.hide();
       this.reportData.length=0;
       this.pagedItems.length=0;
@@ -320,17 +327,22 @@ export class DefaulterListComponent implements OnInit {
         this.resultLength=this.reportData.length
         this.lastAccNum=this.reportData[this.reportData.length-1].acc_num
         this.reportData.forEach(e => {
+          this.penalInttSum+=e.penal_intt
           this.ovdInttSum+=e.ovd_intt
           this.currInttSum+=e.curr_intt
           this.currPrnSum+=e.curr_prn
           this.ovdPrnSum+=e.ovd_prn
           this.totPrn+=e.ovd_prn+e.curr_prn
+          this.total+=e.ovd_prn+e.ovd_intt+e.curr_intt+e.penal_intt
 
+          this.dummypenalInttSum+=e.penal_intt
           this.dummyovdInttSum+=e.ovd_intt
           this.dummycurrInttSum+=e.curr_intt
           this.dummycurrPrnSum+=e.curr_prn
           this.dummyovdPrnSum+=e.ovd_prn
           this.dummytotPrn+=e.ovd_prn+e.curr_prn
+          this.dummytotal+=e.ovd_prn+e.ovd_intt+e.curr_intt+e.penal_intt
+
         },err => {
           this.isLoading = false;
           this.comser.SnackBar_Error(); 
@@ -668,11 +680,11 @@ debugger
   }
   downloadexcel(){
     this.exportAsConfig = {
-      type: 'csv',
+      type: 'xlsx',
       // elementId: 'hiddenTab', 
-      elementIdOrContent:'hiddenTab'
+      elementIdOrContent:'mattable'
     }
-    this.exportAsService.save(this.exportAsConfig, 'cashcumtrial').subscribe(() => {
+    this.exportAsService.save(this.exportAsConfig, 'Overdue List').subscribe(() => {
       // save started
       console.log("hello")
     });
@@ -808,6 +820,10 @@ debugger
       this.currPrnSum=0
       this.ovdPrnSum=0
       this.totPrn=0
+      this.penalInttSum=0
+      this.dummypenalInttSum=0
+      this.total=0
+      this.dummytotal=0
     // debugger;
     console.log(this.dataSource.filteredData)
     this.filteredArray=this.dataSource.filteredData
@@ -817,6 +833,9 @@ debugger
       this.currPrnSum+=e.curr_prn
       this.ovdPrnSum+=e.ovd_prn
       this.totPrn+=e.ovd_prn+e.curr_prn
+      this.penalInttSum+=e.penal_intt
+      this.total+=e.ovd_prn+e.ovd_intt+e.curr_intt+e.penal_intt
+
     });
     // debugger;
   }

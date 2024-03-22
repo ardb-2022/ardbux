@@ -47,6 +47,7 @@ export class RecoveryImportComponent implements OnInit {
     this.svc.addUpdDel<any>('Mst/GetBlockMaster', dt).subscribe(
       res => {
         this.blocks=res;
+        this.blocks = this.blocks.sort((a, b) => (a.block_name > b.block_name) ? 1 : -1);
       })
   }
   getAgentList() {
@@ -88,6 +89,7 @@ export class RecoveryImportComponent implements OnInit {
                 this.showAlert = true;
                 this.flag = 1;
                 this.getImportData=[];
+                this.blocks=[];
               }
             })
             

@@ -235,6 +235,12 @@ export class BorroDetailListComponent implements OnInit {
       this.ovdPrnSum=0
       this.totOutStanding=0
       this.totPenal=0
+      this.dummyovdInttSum=0
+          this.dummycurrInttSum=0
+          this.dummycurrPrnSum=0
+          this.dummyovdPrnSum=0
+          this.dummytotOutStanding=0
+          this.dummytotPenal=0
       this.loanNm=this.AcctTypes.filter(e=>e.acc_type_cd==this.reportcriteria.controls.acc_type_cd.value)[0].acc_type_desc
       console.log(this.loanNm)
       this.fromdate = this.reportcriteria.controls.fromDate.value;
@@ -264,13 +270,6 @@ export class BorroDetailListComponent implements OnInit {
           this.totOutStanding+=e.ovd_prn+e.curr_prn
           this.totPenal+=e.penal_intt
 
-
-          this.dummyovdInttSum+=e.ovd_intt
-          this.dummycurrInttSum+=e.curr_intt
-          this.dummycurrPrnSum+=e.curr_prn
-          this.dummyovdPrnSum+=e.ovd_prn
-          this.dummytotOutStanding+=e.ovd_prn+e.curr_prn
-          this.dummytotPenal+=e.penal_intt
         });
         
       },err => {
@@ -281,6 +280,17 @@ export class BorroDetailListComponent implements OnInit {
         this.reportData2=data
         if(this.reportData2.length==0){
           this.comser.SnackBar_Nodata()
+        }
+        else{
+          this.reportData2.forEach(e => {
+          
+            this.dummyovdInttSum+=e.ovd_intt
+            this.dummycurrInttSum+=e.curr_intt
+            this.dummycurrPrnSum+=e.curr_prn
+            this.dummyovdPrnSum+=e.ovd_prn
+            this.dummytotOutStanding+=e.ovd_prn+e.curr_prn
+            this.dummytotPenal+=e.ovd_intt+e.curr_intt
+          });
         } 
         this.dataSource2.data=this.reportData2
         this.dataSource2.sort = this.sort;

@@ -92,7 +92,7 @@
      printSectionId="mattable" 
      ngxPrint>Print</button>
  <button mat-raised-button type="button" [hidden]="LandingCall" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
- <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadexcel()">Export as EXCEL</button>
+ <!-- <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadexcel()">Export as EXCEL</button> -->
 
     </div>
     </div>
@@ -149,8 +149,8 @@
                            <td mat-cell>{{actiDtls.dc_statement[0].sanction_dt.substr(0,10)}}</td>
                            <td mat-cell>{{actiDtls.dc_statement[0].sanction_amt|currency:"INR"}}</td>
                            <td mat-cell>{{actiDtls.dc_statement[0].own_contribution|currency:"INR"}}</td>
-                           <td mat-cell>{{actiDtls.dc_statement[0].disb_amt|currency:"INR"}}<br>{{actiDtls.dc_statement[1].disb_amt|currency:"INR"}}</td>
-                           <td mat-cell>{{actiDtls.dc_statement[0].disb_dt.substr(0,10)}}<br>{{actiDtls.dc_statement[1].disb_dt.substr(0,10)}}</td>
+                           <td mat-cell>{{actiDtls.dc_statement[0].disb_amt|currency:"INR"}}<br>{{actiDtls.dc_statement[1]?.disb_amt|currency:"INR"}}</td>
+                           <td mat-cell>{{actiDtls.dc_statement[0].disb_dt.substr(0,10)}}<br>{{actiDtls.dc_statement[1]?.disb_dt.substr(0,10)}}</td>
                            <td mat-cell>{{actiDtls.dc_statement[0].lso_no|currency:"INR"}}</td>
                            <td mat-cell>{{actiDtls.dc_statement[0].deposit_amt|currency:"INR"}}</td>
                            
@@ -177,13 +177,13 @@
         <br>
        <table class="t2">
         <tr mat-cell >
-          <td mat-cell style="width:18%;"><b> Purpose Wise Total: </b></td>
-          <td mat-cell style="width:5%"><b>{{row.tot_sanc/2|currency:"INR"}}</b></td>
-          <td mat-cell style="width:5%"><b>{{row.tot_own_contribution/2|currency:"INR"}}</b></td>
+          <td mat-cell style="width:18%;"><b> Purpose Wise Total Disbusment: </b></td>
+          <td mat-cell style="width:5%"><b>{{row.tot_sanc|currency:"INR"}}</b></td>
+          <td mat-cell style="width:5%"><b>{{row.tot_own_contribution|currency:"INR"}}</b></td>
           <td mat-cell style="width:12%;"></td>
           <td mat-cell style="width:5%"><b>{{row.tot_disb|currency:"INR"}}</b></td>
-          <td mat-cell style="width:5%"><b>{{row.tot_dep_amt|currency:"INR"}}</b></td>
-          <td mat-cell style="width:5%"><b>{{row.tot_project/2|currency:"INR"}}</b></td>
+          <td mat-cell style="width:5%"><b>&nbsp;</b></td>
+          <td mat-cell style="width:5%"><b>{{row.tot_project|currency:"INR"}}</b></td>
           <td mat-cell style="width:29%;"></td>
         </tr>
        
@@ -365,7 +365,7 @@
   
 <footer>
   <small>
-    This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions Pvt.Ltd. Kolkata
+    This Report Is Generated Through CFS-2022, Kolkata
    </small> 
    
  </footer>
@@ -376,7 +376,7 @@
    
   
   <!-- <br><br><br><br>
-  <small>This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions, Kolkata</small> -->
+  <small>This Report Is Generated Through CFS-2022, Kolkata</small> -->
    </div>
   <button mat-raised-button hidden id="chngPage" (click)="setPage(1)"></button>
   </div>
@@ -389,7 +389,7 @@
    printSectionId="mattable" 
    ngxPrint>Print</button>
  <button mat-raised-button type="button" [hidden]="LandingCall" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
- <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadexcel()">Export as EXCEL</button>
+ <!-- <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadexcel()">Export as EXCEL</button> -->
 
   </div>
   </div>

@@ -1220,7 +1220,7 @@ debugger
       debugger
       this.svc.addUpdDel<any>('Locker/InsertLockerOpeningData', this.masterModel).subscribe(
         res => {
-        
+        if(res){
           this.td_deftrans.trans_cd = Number(res);
           this.isLoading = false;
           this.disableCustomerName = true;
@@ -1229,7 +1229,14 @@ debugger
           // this.showAlertMsg('INFORMATION', 'Account Record Created Successfully [Account Number:' +
           //   this.DepositModel.tmdeposit.acc_num + '] [Trans Code: ' + this.td_deftrans.trans_cd + ']');
           this.HandleMessage(true, MessageType.Sucess, 'Account Record Created Successfully [Account Number:' +
-            this.masterModel.tmlocker.acc_num + '] [Trans Code: ' + this.td_deftrans.trans_cd + ']');
+            this.masterModel.tmlocker.acc_num + '] [Trans Code: ' + res + ']');
+        }
+        else{
+          this.isLoading = false;
+          // this.showAlertMsg('ERROR', 'Record Not Saved !!!');
+          this.HandleMessage(true, MessageType.Error, 'Error form server side !!!');
+        }
+          
         },
         err => {
 

@@ -73,6 +73,7 @@ export class CTloanDCComponent implements OnInit {
   cAcc:any
   lastAccNum:any
   totSanAmt=0
+  totIBSDamt=0
   totDisAmt=0
   totovdPrnSum=0
   totcurrPrnSum=0
@@ -129,6 +130,7 @@ export class CTloanDCComponent implements OnInit {
       res => {
 
         this.activityList = res;
+        this.activityList = this.activityList.sort((a, b) => (a.activity_cd > b.activity_cd) ? 1 : -1);
         debugger
       },
       err => {
@@ -142,6 +144,7 @@ export class CTloanDCComponent implements OnInit {
     this.svc.addUpdDel<any>('Mst/GetBlockMaster', dt).subscribe(
       res => {
         this.blockList=res;
+        this.blockList = this.blockList.sort((a, b) => (a.block_name > b.block_name) ? 1 : -1);
       })
   }
   onLoadScreen(content) {
@@ -167,6 +170,7 @@ export class CTloanDCComponent implements OnInit {
           this.isLoading=true;
           this.totSanAmt=0;
           this.totDisAmt=0;
+          this.totIBSDamt=0;
           this.totpenalInttSum=0;
           this.totcurrPrnSum=0;
           this.totovdPrnSum=0;
@@ -196,10 +200,11 @@ export class CTloanDCComponent implements OnInit {
               
               for(let j=0;j<this.reportData[i].dclist.length;j++){
                 this.totDisAmt=0;
+                this.totIBSDamt=0
                 for(let k=0;k<this.reportData[i].dclist[j].dc_statement.length;k++){
                     this.totDisAmt+=this.reportData[i].dclist[j].dc_statement[k].disb_amt;
                     this.reportData[i].dclist[j].dc_statement[0].lso_no=this.totDisAmt;
-                    
+                    this.totIBSDamt+=this.reportData[i].dclist[j].dc_statement[0].deposit_amt
                 }
               }
               if(this.reportcriteria.controls.sex.value=='M')
@@ -255,7 +260,7 @@ export class CTloanDCComponent implements OnInit {
     this.exportAsConfig = {
       type: 'xlsx',
       // elementId: 'hiddenTab', 
-      elementIdOrContent:'mattable'
+      elementIdOrContent:'mattable2'
     }
     this.exportAsService.save(this.exportAsConfig, 'Loan Disbusment Certificate').subscribe(() => {
       // save started

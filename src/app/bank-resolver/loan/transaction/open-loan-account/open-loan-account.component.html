@@ -154,7 +154,7 @@
           style="height:25px; text-align: right;" [(ngModel)]="tm_loan_all.loan_acc_no" type="text" placeholder="Bond No">
       </div> -->
       <div class="form-group col-1">
-        <small>Fund Type</small>
+        <small>Fund Type</small><span class="text-danger">*</span>
         <select
           style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
           [(ngModel)]="tm_loan_all.fund_type" id="fund_type"
@@ -165,7 +165,7 @@
       </div>
 
       <div class="form-group col-1">
-        <small for=due_date>Inst. Start Date</small>
+        <small for=due_date>Inst. Start Date </small><span class="text-danger">*</span>
         <div class="input-group">
           <input class="form-control form-control-sm text-capitalize" id="due_date" 
             [disabled]="tm_loan_all.loan_id != undefined || operationType == '' || disableAll == 'Y' "
@@ -182,7 +182,7 @@
     <div class="form-row">
 
       <div class="form-group col-2">
-        <small for=curr_int_rate>Current Interest Rate</small>
+        <small for=curr_int_rate>Current Interest Rate</small><span class="text-danger">*</span>
         <input class="form-control form-control-sm text-capitalize"
           [disabled]="disableAll == 'Y'" id="curr_int_rate"
           style="height:25px; text-align: right; float: none;" type="number" min="0" step='any'
@@ -190,7 +190,7 @@
       </div>
 
       <div class="form-group col-2">
-        <small>Overdue Interest Rate</small>
+        <small>Overdue Interest Rate</small><span class="text-danger">*</span>
         <input class="form-control form-control-sm text-capitalize"
           [disabled]="tm_loan_all.loan_id != undefined || operationType == '' || disableAll == 'Y'" id="ovd_int_rate"
           style="height:25px; text-align: right;" type="number" min="0" step='any' [(ngModel)]="tm_loan_all.ovd_intt_rate"
@@ -198,7 +198,7 @@
       </div>
 
       <div class="form-group col-2">
-        <small>Instalment No</small>
+        <small>Instalment No</small><span class="text-danger">*</span>
         <input class="form-control form-control-sm text-capitalize"
           [disabled]="tm_loan_all.loan_id != undefined || operationType == '' || disableAll == 'Y'" id="instl_no"
           style="height:25px; text-align: right;" type="number" min="0" step='any' [(ngModel)]="tm_loan_all.instl_no"
@@ -206,7 +206,7 @@
       </div>
 
       <div class="form-group col-2">
-        <small>Installment Type</small>
+        <small>Installment Type</small><span class="text-danger">*</span>
         <select
           style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
           [disabled]="tm_loan_all.loan_id != undefined || operationType == '' || disableAll == 'Y' "
@@ -219,15 +219,14 @@
       </div>
 
       <div class="form-group col-2">
-        <small>Repayment Formula</small>
+        <small>Repayment Formula</small><span class="text-danger">*</span>
         <select 
           style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
           [disabled]="tm_loan_all.loan_id != undefined || operationType == '' || disableAll == 'Y' "
           (change)="setRepaymentFormula($event.target.value)" [(ngModel)]="tm_loan_all.emi_formula_no" id="loan_type"
           class="form-control form-control-sm">
-          <option [value]="tm_loan_all.emi_formula_no" selected>
-            {{tm_loan_all.emi_formula_no}}-{{tm_loan_all.emiFormulaDesc}}</option>
-          <option *ngFor="let l of repaymentFormulaList" [value]="l.id">{{l.id}}-{{l.val}}</option>
+          <option  selected>Select</option>
+          <option *ngFor="let l of repaymentFormulaList" [value]="l.formula_no">{{l.formula_desc}}</option>
         </select>
       </div>
 
@@ -326,7 +325,7 @@
 
                 <div class="form-group col-1"></div>
                 <div class="form-group col-7">
-                  <small for=sanc_date>Sanction Date</small>
+                  <small for=sanc_date>Sanction Date<span class="text-danger">*</span></small>
                   <div class="input-group">
                     <input class="form-control form-control-sm text-capitalize" id="sanc_date"
                       style="height:25px; text-align: right;" bsDatepicker
@@ -447,24 +446,26 @@
         <section *ngFor="let ls of tm_loan_sanction_dtls; let i = index">
           <div class="form-row">
             <div class="form-group col-3">
-              <small>Sector</small>
+              <small>Sector</small><span class="text-danger">*</span>
               <select
                 style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
                 [disabled]="disableAll == 'Y' " [(ngModel)]="ls.sector_cd"
                 (change)="setSectorType($event.target.value , i)" id="sec_type" 
                 class="form-control form-control-sm">
                 <!-- <option [value]="ls.sector_cd" disabled selected>{{ls.sector_desc}}</option> -->
+                <option >Select Sector</option>
                 <option *ngFor="let t of sectorList" [value]="t.sector_cd">{{t.sector_desc}}</option>
               </select>
             </div>
 
             <div class="form-group col-2">
-              <small>Activity</small>
+              <small>Activity</small><span class="text-danger">*</span>
               <select
                 style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
                 [disabled]="disableAll == 'Y' " [(ngModel)]="ls.activity_cd"
                 (change)="setActivityType($event.target.value , i)" id="act_type" class="form-control form-control-sm">
                 <!-- <option [value]="ls.activity_cd" disabled selected>{{ls.activity_desc}}</option> -->
+                <option >Select Activity</option>
                 <option *ngFor="let t of selectedActivityList" [value]="t.activity_cd">
                   {{t.activity_desc}}</option>
               </select>
@@ -472,18 +473,19 @@
 
 
             <div class="form-group col-2">
-              <small>Activity Details</small>
+              <small>Activity Details</small><span class="text-danger">*</span>
               <select
                 style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
                 [disabled]="disableAll == 'Y' " [(ngModel)]="ls.crop_cd" (change)="setCorpType($event.target.value , i)"
                 id="act_type" class="form-control form-control-sm">
-                <option [value]="ls.crop_cd" disabled selected>{{ls.crop_cd}}-{{ls.crop_desc}}</option>
+                <option >Select Activity</option>
+                <!-- <option [value]="ls.crop_cd" disabled selected>{{ls.crop_cd}}-{{ls.crop_desc}}</option> -->
                 <option *ngFor="let t of selectedCorpList" [value]="t.crop_cd">{{t.crop_cd}}-{{t.crop_desc}}</option>
               </select>
             </div>
 
             <div class="form-group col-2">
-              <small>Sanction Amount</small>
+              <small>Sanction Amount</small><span class="text-danger">*</span>
               <input class="form-control form-control-sm text-capitalize"
                 [disabled]="(tm_loan_all.acc_cd==23103 && ls.crop_cd !== '00')|| disableAll == 'Y' || ls.approval_status == 'A'"
                 (change)="setValidityDate(i)" [(ngModel)]="ls.sanc_amt" style="height:25px; text-align: right;"
@@ -492,7 +494,7 @@
 
 
             <div class="form-group col-2">
-              <small for=due_date>Validity Date</small>
+              <small for=due_date>Validity Date</small><span class="text-danger">*</span>
               <div class="input-group">
                 <input class="form-control form-control-sm text-capitalize" id="validity_date" [disabled]="disableAll == 'Y' || ls.approval_status == 'A'"
                   style="height:25px; text-align: right;" bsDatepicker
@@ -560,7 +562,7 @@
         </div>
 
         
-        <div class="text-right mb-3" *ngIf="tm_loan_all.acc_cd==23314 || tm_loan_all.acc_cd==23315 || tm_loan_all.acc_cd==20419 || tm_loan_all.acc_cd==20441">
+        <div class="text-right mb-3" *ngIf="tm_loan_all.acc_cd==23314 || tm_loan_all.acc_cd==23315 || tm_loan_all.acc_cd==20419 || tm_loan_all.acc_cd==20441|| tm_loan_all.acc_cd==20416">
           <button  type="button" style="height:22px; padding-top: 0px;"  [disabled]="disableAll == 'Y' "
            class="btn btn-primary btn-sm" (click)="createSecurityDtlList()">
             <i class="fa fa-plus-circle" aria-hidden="true"></i>

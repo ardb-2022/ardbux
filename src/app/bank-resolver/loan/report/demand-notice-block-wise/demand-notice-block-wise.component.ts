@@ -21,6 +21,7 @@ import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 import { LoanOpenDM } from 'src/app/bank-resolver/Models/loan/LoanOpenDM';
 import { tm_loan_all } from 'src/app/bank-resolver/Models/loan/tm_loan_all';
+import { mm_activity } from 'src/app/bank-resolver/Models/loan/mm_activity';
 @Component({
   selector: 'app-demand-notice-block-wise',
   templateUrl: './demand-notice-block-wise.component.html',
@@ -34,6 +35,8 @@ export class DemandNoticeBlockWiseComponent implements OnInit {
   modalRef: BsModalRef;
   isOpenFromDp = false;
   isOpenToDp = false;
+  activityList: mm_activity[] = [];
+
   systemParam: sm_parameter[] = [];
 
   sys = new SystemValues();
@@ -64,6 +67,7 @@ export class DemandNoticeBlockWiseComponent implements OnInit {
   currentPage = 1;
   pagedItems = [];
   reportData:any=[]
+  reportData2:any=[]
   ardbName=localStorage.getItem('ardb_name')
   ardbcd=localStorage.getItem('__ardb_cd')
   branchName=this.sys.BranchName
@@ -123,6 +127,7 @@ export class DemandNoticeBlockWiseComponent implements OnInit {
     private modalService: BsModalService, private _domSanitizer: DomSanitizer, private rstSvc:RestService, private datePipe:DatePipe,
     private router: Router, private comser: CommonServiceService) { }
   ngOnInit(): void {
+    this.getActivityList();
     this.getBlock();
     this.getVillageMaster();
     this.getAccountTypeList();
@@ -160,7 +165,8 @@ export class DemandNoticeBlockWiseComponent implements OnInit {
       acc_cd: [null, Validators.required],
       fromDate: [null, Validators.required],
       toDate: [null, Validators.required],
-      block: [null, Validators.required]
+      block: [null, Validators.required],
+      activity_cd: [null, Validators.required]
     });
     this.onLoadScreen(this.content);
     var date = new Date();
@@ -171,6 +177,29 @@ export class DemandNoticeBlockWiseComponent implements OnInit {
        this.today= n + " "+ time
     this.lastDate = localStorage.getItem('__lastDt');
 
+  }
+  getActivityList() {
+
+    if (this.activityList.length > 0) {
+      return;
+    }
+    this.activityList = [];
+
+    this.svc.addUpdDel<any>('Mst/GetActivityMaster', null).subscribe(
+      res => {
+
+        this.activityList = res;
+        this.activityList = this.activityList.sort((a, b) => (a.activity_cd > b.activity_cd) ? 1 : -1);
+        debugger
+      },
+      err => {
+
+      }
+    );
+
+  }
+  ActivityChange(i:any){
+  
   }
   setVill(){
     this.vilcode='';
@@ -211,6 +240,7 @@ export class DemandNoticeBlockWiseComponent implements OnInit {
     this.svc.addUpdDel<any>('Mst/GetBlockMaster', dt).subscribe(
       res => {
         this.blocks=res;
+        this.blocks = this.blocks.sort((a, b) => (a.block_name > b.block_name) ? 1 : -1);
       })
   }
   getVillageMaster(): void {
@@ -350,13 +380,7 @@ export class DemandNoticeBlockWiseComponent implements OnInit {
       this.lastDate=this.lastDate
     }
     this.comser.getDay(this.reportcriteria.controls.fromDate.value,this.reportcriteria.controls.toDate.value)
-    
-    if (this.reportcriteria.invalid) {
-      this.showAlert = true;
-      this.alertMsg = 'Invalid Input.';
-      return false;
-    }
-  else if(this.comser.diff<0){
+    if(this.comser.diff<0){
     this.date_msg=this.comser.date_msg;
 
     this.notvalidate=true
@@ -406,7 +430,7 @@ export class DemandNoticeBlockWiseComponent implements OnInit {
         
 debugger
         this.reportData.forEach(p => {
-          if(this.sys.ardbCD=="26"){
+          if(this.sys.ardbCD=="26" || this.sys.ardbCD=="20" || this.sys.ardbCD=="10" || this.sys.ardbCD=="11"){
             // p.brn_cd=this.allServiceArea.filter(e=>e.service_area_cd==p.brn_cd)[0]?.service_area_name;
             const abc = p.activity_name;
             let [cName, cAddress] = abc.split('$');
@@ -414,25 +438,43 @@ debugger
             // Trim any leading or trailing whitespaces in the address
             p.activity_name = cName.trim();
             p.ardb_cd = cAddress.trim();
-            
+             
             // Now cName contains the name and cAddress contains the address
             console.log("cName:", cName);
             console.log("cAddress:", cAddress);
           }
           else{
-          p.ardb_cd=this.villages.filter(e=>e.vill_cd==p.ardb_cd && e.service_area_cd==p.cust_address)[0]?.vill_name;
+            p.cust_address=this.allServiceArea.filter(e=>e.service_area_cd==p.cust_address)[0]?.service_area_name;
+            p.ardb_cd=this.villages.filter(e=>e.vill_cd==p.ardb_cd)[0]?.vill_name;
 
-             p.cust_address=this.allServiceArea.filter(e=>e.service_area_cd==p.cust_address)[0]?.service_area_name;
+             
           }
         })
-        debugger
-        this.isLoading=false;
-        if(this.reportData?.length==0||this.reportData==null){
-          this.comser.SnackBar_Nodata()
+          
+    
+    if(this.sys.ardbCD=='20'){
+      this.reportData.forEach(p => {
+        if(p.activity_name==this.reportcriteria.controls.activity_cd.value){
+          this.reportData2.push(p);
+          if(this.reportData2.length>0){
+            this.dataSource.data=this.reportData2
+            this.isLoading=false;
+          }
         }
-        this.dataSource.data=this.reportData;
-        this.dataSource.paginator = this.paginator;
-
+        debugger
+      })
+    }
+    
+    else{
+      
+      if(this.reportData?.length==0||this.reportData==null){
+        this.comser.SnackBar_Nodata()
+      }
+      this.dataSource.data=this.reportData;
+      this.dataSource.paginator = this.paginator;
+      this.isLoading=false;
+    }
+        
 
       },
       err => {

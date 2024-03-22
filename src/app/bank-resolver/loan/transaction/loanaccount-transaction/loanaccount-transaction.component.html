@@ -75,7 +75,7 @@
   </div>
   <div class="modal-footer">
     <!-- <button mat-raised-button class="btn btn-default" (click)="modalRef.hide();disableOperation=false;showTransactionDtl=false;">Cancel</button> -->
-    <button mat-raised-button class="btn btn-default" (click)="onCancel()">Cancel</button> &nbsp;
+    <!-- <button mat-raised-button class="btn btn-default" (click)="onCancel()">Cancel</button> &nbsp; -->
     <button mat-raised-button class="btn btn-primary float-right" (click)="Submit()">View/Edit</button>
   </div>
 </ng-template>
@@ -104,6 +104,41 @@
   </div>
   <div class="modal-footer">
     <button mat-raised-button class="btn btn-light" (click)="modalRef.hide()">Ok</button>
+  </div>
+</ng-template>
+<ng-template #contentLoanRepEMI let-modal bd-example-modal-lg>
+  <div class="modal-header">
+    <h4 class="modal-title customHeader" id="modal-basic-title">EMI Loan Recovery Schedule</h4>
+    <button mat-raised-button class="btn btn-light" (click)="modalRef.hide()">close</button>
+    <button mat-raised-button class="btn btn-light" (click)="calculateEMILoan();modalRef.hide()">Calculate</button>
+  </div>
+  <div class="modal-body">
+
+    <table class="table table-sm table-hover" id="customers2" style="height:100px ; overflow: scroll;">
+      <tr>
+        <th>Rep Id</th>
+        <th>Due Date</th>
+        <th>Instl Prn</th>
+        <th>Instl Intt</th>
+        <th>Total Amount</th>
+        <th> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <input type="checkbox" [checked]="selectAllChecked" (change)="toggleSelectAll()"> Select All</th>
+      </tr>
+      <tr *ngFor="let item of LoanRepSch; let i = index;">
+        <td>{{item.rep_id}}</td>
+        <td>{{item.due_dt1}}</td>
+        <td>{{item.instl_prn|currency:"INR"}}</td>
+        <td>{{item.instl_intt|currency:"INR"}}</td>
+        <td>{{item.instl_prn+item.instl_intt|currency:"INR"}}</td>
+        <td><div class="custom-control form-control-sm custom-switch">
+          <label class="btn btn-filter">
+            <input type="checkbox" name="trades" [checked]="item.recov_status === 'Y'" (change)="setEMIloan(item,i)" [disabled]="item.disabled">
+          </label>&nbsp;
+        </div></td>
+      </tr>
+    </table>
+  </div>
+  <div class="modal-footer">
+    
   </div>
 </ng-template>
 <ng-template #contentLoanStmt let-modal bd-example-modal-xl>
@@ -502,7 +537,7 @@
            </table>
         <!-- <footer>
           <small>
-            This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions Pvt.Ltd. Kolkata
+            This Report Is Generated Through CFS-2022, Kolkata
            </small>
          </footer> -->
         </div>
@@ -608,49 +643,56 @@
             </div>
           </div>
           <br>
-          <b style="font-size: large; padding-left: 28%;">Total Amount:{{t_a| number : '1.2-2'}}</b> 
+          <b style="font-size: large; padding-left: 2%;">Total:{{t_a| number : '1.2-2'}}({{t_a| amountToWord}})</b> 
           <hr>
           <div>
             <div class="row" style="padding-left: 10px;">
               <div class="col-4" style="border-right: 1px solid #808080;">
                 <b> Prn / Intt Typ</b>
-                <hr><br>
+                <hr>
                 <b>Current</b> 
                 <br>
                 <b>Overdue</b>
                 <br>
                 <b>Advance / Penal</b> 
-                <br><br>
+                <br>
                 <hr>
                 <b>Total</b>
               </div>
               <div class="col-4" style="border-right: 1px solid #808080;text-align: right; padding-right: 10%;">
                 <b>Principal</b>
-                <hr><br>
+                <hr>
                 {{c_p| number : '1.2-2'}}
                 <br>
                 {{o_p| number : '1.2-2'}}
                 <br>
                 {{a_p| number : '1.2-2'}}
-                <br><br>
+                <br>
                 <hr>
                 {{c_p+o_p+a_p | number : '1.2-2'}}
               </div>
               <div class="col-4" style="text-align: right; padding-right: 10%;">
                 <b>Interest</b>
-                <hr><br>
+                <hr>
                 {{c_i | number : '1.2-2'}}
                 <br>
                 {{o_i | number : '1.2-2'}}
                 <br>
                 {{p_i | number : '1.2-2'}}
-                <br><br>
+                <br>
                 <hr>
               {{c_i+o_i+p_i | number : '1.2-2'}}
+              </div>
+              <div class="col-12" style="text-align: center;"  *ngIf="sys.ardbCD=='10'">
+                <b>Outstanding: {{this.fd.principal.value| number : '1.2-2'}} | Interest: {{this.fd.intt_recev.value| number : '1.2-2'}}</b>
               </div>
             </div>
             
           </div>
+        </div>
+        <div class="row" style="padding-top: 80px;">
+          <div class="col-6"><b>Customer Signature</b></div>
+          <div class="col-6" style="padding-left: 40px;"><b>Authorized Signatory</b></div>
         </div>
       </div>
 
@@ -702,49 +744,56 @@
               <b>Intt Recov Till:</b> {{i_n_dt?.substr(0,10)}}
             </div>
           </div><br>
-          <b style="font-size: large; padding-left: 28%;">Total Amount:{{t_a| number : '1.2-2'}}</b> 
+          <b style="font-size: large; padding-left:2%;">Total:{{t_a| number : '1.2-2'}}({{t_a| amountToWord}})</b> 
           <hr>
           <div>
             <div class="row" style="padding-left: 10px;">
               <div class="col-4" style="border-right: 1px solid #808080;">
                 <b> Prn / Intt Typ</b>
-                <hr><br>
+                <hr>
                 <b>Current</b> 
                 <br>
                 <b>Overdue</b>
                 <br>
                 <b>Advance / Penal</b> 
-                <br><br>
+                <br>
                 <hr>
                 <b>Total</b>
               </div>
               <div class="col-4" style="border-right: 1px solid #808080;text-align: right; padding-right: 10%;">
                 <b>Principal</b>
-                <hr><br>
+                <hr>
                 {{c_p| number : '1.2-2'}}
                 <br>
                 {{o_p| number : '1.2-2'}}
                 <br>
                 {{a_p| number : '1.2-2'}}
-                <br><br>
+                <br>
                 <hr>
                 {{c_p+o_p+a_p| number : '1.2-2'}}
               </div>
               <div class="col-4" style="text-align: right; padding-right: 10%;">
                 <b>Interest</b>
-                <hr><br>
+                <hr>
                 {{c_i| number : '1.2-2'}}
                 <br>
                 {{o_i| number : '1.2-2'}}
                 <br>
                 {{p_i| number : '1.2-2'}}
-                <br><br>
+                <br>
                 <hr>
               {{c_i+o_i+p_i| number : '1.2-2'}}
+              </div>
+              <div class="col-12" style="text-align: center;" *ngIf="sys.ardbCD=='10'">
+                <b>Outstanding: {{this.fd.principal.value| number : '1.2-2'}} | Interest: {{this.fd.intt_recev.value| number : '1.2-2'}}</b>
               </div>
             </div>
             
           </div>
+        </div>
+        <div class="row" style="padding-top: 80px;">
+          <div class="col-6"><b>Customer Signature</b></div>
+          <div class="col-6" style="padding-left: 40px;"><b>Authorized Signatory</b></div>
         </div>
       </div>
     </div>
@@ -774,7 +823,7 @@
             <div class="justify-content-center" style="text-align:center" *ngIf="reportData">
               <h4>Receipt</h4>
               <h5>{{ardbName}} </h5>
-              <h5>Contai * Purba Medinipur &nbsp;&nbsp;&nbsp;REGD NO. 10 CONT. DATE 01/02/1967</h5>
+              <h5 *ngIf="sys.ardbCD=='2'">Contai * Purba Medinipur &nbsp;&nbsp;&nbsp;REGD NO. 10 CONT. DATE 01/02/1967</h5>
               <h5>Run Date & Time : {{today}} </h5>             
               <h5>{{branchName}}</h5>
                 <h5>{{ardbAddr}}</h5>
@@ -886,7 +935,7 @@
             <div class="justify-content-center" style="text-align:center" *ngIf="reportData">
               <h4>Receipt</h4>
               <h5>{{ardbName}} </h5>
-              <h5>Contai * Purba Medinipur &nbsp;&nbsp;&nbsp;REGD NO. 10 CONT. DATE 01/02/1967</h5>
+              <h5 *ngIf="sys.ardbCD=='2'">Contai * Purba Medinipur &nbsp;&nbsp;&nbsp;REGD NO. 10 CONT. DATE 01/02/1967</h5>
               <h5>Run Date & Time : {{today}} </h5>             
               <h5>{{branchName}}</h5>
                 <h5>{{ardbAddr}}</h5>
@@ -1024,8 +1073,8 @@
             </tr>
               <tbody *ngFor="let i of reportData3; let itr=index;" >
             <tr>
-              <!-- <td> {{i.acc_type_cd}}</td> -->
-              <td *ngIf="i.acc_type_cd==1">Savings Deposit</td>
+              <td> {{i.acc_type_cd}}</td>
+              <!-- <td *ngIf="i.acc_type_cd==1">Savings Deposit</td>
               <td *ngIf="i.acc_type_cd==2">Fixed Deposit</td>
               <td *ngIf="i.acc_type_cd==3">DBS</td>
               <td *ngIf="i.acc_type_cd==4">Cash Certificate</td>
@@ -1034,7 +1083,7 @@
               <td *ngIf="i.acc_type_cd==7">Share Account</td>
               <td *ngIf="i.acc_type_cd==8">Flexi Deposit</td>
               <td *ngIf="i.acc_type_cd==9">Loan Suspense</td>
-              <td *ngIf="i.acc_type_cd==11">DSP</td>
+              <td *ngIf="i.acc_type_cd==11">DSP</td> -->
               <td>{{i.acc_num}}</td>
               <td style="text-align:right">{{i.clr_bal | INRCurrency }}</td>
               <td *ngIf="i.acc_status=='O'" style="color: rgb(4, 104, 4);">Open</td>
@@ -1046,6 +1095,7 @@
       <div class="col-8">
         <table id="trialbalance">
           <tr>
+            <th>Loan Type</th>
             <th>Loan ID</th>
             <th  style="text-align:right">Curr Prn</th>
             <th  style="text-align:right">Ovd Prn</th>
@@ -1057,6 +1107,7 @@
           </tr>
             <tbody *ngFor="let i of reportData2; let itr=index;"> 
           <tr>
+            <td>{{i.acc_desc}}</td>
             <td>{{i.loan_id}}</td>
             <td style="text-align:right">{{i.curr_prn | INRCurrency}}</td>
             <td style="text-align:right">{{i.ovd_prn  | INRCurrency}}</td>
@@ -1401,10 +1452,13 @@
               </div>
             </div>
             <div class="form-group col-2">
-              <small for="amount">Amount <span class="text-danger">*</span> </small>
+              <small for="amount">Total Amount <span class="text-danger">*</span> </small>
               <input type="text" class="form-control form-control-sm" formControlName="amount" id="amount"
                 (change)="onAmtChng()">
             </div>
+            <div class="form-group col-12">
+              {{this.tdDefTransFrm.controls.value|amountToWord}}
+              </div>
             <div class="form-group col-2" *ngIf="isDisburs && showInstrumentDtl">
               <small for="instrument_num">Instrument</small>
               <input type="text" class="form-control form-control-sm" formControlName="instrument_num"

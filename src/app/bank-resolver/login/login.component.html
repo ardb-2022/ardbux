@@ -1,13 +1,11 @@
-<div>
+<!-- <div>
   <div style=" margin: 50px 100px 50px 50px; ">
     <img src="./assets/images/cfs.png"  class="log4">
   
     <div class="col-xs-9 col-sm-6 col-md-5 col-lg-5 shadow-lg mb-5 bg-white p-3 logindiv ">
-      <!-- <div class="bagimg"></div> -->
     <br>
     <img src="./assets/images/login.png"  width="100" height="100" class="log1">
     <img src="./assets/images/login2.png"  width="100" height="100" class="log2">
-      <!-- <h2 class="text-center">Login</h2> -->
       <hr>
       <div *ngIf="showAlert" class="alert alert-danger alert-dismissible fade show" role="alert">
         <strong>Error!</strong> {{alertMsg}}
@@ -20,11 +18,10 @@
       </div>
       
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" id="mainselection">
-        <!-- <label for="ardbbrMst">ARBD CD</label> -->
         <label for="ardbbrMst">Organization Name</label>
         <select id="ardbbrMst" style="border-radius: 1.25rem!important;" class="form-control form-control-sm custom-scrollbar" tabindex="1" formControlName="ardbbrMst" (change)="getArdbCode($event)">
           <option value="">Select</option>
-          <option *ngFor="let option of ardbBrnMst;let i = index" [value]="option.ardB_CD" >{{ option.name }}</option>
+          <option *ngFor="let option of ardbBrnMst;let i = index" [value]="option.ardB_CD" >{{option.ardB_CD}}-{{ option.name }}</option>
         </select>
         <div class="form-group ">
           <label for="exampleInputEmail1">User ID</label>
@@ -41,14 +38,14 @@
           <label for="branch">Branch</label>
         <select tabindex="4" [disabled]="brnDtls.length > 0" id="branch" style="border-radius: 1.25rem!important;" class="form-control form-control-sm custom-scrollbar" formControlName="branch">
           <option value="">Select</option>
-          <option  *ngFor="let option of brnDtls;let i = index" [value]="option.brn_cd">{{ option.brn_name }}</option>
+          <option  *ngFor="let option of brnDtls;let i = index" [value]="option.brn_cd">{{option.brn_cd}}-{{ option.brn_name }}</option>
         </select>
         </div>
-        <button mat-raised-button color="basic"  class="clr-btn" (click)="cancel()" style="border-radius: 20%; margin-left: 20%;">Clear
+        <button mat-raised-button color="basic"  class="clr-btn" (click)="cancel()" style="border-radius: 20px; margin-left: 20%;">Clear
           <mat-icon>restart_alt</mat-icon>
         </button>
         
-        <button mat-raised-button color="primary" class="float-right log-btn" [disabled]=!loginForm.valid style="border-radius: 20%; margin-right: 20%;">Login
+        <button mat-raised-button color="primary" class="float-right log-btn" [disabled]=!loginForm.valid style="border-radius: 20px; margin-right: 20%;">Login
           <mat-icon>login</mat-icon>
         </button>
       </form>
@@ -56,6 +53,79 @@
     </div>
   </div>
     <img src="./assets/images/abc.png" class="log3">
-  </div>
+  </div> -->
+
+  <section class="login">
+		<div class="login_box">
+			<div class="left">
+				<div class="contact">
+          <img src="./assets/images/banklogo.png"  class="log2">
+					<form  [formGroup]="loginForm" (ngSubmit)="onSubmit()" style="width: 100%;" id="mainselection">
+            
+						<!-- <h3>SIGN IN</h3> -->
+            <!-- <img src="./assets/images/login.png"  width="100" height="100" class="log1"> -->
+            
+            <div *ngIf="showAlert" class="alert alert-danger alert-dismissible fade show" role="alert">
+              <strong>Error!</strong> {{alertMsg}}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="closeAlert()">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="alert alert-danger" role="alert" *ngIf="isError">
+              Invalid email or password, try again or register
+            </div>
+            <label for="ardbbrMst">Organization Name</label>
+            <select id="ardbbrMst" style="border-radius: 1rem!important;" class="form-control form-control-sm custom-scrollbar" tabindex="1" formControlName="ardbbrMst" (change)="getArdbCode($event)">
+              <option value="">Select</option>
+              <option *ngFor="let option of ardbBrnMst;let i = index" [value]="option.ardB_CD" >{{option.ardB_CD}}-{{ option.name }}</option>
+            </select>
+            <div class="form-group ">
+              <label for="exampleInputEmail1">User ID</label>
+              <input tabindex="2" type="text" style="border-radius: 1rem!important;" (focusout)="onfocusOut($event)" class="form-control" id="exampleInputEmail1" formControlName="username"
+                aria-describedby="emailHelp" placeholder="Enter user"
+                 name="PreventChromeAutocomplete" autocomplete="address-level4">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputPassword1">Password</label>
+              <input tabindex="3" type="password" style="border-radius: 1rem!important;" class="form-control" id="exampleInputPassword1" formControlName="password"
+                placeholder="Password"  name="x-field-2" autocomplete="new-field-2">
+            </div>
+            <div class="form-group" style="margin-bottom: 2rem!important;">
+              <label for="branch">Branch</label>
+            <select tabindex="4" [disabled]="brnDtls.length > 0" id="branch" style="border-radius: 1rem!important;" class="form-control form-control-sm custom-scrollbar" formControlName="branch">
+              <option value="">Select</option>
+              <option  *ngFor="let option of brnDtls;let i = index" [value]="option.brn_cd">{{option.brn_cd}}-{{ option.brn_name }}</option>
+            </select>
+            </div>
+            <button mat-raised-button color="basic"  class="clr-btn" (click)="cancel()" style="border-radius: 20px;">Clear
+              <mat-icon>restart_alt</mat-icon>
+            </button>
+            
+            <button mat-raised-button color="primary" class="float-right log-btn" [disabled]=!loginForm.valid style="border-radius: 20px;">Login
+              <mat-icon>login</mat-icon>
+            </button>
+
+
+
+
+
+						<!-- <input type="text" placeholder="USERNAME">
+						<input type="text" placeholder="PASSWORD">
+            <button class="clear">CLEAR</button>
+						<button class="submit">LOGIN</button> -->
+					</form>
+				</div>
+			</div>
+			<div class="right">
+        <img src="./assets/images/cfs.png" class="log4" alt="">
+        <img src="./assets/images/bank2.png" style="height: 100%; width: 110%; padding-top:15%" alt="">
+				<div class="right-text">
+					<h2>CFS-2022</h2>
+					<!-- <h5>A UX BASED CREATIVE AGENCEY</h5> -->
+				</div>
+				<!-- <div class="right-inductor"><img src="./assets/images/bank.png" height="600px" alt=""></div> -->
+			</div>
+		</div>
+	</section>
 
 <loading *ngIf="isLoading"></loading>

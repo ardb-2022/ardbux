@@ -18,6 +18,9 @@ import { CommonServiceService } from '../common-service.service';
   providers:[DatePipe]
 })
 export class LoginComponent implements OnInit {
+  private apiUrl = 'https://api64.ipify.org?format=json';
+  // https://api64.ipify.org/?format=json
+  // https://api4.ipify.org/?format=json
 
   loginForm: FormGroup;
   returnUrl: string;
@@ -45,6 +48,7 @@ export class LoginComponent implements OnInit {
   wrongAttamt:any;
   bankFullName:any;
   footer:any;
+  ARBD:any='';
   constructor(private router: Router,
     private formBuilder: FormBuilder,
     private rstSvc: RestService,
@@ -154,20 +158,76 @@ export class LoginComponent implements OnInit {
    
  }
   getArdbCode(e: any) {
+    this.wrongAttamt=0;
+    this.f.username.setValue('')
+    this.f.password.setValue('')
+    this.f.branch.setValue('')
+    if(this.f.ardbbrMst.value=='99'){
+      this.ARBD="26";
+    }
+    else if(this.f.ardbbrMst.value=='100'){
+      this.ARBD="2";
+    }
+    else if(this.f.ardbbrMst.value=='200' || this.f.ardbbrMst.value=='300' ||
+     this.f.ardbbrMst.value=='301'|| this.f.ardbbrMst.value=='302'|| 
+     this.f.ardbbrMst.value=='303'||this.f.ardbbrMst.value=='304'||
+     this.f.ardbbrMst.value=='305'||this.f.ardbbrMst.value=='306'||
+     this.f.ardbbrMst.value=='307'||this.f.ardbbrMst.value=='308'){
+      this.ARBD="3";
+    }
+    else if(this.f.ardbbrMst.value=='401'||this.f.ardbbrMst.value=='402'|| this.f.ardbbrMst.value=='400'){
+      this.ARBD="1";
+    }
+    else if(this.f.ardbbrMst.value=='403'||this.f.ardbbrMst.value=='404' ||this.f.ardbbrMst.value=='405'){
+      this.ARBD="11";
+    }
+    else if(this.f.ardbbrMst.value=='500'){
+      this.ARBD="17";
+    }
+    else{
+      this.ARBD=this.f.ardbbrMst.value;
+    }
+    
+    var dt = {
+      "ardb_cd": this.ARBD,
+      "user_id": this.f.username.value
+    }
+    this.isLoading=true;
+    this.rstSvc.addUpdDel('Mst/GetUserType', dt).subscribe(data => { //console.log(data)
+       
+       if(data){
+        this.userData = data;
+        this.isLoading=false;
+        if(this.userData[0]?.user_type=="D"){
+          this.showAlert=true;
+          this.alertMsg='User id was Locked, Contact to Administrator!'
+          this.isLoading=false;
+          this.loginForm.invalid;
+          return true;
+        }
+        
+       }
+       else{
+        this.showAlert=true;
+        this.alertMsg='Somthing was wrong, try again..'
+        this.isLoading=false;
+        return
+       }
+       
+      },
+      err => {
+        this.isLoading = false;
+      })
     debugger
     //console.log(e);
     //console.log(this.ardbBrnMst);
-    let bankName=this.ardbBrnMst.filter(x=>x.ardB_CD==this.f.ardbbrMst.value)[0].bank_name
-   this.bankFullName=this.ardbBrnMst.filter(x=>x.ardB_CD==this.f.ardbbrMst.value)[0].full_name
+    let bankName=this.ardbBrnMst.filter(x=>x.ardB_CD==this.f.ardbbrMst.value)[0]?.bank_name
+   this.bankFullName=this.ardbBrnMst.filter(x=>x.ardB_CD==this.f.ardbbrMst.value)[0]?.full_name
     // let bankName2=this.ardbBrnMst.filter(x=>x.ardB_CD=='100')[0].bank_name
     debugger
-    if(this.f.ardbbrMst.value=='100'){
-        localStorage.setItem('__ardb_cd', '2');
-    }
     
-    else{
-      localStorage.setItem('__ardb_cd',this.f.ardbbrMst.value);
-    }
+    localStorage.setItem('__ardb_cd',this.ARBD);
+    
     localStorage.setItem('__bName', bankName);
 
     this.router.navigate([bankName + '/login']);
@@ -180,96 +240,133 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.invalid) {
       return;
     }
-    this.isLoading = true;
-    const __bName = localStorage.getItem('__bName');
-    // this.router.navigate([__bName + '/la']); // TODO remove this it will be after login
-    const login = new LOGIN_MASTER();
-    const toreturn = false;
-    const hexText: string = Array.from(this.f.password.value, (char: string) => char.charCodeAt(0).toString(16)).join('');
-    login.ardb_cd = this.f.ardbbrMst.value=='100'?'2':this.f.ardbbrMst.value;
-    login.user_id = this.f.username.value;
-    login.password = hexText;
-    login.brn_cd = this.f.branch.value;
-    this.nm = this.ardbBrnMst.find(x => x.ardB_CD == this.f.ardbbrMst.value)
-    
-    this.nm.name = this.nm.name.substr(0,this.nm.name.length-10)
-    // this.nm.name = this.nm.name +' Co-Operative Agriculture & Rural Development Bank Ltd.'
-    localStorage.setItem('ardb_name', this.bankFullName)
-    localStorage.setItem('report_footer', 'This Report Is Generated Through CFS-2022 ')
-   
-    if( this.f.ardbbrMst.value=='26'){
-      let ardb_addrs=` H.O.: Old Court Compound, PO+PS- Burdwan, Purba Bardhaman- 713101 
-      Contact No: (0342) 2662390/ 9800960007`
-      localStorage.setItem('ardb_addr', ardb_addrs)
-    }
-    if( this.f.ardbbrMst.value=='4'){
-      let ardb_addrs=` Ghatal : Kushpata, Paschim Medinipur, WestBengal`
-      localStorage.setItem('ardb_addr', ardb_addrs)
+    if(this.userData[0]?.user_type != 'A' &&  this.userData[0]?.brn_cd!=this.f.branch.value){
+        this.f.branch.disable() ;
+        this.showAlert=true;
+        this.alertMsg='User only signed into that branch where they were assigned.'
+        return
     }
     else{
-      let ardb_addrs=''
-      localStorage.setItem('ardb_addr', ardb_addrs)
-    }
-    
-    localStorage.setItem('itemUX', this.f.username.value)
-    localStorage.setItem('BUX', this.f.branch.value)
-    this.rstSvc.addUpdDel<any>('Mst/GetUserDtls', login).subscribe(
-      res => {
-        //console.log(res.length)
-        // this.isLoading = false;
-        if (res.length === 0) {
-          this.showAlert = true;
-          this.isLoading=false;
-          this.alertMsg = 'Invalid UserName Or Password!';
-          this.wrongAttamt?this.wrongAttamt:0
-          this.wrongAttamt+=1;
-          localStorage.setItem('W_attempt',  this.wrongAttamt);
-          if(this.wrongAttamt>3){
-            this.loginForm.invalid;
-          }
+      this.isLoading = true;
+      const __bName = localStorage.getItem('__bName');
+      // this.router.navigate([__bName + '/la']); // TODO remove this it will be after login
+      const login = new LOGIN_MASTER();
+      const toreturn = false;
+      const hexText: string = Array.from(this.f.password.value, (char: string) => char.charCodeAt(0).toString(16)).join('');
+      login.ardb_cd = this.ARBD;
+      login.user_id = this.f.username.value;
+      login.password = hexText;
+      login.brn_cd = this.f.branch.value;
+      this.nm = this.ardbBrnMst.find(x => x.ardB_CD == this.f.ardbbrMst.value)
+      
+      // this.nm.name = this.nm.name.substr(0,this.nm.name.length-10)
+      // this.nm.name = this.nm.name +' Co-Operative Agriculture & Rural Development Bank Ltd.'
+      localStorage.setItem('ardb_name', this.bankFullName)
+      localStorage.setItem('report_footer', 'This Report Is Generated Through CFS-2022 ')
+     
+      if( this.f.ardbbrMst.value=='26'){
+        let ardb_addrs=` H.O.: Old Court Compound, PO+PS- Burdwan, Purba Bardhaman- 713101 
+        Contact No: (0342) 2662390/ 9800960007`
+        localStorage.setItem('ardb_addr', ardb_addrs)
+      }
+      if( this.f.ardbbrMst.value=='4'){
+        let ardb_addrs=` Ghatal : Kushpata, Paschim Medinipur, WestBengal`
+        localStorage.setItem('ardb_addr', ardb_addrs)
+      }
+      else{
+        let ardb_addrs=''
+        localStorage.setItem('ardb_addr', ardb_addrs)
+      }
+      
+      localStorage.setItem('itemUX', this.f.username.value)
+      localStorage.setItem('BUX', this.f.branch.value)
+      this.rstSvc.addUpdDel<any>('Mst/GetUserDtls', login).subscribe(
+        res => {
+          //console.log(res.length)
+          // this.isLoading = false;
+          if (res.length === 0) {
+            this.wrongAttamt?this.wrongAttamt:0
+            this.wrongAttamt+=1;
+            localStorage.setItem('W_attempt',  this.wrongAttamt);
 
-          debugger
-        }
-        else {
-          //console.log(res[0])
-
-          if (res[0].login_status === "Y") {
-            this.showAlert = true;
-            this.isLoading=false;
-            this.alertMsg = 'User id already logged in another machine;';
-            // this.showUnlockUsr = true;
-            // alert(this.showUnlockUsr)
-            this.usrToUnlock = res[0];
-            return;
+            
+            if(this.wrongAttamt==1){
+              this.showAlert = true;
+              this.isLoading=false;
+              this.alertMsg = `Invalid UserName Or Password,(Wrong Attamt - ${this.wrongAttamt})`;
+            }
+            else if(this.wrongAttamt==2){
+              this.showAlert = true;
+              this.isLoading=false;
+              this.alertMsg = `Wrong Attamt - ${this.wrongAttamt}, After one more wrong attamt ID will be locked `;
+            }
+           else if(this.wrongAttamt>2){
+              var dc={
+                "ardb_cd":this.ARBD,
+                "user_id":this.f.username.value
+              }
+              this.rstSvc.addUpdDel<any>('Sys/DeleteUserMaster', dc).subscribe(
+                res => {
+                  if(res==0){
+                    this.showAlert = true;
+                    this.isLoading=false;
+                    this.alertMsg = 'User id was locked, Contact to Administrator!';
+                  }
+                })
+            }
+            else{
+              this.showAlert = true;
+              this.isLoading=false;
+              this.alertMsg = `Invalid UserName Or Password,(Wrong Attamt - ${this.wrongAttamt})`;
+            }
+  
+            debugger
           }
           else {
-            // this.isLoading=true;
-            var dt = this.brnDtls.find(x => x.brn_cd == this.f.branch.value)
-            // this.getPrivateIP()
-            this.getBranchIp(dt).then(response => {
-        
-              if (response == true) {
-                res[0].login_status = 'Y';
-                res[0].ip = localStorage.getItem('getIPAddress');
-                this.updateUsrStatus(res[0]);
-                this.getSystemParam();
+            //console.log(res[0])
+  
+            if (res[0].login_status === "Y") {
+              this.showAlert = true;
+              this.isLoading=false;
+              this.alertMsg = 'User id already logged in another machine;';
+              // this.showUnlockUsr = true;
+              // alert(this.showUnlockUsr)
+              this.usrToUnlock = res[0];
+              return;
+            }
+            else {
+              // this.isLoading=true;
+              var dt = this.brnDtls.find(x => x.brn_cd == this.f.branch.value)
+              // this.getPrivateIP()
+              this.getBranchIp(dt).then(response => {
           
-              }
-              
-              else {
-
-              }
-              //  this.isLoading=false;
-            })
+                if (response == true) {
+                  res[0].login_status = 'Y';
+                  res[0].ip = localStorage.getItem('getIPAddress');
+                  this.updateUsrStatus(res[0]);
+                  this.getSystemParam();
+            
+                }
+                
+                else {
+  
+                }
+                //  this.isLoading=false;
+              })
+            }
           }
+        },
+        err => {
+          this.isLoading = false;
+          this.showAlert = true;
+          this.alertMsg = 'Invalid Credential !!!!!';
         }
-      },
+      ),
       err => {
         this.isLoading = false;
-        this.showAlert = true;
-        this.alertMsg = 'Invalid Credential !!!!!';
-      }
-    );
+      };
+      
+    }
     
   }
   
@@ -285,7 +382,7 @@ export class LoginComponent implements OnInit {
         this.isLoading = false;
         this.onSubmit();
       },
-      err => { }
+      err => { this.isLoading = false;}
     );
   }
 
@@ -301,7 +398,7 @@ export class LoginComponent implements OnInit {
   private getSystemParam(): void {
     this.isLoading=true
     var dt={
-      "ardb_cd":this.f.ardbbrMst.value=='100'?'2':this.f.ardbbrMst.value
+      "ardb_cd":this.ARBD
     }
    
     this.rstSvc.addUpdDel('Mst/GetSystemDate',dt).subscribe(data=>
@@ -321,8 +418,9 @@ export class LoginComponent implements OnInit {
           // //console.log(this.systemParam.find(x => x.param_cd === '206').param_value)
 
           this.router.navigate([__bName + '/la']);
-          this.http.get<{ ip: string }>('https://jsonip.com').subscribe(
+          this.http.get<{ ip: string }>(this.apiUrl).subscribe(
             data => {
+              debugger
               // //console.log(data)
               const getIP =  data.ip.split(",");
              localStorage.setItem('getIPAddress', getIP[0]); // feather
@@ -334,23 +432,23 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('L2L', 'true');
           // //console.log(localStorage.getItem('ipAddress'))
           // localStorage.setItem('__ardb_cd', this.f.ardbbrMst.value);
-          localStorage.setItem('__dist_cd', this.ardbBrnMst.find(x=>x.ardB_CD == this.f.ardbbrMst.value).dist_code)
+          localStorage.setItem('__dist_cd', this.ardbBrnMst.find(x=>x.ardB_CD == this.f.ardbbrMst.value)?.dist_code)
           localStorage.setItem('__brnCd', this.f.branch.value); // "101"
-          localStorage.setItem('__brnName', this.brnDtls.find(x => x.brn_cd === this.f.branch.value).brn_name); // "101"
+          localStorage.setItem('__brnName', this.brnDtls.find(x => x.brn_cd === this.f.branch.value)?.brn_name); // "101"
           // localStorage.setItem('__currentDate', this.systemParam.find(x => x.param_cd === '206').param_value); // Day initilaze
-          localStorage.setItem('__cashaccountCD', this.systemParam.find(x => x.param_cd === '213').param_value); // 28101
-          localStorage.setItem('__ddsPeriod', this.systemParam.find(x => x.param_cd === '220').param_value); // 12
+          localStorage.setItem('__cashaccountCD', this.systemParam.find(x => x.param_cd === '213')?.param_value); // 28101
+          localStorage.setItem('__ddsPeriod', this.systemParam.find(x => x.param_cd === '220')?.param_value); // 12
           localStorage.setItem('__userId', this.f.username.value); // feather
-          localStorage.setItem('__minBalWdChq', this.systemParam.find(x => x.param_cd === '301').param_value);
-          localStorage.setItem('__minBalNoChq', this.systemParam.find(x => x.param_cd === '302').param_value);
-          localStorage.setItem('__dpstBnsRt', this.systemParam.find(x => x.param_cd === '805').param_value);
-          localStorage.setItem('__pnlIntRtFrAccPreMatClos', this.systemParam.find(x => x.param_cd === '802').param_value);
-          localStorage.setItem('__curFinyr', this.systemParam.find(x => x.param_cd === '207').param_value);
-          // localStorage.setItem('__neftPayDrAcc', this.systemParam.find(x => x.param_cd === '820').param_value);
-          localStorage.setItem('__sbInttCalTilDt', this.systemParam.find(x => x.param_cd === '799').param_value);
-          localStorage.setItem('__lastDt', this.systemParam.find(x => x.param_cd === '210').param_value);
-          localStorage.setItem('__PrevStatus', this.systemParam.find(x => x.param_cd === '215').param_value);
-          localStorage.setItem('__FinYearClose', this.systemParam.find(x => x.param_cd === '214').param_value);
+          localStorage.setItem('__minBalWdChq', this.systemParam.find(x => x.param_cd === '301')?.param_value);
+          localStorage.setItem('__minBalNoChq', this.systemParam.find(x => x.param_cd === '302')?.param_value);
+          localStorage.setItem('__dpstBnsRt', this.systemParam.find(x => x.param_cd === '805')?.param_value);
+          localStorage.setItem('__pnlIntRtFrAccPreMatClos', this.systemParam.find(x => x.param_cd === '802')?.param_value);
+          localStorage.setItem('__curFinyr', this.systemParam.find(x => x.param_cd === '207')?.param_value);
+          // zlocalStorage.setItem('__neftPayDrAcc', this.systemParam.find(x => x.param_cd === '820').param_value);
+          localStorage.setItem('__sbInttCalTilDt', this.systemParam.find(x => x.param_cd === '799')?.param_value);
+          localStorage.setItem('__lastDt', this.systemParam.find(x => x.param_cd === '210')?.param_value);
+          localStorage.setItem('__PrevStatus', this.systemParam.find(x => x.param_cd === '215')?.param_value);
+          localStorage.setItem('__FinYearClose', this.systemParam.find(x => x.param_cd === '214')?.param_value);
           
           this.f.ardbbrMst.value=='26'?localStorage.setItem('__neftPayDrAcc','401101000283' ):localStorage.setItem('__neftPayDrAcc','0' )
         
@@ -368,7 +466,11 @@ export class LoginComponent implements OnInit {
       },
       sysErr => { }
     );
-  })
+  },
+  error=>{
+    this.isLoading = false;
+  }
+  )
     
   }
 
@@ -391,18 +493,19 @@ export class LoginComponent implements OnInit {
   }
 
   private GetBranchMaster() {
-    // this.isLoading = true;
+    this.isLoading = true;
     var dt = { "ardb_cd": this.f.ardbbrMst.value ?this.f.ardbbrMst.value:null };
     //console.log(dt)
     // https://cfs2022.in/CTARDBUX/api/Mst/GetBranchMaster
     this.rstSvc.addUpdDel('Mst/GetBranchMaster', dt).subscribe(
       res => {
         //console.log(res)
-        // this.isLoading = false;
+        this.isLoading = false;
         this.brnDtls = res;
+        this.brnDtls.sort((a, b) => a.brn_cd - b.brn_cd);
       },
       err => { 
-        // this.isLoading = false;
+        this.isLoading = false;
        }
     );
   }
@@ -427,13 +530,20 @@ export class LoginComponent implements OnInit {
   onfocusOut(e: any) {
 
     var dt = {
-      "ardb_cd": this.f.ardbbrMst.value=='100'?'2':this.f.ardbbrMst.value,
+      "ardb_cd": this.ARBD,
       "user_id": e.target.value
     }
     this.isLoading=true;
     this.rstSvc.addUpdDel('Mst/GetUserType', dt).subscribe(data => { //console.log(data)
        this.userData = data;
        if(this.userData){
+        if(this.userData[0]?.user_type=="D"){
+          this.showAlert=true;
+          this.alertMsg='User id was Locked, Contact to Administrator!'
+          this.isLoading=false;
+          this.loginForm.disable();
+          return true;
+        }
         this.isLoading=false;
         localStorage.setItem('userType',this.userData[0]?.user_type)
        this.loginForm.patchValue({branch:this.userData[0]?.user_type != 'A' ?  this.userData[0]?.brn_cd : ''})
@@ -458,16 +568,20 @@ export class LoginComponent implements OnInit {
 
       //   this.alertMsg = 'User id already logged in another machine;';
       // }
+    },
+    error=>{
+      this.isLoading=false;
     })
   }
   public getBranchIp(e: any) {
     this.loginForm.disable();
     return new Promise((resolve, reject) => 
      {
-      
-      this.http.get<{ ip: string }>('https://jsonip.com').subscribe(
+      this.http.get<{ ip: string }>(this.apiUrl).subscribe(
         data => {
-          ////console.log(data)
+          ////console.
+          debugger
+          console.log(data)
           this.ipAddress = data.ip;
           const myIP =  this.ipAddress.split(",");
           localStorage.setItem('ipAddress',myIP[0])

@@ -74,7 +74,7 @@ export class TransactionapprovalComponent implements OnInit {
   AllHolder:td_accholder[];
   acc_OWNER:any=null;
   joinHold:any=[];
-
+  Totamount:any;
   // cust: mm_customer;
   // tdDepTransRet: td_def_trans_trf[] = [];
 
@@ -452,7 +452,9 @@ export class TransactionapprovalComponent implements OnInit {
         mat_status: acctDtls.mat_status,
         acc_status: acctDtls.acc_status,
         curr_bal: acctDtls.curr_bal,
-        clr_bal: acctDtls.clr_bal,
+        clr_bal: (this.selectedVm.td_def_trans_trf.acc_type_cd==1||this.selectedVm.td_def_trans_trf.acc_type_cd==7
+          ||this.selectedVm.td_def_trans_trf.acc_type_cd==8||this.selectedVm.td_def_trans_trf.acc_type_cd==9
+          ||this.selectedVm.td_def_trans_trf.acc_type_cd==11)?this.selectedVm.td_def_trans_trf.trans_type == 'D'?acctDtls.curr_bal + (+this.Totamount):acctDtls.curr_bal - (+this.Totamount):0,
         standing_instr_flag: acctDtls.standing_instr_flag,
         cheque_facility_flag: acctDtls.cheque_facility_flag,
         approval_status: acctDtls.approval_status,
@@ -469,6 +471,7 @@ export class TransactionapprovalComponent implements OnInit {
         transfer_dt: acctDtls.transfer_dt.toString().substr(0, 10),
         agent_cd: acctDtls.agent_cd,
       });
+      debugger
     } else { this.accDtlsFrm.reset(); }
   }
 
@@ -521,7 +524,7 @@ export class TransactionapprovalComponent implements OnInit {
         kyc_address_no: cust.kyc_address_no,
         org_status: cust.org_status,
         org_reg_no: cust.org_reg_no,
-        catg_desc: category.catg_desc
+        catg_desc: category?.catg_desc
       });
     } else { this.custMstrFrm.reset(); }
 
@@ -633,6 +636,7 @@ export class TransactionapprovalComponent implements OnInit {
     this.HandleMessage(false);
     console.log(vm.td_def_trans_trf)
     this.typeCd=vm.td_def_trans_trf.acc_type_cd
+    this.Totamount=vm.td_def_trans_trf.amount
     let k= new tm_deposit();
     k.acc_type_cd=vm.td_def_trans_trf.acc_type_cd;
     k.acc_num=vm.td_def_trans_trf.acc_num;
@@ -891,12 +895,23 @@ export class TransactionapprovalComponent implements OnInit {
       },
       err => {
         this.isLoading = false;
+        const errorMessage=err.error.text;
+        if(this.containsSubstring(errorMessage)){
+          this.HandleMessage(true, MessageType.Error,'Transaction already Approved...');
+          this.onClickRefreshList();
+        }
+        
+        console.log(err.error.text);
+        debugger
         this.HandleMessage(true, MessageType.Error, err.status==400?'Select Transaction to be APPROVE!!':'Error from server side');
       }
     );
   }
 }
 
+containsSubstring(msg:any): boolean {
+  return msg.includes("Transaction already Approved...");
+}
   public onChangeAcctType(acctTypeCd: number): void {
     acctTypeCd = +acctTypeCd;
     if (acctTypeCd === -99) {

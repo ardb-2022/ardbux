@@ -1,5 +1,4 @@
-
-/* custom scrollbar */
+/* 
 ::-webkit-scrollbar {
   width: 20px;
 }
@@ -10,7 +9,6 @@
 
 ::-webkit-scrollbar-thumb {
   background-color: #d6dee1;
-  /* border-radius: 20px; */
   border: 6px solid transparent;
   background-clip: content-box;
 }
@@ -24,19 +22,14 @@ option:hover{
 }
 .green:hover {background: green;}
 select {
-  
-  
-    /* color: #000000; */
     font-size: 16px;
     font-weight:400;
     padding: 2px 10px;
     width: 100%;
-    /* *background: #58B14C; */
   }
   
   input{
     border: 1px solid rgb(185, 184, 184);
-    /* color: #000000; */
     
     font-size: 16px;
     font-weight: 400;
@@ -91,19 +84,6 @@ select {
     font-size: 1.1em;
     color: #ffffff;
   }
-
-  
-  /* .clr-btn:hover {
-    background-color: rgb(0, 119, 255);
-    background-repeat: no-repeat;
-    border: none;
-    cursor:pointer;
-    overflow: hidden;
-    outline:none;
-    font-size: 1.1em;
-    color: rgb(255, 0, 0);
-  } */
-
   .log-btn {
     background-color: #34723A;
     background-repeat: no-repeat;
@@ -113,46 +93,210 @@ select {
     outline:none;
     font-size: 1.1em;
   }
-  
-  /* .log-btn:hover {
-    background-color: rgb(0, 119, 255);
-    background-repeat: no-repeat;
-    border: none;
-    cursor:pointer;
-    overflow: hidden;
-    outline:none;
-    color:rgb(83, 253, 49);
-    font-size: 1.1em;
-  } */
-  /* bg1{background-image: url("../../../assets/images/bg1.jpg") no-repeat center top !important; background-size: cover !important;align-items: center;} */
-  
-  
-  /* #mainselection {
-    overflow: hidden;
-    width: 350px;
-    -moz-border-radius: 9px 9px 9px 9px;
-    -webkit-border-radius: 9px 9px 9px 9px;
-    border-radius: 9px 9px 9px 9px;
-    box-shadow: 1px 1px 11px #330033;
-  } */
-
-
 body{
   background-color: #34723A!important;
 }
 .logindiv{
   margin-left: 60%; color: rgb(5, 58, 5);
-  border-bottom-left-radius:15%;
-  border-top-right-radius:15%; 
+  border-radius:15%;
   background-image: linear-gradient(to right, rgba(124, 223, 223, 0.418), rgba(95, 185, 100, 0.5));
   
-}
-/* .logindiv{margin-left: 60%;
-  border-bottom-left-radius:15%;
-  border-top-right-radius:15%; 
-  opacity:97%;
-  background-image: linear-gradient(to right, rgba(87, 202, 202, 0.418), rgba(38, 179, 45, 0.699));
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
 } */
+.clr-btn {
+  background-color: rgb(255, 255, 255);
+  background-repeat: no-repeat;
+  border: none;
+  cursor:pointer;
+  overflow: hidden;
+  outline:none;
+  font-size: 1.1em;
+  color: #34723A;
+}
+.clr-btn:hover {
+  background-color: #34723A;
+  background-repeat: no-repeat;
+  border: none;
+  cursor:pointer;
+  overflow: hidden;
+  outline:none;
+  font-size: 1.1em;
+  color: #ffffff;
+}
+.log-btn {
+  background-color: #34723A;
+  background-repeat: no-repeat;
+  border: none;
+  cursor:pointer;
+  overflow: hidden;
+  outline:none;
+  font-size: 1.1em;
+}
+
+img{
+	width: 100%;
+}
+.login {
+    height: 700px;
+    width: 100%;
+    /* background: radial-gradient(#653d84, #332042); */
+    position: relative;
+}
+.login_box {
+    width: 1050px;
+    height: 650px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 1px 4px 22px -8px #0004;
+    display: flex;
+    overflow: hidden;
+}
+.login_box .left{
+  width: 41%;
+  height: 100%;
+  padding: 5px 5px;
+  
+}
+.login_box .right{
+  width: 59%;
+  height: 100%  
+}
+.left .top_link a {
+    color: #452A5A;
+    font-weight: 400;
+}
+.left .top_link{
+  height: 20px
+}
+.left .contact{
+	display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    height: 100%;
+    width: 73%;
+    margin: auto;
+}
+.left h3{
+  text-align: center;
+  margin-bottom: 40px;
+}
+.left input {
+    border: none;
+    width: 80%;
+    margin: 2px 0px;
+    border: 1px solid #4f30677d;
+    padding: 7px 9px;
+    width: 100%;
+    overflow: hidden;
+    background: transparent;
+    /* font-weight: 600; */
+    font-size: 14px;
+}
+.left select {
+  border: none;
+  width: 80%;
+  margin: 2px 0px;
+  border: 1px solid #4f30677d;
+  padding: 7px 9px;
+  width: 100%;
+  overflow: hidden;
+  background: transparent;
+  /* font-weight: 600; */
+  font-size: 14px;
+}
+.left{
+	background: linear-gradient(315deg,#96ef67, #fbffdd);
+}
+.submit {
+    border: none;
+    padding: 15px 35px;
+    border-radius: 8px;
+    margin-top: 120px;
+    background: #34723A;
+    color: #fff;
+    font-weight: bold;
+    -webkit-box-shadow: #34723A;
+    -moz-box-shadow: #34723A;
+    box-shadow: #34723A;
+}
+.clear {
+  border: none;
+  padding: 15px 35px;
+  border-radius: 8px;
+  margin-top: 120px;
+  margin-right: 28px;
+  background: #b33b03;
+  color: #fff;
+  font-weight: bold;
+  -webkit-box-shadow: #b33b03;
+  -moz-box-shadow: #b33b03;
+  box-shadow: #b33b03;
+}
+
+
+
+.right {
+	/* background: linear-gradient(212.38deg, rgba(126, 197, 59, 0.7) 0%, rgba(29, 160, 24, 0.71) 100%),url(https://static.seattletimes.com/wp-content/uploads/2019/01/web-typing-ergonomics-1020x680.jpg); */
+	/* color: #fff; */
+	position: relative;
+}
+
+.right .right-text{
+  height: 100%;
+  position: relative;
+  transform: translate(0%, 45%);
+}
+.right-text h2{
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 50px;
+  font-weight: 500;
+}
+.right-text h5{
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 19px;
+  font-weight: 400;
+}
+
+.right .right-inductor{
+  position: absolute;
+  width: 70px;
+  height: 7px;
+  background: #fff0;
+  left: 50%;
+  bottom: 70px;
+  transform: translate(-50%, 0%);
+}
+.top_link img {
+    width: 28px;
+    padding-right: 7px;
+    margin-top: -3px;
+}
+.log4{
+  width: 51%;
+  position: absolute;
+  left: 22%;
+}
+.log1{
+  /* position: absolute;
+  z-index: 999; */
+  width: 40%;
+  margin-left: 32%;
+  /* height: 17%;
+  top: 6px;
+  margin-left: 37%; */
+}
+.log2{
+  position: absolute;
+  height: 110px;
+  width: 110px;
+  top: 10px;
+}
+

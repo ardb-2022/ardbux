@@ -343,7 +343,7 @@ matmenuTrg:any=[];
             res => {
               this.userInfo=res[0]
               ;//console.log(res)
-              this.userType=res[0].user_type
+              this.userType=res[0]?.user_type
               this.roleCD=this.userType=='A'?1:this.userType=='S'?2:this.userType=='G'?3:4
               debugger
               if(this.roleCD>0){

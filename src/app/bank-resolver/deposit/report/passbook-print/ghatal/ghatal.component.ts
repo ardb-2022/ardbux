@@ -486,7 +486,7 @@ export class GhatalComponent implements OnInit {
       "acc_num":this.reportcriteria.controls.acct_num.value,
       "acc_type_cd":this.reportcriteria.controls.acc_type_cd.value,
      }
-     if(this.sys.ardbCD=="26"||this.sys.ardbCD=="20"){
+     if(this.sys.ardbCD=="4"){
     this.svc.addUpdDel('Deposit/GetPassbookline',dt).subscribe(lRowNo=>{
       this.lastRowNo = lRowNo;
       
@@ -575,74 +575,7 @@ export class GhatalComponent implements OnInit {
        
     })
   }
-  else if(this.sys.ardbCD=="4"){
-    this.svc.addUpdDel('Deposit/GetPassbookline',dt).subscribe(lRowNo=>{
-      this.lastRowNo = lRowNo;
-      
-      this.printDataGhatal=this.passBookData.length>1?this.passBookData.slice():this.passBookData;
-      // this.printData=this.passBookData.slice();
-      if(this.lastRowNo == 20){
-        this.modalRef = this.modalService.show(this.fullpageUpdate, this.config);
-        console.log( this.printDataGhatal);
-      
-      if(this.printDataGhatal.length >20) {
-        for(let i = 0; i< this.printDataGhatal.length ; i ++) 
-        {
-          if(i>19){
-          this.afterPrint.push(this.printDataGhatal[i]);
-          this.restItem=this.afterPrint.length;
-          }
-        }
-          this.printDataGhatal.splice(20,this.printDataGhatal.length-20);
-          ;
-      }
-      
-      else{
-        if(this.printDataGhatal.length<20){
-          this.lastRowNo=this.printDataGhatal.length
-          // this.updateLineNo();
-          // this.updatePassbookStatus();
-        }
-      }
-      console.log(this.lastRowNo);
-      }
-      else{
-        for (let index = 0; index < this.lastRowNo; index++) {
-          this.printDataGhatal.unshift(o);
-        } 
-      console.log( this.printDataGhatal);
-     
-        this.lastRowNo=this.printDataGhatal.length
-       
-      if(this.printDataGhatal.length >19) {
-        for(let i = 0; i< this.printDataGhatal.length ; i ++) 
-        {
-          if(i>19){
-          this.afterPrint.push(this.printDataGhatal[i]);
-          this.restItem=this.afterPrint.length;
-          }
-        }
-          this.printDataGhatal.splice(20,this.printDataGhatal.length-20);
-          ;
-      }
-      
-      else{
-        if( this.printDataGhatal.length<20){
-          this.lastRowNo=this.printDataGhatal.length
-          // this.updateLineNo();
-          // this.updatePassbookStatus();
-        }
-      }
-      console.log(this.lastRowNo);
-      
-      
-      console.log(this.printDataGhatal);
-      ;
-       
-    }
-       
-    })
-  }
+  
   else{
     this.printData=[]
   }
@@ -702,7 +635,7 @@ export class GhatalComponent implements OnInit {
     
   }
   PrintNext(){
-    if(this.sys.ardbCD=="26"||this.sys.ardbCD=="20"||this.sys.ardbCD=="4"){
+    if(this.sys.ardbCD=="4"){
       const o = {
         trans_dt  : null,
         particulars   : null,
@@ -770,45 +703,7 @@ export class GhatalComponent implements OnInit {
         console.log(this.printData);
         
     }
-    else if(this.sys.ardbCD=="4"){
-      this.modalRef.hide();
-      this.printDataGhatal=[];
-      for(let i = 0; i< this.afterPrint.length ; i ++) 
-        {
-          this.printDataGhatal.push(this.afterPrint[i]);
-        }
-        ;
-        
-          this.lastRowNo=0;
-          this.lastRowNo=this.printDataGhatal.length
-        
-        if(this.printDataGhatal.length >19) {
-          this.afterPrint=[];
-          this.restItem=0;
-          for(let i = 0; i< this.printDataGhatal.length ; i ++) 
-            { if(i>19){
-              this.afterPrint.push(this.printDataGhatal[i]);
-              this.lastRowNo=this.afterPrint.length
-              this.restItem=this.afterPrint.length;
-  
-            }
-            }
-            this.printDataGhatal.splice(20,this.printDataGhatal.length-20);
-            ;
-        }
-        else{
-          this.afterPrint=[];
-          
-        
-          this.restItem=0;
-          this.lastRowNo=this.printDataGhatal.length
-          this.restItem=this.printDataGhatal.length;
-  
-          // this.updateLineNo();
-          // this.updatePassbookStatus();
-          
-        }
-    }
+    
     else{
       this.printData=[]
     }

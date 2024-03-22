@@ -362,25 +362,59 @@ export class VoucherComponent implements OnInit {
     (<FormArray>this.onVoucherCreation.get('VoucherF')).removeAt(deleteindex);    
   }
 
-  selectEvent(item, i) {
+  selectEvent(search, i) {
     // do something with selected item
-    if(item.impl_flag=='N'){
-      this.HandleMessage(true, MessageType.Error, '('+item.acc_cd+' - '+ item.acc_name+')'+'  Can not be use in Voucher Head');
+    // if(item.impl_flag=='N'){
+    //   this.HandleMessage(true, MessageType.Error, '('+item.acc_cd+' - '+ item.acc_name+')'+'  Can not be use in Voucher Head');
+    //   this.VoucherF.controls[i].get('acc_cd').setValue('')
+    //   this.VoucherF.controls[i].get('desc').setValue('')
+    //   this.maccmaster1.length=0
+    // }
+    // else{
+    //   try {
+    //     this.VoucherF = this.onVoucherCreation.get('VoucherF') as FormArray;
+    //     this.VoucherF.controls[i].get('acc_cd').setValue(item.acc_cd);
+    //   }
+    //   catch (exception) { let x = 0; }
+    // }
+    if(search.impl_flag=='N'){
+      this.HandleMessage(true, MessageType.Error, '('+search.acc_cd+' - '+ search.acc_name+')'+'  Can not be use in Voucher Head');
       this.VoucherF.controls[i].get('acc_cd').setValue('')
-      this.VoucherF.controls[i].get('desc').setValue('')
       this.maccmaster1.length=0
     }
-    else{
-      try {
-        this.VoucherF = this.onVoucherCreation.get('VoucherF') as FormArray;
-        this.VoucherF.controls[i].get('acc_cd').setValue(item.acc_cd);
-      }
-      catch (exception) { let x = 0; }
+    else if(this._voucherTyp == 'T' && search.acc_cd==21101){
+      this.HandleMessage(true, MessageType.Error, '('+search.acc_cd+' - '+ search.acc_name+')'+'  Can not be use in Transfer Voucher');
+      this.VoucherF.controls[i].get('acc_cd').setValue('');
+      this.VoucherF.controls[i].get('desc').setValue('');
+      this.maccmaster1.length=0
     }
+    // else if(search.acc_cd==26401){
+    //   this.HandleMessage(true, MessageType.Error, '('+search.acc_cd+' - '+ search.acc_name+')'+'  Can not be use in Voucher Screen');
+    //   this.VoucherF.controls[i].get('acc_cd').setValue('');
+    //   this.VoucherF.controls[i].get('desc').setValue('');
+    //   this.maccmaster1.length=0
+    // }
+    else{
+      const isAccCdExists = (arr, search) => arr.some(obj => obj.acc_cd === search.acc_cd);
+      if (!isAccCdExists(this.VoucherF.value, search)) {
+        this.VoucherF.controls[i].get('desc').setValue(search.acc_name)
+            this.VoucherF.controls[i].get('acc_cd').setValue(search.acc_cd)
+            this.maccmaster1.length=0
+      }
+      else{
+        this.HandleMessage(true, MessageType.Error, 'Same GL-Head Can not be use in Entry Screen');
+        this.VoucherF.controls[i].get('acc_cd').setValue('');
+        this.VoucherF.controls[i].get('desc').setValue('');
+        this.maccmaster1.length=0 
+      }
+        
+    }
+    // do something with selected item
     
   }
 
   onChangeSearch(search, i) {
+    
     // do something with selected item
   }
   onChange(event) {
@@ -415,6 +449,7 @@ export class VoucherComponent implements OnInit {
    //  console.log(this.maccmaster.filter(x=>x.acc_cd.toString().includes(e)))
     if(e.target.value){
      this.maccmaster1=this.maccmaster.filter(x=>x.acc_cd.toString().includes(e.target.value))
+     debugger
     for(let p=0;p<this.VoucherF.controls.length;p++){
      if(p==i){
        this.tableId=document.getElementById("tab"+i);
@@ -436,6 +471,8 @@ export class VoucherComponent implements OnInit {
     
  }
  putValue(entry:any,i:any){
+  console.log(this.VoucherF);
+debugger
   if(entry.impl_flag=='N'){
     this.HandleMessage(true, MessageType.Error, '('+entry.acc_cd+' - '+ entry.acc_name+')'+'  Can not be use in Voucher Head');
     this.VoucherF.controls[i].get('acc_cd').setValue('')
@@ -453,9 +490,21 @@ export class VoucherComponent implements OnInit {
   //   this.VoucherF.controls[i].get('desc').setValue('');
   //   this.maccmaster1.length=0
   // }
-  else{this.VoucherF.controls[i].get('desc').setValue(entry.acc_name)
-  this.VoucherF.controls[i].get('acc_cd').setValue(entry.acc_cd)
-  this.maccmaster1.length=0}
+  else{
+    const isAccCdExists = (arr, entry) => arr.some(obj => obj.acc_cd === entry.acc_cd);
+    if (!isAccCdExists(this.VoucherF.value, entry)) {
+      this.VoucherF.controls[i].get('desc').setValue(entry.acc_name)
+          this.VoucherF.controls[i].get('acc_cd').setValue(entry.acc_cd)
+          this.maccmaster1.length=0
+    }
+    else{
+      this.HandleMessage(true, MessageType.Error, 'Same GL-Head Can not be use in Entry Screen');
+      this.VoucherF.controls[i].get('acc_cd').setValue('');
+      this.VoucherF.controls[i].get('desc').setValue('');
+      this.maccmaster1.length=0 
+    }
+      
+  }
     
  
  }
