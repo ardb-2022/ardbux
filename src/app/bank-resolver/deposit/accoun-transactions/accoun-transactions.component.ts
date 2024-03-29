@@ -840,9 +840,7 @@ debugger
         cust_name: this.accNoEnteredForTransaction.cust_name,
         intt_trf_type: intrestType,
         constitution_cd: this.accNoEnteredForTransaction.constitution_cd,
-        constitution_cd_desc: (undefined !== constitution && null !== constitution
-          && undefined !== constitution.constitution_desc && null !== constitution.constitution_desc) ?
-          constitution.constitution_desc : null,
+        constitution_cd_desc: this.accNoEnteredForTransaction.constitution_desc,
         oprn_instr_cd: this.accNoEnteredForTransaction.oprn_instr_cd,
         oprn_instr_cd_desc: (undefined !== OprnInstrDesc && null !== OprnInstrDesc
           && undefined !== OprnInstrDesc.oprn_desc && null !== OprnInstrDesc.oprn_desc) ?
@@ -1132,10 +1130,10 @@ getjoinholder(){
         this.resBrnCd = res;
         this.resbrnCD1 = res;
         this.resBrnCatgCd = res;
-        this.constCd = this.resBrnCd[0]?.constitution_cd
-        this.resBrnCatgCd = this.resBrnCd[0]?.catg_cd;
+        this.constCd = this.resbrnCD1[0]?.constitution_cd
+        this.resBrnCatgCd = this.resbrnCD1[0]?.catg_cd;
         console.log(this.resBrnCatgCd)
-        this.resBrnCd = this.resBrnCd[0]?.brn_cd
+        this.resBrnCd = this.resbrnCD1[0]?.brn_cd
         console.log(this.resBrnCd)
         this.custUCIC=res[0]?.cust_cd
         this.accOpenDt=res[0]?.opening_dt;
@@ -1824,7 +1822,7 @@ getjoinholder(){
             this.svc.addUpdDel<any>('Mst/GetConstitution', null).subscribe(
               res1 => {
                 let k = res1.filter(x => x.constitution_cd == res.tmdepositrenew.constitution_cd)
-                // //////////////debugger;
+                debugger;
                 this.tdDefTransFrm.patchValue({
                   constitution_cd: k[0].constitution_cd,
                   constitution_cd_desc: k[0].constitution_desc

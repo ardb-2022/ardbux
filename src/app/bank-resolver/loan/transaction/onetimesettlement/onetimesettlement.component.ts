@@ -6,7 +6,7 @@ import { RestService, InAppMessageService } from 'src/app/_service';
 import {
   MessageType, mm_acc_type, mm_customer,
   mm_operation, m_acc_master, ShowMessage, SystemValues,
-  td_def_trans_trf, tm_deposit, tm_depositall
+  td_def_trans_trf, tm_deposit, tm_depositall, mm_block
 } from '../../../Models';
 import { tm_denomination_trans } from '../../../Models/deposit/tm_denomination_trans';
 import { DatePipe } from '@angular/common';
@@ -25,6 +25,8 @@ import { p_loan_param } from 'src/app/bank-resolver/Models/loan/p_loan_param';
 import { tt_loan_rep } from 'src/app/bank-resolver/Models/loan/tt_loan_rep';
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 import { DateFormatter } from 'ngx-bootstrap/datepicker';
+import { Observable } from 'rxjs';
+import { mm_activity } from 'src/app/bank-resolver/Models/loan/mm_activity';
 // import { threadId } from 'worker_threads';
 ;
 
@@ -36,7 +38,7 @@ import { DateFormatter } from 'ngx-bootstrap/datepicker';
 })
 export class OnetimesettlementComponent implements OnInit {
 
-  constructor(private svc: RestService, private msg: InAppMessageService, private modalService: BsModalService,
+  constructor(private svc: RestService,public dtpipe: DatePipe, private msg: InAppMessageService, private modalService: BsModalService,
     private frmBldr: FormBuilder, public c: DatePipe, private router: Router, private _domSanitizer: DomSanitizer) { }
   get f() { return this.accTransFrm.controls; }
   get fd() { return this.accDtlsFrm.controls; }
@@ -47,8 +49,15 @@ export class OnetimesettlementComponent implements OnInit {
   @ViewChild('contentbatch', { static: true }) contentbatch: TemplateRef<any>;
   @ViewChild('contentLoanRep', { static: true }) contentLoanRep: TemplateRef<any>;
   @ViewChild('contentLoanStmt', { static: true }) contentLoanStmt: TemplateRef<any>;
-
-  cust_acc_type: any;
+  @ViewChild('LoanChallan', { static: true }) LoanChallan: TemplateRef<any>;
+  @ViewChild('ContaiLoanChallan', { static: true }) ContaiLoanChallan: TemplateRef<any>;
+  cust_acc_type:any;
+  blocks: mm_block[] = [];
+  selectedBlock:any[]=[];
+  selectAllChecked:any
+  selectedEMIloan:any[]=[];
+  lastCheckedIndex: number | null = null;
+  acc2 = new LoanOpenDM();
   operations: mm_operation[];
   unApprovedTransactionLst: td_def_trans_trf[] = [];
   unapprovedTrans: td_def_trans_trf[] = [];
@@ -65,7 +74,10 @@ export class OnetimesettlementComponent implements OnInit {
   sancDetails: FormGroup;
   ReportUrl: SafeResourceUrl;
   UrlString = '';
+  pnlInttRt:any;
   // sancdtls: FormArray;
+  systemParam:any[]=[]
+  activityList: mm_activity[] = [];
   showTransMode = false;
   showTransactionDtl = false;
   hideOnClose = false;
@@ -78,24 +90,25 @@ export class OnetimesettlementComponent implements OnInit {
   perVal: any;
   editDeleteMode = false;
   inttTillDt: any;
-  shownoresult = false;
-  maccmaster: m_acc_master[] = [];
-  maccmasterRet: m_acc_master[] = [];
+  shownoresult=false;
+  recov_sum=0
   config = {
     keyboard: false, // ensure esc press doesnt close the modal
     backdrop: true, // enable backdrop shaded color
     ignoreBackdropClick: true // disable backdrop click to close the modal
   };
-  // accountTypeList: mm_acc_type[] = [];
-
+  subSidyAmt=0;
+  CurrentYearDemand:any[]=[];
   customerList: mm_customer[] = [];
   td_deftrans = new td_def_trans_trf();
   td_deftranstrfList: td_def_trans_trf[] = [];
   tm_transferList: tm_transfer[] = [];
   accountTypeList: mm_acc_type[] = [];
+  accountTypeList2: mm_acc_type[] = [];
   acc_master: m_acc_master[] = [];
+  acc_master1: m_acc_master[] = [];
   tm_deposit = new tm_deposit();
-  accNum:any;
+  name:string;
   accNoEnteredForTransaction: tm_loan_all;
   hideOnRenewal = false;
   showTranferType = true;
@@ -107,6 +120,10 @@ export class OnetimesettlementComponent implements OnInit {
   installmenttypeList: mm_installment_type[] = [];
   denominationGrandTotal = 0;
   transferGrandTotal = 0;
+  suggestedCustomer1: mm_customer[];
+  ardbName=localStorage.getItem('ardb_name');
+  ardbAddr=localStorage.getItem('ardb_addr');
+  branchName=this.sys.BranchName;
   suggestedCustomer: mm_customer[];
   suggestedCustomerCr: mm_customer[];
   indxsuggestedCustomerCr = 0;
@@ -121,17 +138,115 @@ export class OnetimesettlementComponent implements OnInit {
   currIntt: any;
   ovdIntt: any;
   showRemarks = false;
-  disabledOnNull = true;
-  disableOnSaveEdit = false;
-  disableChangeTrf = true;
-  showTrans=true;
-  acc_nm='undefined'
-  accCd:any;
+  disabledOnNull=true;
+  disableOnSaveEdit=false;
+  disableChangeTrf=true
+  inttRetForUpdate:any;
   hidegl:boolean=true;
   glHead:any;
-  acc2 = new LoanOpenDM();
+  memberCD:any;
+  opcrSum = 0;
+  drSum = 0;
+  crSum = 0;
+  clsdrSum = 0;
+  clscrSum = 0;
+  totalRecovSum=0;
+  lastAccCD: any;
+  today: any
+  cName: any
+  cAddress: any
+  cAcc: any
+  lastAccNum: any
+  currInttSum = 0
+  ovdInttSum = 0
+  ovdPrnSum = 0
+  currPrnSum = 0
+  currInttRecovSum = 0
+  ovdInttRecovSum = 0
+  ovdPrnRecovSum = 0
+  currPrnRecovSum = 0
+  totPrn = 0;
+  loanId: any;
+  custNm:any;
+  addr:any;
+  reportData: any = []
+  reportData2: any = []
+  reportData3: any = []
+  fromdate: Date;
+  toDate: Date;
+  // suggestedCustomer: mm_customer[];
+  recovSum=0;
+  disbSum=0;
+  lastDt:any;
+  lastCd:any;
+  penalInttSum=0
+  penalInttRecovSum=0;
+  advPrnRecovSum=0;
+  showWait=false
+  resultLength=0;
+  currInttCalSum = 0
+  ovdInttCalSum = 0
+  penalInttCalSum=0
+  fdCurrPrn=0
+  fdCurrIntt=0
+  fdPrincipal=0
+  fdTotalDue=0
+  fdIntt=0;
+  fdOvdprn=0
+  fdOvdIntt=0
+  fdPenalIntt=0
+  joinHold:any=[];
+  member_id:string;
+  acc_block:string;
+  acc_lfNo:string;
+  acc_phone:string;
+  guardian_name:string;
+  present_address:string;
+  l_cust_cd:any;
+  l_case_no:string;
+  t_d:any;
+  t_a:any;
+  s_a:any;
+  c_int:any;
+  o_int:any;
+  i_r_t:any;
+  c_p:any;
+  c_i:any;
+  o_p:any;
+  o_i:any;
+  a_p:any;
+  p_i:any;
+  t_cd:any;
+  i_n_dt:any;
+  l_ch:any;
+  partyName:any;
+  ln_id:any; 
+  pps:any;
+
+  aCD:any
+  acDesc:any;
+  trns_type:any;
+  m_id:any;
+  fdt:any;
+  tdt:any;
+  Share_fl_no:any;
+  showNW:boolean;
+  outPrn:Number=0;
+  outIntt:Number=0;
+  emiRecovPrn:number=0;
+  emiRecovIntt:number=0;
+  emiRecovTot:number=0;
+  maccmaster:any=[]
+  maccmasterRet:any=[]
+  acc_nm:any
+  accNum:any
+  accCd:any
   // showInstrumentDtl = false;
   ngOnInit(): void {
+    var date = new Date();
+    var n = date.toDateString();
+    var time = date.toLocaleTimeString();
+    this.today= n + " "+ time
     this.isLoading = false;
     this.accTransFrm = this.frmBldr.group({
       acc_type_cd: [''],
@@ -435,7 +550,87 @@ export class OnetimesettlementComponent implements OnInit {
   //   }
   //   else { this.isLoading = false; }
   // }
+  public GetCustomer(): Observable<mm_customer> {
+    const prm = new p_gen_param();
+     
+        prm.as_cust_name = this.acc2.tmloanall.party_cd?.toString();
+        prm.ardb_cd = this.sys.ardbCD;
+        this.svc.addUpdDel<any>('Deposit/GetCustDtls', prm).subscribe(
+          res => {
+            console.log(res)
+            if (undefined !== res && null !== res && res.length > 0) {
+              this.suggestedCustomer1 = res;
+              this.suggestedCustomer1=this.suggestedCustomer1.filter(e=>e.cust_cd==this.acc2.tmloanall.party_cd)
+              this.memberCD= this.suggestedCustomer1[0].old_cust_cd;
 
+              let BLOCK=res.filter(e=>e.cust_cd==this.acc2.tmloanall.party_cd)
+              this.selectedBlock[0] = this.blocks.filter(e => e.block_cd == BLOCK[0].block_cd)[0];
+              console.log(this.blocks);
+              // this.l_cust_cd=this.suggestedCustomer1.filter(e=>e.cust_cd===this.acc2.tmloanall.party_cd)[0].cust_cd
+
+              debugger
+              // console.log(this.selectedBlock[0].block_name);
+              // console.log(this.suggestedCustomer1[0].phone);
+              // console.log(this.acc2.tmloanall.loan_acc_no);
+              // this.ln_id=this.suggestedCustomer1[0].acc_num
+              this.Share_fl_no=this.suggestedCustomer1[0].email;
+              this.partyName=this.suggestedCustomer1[0].cust_name;
+              this.acc_block=this.selectedBlock[0].block_name;
+              this.acc_phone=this.suggestedCustomer1[0].phone;
+              this.present_address=this.suggestedCustomer1[0].present_address;
+              this.member_id=this.suggestedCustomer1[0].old_cust_cd;
+              this.m_id=this.member_id;
+              this.pps=this.activityList.filter(e=>e.activity_cd==this.acc2.tmloanall.activity_cd)[0].activity_desc
+              this.guardian_name=this.suggestedCustomer1[0].guardian_name;
+              this.acc_lfNo=this.acc2.tmloanall.loan_acc_no;
+              this.l_cust_cd=this.suggestedCustomer1[0].cust_cd;debugger
+              debugger
+              if(this.l_cust_cd){
+                this.reportData2.length=0;
+                this.reportData3.length=0;
+                var dt={
+                  "ardb_cd":this.sys.ardbCD,
+                  "brn_cd":this.sys.BranchCode,
+                  "cust_cd":this.l_cust_cd
+                }
+              
+                this.isLoading=true
+                this.svc.addUpdDel('UCIC/GetLoanDtls',dt).subscribe(data=>{console.log(data)
+                  this.reportData2=data
+                  for(let i=0;i<this.reportData2.length;i++){
+                    this.reportData2[i].acc_desc= this.accountTypeList2.filter(c => c.acc_type_cd == this.reportData2[i].acc_cd)[0]?.acc_type_desc;
+                  }
+                  debugger
+                  this.svc.addUpdDel('UCIC/GetDepositDtls',dt).subscribe(data=>{console.log(data)
+                    this.reportData3=data
+                    for(let i=0;i<this.reportData3.length;i++){
+                      this.reportData3[i].acc_type_cd= this.accountTypeList.filter(c => c.acc_type_cd == this.reportData3[i].acc_type_cd)[0]?.acc_type_desc;
+                    }
+                    this.isLoading=false
+                  })
+                })
+              }
+              if(this.sys.ardbCD=="26"){
+                this.l_case_no=this.acc2.tdloansancsetlist[0]?.tdloansancset.filter(e=>e.param_cd=='117')[0]?.param_value
+              }
+              else{
+                this.l_case_no=this.acc2.tdloansancsetlist[0]?.tdloansancset.filter(e=>e.param_cd=='500')[0]?.param_value
+
+              }
+              
+              debugger
+            } else {
+              this.suggestedCustomer1 = [];
+              return [];
+            }
+          },
+          err => { this.isLoading = false; }
+        );
+      
+    
+    return null
+
+  }
   public suggestCustomer(): void {
     this.isLoading = true;
     if (this.f.acct_num.value.length > 0) {
@@ -569,6 +764,22 @@ export class OnetimesettlementComponent implements OnInit {
         acc = res;
         this.acc2=res;
         console.log(res)
+        this.GetCustomer();
+          debugger
+          this.strtDt = acc.tmloanall.instl_start_dt
+          this.currRt = acc.tmloanall.curr_intt_rate
+          this.ovdRt = acc.tmloanall.ovd_intt_rate
+          this.instl_no = acc.tmloanall.instl_no
+          this.perVal = acc.tmloanall.piriodicity
+          this.currPrn = acc.tmloanall.curr_prn
+          this.ovdPrn = acc.tmloanall.ovd_prn
+          this.currIntt = acc.tmloanall.curr_intt
+          this.ovdIntt = acc.tmloanall.ovd_intt
+          this.inttTillDt = acc.tmloanall.last_intt_calc_dt
+          this.aCD=acc.tmloanall.acc_cd
+          this.ln_id=Number(acc.tmloanall.loan_id)
+          this.acDesc=this.AcctTypes.filter(e=>e.acc_type_cd==this.aCD)[0].acc_type_desc
+          debugger
         if (undefined === acc || acc.tmloanall.loan_id == null) {
           this.accTransFrm.patchValue({
             acct_num: ''
@@ -1024,8 +1235,11 @@ export class OnetimesettlementComponent implements OnInit {
       acc1.acc_cd = this.f.acc_type_cd.value;
       this.svc.addUpdDel<any>('Loan/GetLoanData', acc1).subscribe(
         res => {
-          ////////////debugger;
           acc = res;
+          this.acc2 = res;
+          if(this.acc2){
+            this.GetCustomer();
+          }
           this.strtDt = acc.tmloanall.instl_start_dt
           this.currRt = acc.tmloanall.curr_intt_rate
           this.ovdRt = acc.tmloanall.ovd_intt_rate
@@ -1036,7 +1250,10 @@ export class OnetimesettlementComponent implements OnInit {
           this.currIntt = acc.tmloanall.curr_intt
           this.ovdIntt = acc.tmloanall.ovd_intt
           this.inttTillDt = acc.tmloanall.last_intt_calc_dt
-          console.log(acc)
+          this.aCD=acc.tmloanall.acc_cd
+          this.ln_id=Number(acc.tmloanall.loan_id)
+          this.acDesc=this.AcctTypes.filter(e=>e.acc_type_cd==this.aCD)[0].acc_type_desc
+          console.log(this.acc2)
           if (undefined === acc || acc.tmloanall.loan_id == null) {
             this.accTransFrm.patchValue({
               acct_num: ''
@@ -1791,7 +2008,7 @@ export class OnetimesettlementComponent implements OnInit {
               this.svc.addUpdDel<LoanOpenDM>('Loan/InsertLoanTransactionData', saveTransaction).subscribe(
                 res => {
                   ////////////debugger;
-
+                  this.t_cd=+res
                   tdDefTrans.trans_cd = +res;
                   console.log(JSON.stringify(tdDefTrans))
                   this.unApprovedTransactionLst.push(tdDefTrans);
@@ -1903,6 +2120,7 @@ export class OnetimesettlementComponent implements OnInit {
       }
       ////////////debugger;
       if (this.td.trans_cd.value > 0) {
+        
         this.svc.addUpdDel<LoanOpenDM>('Common/UpdateTransactionDetails', saveTransaction).subscribe(
           res => {
             ////////////debugger;
@@ -1942,6 +2160,17 @@ export class OnetimesettlementComponent implements OnInit {
         );
       }
       else {
+        this.t_a=(saveTransaction.tddeftrans?.amount)+(saveTransaction.tddeftrans?.ongoing_unit_no);
+                // this.s_a=saveTransaction.tddeftrans?.share_amt;
+                this.c_p=saveTransaction.tddeftrans?.curr_prn_recov;
+                this.c_i=saveTransaction.tddeftrans?.curr_intt_recov;
+                this.o_p=saveTransaction.tddeftrans?.ovd_prn_recov;
+                this.o_i=saveTransaction.tddeftrans?.ovd_intt_recov;
+                this.a_p=saveTransaction.tddeftrans?.adv_prn_recov;
+                this.p_i=saveTransaction.tddeftrans?.penal_intt_recov;
+                // this.i_n_dt=this.td.intt_recov_dt.value;
+                this.i_n_dt=this.td.no_of_day.value!=0? this.dtpipe.transform(this.td.intt_recov_dt.value, 'dd/MM/yyyy hh:mm:ss'):this.td.intt_recov_dt.value;
+                this.l_ch=saveTransaction.tddeftrans?.ongoing_unit_no;
         this.tdDefTransFrm.disable();
         this.tdDefTransFrm.disable();
         // this.td.trf_type.disable();
@@ -1964,8 +2193,38 @@ export class OnetimesettlementComponent implements OnInit {
         }
         this.svc.addUpdDel<LoanOpenDM>('Loan/InsertLoanTransactionData', saveTransaction).subscribe(
           res => {
-            ////////////debugger;
-            // console.log(res)
+            if(res){
+              this.t_cd=+res
+                  tdDefTrans.trans_cd = +res;
+                  console.log(JSON.stringify(tdDefTrans))
+                  this.unApprovedTransactionLst.push(tdDefTrans);
+                  console.log(this.unApprovedTransactionLst);
+                  debugger;
+                  if(this.isRecovery){
+                    this.outIntt=0
+                    // this.outPrn=((+this.inttRetForUpdate.curr_prn_recov)-(+this.td.curr_prn_recov.value) - (+this.td.adv_prn_recov.value)) + ((+this.inttRetForUpdate.ovd_prn_recov)-(+this.td.ovd_prn_recov.value))
+                    this.outPrn=0
+                    debugger;
+                    this.accDtlsFrm.patchValue({
+                      ovd_principal:0,
+                      curr_principal:0,
+                      curr_intt:0,
+                      ovd_intt:0,
+                      penal_intt:0,
+                      intt_recev:0,
+                      total_due:0,
+                      principal: 0
+                      
+                    })
+              debugger
+                    if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'){
+                      this.modalRef = this.modalService.show(this.ContaiLoanChallan, { class: 'modal-xl' });
+                    }
+                    else{
+                      this.modalRef = this.modalService.show(this.LoanChallan, { class: 'modal-sm' });
+                    }
+                  }
+            }
             tdDefTrans.trans_cd = +res;
             // console.log(JSON.stringify(tdDefTrans))
             // const obj=JSON.stringify(tdDefTrans)
@@ -2679,6 +2938,13 @@ export class OnetimesettlementComponent implements OnInit {
       err => { }
     );
   }
+  printChallan(){
+    if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'){
+      this.modalRef = this.modalService.show(this.ContaiLoanChallan, { class: 'modal-xl' });
+    }
+    else{
+      this.modalRef = this.modalService.show(this.LoanChallan, { class: 'modal-sm' });
+    }}
 }
 
 export class DynamicSelect {

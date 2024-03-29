@@ -175,6 +175,12 @@
           <input  type="text" class="form-control form-control-sm" formControlName="amount" id="amount" disabled
           (focusout)="onAmtChngDuringRenewal(); processInterest()" >
         </div>
+        <div class="form-group col-2" >
+          <small for="curr_intt_recov">Ext Interest</small>
+          <!-- (change)="inttCalOnClose()" -->
+          <input type="text"   class="form-control form-control-sm"(keyup)="ChangeRenewintt($event)"
+            [(ngModel)]="exeintt">
+        </div>
         <div class="form-group col-2" [hidden]="!showBalance">
           <small for="amount">Balance</small>
           <input  type="text" class="form-control form-control-sm" disabled formControlName="balance" id="balance" >

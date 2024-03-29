@@ -86,12 +86,480 @@
       <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onResetClick()">Reset</button>
       <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onBackClick()">Back</button>
       <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1">Cancel</button>
+      
+    <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" style="position: absolute;right: 10px;" (click)="printChallan()">Print Challan</button>
     </div>
     </ng-template>
     <ng-container *ngTemplateOutlet="buttonDiv">
   
     </ng-container>
+    <ng-template #LoanChallan>
+      <div class="modal-header">
+        <h4 class="modal-title pull-left customHeader" style="padding-right: 10px;">Recovery Challan </h4>
+        
+        <button  type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row print" id="challan" hidden >
+          <div class="col-6 table-container" >
+            <div style="border: 1px solid #b7b4b4;">
+              <div>
+                <div class="justify-content-center" style="text-align:center">
+                  <br><h5>{{ardbName}} </h5>
+                  <h5>{{branchName}}</h5>
+                  <h5>Run Date & Time : {{today}} </h5>
+                  <h5>{{ardbAddr}}</h5>
+              <br>
+              </div>
+              </div>
+              <hr>
+              <br>
+              <div class="row" style="padding-left: 10px;" >
+                <div class="col-6">
+                <b>Trans Date:</b> {{sys?.CurrentDate | date:'dd/MM/yyyy'}}
+                </div>
+                <div class="col-6">
+                  <b>Trans ID:</b> {{t_cd}}
+                </div>
+              </div>
+              <div class="row" style="padding-left: 10px;">
+                <div class="col-12">
+                  <b>Loan Account:</b> {{acDesc}}
+                  <br>
+                  <b>Loanee Name:</b> {{partyName}}
+                  <br>
+                  <b>Address:</b> {{present_address}}
+                </div>
+              </div>
+              <div class="row" style="padding-left: 10px;padding-bottom: 10px;">
+                <div class="col-6">
+                  <b>Member No:</b> {{m_id}}
+                  <br>
+                  <b>Curr & Ovd Intt Rt. :</b> {{currRt}} & {{ovdRt}}
+                  <br>
+                  <b>Loan ID: {{ln_id}}</b>
+                </div>
+                <div class="col-6">
+                  <b>Ledger No:</b> {{acc_lfNo}}
+                  <br>
+                  <b>Operation:</b> Recovery By  {{trns_type=='C'?"Cash":"Transfer"}}
+                  <br>
+                  <!-- <b>Share:</b> {{s_a}} -->
+                  
+                  <b>Intt Recov Till:</b> {{i_n_dt?.substr(0,10)}}
+                </div>
+              </div>
+              <br>
+              <b style="font-size: large; padding-left: 2%;">Total:{{t_a| number : '1.2-2'}}({{t_a| amountToWord}})</b> 
+              <hr>
+              <div>
+                <div class="row" style="padding-left: 10px;">
+                  <div class="col-4" style="border-right: 1px solid #808080;">
+                    <b> Prn / Intt Typ</b>
+                    <hr>
+                    <b>Current</b> 
+                    <br>
+                    <b>Overdue</b>
+                    <br>
+                    <b>Advance / Penal</b> 
+                    <br>
+                    <hr>
+                    <b>Total</b>
+                  </div>
+                  <div class="col-4" style="border-right: 1px solid #808080;text-align: right; padding-right: 10%;">
+                    <b>Principal</b>
+                    <hr>
+                    {{c_p| number : '1.2-2'}}
+                    <br>
+                    {{o_p| number : '1.2-2'}}
+                    <br>
+                    {{a_p| number : '1.2-2'}}
+                    <br>
+                    <hr>
+                    {{c_p+o_p+a_p | number : '1.2-2'}}
+                  </div>
+                  <div class="col-4" style="text-align: right; padding-right: 10%;">
+                    <b>Interest</b>
+                    <hr>
+                    {{c_i | number : '1.2-2'}}
+                    <br>
+                    {{o_i | number : '1.2-2'}}
+                    <br>
+                    {{p_i | number : '1.2-2'}}
+                    <br>
+                    <hr>
+                  {{c_i+o_i+p_i | number : '1.2-2'}}
+                  </div>
+                  <div class="col-12" style="text-align: center;"  >
+                    <b>Outstanding: 0.00 | Interest: 0.00</b>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+            <div class="row" style="padding-top: 80px;">
+              <div class="col-6"><b>Customer Signature</b></div>
+              <div class="col-6" style="padding-left: 40px;"><b>Authorized Signatory</b></div>
+            </div>
+          </div>
     
+          <div class="col-6 table-container" >
+            <div style="border: 1px solid #b7b4b4;">
+              <div>
+                <div class="justify-content-center" style="text-align:center" >
+                  <br><h5>{{ardbName}} </h5>
+                  <h5>{{branchName}}</h5>
+                  <h5>Run Date & Time : {{today}} </h5>
+                  <h5> {{ardbAddr}}</h5>
+                  <br>
+              </div>
+              </div>
+              <hr>
+              <br>
+              <div class="row" style="padding-left: 10px;">
+                <div class="col-6">
+                <b>Trans Date:</b>  {{sys?.CurrentDate | date:'dd/MM/yyyy'}}
+                </div>
+                <div class="col-6">
+                  <b>Trans ID:</b> {{t_cd}}
+                </div>
+              </div>
+              <div class="row" style="padding-left: 10px;">
+                <div class="col-12">
+                  <b>Loan Account:</b> {{acDesc}}
+                  <br>
+                  <b>Loanee Name:</b> {{partyName}}
+                  <br>
+                  <b>Address:</b> {{present_address}}
+                </div>
+              </div>
+              <div class="row" style="padding-left: 10px;padding-bottom: 10px;">
+                <div class="col-6">
+                  <b>Member No:</b> {{m_id}}
+                  <br>
+                  <b>Curr & Ovd Intt Rt. :</b> {{currRt}} & {{ovdRt}}
+                  <br>
+                  <b>Loan ID:</b> {{ln_id}}
+                </div>
+                <div class="col-6">
+                  <b>Ledger No:</b> {{acc_lfNo}}
+                  <br>
+                  <b>Operation:</b> Recovery By {{trns_type=='C'?"Cash":"Transfer"}}
+                  <br>
+                  <!-- <b>Share:</b> {{s_a | number : '1.2-2'}}
+                  <br> -->
+                  <b>Intt Recov Till:</b> {{i_n_dt?.substr(0,10)}}
+                </div>
+              </div><br>
+              <b style="font-size: large; padding-left:2%;">Total:{{t_a| number : '1.2-2'}}({{t_a| amountToWord}})</b> 
+              <hr>
+              <div>
+                <div class="row" style="padding-left: 10px;">
+                  <div class="col-4" style="border-right: 1px solid #808080;">
+                    <b> Prn / Intt Typ</b>
+                    <hr>
+                    <b>Current</b> 
+                    <br>
+                    <b>Overdue</b>
+                    <br>
+                    <b>Advance / Penal</b> 
+                    <br>
+                    <hr>
+                    <b>Total</b>
+                  </div>
+                  <div class="col-4" style="border-right: 1px solid #808080;text-align: right; padding-right: 10%;">
+                    <b>Principal</b>
+                    <hr>
+                    {{c_p| number : '1.2-2'}}
+                    <br>
+                    {{o_p| number : '1.2-2'}}
+                    <br>
+                    {{a_p| number : '1.2-2'}}
+                    <br>
+                    <hr>
+                    {{c_p+o_p+a_p| number : '1.2-2'}}
+                  </div>
+                  <div class="col-4" style="text-align: right; padding-right: 10%;">
+                    <b>Interest</b>
+                    <hr>
+                    {{c_i| number : '1.2-2'}}
+                    <br>
+                    {{o_i| number : '1.2-2'}}
+                    <br>
+                    {{p_i| number : '1.2-2'}}
+                    <br>
+                    <hr>
+                  {{c_i+o_i+p_i| number : '1.2-2'}}
+                  </div>
+                  <div class="col-12" style="text-align: center;" *ngIf="sys.ardbCD=='10'">
+                    <b>Outstanding: {{this.fd.principal.value| number : '1.2-2'}} | Interest: {{this.fd.intt_recev.value| number : '1.2-2'}}</b>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+            <div class="row" style="padding-top: 80px;">
+              <div class="col-6"><b>Customer Signature</b></div>
+              <div class="col-6" style="padding-left: 40px;"><b>Authorized Signatory</b></div>
+            </div>
+          </div>
+        </div>
+        <h4>Are you want to print this transaction challan?</h4>
+      </div>
+      <div class="modal-footer">
+        <div class="print">
+            <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" [useExistingCss]="true" 
+            class="btn btn-rounded btn-primary m-1" 
+            printSectionId="challan" ngxPrint (click)="modalRef.hide()">Print Challan</button>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template #ContaiLoanChallan>
+      <div class="modal-header">
+        <h4 class="modal-title pull-left customHeader" style="padding-right: 10px;">Recovery Challan </h4>
+        
+        <button  type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row " id="challan2" hidden>
+          <div class="col-12 container" >
+            <div style="border: 1px solid #b7b4b4;">
+              <div>
+                <div class="justify-content-center" style="text-align:center" *ngIf="reportData">
+                  <h4>Receipt</h4>
+                  <h5>{{ardbName}} </h5>
+                  <h5 *ngIf="sys.ardbCD=='2'">Contai * Purba Medinipur &nbsp;&nbsp;&nbsp;REGD NO. 10 CONT. DATE 01/02/1967</h5>
+                  <h5>Run Date & Time : {{today}} </h5>             
+                  <h5>{{branchName}}</h5>
+                    <h5>{{ardbAddr}}</h5>
+              </div>
+              </div>
+              <br>
+              <div class="row" style="padding-left: 10px;padding-right: 10px;font-size: larger;" >
+                <div class="col-6">
+                <b>Trans Date:</b> {{sys?.CurrentDate | date:'dd/MM/yyyy'}}
+                </div>
+                <div class="col-6 text-right">
+                  <b>Trans ID:</b> {{t_cd}}
+                </div>
+              </div>
+              <div class="row" style="padding-left: 10px;padding-right: 10px; font-size: larger;">
+                <div class="col-8">
+                  <b>Loan Account:</b> {{acDesc}}
+                  <br>
+                  <b>Loanee Name:</b> {{partyName}}
+                  <br>
+                  <b>Address:</b> {{present_address}}
+                </div>
+                <div class="col-4 text-right">
+                  <b>Loan Case No:</b> {{l_case_no}}
+                  <br>
+                  <b>Ledger No:</b> {{acc_lfNo}}
+                  
+                </div>
+              </div>
+              <div class="row" style="padding-left: 10px;padding-bottom: 10px;padding-right: 10px; font-size: larger;">
+                <div class="col-6">
+                  <b>Purpose:</b> {{pps}}
+                  <br>
+                  <b>Curr & Ovd Intt Rt. :</b> {{currRt}} & {{ovdRt}}
+                  <br>
+                  <b>Loan ID: {{ln_id}}</b>
+                </div>
+                <div class="col-6 text-right">
+                  
+                  <b>Legal Charge:</b> {{l_ch}}
+                  <br>
+                  <b>Operation:</b> Recovery By  {{trns_type=='C'?"Cash":"Transfer"}}
+                  <br>
+                  <!-- <b>Share:</b> {{s_a}} -->
+                  
+                  <b>Intt Recov Till:</b> {{i_n_dt?.substr(0,10)}}
+                </div>
+              </div>
+              <div>
+                <table style="margin:2%; padding:5%; width: 95%;border: 1px solid gray;">
+                  <thead><tr style="border-bottom:1px solid #969494;">
+                    <td style="border-right: 1px solid #969494;padding:5px;font-size: larger;text-align: center; width: 35%!important"><b>Prn / Intt Typ</b></td>
+                    <td style="border-right: 1px solid #969494;padding:5px;font-size: larger; width: 35%!important;text-align: right; "><b>Principal</b></td>
+                    <td style="border-right: 1px solid #969494;padding:5px;font-size: larger;text-align: right; "><b>Interest</b></td>
+                  </tr></thead>
+                  <tbody>
+                    <tr style="border-bottom:1px solid #969494;">
+                    <td style="border-right: 1px solid #969494;padding:5px;font-size: larger;text-align: center; width: 35%!important">Current</td>
+                    <td style="border-right: 1px solid #969494;padding:5px;font-size: larger;text-align: right; width: 35%!important"><b> {{c_p| number : '1.2-2'}}</b></td>
+                    <td style="padding:5px;font-size: larger;text-align: right;"><b>{{c_i | number : '1.2-2'}}</b></td>
+                    </tr>
+                    <tr style="border-bottom:1px solid #969494;">
+                      <td style="border-right: 1px solid #969494;padding:5px;font-size: larger;text-align: center; width: 35%!important">Overdue</td>
+                      <td style="border-right: 1px solid #969494;padding:5px;font-size: larger; text-align: right;width: 35%!important"><b> {{o_p| number : '1.2-2'}}</b></td>
+                      <td style="padding:5px;font-size: larger;text-align: right;"><b> {{o_i | number : '1.2-2'}}</b></td>
+                      </tr>
+                      <tr style="border-bottom:1px solid #969494;">
+                        <td style="border-right: 1px solid #969494;padding:5px;font-size: larger;text-align: center; width: 35%!important">Advance/Penal</td>
+                        <td style="border-right: 1px solid #969494;padding:5px;font-size: larger;text-align: right; width: 35%!important"><b> {{a_p| number : '1.2-2'}}</b></td>
+                        <td style="padding:5px;font-size: larger;text-align: right;"><b>{{p_i | number : '1.2-2'}}</b></td>
+                        </tr>
+                        <tr style="border-bottom:1px solid #969494;">
+                          <td style="border-right: 1px solid #969494;padding:5px;font-size: larger;text-align: center; width: 35%!important">Total</td>
+                          <td style="border-right: 1px solid #969494;padding:5px;font-size: larger;text-align: right; width: 35%!important"><b> {{c_p+o_p+a_p | number : '1.2-2'}}</b></td>
+                          <td style="padding:5px;font-size: larger;text-align: right;"><b>{{c_i+o_i+p_i | number : '1.2-2'}}</b></td>
+                          </tr>
+                  </tbody>
+                  
+                </table>
+                
+                <div class="row" style="margin-left:20%; font-size: larger;">
+                  <b style="text-align: center;">Total Amount:{{t_a| number : '1.2-2'}}</b> &nbsp;&nbsp;(<b class="amountToWord">{{t_a | amountToWord}} ONLY</b>)
+                 
+                 </div>
+                 <br>
+                <table style="margin-left:20%; width: 60%;border: 1px solid gray;">
+                  <tr style="border: 1px solid gray;width: 100%;">
+                    <td style="border-right: 1px solid #808080;padding:5px;font-size: larger; width: 35%!important">Outstanding Principal</td>
+                    <td style="border-right: 1px solid gray;padding:5px;font-size: larger; width: 20%!important"><b>{{outPrn| number : '1.2-2'}}</b></td>
+                    <td style="border-right: 1px solid gray;padding:5px;font-size: larger; width: 25%!important">Interest</td>
+                    <td style="padding:5px; width: 20%!important; font-size: larger;"><b>{{outIntt| number : '1.2-2'}}</b></td>
+                  </tr>
+                </table>
+                <br><br><br>
+                <div class="row" >
+                  <div class="col-4" style="text-align: center;font-size: large; "><b>CASHIER</b> </div>
+                  <div class="col-4" style="text-align: center;font-size: large; "><b>J.O.(ACCTS.)</b></div>
+                  <div class="col-4" style="text-align: center;font-size: large; "><b>MANAGER</b></div>
+    
+                </div>
+                <br>
+              </div>
+            </div>
+          </div>
+          <br><br><br><br>
+          <div class="col-12 container" >
+            <div style="border: 1px solid #b7b4b4;">
+              <div>
+                <div class="justify-content-center" style="text-align:center" *ngIf="reportData">
+                  <h4>Receipt</h4>
+                  <h5>{{ardbName}} </h5>
+                  <h5 *ngIf="sys.ardbCD=='2'">Contai * Purba Medinipur &nbsp;&nbsp;&nbsp;REGD NO. 10 CONT. DATE 01/02/1967</h5>
+                  <h5>Run Date & Time : {{today}} </h5>             
+                  <h5>{{branchName}}</h5>
+                    <h5>{{ardbAddr}}</h5>
+              </div>
+              </div>
+              <br>
+              <div class="row" style="padding-left: 10px;padding-right: 10px;font-size: larger;" >
+                <div class="col-6">
+                <b>Trans Date:</b> {{sys?.CurrentDate | date:'dd/MM/yyyy'}}
+                </div>
+                <div class="col-6 text-right">
+                  <b>Trans ID:</b> {{t_cd}}
+                </div>
+              </div>
+              <div class="row" style="padding-left: 10px;padding-right: 10px; font-size: larger;">
+                <div class="col-8">
+                  <b>Loan Account:</b> {{acDesc}}
+                  <br>
+                  <b>Loanee Name:</b> {{partyName}}
+                  <br>
+                  <b>Address:</b> {{present_address}}
+                </div>
+                <div class="col-4 text-right">
+                  <b>Loan Case No:</b> {{l_case_no}}
+                  <br>
+                  <b>Ledger No:</b> {{acc_lfNo}}
+                  
+                </div>
+              </div>
+              <div class="row" style="padding-left: 10px;padding-bottom: 10px;padding-right: 10px; font-size: larger;">
+                <div class="col-6">
+                  <b>Purpose:</b> {{pps}}
+                  <br>
+                  <b>Curr & Ovd Intt Rt. :</b> {{currRt}} & {{ovdRt}}
+                  <br>
+                  <b>Loan ID: {{ln_id}}</b>
+                </div>
+                <div class="col-6 text-right">
+                  
+                  <b>Legal Charge:</b> {{l_ch}}
+                  <br>
+                  <b>Operation:</b> Recovery By  {{trns_type=='C'?"Cash":"Transfer"}}
+                  <br>
+                  <!-- <b>Share:</b> {{s_a}} -->
+                  
+                  <b>Intt Recov Till:</b> {{i_n_dt?.substr(0,10)}}
+                </div>
+              </div>
+              <div>
+                <table style="margin:2%; padding:5%; width: 95%;border: 1px solid gray;">
+                  <thead><tr style="border-bottom:1px solid #969494;">
+                    <td style="border-right: 1px solid #969494;padding:5px;font-size: larger;text-align: center; width: 35%!important"><b>Prn / Intt Typ</b></td>
+                    <td style="border-right: 1px solid #969494;padding:5px;font-size: larger; width: 35%!important;text-align: right; "><b>Principal</b></td>
+                    <td style="border-right: 1px solid #969494;padding:5px;font-size: larger;text-align: right; "><b>Interest</b></td>
+                  </tr></thead>
+                  <tbody>
+                    <tr style="border-bottom:1px solid #969494;">
+                    <td style="border-right: 1px solid #969494;padding:5px;font-size: larger;text-align: center; width: 35%!important">Current</td>
+                    <td style="border-right: 1px solid #969494;padding:5px;font-size: larger;text-align: right; width: 35%!important"><b> {{c_p| number : '1.2-2'}}</b></td>
+                    <td style="padding:5px;font-size: larger;text-align: right;"><b>{{c_i | number : '1.2-2'}}</b></td>
+                    </tr>
+                    <tr style="border-bottom:1px solid #969494;">
+                      <td style="border-right: 1px solid #969494;padding:5px;font-size: larger;text-align: center; width: 35%!important">Overdue</td>
+                      <td style="border-right: 1px solid #969494;padding:5px;font-size: larger; text-align: right;width: 35%!important"><b> {{o_p| number : '1.2-2'}}</b></td>
+                      <td style="padding:5px;font-size: larger;text-align: right;"><b> {{o_i | number : '1.2-2'}}</b></td>
+                      </tr>
+                      <tr style="border-bottom:1px solid #969494;">
+                        <td style="border-right: 1px solid #969494;padding:5px;font-size: larger;text-align: center; width: 35%!important">Advance/Penal</td>
+                        <td style="border-right: 1px solid #969494;padding:5px;font-size: larger;text-align: right; width: 35%!important"><b> {{a_p| number : '1.2-2'}}</b></td>
+                        <td style="padding:5px;font-size: larger;text-align: right;"><b>{{p_i | number : '1.2-2'}}</b></td>
+                        </tr>
+                        <tr style="border-bottom:1px solid #969494;">
+                          <td style="border-right: 1px solid #969494;padding:5px;font-size: larger;text-align: center; width: 35%!important"><b>Total</b></td>
+                          <td style="border-right: 1px solid #969494;padding:5px;font-size: larger;text-align: right; width: 35%!important"><b> {{c_p+o_p+a_p | number : '1.2-2'}}</b></td>
+                          <td style="padding:5px;font-size: larger;text-align: right;"><b>{{c_i+o_i+p_i | number : '1.2-2'}}</b></td>
+                          </tr>
+                  </tbody>
+                  
+                </table>
+                
+                <div class="row" style="margin-left:20%; font-size: larger;">
+                  <b style="text-align: center;">Total Amount:{{t_a| number : '1.2-2'}}</b> &nbsp;&nbsp;(<b class="amountToWord">{{t_a | amountToWord}} ONLY</b>)
+                 
+                 </div>
+                 <br>
+                <table style="margin-left:20%; width: 60%;border: 1px solid gray;">
+                  <tr style="border: 1px solid gray;width: 100%;">
+                    <td style="border-right: 1px solid #808080;padding:5px;font-size: larger; width: 35%!important">Outstanding Principal</td>
+                    <td style="border-right: 1px solid gray;padding:5px;font-size: larger; width: 20%!important"><b>{{outPrn| number : '1.2-2'}}</b></td>
+                    <td style="border-right: 1px solid gray;padding:5px;font-size: larger; width: 25%!important">Interest</td>
+                    <td style="padding:5px; width: 20%!important; font-size: larger;"><b>{{outIntt| number : '1.2-2'}}</b></td>
+                  </tr>
+                </table>
+                <br><br><br>
+                <div class="row" >
+                  <div class="col-4" style="text-align: center;font-size: large; "><b>CASHIER</b> </div>
+                  <div class="col-4" style="text-align: center;font-size: large; "><b>J.O.(ACCTS.)</b></div>
+                  <div class="col-4" style="text-align: center;font-size: large; "><b>MANAGER</b></div>
+    
+                </div>
+                <br>
+              </div>
+            </div>
+          </div>
+        </div>
+        <h4>Are you want to print this transaction challan?</h4>
+      </div>
+      <div class="modal-footer">
+        <div class="print">
+            <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" [useExistingCss]="true" 
+            class="btn btn-rounded btn-primary m-1" 
+            printSectionId="challan2" ngxPrint (click)="modalRef.hide()">Print Challan</button>
+        </div>
+      </div>
+    </ng-template>
     <div class="col-xs-12 col-sm-12 col-md-11 col-lg-11 shadow mb-2 bg-white p-3">
       <div *ngIf="showMsg && showMsg.Show" class="col-xs-12 col-sm-12 col-md-11 col-lg-11">
         <div class="alert alert-dismissible fade show" role="alert" [ngClass]="{'alert-success': showMsg.Type === 0,

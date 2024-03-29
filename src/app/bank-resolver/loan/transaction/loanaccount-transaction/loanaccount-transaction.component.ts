@@ -128,7 +128,7 @@ export class LoanaccountTransactionComponent implements OnInit {
   denominationGrandTotal = 0;
   transferGrandTotal = 0;
   suggestedCustomer1: mm_customer[];
-  ardbName=localStorage.getItem('ardb_name');ardb_addr
+  ardbName=localStorage.getItem('ardb_name');
   ardbAddr=localStorage.getItem('ardb_addr');
   branchName=this.sys.BranchName;
   suggestedCustomer: mm_customer[];
@@ -1448,9 +1448,7 @@ export class LoanaccountTransactionComponent implements OnInit {
           if(this.acc2.tdloansancsetlist.length>0){
 
           }
-          
-          
-            this.GetCustomer();
+          this.GetCustomer();
           this.CurrentDemand();
           debugger
           this.strtDt = acc.tmloanall.instl_start_dt

@@ -257,30 +257,6 @@
     },
     
     {
-      "ardB_CD": "403",
-      "name": "Raiganj Itahar Branch.",
-      "full_name": "Raiganj Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 319.0,
-      "bank_name": "MUARDBUXBR3"
-    },
-    {
-      "ardB_CD": "404",
-      "name": "Raiganj Dalkhola Branch.",
-      "full_name": "Raiganj Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 319.0,
-      "bank_name": "MUARDBUXBR4"
-    },
-    
-    {
-      "ardB_CD": "405",
-      "name": "Raiganj Islampur Branch.",
-      "full_name": "Raiganj Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 319.0,
-      "bank_name": "MUARDBUXUAT"
-    },
-    
-    
-    {
       "ardB_CD": "99",
       "name": "Burdwan UAT Test.",
       "full_name": "Burdwan UAT Test.",
@@ -295,3 +271,5 @@
       "bank_name": "ARDBTESTUX"
     }
   ]
+
+ 

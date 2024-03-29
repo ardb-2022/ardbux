@@ -264,8 +264,6 @@ export class PrintCertificateComponent implements OnInit {
         }
         else{this.sbAcc=''}
         debugger
-
-          this.renew_id=this.masterModel.tmdeposit.renew_id
           this.oprn_instr_desc = this.operationalInstrList.filter(x => x.oprn_cd.toString() === this.masterModel.tmdeposit.oprn_instr_cd.toString())[0].oprn_desc;
           for (let i = 0; i <=  this.masterModel.tdaccholder.length; i++) {
             console.log( this.masterModel);
@@ -273,32 +271,15 @@ export class PrintCertificateComponent implements OnInit {
           this.joinHold+=( this.masterModel.tdaccholder.length==0?'': this.masterModel.tdaccholder[i].acc_holder+',')
           console.log(this.joinHold);
           }
+          if(this.masterModel.tmdeposit.renew_id){
+              this.renew_id=this.masterModel.tmdeposit.renew_id
+              this.getPrintFlag();
+              this.showAlert = false;
+          }
         })
-      this.showAlert = false;
-      // this.fromdate = this.reportcriteria.controls.fromDate.value;
-      // this.toDate = this.reportcriteria.controls.toDate.value;
-      // this.UrlString = this.svc.getReportUrl();
-      // this.UrlString = this.UrlString + 'WebForm/Deposit/passbookprint?'
-      //   + 'ardb_cd='+this.sys.ardbCD
-      //   + '&brn_cd=' + this.sys.BranchCode
-      //   + '&acc_type_cd=' + (+this.reportcriteria.controls.acc_type_cd.value)
-      //   + '&acc_num=' + this.reportcriteria.controls.acct_num.value
-      //   + '&from_dt=' + Utils.convertDtToString(this.fromdate)
-      //   + '&to_dt=' + Utils.convertDtToString(this.toDate);
-      // this.isLoading = true;
-      // this.ReportUrl = this._domSanitizer.bypassSecurityTrustResourceUrl(this.UrlString);
-      // this.modalRef.hide();
-      // setTimeout(() => {
-      //   this.isLoading = false;
-      // }, 10000);
+      
     }
-    this.getPrintFlag();
-    // if(this.printFlag=='Y'){
-    //   debugger
-    //   this.modalRef = this.modalService.show(this.alreadyUpdate, this.config);
-    //   this.disablePrint=true;
-    // }
-    // debugger
+   
 }
   getSMParameter(){
     this.svc.addUpdDel('Mst/GetSystemParameter', null).subscribe(
@@ -311,7 +292,7 @@ export class PrintCertificateComponent implements OnInit {
           "acc_num":this.reportcriteria.controls.acct_num.value,
           "acc_type_cd":this.reportcriteria.controls.acc_type_cd.value,
           "print_status":"Y",
-          "renew_id":this.renew_id
+          "renew_id":this.masterModel.tmdeposit.renew_id
          }
         this.svc.addUpdDel('Deposit/UpdateCertificateStatus',dt).subscribe(res=>{
           console.log(res);
@@ -326,7 +307,7 @@ export class PrintCertificateComponent implements OnInit {
     debugger
     var dc={
       "ardb_cd":this.sys.ardbCD,
-      "renew_id":this.renew_id,
+      "renew_id":this.masterModel.tmdeposit.renew_id,
       "acc_num":this.reportcriteria.controls.acct_num.value,
       "acc_type_cd":this.reportcriteria.controls.acc_type_cd.value
      }

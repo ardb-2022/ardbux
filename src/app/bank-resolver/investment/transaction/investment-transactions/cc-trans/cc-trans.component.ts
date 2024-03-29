@@ -89,6 +89,7 @@ export class CcTransComponent implements OnInit {
   ShowHide:boolean=false;
   closeInt: any;
   showOnTDS:boolean=false;
+  exeintt:any=0
   
   constructor(public invComServ:InvTranServService ,private svc: RestService, private msg: InAppMessageService,
     private frmBldr: FormBuilder, public datepipe: DatePipe, private router: Router,
@@ -1998,7 +1999,7 @@ debugger
         toReturn.curr_prn_recov = Number(this.td.amount.value) + Number(this.td.interest.value);
         toReturn.ovd_prn_recov = this.accNoEnteredForTransaction3.prn_amt;
         // toReturn.curr_intt_recov = Number(this.accDtlsFrm.controls.mat_amt.value)==Number(this.td.amount)?this.accDtlsFrm.controls.intt_amt.value:'';
-        toReturn.curr_intt_recov =this.masterModel.tmdepositInv.intt_amt;
+        toReturn.curr_intt_recov =this.masterModel.tmdepositInv.intt_amt+this.exeintt?this.exeintt:0;
         toReturn.ovd_intt_recov = Number(this.td.ovd_intt_recov.value);
         console.log(this.td.amount.value,this.accDtlsFrm.controls.mat_amt.value);
         
@@ -2815,6 +2816,17 @@ debugger
   }
   onBackClick() {
     this.router.navigate([this.sys.BankName + '/la']);
+  }
+  ChangeRenewintt(i:any){
+    if(this.td.amount.value){
+      this.exeintt=0;
+      this.exeintt=((+i.target.value)+(+this.accNoEnteredForTransaction.intt_amt));
+      // this.td.amount.setValue((this.accNoEnteredForTransaction.prn_amt+this.accNoEnteredForTransaction.intt_amt)-this.td.ovd_intt_recov.value)
+      // this.accDtlsFrm.controls.mat_amt.setValue((this.accNoEnteredForTransaction.prn_amt+this.accNoEnteredForTransaction.intt_amt)-this.td.ovd_intt_recov.value)
+      this.td.amount.setValue((this.accNoEnteredForTransaction.prn_amt+this.accNoEnteredForTransaction.intt_amt+(+i.target.value))-(this.td.ovd_intt_recov.value?this.td.ovd_intt_recov.value:0))
+      
+    debugger
+    }
   }
 }
 

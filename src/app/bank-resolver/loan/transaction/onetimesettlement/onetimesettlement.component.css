@@ -57,4 +57,11 @@ small {
     color: white;
     font-size:small
   }
-  
+  @media print {
+    .table-container {
+      display: inline-block;
+      width: 50%; /* Adjust the width as needed */
+      margin-top: 1%;
+    }
+    
+  }
