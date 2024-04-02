@@ -178,7 +178,7 @@
                     {{a_p| number : '1.2-2'}}
                     <br>
                     <hr>
-                    {{c_p+o_p+a_p | number : '1.2-2'}}
+                    {{tot_p}}
                   </div>
                   <div class="col-4" style="text-align: right; padding-right: 10%;">
                     <b>Interest</b>
@@ -190,7 +190,7 @@
                     {{p_i | number : '1.2-2'}}
                     <br>
                     <hr>
-                  {{c_i+o_i+p_i | number : '1.2-2'}}
+                  {{tot_i}}
                   </div>
                   <div class="col-12" style="text-align: center;"  >
                     <b>Outstanding: 0.00 | Interest: 0.00</b>
@@ -279,7 +279,7 @@
                     {{a_p| number : '1.2-2'}}
                     <br>
                     <hr>
-                    {{c_p+o_p+a_p| number : '1.2-2'}}
+                    {{tot_p}}
                   </div>
                   <div class="col-4" style="text-align: right; padding-right: 10%;">
                     <b>Interest</b>
@@ -291,10 +291,10 @@
                     {{p_i| number : '1.2-2'}}
                     <br>
                     <hr>
-                  {{c_i+o_i+p_i| number : '1.2-2'}}
+                  {{tot_i}}
                   </div>
-                  <div class="col-12" style="text-align: center;" *ngIf="sys.ardbCD=='10'">
-                    <b>Outstanding: {{this.fd.principal.value| number : '1.2-2'}} | Interest: {{this.fd.intt_recev.value| number : '1.2-2'}}</b>
+                  <div class="col-12" style="text-align: center;"  >
+                    <b>Outstanding: 0.00 | Interest: 0.00</b>
                   </div>
                 </div>
                 

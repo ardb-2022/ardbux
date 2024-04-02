@@ -72,7 +72,7 @@ export class InvestmentTransactionsComponent implements OnInit {
   showBalance = false;
   showTransfrTyp = true;
   masterModel = new AccOpenDM();
-  suggestedCustomer: mm_customer[];
+  suggestedCustomer: any;
   customerList: mm_customer[] = [];
   td_deftrans = new td_def_trans_trf();
   td_deftranstrfList: td_def_trans_trf[] = [];
@@ -232,7 +232,7 @@ export class InvestmentTransactionsComponent implements OnInit {
   /** method fires on account type change */
   public onAcctTypeChange(): void {
     
-    this.suggestedCustomer=[]
+    this.suggestedCustomer=null
     console.log(this.f.acc_type_cd.value)
     this.tm_denominationList = [];
     this.accNoEnteredForTransaction = undefined;
@@ -269,28 +269,31 @@ enable(e:any){
     this.disabledOnNull = true;
   }
 }
-
+  SelectCustomer(){
+    this.suggestedCustomer=null
+    this.getAccountOpeningTempData();
+  }
   loadInvData(){
-    
+    this.isLoading=true;
     console.log(this.f.acc_type_cd)
     if (this.f.acc_type_cd === null || this.f.acc_type_cd === undefined) {
       // this.showAlertMsg('WARNING', 'Please select Account Type');
       this.HandleMessage(true, MessageType.Warning, 'Please select Account Type');
       this.f.acct_num = null;
+      this.isLoading=false;
       return;
     }
-    console.log(this.f.acct_num.value);
-      
+    else{
+        this.isLoading=true;
       this.tm_deposit.acc_num=this.f.acct_num.value
       this.tm_deposit.ardb_cd=this.sys.ardbCD
-      this.isLoading = true;
       this.svc.addUpdDel<any>('INVESTMENT/GetInvOpeningData', this.tm_deposit).subscribe(
         res => {
-          console.log(res);
+          if(res){
+            console.log(res);
           this.invComServ.masterModel=res;
           this.masterModel = res;
           this.opnTyp=false;
-  
           if (this.masterModel === undefined || this.masterModel === null) {
             // this.showAlertMsg('WARNING', 'No record found!!');
             this.HandleMessage(true, MessageType.Warning, 'No record found!!');
@@ -309,20 +312,29 @@ enable(e:any){
             this.invComServ.getBranchName(this.masterModel.tmdepositInv.bank_cd);
             this.invComServ.getConstitutionList();
             this.invComServ.getOperationalInstr();
-            this.isLoading = false;
+            this.suggestedCustomer=res.tmdepositInv;
+            if(this.suggestedCustomer){
+              this.isLoading=false;
+            }
+          }
+          }
+          else{
+            this.isLoading=false
+            this.HandleMessage(true, MessageType.Error, 'No record found with this account number !!');
           }
           },
         err => {
           this.isLoading = false;
           // this.showAlertMsg('ERROR', 'Unable to find record!!');
-          this.HandleMessage(true, MessageType.Warning, 'Unable to find record!!');
+          this.HandleMessage(true, MessageType.Error, 'Unable to find record, Internal Server Error !!');
         }
   
       );
+    }
   }
   getAccountOpeningTempData() {
     this.editDeleteMode=false;
-
+    this.isLoading=true
     this.resetClick=false
     console.log(this.invComServ.bankName,this.invComServ.branchName,this.invComServ.constitutionDes,this.invComServ.operInsDESC);
     
@@ -335,18 +347,21 @@ enable(e:any){
                 this.sel_fd=false;
                 this.sel_mis=false;
                 this.sel_rd=false;
+                this.isLoading=false;
                 }
               else if(this.f.acc_type_cd.value==22){
                   this.sel_fd=false;
                   this.sel_cc=true;
                   this.sel_mis=false;
                   this.sel_rd=false;
+                  this.isLoading=false;
                   }
               else if(this.f.acc_type_cd.value==24){
                     this.sel_mis=false;
                     this.sel_fd=false;
                     this.sel_cc=true;
                     this.sel_rd=false;
+                    this.isLoading=false;
           
                     }
               else if(this.f.acc_type_cd.value==25){
@@ -354,6 +369,7 @@ enable(e:any){
                       this.sel_mis=false;
                       this.sel_fd=false;
                       this.sel_cc=false;
+                      this.isLoading=false;
                       }
               
   

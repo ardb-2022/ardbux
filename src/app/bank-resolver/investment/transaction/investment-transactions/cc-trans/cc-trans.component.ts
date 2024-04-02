@@ -1999,7 +1999,7 @@ debugger
         toReturn.curr_prn_recov = Number(this.td.amount.value) + Number(this.td.interest.value);
         toReturn.ovd_prn_recov = this.accNoEnteredForTransaction3.prn_amt;
         // toReturn.curr_intt_recov = Number(this.accDtlsFrm.controls.mat_amt.value)==Number(this.td.amount)?this.accDtlsFrm.controls.intt_amt.value:'';
-        toReturn.curr_intt_recov =this.masterModel.tmdepositInv.intt_amt+this.exeintt?this.exeintt:0;
+        toReturn.curr_intt_recov =this.exeintt?(+this.exeintt):0+(+this.masterModel.tmdepositInv.intt_amt);
         toReturn.ovd_intt_recov = Number(this.td.ovd_intt_recov.value);
         console.log(this.td.amount.value,this.accDtlsFrm.controls.mat_amt.value);
         
@@ -2629,7 +2629,7 @@ debugger
   this.TrfTotAmt=0
   this.mat_val = 0 
   this.i_trans.onResetClick();
-  this.router.navigate([this.sys.BankName + '/I_Trns']);
+  this.router.navigate([this.sys.BankName + '/la']);
   this.i_trans.ngOnInit();
 }
   onRenewalSelect(){

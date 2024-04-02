@@ -222,7 +222,8 @@ export class OnetimesettlementComponent implements OnInit {
   partyName:any;
   ln_id:any; 
   pps:any;
-
+  tot_p:any;
+  tot_i:any
   aCD:any
   acDesc:any;
   trns_type:any;
@@ -818,20 +819,36 @@ export class OnetimesettlementComponent implements OnInit {
           this.accNoEnteredForTransaction = acc.tmloanall;
           this.accDtlsFrm.patchValue({
             cust_name: acc.tmloanall.cust_name,
-            intt_recev: acc.tmloanall.curr_intt + acc.tmloanall.ovd_intt,
-            curr_principal: acc.tmloanall.curr_prn,
-            curr_intt: acc.tmloanall.curr_intt,
+            intt_recev: 0,
+            curr_principal: 0,
+            curr_intt: 0,
             curr_intt_rate: acc.tmloanall.curr_intt_rate,
-            ovd_principal: acc.tmloanall.ovd_prn,
-            ovd_intt: acc.tmloanall.ovd_intt,
+            ovd_principal: 0,
+            ovd_intt: 0,
             ovd_intt_rate: acc.tmloanall.ovd_intt_rate,
-            principal: acc.tmloanall.curr_prn + acc.tmloanall.ovd_prn,
-            total_due: acc.tmloanall.curr_intt + acc.tmloanall.ovd_intt + acc.tmloanall.curr_prn + acc.tmloanall.ovd_prn + acc.tmloanall.penal_intt,
-            disb_amt: acc.tmloanall.disb_amt,
+            principal: 0,
+            total_due:0,
+            disb_amt: 0,
             disb_dt: acc.tmloanall.disb_dt,
-            penal_intt: acc.tmloanall.penal_intt
+            penal_intt: 0
           });
-
+          this.t_cd=acc.tddeftrans.trans_cd;
+          this.tot_p=(+acc.tddeftrans?.curr_prn_recov)+(+acc.tddeftrans?.ovd_prn_recov)+(+acc.tddeftrans?.adv_prn_recov);
+          this.tot_i=(+acc.tddeftrans?.curr_intt_recov)+(+acc.tddeftrans?.ovd_intt_recov)+(+acc.tddeftrans?.penal_intt_recov);
+          this.t_a=(+acc.tddeftrans?.amount)+(acc.tddeftrans?.ongoing_unit_no);
+                // this.s_a=saveTransaction.tddeftrans?.share_amt;
+                this.c_p=acc.tddeftrans?.curr_prn_recov;
+                this.c_i=acc.tddeftrans?.curr_intt_recov;
+                this.o_p=acc.tddeftrans?.ovd_prn_recov;
+                this.o_i=acc.tddeftrans?.ovd_intt_recov;
+                this.a_p=acc.tddeftrans?.adv_prn_recov;
+                this.p_i=acc.tddeftrans?.penal_intt_recov;
+                this.i_n_dt=acc.tddeftrans?.intt_till_dt;
+                this.trns_type=acc.tddeftrans?.trf_type;
+                this.ln_id=acc.tddeftrans?.acc_num;
+                this.aCD=acc.tmloanall.acc_cd;
+                this.l_ch=acc.tddeftrans?.ongoing_unit_no;
+                this.acDesc=this.AcctTypes.filter(e=>e.acc_type_cd==this.aCD)[0].acc_type_desc;
           console.log(acc.tddeftrans.ovd_intt_recov, this.td.recov_type.value)
           // ////debugger;
           // if(this.editDeleteMode && this.td.recov_type.value=='A'){
@@ -927,7 +944,7 @@ export class OnetimesettlementComponent implements OnInit {
           // console.log(this.f.oprn_cd.value);
           // ////debugger;
           if (this.isRecovery)
-            this.PopulateRecoveryDetails(3)    
+            // this.PopulateRecoveryDetails(3)    
 
           this.sancdtls = acc.tmlaonsanctiondtls;
           this.sancdtls.forEach(x => x.draw_limit = x.sanc_amt - acc.tmloanall.curr_prn);
@@ -2160,7 +2177,11 @@ export class OnetimesettlementComponent implements OnInit {
         );
       }
       else {
+        this.tot_p=0;
+        this.tot_i=0;
         this.t_a=(saveTransaction.tddeftrans?.amount)+(saveTransaction.tddeftrans?.ongoing_unit_no);
+        this.tot_p=(+saveTransaction.tddeftrans?.curr_prn_recov)+(+saveTransaction.tddeftrans?.ovd_prn_recov)+(+saveTransaction.tddeftrans?.adv_prn_recov);
+        this.tot_i=(+saveTransaction.tddeftrans?.curr_intt_recov)+(+saveTransaction.tddeftrans?.ovd_intt_recov)+(+saveTransaction.tddeftrans?.penal_intt_recov);
                 // this.s_a=saveTransaction.tddeftrans?.share_amt;
                 this.c_p=saveTransaction.tddeftrans?.curr_prn_recov;
                 this.c_i=saveTransaction.tddeftrans?.curr_intt_recov;

@@ -42,14 +42,30 @@
           <div class="form-group col-6">
             <small for="acc_no">Account Number</small>
             <div class="input-group">
-                <input style="height:25px"  (change)="loadInvData()" (keypress)="enable($event)"
+                <input style="height:25px"  (keypress)="enable($event)"
                 formControlName="acct_num" type="text" [attr.disabled]="null == operations ? '' : null"
                   class="form-control form-control-sm text-capitalize" id="acc_no" placeholder="Account Number">
                   <div class="input-group-append">
-                    <button class="btn btn-primary btn-sm" [disabled]="disabledOnNull" (click)="getAccountOpeningTempData()">
+                    <button class="btn btn-primary btn-sm" [disabled]="disabledOnNull" (click)="loadInvData()">
                       <i class="fa fa-search"></i>
                     </button>
                   </div>
+            </div>
+            <div class="suggestions" *ngIf="suggestedCustomer">
+              <table class="table table-hover table-bordered table-sm w-auto small" id="customers1">
+                  <tr>
+                    <th scope="col">Acc Num</th>
+                    <th scope="col">Principal Amount</th>
+                    <th scope="col">Interest Amount</th>
+                  </tr>
+                <tbody>
+                  <tr  (click)="SelectCustomer()">
+                    <td scope="row">{{suggestedCustomer.acc_num}}</td>
+                    <td>{{suggestedCustomer.prn_amt}}</td>
+                    <td>{{suggestedCustomer.intt_amt}}</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
           <!-- <input type="number" [attr.disabled]="null == operations ? '' : null" class="form-control form-control-sm "
@@ -178,3 +194,4 @@
       (click)="onUpapprovedConfirm(unApprovedTransactionLstOfAcc[0])">View/Edit</button>
   </div>
 </ng-template>
+<loading *ngIf="isLoading"></loading>

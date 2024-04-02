@@ -230,6 +230,8 @@ import { TamlukComponent } from './deposit/report/passbook-print/tamluk/tamluk.c
 import { TamlukFastPageComponent } from './deposit/report/passbook-print/tamluk/tamluk-fast-page/tamluk-fast-page.component';
 import { VillMasterContaiComponent } from './loan/masters/vill-master-contai/vill-master-contai.component';
 import { RecovSummaryComponent } from './loan/report/recovery-register/recov-summary/recov-summary.component';
+import { InvTransactionComponent } from './investment/transaction/inv-transaction/inv-transaction.component';
+
 @NgModule({
   declarations: [ 
     AmountToWordPipe,UserLoginStatusComponent,OpenInvestComponent,KeyoffDirective,
@@ -278,7 +280,10 @@ import { RecovSummaryComponent } from './loan/report/recovery-register/recov-sum
             YearendDemandRecoveryComponent, DemandNoticeBlockWiseComponent, RecovAdvPrnComponent, RecovAdvPrnVillComponent, 
             InterestSubsidySummaryComponent, DcbrPrintComponent, NpaSummaryComponent,LockerComponent, MenuItemComponent, 
             DetailListSbcaConstWiseComponent, FortnightlyReturnComponent, ConsoFortnightlyReturnComponent, BorrowingComponent, DcbrVillWiseComponent, 
-            ContaiUCICprofileComponent, GoldTestAndValuationReportComponent, DemandNoticeContaiComponent, UcicMergeComponent, CTloanDCComponent, RecoveryExportComponent, RecoveryImportComponent, RecoveryIndiPostComponent, ContaiComponent, ContaiFastPageComponent, GhatalComponent, GhatalFastPageComponent, GoldLoanReportComponent, GoldLoanAsOnDateComponent, GoldLoanCurrDateComponent, GroupWiseComponent, NpaAllWithGroupComponent, DcbrGroupWiseComponent, TamlukComponent, TamlukFastPageComponent, VillMasterContaiComponent, RecovSummaryComponent
+            ContaiUCICprofileComponent, GoldTestAndValuationReportComponent, DemandNoticeContaiComponent, UcicMergeComponent, CTloanDCComponent, 
+            RecoveryExportComponent, RecoveryImportComponent, RecoveryIndiPostComponent, ContaiComponent, ContaiFastPageComponent, GhatalComponent, 
+            GhatalFastPageComponent, GoldLoanReportComponent, GoldLoanAsOnDateComponent, GoldLoanCurrDateComponent, GroupWiseComponent, NpaAllWithGroupComponent, 
+            DcbrGroupWiseComponent, TamlukComponent, TamlukFastPageComponent, VillMasterContaiComponent, RecovSummaryComponent,InvTransactionComponent
   ],
   imports: [
     MatAutocompleteModule,
