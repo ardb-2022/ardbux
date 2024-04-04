@@ -248,20 +248,13 @@ selectItems1=[
         }
         else{
           this.reportData=data
-        }
-        this.dataSource.data=this.reportData
-        // this.itemsPerPage=this.reportData.length % 50 <=0 ? this.reportData.length: this.reportData.length % 50
-        this.isLoading=false
-       
-        
-        // this.pageChange=document.getElementById('chngPage');
-        // this.pageChange.click()
-        // this.setPage(2);
-        // this.setPage(1)
-        this.modalRef.hide();
-        this.lastAccNum=this.reportData[this.reportData.length-1].loan_id
-        console.log(this.lastAccNum)
-        this.reportData.forEach(e => {
+          this.modalRef.hide();
+          this.lastAccNum=this.reportData[this.reportData.length-1].loan_id
+          console.log(this.lastAccNum)
+          this.reportData.forEach(e => {
+          if(e.npa_dt=='01/01/0001 00:00'){
+            e.npa_dt=null
+          }
           this.totIssueSum+=e.disb_amt
           this.totPrnDue+=e.prn_due
           this.totInttDue+=e.intt_due
@@ -289,6 +282,11 @@ selectItems1=[
             this. dummytotNpaSum+=e.d1_prn+e.d2_prn+e.d3_prn+e.substan_prn
             this.dummytotProvSum+=e.provision
         });
+          this.dataSource.data=this.reportData
+       
+        this.isLoading=false
+        }
+        
       })
     }
   }
