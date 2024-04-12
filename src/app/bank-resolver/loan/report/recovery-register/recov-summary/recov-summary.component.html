@@ -116,6 +116,8 @@
                     <th mat-header-cell> Current Interest Recovery</th>
                     <th mat-header-cell> Overdue Interest Recovery</th>
                     <th mat-header-cell> Penal Interest Recovery</th>
+                    <th mat-header-cell>Principal Recovery</th>
+                    <th mat-header-cell>Interest Recovery</th>
                     <th mat-header-cell>Total Recovery</th>
                   </tr> 
                   <tr mat-cell *ngFor="let blkDtls of row.blockwiserecovery">
@@ -126,6 +128,12 @@
                       <td mat-cell>{{blkDtls.blocktype.tot_block_curr_intt_recov|currency:"INR"}}</td>
                       <td mat-cell>{{blkDtls.blocktype.tot_block_ovd_intt_recov|currency:"INR"}}</td>
                       <td mat-cell>{{blkDtls.blocktype.tot_block_penal_intt_recov|currency:"INR"}}</td>
+                      <td mat-cell>{{(blkDtls.blocktype.tot__block_adv_prn_recov + 
+                      blkDtls.blocktype.tot_block_curr_prn_recov + 
+                      blkDtls.blocktype.tot__block_ovd_prn_recov) |currency:"INR"}}</td>
+                       <td mat-cell>{{(blkDtls.blocktype.tot_block_curr_intt_recov + 
+                        blkDtls.blocktype.tot_block_penal_intt_recov + 
+                        blkDtls.blocktype.tot_block_ovd_intt_recov) |currency:"INR"}}</td>
                       <td mat-cell>{{blkDtls.blocktype.tot_block_recov|currency:"INR"}}</td>
                       
                   </tr>
@@ -167,6 +175,15 @@
           <td mat-cell style="width:10%;"><b>{{row.acctype.tot_acc_curr_intt_recov|currency:"INR"}}</b></td>
           <td mat-cell style="width:10%;"><b>{{row.acctype.tot_acc_ovd_intt_recov|currency:"INR"}}</b></td>
           <td mat-cell style="width:10%;"><b>{{row.acctype.tot_acc_penal_intt_recov|currency:"INR"}}</b></td>
+          <td mat-cell style="width:10%;"><b>{{
+         ( row.acctype.tot_acc_adv_prn_recov+
+          row.acctype.tot_acc_curr_prn_recov+
+          row.acctype.tot_acc_ovd_prn_recov)|currency:"INR"}}</b></td>
+
+          <td mat-cell style="width:10%;"><b>{{
+          (row.acctype.tot_acc_curr_intt_recov+
+          row.acctype.tot_acc_ovd_intt_recov+
+          row.acctype.tot_acc_penal_intt_recov)|currency:"INR"}}</b></td>
           <td mat-cell style="width:10%;"><b>{{row.acctype.tot_acc_recov|currency:"INR"}}</b></td>
       
         </tr>
@@ -203,7 +220,7 @@
     <tr>
       <td style="width:30px;" ></td>
       <td><b>Grand Total recov:-</b></td>
-      <td style="width:21%;" ></td>
+      <td style="width:18%;" ></td>
       <td><b>{{totadvPrnSum|currency:"INR"}}</b></td>
       <td style="width:5px;" ></td>
       <td><b>{{totcurrPrnSum|currency:"INR"}}</b></td>
@@ -215,6 +232,10 @@
       <td><b>{{totovdInttSum|currency:"INR"}}</b></td>
       <td style="width:5px;" ></td>
       <td><b>{{totpenalInttSum|currency:"INR"}}</b></td>
+      <td style="width:5px;" ></td>
+      <td><b> {{(totadvPrnSum+totcurrPrnSum+totovdPrnSum)|currency:"INR"}}</b></td>
+      <td style="width:5px;" ></td>
+      <td><b> {{(totcurrInttSum+totovdInttSum+totpenalInttSum)|currency:"INR"}}</b></td>
       <td style="width:5px;" ></td>
       <td><b> {{totPrn|currency:"INR"}}</b></td>
       <td style="width:2%;" ></td>

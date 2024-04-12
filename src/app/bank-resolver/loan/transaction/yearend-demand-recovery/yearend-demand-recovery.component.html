@@ -1335,7 +1335,7 @@
               <div class="form-group col-2">
                 <small for="amount">Amount <span class="text-danger">*</span> </small>
                 <input type="text" class="form-control form-control-sm" formControlName="amount" id="amount"
-                  (change)="onAmtChng()">
+                 (keyup)="onAmtChng2($event)" (change)="onAmtChng()">
               </div>
               <div class="form-group col-2" *ngIf="isDisburs && showInstrumentDtl">
                 <small for="instrument_num">Instrument</small>

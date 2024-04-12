@@ -236,7 +236,7 @@
                             <b><div class="col-12 pull-left"> {{translatedData?.guardian_name}} - C/o:{{data?.block_name}}</div></b>
                             </div>
                             <div class="row">
-                              <b><div class="col-12 pull-left"> {{overdueData?.address}}-{{data?.cust_address}}</div></b>
+                              <b><div class="col-12 pull-left"> {{overdueData?.address}} - {{data?.cust_address}}</div></b>
                               </div>
                               <div class="row">
                                 <b><div class="col-12 pull-left"> {{overdueData?.purpose}} - {{data?.activity_name }}</div></b>
@@ -294,8 +294,12 @@
                       <td style="text-align: left;">{{overdueData?.penal_amt}}</td>
                       <td style="text-align: right;">{{data?.penal_intt| currency:"INR"}}</td>
                     </tr>
+                    <tr>
+                      <td style="text-align: left;">খরচ</td>
+                      <td style="text-align: right;">{{200| currency:"INR"}}</td>
+                    </tr>
                        <tr><td colspan="2">..............................................................................................................................................</td></tr>
-                       <tr ><td colspan="2" style="text-align: right;"><b>{{overdueData?.total}} : {{data?.curr_intt + data?.curr_prn + data?.ovd_prn + data?.ovd_intt + data?.penal_intt| currency:'INR'}}</b></td></tr>
+                       <tr ><td colspan="2" style="text-align: right;"><b>{{overdueData?.total}} : {{data?.curr_intt + data?.curr_prn + data?.ovd_prn + data?.ovd_intt + data?.penal_intt + 200 | currency:'INR'}}</b></td></tr>
                        
                     </table><br><br><br><br><br><br><br><br><br>
                  <div class="pull-right bt-5">

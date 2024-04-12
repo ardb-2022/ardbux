@@ -245,6 +245,8 @@ export class LoanaccountTransactionComponent implements OnInit {
   emiRecovPrn:number=0;
   emiRecovIntt:number=0;
   emiRecovTot:number=0;
+  tot_inst_prn:number=0;
+  tot_inst_paid:number=0;
   // editDeleteMode=false
   // showInstrumentDtl = false;
   ngOnInit(): void {
@@ -3610,7 +3612,10 @@ debugger;
         console.log(res)
         if (undefined !== res) {
           this.LoanRepSch = res;
-          this.LoanRepSch.forEach(x => x.due_dt1 = x.due_dt.toString().substr(0, 10))
+          this.LoanRepSch.forEach(x =>{ 
+            x.due_dt1 = x.due_dt.toString().substr(0, 10),
+            this.tot_inst_prn += x.instl_prn,
+            this.tot_inst_paid += x.instl_paid})
           this.modalRef = this.modalService.show(template);
           this.isLoading = false;
         }

@@ -1612,10 +1612,26 @@ export class YearendDemandRecoveryComponent implements OnInit {
       paid_amount: ((+this.td.amount.value) - totmiscAmt)
     });
   }
-
+  onAmtChng2(i:any){
+    if ((+i.target.value) > (+this.fd.total_due.value)) {
+      this.HandleMessage(true, MessageType.Error, 'Amount can not be greaterthan due amount');
+      this.tdDefTransFrm.patchValue({
+        no_of_day: 0,
+        curr_prn_recov: '',
+        curr_intt_recov: '',
+        ovd_prn_recov: '',
+        ovd_intt_recov: '',
+        adv_prn_recov:'',
+        penal_intt_recov:'',
+        amount: ''
+      });
+      return;
+    }
+  }
   onAmtChng(): void {
 
     this.HandleMessage(false);
+    
     if ((+this.td.amount.value) < 0) {
       this.HandleMessage(true, MessageType.Error, 'Amount can not be negative.');
       this.td.amount.setValue('');

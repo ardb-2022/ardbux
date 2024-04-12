@@ -49,6 +49,7 @@ export class LoginComponent implements OnInit {
   bankFullName:any;
   footer:any;
   ARBD:any='';
+  SBaccCD:any;
   constructor(private router: Router,
     private formBuilder: FormBuilder,
     private rstSvc: RestService,
@@ -61,6 +62,7 @@ export class LoginComponent implements OnInit {
      }
 
   ngOnInit(): void {
+    
     this.wrongAttamt=localStorage.getItem('W_attempt')
     this.encriptPass();
     localStorage.removeItem('ardb_name');
@@ -428,7 +430,8 @@ export class LoginComponent implements OnInit {
 
 
             })
-            
+          this.SBaccCD=RestService.bankconfigurationList.filter(e=>e.bank_name==__bName)[0].sms_provider
+          localStorage.setItem('sbAccType', this.SBaccCD);
           localStorage.setItem('L2L', 'true');
           // //console.log(localStorage.getItem('ipAddress'))
           // localStorage.setItem('__ardb_cd', this.f.ardbbrMst.value);
@@ -487,6 +490,7 @@ export class LoginComponent implements OnInit {
     localStorage.removeItem('__ardb_cd');
     localStorage.removeItem('ardb_addr');
     localStorage.removeItem('L2L');
+    localStorage.removeItem('sbAccType');
     this.brnDtls.length = 0;
     this.loginForm.reset();
     this.loginForm.enable();
@@ -522,8 +526,12 @@ export class LoginComponent implements OnInit {
     //   }
     // );
     this.rstSvc.getlbr(environment.ardbUrl,null).subscribe(data=>{
-      // //console.log(data)
-      this.ardbBrnMst = data;
+      // //console.log(data
+      if(data){
+        console.log(RestService.bankconfigurationList)
+        this.ardbBrnMst = data;
+      }
+      
       // this.menuConfigs=data;
     })
   }
