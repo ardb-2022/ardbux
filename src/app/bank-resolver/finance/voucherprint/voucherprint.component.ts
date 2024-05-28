@@ -19,7 +19,7 @@ export class VoucherprintComponent implements OnInit {
   @ViewChild('content', { static: true }) content: TemplateRef<any>;
   @ViewChild('contentSearch', { static: true }) contentSearch: TemplateRef<any>;
   @ViewChild('reportcontent') reportcontent: ElementRef;
- 
+  selectedFilter = 'B';
   modalRef: BsModalRef;
   modalRefSearch: BsModalRef;
   isOpenFromDp = false;
@@ -49,12 +49,16 @@ export class VoucherprintComponent implements OnInit {
   nullVD:number;
   RedVoucher:any;
   showTopButton = false;
+  ardbName:any;
+  branchName:any;
+  today:any;
   constructor(private svc: RestService,private formBuilder: FormBuilder,
      private modalService: BsModalService,
      private router: Router) { }
 
   ngOnInit(): void {
-    ;
+    this.ardbName=localStorage.getItem('ardb_name')
+    this.branchName=this.sys.BranchName;
     this.fromdate=this.sys.CurrentDate;
     this.todate=this.sys.CurrentDate;
     this.reportcriteria = this.formBuilder.group({
@@ -66,6 +70,10 @@ export class VoucherprintComponent implements OnInit {
       searchDate:[null]
     })
     this.onLoadScreen(this.content);
+      var date = new Date();
+      var n = date.toDateString();
+      var time = date.toLocaleTimeString();
+      this.today= n + " "+ time
   }
   scrollToBotom(){
     window.scrollTo({  top:document.body.scrollHeight, behavior: 'smooth' }); // Smooth scroll to top
@@ -116,7 +124,17 @@ export class VoucherprintComponent implements OnInit {
       // this.modalService.dismissAll(this.content);
     }
   }
+  
+  onFilterChange(event:any){
+    this.selectedFilter = event.value;
+    if (this.selectedFilter != 'B') {
+      this.tvn=this.tvn1.filter(voucher => voucher.voucher_typ === this.selectedFilter);
+    }
+    else{
+      this.tvn=this.tvn1
+    }
 
+  }
   private getmVoucherDetails(): void {
     this.prp.brn_cd=localStorage.getItem('__brnCd');
     this.prp.from_dt= this.fromdate;

@@ -7,7 +7,12 @@
     -webkit-appearance: none;
     margin: 0;
   }
-
+  tr.fixedHeader{
+    position: sticky;
+    /* position: -webkit-sticky; */
+    top: -17px;
+    background-color: inherit;
+  }
   /* Firefox */
   input[type=number] {
     -moz-appearance: textfield;

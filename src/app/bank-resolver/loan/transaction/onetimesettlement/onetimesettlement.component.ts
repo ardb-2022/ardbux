@@ -24,7 +24,6 @@ import { mm_installment_type } from 'src/app/bank-resolver/Models/mm_installment
 import { p_loan_param } from 'src/app/bank-resolver/Models/loan/p_loan_param';
 import { tt_loan_rep } from 'src/app/bank-resolver/Models/loan/tt_loan_rep';
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
-import { DateFormatter } from 'ngx-bootstrap/datepicker';
 import { Observable } from 'rxjs';
 import { mm_activity } from 'src/app/bank-resolver/Models/loan/mm_activity';
 // import { threadId } from 'worker_threads';
@@ -232,8 +231,8 @@ export class OnetimesettlementComponent implements OnInit {
   tdt:any;
   Share_fl_no:any;
   showNW:boolean;
-  outPrn:Number=0;
-  outIntt:Number=0;
+  outPrn:any=0;
+  outIntt:any=0;
   emiRecovPrn:number=0;
   emiRecovIntt:number=0;
   emiRecovTot:number=0;
@@ -294,7 +293,7 @@ export class OnetimesettlementComponent implements OnInit {
       tr_acc_num: [''],
       voucher_dt: [''],
       voucher_id: [''],
-      trf_type: [''],
+      trf_type: ['O'],
       tr_acc_cd: [''],
       acc_cd: [''],
       share_amt: [''],
@@ -678,7 +677,7 @@ export class OnetimesettlementComponent implements OnInit {
     this.shownoresult = false;
     
     this.f.acct_num.setValue(cust.loan_id);
-    this.td.trf_type.setValue('C');
+    this.td.trf_type.setValue('O');
     this.onTransTypeChange()
     this.onAccountNumTabOff();
     this.suggestedCustomer = [];
@@ -1467,7 +1466,7 @@ export class OnetimesettlementComponent implements OnInit {
       this.geteffectiveinttrt();
       this.isDisburs = false;
       this.isRecovery = true;
-      this.td.trf_type.value !== '';
+      this.td.trf_type.setValue('O');
     }
   }
 
@@ -1849,7 +1848,7 @@ export class OnetimesettlementComponent implements OnInit {
 
     if (undefined === this.td.trf_type.value
       || null === this.td.trf_type.value
-      || this.td.trf_type.value === '') {
+      || this.td.trf_type.value === 'O') {
       this.HandleMessage(true, MessageType.Error, 'Please choose tranaction type.');
       return;
     }

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, TemplateRef, ElementRef,ChangeDetectorRef ,AfterViewInit} from '@angular/core';
 import { RestService } from 'src/app/_service';
-import { WebDataRocksPivot } from 'src/app/webdatarocks/webdatarocks.angular4';
+ 
 import { tt_cash_account, p_report_param, SystemValues } from 'src/app/bank-resolver/Models';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 // import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
@@ -24,7 +24,7 @@ import { CommonServiceService } from 'src/app/bank-resolver/common-service.servi
 })
 export class WeeklyReturnComponent implements OnInit ,AfterViewInit{
   @ViewChild('content', { static: true }) content: TemplateRef<any>;
-  @ViewChild('CashAccount') child: WebDataRocksPivot;
+   
   @ViewChild('external') external: ElementRef;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;

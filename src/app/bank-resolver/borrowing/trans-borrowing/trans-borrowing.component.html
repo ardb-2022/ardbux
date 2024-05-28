@@ -58,7 +58,7 @@
               <small for="acc_type_cd">Borrowing Type</small>
               <select id="acc_type_cd"  class="form-control form-control-sm" formControlName="acc_type_cd"
                 (change)="onAcctTypeChange()">
-                <option *ngIf="AcctTypes" disabled selected>Choose</option>
+                <option *ngIf="AcctTypes" [readonly]="true" selected>Choose</option>
                 <option *ngFor="let acctType of accountTypeList" [value]="acctType.acc_type_cd">
                   {{acctType.acc_type_cd +' ' + acctType.acc_type_desc}}
                 </option>
@@ -136,7 +136,7 @@
               <!-- <select id="oprn_cd" [attr.disabled]="(null == operations || disableOperation) ? '' : null" -->
               <select id="oprn_cd"
                 class="form-control form-control-sm" formControlName="oprn_cd" (change)="onOperationTypeChange()">
-                <option  disabled value="">Choose</option>
+                <option  [readonly]="true" value="">Choose</option>
                 <option value="recovery">Recovery</option>
               </select>
             </div>
@@ -156,73 +156,73 @@
                   <div class="form-group col-6">
                     <small for="acc_type_cd">Acc Type Cd</small>
                     <input type="text" class="form-control form-control-sm" formControlName="acc_type_cd" id="acc_type_cd"
-                      disabled>
+                      [readonly]="true">
                   </div>
                   <div class="form-group col-6">
                     <small for="cheque_facility_flag">Rate of Interest</small>
                     
                     <input type="text" class="form-control form-control-sm" formControlName="loan_id" id="loan_id"
-                      disabled>
+                      [readonly]="true">
                   </div>
                   <div class="form-group col-6">
                     <small for="constitution_cd">Intt Till Dt</small>
                     <input type="text" class="form-control form-control-sm" formControlName="lst_intt_cal_dt" id="lst_intt_cal_dt"
-                      disabled>
+                      [readonly]="true">
                   </div>
                   <!-- <div class="form-group col-6">
                     <small for="constitution_cd">Disb Date</small>
                     <input type="text" class="form-control form-control-sm" formControlName="disb_dt" id="disb_dt"
-                      disabled>
+                      [readonly]="true">
                   </div> -->
                   <div class="form-group col-6">
                     <small for="constitution_cd">Disb Amount</small>
                     <input type="text" class="form-control form-control-sm" formControlName="disb_amt" id="disb_amt"
-                      disabled>
+                      [readonly]="true">
                   </div>
                  
                   <div class="form-group col-6">
                     <small for="constitution_cd">Current Interest</small>
                     <input type="text" class="form-control form-control-sm" formControlName="curr_intt" id="curr_intt"
-                      disabled>
+                      [readonly]="true">
                   </div>
                   
                   <div class="form-group col-6">
                     <small for="acc_close_dt">Current Principal</small>
                     <input type="text" class="form-control form-control-sm" formControlName="curr_principal"
-                      id="curr_principal" disabled>
+                      id="curr_principal" [readonly]="true">
                   </div>
                   
                   <div class="form-group col-6">
                     <small for="clr_bal">Overdue Interest</small>
                     <input type="text" class="form-control form-control-sm" formControlName="ovd_intt" id="ovd_intt"
-                      disabled>
+                      [readonly]="true">
                   </div>
                   
                   <div class="form-group col-6">
                     <small for="oprn_instr_cd">Overdue Principal</small>
                     <input type="text" class="form-control form-control-sm" formControlName="ovd_principal"
-                      id="ovd_principal" disabled>
+                      id="ovd_principal" [readonly]="true">
                   </div>
                   <!-- <div class="form-group col-6">
                     <small for="penal_intt">Total Outstanding</small>
                     <input type="text" class="form-control form-control-sm" formControlName="penal_intt" id="penal_intt"
-                      disabled>
+                      [readonly]="true">
                   </div> -->
                   <div class="form-group col-6">
                     <small for="curr_bal">Total Interest</small>
                     <input type="text" class="form-control form-control-sm" formControlName="total_due" id="total_due"
-                      disabled>
+                      [readonly]="true">
                   </div>
                   <div class="form-group col-6">
                     <small for="cheque_facility_flag">Total Principal</small>
                     
                     <input type="text" class="form-control form-control-sm" formControlName="principal" id="principal"
-                      disabled>
+                      [readonly]="true">
                   </div>
                   
                   <div class="form-group col-4">
                     <input type="text" class="form-control form-control-sm" formControlName="disb_dt" id="disb_dt" hidden
-                      disabled>
+                      [readonly]="true">
                   </div>
                 </div>
                <!-- <button style="font-weight: 500; font-size: 14px;" type="button" class="btn btn-link" (click)="customerDtls(LoanChallan)">Show Customer Details</button> -->
@@ -270,7 +270,7 @@
             <div class="form-row">
               <div class="form-group col-1">
                 <small for="amount">Trans Code</small>
-                <input type="text" class="form-control form-control-sm" formControlName="trans_cd" id="trans_cd" disabled>
+                <input type="text" class="form-control form-control-sm" formControlName="trans_cd" id="trans_cd" [readonly]="true">
               </div>
               <div class="form-group col-2" *ngIf="isRecovery">
                 <small for="intt_recov_dt">Trans Dt <span class="text-danger">*</span></small>
@@ -288,9 +288,9 @@
               </div>
               <div class="form-group col-2" *ngIf="isRecovery">
                 <small for="recov_type">Recovery Type<span class="text-danger">*</span></small>
-                <select id="recov_type" class="form-control form-control-sm" formControlName="recov_type" disabled
+                <select id="recov_type" class="form-control form-control-sm" formControlName="recov_type" [readonly]="true"
                   (change)="onRecovTypeChange()">
-                  <option disabled>Choose</option>
+                  <option [readonly]="true">Choose</option>
                   <!-- <option value="A" [selected]="true">Auto</option> -->
                   <!-- <option value="A" >Auto</option> -->
                   <option value="M" [selected]="editDeleteMode==false">Manual</option>
@@ -300,7 +300,7 @@
                 <small for="trf_type">Transaction  Type<span class="text-danger">*</span></small>
                 <select id="trf_type" class="form-control form-control-sm" formControlName="trf_type"
                   (change)="onTransTypeChange()">
-                  <option disabled>Choose</option>
+                  <option [readonly]="true">Choose</option>
                   <!-- <option value="C">Cash</option> -->
                   <option value="T">Transfer</option>
                 </select>
@@ -309,12 +309,12 @@
               <div class="form-group col-2" *ngIf="isRecovery">
                 <small for="intt_recov_dt">Intt. Recovery Till <span class="text-danger">*</span></small>
                 <div class="input-group">
-                  <input type="text" disabled placeholder="dd/mm/yyyy" class="form-control form-control-sm"  bsDatepicker
+                  <input type="text" [readonly]="true" placeholder="dd/mm/yyyy" class="form-control form-control-sm"  bsDatepicker
                     formControlName="intt_recov_dt" (ngModelChange)="onRecoveryTillDateChng($event)"
                     [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }"
                     [isOpen]="isOpenToDp">
                   <div class="input-group-append">
-                    <button mat-raised-button class="btn btn-outline-secondary btn-sm" disabled type="button" (click)="isOpenToDp = !isOpenToDp">
+                    <button mat-raised-button class="btn btn-outline-secondary btn-sm" [readonly]="true" type="button" (click)="isOpenToDp = !isOpenToDp">
                       <i class="fa fa-calendar" aria-hidden="true"></i>
                     </button>
                   </div>
@@ -323,7 +323,7 @@
               
               <div class="form-group col-3">
                 <small for="amount">Amount <span class="text-danger">*</span> </small>
-                <input disabled type="text" class="form-control form-control-sm" formControlName="amount" id="amount">
+                <input [readonly]="true" type="text" class="form-control form-control-sm" formControlName="amount" id="amount">
               </div>
               <div class="form-group col-2" *ngIf="isDisburs && showInstrumentDtl">
                 <small for="instrument_num">Instrument</small>
@@ -366,34 +366,34 @@
             <div class="form-row">
               <div class="form-group col-3" *ngIf="isDisburs">
                 <small for="instl_no">No of Installment</small>
-                <input type="text" disabled class="form-control form-control-sm" formControlName="instl_no" id="instl_no">
+                <input type="text" [readonly]="true" class="form-control form-control-sm" formControlName="instl_no" id="instl_no">
               </div>
               <div class="form-group col-2" *ngIf="isDisburs">
                 <small for="periodicity">Periodicity</small>
-                <input type="text" disabled class="form-control form-control-sm" formControlName="periodicity"
+                <input type="text" [readonly]="true" class="form-control form-control-sm" formControlName="periodicity"
                   id="periodicity">
               </div>
               
               <div class="form-group col-4" *ngIf="isDisburs">
                 <small for="instl_start_dt">Installment Start Dt</small>
-                <input type="text" disabled class="form-control form-control-sm" formControlName="instl_start_dt"
+                <input type="text" [readonly]="true" class="form-control form-control-sm" formControlName="instl_start_dt"
                   id="instl_start_dt">
               </div>
               <div class="form-group col-4" *ngIf="isDisburs">
                 <small for="paid_amount">Paid Amount</small>
-                <input type="text" disabled class="form-control form-control-sm" formControlName="paid_amount"
+                <input type="text" [readonly]="true" class="form-control form-control-sm" formControlName="paid_amount"
                   id="paid_amount">
               </div>
               <!-- Recovery -->
               <!-- <div class="form-group col-4" *ngIf="isRecovery">
                 <small for="no_of_day">No. of Days</small>
                 <input type="text" class="form-control form-control-sm" formControlName="no_of_day" id="no_of_day"
-                  disabled>
+                  [readonly]="true">
               </div> -->
               <!-- <div class="form-group col-3" *ngIf="isRecovery">
                 <small for="intt_rate">Effective Intt. Rt</small>
                 <input type="text" class="form-control form-control-sm" formControlName="intt_rate" id="intt_rate"
-                  disabled>
+                  [readonly]="true">
               </div> -->
               <div class="form-row">
                 <div class="form-group col-5" *ngIf="isRecovery">
@@ -403,7 +403,7 @@
                 </div>
                 <div class="form-group col-2">
                   <small for="curr_intt_rate">Rate of Curr Int</small>
-                  <input type="text" disabled class="form-control form-control-sm" formControlName="curr_intt_rate"
+                  <input type="text" [readonly]="true" class="form-control form-control-sm" formControlName="curr_intt_rate"
                     id="curr_intt_rate">
                 </div>
                 <div class="form-group col-5" *ngIf="isRecovery">
@@ -425,7 +425,7 @@
                 </div>
                 <div class="form-group col-2">
                   <small for="ovd_intt_rate">Rate of Ovd Int</small>
-                  <input type="text" disabled class="form-control form-control-sm" formControlName="ovd_intt_rate"
+                  <input type="text" [readonly]="true" class="form-control form-control-sm" formControlName="ovd_intt_rate"
                     id="ovd_intt_rate">
                 </div>
                 <div class="form-group col-5" *ngIf="isRecovery">
@@ -458,7 +458,7 @@
                       <small>Rupees</small> <br>
                       <select
                         class="form-control form-control-sm" (change)="setDenomination($event.target.value, i)">
-                        <option value="t1.value" disabled selected>{{t1.rupees_desc}}</option>
+                        <option value="t1.value" [readonly]="true" selected>{{t1.rupees_desc}}</option>
                         <option [value]="l.value" *ngFor="let l of denominationList">{{l.rupees}}</option>
                       </select>
                     </div>
@@ -486,7 +486,7 @@
                   </div>
   
                   <div class="form-group col-4">
-                    <input [(ngModel)]='denominationGrandTotal' disabled type="text"
+                    <input [(ngModel)]='denominationGrandTotal' [readonly]="true" type="text"
                       class="form-control form-control-sm text-capitalize" id="total" placeholder="Total">
                   </div>
                 </div>
@@ -514,7 +514,7 @@
                       <div class="input-group">
                         <input type="text" class="form-control form-control-sm "
                           [disabled]="undefined !== l.cust_acc_type && l.cust_acc_type.length > 0" [(ngModel)]="l.gl_acc_code"
-                          placeholder="Enter GL-Code" [disabled]="i==0" id="debit_gl_ac" (keyup)="hidetab($event)">
+                          placeholder="Enter GL-Code"  id="debit_gl_ac" (keyup)="hidetab($event)">
                           <div class="input-group-append">
                             <button  class="btn btn-primary btn-sm"
                               (click)="checkAndSetDebitAccType('gl_acc', l)">
@@ -546,7 +546,7 @@
   
                     <div class="form-group col-4">
                       <small for="debit_gl_head">GL Head</small>
-                      <input type="text" disabled [(ngModel)]="l.gl_acc_desc"
+                      <input type="text" [readonly]="true" [(ngModel)]="l.gl_acc_desc"
                         class="form-control form-control-sm text-capitalize" id="debit_gl_head">
                     </div>
   
@@ -575,15 +575,15 @@
   
                     <div class="form-group col-2">
                       <small for="debit_ac_dsc">Account Desc</small>
-                      <input type="text" [(ngModel)]="l.cust_acc_desc"  disabled
+                      <input type="text" [(ngModel)]="l.cust_acc_desc"  [readonly]="true"
                         class="form-control form-control-sm text-capitalize" id="debit_ac_dsc">
                     </div> -->
                     <!-- comment beforehand -->
                     <div class="form-group col-2">
                       <small for="credit_ac">Account Type</small>
-                      <select disabled id="credit_ac" class="form-control form-control-sm" [(ngModel)]="l.cust_acc_type"
+                      <select [readonly]="true" id="credit_ac" class="form-control form-control-sm" [(ngModel)]="l.cust_acc_type"
                         (focusout)="checkAndSetDebitAccType('cust_acc', l)">
-                        <option *ngIf="accountTypeList" disabled>Choose</option>
+                        <option *ngIf="accountTypeList" [readonly]="true">Choose</option>
                         <option *ngFor="let acctType of accountTypeList" [value]="acctType.acc_type_cd">
                           {{acctType.acc_type_cd +' ' + acctType.acc_type_desc}}
                         </option>
@@ -592,7 +592,7 @@
                     <div class="form-group col-3" >
                       <small for="credit_ac_name">Acc Holder Name</small>
                       <div class="input-group">
-                        <input disabled type="text" class="form-control form-control-sm "
+                        <input [readonly]="true" type="text" class="form-control form-control-sm "
                          [(ngModel)]="l.cust_name"
                         type="text" placeholder="Enter Acc# / Customer Name / Phone number" (input)="onChangeTrf(i)"
                         name="x-field-1" autocomplete="new-field-1">
@@ -634,14 +634,14 @@
   
                     <div class="form-group col-3">
                       <small for="debit_ac_no">Account Number</small>
-                      <input type="text" [(ngModel)]="l.cust_acc_number" disabled (focusout)="setDebitAccDtls( l)"
+                      <input type="text" [(ngModel)]="l.cust_acc_number" [readonly]="true" (focusout)="setDebitAccDtls( l)"
                         [disabled]="undefined !== l.gl_acc_code && l.gl_acc_code.length > 0"
                         class="form-control form-control-sm text-capitalize" id="debit_ac_no">
                     </div>
                     <!-- comment beforehand -->
                     <!-- <div class="form-group col-3">
                       <small for="debit_ac_name">Acc Holder Name</small>
-                      <input type="text" disabled [(ngModel)]="l.cust_name"
+                      <input type="text" [readonly]="true" [(ngModel)]="l.cust_name"
                         [disabled]="undefined !== l.gl_acc_code && l.gl_acc_code.length > 0"
                         class="form-control form-control-sm text-capitalize" id="debit_ac_name">
                     </div> -->
@@ -659,7 +659,7 @@
                 <div class="text-right mb-3">
                   <div class="form-group">
                     <small for="trf_total_amt">Total</small>
-                    <input type="text" disabled [(ngModel)]="TrfTotAmt"
+                    <input type="text" [readonly]="true" [(ngModel)]="TrfTotAmt"
                       class="form-control form-control-sm text-capitalize" id="trf_total_amt">
                     <button  type="button" style="height:22px; padding-top: 0px;" class="btn btn-primary btn-sm mr-1"
                       (click)="addTransfer()" title="Add transfer">

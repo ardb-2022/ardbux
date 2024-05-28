@@ -19,7 +19,7 @@
         <div>
           <label for="fromDate">From Date</label>
           <div class="input-group">
-            <input type="text" placeholder="dd/mm/yyyy" class="form-control" [ngModel]="fromdate" disabled bsDatepicker
+            <input type="text" placeholder="dd/mm/yyyy" class="form-control" [ngModel]="fromdate" [readonly]="true" bsDatepicker
             formControlName="fromDate" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }"
             [isOpen]="isOpenFromDp">
           <div class="input-group-append">
@@ -32,7 +32,7 @@
         <div >
             <label for="toDate">To Date</label>
             <div class="input-group">
-              <input type="text" placeholder="dd/mm/yyyy" class="form-control" [ngModel]="todate" disabled bsDatepicker
+              <input type="text" placeholder="dd/mm/yyyy" class="form-control" [ngModel]="todate" [readonly]="true" bsDatepicker
               formControlName="toDate" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }"
               [isOpen]="isOpenToDp">
             <div class="input-group-append">
@@ -111,6 +111,18 @@ style="background-color: #78c2ad21; min-height: 20vh;">
      
       <button mat-raised-button type="button" class="btn btn-rounded btn-primary btn-primary-spacing btn-sm" (click)="closeScreen()"
         style="position: absolute;right: 10px;">Close</button>
+        <mat-radio-group aria-label="Select an option"  [value]="selectedFilter" (change)="onFilterChange($event)">
+          <mat-radio-button value="C">
+            <label style="margin-top: 10px;">Cash</label>
+          </mat-radio-button>
+          <mat-radio-button value="T"> 
+            <label style="margin-top: 10px;">Transfer</label>
+          </mat-radio-button>
+          <mat-radio-button value="B"> 
+            <label style="margin-top: 10px;">Both</label>
+          </mat-radio-button>
+        </mat-radio-group>
+
     </div>
   </div>
 </ng-template>
@@ -123,7 +135,13 @@ style="background-color: #78c2ad21; min-height: 20vh;">
   
 <div  class="col-xs-12 col-sm-12 col-md-8 col-lg-8 shadow-lg mb-4 bg-white p-3">
   <div id="reportcontent" #reportcontent>
-    
+ <br>
+ <div class="justify-content-center" style="text-align:center">
+  <br><h4>{{ardbName}} ({{branchName}})</h4>
+  
+  <h4>Run Date & Time : {{today}} </h4>
+</div>
+ <br><br>   
 <table style="width: 100% " id="_voucher">     
 <tr *ngFor="let item of tvn; let i = index;">
   <!-- <p *ngIf="tvn[i].vd.length> 2" style="page-break-after: always;">&nbsp;</p> -->

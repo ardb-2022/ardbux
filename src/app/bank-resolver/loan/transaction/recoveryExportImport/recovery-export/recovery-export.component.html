@@ -17,7 +17,7 @@
           <div class="col-4">
             <small for="block">Select Block</small>
            <select id="block" class="form-control form-control-sm" formControlName="block_cd">
-             <option *ngIf="blocks" disabled>Choose</option>
+             <option *ngIf="blocks" [readonly]="true">Choose</option>
              <option  *ngFor="let block of blocks" [value]="block.block_cd">
                {{block.block_cd +' ' + block.block_name}}
              </option>
@@ -102,8 +102,8 @@
           <th>Interest</th>
         </tr>
         <tr *ngIf="getExportData">
-          <td><input type="text" class="inputBld" name="agent_nm" id="agent_lbl" disabled value=" BLOCK NAME"></td>
-          <td><input type="text" class="inputBld" name="agent_nm" id="agent_nm" disabled value="{{agentName}}"></td>
+          <td><input type="text" class="inputBld" name="agent_nm" id="agent_lbl" [readonly]="true" value=" BLOCK NAME"></td>
+          <td><input type="text" class="inputBld" name="agent_nm" id="agent_nm" [readonly]="true" value="{{agentName}}"></td>
           <td></td>
           <td></td>
           <td></td>

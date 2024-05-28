@@ -141,7 +141,7 @@
         <div class="form-group col-4">
           <small for="subsidy">Subsidy Type</small>
           <select id="subsidy" class="form-control form-control-sm" formControlName="subsidy">
-            <option selected disabled>Choose...</option>
+            <option selected [readonly]="true">Choose...</option>
             <option *ngFor="let sub of subsidyData" [value]="sub.sub_id">{{sub.sub_desc}}</option>
           </select>
         </div>
@@ -150,7 +150,7 @@
         <div class="form-group col-4">
           <small for="subsidy_type">Implemented</small>
           <select id="subsidy_type" class="form-control form-control-sm" formControlName="subsidy_type">
-            <option selected disabled>Choose...</option>
+            <option selected [readonly]="true">Choose...</option>
             <option value="Y">YES</option>
             <option value="N">NO</option>
           </select>

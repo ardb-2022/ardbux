@@ -1216,6 +1216,9 @@ removeSecurityDtlList()
             this.associateChildRecordsWithHeader();
             this.operationType = 'Q';
             this.disableAll = 'Y';
+            if(res.tdloansancsetlist){
+              this.getAccountData();//for geting security acc details
+            }
           }
           else {
             this.HandleMessage(true, MessageType.Warning, 'No record found!!!');

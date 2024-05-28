@@ -312,12 +312,10 @@ export class RecovNormalComponent implements OnInit {
   }
   downloadexcel(){
     this.exportAsConfig = {
-      type: 'xlsx',
-      // elementId: 'hiddenTab', 
+      type: 'xlsx', 
       elementIdOrContent:'mattable'
     }
-    this.exportAsService.save(this.exportAsConfig, 'ConsoTrial').subscribe(() => {
-      // save started
+    this.exportAsService.save(this.exportAsConfig, 'RecoveryReg').subscribe(() => {
       console.log("hello")
     });
   }

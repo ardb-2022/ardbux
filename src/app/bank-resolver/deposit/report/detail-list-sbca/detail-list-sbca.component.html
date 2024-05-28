@@ -30,13 +30,13 @@
             <option [value]="9">9 - Loan Suspense</option> -->
           </select>
         </div>
-        <div class="form-group col-12" *ngIf="reportcriteria.controls.acc_type_cd.value=='7'">
+        <div class="form-group col-12" *ngIf="reportcriteria.controls.acc_type_cd.value=='7'|| reportcriteria.controls.acc_type_cd.value=='1'|| reportcriteria.controls.acc_type_cd.value=='8'">
           <small for="constitution_cd">Constituion</small>
           <select id="constitution_cd" class="form-control form-control-sm"
           formControlName="constitution_cd" (change)="sendData()">
             <option disabled>Choose</option>
             <option  *ngFor="let cc of constitutionListToBind" [value]="cc.constitution_cd">{{cc.constitution_cd +' - ' +cc.constitution_desc}}</option>
-            <!-- <option value="0">With All Constitution</option> -->
+            <option value='0'>With All Constitution</option>
           </select>
         </div>
         <div class="form-group col-12">
@@ -73,7 +73,7 @@ style="background-color: #78c2ad21; min-height: 20vh;">
    printSectionId={{printedId}} 
    ngxPrint>Print</button>
    <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
-   <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadexcel()">Export as EXCEL</button>
+   <button *ngIf="reportcriteria.controls.constitution_cd.value!='0'" mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadexcel()">Export as EXCEL</button>
 
   
   </div>
@@ -94,7 +94,7 @@ style="background-color: #78c2ad21; min-height: 20vh;">
 
 
 
-<div class="mat-elevation-z8" id="trial777" *ngIf="reportcriteria.controls.acc_type_cd.value=='7'">
+<div class="mat-elevation-z8" id="trial777" *ngIf="(reportcriteria.controls.acc_type_cd.value=='7'||reportcriteria.controls.acc_type_cd.value=='8'||reportcriteria.controls.acc_type_cd.value=='1') && reportcriteria.controls.constitution_cd.value!='0'">
     
   <table mat-table [dataSource]="dataSource2" matSort >
     
@@ -166,7 +166,7 @@ style="background-color: #78c2ad21; min-height: 20vh;">
     This Report Is Generated Through Synergic Banking, Developed By Synergic Softek Solutions Pvt.Ltd. Kolkata
    </small></footer>
 </div>
-<div class="mat-elevation-z8" id="trial111" *ngIf="this.reportcriteria.controls.acc_type_cd.value!='7'">
+<div class="mat-elevation-z8" id="trial111" *ngIf="reportcriteria.controls.constitution_cd.value=='0'">
   
   <table mat-table [dataSource]="dataSource" matSort >
     
@@ -303,7 +303,7 @@ style="background-color: #78c2ad21; min-height: 20vh;">
  printSectionId={{printedId}}
  ngxPrint>Print</button>
  <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
- <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadexcel()">Export as EXCEL</button>
+ <button *ngIf="reportcriteria.controls.constitution_cd.value!='0'" mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadexcel()">Export as EXCEL</button>
 
 </div>
 </div>

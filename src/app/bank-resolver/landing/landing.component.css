@@ -112,22 +112,24 @@
     border-radius: 24px;}
   .bgColor8{background-color: #772c2cd9;max-width: 300px;
     border-radius: 24px;} */
-    .bgColor1{background-color: #0e660273;max-width: 300px;
+   
+   
+    .bgColor1{background-color: #6ea368;max-width: 300px;
       border-radius: 24px;}
-    .bgColor2{background-color: #4d026673;max-width: 300px;
+    .bgColor2{background-color: rgba(133, 89, 147, 0.995);max-width: 300px;
       border-radius: 24px;}
-    .bgColor6{background-color: #b97d3e87;max-width: 300px;
+    .bgColor6{background-color: #ac8358;max-width: 300px;
       border-radius: 24px;}
-    .bgColor4{background-color: #a11c1c8f;max-width: 300px;
+    .bgColor4{background-color: #b25757fe;max-width: 300px;
       border-radius: 24px;}
   
-    .bgColor5{background-color: #1046ff75;;max-width: 300px;
+    .bgColor5{background-color: #4f609a;;max-width: 300px;
       border-radius: 24px;}
-    .bgColor3{background-color: #a6b10596;max-width: 300px;
+    .bgColor3{background-color: #8e9242fe;max-width: 300px;
       border-radius: 24px;}
-    .bgColor7{background-color: #0093ab73;max-width: 300px;
+    .bgColor7{background-color: #4f98a4;max-width: 300px;
       border-radius: 24px;}
-    .bgColor8{background-color: #3e3a81a8;max-width: 300px;
+    .bgColor8{background-color: #a54980;max-width: 300px;
       border-radius: 24px;}
 
   h2{font-size: 18px; color: #ffffff; font-weight: 400;}
@@ -135,9 +137,10 @@
     padding: 10px;
   }
   .example-card {
+    border: 3px solid #ffffff;
     /* background-color: rgb(204 235 251 / 86%); */
     max-width: 300px;
-    /* height: 100px; */
+    height: 150px;
     border-radius: 24px;
     -moz-border-radius: 24px; 
     -webkit-border-radius: 24px; 
@@ -150,6 +153,8 @@
     opacity: 0.4;
     max-height: 55px;
     top: 21%;
+    border: 2px solid white;
+    border-radius: 50%;
   }
   .mat-menu-content {
     background-color: rgb(0, 0, 0) !important;
@@ -180,7 +185,7 @@
     top: -30px;
     border-radius: 15px;
     /* background-color: #9bcd98; */
-    background-color: #efebebdb;
+    background-color: #efebeb;
     float: left;
     -moz-border-radius: 15px; 
     -webkit-border-radius: 15px; 
@@ -195,7 +200,7 @@
     top: -30px;
     border-radius: 15px;
     /* background-color: #b99cca; */
-    background-color:#efebebdb;
+    background-color:#efebeb;
     float: left;
     -moz-border-radius: 15px; 
     -webkit-border-radius: 15px; 
@@ -209,7 +214,7 @@
     top: -30px;
     border-radius: 15px;
     /* background-color:#bbc549; */
-    background-color:#efebebdb;
+    background-color:#efebeb;
     float: left;
     -moz-border-radius: 15px; 
     -webkit-border-radius: 15px; 
@@ -222,7 +227,7 @@
     top: -30px;
     border-radius: 15px;
     /* background-color: #d16868e3; */
-    background-color: #efebebdb;
+    background-color: #efebeb;
     float: left;
     -moz-border-radius: 15px; 
     -webkit-border-radius: 15px; 
@@ -236,7 +241,7 @@
     top: -30px;
     border-radius: 15px;
     /* background-color:#dd9fb0; */
-    background-color:#efebebdb;
+    background-color:#efebeb;
     float: left;
     -moz-border-radius: 15px; 
     -webkit-border-radius: 15px; 
@@ -250,7 +255,7 @@
     top: -30px;
     border-radius: 15px;
     /* background-color:#e1c47b; */
-    background-color:#efebebdb;
+    background-color:#efebeb;
     float: left;
     -moz-border-radius: 15px; 
     -webkit-border-radius: 15px; 
@@ -263,7 +268,7 @@
     top: -30px;
     border-radius: 15px;
     /* background-color: #6ecba7; */
-    background-color: #efebebdb;
+    background-color: #efebeb;
     float: left;
     -moz-border-radius: 15px; 
     -webkit-border-radius: 15px; 
@@ -276,7 +281,7 @@
     top: -30px;
     border-radius: 15px;
     /* background-color: #8688d5; */
-    background-color: #efebebdb;
+    background-color: #efebeb;
     float: left;
     -moz-border-radius: 15px; 
     -webkit-border-radius: 15px; 
@@ -288,13 +293,13 @@
     font-weight: 500;
     color: white;
     font-size: 17px;
-    float:right;
+    text-align: center;
     padding-top: 8px;
   }
   .repLink{
     font-weight: 500;
     color: white;
-    font-size: 16px;
+    font-size: 18px;
   }
   .mat-tooltip {
     background-color: rgb(5, 88, 17)!important;
@@ -570,6 +575,6 @@
     position: absolute;
     height: 89px;
     max-height: fit-content;
-    top: 121px;
+    top: 115px;
     left: 43%;
   }

@@ -54,7 +54,7 @@ style="background-color: #78c2ad21; min-height: 90vh;">
             <div class="form-group col-2">
               <small for="trans_date">Trans Date<span class="text-danger">*</span></small>
                 <div class="input-group">
-                <input type="text" style="height:30px;" disabled placeholder="dd/mm/yyyy" class="form-control" 
+                <input type="text" style="height:30px;" [readonly]="true" placeholder="dd/mm/yyyy" class="form-control" 
                 formControlName="trf_dt"  bsDatepicker
                 [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }"
                 [isOpen]="isOpenFromDp">
@@ -72,7 +72,7 @@ style="background-color: #78c2ad21; min-height: 90vh;">
             </div>
             <div class="form-group col-2">
               <small for="approval_status">Status</small>
-              <input type="text" formControlName="approval_status1" disabled
+              <input type="text" formControlName="approval_status1" [readonly]="true"
                   class="form-control form-control-sm text-capitalize" id="approval_status">
             </div>
             <div class="form-group col-7">
@@ -98,7 +98,7 @@ style="background-color: #78c2ad21; min-height: 90vh;">
   
                     <div class="form-group col-2">
                       <small for="debit_ac_dsc">Account Desc</small>
-                      <input type="text" [(ngModel)]="l.cust_acc_desc"  disabled
+                      <input type="text" [(ngModel)]="l.cust_acc_desc"  [readonly]="true"
                         class="form-control form-control-sm text-capitalize" id="debit_ac_dsc">
                     </div> -->
                     <div class="form-group col-2">
@@ -107,7 +107,7 @@ style="background-color: #78c2ad21; min-height: 90vh;">
                     </div>
                     <div class="form-group col-4" *ngIf="showGlHeadDr">
                       <small for="debit_ac_name">GL Name</small>
-                      <input type="text" class="form-control form-control-sm text-capitalize" [(ngModel)]="l.cust_name" name="x-field-1" id="debit_ac_name" disabled>
+                      <input type="text" class="form-control form-control-sm text-capitalize" [(ngModel)]="l.cust_name" name="x-field-1" id="debit_ac_name" [readonly]="true">
                     </div>
                     <div class="form-group col-4" *ngIf="!showGlHeadDr">  
                       <small for="debit_ac_name ">Acc Holder Name</small>
@@ -150,7 +150,7 @@ style="background-color: #78c2ad21; min-height: 90vh;">
   
                     <div class="form-group col-3">
                       <small for="debit_ac_no">Account Number</small>
-                      <input type="text" [(ngModel)]="l.cust_acc_number" disabled
+                      <input type="text" [(ngModel)]="l.cust_acc_number" [readonly]="true"
                         (focusout)="setDebitAccDtls( l)" [disabled]="undefined !== l.gl_acc_code && l.gl_acc_code?.length > 0"
                         class="form-control form-control-sm text-capitalize" id="debit_ac_no">
                     </div>
@@ -181,7 +181,7 @@ style="background-color: #78c2ad21; min-height: 90vh;">
   
                     <div  class="form-group col-4">
                       <small for="debit_gl_head">GL Head</small>
-                      <input type="text" disabled [(ngModel)]="l.gl_acc_desc"
+                      <input type="text" [readonly]="true" [(ngModel)]="l.gl_acc_desc"
                         class="form-control form-control-sm text-capitalize" id="debit_gl_head">
                     </div>
   
@@ -201,7 +201,7 @@ style="background-color: #78c2ad21; min-height: 90vh;">
                 <div class="text-right mb-3">
                   <div class="form-group">
                     <small for="trf_total_amt">Total</small>
-                    <input type="text" disabled [(ngModel)]="TrfTotAmt"
+                    <input type="text" [readonly]="true" [(ngModel)]="TrfTotAmt"
                       class="form-control form-control-sm text-capitalize" id="trf_total_amt">
                       <button type="button" style="margin-top: 10px;margin-bottom:10px; padding-bottom: 10px; height: 28px;" class="btn btn-primary btn-sm mr-1"
                       (click)="addTransfer()" title="Add transfer">
@@ -226,7 +226,7 @@ style="background-color: #78c2ad21; min-height: 90vh;">
   
                     <div class="form-group col-2">
                       <small for="credit_ac_dsc">Account Desc</small>
-                      <input type="text" [(ngModel)]="l.cust_acc_desc"  disabled
+                      <input type="text" [(ngModel)]="l.cust_acc_desc"  [readonly]="true"
                         class="form-control form-control-sm text-capitalize" id="credit_ac_dsc">
                     </div> -->
                     <!-- <div class="form-group col-2">
@@ -234,7 +234,7 @@ style="background-color: #78c2ad21; min-height: 90vh;">
                       <select id="credit_ac" class="form-control form-control-sm" [(ngModel)]="l.cust_acc_type"
                       [disabled]="undefined !== l.gl_acc_code && l.gl_acc_code.length > 0"
                       (focusout)="checkAndSetCreditAccType('cust_acc', l)">
-                      <option *ngIf="accountTypeList" disabled>Choose</option>
+                      <option *ngIf="accountTypeList" [readonly]="true">Choose</option>
                       <option *ngFor="let acctType of accountTypeList" [value]="acctType.acc_type_cd">
                       {{acctType.acc_type_cd +' ' + acctType.acc_type_desc}}
                       </option>
@@ -246,7 +246,7 @@ style="background-color: #78c2ad21; min-height: 90vh;">
                     </div>
                     <div class="form-group col-4" *ngIf="showGlHeadCr">
                       <small for="debit_ac_name">GL Name </small>
-                      <input type="text" class="form-control form-control-sm text-capitalize" [(ngModel)]="l.cust_name" name="x-field-1" id="debit_ac_name" disabled>
+                      <input type="text" class="form-control form-control-sm text-capitalize" [(ngModel)]="l.cust_name" name="x-field-1" id="debit_ac_name" [readonly]="true">
                     </div>
                     <div class="form-group col-4" *ngIf="!showGlHeadCr">  
                       <small for="credit_ac_name">Acc Holder Name</small>
@@ -289,7 +289,7 @@ style="background-color: #78c2ad21; min-height: 90vh;">
   
                      <div class="form-group col-3">
                       <small for="credit_ac_no">Account Number</small>
-                      <input type="text" [(ngModel)]="l.cust_acc_number" disabled
+                      <input type="text" [(ngModel)]="l.cust_acc_number" [readonly]="true"
                         (focusout)="setCreditAccDtls( l)" [disabled]="undefined !== l.gl_acc_code && l.gl_acc_code?.length > 0"
                         class="form-control form-control-sm text-capitalize" id="credit_ac_no">
                     </div>       
@@ -319,7 +319,7 @@ style="background-color: #78c2ad21; min-height: 90vh;">
   
                     <div  class="form-group col-4">
                       <small for="credit_gl_head">GL Head</small>
-                      <input type="text" disabled [(ngModel)]="l.gl_acc_desc"
+                      <input type="text" [readonly]="true" [(ngModel)]="l.gl_acc_desc"
                         class="form-control form-control-sm text-capitalize" id="credit_gl_head">
                     </div>
   
@@ -339,7 +339,7 @@ style="background-color: #78c2ad21; min-height: 90vh;">
                 <div class="text-right mb-3">
                   <div class="form-group">
                     <small for="cr_trf_total_amt">Total</small>
-                    <input type="text" disabled [(ngModel)]="CrTrfTotAmt"
+                    <input type="text" [readonly]="true" [(ngModel)]="CrTrfTotAmt"
                       class="form-control form-control-sm text-capitalize" id="cr_trf_total_amt">
                       <button type="button" style="margin-top: 10px;padding-bottom: 10px; margin-bottom:10px;height: 28px;" class="btn btn-primary btn-sm mr-1"
                       (click)="CraddTransfer()" title="Add transfer">

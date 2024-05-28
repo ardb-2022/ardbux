@@ -113,28 +113,28 @@
                     JOINT HOLDER:-{{joinHold}}
                    </span>
                   <input type="text" class="form-control form-control-sm" formControlName="cust_name" id="cust_name"
-                   disabled>
+                   [readonly]="true">
                 </div>
                 <div class="form-group  col-12">
                   <small for="guardian_name">Guardian Name</small>
                   <input type="text" class="form-control form-control-sm text-capitalize" formControlName="guardian_name" id="guardian_name"
-                     disabled>
+                     [readonly]="true">
                 </div>
                 <div class="form-group  col-6">
                   <small for="dt_of_birth">Date Of Birth</small>
                   <input type="text" class="form-control form-control-sm" formControlName="dt_of_birth"
-                  id="dt_of_birth"  disabled>
+                  id="dt_of_birth"  [readonly]="true">
                   <!-- <small>{{f.dt_of_birth.value | date:"MM/dd/yyyy"}}</small> -->
                 </div>
                 <div class="form-group col-6">
                   <small for="catg_cd">Category</small>
                   <input type="text" class="form-control form-control-sm" formControlName="catg_desc" id="catg_desc"
-                     disabled>
+                     [readonly]="true">
                 </div>
                 <div class="form-group col-12">
                   <small for="present_address">Address</small>
                   <input type="text" class="form-control form-control-sm" id="present_address" formControlName="present_address"
-                    disabled>
+                    [readonly]="true">
                 </div>
               </div>
               <button type="button" class="btn btn-link" (click)="openModal(addInfcontent)"
@@ -264,60 +264,60 @@
               <!-- <div class="form-group col-12">
                 <small for="acc_num">Name</small>
                 <input type="text" class="form-control form-control-sm" formControlName="acc_num" id="acc_num"
-                  placeholder="Name" disabled>
+                  placeholder="Name" [readonly]="true">
               </div> -->
               <div class="form-group col-6">
                 <small for="constitution_cd">Constitution</small>
                 <input type="text" class="form-control form-control-sm" formControlName="constitution_cd" id="constitution_cd"
-                hidden disabled>
+                hidden [readonly]="true">
               <input type="text" class="form-control form-control-sm" formControlName="constitution_cd_desc"
-                id="constitution_cd_desc" disabled>
+                id="constitution_cd_desc" [readonly]="true">
               </div>
               <div class="form-group col-6">
                 <small for="dep_period">Deposit Period</small>
                 <input type="text" class="form-control form-control-sm" formControlName="dep_period" id="dep_period"
-                   disabled>
+                   [readonly]="true">
               </div>
               <div class="form-group col-6">
                 <small for="opening_dt">Opening Date</small>
                 <input type="text" class="form-control form-control-sm" formControlName="opening_dt" id="opening_dt"
-                  disabled>
+                  [readonly]="true">
               </div>
               <div class="form-group col-6">
                 <small for="mat_dt">Maturity Date</small>
                 <input type="text" class="form-control form-control-sm" formControlName="mat_dt" id="mat_dt"
-                   disabled>
+                   [readonly]="true">
               </div>
               <div class="form-group col-6">
                 <small for="prn_amt">Principal Amount</small>
                 <input type="text" class="form-control form-control-sm" formControlName="prn_amt" id="prn_amt"
-                  disabled>
+                  [readonly]="true">
               </div>
               <div class="form-group col-6">
                 <small for="clr_bal">Cleared Balance</small>
-                <input type="text" class="form-control form-control-sm" formControlName="clr_bal" id="clr_bal" disabled>
+                <input type="text" class="form-control form-control-sm" formControlName="clr_bal" id="clr_bal" [readonly]="true">
               </div>
               <div class="form-group col-6">
                 <small for="curr_bal">Current Balance</small>
-                <input type="text" class="form-control form-control-sm" formControlName="curr_bal" id="curr_bal" disabled>
+                <input type="text" class="form-control form-control-sm" formControlName="curr_bal" id="curr_bal" [readonly]="true">
               </div>
               <div class="form-group col-6">
                 <small for="oprn_instr_cd">Operation</small>
                 <input type="text" class="form-control form-control-sm" formControlName="oprn_instr_cd" id="oprn_instr_cd"
-                  disabled hidden>
+                  [readonly]="true" hidden>
                 <input type="text" class="form-control form-control-sm" formControlName="oprn_instr_cd_desc"
-                  id="oprn_instr_cd_desc" disabled>
+                  id="oprn_instr_cd_desc" [readonly]="true">
               </div>
 
               <div class="form-group col-6">
                 <small for="intt_rt">Interest Rate</small>
                 <input type="text" class="form-control form-control-sm" formControlName="intt_rt" id="intt_rt"
-                   disabled>
+                   [readonly]="true">
               </div>
               <div class="form-group col-6">
                 <small for="intt_amt">Interest Amount</small>
                 <input type="text" class="form-control form-control-sm" formControlName="intt_amt" id="intt_amt"
-                   disabled>
+                   [readonly]="true">
               </div>
             </div>
             <button  type="button" class="btn btn-link" *ngIf="selectedAccountType === 6"
@@ -365,40 +365,40 @@
               <div class="form-group col-6">
                 <small for="dep_period">Deposit Period</small>
                 <input type="text" class="form-control form-control-sm" formControlName="dep_period" id="dep_period"
-                   disabled>
+                   [readonly]="true">
               </div>
               <div class="form-group col-3">
                 <small for="opening_dt">Opening Date</small>
                 <input type="text" class="form-control form-control-sm" formControlName="opening_dt" id="opening_dt"
-                  disabled>
+                  [readonly]="true">
               </div>
               <div class="form-group col-3">
                 <small for="instl_no">No of Installment</small>
-                <input type="text" class="form-control form-control-sm" formControlName="instl_no" id="instl_no" disabled>
+                <input type="text" class="form-control form-control-sm" formControlName="instl_no" id="instl_no" [readonly]="true">
               </div>
               <div class="form-group col-3">
                 <small for="intt_rt">Rate of intt</small>
                 <input type="text" class="form-control form-control-sm" formControlName="intt_rt" id="intt_rt"
-                   disabled>
+                   [readonly]="true">
               </div>
               <div class="form-group col-3">
                 <small for="prn_amt">Principal Amount</small>
                 <input type="text" class="form-control form-control-sm" formControlName="prn_amt" id="prn_amt"
-                  disabled>
+                  [readonly]="true">
               </div>
               <div class="form-group col-3">
                 <small for="curr_intt_recov">Interest</small>
                 <input type="text" class="form-control form-control-sm" formControlName="curr_intt_recov" id="curr_intt_recov"
-                  disabled>
+                  [readonly]="true">
               </div>
               
               <!-- <div class="form-group col-3">
                 <small for="curr_prn_recov">Bonus Amt.</small>
-                <input type="text" class="form-control form-control-sm" formControlName="curr_prn_recov" id="curr_prn_recov" disabled>
+                <input type="text" class="form-control form-control-sm" formControlName="curr_prn_recov" id="curr_prn_recov" [readonly]="true">
               </div> -->
               <div class="form-group col-3">
                 <small for="tot_amount">Maturity Amount</small>
-                <input type="text" class="form-control form-control-sm" formControlName="tot_amount" id="tot_amount" disabled>
+                <input type="text" class="form-control form-control-sm" formControlName="tot_amount" id="tot_amount" [readonly]="true">
               </div>
             </div>
             
@@ -413,67 +413,67 @@
             <div class="form-row">
               <div class="form-group col-6">
                 <small for="acc_type_cd">Account Type</small>
-                <input type="text" class="form-control form-control-sm" formControlName="acc_type_cd" id="acc_type_cd" disabled>
+                <input type="text" class="form-control form-control-sm" formControlName="acc_type_cd" id="acc_type_cd" [readonly]="true">
               </div>
               <div class="form-group col-6">
                 <small for="acc_num">A/C</small>
-                <input type="text" class="form-control form-control-sm" formControlName="acc_num" id="acc_num" disabled>
+                <input type="text" class="form-control form-control-sm" formControlName="acc_num" id="acc_num" [readonly]="true">
               </div>
               <div class="form-group col-6">
                 <small for="trans_type">Transaction Type</small>
-                <input type="text" class="form-control form-control-sm" formControlName="trans_type" id="trans_type" disabled>
+                <input type="text" class="form-control form-control-sm" formControlName="trans_type" id="trans_type" [readonly]="true">
               </div>
               <div class="form-group col-6">
                 <small for="trans_mode">Transaction Mode</small>
-                <input type="text" class="form-control form-control-sm" formControlName="trans_mode" id="trans_mode" disabled>
+                <input type="text" class="form-control form-control-sm" formControlName="trans_mode" id="trans_mode" [readonly]="true">
               </div>
               <div class="form-group col-6">
                 <small for="amount">Amount </small>
-                <input type="text" class="form-control form-control-sm" formControlName="amount" id="amount" disabled>
+                <input type="text" class="form-control form-control-sm" formControlName="amount" id="amount" [readonly]="true">
               </div>
               <div class="form-group col-6">
                 <small for="curr_intt_recov">Interest</small>
                 <input type="text" class="form-control form-control-sm" formControlName="curr_intt_recov" id="curr_intt_recov"
-                  disabled>
+                  [readonly]="true">
               </div>
               <div class="form-group col-6">
                 <small for="ovd_intt_recov">Default Penalty</small>
-                <input type="text" class="form-control form-control-sm" formControlName="ovd_intt_recov" id="ovd_intt_recov" disabled>
+                <input type="text" class="form-control form-control-sm" formControlName="ovd_intt_recov" id="ovd_intt_recov" [readonly]="true">
               </div>
               <div class="form-group col-6">
                 <small for="curr_prn_recov">Bonus Amt.</small>
-                <input type="text" class="form-control form-control-sm" formControlName="curr_prn_recov" id="curr_prn_recov" disabled>
+                <input type="text" class="form-control form-control-sm" formControlName="curr_prn_recov" id="curr_prn_recov" [readonly]="true">
               </div>
               <div class="form-group col-6">
                 <small for="tot_amount">Total Amount</small>
-                <input type="text" class="form-control form-control-sm" formControlName="tot_amount" id="tot_amount" disabled>
+                <input type="text" class="form-control form-control-sm" formControlName="tot_amount" id="tot_amount" [readonly]="true">
               </div>
             </div>
             <div class="form-row">
               <div class="form-group col-6">
                 <small for="instrument_dt">Instrument Date</small>
                 <input type="text" class="form-control form-control-sm" formControlName="instrument_dt" id="instrument_dt"
-                  disabled>
+                  [readonly]="true">
               </div>
               <div class="form-group col-6">
                 <small for="instrument_num">Instrument Number</small>
                 <input type="text" class="form-control form-control-sm" formControlName="instrument_num" id="instrument_num"
-                  disabled>
+                  [readonly]="true">
               </div>
               <div class="form-group col-12">
                 <small for="paid_to">Paid To</small>
-                <input type="text" class="form-control form-control-sm" formControlName="paid_to" id="paid_to" disabled>
+                <input type="text" class="form-control form-control-sm" formControlName="paid_to" id="paid_to" [readonly]="true">
               </div>
               <div class="form-group col-6">
                 <small for="trf_type">Transaction Type</small>
-                <input type="text" class="form-control form-control-sm" formControlName="trf_type" id="trf_type" disabled>
+                <input type="text" class="form-control form-control-sm" formControlName="trf_type" id="trf_type" [readonly]="true">
               </div>
             </div>
             <div class="form-row">
               <div class="form-group col-6">
                 <small for="approval_status">Approval Status</small>
                 <input type="text" class="form-control form-control-sm" formControlName="approval_status" id="approval_status"
-                  disabled>
+                  [readonly]="true">
               </div>
             </div>
             <button  type="button" class="btn btn-link" *ngIf="undefined !== tmDenominationTransLst && tmDenominationTransLst.length > 0" (click)="openModal(content)">

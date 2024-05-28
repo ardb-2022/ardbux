@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, TemplateRef, ElementRef,ChangeDetectorRef ,AfterViewInit} from '@angular/core';
 import { RestService } from 'src/app/_service';
-import { WebDataRocksPivot } from 'src/app/webdatarocks/webdatarocks.angular4';
+ 
 import { tt_cash_account, p_report_param, SystemValues } from 'src/app/bank-resolver/Models';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 // import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
@@ -26,7 +26,7 @@ import { CommonServiceService } from 'src/app/bank-resolver/common-service.servi
 })
 export class CashaccountComponent implements OnInit ,AfterViewInit{
   @ViewChild('content', { static: true }) content: TemplateRef<any>;
-  @ViewChild('CashAccount') child: WebDataRocksPivot;
+   
   @ViewChild('external') external: ElementRef;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -196,9 +196,7 @@ export class CashaccountComponent implements OnInit ,AfterViewInit{
     this.showAlert = false;
   }
   // private pdfmake : pdfMake;
-  onPivotReady(CashAccount: WebDataRocksPivot): void {
-    console.log('[ready] WebDataRocksPivot', this.child);
-  }
+   
 
 
 
@@ -355,33 +353,9 @@ export class CashaccountComponent implements OnInit ,AfterViewInit{
   //   );
   // }
 
-  setOption(option, value) {
-    this.child.webDataRocks.setOptions({
-      grid: {
-        [option]: value
-      }
-    });
+  
 
-    this.child.webDataRocks.refresh();
-  }
-
-  exportPDFTitle() {
-    const options = this.child.webDataRocks.getOptions();
-    this.child.webDataRocks.setOptions({
-      grid: {
-        title: 'Cash Account For The Period ' + this.fd + '-' + this.td
-      }
-    }
-    );
-    this.child.webDataRocks.refresh();
-    this.child.webDataRocks.exportTo('pdf', { pageOrientation: 'potrait', header: '<div>##CURRENT-DATE##&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Synergic Banking&emsp;&emsp;&emsp;Branch : ' + localStorage.getItem('__brnName') + '<br>&nbsp</div>', filename: 'CashAccount' });
-
-    this.child.webDataRocks.on('exportcomplete', function () {
-      this.child.webDataRocks.off('exportcomplete');
-      this.child.webDataRocks.setOptions(options);
-      this.child.webDataRocks.refresh();
-    });
-  }
+   
 
 
   closeScreen() {

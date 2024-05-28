@@ -108,6 +108,11 @@ thead {
   width: 100%;
 }
 
+.mkSmallBK{
+  font-size: large;
+  width: 90%;
+  margin-right: 10%;
+}
 
 /* @page 
 {
@@ -120,6 +125,11 @@ thead {
 }*/
 @media print {
   .mkSmallG{font-size: large;font-family:Arial, Helvetica, ui-sans-serif}
+  .mkSmallBK{
+    font-size: large;
+    width: 90%;
+    margin-right: 10%;
+  }
 }
 .mkSmallG{
   font-size: large;

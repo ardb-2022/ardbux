@@ -13,7 +13,7 @@ import { UTCustomerProfileComponent } from './UCIC/utcustomer-profile/utcustomer
 import { UTSelfHelpComponent } from './UCIC/utself-help/utself-help.component';
 import { DailybookComponent } from './finance/report/dailybook/dailybook.component';
 import { CashaccountComponent } from './finance/report/cashaccount/cashaccount.component';
-import { WebDataRocksPivot } from '../webdatarocks/webdatarocks.angular4';
+// import { WebDataRocksPivot } from '../webdatarocks/webdatarocks.angular4';
 import { TrialbalanceComponent } from './finance/report/trialbalance/trialbalance.component';
 import { CashcumtrialComponent } from './finance/report/cashcumtrial/cashcumtrial.component';
 import { GenLedgerComponent } from './finance/report/gen-ledger/gen-ledger.component';
@@ -230,14 +230,18 @@ import { TamlukComponent } from './deposit/report/passbook-print/tamluk/tamluk.c
 import { TamlukFastPageComponent } from './deposit/report/passbook-print/tamluk/tamluk-fast-page/tamluk-fast-page.component';
 import { VillMasterContaiComponent } from './loan/masters/vill-master-contai/vill-master-contai.component';
 import { RecovSummaryComponent } from './loan/report/recovery-register/recov-summary/recov-summary.component';
-import { InvTransactionComponent } from './investment/transaction/inv-transaction/inv-transaction.component';
+import { RiskFundComponent } from './loan/report/risk-fund/risk-fund.component';
+import { BankuraComponent } from './deposit/report/passbook-print/bankura/bankura.component';
+import { BankuraFastPageComponent } from './deposit/report/passbook-print/bankura/bankura-fast-page/bankura-fast-page.component';
+import { SendSmsFromDemandComponent } from './loan/report/send-sms-from-demand/send-sms-from-demand.component';
+import { UpdatedDemandListComponent } from './loan/report/demand-list/updated-demand-list/updated-demand-list.component';
 
 @NgModule({
   declarations: [ 
     AmountToWordPipe,UserLoginStatusComponent,OpenInvestComponent,KeyoffDirective,
     BankResolverComponent, LoginComponent, HeaderComponent, LandingComponent, LoadingComponent,
     UTCustomerProfileComponent, UTSelfHelpComponent, DailybookComponent, CashaccountComponent,
-    WebDataRocksPivot, TrialbalanceComponent, CashcumtrialComponent, GenLedgerComponent,
+    TrialbalanceComponent, CashcumtrialComponent, GenLedgerComponent,
     VoucherprintComponent, AccountDetailsComponent, TransactionDetailsComponent,
     GenLedger2Component, TransactionapprovalComponent, AccOpeningComponent,
     CustomerInfoComponent, VoucherComponent, TestComponent,
@@ -283,7 +287,8 @@ import { InvTransactionComponent } from './investment/transaction/inv-transactio
             ContaiUCICprofileComponent, GoldTestAndValuationReportComponent, DemandNoticeContaiComponent, UcicMergeComponent, CTloanDCComponent, 
             RecoveryExportComponent, RecoveryImportComponent, RecoveryIndiPostComponent, ContaiComponent, ContaiFastPageComponent, GhatalComponent, 
             GhatalFastPageComponent, GoldLoanReportComponent, GoldLoanAsOnDateComponent, GoldLoanCurrDateComponent, GroupWiseComponent, NpaAllWithGroupComponent, 
-            DcbrGroupWiseComponent, TamlukComponent, TamlukFastPageComponent, VillMasterContaiComponent, RecovSummaryComponent,InvTransactionComponent
+            DcbrGroupWiseComponent, TamlukComponent, TamlukFastPageComponent, VillMasterContaiComponent, RecovSummaryComponent, RiskFundComponent, BankuraComponent, 
+            BankuraFastPageComponent, SendSmsFromDemandComponent, UpdatedDemandListComponent
   ],
   imports: [
     MatAutocompleteModule,

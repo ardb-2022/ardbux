@@ -1,7 +1,7 @@
 import { SystemValues } from './../../../Models/SystemValues';
 import { Component, OnInit, ViewChild, TemplateRef, ChangeDetectorRef ,AfterViewInit, ElementRef} from '@angular/core';
 import { RestService } from 'src/app/_service';
-import { WebDataRocksPivot } from 'src/app/webdatarocks/webdatarocks.angular4';
+ 
 import { tt_cash_account, p_report_param } from 'src/app/bank-resolver/Models';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 // import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
@@ -26,7 +26,7 @@ import jspdf from 'jspdf';
 })
 export class DailybookComponent implements OnInit ,AfterViewInit{
   @ViewChild('content', { static: true }) content: TemplateRef<any>;
-  @ViewChild('DailyCashBook') child: WebDataRocksPivot;
+  
   @ViewChild('mattable') mattable: ElementRef;
   displayedColumns: string[] = ['dr_acc_cd', 'dr_particulars', 'dr_amt', 'dr_amt_tr','cr_acc_cd', 'cr_particulars', 'cr_amt', 'cr_amt_tr'];
   dataSource=new MatTableDataSource();
@@ -292,9 +292,7 @@ export class DailybookComponent implements OnInit ,AfterViewInit{
   public closeAlert() {
     this.showAlert = false;
   }
-  onPivotReady(DailyCashBook: WebDataRocksPivot): void {
-    console.log("[ready] WebDataRocksPivot", this.child);
-  }
+
 
   onReportComplete(): void {
     ;
@@ -451,35 +449,10 @@ export class DailybookComponent implements OnInit ,AfterViewInit{
     // );
   }
 
-  setOption(option, value) {
-    this.child.webDataRocks.setOptions({
-      grid: {
-        [option]: value
-      }
-    });
-    ;
-    this.child.webDataRocks.refresh();
-  }
   closeScreen() {
     this.router.navigate([localStorage.getItem('__bName') + '/la']);
   }
-  exportPDFTitle() {
-    var options = this.child.webDataRocks.getOptions();
-    this.child.webDataRocks.setOptions({
-      grid: {
-        title: 'Day Book For The Period ' + this.fd + '-' + this.td
-      }
-    }
-    );
-    let brnName = "Main Branch";
-    this.child.webDataRocks.refresh();
-    this.child.webDataRocks.exportTo('pdf', { pageOrientation: 'potrait', header: "<div>##CURRENT-DATE##&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Synergic Banking&emsp;&emsp;&emsp;Branch : " + localStorage.getItem('__brnName') + "<br>&nbsp</div>", filename: "DayBook" });
-    this.child.webDataRocks.on('exportcomplete', function () {
-      this.child.webDataRocks.off('exportcomplete')
-      this.child.webDataRocks.setOptions(options);
-      this.child.webDataRocks.refresh();
-    });
-  }
+  
   pageChanged(event: PageChangedEvent): void {
     const startItem = (event.page - 1) * event.itemsPerPage;
     const endItem = event.page * event.itemsPerPage;

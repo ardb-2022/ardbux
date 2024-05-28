@@ -329,6 +329,11 @@
   
     <td mat-cell *matCellDef="let element" style="text-align:center"> {{element.penal_intt + element.ovd_intt + element.curr_intt + element.ovd_prn | currency:'INR'}} </td>
   </ng-container>
+  <ng-container matColumnDef="n_d">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header >No. of Default
+    </th>
+    <td mat-cell *matCellDef="let element" style="text-align:center"> {{element.ovd_intt_rate}} </td>
+  </ng-container>
   <ng-container matColumnDef="computed_till_dt">
    
     <th mat-header-cell *matHeaderCellDef mat-sort-header > Interest Upto

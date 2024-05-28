@@ -37,10 +37,13 @@
     printSectionId={{printID}} ngxPrint [useExistingCss]="true">Print FastPage</button> &nbsp;
   </div>
 <div id="fastPage" style="font-family:Arial, Helvetica, ui-sans-serif;font-size:14px;" hidden>
-    <div style="margin-top: 53%; ">&nbsp;</div>
+    <div style="margin-top: 53%; " *ngIf="sys.ardbCD!='23'&& sys.ardbCD!='22'">&nbsp;</div>
+    <div style="margin-top: 60%; " *ngIf="sys.ardbCD=='23'">&nbsp;</div>
+    <div style="margin-top: 51%; " *ngIf="sys.ardbCD=='22'">&nbsp;</div>
     <div class="form-row" style="margin-left: 10%;">
-        <div style="width: 40%;"><b>A/C No:  </b> {{paddingACC}}{{suggestedCustomer[0].acc_num}}</div>
-        <div style="text-align: right;width: 20%;"><b *ngIf="sys.ardbCD!='4'">IFSC: {{IFSC}}</b></div>
+      <div style="width: 40%;" *ngIf="sys.ardbCD=='26' || sys.ardbCD=='20'"><b>A/C No:  </b> {{paddingACC}}{{suggestedCustomer[0].acc_num}}</div>
+      <div style="width: 40%;" *ngIf="sys.ardbCD!='26'"><b>A/C No:  </b>{{suggestedCustomer[0].acc_num}}</div>
+        <div style="text-align: right;width: 20%;"><b *ngIf="sys.ardbCD=='26'||sys.ardbCD=='20'">IFSC: {{IFSC}}</b></div>
         <div style="text-align: right;width: 30%;"><b>CIF:  </b>{{masterModel.tmdeposit.cust_cd}}</div>
     </div>
       <div class="form-row" style="margin-left: 10%;padding-top: 5px;">
@@ -62,11 +65,12 @@
             <div style="width: 30%;"><b>Mode of Operation:  </b>{{oprn_instr_desc}} </div>
         </div>
         <div class="form-row" style="padding-left: 3%;padding-top: 5px;">
-            <div style="width:97%;"><b>Contact No:  </b>{{suggestedCustomer[0].phone}}</div>
+            <div style="width:35%;"><b>Contact No:  </b>{{suggestedCustomer[0].phone}}</div>
+            <div style="width:30%;"><b>Nominee Status:  </b>{{masterModel.tdnominee?"YES":"NO"}}</div>
         </div>
         <div class="form-row" style="padding-left: 3%;padding-top: 5px;">
-          <div style="width: 50%;"><b>Issue Date:  </b>{{curDay}}</div>
-          <div style="text-align: right;width: 47%;"><b>Branch Manager / Authorised Signatory</b></div>
+          <div style="width: 40%;"><b>Issue Date:  </b>{{curDay}}</div>
+          <div style="text-align: right;width: 45%;"><b>Branch Manager / Authorised Signatory</b></div>
         </div>
     </div>
   </div>

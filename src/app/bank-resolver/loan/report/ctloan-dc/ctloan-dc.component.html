@@ -356,7 +356,7 @@
       </td>
      </ng-container> -->
   <tr mat-header-row *matHeaderRowDef="['mainHeader']"></tr>
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr class="fixedHeader" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let element; columns: displayedColumns;"></tr>
   <!-- <tr mat-footer-row *matFooterRowDef="['Total','total_disb','space'  ]" class="example-second-footer-row"></tr> -->
   

@@ -132,5 +132,27 @@ export class CommonServiceService {
   //   }
   //   else { this.isLoading = false; }
   // }
+  getFormatedDate(dateString: string): string{
+    var parts = dateString.split(' ')[0].split('/');
+    
+    // Extract day, month, and year
+    var day = parseInt(parts[0], 10);
+    var month = parseInt(parts[1], 10);
+    var year = parseInt(parts[2], 10);
+    
+    // Array of month names
+    var monthNames = [
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
+    
+    // Format the date
+    var formattedDate = day + ' ' + monthNames[month - 1] + ' ' + year;
+    
+    return formattedDate;
+
+
+
+  }
 
 }

@@ -198,6 +198,11 @@ import { TamlukComponent } from './deposit/report/passbook-print/tamluk/tamluk.c
 import { TamlukFastPageComponent } from './deposit/report/passbook-print/tamluk/tamluk-fast-page/tamluk-fast-page.component';
 import { VillMasterContaiComponent } from './loan/masters/vill-master-contai/vill-master-contai.component';
 import { RecovSummaryComponent } from './loan/report/recovery-register/recov-summary/recov-summary.component';
+import { RiskFundComponent } from './loan/report/risk-fund/risk-fund.component';
+import { BankuraComponent } from './deposit/report/passbook-print/bankura/bankura.component';
+import { BankuraFastPageComponent } from './deposit/report/passbook-print/bankura/bankura-fast-page/bankura-fast-page.component';
+import { SendSmsFromDemandComponent } from './loan/report/send-sms-from-demand/send-sms-from-demand.component';
+import { UpdatedDemandListComponent } from './loan/report/demand-list/updated-demand-list/updated-demand-list.component';
 
 const routes: Routes = [
   { path: 'Admin', component: AdminPanelComponent },
@@ -265,6 +270,7 @@ const routes: Routes = [
       { path: 'UM_UpLogStatus', component: UserLoginStatusComponent, canActivate: [AuthGuard] },
       { path: 'UM_UPermission', component: UserPermissionComponent, canActivate: [AuthGuard] },
       
+      { path: 'LT_demandSMS', component: SendSmsFromDemandComponent, canActivate: [AuthGuard] },
       { path: 'LT_GoldTest', component: GoldTestAndValuationReportComponent, canActivate: [AuthGuard] },
       { path: 'LT_OpenLoanAcc', component: OpenLoanAccountComponent, canActivate: [AuthGuard] },
       { path: 'LT_LoanTrans', component: LoanaccountTransactionComponent, canActivate: [AuthGuard] },
@@ -299,6 +305,7 @@ const routes: Routes = [
       { path: 'LR_DlistAll', component: DetaillistAllComponent, canActivate: [AuthGuard] },
       { path: 'LR_DflLst', component: DefaulterListComponent, canActivate: [AuthGuard] },
       { path: 'LR_DMLst', component: DemandListComponent, canActivate: [AuthGuard] },
+      { path: 'LR_DMLstUpdated', component: UpdatedDemandListComponent, canActivate: [AuthGuard] },
       { path: 'LR_AMLst', component: ActwiseLstComponent, canActivate: [AuthGuard] },
       { path: 'LR_BMLst', component: BlockwiseLstComponent, canActivate: [AuthGuard] },
       { path: 'LR_DCBR_P', component: DcbrPrintComponent, canActivate: [AuthGuard] },
@@ -327,6 +334,7 @@ const routes: Routes = [
       { path: 'LR_FN_Return', component: FortnightlyReturnComponent, canActivate: [AuthGuard] },
       { path: 'LR_Conso_FN_Return', component: ConsoFortnightlyReturnComponent, canActivate: [AuthGuard] },
       { path: 'LR_NPA_ALL', component: NpaALLComponent, canActivate: [AuthGuard] },
+      { path: 'LR_Risk_Fund', component: RiskFundComponent, canActivate: [AuthGuard] },
       { path: 'LR_NPA_ALL_GROUP', component: NpaAllWithGroupComponent, canActivate: [AuthGuard] },
       { path: 'LR_GOLD_REP', component: GoldLoanReportComponent, canActivate: [AuthGuard] },
       { path: 'LR_GOLD_REP_ASON', component: GoldLoanAsOnDateComponent, canActivate: [AuthGuard] },
@@ -363,6 +371,9 @@ const routes: Routes = [
       
       { path: 'DR_tamluk_PbkPrn', component: TamlukComponent,
         children: [{ path: 'DR_tamluk_PassBookFastPage', component: TamlukFastPageComponent},], canActivate: [AuthGuard] },
+        
+      { path: 'DR_bankura_PbkPrn', component: BankuraComponent,
+        children: [{ path: 'DR_bankura_PassBookFastPage', component: BankuraFastPageComponent},], canActivate: [AuthGuard] },
       
       { path: 'DR_ghatal_PbkPrn', component: GhatalComponent,
           children: [{ path: 'DR_ghatal_PassBookFastPage', component: GhatalFastPageComponent},], canActivate: [AuthGuard] },

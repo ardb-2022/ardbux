@@ -1,4 +1,4 @@
-import { Component, HostListener, ɵCodegenComponentFactoryResolver } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { InAppMessageService } from './_service';
 

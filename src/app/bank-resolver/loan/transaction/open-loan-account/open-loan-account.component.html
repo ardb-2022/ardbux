@@ -83,7 +83,7 @@
 
       <div class="form-group col-2">
         <small for="cust_code">Customer Code</small>
-        <input style="height:25px" disabled type="text" class="form-control form-control-sm text-capitalize"
+        <input style="height:25px" [readonly]="true" type="text" class="form-control form-control-sm text-capitalize"
           id="cust_code" placeholder="Customer CD" [(ngModel)]="tm_loan_all.party_cd" id="cust_code">
       </div>
 
@@ -141,7 +141,7 @@
           [disabled]="tm_loan_all.loan_id != undefined || operationType == '' || disableAll == 'Y' "
           [(ngModel)]="tm_loan_all.loan_acc_type" (change)="setLoanAccountType($event.target.value)" id="loan_type"
           class="form-control form-control-sm">
-          <option [value]="tm_loan_all.loan_acc_type" disabled selected>
+          <option [value]="tm_loan_all.loan_acc_type" [readonly]="true" selected>
             {{tm_loan_all.acc_cd}}-{{tm_loan_all.loan_acc_type}}</option>
           <option *ngFor="let l of accountTypeList" [value]="l.acc_type_cd">{{l.acc_type_cd}}-{{l.acc_type_desc}}</option>
         </select>
@@ -159,7 +159,7 @@
           style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
           [(ngModel)]="tm_loan_all.fund_type" id="fund_type"
           class="form-control form-control-sm">
-          <option value="" disabled selected>Select</option>
+          <option value="" [readonly]="true" selected>Select</option>
           <option *ngFor="let l of fundTypeList" [value]="l.value">{{l.name}}</option>
         </select>
       </div>
@@ -212,7 +212,7 @@
           [disabled]="tm_loan_all.loan_id != undefined || operationType == '' || disableAll == 'Y' "
           (change)="setInstalPeriod($event.target.value)" [(ngModel)]="tm_loan_all.piriodicity" id="loan_type"
           class="form-control form-control-sm">
-          <option [value]="tm_loan_all.piriodicity" disabled selected>
+          <option [value]="tm_loan_all.piriodicity" [readonly]="true" selected>
             {{tm_loan_all.piriodicity}}-{{tm_loan_all.instalmentTypeDesc}}</option>
           <option *ngFor="let l of instalmentTypeList" [value]="l.desc_type">{{l.desc_type}}-{{l.ins_desc}}</option>
         </select>
@@ -319,7 +319,7 @@
                 <div class="form-group col-3">
                   <small>Sanc No</small>
                   <input class="form-control form-control-sm text-capitalize" id="l.sanc_no"
-                    style="height:25px; text-align: right;" disabled
+                    style="height:25px; text-align: right;" [readonly]="true"
                     [(ngModel)]="l.sanc_no" type="number" min="0" step='any' placeholder="Sanction No">
                 </div>
 
@@ -346,7 +346,7 @@
               <div class="form-row ">
                 <div class="form-group col-3">
                   <small for="joint_cust_code">Customer Code</small>
-                  <input style="height:25px" disabled type="text" class="form-control form-control-sm text-capitalize"
+                  <input style="height:25px" [readonly]="true" type="text" class="form-control form-control-sm text-capitalize"
                     [(ngModel)]="t1.cust_cd" placeholder="Customer Code" id="joint_cust_code" placeholder="Customer Code">
                 </div>
 
@@ -408,7 +408,7 @@
                     style="height:25px; text-align-last: left; font-size: small; padding-top: 0px; background-color: whitesmoke;"
                     id="relation" [disabled]="disableAll == 'Y' " [(ngModel)]="t1.relation"
                     (change)="setJointHolderRelation($event.target.value , i)" class="form-control form-control-sm">
-                    <option [value]="t1.relation" disabled selected>{{t1.relationId}}-{{t1.relation}}</option>
+                    <option [value]="t1.relation" [readonly]="true" selected>{{t1.relationId}}-{{t1.relation}}</option>
                     <option *ngFor="let l of relationship" [value]="l.val">{{l.id}}-{{l.val}}</option>
                   </select>
 
@@ -452,7 +452,7 @@
                 [disabled]="disableAll == 'Y' " [(ngModel)]="ls.sector_cd"
                 (change)="setSectorType($event.target.value , i)" id="sec_type" 
                 class="form-control form-control-sm">
-                <!-- <option [value]="ls.sector_cd" disabled selected>{{ls.sector_desc}}</option> -->
+                <!-- <option [value]="ls.sector_cd" [readonly]="true" selected>{{ls.sector_desc}}</option> -->
                 <option >Select Sector</option>
                 <option *ngFor="let t of sectorList" [value]="t.sector_cd">{{t.sector_desc}}</option>
               </select>
@@ -464,7 +464,7 @@
                 style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
                 [disabled]="disableAll == 'Y' " [(ngModel)]="ls.activity_cd"
                 (change)="setActivityType($event.target.value , i)" id="act_type" class="form-control form-control-sm">
-                <!-- <option [value]="ls.activity_cd" disabled selected>{{ls.activity_desc}}</option> -->
+                <!-- <option [value]="ls.activity_cd" [readonly]="true" selected>{{ls.activity_desc}}</option> -->
                 <option >Select Activity</option>
                 <option *ngFor="let t of selectedActivityList" [value]="t.activity_cd">
                   {{t.activity_desc}}</option>
@@ -479,7 +479,7 @@
                 [disabled]="disableAll == 'Y' " [(ngModel)]="ls.crop_cd" (change)="setCorpType($event.target.value , i)"
                 id="act_type" class="form-control form-control-sm">
                 <option >Select Activity</option>
-                <!-- <option [value]="ls.crop_cd" disabled selected>{{ls.crop_cd}}-{{ls.crop_desc}}</option> -->
+                <!-- <option [value]="ls.crop_cd" [readonly]="true" selected>{{ls.crop_cd}}-{{ls.crop_desc}}</option> -->
                 <option *ngFor="let t of selectedCorpList" [value]="t.crop_cd">{{t.crop_cd}}-{{t.crop_desc}}</option>
               </select>
             </div>
@@ -532,7 +532,7 @@
 
               <div class="form-row">
                 <div class="form-group col-6">
-                  <input class="form-control form-control-sm text-capitalize" disabled style="height:25px; text-align: rigt;"
+                  <input class="form-control form-control-sm text-capitalize" [readonly]="true" style="height:25px; text-align: rigt;"
                   [(ngModel)]="rec.param_desc" id="sec_val" type="text" placeholder="SecurityQ">
                 </div>
 
@@ -587,7 +587,7 @@
                     style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
                     id="trans_type" [(ngModel)]="newtm_deposit.constitution_cd" class="form-control form-control-sm"
                     >
-                    <option [value]="newtm_deposit.constitution_cd" disabled selected>
+                    <option [value]="newtm_deposit.constitution_cd" [readonly]="true" selected>
                       {{newtm_deposit.constitution_cd}}-{{newtm_deposit.constitution_desc}}</option>
                     <option *ngFor="let l of selectedConstitutionList" [value]="l.constitution_cd">
                       {{l.constitution_cd}}-{{l.constitution_desc}}</option>
@@ -621,8 +621,8 @@
                       </div>
                       <div class="form-group col-5">
                         <small for="dbs_acc_open_dt">Maturity Date</small>
-                        <input disabled style="height:20px;" type="text" placeholder="dd/mm/yyyy" class="form-control"
-                          [(ngModel)]="newtm_deposit.mat_dt" disabled >
+                        <input [readonly]="true" style="height:20px;" type="text" placeholder="dd/mm/yyyy" class="form-control"
+                          [(ngModel)]="newtm_deposit.mat_dt" [readonly]="true" >
                       </div>
                     </div>
                   </div>
@@ -645,7 +645,7 @@
     
                 <div class="form-group col-4">
                   <small for="dep_interest">Interest</small>
-                  <input disabled [(ngModel)]="newtm_deposit.intt_amt" style="height:20px; text-align-last: right;"
+                  <input [readonly]="true" [(ngModel)]="newtm_deposit.intt_amt" style="height:20px; text-align-last: right;"
                     type="number" min="0" step='any' class="form-control form-control-sm text-capitalize" id="dep_interest">
                 </div>
               </div>

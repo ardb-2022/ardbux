@@ -252,7 +252,12 @@ border-top:1px solid black
   } }
   
   
-  
+  tr.fixedHeader{
+    position: sticky;
+    /* position: -webkit-sticky; */
+    top: -17px;
+    background-color: inherit;
+  }
   
   /* Hidden Table Css */
   #trial1 {

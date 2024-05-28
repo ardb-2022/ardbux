@@ -113,8 +113,9 @@ span.mat-menu-item{
   background: rgb(148 229 121 / 60%);
 }
 .menu_item_style {
-    color: 34723A; /* Change 'red' to your desired color */
+    color: #34723A; /* Change 'red' to your desired color */
   }
   .mat-button{
     padding: 0 8px!important; 
   }
+ 

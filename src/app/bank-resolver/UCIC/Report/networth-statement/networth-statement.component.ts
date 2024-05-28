@@ -158,12 +158,12 @@ export class NetworthStatementComponent implements OnInit {
       this.svc.addUpdDel('UCIC/GetLoanDtls',dt).subscribe(data=>{console.log(data)
         this.reportData=data
         for(let i=0;i<this.reportData.length;i++){
-          this.reportData[i].acc_desc= this.accountTypeList2.filter(c => c.acc_type_cd == this.reportData[i].acc_cd)[0]?.acc_type_desc;
+          this.reportData[i].acc_desc= this.accountTypeList2.filter(c => c.acc_type_cd == this.reportData[i]?.acc_cd)[0]?.acc_type_desc;
         }
         this.svc.addUpdDel('UCIC/GetDepositDtls',dt).subscribe(data=>{console.log(data)
           this.reportData1=data
           for(let i=0;i<this.reportData1.length;i++){
-            this.reportData1[i].acc_type_cd= this.accountTypeList.filter(c => c.acc_type_cd == this.reportData1[i].acc_type_cd)[0].acc_type_desc;
+            this.reportData1[i].acc_type_desc= this.accountTypeList.filter(c => c.acc_type_cd == this.reportData1[i]?.acc_type_cd)[0]?.acc_type_desc;
           }
           debugger
           // this.reportData1 = this.reportData1.sort((a, b) => (a.acc_type_cd > b.acc_type_cd) ? 1 : -1);

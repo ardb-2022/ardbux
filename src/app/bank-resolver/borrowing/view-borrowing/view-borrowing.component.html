@@ -61,7 +61,7 @@
 
       <div class="form-group col-2">
         <small for="rec_dep_intt_rate">Bank Name</small>
-        <select  disabled
+        <select  [readonly]="true"
             style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
             id="trans_type" [(ngModel)]="tm_loan_all.party_cd" class="form-control form-control-sm"
             (change)="setBankName($event.target.value)">
@@ -76,7 +76,7 @@
         <select [disabled]="tm_loan_all.loan_id != undefined || operationType == '' || disableAll == 'Y'"
             style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
             [(ngModel)]="tm_loan_all.cust_name" id="branch_cd" class="form-control form-control-sm">
-            <option [value]="" disabled>
+            <option [value]="" [readonly]="true">
               select Branch</option>
             <option *ngFor="let l of branch" [value]="l.branch_cd">
               {{l.branch_cd}}-{{l.branch_name}}</option>
@@ -85,7 +85,7 @@
 
       <!-- <div class="form-group col-2">
         <small for="cust_code">Customer Code</small>
-        <input style="height:25px" disabled type="text" class="form-control form-control-sm text-capitalize"
+        <input style="height:25px" [readonly]="true" type="text" class="form-control form-control-sm text-capitalize"
           id="cust_code" placeholder="Customer CD" [(ngModel)]="tm_loan_all.party_cd" id="cust_code">
       </div>
 
@@ -150,13 +150,13 @@
           style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
           [(ngModel)]="tm_loan_all.fund_type" id="fund_type"
           class="form-control form-control-sm">
-          <option value="" disabled selected>Select</option>
+          <option value="" [readonly]="true" selected>Select</option>
           <option *ngFor="let l of fundTypeList" [value]="l.value">{{l.name}}</option>
         </select>
       </div> -->
       <div class="form-group col-2">
         <small>Borrowing Amount</small>
-        <input class="form-control form-control-sm text-capitalize" disabled
+        <input class="form-control form-control-sm text-capitalize" [readonly]="true"
          
           style="height:25px; text-align: right;" type="number" min="0" step='any' [(ngModel)]="tm_loan_all.disb_amt"
           placeholder="Borrowing Amount">
@@ -164,7 +164,7 @@
       <div class="form-group col-2">
         <small for=due_date>Inst. Start Date</small>
         <div class="input-group">
-          <input class="form-control form-control-sm text-capitalize" id="due_date"  disabled
+          <input class="form-control form-control-sm text-capitalize" id="due_date"  [readonly]="true"
            
             style="height:25px; text-align: right;" bsDatepicker 
             [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }"
@@ -180,7 +180,7 @@
 
       <div class="form-group col-2">
         <small for=curr_int_rate>Current Interest Rate</small>
-        <input class="form-control form-control-sm text-capitalize" disabled
+        <input class="form-control form-control-sm text-capitalize" [readonly]="true"
         
           style="height:25px; text-align: right; float: none;" type="number" min="0" step='any'
           [(ngModel)]="tm_loan_all.curr_intt_rate" (change)="checkAndSetOverdueInterest()" placeholder="Curr Int Rate">
@@ -188,42 +188,42 @@
 
       <div class="form-group col-2">
         <small>Overdue Interest Rate</small>
-        <input class="form-control form-control-sm text-capitalize" disabled
+        <input class="form-control form-control-sm text-capitalize" [readonly]="true"
          
           style="height:25px; text-align: right;" type="number" min="0" step='any' [(ngModel)]="tm_loan_all.ovd_intt_rate"
           placeholder="Customer Phone" placeholder="Overdue Interest Rate">
       </div>
       <div class="form-group col-2">
         <small for=curr_int_rate>Current Principal</small>
-        <input class="form-control form-control-sm text-capitalize" disabled
+        <input class="form-control form-control-sm text-capitalize" [readonly]="true"
         
           style="height:25px; text-align: right; float: none;" type="number" min="0" step='any'
           [(ngModel)]="tm_loan_all.curr_prn" placeholder="Curr Prn">
       </div>
       <div class="form-group col-2">
         <small for=curr_int_rate>Current Interest</small>
-        <input class="form-control form-control-sm text-capitalize" disabled
+        <input class="form-control form-control-sm text-capitalize" [readonly]="true"
         
           style="height:25px; text-align: right; float: none;" type="number" min="0" step='any'
           [(ngModel)]="tm_loan_all.curr_intt" placeholder="Curr Int">
       </div>
       <div class="form-group col-2">
         <small for=curr_int_rate>Overdue Principal</small>
-        <input class="form-control form-control-sm text-capitalize" disabled
+        <input class="form-control form-control-sm text-capitalize" [readonly]="true"
         
           style="height:25px; text-align: right; float: none;" type="number" min="0" step='any'
           [(ngModel)]="tm_loan_all.ovd_prn" placeholder="Ovd Prn">
       </div>
       <div class="form-group col-2">
         <small for=curr_int_rate>Overdue Interest</small>
-        <input class="form-control form-control-sm text-capitalize" disabled
+        <input class="form-control form-control-sm text-capitalize" [readonly]="true"
         
           style="height:25px; text-align: right; float: none;" type="number" min="0" step='any'
           [(ngModel)]="tm_loan_all.ovd_intt" placeholder="Ovd Int">
       </div>
       <!-- <div class="form-group col-2">
         <small>Instalment No</small>
-        <input class="form-control form-control-sm text-capitalize" disabled
+        <input class="form-control form-control-sm text-capitalize" [readonly]="true"
         
           style="height:25px; text-align: right;" type="number" min="0" step='any' [(ngModel)]="tm_loan_all.instl_no"
           placeholder="Instalment No">
@@ -231,12 +231,12 @@
 
       <!-- <div class="form-group col-2">
         <small>Installment Type</small>
-        <select disabled
+        <select [readonly]="true"
           style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
         
           (change)="setInstalPeriod($event.target.value)" [(ngModel)]="tm_loan_all.piriodicity" id="loan_type"
           class="form-control form-control-sm">
-          <option [value]="tm_loan_all.piriodicity" disabled selected>
+          <option [value]="tm_loan_all.piriodicity" [readonly]="true" selected>
             {{tm_loan_all.piriodicity}}-{{tm_loan_all.instalmentTypeDesc}}</option>
           <option *ngFor="let l of instalmentTypeList" [value]="l.desc_type">{{l.desc_type}}-{{l.ins_desc}}</option>
         </select>
@@ -244,7 +244,7 @@
 <!-- 
       <div class="form-group col-2">
         <small>Repayment Formula</small>
-        <select disabled
+        <select [readonly]="true"
           style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
          
           (change)="setRepaymentFormula($event.target.value)" [(ngModel)]="tm_loan_all.emi_formula_no" id="loan_type"
@@ -259,7 +259,7 @@
       <!-- <div class="form-group col-2 " >
       
           <small>Borrowing Folio No.</small>
-          <input class="form-control form-control-sm text-capitalize" disabled
+          <input class="form-control form-control-sm text-capitalize" [readonly]="true"
            
             style="height:25px; text-align: right;" [(ngModel)]="tm_loan_all.loan_acc_no" type="text" placeholder="Borrowing Folio No">
         -->

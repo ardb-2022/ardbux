@@ -265,7 +265,7 @@ export class InvTransactionApprovalComponent implements OnInit {
             trans_type: transactionDtl.trans_type === 'D' ? 'Deposit' :
               transactionDtl.trans_type === 'W' ? 'Withdrawal' :
                 transactionDtl.trans_type === 'I' ? 'Interest Payment' : null,
-            trans_mode: transactionDtl.trans_mode === 'R' ? 'Renewal' :
+            trans_mode: transactionDtl.trans_mode === 'R' ? 'Renewal' : 
               transactionDtl.trans_mode === 'C' ? 'Close' :
                 transactionDtl.trans_mode === 'I' ? 'Interest Payment' :
                   transactionDtl.trans_mode === 'W' ? 'Withdrawal Slip' :
@@ -339,7 +339,7 @@ export class InvTransactionApprovalComponent implements OnInit {
 
   private getDenominationOrTransferDtl(transactionDtl: td_def_trans_trf): void {
     this.tmDenominationTransLst = [];
-    this.tranferDetails = [];
+    // this.tranferDetails = [];
     if (transactionDtl.trf_type === 'C') {
       const tmDenoTrf = new tm_denomination_trans();
       tmDenoTrf.brn_cd = this.sys.BranchCode;
@@ -358,7 +358,7 @@ export class InvTransactionApprovalComponent implements OnInit {
         err => { }
       );
     }
-    else if(this.masterModel.tddeftrans.trans_mode=='O'){
+    else if(transactionDtl.trans_mode=='O'){
       this.transactionDtlsFrm.controls.amount.setValue(this.tm_Inv.prn_amt);
       this.transactionDtlsFrm.controls.curr_intt_recov.setValue(this.tm_Inv.intt_amt);
       this.transactionDtlsFrm.controls.tot_amount.setValue(Number(this.tm_Inv.prn_amt)+Number(this.transactionDtlsFrm.controls.curr_intt_recov.value))
@@ -375,10 +375,10 @@ export class InvTransactionApprovalComponent implements OnInit {
           if (null !== res && Object.keys(res).length !== 0) {
             this.tranferDetails = res;
             // this.showTransferDtl = true;
-            this.totalOfDenomination = 0;
-            this.tranferDetails.forEach(e => {
-              this.totalOfDenomination += (+e.amount);
-            });
+            // this.totalOfDenomination = 0;
+            // this.tranferDetails.forEach(e => {
+            //   this.totalOfDenomination += (+e.amount);
+            // });
             // this.tmDenominationTransLst = res;
             // this.tmDenominationTransLst.forEach(element => {
             //   this.totalOfDenomination += element.total;
@@ -682,9 +682,16 @@ export class InvTransactionApprovalComponent implements OnInit {
       res => {
         this.masterModel = res;
         console.log(this.masterModel);
-        
+        this.totalOfDenomination=0
         this.tm_Inv=this.masterModel.tmdepositInv
-        
+        if(this.masterModel.tddeftranstrf){
+          this.tranferDetails=this.masterModel.tddeftranstrf
+          for(let i=0;i<this.masterModel.tddeftranstrf.length;i++){
+            this.totalOfDenomination+=this.masterModel.tddeftranstrf[i].amount
+            // this.tranferDetails.push(this.masterModel.tddeftranstrf[i])
+          }
+        }
+        debugger
         console.log( this.tm_Inv)
         this.acctypcd=this.tm_Inv.acc_type_cd;
         this.accnum= this.tm_Inv.acc_num
@@ -692,7 +699,7 @@ export class InvTransactionApprovalComponent implements OnInit {
         this.refresh = false;
         this.setAccDtlsFrmData( this.tm_Inv);
         // this.msg.sendCommonAccountNum(acc.acc_num);
-        this.getAdditionalInformationForAccount( this.tm_Inv);
+        // this.getAdditionalInformationForAccount( this.tm_Inv);
         this.refresh = true;
         
         // this.getCustInfo( this.tm_Inv.cust_cd);

@@ -214,6 +214,7 @@ export class UTCustomerProfileComponent implements OnInit {
       this.getVillageMaster();
       this.getKYCTypMaster();
       this.getBlockMster();
+      this.onClearClick();
       this.getServiceAreaMaster();
       // this.onRetrieveClick();
       this.f.status.setValue('A');
@@ -307,13 +308,14 @@ export class UTCustomerProfileComponent implements OnInit {
     );
   }
 
-  onVillageChnage(vill_cd: string): void {
+  onVillageChnage(vill_cd: any,s_area_cd:any,b_cd:any): void {
+    console.log(vill_cd,s_area_cd,b_cd);
+    console.log(this.villages);
+    
     // add logic to select block and area.
-    const selectedVillage = this.villages.filter(e => e.vill_cd === vill_cd)[0];
-    this.selectedBlock = this.blocks.filter(e => e.block_cd ===
-      selectedVillage.block_cd)[0];
-    this.selectedServiceArea = this.serviceAreas.filter(e => e.service_area_cd ===
-      selectedVillage.service_area_cd)[0];
+    const selectedVillage = this.villages.filter(e => e.vill_cd == vill_cd && e.service_area_cd==s_area_cd && e.block_cd==b_cd)[0];
+    this.selectedBlock = this.blocks.filter(e => e.block_cd == b_cd)[0];
+    this.selectedServiceArea = this.serviceAreas.filter(e => e.service_area_cd == s_area_cd)[0];
       
     this.custMstrFrm.patchValue({
       vill_cd:selectedVillage.vill_cd,
@@ -501,7 +503,7 @@ export class UTCustomerProfileComponent implements OnInit {
   public onDobChange(value: Date): number {
     // ;
     if (null !== value) {
-      const timeDiff = Math.abs(Date.now() - value.getTime());
+      const timeDiff = Math.abs(Date.now() - value?.getTime());
       const age = Math.floor((timeDiff / (1000 * 3600 * 24)) / 365.25)
       this.f.age.setValue(age);
       this.f.catg_cd.setValue(age>60?3:null)

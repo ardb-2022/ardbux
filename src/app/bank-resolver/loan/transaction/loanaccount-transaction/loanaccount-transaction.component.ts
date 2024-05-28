@@ -240,8 +240,8 @@ export class LoanaccountTransactionComponent implements OnInit {
   tdt:any;
   Share_fl_no:any;
   showNW:boolean;
-  outPrn:Number=0;
-  outIntt:Number=0;
+  outPrn:any=0;
+  outIntt:any=0;
   emiRecovPrn:number=0;
   emiRecovIntt:number=0;
   emiRecovTot:number=0;
@@ -302,7 +302,7 @@ export class LoanaccountTransactionComponent implements OnInit {
       tr_acc_num: [''],
       voucher_dt: [''],
       voucher_id: [''],
-      trf_type: [''],
+      trf_type: ['C'],
       tr_acc_cd: [''],
       acc_cd: [''],
       share_amt: [''],
@@ -1344,7 +1344,8 @@ export class LoanaccountTransactionComponent implements OnInit {
 
       this.isDisburs = false;
       this.isRecovery = true;
-      this.td.trf_type.value !== '';
+      this.td.trf_type.setValue('C')
+      this.td.remarks_on_manual.setValue('BY CASH')
     }
     var dx={
       "loan_id":this.f.acct_num.value,
@@ -1651,7 +1652,7 @@ export class LoanaccountTransactionComponent implements OnInit {
               if (undefined !== res) {
                 this.LoanRepSch = res;
                 debugger
-                this.LoanRepSch = this.LoanRepSch?.filter(x=>x.status=='U');
+                this.LoanRepSch = this.LoanRepSch?.filter(x=>x.status!='P');
                 debugger
                 this.LoanRepSch.forEach(x => 
                   {x.due_dt1 = x.due_dt?.toString().substr(0, 10)
@@ -1731,7 +1732,8 @@ export class LoanaccountTransactionComponent implements OnInit {
 
       this.isDisburs = false;
       this.isRecovery = true;
-      this.td.trf_type.value !== '';
+      this.td.trf_type.setValue('C');
+      this.td.remarks_on_manual.setValue('BY CASH')
     }
   }
 
@@ -3608,7 +3610,8 @@ debugger;
     tmDep.ardb_cd = this.sys.ardbCD;
     this.svc.addUpdDel<any>('Loan/PopulateLoanRepSch', tmDep).subscribe(
       res => {
-        ////////debugger;
+        this.tot_inst_prn=0;
+        this.tot_inst_paid=0;
         console.log(res)
         if (undefined !== res) {
           this.LoanRepSch = res;

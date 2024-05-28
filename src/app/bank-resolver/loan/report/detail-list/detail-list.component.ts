@@ -233,6 +233,11 @@ export class DetailListComponent implements OnInit {
       }
       this.svc.addUpdDel('Loan/PopulateLoanDetailedList',dt).subscribe(data=>{console.log(data)
         this.reportData=data
+        for(let i=0;i<this.reportData.length;i++){
+          this.reportData[i].list_dt=this.comser.getFormatedDate(this.reportData[i].list_dt);
+          this.reportData[i].computed_till_dt=this.comser.getFormatedDate(this.reportData[i].computed_till_dt);
+          
+        }
         this.itemsPerPage=this.reportData.length % 50 <=0 ? this.reportData.length: this.reportData.length % 50
         this.isLoading=false
         // if(this.reportData.length<50){

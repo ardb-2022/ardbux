@@ -44,7 +44,7 @@ export class LockerTransactionComponent implements OnInit {
   static accTypes: mm_acc_type[] = [];
   AcctTypes: mm_operation[];
   @ViewChild('kycContent', { static: true }) kycContent: TemplateRef<any>;
-  L_ACC_TYPE_CD:number=34102;
+  L_ACC_TYPE_CD:number;
   disablejoinholder:boolean=true;
   transTypeFlg = '';
   agentData:any;
@@ -124,6 +124,8 @@ export class LockerTransactionComponent implements OnInit {
   showtransdetails:boolean=false;
   customerList: mm_customer[] = [];
   suggestedCustomer: mm_customer[];
+  suggestedLocker: tm_locker[];
+  suggestedSBLocker:tm_locker[]
   suggestedSBCustomer: mm_customer[];
   suggestedCustomerSignatories: mm_customer[];
   suggestedCustomerSignatoriesIdx: number;
@@ -142,7 +144,7 @@ export class LockerTransactionComponent implements OnInit {
   glHead:any;
   acc_master: m_acc_master[] = [];
   acc_master1: m_acc_master[] = [];
-
+  systemParam:any;
   p_gen_param = new p_gen_param();
   lockerRt:any=[];
   loc_type:any='';
@@ -224,6 +226,7 @@ export class LockerTransactionComponent implements OnInit {
   transferTypeListTemp = this.transferTypeList;
 
   ngOnInit(): void {
+    this.getSystemParam();
     this.getLocker = this.frmBldr.group({
       agreement_no: [''],
       oprn_cd: ['']
@@ -262,6 +265,7 @@ export class LockerTransactionComponent implements OnInit {
 
     this.savingsDepoSpclPeriod = this.sys.DdsPeriod;
     this.suggestedCustomer = null;
+    this.suggestedLocker = null;
     this.suggestedCustomerSignatories = null;
     this.suggestedCustomerJointHolder = null;
 
@@ -284,6 +288,20 @@ export class LockerTransactionComponent implements OnInit {
     }, 150);
     // console.log(this.constitutionDtParser('YEAR=1;Month=10;Days=25;'));
   }
+    getSystemParam(){
+      this.svc.addUpdDel('Mst/GetSystemParameter', null).subscribe(
+        sysRes => {
+          try {
+            this.systemParam = sysRes;
+            this.L_ACC_TYPE_CD=this.systemParam.find(x => x.param_cd === '910')?.param_value
+            console.log(this.L_ACC_TYPE_CD);
+            
+          }
+          catch(exception){
+            console.log(exception)
+          }
+        })
+    }
   private getOperationMaster(): void {
     console.log(LockerTransactionComponent.operations);
 
@@ -353,7 +371,19 @@ export class LockerTransactionComponent implements OnInit {
     debugger
     this.ldtf.till_dt.setValue(this.setDate(dt));
   }
-  
+  tillDTChange(){
+    
+    var originalDate = new Date(this.ldtf.till_dt.value);
+  //   var formattedDate = originalDate.toLocaleDateString('en-GB', {
+  //     day: '2-digit',
+  //     month: '2-digit',
+  //     year: 'numeric'
+  // });
+  // formattedDate += " 00:00";
+  // console.log(formattedDate);
+  this.td_deftrans.intt_till_dt=originalDate;
+    debugger
+  }
     onTransTypeChange(): void {
       debugger;
       const selectedOperation = this.operations.filter(e => e.oprn_cd === +this.l.oprn_cd.value)[0];
@@ -610,6 +640,68 @@ assignLockerData(){
     }
     // console.log(this.suggestedCustomer)
   }
+  public suggestLocker(): Observable<tm_locker> {
+    this.isLoading = true;
+    console.log("here")
+    // console.log(this.f.acct_num.value.length)
+    //  console.log(this.accDtlsFrm.get('home_brn_cd').value)
+    if (this.l.agreement_no.value.length > 0) {
+      const prm = new p_gen_param();
+      prm.ardb_cd = this.sys.ardbCD;
+      prm.brn_cd = this.sys.BranchCode;
+      prm.as_cust_name = this.l.agreement_no.value.toLowerCase();
+      console.log(prm.ardb_cd);
+
+      this.svc.addUpdDel<any>('Locker/GetlockerDtlsSearch', prm).subscribe(
+        res => {
+          console.log(res)
+          this.isLoading = false;
+          
+          if (undefined !== res && null !== res && res.length > 0 && res != '' && this.l.agreement_no.value) {
+            this.suggestedSBLocker = [];
+            // this.suggestedCustomer = res.slice(0, 10);
+            this.suggestedSBLocker = res
+            this.suggestedLocker = res
+            console.log(res.length + " " + this.suggestedSBLocker.length)
+            return this.suggestedSBLocker;
+          } else {
+            this.shownoresult = true;
+            console.log(res.length)
+            this.suggestedSBLocker = [];
+            return this.suggestedSBLocker;
+          }
+        },
+        err => {
+          this.shownoresult = true;
+          this.isLoading = false;
+        }
+      );
+
+
+    } else {
+      // debugger;
+      this.isLoading = false;
+      this.suggestedSBCustomer = null;
+      return null;
+    }
+    // console.log(this.suggestedCustomer)
+  }
+  public SelectLocker(cust: any): void {
+    // this.optionClicked=true;
+    this.l.agreement_no.setValue(cust.agreement_no);
+    this.shownoresult = false;
+    // this.selectedCust = cust.acc_num
+    console.log(cust)
+    this.GetUnapprovedLockerTrans(cust)
+    // this.tm_deposit.user_acc_num=cust.acc_num
+    // this.f.acct_num.setValue(cust.acc_num);
+    // this.onAccountNumTabOff();
+    // this.f.acct_num.value.length=0;
+    this.suggestedSBLocker = [];
+    // this.validateSbAccount();
+   
+   
+  }
   public SelectCustomer(cust: any): void {
     // this.optionClicked=true;
     this.shownoresult = false;
@@ -622,6 +714,18 @@ assignLockerData(){
     this.suggestedSBCustomer = [];
     this.validateSbAccount();
    
+   
+  }
+  clearSuggestedLocker() {
+    this.suggestedSBLocker = null;
+    this.shownoresult = false;
+    if (this.l.agreement_no.value.length > 0) {
+      this.disabledOnNull = false;
+    }
+    else {
+      this.disabledOnNull = true;
+    }
+
 
   }
   clearSuggestedCust() {
@@ -747,6 +851,7 @@ assignLockerData(){
     this.operationType = '';
     this.disabledOnNull=true;
     this.suggestedCustomer=null;
+    this.suggestedLocker=null;
     this.showNoResult=false
     this.loc_type='';
     this.loc_status='';
@@ -828,12 +933,12 @@ assignLockerData(){
     }
    
     
-  getLockerOpeningTempData() {
+  getLockerOpeningTempData(agreement_no:any) {
     
       var dt={
         "ardb_cd":this.sys.ardbCD,
         "brn_cd":this.sys.BranchCode,
-        "agreement_no":this.l.agreement_no.value
+        "agreement_no":agreement_no
       }
     this.isLoading = true;
     this.svc.addUpdDel<any>('Locker/GetLockerOpeningData', dt).subscribe(
@@ -1008,11 +1113,11 @@ assignLockerData(){
     // this.operationalInstrList=null;
 
   }
-  GetUnapprovedLockerTrans(){
+  GetUnapprovedLockerTrans(cust:any){
        var dt={
         "ardb_cd":this.sys.ardbCD,
         "brn_cd":this.sys.BranchCode,
-        "agreement_no":this.l.agreement_no.value
+        "agreement_no":cust.agreement_no
       }
     
     this.isLoading = true;
@@ -1029,7 +1134,7 @@ assignLockerData(){
           
         }
         else{
-          this.getLockerOpeningTempData();
+          this.getLockerOpeningTempData(cust.agreement_no);
           this.isLoading = false;
           // this.HandleMessage(true, MessageType.Warning, 'This Agreement No. dose not exist!!');
           // this.tm_locker.agreement_no=null;
@@ -1051,7 +1156,7 @@ assignLockerData(){
     this.l.oprn_cd.setValue(oprncd);
     this.unApproveTrans = selectedTransactionToEdit;
     this.modalRef.hide();
-    this.getLockerOpeningTempData();
+    this.getLockerOpeningTempData(selectedTransactionToEdit.acc_num);
     
   }
   setTransactionValue(){
@@ -1101,7 +1206,7 @@ assignLockerData(){
     if (this.operationType === 'I') {
       
       this.td_deftrans.acc_num=this.tm_locker.agreement_no
-      
+      // this.tm_locker.ardb_cd=this.sys.ardbCD
       this.masterModel.tmlocker=new tm_locker();
       this.masterModel.tdnominee=[];
       this.masterModel.tdaccholder=[];
@@ -1114,7 +1219,7 @@ debugger
       // this.getNewAccountNoAndSaveData();
     }
     else {
-
+      // this.tm_locker.ardb_cd=this.sys.ardbCD
       this.td_deftrans.acc_num=this.tm_locker.agreement_no
       this.masterModel.tmlocker=new tm_locker();
       this.masterModel.tdnominee=[];
@@ -1439,6 +1544,7 @@ if(this.td_deftrans.trf_type=='T'){
   // }
   onChangeNull(){
     this.suggestedCustomer = null;
+    this.suggestedLocker = null;
     this.showNoResult=false;
     if(this.tm_locker.name.length > 2){this.disabledOnNull=false}
     else{this.disabledOnNull=true}
@@ -2357,7 +2463,9 @@ if(this.td_deftrans.trf_type=='T'){
       this.processPrincipal();
     }
   }
-
+  gstChange(){
+    this.ldtf.tot_amount.setValue((+this.ldtf.rent.value) + (+this.ldtf.gst.value))
+  }
   processPrincipal() {
 
     if ((this.tm_deposit.acc_type_cd !== 1) && (this.tm_deposit.acc_type_cd !== 7) && (this.tm_deposit.acc_type_cd !== 13)) {

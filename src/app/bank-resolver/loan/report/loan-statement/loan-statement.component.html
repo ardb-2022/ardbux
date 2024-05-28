@@ -537,7 +537,7 @@
       <tr mat-footer-row *matFooterRowDef="['disclaimer1','disclaimer2','disclaimer3','disclaimer4','disclaimer5','disclaimer6','disclaimer7','disclaimer8','disclaimer9','disclaimer10','disclaimer11','disclaimer12','disclaimer13','disclaimer14','disclaimer15','disclaimer16','disclaimer17','disclaimer18','disclaimer19']" class="example-second-footer-row"></tr>
       <tr mat-header-row *matHeaderRowDef="['header0','header1','header2','header3','header4','header5','header6','header7','header8']"></tr>
     
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr class="fixedHeader" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     
       <tr mat-row *matRowDef="let element; columns: displayedColumns;"></tr>
        </table>

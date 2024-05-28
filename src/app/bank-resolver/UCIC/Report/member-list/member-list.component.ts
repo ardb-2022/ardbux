@@ -51,6 +51,11 @@ export class MemberListComponent implements OnInit {
   isOpenFromDp = false;
   isOpenToDp = false;
   sys = new SystemValues();
+  config = {
+    keyboard: false, // ensure esc press doesnt close the modal
+    backdrop: true, // enable backdrop shaded color
+    ignoreBackdropClick: true // disable backdrop click to close the modal
+  };
   reportcriteria: FormGroup;
   closeResult = '';
   showReport = false;
@@ -65,13 +70,15 @@ export class MemberListComponent implements OnInit {
   ardbName=localStorage.getItem('ardb_name')
   branchName=this.sys.BranchName
   pageChange: any;
-  today:any
+  today:any;
+  fromdate: Date;
   resultLength=0
   pressed = false;
   currentResizeIndex: number;
   startX: number;
   startWidth: number;
   isResizingRight: boolean;
+  asOnDate:string;
   resizableMousemove: () => void;
   resizableMouseup: () => void;
   columns: any[] = [
@@ -93,9 +100,14 @@ export class MemberListComponent implements OnInit {
     private cd: ChangeDetectorRef, private comser:CommonServiceService,
     private modalService: BsModalService,  private renderer: Renderer2,private _domSanitizer: DomSanitizer, private router: Router) { }
   ngOnInit(): void {
+    this.fromdate = this.sys.CurrentDate;
+    this.reportcriteria = this.formBuilder.group({
+      fromDate: [null, Validators.required]
+    });
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-    this.SubmitReport()
+    this.onLoadScreen(this.content);
+    // this.SubmitReport()
     var date = new Date();
     var n = date.toDateString();
     var time = date.toLocaleTimeString();
@@ -105,16 +117,41 @@ export class MemberListComponent implements OnInit {
     this.currentPage = page;
     this.cd.detectChanges();
   }
+  onLoadScreen(content) {
+  
+    this.modalRef = this.modalService.show(content, this.config);
+  }
   pageChanged(event: PageChangedEvent): void {
     const startItem = (event.page - 1) * event.itemsPerPage;
     const endItem = event.page * event.itemsPerPage;
     this.pagedItems = this.reportData.slice(startItem, endItem); //Retrieve items for page
     this.cd.detectChanges();
   }
+  formatDate(date: Date): string {
+    // Get the day, month, and year
+    const day = date.getDate();
+    const month = date.getMonth() + 1; // Month starts from 0
+    const year = date.getFullYear();
+
+    // Pad single digit day and month with zero
+    const formattedDay = day < 10 ? '0' + day : day;
+    const formattedMonth = month < 10 ? '0' + month : month;
+
+    // Format the date as dd/mm/yyyy
+    return `${formattedDay}/${formattedMonth}/${year}`;
+}
   public SubmitReport() {
+    // const inputDateString = this.fromdate;
+    const inputDate = this.reportcriteria.controls.fromDate.value;
+    const formattedDate = this.formatDate(inputDate);
+    this.asOnDate=formattedDate
+    console.log(formattedDate);
+    this.modalRef.hide();
+    this.fromdate = this.reportcriteria.controls.fromDate.value;
     var dt={
         "ardb_cd":this.sys.ardbCD,
         "brn_cd":this.sys.BranchCode,
+        "cust_dt":this.fromdate.toISOString()
     }
       this.isLoading=true
       this.showAlert = false;

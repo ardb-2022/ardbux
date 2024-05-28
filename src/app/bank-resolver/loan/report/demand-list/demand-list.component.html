@@ -58,7 +58,7 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button mat-raised-button class="btn btn-primary" (click)="SubmitReport()">Submit</button> &nbsp;
+    <button mat-raised-button class="btn btn-primary" (click)="SubmitReport()">Get DemandList</button> &nbsp;
     <button mat-raised-button class="btn btn-light" (click)="modalRef.hide()">Close</button>
   </div>
 </ng-template>
@@ -66,15 +66,16 @@
 <div class="row d-flex justify-content-center align-items-center pt-4"
   style="background-color: #78c2ad21; min-height: 20vh;">
  
-  <!-- <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 shadow-sm mb-4 bg-white p-3">
+  <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 shadow-sm mb-4 bg-white p-3">
     <div>
       <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="closeScreen()">Close</button>
       <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" [useExistingCss]="true" printSectionId="mattable"
         ngxPrint>Print</button>
       <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
+      <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadexcel()">Export as EXCEL</button>
 
     </div>
-  </div> -->
+  </div>
   <div class="col-xs-12 col-sm-12 shadow-lg mb-4 bg-white p-3 mkScroll">
 
    
@@ -232,7 +233,7 @@
         <!-- ID Column -->
         <ng-container matColumnDef="disb_dt" >
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Disbursement Date</th>
-          <td mat-cell *matCellDef="let row" style="text-align: center;">{{row.disb_dt.substr(0,10) }}</td>
+          <td mat-cell *matCellDef="let row" style="text-align: center;">{{row.disb_dt }}</td>
         </ng-container>
     
         <!-- ID Column -->
@@ -289,9 +290,9 @@
           </th>
         </ng-container>
        <!-- Footer column -->
-        <!-- <ng-container matColumnDef="Total">
-          <td mat-footer-cell *matFooterCellDef colspan="7" style="text-align: center; border-right:1 px solid rgb(172,170,170)!important;">
-            <b>Total</b>
+        <ng-container matColumnDef="Total">
+          <td mat-footer-cell *matFooterCellDef colspan="8" style="text-align: center; border-right:1 px solid rgb(172,170,170)!important;">
+            <b>Overall Total (Count-{{resultLength}})</b>
           </td>
         </ng-container>
         <ng-container matColumnDef="Total0">
@@ -329,7 +330,7 @@
           <td mat-footer-cell *matFooterCellDef colspan="" style="text-align: center;border-right:1 px solid rgb(172,170,170)!important;" >
              <b>{{totalSum | currency:"INR"}}</b>
           </td>
-         </ng-container> -->
+         </ng-container>
         <tr mat-header-row *matHeaderRowDef="['Header']"
          class="example-second-header-row">
         </tr>
@@ -354,32 +355,11 @@
         
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
 
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        <!-- <tr mat-footer-row *matFooterRowDef="['Total','Total0','Total1','Total2','Total3','Total4','Total5','Total6']" class="example-second-footer-row"></tr> -->
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="border-bottom:1px solid rgb(202, 199, 199); ;"></tr>
+        <tr mat-footer-row *matFooterRowDef="['Total','Total0','Total1','Total2','Total3','Total4','Total5','Total6']" class="example-second-footer-row"></tr>
         
         <!-- Row shown when there is no matching data. -->
         
-      </table>
-      <table>
-        <tr>
-          <td style="width:5%;"></td>
-          <td style="width:58%;text-align: center;" ><b>Overall Total (Count-{{resultLength}})</b></td>
-          <td style="width:5%;text-align:center"><b>{{totOutstanding}}</b></td>
-          <!-- <td style="width:35px;" ></td> -->
-          <td style="width:7%;text-align:center"><b>{{currPrnSum}}</b></td>
-          <!-- <td style="width:35px;" ></td> -->
-          <td style="width:6%;text-align:center"><b>{{ovdPrnSum}}</b></td>
-          <!-- <td style="width:35px;" ></td> -->
-          <td style="width:5%;text-align:center"><b>{{currInttSum}}</b></td>
-          <!-- <td style="width:35px;" ></td> -->
-          <td style="width:5%;text-align:center"><b>{{ovdInttSum}}</b></td>
-          <!-- <td style="width:35px;" ></td> -->
-          <td style="width:8%;text-align:center"><b>{{penalInttSum}}</b></td>
-          <!-- <td style="width:35px;" ></td> -->
-          <td style="width:0%;text-align:center"><b>{{totalSum}}</b></td>
-            <!-- <td style="width:15px;" ></td> -->
-          
-        </tr>
       </table>
       
       <footer><small>

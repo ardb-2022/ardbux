@@ -19,10 +19,10 @@
             <small for="acc_type_cd"><i class="fa fa-star text-danger" aria-hidden="true"></i> Account Type</small>
             <select id="acc_type_cd" class="form-control form-control-sm" formControlName="acc_type_cd"
               (change)="onAccountTypeChange()">
-              <option disabled>Choose</option>
-              <option [value]="4">Cash Certificate</option>
-              <option [value]="5">MIS Deposit Certificate</option>
-              <option disabled [value]="6">RD Deposit Certificate</option>
+              <option *ngIf="AcctTypes2" disabled>Choose</option>
+              <option *ngFor="let acctType of AcctTypes2" [value]="acctType.acc_type_cd">
+                {{acctType.acc_type_cd +' ' + acctType.acc_type_desc}}
+              </option>
 
             </select>
           </div>

@@ -157,7 +157,7 @@
             
             <h4>Run Date & Time : {{today}} </h4>
             <h4> <u>  Account Statement DDS from {{reportcriteria.controls.fromDate.value?.toDateString() | date: 'dd/MM/yyyy'}} to {{ this.reportcriteria.controls.toDate.value?.toDateString() | date: 'dd/MM/yyyy'}}</u></h4>
-            <h4> <u> Agent: {{agentCD}} / A/C No. {{cAcc}} /Name: {{cName}}/Present Address:  {{cAddress}}</u></h4>
+            <h4> <u> Agent: <b>{{agentCD}}</b> / A/C No. <b>{{cAcc}}</b> /Name: <b>{{cName}}</b>/Present Address:  {{cAddress}}</u></h4>
           </div>
         </th>
       </ng-container>

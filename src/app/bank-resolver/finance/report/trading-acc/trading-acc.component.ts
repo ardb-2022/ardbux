@@ -1,7 +1,7 @@
 import { SystemValues } from './../../../Models/SystemValues';
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { RestService } from 'src/app/_service';
-import { WebDataRocksPivot } from 'src/app/webdatarocks/webdatarocks.angular4';
+ 
 import { tt_cash_account, p_report_param } from 'src/app/bank-resolver/Models';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 // import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
@@ -20,7 +20,7 @@ import Utils from 'src/app/_utility/utils';
 export class TradingAccComponent implements OnInit {
 
   @ViewChild('content', { static: true }) content: TemplateRef<any>;
-  @ViewChild('DailyCashBook') child: WebDataRocksPivot;
+  
   // ReportUrl :SafeResourceUrl;
   // UrlString:string ="http://localhost:63011/"
   modalRef: BsModalRef;

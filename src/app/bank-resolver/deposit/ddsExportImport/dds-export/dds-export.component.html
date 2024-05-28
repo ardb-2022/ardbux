@@ -41,8 +41,8 @@
         <th>EMI Outstanding / Balance</th>
       </tr>
       <tr *ngIf="getExportData">
-        <td><input type="text" class="inputBld" name="agent_nm" id="agent_lbl" disabled value="DCA / AGENT Name"></td>
-        <td><input type="text" class="inputBld" name="agent_nm" id="agent_nm" disabled value="{{agentName}}"></td>
+        <td><input type="text" class="inputBld" name="agent_nm" id="agent_lbl" [readonly]="true" value="DCA / AGENT Name"></td>
+        <td><input type="text" class="inputBld" name="agent_nm" id="agent_nm" [readonly]="true" value="{{agentName}}"></td>
         <td></td>
         <td></td>
         <td></td>

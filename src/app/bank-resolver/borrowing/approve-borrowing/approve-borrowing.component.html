@@ -133,121 +133,121 @@
                 <span class="badge badge-warning pull-right" *ngIf="showINSTNO"> 
                   Installment No: {{this.selectedVm.loan?.tmloanall?.instl_no}} ({{this.selectedVm.loan?.tmloanall?.piriodicity=='Y'?"Yearly":"Monthly"}})
                  </span>
-                <input type="text" class="form-control form-control-sm" formControlName="party" id="party" disabled>
+                <input type="text" class="form-control form-control-sm" formControlName="party" id="party" [readonly]="true">
               </div>
               <div class="form-group col-4">
                 <small for="amount">Amount </small>
-                <input type="text" class="form-control form-control-sm" formControlName="amount" id="amount" disabled>
+                <input type="text" class="form-control form-control-sm" formControlName="amount" id="amount" [readonly]="true">
               </div>
               <div class="form-group col-12">
                 <small for="acc_type_cd">Borrowing Type</small>
                 <input type="text" class="form-control form-control-sm" formControlName="acc_type_cd"
-                id="acc_type_cd" disabled>
+                id="acc_type_cd" [readonly]="true">
               </div>
               
               <div class="col-12">
                 <div class="row">
                   <!-- <div class="form-group col-6">
                     <small for="curr_prn">Current Prn </small>
-                    <input type="text" class="form-control form-control-sm" formControlName="curr_prn" id="curr_prn" disabled>
+                    <input type="text" class="form-control form-control-sm" formControlName="curr_prn" id="curr_prn" [readonly]="true">
                   </div>
                   <div class="form-group col-6">
                     <small for="ovd_prn">Ovd Prn </small>
-                    <input type="text" class="form-control form-control-sm" formControlName="ovd_prn" id="ovd_prn" disabled>
+                    <input type="text" class="form-control form-control-sm" formControlName="ovd_prn" id="ovd_prn" [readonly]="true">
                   </div>
                   <div class="form-group col-6">
                     <small for="curr_intt">Current Intt</small>
-                    <input type="text" class="form-control form-control-sm" formControlName="curr_intt" id="curr_intt" disabled>
+                    <input type="text" class="form-control form-control-sm" formControlName="curr_intt" id="curr_intt" [readonly]="true">
                   </div>
                   <div class="form-group col-6">
                     <small for="ovd_intt">Ovd Intt </small>
-                    <input type="text" class="form-control form-control-sm" formControlName="ovd_intt" id="ovd_intt" disabled>
+                    <input type="text" class="form-control form-control-sm" formControlName="ovd_intt" id="ovd_intt" [readonly]="true">
                   </div> -->
                   
                   <div class="form-group col-4" [hidden]="loanOpenDm?.tddeftrans?.trans_type == 'R'?true:false">
                     <small for="loan_id">Borrowing Id</small>
                     <input type="text" class="form-control form-control-sm text-danger" formControlName="loan_id" id="loan_id"
-                      disabled>
+                      [readonly]="true">
                   </div>
                   <div class="form-group col-4">
                     <small for="approval_status">Approval Status</small>
                     <input type="text" class="form-control form-control-sm" formControlName="approval_status" id="approval_status"
-                      disabled>
+                      [readonly]="true">
                   </div>
                   <div class="form-group col-4">
                     <small for="trans_dt">Transaction Date</small>
-                    <input type="text" class="form-control form-control-sm" formControlName="trans_dt" id="trans_dt" disabled>
+                    <input type="text" class="form-control form-control-sm" formControlName="trans_dt" id="trans_dt" [readonly]="true">
                   </div>
                   <div class="form-group col-4">
                     <small for="trans_cd">Transaction Code</small>
-                    <input type="text" class="form-control form-control-sm" formControlName="trans_cd" id="trans_cd" disabled>
+                    <input type="text" class="form-control form-control-sm" formControlName="trans_cd" id="trans_cd" [readonly]="true">
                   </div>
                   <div class="form-group col-4">
                     <small for="trans_type">Transaction Type</small>
-                    <input type="text" class="form-control form-control-sm" formControlName="trans_type" id="trans_type" disabled>
+                    <input type="text" class="form-control form-control-sm" formControlName="trans_type" id="trans_type" [readonly]="true">
                   </div>
                   
                   
                   <div class="form-group col-4">
                     <small for="curr_intt">Cur Intt Rt.</small>
-                    <input type="text" class="form-control form-control-sm" formControlName="curr_intt" id="curr_intt" disabled>
+                    <input type="text" class="form-control form-control-sm" formControlName="curr_intt" id="curr_intt" [readonly]="true">
                   </div>
                   <div class="form-group col-4">
                     <small for="ovd_intt">Ovd Intt Rt.</small>
-                    <input type="text" class="form-control form-control-sm" formControlName="ovd_intt" id="ovd_intt" disabled>
+                    <input type="text" class="form-control form-control-sm" formControlName="ovd_intt" id="ovd_intt" [readonly]="true">
                   </div>
                   <div class="form-group col-4" [hidden]="loanOpenDm?.tddeftrans?.trans_type == 'R'?true:false">
                     <small for="instl_no">Installment No</small>
-                    <input type="text" class="form-control form-control-sm" formControlName="instl_no" id="instl_no" disabled>
+                    <input type="text" class="form-control form-control-sm" formControlName="instl_no" id="instl_no" [readonly]="true">
                   </div>
                   <div class="form-group col-4" [hidden]="loanOpenDm?.tddeftrans?.trans_type == 'R'?true:false">
                     <small for="instl_start_dt">Instl St Dt.</small>
-                    <input type="text" class="form-control form-control-sm" formControlName="instl_start_dt" id="instl_start_dt" disabled>
+                    <input type="text" class="form-control form-control-sm" formControlName="instl_start_dt" id="instl_start_dt" [readonly]="true">
                   </div>
                   <div class="form-group col-6" [hidden]="loanOpenDm?.tddeftrans?.trans_type == 'B'?true:false">
                     <small for="curr_prn_recov">Curr Prn Recov</small>
                     <input type="text" class="form-control form-control-sm" formControlName="curr_prn_recov" id="curr_prn_recov"
-                      disabled>
+                      [readonly]="true">
                   </div>
                   <div class="form-group col-6" [hidden]="loanOpenDm?.tddeftrans?.trans_type == 'B'?true:false">
                     <small for="ovd_prn_recov">Ovd Prn Recov</small>
                     <input type="text" class="form-control form-control-sm" formControlName="ovd_prn_recov" id="ovd_prn_recov"
-                      disabled>
+                      [readonly]="true">
                   </div>
                   <div class="form-group col-6" [hidden]="loanOpenDm?.tddeftrans?.trans_type == 'B'?true:false">
                     <small for="curr_intt_recov">Curr Intt Recov</small>
                     <input type="text" class="form-control form-control-sm" formControlName="curr_intt_recov" id="curr_intt_recov"
-                      disabled>
+                      [readonly]="true">
                   </div>
                   <div class="form-group col-6" [hidden]="loanOpenDm?.tddeftrans?.trans_type == 'B'?true:false">
                     <small for="ovd_intt_recov">Ovd Intt Recov</small>
                     <input type="text" class="form-control form-control-sm" formControlName="ovd_intt_recov" id="ovd_intt_recov"
-                      disabled>
+                      [readonly]="true">
                   </div>
                   
                   <!-- <div class="form-group col-6">
                     <small for="mis_advance_recov">Saleble Form</small>
                     <input type="text" class="form-control form-control-sm" formControlName="mis_advance_recov"
-                      id="mis_advance_recov " disabled>
+                      id="mis_advance_recov " [readonly]="true">
                   </div>
                   <div class="form-group col-6">
                     <small for="sum_assured">Commission</small>
                     <input type="text" class="form-control form-control-sm" formControlName="sum_assured" id="sum_assured"
-                      disabled>
+                      [readonly]="true">
                   </div>
                   <div class="form-group col-6">
                     <small for="share_amt">Share</small>
-                    <input type="text" class="form-control form-control-sm" formControlName="share_amt" id="share_amt " disabled>
+                    <input type="text" class="form-control form-control-sm" formControlName="share_amt" id="share_amt " [readonly]="true">
                   </div>
                   <div class="form-group col-6">
                     <small for="audit_fees_recc">Insurance</small>
                     <input type="text" class="form-control form-control-sm" formControlName="audit_fees_recc" id="audit_fees_recc"
-                      disabled>
+                      [readonly]="true">
                   </div> -->
                   <!-- <div class="form-group col-6">
                     <small for="trans_type">Transfer Type</small>
                     <input type="text" class="form-control form-control-sm" formControlName="trans_type" id="trans_type "
-                      disabled>
+                      [readonly]="true">
                   </div> -->
                 </div>
 

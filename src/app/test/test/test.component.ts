@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { exit } from 'process';
-import { stringify } from 'querystring';
+//  
 // import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { mm_category, mm_customer, td_def_trans_trf } from 'src/app/bank-resolver/Models';
 import { AccOpenDM } from 'src/app/bank-resolver/Models/deposit/AccOpenDM';

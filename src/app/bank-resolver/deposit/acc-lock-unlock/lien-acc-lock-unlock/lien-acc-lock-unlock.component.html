@@ -49,9 +49,9 @@
         <div class="input-group">
         
         <input style="height:25px"
-          [disabled]="tm_depositall.acc_type_cd == undefined || tm_depositall.acc_type_cd == null || operationType != 'R' || disabledAll" type="text"
-          [(ngModel)]="tm_depositall.acc_num" (keypress)="onChangeNull()" class="form-control form-control-sm text-capitalize" id="acc_no" placeholder="Account Number">
-          <button class="btn btn-primary btn-sm"  [disabled]="disabledOnNull" style="font-size:x-small" (click)="suggestCustomerCr()"><i class="fa fa-search"></i></button>
+          [disabled]="tm_depositall.acc_type_cd == undefined || tm_depositall.acc_type_cd == null || operationType != 'R' " type="text"
+          [(ngModel)]="tm_depositall.acc_num"  class="form-control form-control-sm " id="acc_no" placeholder="Account Number">
+          <button class="btn btn-primary btn-sm" style="font-size:x-small" (click)="suggestCustomerCr()"><i class="fa fa-search"></i></button>
    
         </div>
         <div class="suggestions border p-2" *ngIf="suggestedCustomerCr">

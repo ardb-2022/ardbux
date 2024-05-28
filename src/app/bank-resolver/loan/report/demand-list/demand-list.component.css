@@ -65,14 +65,14 @@ font-size: 12px!important;
   }
   
   .mat-column-lf_no{
-    max-width: 100px!important;
+    /* max-width: 100px!important; */
     text-align: center;
     padding-right: 3px;
     padding-left: 3px;
     border-top: 1px solid rgb(202, 199, 199);
     border-right: 1px solid rgb(202, 199, 199);
   }.mat-column-loan_id{
-    max-width: 100px!important;
+    /* max-width: 100px!important; */
     text-align: center;
     padding-right: 3px;
     padding-left: 3px;
@@ -88,7 +88,7 @@ font-size: 12px!important;
     border-right: 1px solid rgb(202, 199, 199);
   }
   .mat-column-disb_dt{
-    max-width: 90px!important;
+    /* max-width: 90px!important; */
     text-align: center;
     padding-right: 3px;
     padding-left: 3px;
@@ -105,27 +105,27 @@ font-size: 12px!important;
   }
  
 .mat-column-curr_prn{
-  max-width: 80px!important;
+  /* max-width: 80px!important; */
   text-align: center;
   border-top: 1px solid rgb(202, 199, 199);
 }
 .mat-column-ovd_prn{
-  max-width: 80px!important;
+  /* max-width: 80px!important; */
  
   border-top: 1px solid rgb(202, 199, 199);
 }
 .mat-column-curr_intt{
-  max-width: 80px!important;
+  /* max-width: 80px!important; */
  
   border-top: 1px solid rgb(202, 199, 199);
 }
 .mat-column-ovd_intt{
-  max-width: 80px!important;
+  /* max-width: 80px!important; */
  
   border-top: 1px solid rgb(202, 199, 199);
 }
 .mat-column-penal_intt{
-  max-width: 100px!important;
+  /* max-width: 100px!important; */
  
   border-top: 1px solid rgb(202, 199, 199);
 }
@@ -134,7 +134,7 @@ font-size: 12px!important;
  
 }
 .mat-column-outstanding_prn{
-  max-width: 80px!important;
+  /* max-width: 80px!important; */
   border-top: 1px solid rgb(202, 199, 199);
   border-right: 1px solid rgb(202, 199, 199);
   padding-right: 3px;

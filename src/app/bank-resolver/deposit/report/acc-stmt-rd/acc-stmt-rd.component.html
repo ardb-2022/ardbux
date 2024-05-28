@@ -161,7 +161,7 @@
             
             <h4>Run Date & Time : {{today}} </h4>
             <h4> <u>  Account Statement RD from {{reportcriteria.controls.fromDate.value?.toDateString() | date: 'dd/MM/yyyy'}} to {{ this.reportcriteria.controls.toDate.value?.toDateString() | date: 'dd/MM/yyyy'}}</u></h4>
-            <h5> A/C No. {{cAcc}} / Name: {{cName}}/Present Address:  {{cAddress}}</h5>
+            <h4> A/C No.<b> {{cAcc}}</b> / Name: <b>{{cName}}</b>/Present Address: <b>{{cAddress}}</b> </h4>
             <h4><b>Total Balance - {{clrSum| currency:"INR"}}</b></h4>
           </div>
         </th>

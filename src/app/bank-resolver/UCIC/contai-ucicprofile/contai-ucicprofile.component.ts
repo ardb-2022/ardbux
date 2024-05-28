@@ -261,6 +261,7 @@ export class ContaiUCICprofileComponent implements OnInit {
       this.getServiceAreaMaster();
       this.getPsMaster();
       this.getPoMaster();
+      this.onClearClick();
       // this.onRetrieveClick();
       this.f.status.setValue('A');
       this.f.state.disable()

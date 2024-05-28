@@ -65,7 +65,7 @@
        <button mat-raised-button type="button" 
         class="btn btn-rounded btn-primary m-1" 
         [useExistingCss]="true"
-        printSectionId="hiddenTab" 
+        printSectionId="mattable" 
         [printStyle]="{ '@page': { size: 'landscape !important' } }"
         ngxPrint>Print</button>
        <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadexcel()">Export as EXCEL</button>
@@ -216,7 +216,7 @@
       <!-- Fruit Column -->
       <ng-container matColumnDef="disb_dt" >
         <th mat-header-cell *matHeaderCellDef mat-sort-header >Issue DT </th>
-        <td mat-cell *matCellDef="let row" >{{row.disb_dt.substr(0,10)}} </td>
+        <td mat-cell *matCellDef="let row" >{{row.disb_dt}} </td>
       </ng-container>
       <!-- ID Column -->
       <ng-container matColumnDef="disb_amt" >
@@ -240,7 +240,7 @@
       <!-- Name Column -->
       <ng-container matColumnDef="npa_dt" >
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Date of Default </th>
-        <td mat-cell *matCellDef="let row" >{{row.npa_dt?row.npa_dt.substr(0,10):row.npa_dt }}</td>
+        <td mat-cell *matCellDef="let row" >{{row.npa_dt}}</td>
       </ng-container>
       <!-- Name Column -->
       <ng-container matColumnDef="ovd_prn" >
@@ -440,7 +440,7 @@
      <button mat-raised-button type="button" 
      class="btn btn-rounded btn-primary m-1" 
      [useExistingCss]="true"
-     printSectionId="hiddenTab" 
+     printSectionId="mattable" 
      [printStyle]="{ '@page': { size: 'landscape !important' } }"
      ngxPrint>Print</button>
      <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadexcel()">Export as EXCEL</button>

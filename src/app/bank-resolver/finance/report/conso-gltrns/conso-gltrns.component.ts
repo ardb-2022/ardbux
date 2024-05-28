@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { WebDataRocksPivot } from 'src/app/webdatarocks/webdatarocks.angular4';
+ 
 import { p_report_param, SystemValues, tt_cash_cum_trial, tt_gl_trans } from 'src/app/bank-resolver/Models';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { RestService } from 'src/app/_service';
@@ -22,7 +22,7 @@ import { CommonServiceService } from 'src/app/bank-resolver/common-service.servi
 })
 export class ConsoGLTrnsComponent implements OnInit {
   @ViewChild('content', { static: true }) content: TemplateRef<any>;
-  @ViewChild('GenLedgerDtl') child: WebDataRocksPivot;
+   
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   modalRef: BsModalRef;
@@ -248,184 +248,10 @@ export class ConsoGLTrnsComponent implements OnInit {
     this.showAlert = false;
   }
   // private pdfmake : pdfMake;
-  onPivotReady(GenLedgerDtl: WebDataRocksPivot): void {
-    console.log('[ready] WebDataRocksPivot', this.child);
-  }
+ 
 
 
-  onReportComplete(): void {
-    ;
-    if (!this.isLoading)return ;
-    this.prp.brn_cd = this.sys.BranchCode;
-    this.prp.from_dt = this.fromdate;
-    this.prp.to_dt = this.todate;
-    this.prp.ad_from_acc_cd = parseInt(this.r.fromAcc.value);
-    this.prp.ad_to_acc_Cd = parseInt(this.r.toAcc.value);
-    const fdate = new Date(this.fromdate);
-    const tdate = new Date(this.todate);
-    this.fd = (('0' + fdate.getDate()).slice(-2)) + '/' + (('0' + (fdate.getMonth() + 1)).slice(-2)) + '/' + (fdate.getFullYear());
-    this.td = (('0' + tdate.getDate()).slice(-2)) + '/' + (('0' + (tdate.getMonth() + 1)).slice(-2)) + '/' + (tdate.getFullYear());
-    this.dt = new Date();
-    this.dt = (('0' + this.dt.getDate()).slice(-2)) + '/' + (('0' + (this.dt.getMonth() + 1)).slice(-2)) + '/' + (this.dt.getFullYear()) + ' ' + this.dt.getHours() + ':' + this.dt.getMinutes();
-    this.child.webDataRocks.off('reportcomplete');
-    // Api call to get data
-    this.svc.addUpdDel<any>('Report/GLTD2', this.prp).subscribe(
-      (data: tt_gl_trans[]) => {
-        this.genLdgerTrans = data;
-        ;
-      },
-      error => { console.log(error); },
-      () => {
-        this.isLoading = false;
-        ;
-        this.child.webDataRocks.setReport({
-          dataSource: {
-            data: this.genLdgerTrans
-          },
-          tableSizes: {
-            columns: [
-              {
-                idx: 0,
-                width: 105
-              },
-              {
-                idx: 1,
-                width: 105
-              },
-              {
-                idx: 2,
-                width: 105
-              },
-              {
-                idx: 3,
-                width: 105
-              },
-              {
-                idx: 4,
-                width: 105
-              },
-              {
-                idx: 5,
-                width: 105
-              },
-              {
-                idx: 6,
-                width: 105
-              }
-            ]
-          },
-          options: {
-            grid: {
-              type: 'flat',
-              showTotals: 'off',
-              showGrandTotals: 'off'
-            }
-          },
-          slice: {
-            rows: [
-              {
-                uniqueName: 'acc_cd',
-                caption: 'Account Code',
-                sort: 'unsorted'
-
-              },
-              {
-                uniqueName: 'voucher_dt',
-                caption: 'Voucher Date',
-                sort: 'unsorted'
-              },
-              {
-                uniqueName: 'dr_amt',
-                caption: 'Debit Amount',
-                sort: 'unsorted'
-              },
-              {
-                uniqueName: 'cr_amt',
-                caption: 'Credit Amount',
-                sort: 'unsorted'
-              },
-              {
-                uniqueName: 'trans_month',
-                caption: 'Month of Transaction',
-                sort: 'unsorted'
-              },
-              {
-                uniqueName: 'trans_year',
-                caption: 'Year of Transaction',
-                sort: 'unsorted'
-              },
-              {
-                uniqueName: 'opng_bal',
-                caption: 'Opening Balance',
-                sort: 'unsorted'
-              }
-            ],
-            measures: [
-              {
-                uniqueName: 'acc_cd'
-              }],
-            flatOrder: [
-              'Account Code',
-              'Voucher Dt',
-              'Debit Amount',
-              'Credit Amount',
-              'Month of Transaction',
-              'Year of Transaction',
-              'Opening Balance'
-            ]
-          },
-
-          formats: [{
-            name: '',
-            thousandsSeparator: ',',
-            decimalSeparator: '.',
-            decimalPlaces: 2,
-            maxSymbols: 20,
-            currencySymbol: '',
-            currencySymbolAlign: 'left',
-            nullValue: ' ',
-            infinityValue: 'Infinity',
-            divideByZeroValue: 'Infinity'
-          },
-          {
-            name: 'decimal0',
-            decimalPlaces: 0,
-            thousandsSeparator: '',
-            textAlign: 'left'
-          }
-          ]
-        });
-        this.modalRef.hide();
-      }
-    );
-  }
-
-  setOption(option, value) {
-    this.child.webDataRocks.setOptions({
-      grid: {
-        [option]: value
-      }
-    });
-    ;
-    this.child.webDataRocks.refresh();
-  }
-
-  exportPDFTitle() {
-    const options = this.child.webDataRocks.getOptions();
-    this.child.webDataRocks.setOptions({
-      grid: {
-        title: 'Cash Cum Trial Balance For The Period ' + this.fd + '-' + this.td
-      }
-    }
-    );
-    this.child.webDataRocks.refresh();
-    this.child.webDataRocks.exportTo('pdf', { pageOrientation:'potrait',header:"<div>##CURRENT-DATE##&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Synergic Banking&emsp;&emsp;&emsp;Branch : "+localStorage.getItem('__brnName')+"<br>&nbsp</div>",filename:"GeneralLedgerTransactions"});
-    this.child.webDataRocks.on('exportcomplete', function () {
-      this.child.webDataRocks.off('exportcomplete');
-      this.child.webDataRocks.setOptions(options);
-      this.child.webDataRocks.refresh();
-    });
-  }
+ 
   closeScreen()
 {
   this.router.navigate([localStorage.getItem('__bName') + '/la']);

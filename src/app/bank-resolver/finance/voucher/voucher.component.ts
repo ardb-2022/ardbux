@@ -679,6 +679,15 @@ debugger
     );
   }
   ShowVPrint(){
+    this.printData.sort((a, b) => {
+      if (a.debit_credit_flag < b.debit_credit_flag) {
+        return -1;
+      } else if (a.debit_credit_flag > b.debit_credit_flag) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
     this.modalRef = this.modalService.show(this.print, { class: 'modal-xl' });
   }
   private InsertVoucher(): void {
@@ -720,6 +729,15 @@ debugger
 
       }
       debugger
+      tvdSaveAll.sort((a, b) => {
+        if (a.debit_credit_flag < b.debit_credit_flag) {
+          return -1;
+        } else if (a.debit_credit_flag > b.debit_credit_flag) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
       this.printData=[]
       this._cDt='';
       let date = tvdSaveAll[0].voucher_dt;

@@ -37,12 +37,12 @@
       <div class="form-group col-2">
         <small for="loan_id">Member/Nominal Member No:</small>
         <input style="height:25px" type="text" class="form-control form-control-sm "
-        id="Member No" placeholder="Member No" disabled formControlName="member_no">
+        id="Member No" placeholder="Member No" [readonly]="true" formControlName="member_no">
       </div>
 
       <div class="form-group col-2">
         <small for="loan_id">Member Id:</small>
-        <input style="height:25px" type="text" disabled class="form-control form-control-sm "
+        <input style="height:25px" type="text" [readonly]="true" class="form-control form-control-sm "
         id="Member Id" placeholder="Member Id" formControlName="cust_cd">
       </div>
       <div class="form-group col-3">
@@ -114,7 +114,7 @@
       </div>
       <div class="form-group col-2">
         <small for="loan_id">Contact No:</small>
-        <input style="height:25px" type="Number" disabled class="form-control form-control-sm "
+        <input style="height:25px" type="Number" [readonly]="true" class="form-control form-control-sm "
         id="Contact No" placeholder="Contact No" formControlName="phone">
       </div>
       
@@ -163,7 +163,7 @@
           <div class="form-group col-12">
             <small for="loan_id">Address:</small>
             <input style="height:25px" type="text" class="form-control form-control-sm "
-            id="address" placeholder="address" disabled formControlName="present_address">
+            id="address" placeholder="address" [readonly]="true" formControlName="present_address">
           </div>
       </div>
     </form>
@@ -219,7 +219,7 @@
           <div class="form-row ">
             <div class="form-group col-1">
               <small for="sl_no">Serial No</small>
-              <input style="height:25px" disabled type="text" class="form-control form-control-sm text-capitalize"
+              <input style="height:25px" [readonly]="true" type="text" class="form-control form-control-sm text-capitalize"
                 [(ngModel)]="t1.sl_no" placeholder="Serial No" id="sl_no" placeholder="Serial No">
             </div>
 
@@ -292,39 +292,39 @@
         <hr><br>
           <div class="form-row ">
             <div class="form-group col-2">
-              <input style="height:25px" disabled type="Number" class="form-control form-control-sm text-capitalize"
+              <input style="height:25px" [readonly]="true" type="Number" class="form-control form-control-sm text-capitalize"
                 [(ngModel)]="total" >
             </div>
             <div class="form-group col-1">
-              <input style="height:25px" disabled type="Number" class="form-control form-control-sm text-capitalize"
+              <input style="height:25px" [readonly]="true" type="Number" class="form-control form-control-sm text-capitalize"
                 [(ngModel)]="tot_desc_no "  placeholder="Total Item">
             </div>
             <div class="form-group col-1">
-              <input style="height:25px" disabled type="Number" class="form-control form-control-sm text-capitalize"
+              <input style="height:25px" [readonly]="true" type="Number" class="form-control form-control-sm text-capitalize"
                 [(ngModel)]="tot_gross_we"  id="gross_we" placeholder="Total Gross Weight">
             </div>
             <div class="form-group col-1">
-              <input style="height:25px" disabled type="Number" class="form-control form-control-sm text-capitalize"
+              <input style="height:25px" [readonly]="true" type="Number" class="form-control form-control-sm text-capitalize"
                 [(ngModel)]="tot_alloy_stone_we" id="alloy_stone_we" placeholder="Total Loss Alloy Stones">
             </div>
             <div class="form-group col-1">
-              <input style="height:25px" disabled type="Number" class="form-control form-control-sm text-capitalize"
+              <input style="height:25px" [readonly]="true" type="Number" class="form-control form-control-sm text-capitalize"
                 [(ngModel)]="tot_net_we"  id="net_we" placeholder="Total Net Weight">
             </div>
             <div class="form-group col-1">
-              <!-- <input style="height:25px" disabled type="text" class="form-control form-control-sm text-capitalize"
+              <!-- <input style="height:25px" [readonly]="true" type="text" class="form-control form-control-sm text-capitalize"
                 [(ngModel)]="tot_purity_we"  id="purity_we" placeholder="Total Purity Carat"> -->
             </div>
             <div class="form-group col-2">
-              <input style="height:25px" disabled type="text" class="form-control form-control-sm text-capitalize"
+              <input style="height:25px" [readonly]="true" type="text" class="form-control form-control-sm text-capitalize"
                 [(ngModel)]="tot_act_we"  id="act_we" placeholder="Total Equivalent Weight of 22 krt">
             </div>
             <div class="form-group col-1">
-              <!-- <input style="height:25px" disabled type="text" class="form-control form-control-sm text-capitalize"
+              <!-- <input style="height:25px" [readonly]="true" type="text" class="form-control form-control-sm text-capitalize"
                 [(ngModel)]="tot_act_rate"  id="act_rate" placeholder="Total Rate/Grm for 22 krt"> -->
             </div>
             <div class="form-group col-1">
-              <input style="height:25px" disabled type="text" class="form-control form-control-sm text-capitalize"
+              <input style="height:25px" [readonly]="true" type="text" class="form-control form-control-sm text-capitalize"
                 [(ngModel)]="tot_net_value"  id="net_value" placeholder="Total Value of gold Ornaments">
             </div>
             <div class="form-group col-1">
@@ -361,7 +361,7 @@
         <div class="form-group col-4">
           <small for="fundType">Set Printing Type</small>
           <select id="fundType" class="form-control form-control-sm" [(ngModel)]="printType">
-            <option disabled>Choose</option>
+            <option [readonly]="true">Choose</option>
             <option value="OR">Original Copy</option>
             <option value="D">Duplicate Copy</option>
             <option value="T">Triplicate Copy</option>

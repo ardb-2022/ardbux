@@ -73,7 +73,7 @@ private subject=new Subject<any>()
     }
     SaveButtonClick() {  
       debugger 
-      this.subject.next(); 
+      // this.subject.next(); 
       // this.callSave.emit();    
     }
     DeleteButtonClick() {    

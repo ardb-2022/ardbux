@@ -145,7 +145,7 @@
                   <h3> {{_voucherId}} </h3>
                 </td>
                 <td>
-                   <!-- <h3><input type="text"  style="height: 25px" placeholder="dd/mm/yyyy" class="form-control" [ngModel]="_voucherDt" disabled bsDatepicker
+                   <!-- <h3><input type="text"  style="height: 25px" placeholder="dd/mm/yyyy" class="form-control" [ngModel]="_voucherDt" [readonly]="true" bsDatepicker
                     [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }"
                     [isOpen]="isOpenFromDp"></h3> 
                    <h3>{{_voucherDt |date}}</h3>
@@ -156,7 +156,7 @@
                     <h4 for="trans_date">Voucher Date<span class="text-danger">*</span></h4>
                       <div class="input-group">
                         <!-- <input type="text" style="height:30px;" placeholder="dd/mm/yyyy" class="form-control" 
-                        [(ngModel)]="_voucherDt" disabled> -->
+                        [(ngModel)]="_voucherDt" [readonly]="true"> -->
                       <input type="text" style="height:40px;" placeholder="dd/mm/yyyy" class="form-control" 
                       bsDatepicker [(ngModel)]="_voucherDt"
                       [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }"
@@ -210,9 +210,9 @@
               <tbody>
                 <tr formArrayName="VoucherF" *ngFor="let item of voucherData.controls; let i = index;">
                   <div [formGroupName]="i">
-                    <td style="width: 10%"><input formControlName="dr_cr" type="text" disabled class="form-control fonm-control-sm"></td>
+                    <td style="width: 10%"><input formControlName="dr_cr" type="text" [readonly]="true" class="form-control fonm-control-sm"></td>
                     <td style="width: 10%">
-                      <input formControlName="acc_cd" type="text" [disabled]="i==0"  (keyup)="codeChange($event,i)" class="form-control form-control-sm">
+                      <input formControlName="acc_cd" type="text"   (keyup)="codeChange($event,i)" class="form-control form-control-sm">
                         <table id="tab{{i}}" class="suggestions customers">
                           <tbody>
                             <tr *ngFor="let entry of maccmaster1" style="cursor:pointer" (click)="putValue(entry,i)">

@@ -1,4 +1,4 @@
-import { isNumeric } from 'rxjs/internal-compatibility';
+// import { isNumeric } from 'rxjs/internal-compatibility';
 import { SystemValues } from './../../Models/SystemValues';
 
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
@@ -161,7 +161,10 @@ export class AccOpeningViewComponent implements OnInit {
   standingInstrAfterMaturity = [
     { instr_code: '1', instr_dscr: 'Auto Close' },
     { instr_code: '2', instr_dscr: 'Auto Renew' },
-    { instr_code: '0', instr_dscr: 'None' }
+    { instr_code: '0', instr_dscr: 'None' },
+    { instr_code: 'N', instr_dscr: 'No SI' },
+    { instr_code: 'Y', instr_dscr: 'SI' }
+
   ];
 
 
@@ -274,7 +277,8 @@ export class AccOpeningViewComponent implements OnInit {
     //  console.log(this.accDtlsFrm.get('home_brn_cd').value)
     if (this.tm_deposit.user_acc_num.length > 0) {
       const prm = new p_gen_param();
-      prm.ad_acc_type_cd = (this.sys.ardbCD=="20" || this.sys.ardbCD=="26"||this.sys.ardbCD=="10")? 1:8;
+      prm.ad_acc_type_cd = localStorage.getItem("sbAccType");
+      // (this.sys.ardbCD=="20" ||this.sys.ardbCD=="11" || this.sys.ardbCD=="26"||this.sys.ardbCD=="10"||this.sys.ardbCD=="22"||this.sys.ardbCD=="23")? 1:8;
       prm.as_cust_name = this.tm_deposit.user_acc_num.toLowerCase();
       console.log(prm.ardb_cd);
 
@@ -434,10 +438,8 @@ export class AccOpeningViewComponent implements OnInit {
     }
 
 
-    if (this.tm_deposit.standing_instr_flag !== undefined
-      && this.tm_deposit.standing_instr_flag !== null
-      && isNumeric(this.tm_deposit.standing_instr_flag)) {
-      this.setStandingInstrAfterMatu(Number(this.tm_deposit.standing_instr_flag));
+    if (this.tm_deposit.standing_instr_flag) {
+      this.setStandingInstrAfterMatu(this.tm_deposit.standing_instr_flag);
     }
 
 
@@ -815,7 +817,8 @@ debugger
     const temp_deposit = new tm_deposit();
     temp_deposit.brn_cd = this.branchCode;
     temp_deposit.acc_num = this.tm_deposit.user_acc_num;
-    temp_deposit.acc_type_cd = (this.sys.ardbCD=="20" || this.sys.ardbCD=="26"||this.sys.ardbCD=="10")? 1:8;
+    temp_deposit.acc_type_cd = localStorage.getItem("sbAccType");
+    // (this.sys.ardbCD=="20" || this.sys.ardbCD=="26"||this.sys.ardbCD=="10"||this.sys.ardbCD=="11"||this.sys.ardbCD=="22"||this.sys.ardbCD=="23")? 1:8;
 
     this.isLoading = true;
     this.svc.addUpdDel<any>('Deposit/GetDeposit', temp_deposit).subscribe(
@@ -1773,7 +1776,7 @@ debugger
     null;
   }
 
-  setStandingInstrAfterMatu(val: number) {
+  setStandingInstrAfterMatu(val: any) {
 
     this.tm_deposit.standing_instr_flag = val.toString();
     this.tm_deposit.standing_instr_dscr = this.standingInstrAfterMaturity.filter(x => x.instr_code === val.toString())[0].instr_dscr;

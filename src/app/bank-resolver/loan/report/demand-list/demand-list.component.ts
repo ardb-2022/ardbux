@@ -59,7 +59,7 @@ export class DemandListComponent implements OnInit {
   reportData:any=[]
   ardbName=localStorage.getItem('ardb_name')
   branchName=this.sys.BranchName
-
+  prm:any;
   pageChange: any;
   opdrSum=0;
   opcrSum=0;
@@ -162,7 +162,7 @@ export class DemandListComponent implements OnInit {
   
   diff:any;
   constructor(private datePipe:DatePipe,private comSer:CommonServiceService, private svc: RestService, private formBuilder: FormBuilder,private exportAsService: ExportAsService, private cd: ChangeDetectorRef,
-    private modalService: BsModalService, private _domSanitizer: DomSanitizer,
+    private modalService: BsModalService, private _domSanitizer: DomSanitizer, private comser:CommonServiceService,
     private router: Router) { }
   ngOnInit(): void {
     this.dataSource.paginator = this.paginator;
@@ -387,7 +387,9 @@ debugger
     this.dataSource.data=this.filteredArray
     this.getTotal()
   }
+  
   public SubmitReport() {
+    
     this.comSer.getDay(this.reportcriteria.controls.fromDate.value,this.reportcriteria.controls.toDate.value)
     
     if (this.reportcriteria.invalid) {
@@ -435,6 +437,14 @@ debugger
       this.svc.addUpdDel('Loan/GetDemandList',dt).subscribe(data=>{console.log(data)
         // this.svc.addUpdDel('Loan/GetDemandListMemberwise',dt).subscribe(data=>{console.log(data)
         this.reportData=data
+        for(let i=0;i<this.reportData.length;i++){
+          if(this.reportData[i].disb_dt.substr(0,10)=='01/01/0001'){
+            this.reportData[i].disb_dt='';
+          }
+          else{
+            this.reportData[i].disb_dt=this.comser.getFormatedDate(this.reportData[i].disb_dt);
+          }
+        }
         this.itemsPerPage=this.reportData.length % 50 <=0 ? this.reportData.length: this.reportData.length % 50
         this.isLoading=false
         this.dataSource.data=this.reportData

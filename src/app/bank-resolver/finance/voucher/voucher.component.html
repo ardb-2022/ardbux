@@ -1,6 +1,6 @@
 <ng-template #print>
   <div class="modal-header">
-    <h4 class="modal-title pull-left customHeader" style="padding-right: 10px;">Recovery Challan </h4>
+    <h4 class="modal-title pull-left customHeader" style="padding-right: 10px;">Print voucher </h4>
     
     <button  type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
       <span aria-hidden="true">&times;</span>
@@ -41,7 +41,12 @@
                 <tr *ngFor="let i of printData">
                   <td style="text-align: left;">{{i.acc_cd}}</td>
                   <td style="text-align: left;">{{i.narration}} of Rs. </td>
-                  <td style="text-align: right;padding-right: 10px;"><b>{{i.amount| currency:'INR'}}</b></td>
+                  <td style="text-align: right;padding-right: 10px;"><b>{{i.amount| currency:'INR'}}({{i.debit_credit_flag=='D'?'Dr':'Cr'}})</b></td>
+                </tr>
+                
+                <tr style="border-top: 1px solid rgb(223, 220, 210);">
+                  <td style="text-align: right;" colspan="2"><b>Total</b></td>
+                  <td style="text-align: center;" ><b>{{_voucherTypeName=="Cash Receipt"?_totalCr:_totalDr | currency:'INR'}}</b></td>
                 </tr>
               </table>
             </div>
@@ -103,7 +108,12 @@
                 <tr *ngFor="let i of printData">
                   <td style="text-align: left;">{{i.acc_cd}}</td>
                   <td style="text-align: left;">{{i.narration}} of Rs. </td>
-                  <td style="text-align: right;padding-right: 10px;"><b>{{i.amount| currency:'INR'}}</b></td>
+                  <td style="text-align: right;padding-right: 10px;"><b>{{i.amount| currency:'INR'}}({{i.debit_credit_flag=='D'?'Dr':'Cr'}})</b></td>
+                </tr>
+                
+                <tr style="border-top: 1px solid rgb(223, 220, 210);">
+                  <td style="text-align: right;" colspan="2"><b>Total</b></td>
+                  <td style="text-align: center;" ><b>{{_voucherTypeName=="Cash Receipt"?_totalCr:_totalDr | currency:'INR'}}</b></td>
                 </tr>
               </table>
             </div>
@@ -166,7 +176,7 @@
         <div class="input-group">
           <!-- <input id="fromDate" class="form-control" placeholder="yyyy-mm-dd" name="fd" [ngModel]="fromdate  | date:'yyyy-MM-dd' " formControlName="fromDate"
             id="fd" type="date"> -->
-            <input type="text" placeholder="dd/mm/yyyy" class="form-control" [ngModel]="fromdate" disabled bsDatepicker
+            <input type="text" placeholder="dd/mm/yyyy" class="form-control" [ngModel]="fromdate" [readonly]="true" bsDatepicker
             formControlName="fromDate" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }"
             [isOpen]="isOpenFromDp">
           <div class="input-group-append">
@@ -264,7 +274,7 @@
       <button mat-raised-button type="button" class="btn btn-rounded btn-primary btn-primary-spacing btn-sm" [disabled]="isClear"
         (click)="Clear()">Clear</button>
       
-        <button mat-raised-button type="button" class="btn btn-rounded btn-primary btn-primary-spacing btn-sm" style="position: absolute;right: 9%;top: 15px;"  
+        <button mat-raised-button type="button" class="btn btn-rounded btn-primary btn-primary-spacing btn-sm" style="position: absolute;"  
         (click)="ShowVPrint()" >Print Voucher</button>
         <button mat-raised-button type="button" class="btn btn-rounded btn-primary btn-primary-spacing btn-sm" (click)="closeScreen()"
         style="position: absolute;right: 10px;">Close</button>
@@ -343,9 +353,9 @@
             <tbody>
               <tr formArrayName="VoucherF" *ngFor="let item of voucherData.controls; let i = index;">
                 <div [formGroupName]="i">
-                  <td style="width: 10%"><input formControlName="dr_cr" type="text" disabled class="form-control fonm-control-sm"></td>
+                  <td style="width: 10%"><input formControlName="dr_cr" type="text" [readonly]="true" class="form-control fonm-control-sm"></td>
                   <td style="width: 10%">
-                    <input formControlName="acc_cd" type="text" [disabled]="i==0"  (keyup)="codeChange($event,i)" class="form-control form-control-sm">
+                    <input formControlName="acc_cd" type="text"   (keyup)="codeChange($event,i)" class="form-control form-control-sm">
                       <table id="tab{{i}}" class="suggestions customers">
                         <tbody>
                           <tr *ngFor="let entry of maccmaster1" style="cursor:pointer" (click)="putValue(entry,i)">

@@ -91,58 +91,58 @@
       <div class="form-row">
         <div class="form-group  col-1">
           <small for="loan_id">SL NO.</small>
-          <input type="text" disabled [value]="i+1" class="form-control form-control-sm text-capitalize"
+          <input type="text" [readonly]="true" [value]="i+1" class="form-control form-control-sm text-capitalize"
              id="loan_id">
         </div>
         <div class="form-group  col-2">
           <small for="loan_id">Loan Id</small>
-          <input type="text" disabled [(ngModel)]="t.loan_id" class="form-control form-control-sm text-capitalize"
+          <input type="text" [readonly]="true" [(ngModel)]="t.loan_id" class="form-control form-control-sm text-capitalize"
              id="loan_id">
         </div>
         <div class="form-group col-2">
           <small for="party_name">Customer Name</small>
-          <input type="text" [(ngModel)]="t.party_name" disabled class="form-control form-control-sm text-capitalize" 
+          <input type="text" [(ngModel)]="t.party_name" [readonly]="true" class="form-control form-control-sm text-capitalize" 
             id="party_name">
         </div>
         <div class="form-group col-1">
           <small for="curr_prn_recov">Cur Prn Recov</small>
-          <input type="text" disabled [(ngModel)]="t.curr_prn_recov" style="height:30px;" id="curr_prn_recov" class="form-control" >
+          <input type="text" [readonly]="true" [(ngModel)]="t.curr_prn_recov" style="height:30px;" id="curr_prn_recov" class="form-control" >
         </div>
         <div class="form-group col-1">
           <small for="curr_prn_recov">Ovd Prn Recov</small>
-          <input type="text" disabled [(ngModel)]="t.ovd_prn_recov" style="height:30px;" id="curr_prn_recov" class="form-control" >
+          <input type="text" [readonly]="true" [(ngModel)]="t.ovd_prn_recov" style="height:30px;" id="curr_prn_recov" class="form-control" >
         </div>
         <div class="form-group col-1">
           <small for="curr_prn_recov">Adv Prn Recov</small>
-          <input type="text" disabled [(ngModel)]="t.adv_prn_recov" style="height:30px;" id="curr_prn_recov" class="form-control" >
+          <input type="text" [readonly]="true" [(ngModel)]="t.adv_prn_recov" style="height:30px;" id="curr_prn_recov" class="form-control" >
         </div>
         <div class="form-group col-1">
           <small for="curr_intt_recov">Cur Intt Recov</small>
-          <input type="text" disabled [(ngModel)]="t.curr_intt_recov" style="height:30px;" id="curr_intt_recov" class="form-control" >
+          <input type="text" [readonly]="true" [(ngModel)]="t.curr_intt_recov" style="height:30px;" id="curr_intt_recov" class="form-control" >
         </div>
         <div class="form-group col-1">
           <small for="ovd_prn_recov">Ovd Intt Recov</small>
-          <input type="text" disabled [(ngModel)]="t.ovd_prn_recov" style="height:30px;" id="ovd_prn_recov" class="form-control" >
+          <input type="text" [readonly]="true" [(ngModel)]="t.ovd_prn_recov" style="height:30px;" id="ovd_prn_recov" class="form-control" >
         </div>
         <div class="form-group col-1">
           <small for="penal_intt_recov">Pnl Intt Recov</small>
-          <input type="text" disabled [(ngModel)]="t.penal_intt_recov" style="height:30px;" id="penal_intt_recov" class="form-control" >
+          <input type="text" [readonly]="true" [(ngModel)]="t.penal_intt_recov" style="height:30px;" id="penal_intt_recov" class="form-control" >
         </div>
         <div class="form-group col-1">
           <small for="penal_intt_recov">Total Recov</small>
-          <input type="text" disabled [(ngModel)]="t.recov_amt" style="height:30px;" id="penal_intt_recov" class="form-control" >
+          <input type="text" [readonly]="true" [(ngModel)]="t.recov_amt" style="height:30px;" id="penal_intt_recov" class="form-control" >
         </div>
       </div>
     </div>
     <div *ngIf="transData" class="form-row">
       <div class="form-group col-5 text-center"> Total Amount:</div>
-      <div class="form-group col-1"><input type="text" disabled style="height:30px;" class="form-control" [value]="tot_cur_prn"></div>
-      <div class="form-group col-1"><input type="text" disabled style="height:30px;" class="form-control" [value]="tot_ovd_prn"></div>
-      <div class="form-group col-1"><input type="text" disabled style="height:30px;" class="form-control" [value]="tot_adv_prn"></div>
-      <div class="form-group col-1"><input type="text" disabled style="height:30px;" class="form-control" [value]="tot_cur_intt"></div>
-      <div class="form-group col-1"><input type="text" disabled style="height:30px;" class="form-control" [value]="tot_ovd_intt"></div>
-      <div class="form-group col-1"><input type="text" disabled style="height:30px;" class="form-control" [value]="tot_pnl_intt"></div>
-      <div class="form-group col-1"><input type="text" disabled style="height:30px;" class="form-control" [value]="totAmt"></div>
+      <div class="form-group col-1"><input type="text" [readonly]="true" style="height:30px;" class="form-control" [value]="tot_cur_prn"></div>
+      <div class="form-group col-1"><input type="text" [readonly]="true" style="height:30px;" class="form-control" [value]="tot_ovd_prn"></div>
+      <div class="form-group col-1"><input type="text" [readonly]="true" style="height:30px;" class="form-control" [value]="tot_adv_prn"></div>
+      <div class="form-group col-1"><input type="text" [readonly]="true" style="height:30px;" class="form-control" [value]="tot_cur_intt"></div>
+      <div class="form-group col-1"><input type="text" [readonly]="true" style="height:30px;" class="form-control" [value]="tot_ovd_intt"></div>
+      <div class="form-group col-1"><input type="text" [readonly]="true" style="height:30px;" class="form-control" [value]="tot_pnl_intt"></div>
+      <div class="form-group col-1"><input type="text" [readonly]="true" style="height:30px;" class="form-control" [value]="totAmt"></div>
     </div>
   </div>
     

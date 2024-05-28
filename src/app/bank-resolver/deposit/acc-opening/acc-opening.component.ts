@@ -438,7 +438,8 @@ export class AccOpeningComponent implements OnInit {
     //  console.log(this.accDtlsFrm.get('home_brn_cd').value)
     if (this.tm_deposit.user_acc_num.length > 0) {
       const prm = new p_gen_param();
-      prm.ad_acc_type_cd = (this.sys.ardbCD=="20" || this.sys.ardbCD=="26"|| this.sys.ardbCD=="10")? 1:8;
+      prm.ad_acc_type_cd = localStorage.getItem("sbAccType");
+      // (this.sys.ardbCD=="20" || this.sys.ardbCD=="26"|| this.sys.ardbCD=="10"||this.sys.ardbCD=="11"|| this.sys.ardbCD=="22" || this.sys.ardbCD=="23")? 1:8;
       prm.as_cust_name = this.tm_deposit.user_acc_num.toLowerCase();
       console.log(prm.ardb_cd);
 
@@ -2260,7 +2261,8 @@ export class AccOpeningComponent implements OnInit {
     const temp_deposit = new tm_deposit();
     temp_deposit.brn_cd = this.branchCode;
     temp_deposit.acc_num = this.tm_deposit.user_acc_num;
-    temp_deposit.acc_type_cd = (this.sys.ardbCD=="20" || this.sys.ardbCD=="26"|| this.sys.ardbCD=="10")? 1:8;
+    temp_deposit.acc_type_cd = localStorage.getItem("sbAccType");
+    // (this.sys.ardbCD=="20" ||this.sys.ardbCD=="11" || this.sys.ardbCD=="26"|| this.sys.ardbCD=="10"|| this.sys.ardbCD=="22"||this.sys.ardbCD=="23")? 1:8;
     temp_deposit.ardb_cd=this.sys.ardbCD;
     this.isLoading = true;
     this.svc.addUpdDel<any>('Deposit/GetDeposit', temp_deposit).subscribe(

@@ -71,9 +71,7 @@
           <strong class="text-danger">" {{this.reportcriteria.controls.cust_name.value}} " does not match with any
             customer</strong>
         </div>
-        <div class="mt-2" *ngIf="showWait">
-          Please wait...
-        </div>
+        
       </div>
     </form>
   </div>
@@ -133,7 +131,7 @@
           </tr>
             <tbody *ngFor="let i of reportData1; let itr=index;" >
           <tr>
-            <td> {{i.acc_type_cd}}</td>
+            <td> {{i.acc_type_desc}}</td>
             <!-- <td *ngIf="i.acc_type_cd==1">Savings Deposit</td>
             <td *ngIf="i.acc_type_cd==2">Fixed Deposit</td>
             <td *ngIf="i.acc_type_cd==3">DBS</td>

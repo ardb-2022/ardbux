@@ -59,8 +59,10 @@
 		<div class="login_box">
 			<div class="left">
 				<div class="contact">
-          <img src="./assets/images/banklogo.png"  class="log2">
-					<form  [formGroup]="loginForm" (ngSubmit)="onSubmit()" style="width: 100%;" id="mainselection">
+          <!-- <img src="./assets/images/Revenue.gif"  class="log2"> -->
+          <img src="./assets/images/logo11.png"  class="log2">
+          <img src="./assets/images/logo.png"  class="log3">
+					<form  [formGroup]="loginForm" (ngSubmit)="onSubmit()" style="width: 100%;margin-top: 33%;" id="mainselection">
             
 						<!-- <h3>SIGN IN</h3> -->
             <!-- <img src="./assets/images/login.png"  width="100" height="100" class="log1"> -->
@@ -105,8 +107,7 @@
               <mat-icon>login</mat-icon>
             </button>
 
-
-
+          
 
 
 						<!-- <input type="text" placeholder="USERNAME">
@@ -117,8 +118,9 @@
 				</div>
 			</div>
 			<div class="right">
-        <img src="./assets/images/cfs.png" class="log4" alt="">
-        <img src="./assets/images/bank2.png" style="height: 100%; width: 110%; padding-top:15%" alt="">
+        <img src="./assets/images/cfsgreen.png" class="log4" alt="">
+        <!-- <img src="./assets/images/bank2.png" style="height: 100%; width: 110%; padding-top:15%" alt=""> -->
+        <img src="./assets/images/Revenue.gif"  style="height: 88%; width: 80%; padding-top:20%; margin-left: 9%;">
 				<div class="right-text">
 					<h2>CFS-2022</h2>
 					<!-- <h5>A UX BASED CREATIVE AGENCEY</h5> -->
@@ -129,3 +131,23 @@
 	</section>
 
 <loading *ngIf="isLoading"></loading>
+
+<!-- Modal HTML -->
+<div id="myModal" class="modal fade">
+	<div class="modal-dialog modal-confirm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<div class="icon-box">
+					<i class="material-icons">&#xE876;</i>
+				</div>				
+				<h4 class="modal-title w-100">Awesome!</h4>	
+			</div>
+			<div class="modal-body">
+				<p class="text-center">Your booking has been confirmed. Check your email for detials.</p>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-success btn-block" data-dismiss="modal">OK</button>
+			</div>
+		</div>
+	</div>
+</div> 

@@ -60,7 +60,6 @@ style="background-color: #78c2ad21; min-height: 20vh;">
    ngxPrint>Print</button>
  <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
  <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadexcel()">Export as EXCEL</button>
-   
   </div>
   </div>
 <!-- {{ReportUrl}} -->
@@ -244,10 +243,10 @@ style="background-color: #78c2ad21; min-height: 20vh;">
    </th>
  
    
-   <td mat-cell *matCellDef="let element" style="text-align:center"> {{element.list_dt.substr(0,10)}} </td>
+   <td mat-cell *matCellDef="let element" style="text-align:center"> {{element.list_dt}} </td>
  </ng-container>
 
- <ng-container matColumnDef="curr_intt_rate">
+  <ng-container matColumnDef="curr_intt_rate">
  
   <th mat-header-cell *matHeaderCellDef mat-sort-header > Curr Intt Rt
   </th>
@@ -318,7 +317,7 @@ style="background-color: #78c2ad21; min-height: 20vh;">
   <th mat-header-cell *matHeaderCellDef mat-sort-header > Interest Upto
   </th>
 
-  <td mat-cell *matCellDef="let element" style="text-align:center"> {{element.computed_till_dt.substr(0,10)}} </td>
+  <td mat-cell *matCellDef="let element" style="text-align:center"> {{element.computed_till_dt}} </td>
 </ng-container>
 
 

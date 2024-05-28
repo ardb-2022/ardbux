@@ -129,7 +129,7 @@ export class DetailListSbcaConstWiseComponent implements OnInit,AfterViewInit {
               return arr.indexOf(arr.find(t => t.acc_type_cd === thing.acc_type_cd)) === i;
             });
           this.AcctTypes = this.AcctTypes.sort((a, b) => (a.acc_type_cd > b.acc_type_cd ? 1 : -1));
-          this.AcctTypes =this.AcctTypes.filter(e=>e.acc_type_cd==1 || e.acc_type_cd==7||e.acc_type_cd==8)
+          this.AcctTypes =this.AcctTypes.filter(e=>e.acc_type_cd==1 || e.acc_type_cd==7||e.acc_type_cd==8||e.acc_type_cd==9)
         },
         err => { this.isLoading = false; }
       );

@@ -73,7 +73,7 @@
           <div class="form-group col-3">
             <small for="dbs_acc_open_dt">Opening Date</small>
             <input style="height:25px;" type="text" placeholder="dd/mm/yyyy" class="form-control"
-              [ngModel]="tm_deposit.opening_dt" disabled bsDatepicker
+              [ngModel]="tm_deposit.opening_dt" [readonly]="true" bsDatepicker
               [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }">
           </div>
 
@@ -91,7 +91,7 @@
                 style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
                 id="trans_type" [(ngModel)]="tm_deposit.constitution_cd" class="form-control form-control-sm"
                 (change)="setConstitutionType($event.target.value)">
-                <option [value]="tm_deposit.constitution_cd" disabled selected>
+                <option [value]="tm_deposit.constitution_cd" [readonly]="true" selected>
                   {{tm_deposit.constitution_cd}}-{{tm_deposit.constitution_desc}}</option>
                 <option *ngFor="let l of selectedConstitutionList" [value]="l.constitution_cd">
                   {{l.constitution_cd}}-{{l.constitution_desc}}</option>
@@ -149,7 +149,7 @@
                 style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
                 id="intt_trans_type" [(ngModel)]="tm_deposit.intt_trf_type" class="form-control form-control-sm"
                 (change)="setIntTfrType($event.target.value)" (change)="reProcessPrincipal()">
-                <option [value]="tm_deposit.intt_trf_type" disabled selected>{{tm_deposit.intt_tfr_type_dscr}}</option>
+                <option [value]="tm_deposit.intt_trf_type" [readonly]="true" selected>{{tm_deposit.intt_tfr_type_dscr}}</option>
                 <option *ngFor="let l of intTransferType ; let i= index" [hidden]="i== 0 && tm_deposit.acc_type_cd == 2" [value]="l.tfr_type">{{l.tfr_desc}}</option>
               </select>
             </div>
@@ -170,7 +170,7 @@
 
             <div class="form-group col-3">
               <small for="dep_interest">Interest</small>
-              <input disabled [(ngModel)]="tm_deposit.intt_amt" style="height:25px; text-align-last: right;"
+              <input [readonly]="true" [(ngModel)]="tm_deposit.intt_amt" style="height:25px; text-align-last: right;"
                 type="number" min="0" step='any' class="form-control form-control-sm text-capitalize" id="dep_interest">
             </div>
           </div>
@@ -180,8 +180,8 @@
           <div class="form-row">
             <div class="form-group col-2">
               <small for="dbs_acc_open_dt">Maturity Date</small>
-              <input disabled style="height:25px;" type="text" placeholder="dd/mm/yyyy" class="form-control"
-                [(ngModel)]="tm_deposit.mat_dt" disabled bsDatepicker
+              <input [readonly]="true" style="height:25px;" type="text" placeholder="dd/mm/yyyy" class="form-control"
+                [(ngModel)]="tm_deposit.mat_dt" [readonly]="true" bsDatepicker
                 [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }">
             </div>
 
@@ -198,7 +198,7 @@
                 style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
                 id="stand_ins_after_matu" [(ngModel)]="tm_deposit.standing_instr_flag"
                 class="form-control form-control-sm" (change)="setStandingInstrAfterMatu($event.target.value)">
-                <!-- <option [value]="tm_deposit.standing_instr_flag" disabled selected="selected">{{tm_deposit.standing_instr_dscr}}</option> -->
+                <!-- <option [value]="tm_deposit.standing_instr_flag" [readonly]="true" selected="selected">{{tm_deposit.standing_instr_dscr}}</option> -->
                 <!-- <div *ngFor="let l of standingInstrAfterMaturity">
                   {{l}}
             </div> -->
@@ -243,7 +243,7 @@
                 style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
                 id="trans_type" [(ngModel)]="tm_deposit.constitution_cd" [disabled]='disableAll'
                 class="form-control form-control-sm" (change)="setConstitutionType($event.target.value)">
-                <option [value]="tm_deposit.constitution_cd" disabled selected>
+                <option [value]="tm_deposit.constitution_cd" [readonly]="true" selected>
                   {{tm_deposit.constitution_cd}}-{{tm_deposit.constitution_desc}}</option>
                 <option *ngFor="let l of selectedConstitutionList" [value]="l.constitution_cd">
                   {{l.constitution_cd}}-{{l.constitution_desc}}</option>
@@ -302,7 +302,7 @@
                 style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
                 id="intt_trans_type" [(ngModel)]="tm_deposit.intt_trf_type" class="form-control form-control-sm"
                 (change)="setIntTfrType($event.target.value)">
-                <option [value]="tm_deposit.intt_trf_type" disabled >{{tm_deposit.intt_tfr_type_dscr}}</option>
+                <option [value]="tm_deposit.intt_trf_type" [readonly]="true" >{{tm_deposit.intt_tfr_type_dscr}}</option>
                 <!-- <option *ngFor="let l of intTransferType" [value]="l.tfr_type">{{l.tfr_desc}}</option> -->
               </select>
             </div>
@@ -326,7 +326,7 @@
 
             <div class="form-group col-3">
               <small for="term_dep_interest">Interest</small>
-              <input [(ngModel)]="tm_deposit.intt_amt" style="height:25px; text-align-last: right;" disabled
+              <input [(ngModel)]="tm_deposit.intt_amt" style="height:25px; text-align-last: right;" [readonly]="true"
                 type="number" min="0" step='any' class="form-control form-control-sm text-capitalize"
                 id="term_dep_interest">
             </div>
@@ -337,7 +337,7 @@
           <div class="form-row">
             <!-- <div class="form-group col-3">
             <small for="term_dep_mat_dt">Maturity Date</small>
-            <input disabled style="height:25px; width: 150px" type="text" placeholder="dd/mm/yyyy"
+            <input [readonly]="true" style="height:25px; width: 150px" type="text" placeholder="dd/mm/yyyy"
               [(ngModel)]="tm_deposit.mat_dt" bsDatepicker [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }">
           </div> -->
 
@@ -349,8 +349,8 @@
           </div>
             <div class="form-group col-6">
               <small for="dbs_acc_open_dt">Maturity Date</small>
-              <input disabled style="height:25px;" type="text" placeholder="dd/mm/yyyy" class="form-control"
-                [(ngModel)]="tm_deposit.mat_dt" disabled bsDatepicker
+              <input [readonly]="true" style="height:25px;" type="text" placeholder="dd/mm/yyyy" class="form-control"
+                [(ngModel)]="tm_deposit.mat_dt" [readonly]="true" bsDatepicker
                 [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }">
             </div>
 
@@ -367,7 +367,7 @@
                 style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
                 id="term_dep_stand_ins_after_matu" [(ngModel)]="tm_deposit.standing_instr_flag"
                 class="form-control form-control-sm" (change)="setStandingInstrAfterMatu($event.target.value)">
-                <option [value]="tm_deposit.standing_instr_flag" disabled selected="selected">
+                <option [value]="tm_deposit.standing_instr_flag" [readonly]="true" selected="selected">
                   {{tm_deposit.standing_instr_dscr}}</option>
                 <option *ngFor="let l of standingInstrAfterMaturity" [selected]="tm_deposit.standing_instr_flag==l.instr_code" [value]="l.instr_code">{{l.instr_dscr}}</option>
               </select>
@@ -397,7 +397,7 @@
               <select [disabled]='disableAll'
                   style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
                   id="branch_cd" [(ngModel)]="tm_deposit.branch_cd" class="form-control form-control-sm">
-                  <option [value]="" disabled>
+                  <option [value]="" [readonly]="true">
                     select Branch</option>
                   <option *ngFor="let l of branch" [value]="l.branch_cd">
                     {{l.branch_cd}}-{{l.branch_name}}</option>
@@ -420,7 +420,7 @@
                 style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
                 id="trans_type" [(ngModel)]="tm_deposit.constitution_cd" [disabled]='disableAll'
                 class="form-control form-control-sm" (change)="setConstitutionType($event.target.value)">
-                <option [value]="tm_deposit.constitution_cd" disabled selected>
+                <option [value]="tm_deposit.constitution_cd" [readonly]="true" selected>
                   {{tm_deposit.constitution_cd}}-{{tm_deposit.constitution_desc}}</option>
                 <option *ngFor="let l of selectedConstitutionList" [value]="l.constitution_cd">
                   {{l.constitution_cd}}-{{l.constitution_desc}}</option>
@@ -476,11 +476,11 @@
 
             <div class="form-group col-4">
               <small for="mis_int_trans_type">Intt Transfer Type</small> <br>
-              <select disabled
+              <select [readonly]="true"
                 style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
                 id="mis_int_trans_type" [(ngModel)]="tm_deposit.intt_trf_type" class="form-control form-control-sm"
                 (change)="setIntTfrType($event.target.value)">
-                <option [value]="tm_deposit.intt_trf_type" disabled selected>{{tm_deposit.intt_tfr_type_dscr}}</option>
+                <option [value]="tm_deposit.intt_trf_type" [readonly]="true" selected>{{tm_deposit.intt_tfr_type_dscr}}</option>
                 <option *ngFor="let l of intTransferType" [value]="l.tfr_type">{{l.tfr_desc}}</option>
               </select>
             </div>
@@ -501,7 +501,7 @@
 
             <div class="form-group col-3">
               <small for="mis_interest">Interest</small>
-              <input [(ngModel)]="tm_deposit.intt_amt" disabled style="height:25px; text-align-last: right;"
+              <input [(ngModel)]="tm_deposit.intt_amt" [readonly]="true" style="height:25px; text-align-last: right;"
                 type="number" min="0" step='any' class="form-control form-control-sm text-capitalize" id="mis_interest">
             </div>
 
@@ -511,14 +511,14 @@
           <div class="form-row">
             <!-- <div class="form-group col-3">
             <small for="mis_mat_dt">Maturity Date</small>
-            <input disabled style="height:25px; width: 150px" type="text" placeholder="dd/mm/yyyy"
+            <input [readonly]="true" style="height:25px; width: 150px" type="text" placeholder="dd/mm/yyyy"
               [(ngModel)]="tm_deposit.mat_dt" bsDatepicker [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }">
           </div> -->
 
             <div class="form-group col-2">
               <small for="dbs_acc_open_dt">Maturity Date</small>
-              <input disabled style="height:25px;" type="text" placeholder="dd/mm/yyyy" class="form-control"
-                [(ngModel)]="tm_deposit.mat_dt" disabled bsDatepicker
+              <input [readonly]="true" style="height:25px;" type="text" placeholder="dd/mm/yyyy" class="form-control"
+                [(ngModel)]="tm_deposit.mat_dt" [readonly]="true" bsDatepicker
                 [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }">
             </div>
 
@@ -534,7 +534,7 @@
                 style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
                 id="mis_stand_ins_after_matu" [(ngModel)]="tm_deposit.standing_instr_flag"
                 class="form-control form-control-sm" (change)="setStandingInstrAfterMatu($event.target.value)">
-                <option [value]="tm_deposit.standing_instr_flag" disabled selected>{{tm_deposit.standing_instr_dscr}}
+                <option [value]="tm_deposit.standing_instr_flag" [readonly]="true" selected>{{tm_deposit.standing_instr_dscr}}
                 </option>
                 <option *ngFor="let l of standingInstrAfterMaturity" [value]="l.instr_code">{{l.instr_dscr}}</option>
               </select>
@@ -575,7 +575,7 @@
                 style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
                 id="trans_type" [(ngModel)]="tm_deposit.constitution_cd" [disabled]='disableAll'
                 class="form-control form-control-sm" (change)="setConstitutionType($event.target.value)">
-                <option [value]="tm_deposit.constitution_cd" disabled selected>
+                <option [value]="tm_deposit.constitution_cd" [readonly]="true" selected>
                   {{tm_deposit.constitution_cd}}-{{tm_deposit.constitution_desc}}</option>
                 <option *ngFor="let l of selectedConstitutionList" [value]="l.constitution_cd">
                   {{l.constitution_cd}}-{{l.constitution_desc}}</option>
@@ -619,7 +619,7 @@
 
             <div class="form-group col-2">
               <small for="rec_dep_interest">Interest</small>
-              <input [(ngModel)]="tm_deposit.intt_amt" disabled style="height:25px; text-align-last: right;"
+              <input [(ngModel)]="tm_deposit.intt_amt" [readonly]="true" style="height:25px; text-align-last: right;"
                 type="number" min="0" value='0' step='any' class="form-control form-control-sm text-capitalize"
                 id="rec_dep_interest">
             </div>
@@ -633,8 +633,8 @@
 
             <div class="form-group col-3">
               <small for="dbs_acc_open_dt">Maturity Date</small>
-              <input disabled style="height:25px;" type="text" placeholder="dd/mm/yyyy" class="form-control"
-                [(ngModel)]="tm_deposit.mat_dt" disabled bsDatepicker
+              <input [readonly]="true" style="height:25px;" type="text" placeholder="dd/mm/yyyy" class="form-control"
+                [(ngModel)]="tm_deposit.mat_dt" [readonly]="true" bsDatepicker
                 [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }">
             </div>
 
@@ -661,7 +661,7 @@
                 style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
                 id="rec_dep_stand_ins_after_matu" [(ngModel)]="tm_deposit.standing_instr_flag"
                 class="form-control form-control-sm" (change)="setStandingInstrAfterMatu($event.target.value)">
-                <option [value]="tm_deposit.standing_instr_flag" disabled selected>{{tm_deposit.standing_instr_dscr}}
+                <option [value]="tm_deposit.standing_instr_flag" [readonly]="true" selected>{{tm_deposit.standing_instr_dscr}}
                 </option>
                 <option *ngFor="let l of standingInstrAfterMaturity" [value]="l.instr_code">{{l.instr_dscr}}</option>
               </select>

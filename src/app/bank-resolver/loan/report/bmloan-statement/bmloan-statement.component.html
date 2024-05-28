@@ -159,13 +159,13 @@
               <h4>Run Date & Time : {{today}} </h4> <br>
               <h4> <u> Loan Statement from {{reportcriteria.controls.fromDate.value | date: 'dd/MM/yyyy'}} to
                   {{reportcriteria.controls.toDate.value | date: 'dd/MM/yyyy'}}</u></h4>
-              <p>
+              <h4>
                 <b>
                   Name : {{custNm}} <br>
                   Loan ID : {{loanId}} <br>
                   Present Address : {{addr}}
                 </b>
-              </p>
+              </h4>
             </div>
          </th>
         </ng-container>
@@ -424,7 +424,7 @@
   
         <tr mat-header-row *matHeaderRowDef="['header1','header2','header3','header6','header4','header5']"></tr>
       
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr class="fixedHeader" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       
         <tr mat-row *matRowDef="let element; columns: displayedColumns;"></tr>
          </table>

@@ -89,16 +89,18 @@
                   </div>
                     <div class="form-row" *ngFor="let locker of reportData;let i = index">
                     <div class="form-group col-4">
-                        <select  style="border-radius: 1.25rem!important;" value="{{locker.locker_type}}" class="form-control form-control-sm custom-scrollbar" (change)="typeChange($event, i)"  >
-                            <option *ngFor="let l_type of locker_type" [value]="l_type.id">{{ l_type.type }}</option>
-                            </select>
+                        <select  style="border-radius: 1.25rem!important;"  class="form-control form-control-sm custom-scrollbar" (change)="typeChange($event, i)"  >
+                          <option>Select</option>
+                          <option *ngFor="let l_type of locker_type" [selected]="locker.locker_type==l_type.id" [value]="l_type.id">{{ l_type.type }}</option>
+                        </select>
                       </div>
                       <div class="form-group col-4">
-                        <input type="text" style="border-radius: 1.25rem!important;" disabled value="{{locker.locker_id}}" class="form-control form-control-sm custom-scrollbar" tabindex="1"  >
+                        <input type="text" style="border-radius: 1.25rem!important;" disabled [value]="locker.locker_id" class="form-control form-control-sm custom-scrollbar" tabindex="1"  >
                       </div>
                       <div class="form-group col-4">
-                        <select  style="border-radius: 1.25rem!important;" value="{{locker.locker_status}}"  class="form-control form-control-sm custom-scrollbar" (change)="statusChange($event, i)" >
-                            <option *ngFor="let l_type of locker_status" [value]="l_type.id">{{ l_type.type }}</option>
+                        <select  style="border-radius: 1.25rem!important;"   class="form-control form-control-sm custom-scrollbar" (change)="statusChange($event, i)" >
+                          <option>Select</option>
+                          <option *ngFor="let l_type of locker_status" [selected]="locker.locker_status==l_type.id" [value]="l_type.id">{{ l_type.type }}</option>
                             </select>
                       </div>
                     </div>

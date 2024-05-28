@@ -108,60 +108,60 @@
                   <!-- <div class="form-group col-12">
                     <small for="acc_num">Name</small>
                     <input type="text" class="form-control form-control-sm" formControlName="acc_num" id="acc_num"
-                      placeholder="Name" disabled>
+                      placeholder="Name" [readonly]="true">
                   </div> -->
                   <div class="form-group col-6">
                     <small for="constitution_cd">Constitution</small>
                     <input type="text" class="form-control form-control-sm" formControlName="constitution_cd" id="constitution_cd"
-                    hidden disabled>
+                    hidden [readonly]="true">
                   <input type="text" class="form-control form-control-sm" formControlName="constitution_cd_desc"
-                    id="constitution_cd_desc" disabled>
+                    id="constitution_cd_desc" [readonly]="true">
                   </div>
                   <div class="form-group col-6">
                     <small for="dep_period">Deposit Period</small>
                     <input type="text" class="form-control form-control-sm" formControlName="dep_period" id="dep_period"
-                       disabled>
+                       [readonly]="true">
                   </div>
                   <div class="form-group col-6">
                     <small for="opening_dt">Opening Date</small>
                     <input type="text" class="form-control form-control-sm" formControlName="opening_dt" id="opening_dt"
-                      disabled>
+                      [readonly]="true">
                   </div>
                   <div class="form-group col-6">
                     <small for="mat_dt">Maturity Date</small>
                     <input type="text" class="form-control form-control-sm" formControlName="mat_dt" id="mat_dt"
-                       disabled>
+                       [readonly]="true">
                   </div>
                   <div class="form-group col-6">
                     <small for="prn_amt">Principal Amount</small>
                     <input type="text" class="form-control form-control-sm" formControlName="prn_amt" id="prn_amt"
-                      disabled>
+                      [readonly]="true">
                   </div>
                   <div class="form-group col-6">
                     <small for="clr_bal">Cleared Balance</small>
-                    <input type="text" class="form-control form-control-sm" formControlName="clr_bal" id="clr_bal" disabled>
+                    <input type="text" class="form-control form-control-sm" formControlName="clr_bal" id="clr_bal" [readonly]="true">
                   </div>
                   <div class="form-group col-6">
                     <small for="curr_bal">Current Balance</small>
-                    <input type="text" class="form-control form-control-sm" formControlName="curr_bal" id="curr_bal" disabled>
+                    <input type="text" class="form-control form-control-sm" formControlName="curr_bal" id="curr_bal" [readonly]="true">
                   </div>
                   <div class="form-group col-6">
                     <small for="oprn_instr_cd">Operation</small>
                     <input type="text" class="form-control form-control-sm" formControlName="oprn_instr_cd" id="oprn_instr_cd"
-                      disabled hidden>
+                      [readonly]="true" hidden>
                     <input type="text" class="form-control form-control-sm" formControlName="oprn_instr_cd_desc"
-                      id="oprn_instr_cd_desc" disabled>
+                      id="oprn_instr_cd_desc" [readonly]="true">
                   </div>
     
                   <div class="form-group col-6">
                     <small for="intt_rt">Interest Rate</small>
                     <input type="text" class="form-control form-control-sm" formControlName="intt_rt" id="intt_rt"
-                       disabled>
+                       [readonly]="true">
                   </div>
                   <div class="form-group col-6">
                     <small for="intt_amt">Interest Amount</small>
                     <input type="text" class="form-control form-control-sm" formControlName="intt_amt" id="intt_amt"
-                       disabled>
+                       [readonly]="true">
                   </div>
                 </div>
                 <button  type="button" class="btn btn-link" *ngIf="selectedAccountType === 6"
@@ -327,68 +327,68 @@
             <div class="form-row">
               <div class="form-group col-6">
                 <small for="acc_type_cd">Account Type</small>
-                <input type="text" class="form-control form-control-sm" formControlName="acc_type_cd" id="acc_type_cd" disabled>
+                <input type="text" class="form-control form-control-sm" formControlName="acc_type_cd" id="acc_type_cd" [readonly]="true">
               </div>
               <div class="form-group col-6">
                 <small for="acc_num">A/C</small>
-                <input type="text" class="form-control form-control-sm" formControlName="acc_num" id="acc_num" disabled>
+                <input type="text" class="form-control form-control-sm" formControlName="acc_num" id="acc_num" [readonly]="true">
               </div>
               <div class="form-group col-6">
                 <small for="trans_type">Transaction Type</small>
-                <input type="text" class="form-control form-control-sm" formControlName="trans_type" id="trans_type" disabled>
+                <input type="text" class="form-control form-control-sm" formControlName="trans_type" id="trans_type" [readonly]="true">
               </div>
               <div class="form-group col-6">
                 <small for="trans_mode">Transaction Mode</small>
-                <input type="text" class="form-control form-control-sm" formControlName="trans_mode" id="trans_mode" disabled>
+                <input type="text" class="form-control form-control-sm" formControlName="trans_mode" id="trans_mode" [readonly]="true">
               </div>
               <div class="form-group col-6">
                 <small for="amount">Amount </small>
-                <input type="text" class="form-control form-control-sm" formControlName="amount" id="amount" disabled>
+                <input type="text" class="form-control form-control-sm" formControlName="amount" id="amount" [readonly]="true">
               </div>
               <div class="form-group col-6">
                 <small for="curr_intt_recov">Interest</small>
                 <input type="text" class="form-control form-control-sm" formControlName="curr_intt_recov" id="curr_intt_recov"
-                  disabled>
+                  [readonly]="true">
               </div>
               <div class="form-group col-6">
                 <small for="ovd_intt_recov">TDS</small>
                 <input type="text" class="form-control form-control-sm" formControlName="ovd_intt_recov" id="ovd_intt_recov"
-                  disabled>
+                  [readonly]="true">
               </div>
               <!-- <div class="form-group col-6">
                 <small for="amount">Total Amount</small>
-                <input type="text" class="form-control form-control-sm" formControlName="amount" id="amount" disabled>
+                <input type="text" class="form-control form-control-sm" formControlName="amount" id="amount" [readonly]="true">
               </div> -->
               <div class="form-group col-6">
                 <small for="tot_amount">Total Amount</small>
-                <input type="text" class="form-control form-control-sm" formControlName="tot_amount" id="tot_amount" disabled>
+                <input type="text" class="form-control form-control-sm" formControlName="tot_amount" id="tot_amount" [readonly]="true">
               </div>
             </div>
             <div class="form-row">
               <div class="form-group col-6">
                 <small for="instrument_dt">Instrument Date</small>
                 <input type="text" class="form-control form-control-sm" formControlName="instrument_dt" id="instrument_dt"
-                  disabled>
+                  [readonly]="true">
               </div>
               <div class="form-group col-6">
                 <small for="instrument_num">Instrument Number</small>
                 <input type="text" class="form-control form-control-sm" formControlName="instrument_num" id="instrument_num"
-                  disabled>
+                  [readonly]="true">
               </div>
               <div class="form-group col-12">
                 <small for="paid_to">Paid To</small>
-                <input type="text" class="form-control form-control-sm" formControlName="paid_to" id="paid_to" disabled>
+                <input type="text" class="form-control form-control-sm" formControlName="paid_to" id="paid_to" [readonly]="true">
               </div>
               <div class="form-group col-6">
                 <small for="trf_type">tranaction Type</small>
-                <input type="text" class="form-control form-control-sm" formControlName="trf_type" id="trf_type" disabled>
+                <input type="text" class="form-control form-control-sm" formControlName="trf_type" id="trf_type" [readonly]="true">
               </div>
             </div>
             <div class="form-row">
               <div class="form-group col-6">
                 <small for="approval_status">Approval Status</small>
                 <input type="text" class="form-control form-control-sm" formControlName="approval_status" id="approval_status"
-                  disabled>
+                  [readonly]="true">
               </div>
             </div>
             <button  type="button" class="btn btn-link" *ngIf="undefined !== tmDenominationTransLst && tmDenominationTransLst.length > 0" (click)="openModal(content)">
@@ -451,13 +451,13 @@
               transfer.remarks +' / ' +transfer.created_by + '(' +transfer.acc_num + ')'}}</td>
             <td *ngIf="transfer.acc_num === '0000'"></td>
             <td *ngIf="transfer.acc_num !== '0000'"></td>
-            <td *ngIf="transfer.acc_num === '0000'">{{transfer.acc_type_cd + ' - ' + transfer.acc_name}}</td>
+            <td *ngIf="transfer.acc_num === '0000'">{{transfer.acc_type_cd}}</td>
             <td>&#8377;{{transfer.amount}}</td>
           </tr>
           <tr>
             <td></td>
             <td></td>
-            <td style="text-align: center!important;"><strong>Total</strong></td>
+            <td style="text-align: left!important;"><strong>Total</strong></td>
             <td><strong>&#8377;{{totalOfDenomination}}</strong></td>
           </tr>
         </tbody>

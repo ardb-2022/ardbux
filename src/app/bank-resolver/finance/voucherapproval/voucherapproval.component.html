@@ -34,7 +34,7 @@
         <div class="input-group">
           <!-- <input id="fromDate" class="form-control" placeholder="yyyy-mm-dd" name="fd" [ngModel]="fromdate  | date:'yyyy-MM-dd' " formControlName="fromDate"
             id="fd" type="date"> -->
-            <input type="text" placeholder="dd/mm/yyyy" class="form-control" [ngModel]="fromdate" disabled bsDatepicker
+            <input type="text" placeholder="dd/mm/yyyy" class="form-control" [ngModel]="fromdate" [readonly]="true" bsDatepicker
             formControlName="fromDate" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }"
             [isOpen]="isOpenFromDp">
           <div class="input-group-append">
@@ -204,8 +204,8 @@
               <tbody>
                 <tr formArrayName="VoucherF" *ngFor="let item of voucherData.controls; let i = index;">
                   <div [formGroupName]="i">
-                    <td style="width: 12%"><input formControlName="dr_cr" type="text" disabled class="form-control fonm-control-sm"></td>
-                    <td style="width: 11%"><input formControlName="acc_cd" type="text" disabled class="form-control form-control-sm"></td>
+                    <td style="width: 12%"><input formControlName="dr_cr" type="text" [readonly]="true" class="form-control fonm-control-sm"></td>
+                    <td style="width: 11%"><input formControlName="acc_cd" type="text" [readonly]="true" class="form-control form-control-sm"></td>
                     <td style="width: 47%">
                       <!-- <div class="ng-autocomplete"> -->
                       <ng-autocomplete [data]="maccmaster" [searchKeyword]="keyword"  placeHolder="Account Name"
@@ -232,9 +232,9 @@
                       <!-- </div> -->
                     </td>
                     <!-- <td style="width: 40%"><input formControlName="desc"  type="text" class="form-control"></td> -->
-                    <td style="width: 11%"><input formControlName="dr_amt" disabled (input)="drAmountInput(i,$event)" type="number"
+                    <td style="width: 11%"><input formControlName="dr_amt" [readonly]="true" (input)="drAmountInput(i,$event)" type="number"
                         class="form-control form-control-sm"></td>
-                    <td style="width: 11%"><input formControlName="cr_amt" disabled (input)="crAmountInput(i,$event)" type="number"
+                    <td style="width: 11%"><input formControlName="cr_amt" [readonly]="true" (input)="crAmountInput(i,$event)" type="number"
                         class="form-control form-control-sm"></td>
                         <td style="width: 8%"></td>
                     <!-- <td style="width: 10%"><button mat-raised-button class="btn btn-rounded btn-primary btn-primary-spacing btn-sm"

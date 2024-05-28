@@ -1,275 +1,274 @@
 [
-    {
-      "ardB_CD": "1",
-      "name": "South 24 Parganas ARDB Ltd.",
-      "full_name": "South 24 Parganas Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 304.0,
-      "bank_name": "SPARDBUX"
-    },
-    {
-      "ardB_CD": "2",
-      "name": "Contai ARDB Ltd.",
-      "full_name": "Contai Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 19.0,
-      "bank_name": "CTARDBUX"
-    },
-    {
-      "ardB_CD": "3",
-      "name": "Tamluk ARDB Ltd.",
-      "full_name": "Tamluk Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 317.0,
-      "bank_name": "TMARDBUX"
-    },
-    {
-      "ardB_CD": "4",
-      "name": "Ghatal ARDB Ltd.",
-      "full_name": "Ghatal Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 318.0,
-      "bank_name": "GARDBUX"
-    },
-    {
-      "ardB_CD": "5",
-      "name": "Jhargram ARDB Ltd.",
-      "full_name": "Jhargram Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 703.0,
-      "bank_name": ""
-    },
-    {
-      "ardB_CD": "6",
-      "name": "Midnapore ARDB Ltd.",
-      "full_name": "Midnapore Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 318.0,
-      "bank_name": ""
-    },
-    {
-      "ardB_CD": "7",
-      "name": "Alipurduar ARDB Ltd.",
-      "full_name": "Alipurduar Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 664.0,
-      "bank_name": ""
-    },
-    {
-      "ardB_CD": "8",
-      "name": "Jalpaiguri ARDB Ltd.",
-      "full_name": "Jalpaiguri Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 314.0,
-      "bank_name": ""
-    },
-    {
-      "ardB_CD": "9",
-      "name": "Coochbehar ARDB Ltd.",
-      "full_name": "Coochbehar Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 308.0,
-      "bank_name": ""
-    },
-    {
-      "ardB_CD": "10",
-      "name": "Dakshin Dinajpur ARDB Ltd.",
-      "full_name": "Dakshin Dinajpur Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 310.0,
-      "bank_name": "DDDARDBUX"
-    },
-    {
-      "ardB_CD": "11",
-      "name": "Raiganj ARDB Ltd.",
-      "full_name": "Raiganj Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 311.0,
-      "bank_name": "RCARDBUX"
-    },
-    {
-      "ardB_CD": "12",
-      "name": "Malda ARDB Ltd.",
-      "full_name": "Malda Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 316.0,
-      "bank_name": ""
-    },
-    {
-      "ardB_CD": "15",
-      "name": "North 24 Parganas ARDB Ltd.",
-      "full_name": "North 24 Parganas Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 303.0,
-      "bank_name": ""
-    },
-    {
-      "ardB_CD": "16",
-      "name": "Kandi ARDB Ltd.",
-      "full_name": "Kandi Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 319.0,
-      "bank_name": "KANDIARDBUX"
-    },
-    {
-      "ardB_CD": "17",
-      "name": "Murshidabad ARDB Ltd.",
-      "full_name": "Murshidabad Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 319.0,
-      "bank_name": "MUARDBUX"
-    },
-    {
-      "ardB_CD": "18",
-      "name": "Hooghly ARDB Ltd.",
-      "full_name": "Hooghly Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 312.0,
-      "bank_name": ""
-    },
-    {
-      "ardB_CD": "19",
-      "name": "Arambagh ARDB Ltd.",
-      "full_name": "Arambagh Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 312.0,
-      "bank_name": ""
-    },
-    {
-      "ardB_CD": "20",
-      "name": "Birbhum ARDB Ltd.",
-      "full_name": "Birbhum Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 307.0,
-      "bank_name": "ARDBUX"
-    },
-    {
-      "ardB_CD": "21",
-      "name": "Rampurhat ARDB Ltd.",
-      "full_name": "Rampurhat Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 307.0,
-      "bank_name": ""
-    },
-    {
-      "ardB_CD": "22",
-      "name": "Bankura ARDB Ltd.",
-      "full_name": "Bankura Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 305.0,
-      "bank_name": ""
-    },
-    {
-      "ardB_CD": "23",
-      "name": "Howrah ARDB Ltd.",
-      "full_name": "Howrah Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 313.0,
-      "bank_name": ""
-    },
-    {
-      "ardB_CD": "24",
-      "name": "Nadia ARDB Ltd.",
-      "full_name": "Nadia Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 320.0,
-      "bank_name": ""
-    },
-    {
-      "ardB_CD": "25",
-      "name": "Katwa-Kalna ARDB Ltd.",
-      "full_name": "Katwa-Kalna Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 306.0,
-      "bank_name": ""
-    },
-    {
-      "ardB_CD": "26",
-      "name": "Burdwan ARDB Ltd.",
-      "full_name": "Burdwan Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 704.0,
-      "bank_name": "BMARDBUX"
-    },
-    
-    {
-      "ardB_CD": "200",
-      "name": "Tamluk Main Branch",
-      "full_name": "Tamluk Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 317.0,
-      "bank_name": "GARDBUXBR"
-    },
-    {
-      "ardB_CD": "300",
-      "name": "Tamluk Panskura Branch",
-      "full_name": "Tamluk Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 317.0,
-      "bank_name": "TMARDBUXBR1"
-    }
-    ,
-    {
-      "ardB_CD": "301",
-      "name": "Tamluk Deulia Branch",
-      "full_name": "Tamluk Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 317.0,
-      "bank_name": "TMARDBUXBR2"
-    }
-    ,
-    {
-      "ardB_CD": "302",
-      "name": "Tamluk Moyna Branch",
-      "full_name": "Tamluk Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 317.0,
-      "bank_name": "TMARDBUXBR3"
-    }
-    ,
-    {
-      "ardB_CD": "303",
-      "name": "Tamluk Chandipur Branch",
-      "full_name": "Tamluk Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 317.0,
-      "bank_name": "TMARDBUXBR4"
-    },
-    {
-      "ardB_CD": "304",
-      "name": "Tamluk Khanchi Branch",
-      "full_name": "Tamluk Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 317.0,
-      "bank_name": "TMARDBUXBR5"
-    },
-    {
-      "ardB_CD": "305",
-      "name": "Tamluk Nandigram Branch",
-      "full_name": "Tamluk Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 317.0,
-      "bank_name": "TMARDBUXBR6"
-    },
-    {
-      "ardB_CD": "306",
-      "name": "Tamluk Reapara Branch",
-      "full_name": "Tamluk Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 317.0,
-      "bank_name": "TMARDBUXBR7"
-    },
-    {
-      "ardB_CD": "307",
-      "name": "Tamluk Head Office",
-      "full_name": "Tamluk Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 317.0,
-      "bank_name": "TMARDBUXBR8"
-    },
-    {
-      "ardB_CD": "400",
-      "name": "South 24 Parganas Jaynagar Branch.",
-      "full_name": "South 24 Parganas Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 317.0,
-      "bank_name": "TMARDBUXUAT"
-    },
-    {
-      "ardB_CD": "401",
-      "name": "South 24 Parganas Kakdwip Branch.",
-      "full_name": "South 24 Parganas Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 319.0,
-      "bank_name": "MUARDBUXBR1"
-    },
-    {
-      "ardB_CD": "402",
-      "name": "South 24 Parganas Canning Branch.",
-      "full_name": "South 24 Parganas Co-Operative Agriculture & Rural Development Bank Ltd.",
-      "dist_code": 319.0,
-      "bank_name": "MUARDBUXBR2"
-    },
-    
-    {
-      "ardB_CD": "99",
-      "name": "Burdwan UAT Test.",
-      "full_name": "Burdwan UAT Test.",
-      "dist_code": 704.0,
-      "bank_name": "BMARDBUXUAT"
-    },
-    {
-      "ardB_CD": "100",
-      "name": "Contai UAT Test .",
-      "full_name": "Contai UAT Test",
-      "dist_code": 317.0,
-      "bank_name": "ARDBTESTUX"
-    }
-  ]
+  {
+    "ardB_CD": "1",
+    "name": "South 24 Parganas ARDB Ltd.",
+    "full_name": "South 24 Parganas Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 304.0,
+    "bank_name": "SPARDBUX"
+  },
+  {
+    "ardB_CD": "2",
+    "name": "Contai ARDB Ltd.",
+    "full_name": "Contai Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 19.0,
+    "bank_name": "CTARDBUX"
+  },
+  {
+    "ardB_CD": "3",
+    "name": "Tamluk ARDB Ltd.",
+    "full_name": "Tamluk Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 317.0,
+    "bank_name": "TMARDBUX"
+  },
+  {
+    "ardB_CD": "4",
+    "name": "Ghatal ARDB Ltd.",
+    "full_name": "Ghatal Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 318.0,
+    "bank_name": "GARDBUX"
+  },
+  {
+    "ardB_CD": "5",
+    "name": "Jhargram ARDB Ltd.",
+    "full_name": "Jhargram Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 703.0,
+    "bank_name": ""
+  },
+  {
+    "ardB_CD": "6",
+    "name": "Midnapore ARDB Ltd.",
+    "full_name": "Midnapore Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 318.0,
+    "bank_name": ""
+  },
+  {
+    "ardB_CD": "7",
+    "name": "Alipurduar ARDB Ltd.",
+    "full_name": "Alipurduar Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 664.0,
+    "bank_name": ""
+  },
+  {
+    "ardB_CD": "8",
+    "name": "Jalpaiguri ARDB Ltd.",
+    "full_name": "Jalpaiguri Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 314.0,
+    "bank_name": "JPARDBUX"
+  },
+  {
+    "ardB_CD": "9",
+    "name": "Coochbehar ARDB Ltd.",
+    "full_name": "Coochbehar Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 308.0,
+    "bank_name": ""
+  },
+  {
+    "ardB_CD": "10",
+    "name": "Dakshin Dinajpur ARDB Ltd.",
+    "full_name": "Dakshin Dinajpur Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 310.0,
+    "bank_name": "DDDARDBUX"
+  },
+  {
+    "ardB_CD": "11",
+    "name": "Raiganj ARDB Ltd.",
+    "full_name": "Raiganj Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 311.0,
+    "bank_name": "RCARDBUX"
+  },
+  {
+    "ardB_CD": "12",
+    "name": "Malda ARDB Ltd.",
+    "full_name": "Malda Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 316.0,
+    "bank_name": ""
+  },
+  {
+    "ardB_CD": "15",
+    "name": "North 24 Parganas ARDB Ltd.",
+    "full_name": "North 24 Parganas Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 303.0,
+    "bank_name": ""
+  },
+  {
+    "ardB_CD": "16",
+    "name": "Kandi ARDB Ltd.",
+    "full_name": "Kandi Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 319.0,
+    "bank_name": "KANDIARDBUX"
+  },
+  {
+    "ardB_CD": "17",
+    "name": "Murshidabad ARDB Ltd.",
+    "full_name": "Murshidabad Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 319.0,
+    "bank_name": "MUARDBUX"
+  },
+  {
+    "ardB_CD": "18",
+    "name": "Hooghly ARDB Ltd.",
+    "full_name": "Hooghly Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 312.0,
+    "bank_name": ""
+  },
+  {
+    "ardB_CD": "19",
+    "name": "Arambagh ARDB Ltd.",
+    "full_name": "Arambagh Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 312.0,
+    "bank_name": "ACARDBUX"
+  },
+  {
+    "ardB_CD": "20",
+    "name": "Birbhum ARDB Ltd.",
+    "full_name": "Birbhum Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 307.0,
+    "bank_name": "ARDBUX"
+  },
+  {
+    "ardB_CD": "21",
+    "name": "Rampurhat ARDB Ltd.",
+    "full_name": "Rampurhat Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 307.0,
+    "bank_name": ""
+  },
+  {
+    "ardB_CD": "22",
+    "name": "Bankura ARDB Ltd.",
+    "full_name": "Bankura District Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 305.0,
+    "bank_name": "BKARDBUX"
+  },
+  {
+    "ardB_CD": "23",
+    "name": "Howrah ARDB Ltd.",
+    "full_name": "Howrah District Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 313.0,
+    "bank_name": "HARDBUX"
+  },
+  {
+    "ardB_CD": "24",
+    "name": "Nadia ARDB Ltd.",
+    "full_name": "Nadia Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 320.0,
+    "bank_name": ""
+  },
+  {
+    "ardB_CD": "25",
+    "name": "Katwa-Kalna ARDB Ltd.",
+    "full_name": "Katwa-Kalna Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 306.0,
+    "bank_name": ""
+  },
+  {
+    "ardB_CD": "26",
+    "name": "Burdwan ARDB Ltd.",
+    "full_name": "Burdwan Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 704.0,
+    "bank_name": "BMARDBUX"
+  },
+  
+  {
+    "ardB_CD": "200",
+    "name": "Tamluk Main Branch",
+    "full_name": "Tamluk Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 317.0,
+    "bank_name": "GARDBUXBR"
+  },
+  {
+    "ardB_CD": "300",
+    "name": "Tamluk Panskura Branch",
+    "full_name": "Tamluk Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 317.0,
+    "bank_name": "TMARDBUXBR1"
+  }
+  ,
+  {
+    "ardB_CD": "301",
+    "name": "Tamluk Deulia Branch",
+    "full_name": "Tamluk Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 317.0,
+    "bank_name": "TMARDBUXBR2"
+  }
+  ,
+  {
+    "ardB_CD": "302",
+    "name": "Tamluk Moyna Branch",
+    "full_name": "Tamluk Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 317.0,
+    "bank_name": "TMARDBUXBR3"
+  }
+  ,
+  {
+    "ardB_CD": "303",
+    "name": "Tamluk Chandipur Branch",
+    "full_name": "Tamluk Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 317.0,
+    "bank_name": "TMARDBUXBR4"
+  },
+  {
+    "ardB_CD": "304",
+    "name": "Tamluk Khanchi Branch",
+    "full_name": "Tamluk Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 317.0,
+    "bank_name": "TMARDBUXBR5"
+  },
+  {
+    "ardB_CD": "305",
+    "name": "Tamluk Nandigram Branch",
+    "full_name": "Tamluk Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 317.0,
+    "bank_name": "TMARDBUXBR6"
+  },
+  {
+    "ardB_CD": "306",
+    "name": "Tamluk Reapara Branch",
+    "full_name": "Tamluk Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 317.0,
+    "bank_name": "TMARDBUXBR7"
+  },
+  {
+    "ardB_CD": "307",
+    "name": "Tamluk Head Office",
+    "full_name": "Tamluk Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 317.0,
+    "bank_name": "TMARDBUXBR8"
+  },
+  {
+    "ardB_CD": "400",
+    "name": "South 24 Parganas Jaynagar Branch.",
+    "full_name": "South 24 Parganas Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 317.0,
+    "bank_name": "TMARDBUXUAT"
+  },
+  {
+    "ardB_CD": "401",
+    "name": "South 24 Parganas Kakdwip Branch.",
+    "full_name": "South 24 Parganas Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 319.0,
+    "bank_name": "MUARDBUXBR1"
+  },
+  {
+    "ardB_CD": "402",
+    "name": "South 24 Parganas Canning Branch.",
+    "full_name": "South 24 Parganas Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "dist_code": 319.0,
+    "bank_name": "MUARDBUXBR2"
+  },
+  
+  {
+    "ardB_CD": "99",
+    "name": "Burdwan UAT Test.",
+    "full_name": "Burdwan UAT Test.",
+    "dist_code": 704.0,
+    "bank_name": "BMARDBUXUAT"
+  },
+  {
+    "ardB_CD": "100",
+    "name": "Contai UAT Test .",
+    "full_name": "Contai UAT Test",
+    "dist_code": 317.0,
+    "bank_name": "ARDBTESTUX"
+  }
+]
 
- 

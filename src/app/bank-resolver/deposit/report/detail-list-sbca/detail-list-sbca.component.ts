@@ -204,7 +204,7 @@ export class DetailListSBCAComponent implements OnInit,AfterViewInit {
         // 'const_cd' : this.reportcriteria.controls.constitution_cd.value,
         'from_dt' : this.fromdate.toISOString()
       }
-      this.printedId=this.reportcriteria.controls.acc_type_cd.value=="7"?"trial777":"trial111"
+      this.printedId=this.reportcriteria.controls.acc_type_cd.value=="7"||this.reportcriteria.controls.acc_type_cd.value=="1"||this.reportcriteria.controls.acc_type_cd.value=="8"?"trial777":"trial111"
       this.svc.addUpdDel('Deposit/PopulateDLSavingsAll',dt).subscribe(data=>{
         this.sendData()
         console.log(data)
@@ -212,7 +212,7 @@ export class DetailListSBCAComponent implements OnInit,AfterViewInit {
         if(this.reportData.length==0){
           this.comSer.SnackBar_Nodata()
         } 
-        if(this.reportcriteria.controls.acc_type_cd.value=="7"){
+        if(this.reportcriteria.controls.constitution_cd.value!='0'){
           for(let i=0;i<this.reportData.length;i++){
             if(this.reportData[i]?.constype.constitution_cd==this.reportcriteria.controls.constitution_cd.value)
             {
@@ -222,16 +222,7 @@ export class DetailListSBCAComponent implements OnInit,AfterViewInit {
               this.dataSource2.data=this.reportData[i]?.ttsbcadtllist;
               debugger
             }
-            // else{
-            //   debugger
-            //   this.showAlert = true;
-            //   // this.HandleMessage(true, MessageType.Error, 'Please select correct transfer type or put transfer value');
-            //   this.alertMsg = 'No data foud with this Constitution';
-            //   this.dataSource2.data=[];
-            // }
           }
-          
-
         }
         else{
           for(let i=0;i<this.reportData.length;i++){

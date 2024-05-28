@@ -70,7 +70,7 @@ export class GoldTestAndValuationReportComponent implements OnInit {
   tot_net_value:number=0;
   tot_act_rate:number=0;
   tot_eligibility:number=0;
-  tot_sanction:Number=0
+  tot_sanction:any=0
   ardbName=localStorage.getItem('ardb_name');
   ardbCD=localStorage.getItem('__ardb_cd');
   branchName=this.sys.BranchName;

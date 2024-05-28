@@ -1,0 +1,15 @@
+@media print{
+    #fastPage{
+        page-break-after: avoid!important;
+        page-break-before: avoid!important;
+        font-size:x-large!important;
+        
+    }
+    
+    #fastPage,p{font-weight: 600!important;}
+}
+#fastPage{
+    font-weight: 600!important;
+}p{
+    font-size:x-large!important
+}

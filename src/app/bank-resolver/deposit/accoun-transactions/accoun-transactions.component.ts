@@ -67,7 +67,8 @@ export class AccounTransactionsComponent implements OnInit {
   custBrnCd:any;
   MIScloseInt:any;
   matInt: any;
-  Formatamount:any
+  Formatamount:any;
+  selOprn2:any;
   sys = new SystemValues();
   accTransFrm: FormGroup;
   tdDefTransFrm: FormGroup;
@@ -92,6 +93,7 @@ export class AccounTransactionsComponent implements OnInit {
   tm_transferList: tm_transfer[] = [];
   accountTypeList: mm_acc_type[] = [];
   accountTypeList2: mm_acc_type[] = [];
+  accountTypeList3: mm_acc_type[] = [];
   acc_master: m_acc_master[] = [];
   acc_master1: m_acc_master[] = [];
   tm_deposit = new tm_deposit();
@@ -1021,6 +1023,30 @@ console.log(this.accDtlsFrm.controls.mat_amt.value);
 
   /** method fires on account type change */
   public onAcctTypeChange(): void {
+    this.accountTypeList3=[]
+    if(this.accTransFrm.controls.acc_type_cd.value==1){
+      this.accountTypeList3 = this.accountTypeList.filter(c => c.dep_loan_flag === 'D');
+      this.accountTypeList3 =this.accountTypeList3.filter(e=>e.acc_type_cd!=2 && e.acc_type_cd!=3 && e.acc_type_cd!=4 && e.acc_type_cd!=5 && e.acc_type_cd!=6 && e.acc_type_cd!=11)
+      this.accountTypeList3 = this.accountTypeList3.sort((a, b) => (a.acc_type_cd > b.acc_type_cd) ? 1 : -1);
+    }
+    else if(this.accTransFrm.controls.acc_type_cd.value==7){
+      this.accountTypeList3 = this.accountTypeList.filter(c => c.dep_loan_flag === 'D');
+      this.accountTypeList3 =this.accountTypeList3.filter(e=>e.acc_type_cd!=2 && e.acc_type_cd!=3 && e.acc_type_cd!=4 && e.acc_type_cd!=5 && e.acc_type_cd!=6 && e.acc_type_cd!=11)
+      this.accountTypeList3 = this.accountTypeList3.sort((a, b) => (a.acc_type_cd > b.acc_type_cd) ? 1 : -1);
+    }
+    else if(this.accTransFrm.controls.acc_type_cd.value==8){
+      this.accountTypeList3 = this.accountTypeList.filter(c => c.dep_loan_flag === 'D');
+      this.accountTypeList3 =this.accountTypeList3.filter(e=>e.acc_type_cd!=2 && e.acc_type_cd!=3 && e.acc_type_cd!=4 && e.acc_type_cd!=5 && e.acc_type_cd!=6 && e.acc_type_cd!=11)
+      this.accountTypeList3 = this.accountTypeList3.sort((a, b) => (a.acc_type_cd > b.acc_type_cd) ? 1 : -1);
+    }
+    else if(this.accTransFrm.controls.acc_type_cd.value==9){
+      this.accountTypeList3 = this.accountTypeList.filter(c => c.dep_loan_flag === 'D');
+      this.accountTypeList3 =this.accountTypeList3.filter(e=>e.acc_type_cd!=2 && e.acc_type_cd!=3 && e.acc_type_cd!=4 && e.acc_type_cd!=5 && e.acc_type_cd!=6 && e.acc_type_cd!=11)
+      this.accountTypeList3 = this.accountTypeList3.sort((a, b) => (a.acc_type_cd > b.acc_type_cd) ? 1 : -1);
+    }
+    else{
+      this.accountTypeList3 =this.accountTypeList
+    }
     this.suggestedCustomer=[]
     console.log(this.f.acc_type_cd.value)
     this.tm_denominationList = [];
@@ -2734,9 +2760,12 @@ getjoinholder(){
                 
                   this.svc.addUpdDel<any>('Deposit/F_CALCTDINTT_REG', temp_gen_param).subscribe(
                     res => {
-                      console.log(res)
-                      this.closeInt = res;
-                      this.isLoading=false;
+                      if(res){
+                        console.log(res)
+                        this.closeInt = res;
+                        this.isLoading=false;
+                      }
+                      
                       // this.tdDefTransFrm.patchValue({
                       //   interest: +res
                       // });
@@ -3499,7 +3528,7 @@ getjoinholder(){
         this.onDepositePeriodChange()
       
       }
-        if((this.sys.ardbCD!='20') && (afterMatured == true && (accTypCode === 2 || accTypCode == 4||accTypCode == 3))) {
+        if((this.sys.ardbCD!='20' && this.sys.ardbCD!='3') && (afterMatured == true && (accTypCode === 2 || accTypCode == 4||accTypCode == 3))) {
 
         //  if(afterMatured == true && (accTypCode === 2 || accTypCode == 4)) {
           this.modalRefClose = this.modalService.show(this.afterMatRenewal,
@@ -3517,7 +3546,7 @@ getjoinholder(){
               res => {
                 console.log(res)
                 this.matInt = res;
-                  if (this.sys.ardbCD!='20' && (accTypCode == 2||accTypCode == 4 ||accTypCode == 3)) {
+                  if (this.sys.ardbCD!='20' && this.sys.ardbCD!='3' && (accTypCode == 2||accTypCode == 4 ||accTypCode == 3)) {
 
                 //  if (accTypCode == 2||accTypCode == 4) {
                   console.log("hello")
@@ -3627,6 +3656,11 @@ getjoinholder(){
           
           td_def_mat_amt:((+this.tdDefTransFrm.controls.amount.value) + (+this.tdDefTransFrm.controls.curr_intt_recov.value)-(+this.tdDefTransFrm.controls.ovd_intt_recov.value? +this.tdDefTransFrm.controls.ovd_intt_recov.value:0))
         })
+      }
+      if(this.f.acc_type_cd.value==5 ){
+        this.tdDefTransFrm.patchValue({
+          td_def_mat_amt: ((Number(this.td.amount.value)+Number(this.td.curr_intt_recov.value)+Number(this.td.curr_prn_recov))-(+this.td.ovd_intt_recov.value?+this.td.ovd_intt_recov.value:0)),
+        });
       }
     }
   public inttCalOnClose(): void {
@@ -3863,6 +3897,15 @@ getjoinholder(){
       + (+this.td.curr_prn_recov.value)).toFixed(2));
 
       
+  }
+  addBonus(){
+    this.tdDefTransFrm.patchValue({
+
+      td_def_mat_amt: (+this.accNoEnteredForTransaction.prn_amt
+        + (+this.td.curr_intt_recov.value)+(+this.td.curr_prn_recov.value)),
+      // trans_mode:'Close'
+    });
+  
   }
 
   private patchtdDefTransFrm(): void {
@@ -4283,11 +4326,40 @@ getjoinholder(){
   }
 
   onSaveClick(): void {
-    
+   
     console.log(this.td_deftranstrfList);
 
     const accTypeCd = +this.f.acc_type_cd.value;
-    
+    const selectedOperation2 = this.operations.filter
+      (e => e.oprn_cd === +this.f.oprn_cd.value)[0];
+    this.selOprn2 = selectedOperation2;
+    //for FD INTREST PAYMENT
+    if((accTypeCd == 2 || accTypeCd == 5) && this.td.trf_type.value === 'T' && selectedOperation2.oprn_desc.toLocaleLowerCase() == 'interest payment'){
+      if(this.td.amount.value!=this.TrfTotAmt){
+        this.HandleMessage(true, MessageType.Error, 'Transaction amount dose not match with transfer amount..');
+        return;
+      }
+    }
+    if((accTypeCd == 2 || accTypeCd == 3|| accTypeCd == 4 || accTypeCd == 5) && this.showBalance && this.td.trf_type.value === 'T' && selectedOperation2.oprn_desc.toLocaleLowerCase() == 'renewal'){
+      if(this.td.balance.value!=this.TrfTotAmt){
+        this.HandleMessage(true, MessageType.Error, 'Balance amount dose not match with transfer amount..');
+        return;
+      }
+    }
+    if((accTypeCd == 6 ) && this.td.trf_type.value === 'T' && selectedOperation2.oprn_desc.toLocaleLowerCase() == 'rd installment'){
+      if(this.td.amount.value!=this.TrfTotAmt){
+        this.HandleMessage(true, MessageType.Error, 'Transaction amount dose not match with transfer amount..');
+        return;
+      }
+    }
+    if((accTypeCd == 6 || accTypeCd == 5 || accTypeCd == 4 || accTypeCd == 3 ) && this.td.trf_type.value === 'T' && selectedOperation2.oprn_desc.toLocaleLowerCase() == 'close'){
+      if(this.td.td_def_mat_amt.value!=this.TrfTotAmt){
+        this.HandleMessage(true, MessageType.Error, 'Maturity amount dose not match with transfer amount..');
+        return;
+      }
+    }
+   
+    //for FD INTREST PAYMENT
     if ((accTypeCd !== 1 && accTypeCd !== 7 && accTypeCd !== 8 && accTypeCd !== 9)&&(+this.td.amount.value) <= 0) {
       this.HandleMessage(true, MessageType.Error, 'Amount can not be blank');
       return;
@@ -4306,7 +4378,7 @@ getjoinholder(){
     //     }
     //   })
     // }
-    else if(this.td.trf_type.value === 'T' && (this.accTransFrm.controls.acc_type_cd.value==9||this.accTransFrm.controls.acc_type_cd.value==1||this.accTransFrm.controls.acc_type_cd.value==8)){
+    else if(this.td.trf_type.value === 'T' && (this.accTransFrm.controls.acc_type_cd.value==9||this.accTransFrm.controls.acc_type_cd.value==1||this.accTransFrm.controls.acc_type_cd.value==8||this.accTransFrm.controls.acc_type_cd.value==7)){
         if(this.td.amount.value!=this.TrfTotAmt){
           this.HandleMessage(true, MessageType.Error, 'Total Amount can not be more than Transaction amount');
           return;
@@ -4386,6 +4458,7 @@ getjoinholder(){
             return;
           
      }
+     
          
           // this.HandleMessage(true, MessageType.Error,
           //   `Transfer total amount ₹${this.TrfTotAmt}, ` +
@@ -5448,7 +5521,11 @@ getjoinholder(){
   // mapDenominationToTmdenominationtrans(): void {
 
   // }
-
+  CloseInttChange(){
+    this.td.td_def_mat_amt.setValue(+(+(+this.td.amount.value)+(+this.td.curr_intt_recov.value)+(+this.td.curr_prn_recov.value))-(+this.td.ovd_intt_recov.value))
+  console.log();
+  
+  }
   onResetClick(): void {
     // this.showMsg = null;
     this.showNW=true;
@@ -5480,6 +5557,13 @@ getjoinholder(){
     this.mat_val = 0
     this.showCloseInterest = false;
     this.TrfTotAmt = 0;  //marker
+    this.closeInt=0;
+    this.matInt=0;
+    this.aftmatInt=0;
+    this.effInt=0;
+    this.matureIntForMis=0;
+    this.accNoEnteredForTransaction.intt_amt=0;
+    this.preCloseMIS=null;
   }
 
   addDenomination() {
@@ -5547,14 +5631,18 @@ getjoinholder(){
     }
     this.accountTypeList = [];
     this.accountTypeList2 = [];
+    this.accountTypeList3 = [];
 
     this.svc.addUpdDel<any>('Mst/GetAccountTypeMaster', null).subscribe(
       res => {
 
         this.accountTypeList2 = res;
+        this.accountTypeList3 = res;
         this.accountTypeList = res;
         this.accountTypeList = this.accountTypeList.filter(c => c.dep_loan_flag === 'D');
         this.accountTypeList = this.accountTypeList.sort((a, b) => (a.acc_type_cd > b.acc_type_cd) ? 1 : -1);
+       
+       
       });
   }
   onChangeTrf(i: any) {
@@ -6153,6 +6241,3 @@ export class DynamicSelect {
   key: any;
   Description: any;
 }
-
-
-

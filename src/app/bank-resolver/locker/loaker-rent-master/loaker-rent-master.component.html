@@ -21,7 +21,7 @@
           <div class="form-group col-4">
             <small for="acc_type">Locker Type<span class="text-danger">*</span></small>
               <select  style="border-radius: 1.25rem!important;"  class="form-control form-control-sm custom-scrollbar"  formControlName="l_type" >
-                  <option *ngFor="let l_type of locker_type" [value]="l_type.id">{{ l_type.type }}</option>
+                  <option *ngFor="let l_type of locker_type" [selected]="l_type.id">{{ l_type.type }}</option>
                   </select>
             </div>
             <div class="form-group col-4">

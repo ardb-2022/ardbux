@@ -154,7 +154,7 @@ export class InvestmentTransactionsComponent implements OnInit {
     setTimeout(() => {
       this.getOperationMaster();
       this.getAccountTypeList();
-      this.getCustomerList();
+      // this.getCustomerList();
       this.getDenominationList();
       this.getConstitutionList();
       this.getOperationalInstr();
@@ -270,8 +270,14 @@ enable(e:any){
   }
 }
   SelectCustomer(){
+   if(this.masterModel.tddeftrans.approval_status=='U'){
+      this.getUnapprovedDepTransAskViewEditOption()
+      this.suggestedCustomer=null
+    }
+   else{
     this.suggestedCustomer=null
     this.getAccountOpeningTempData();
+   }
   }
   loadInvData(){
     this.isLoading=true;
@@ -303,10 +309,7 @@ enable(e:any){
             this.HandleMessage(true, MessageType.Warning, 'Account still not approved!');
             this.f.acct_num = null;
            return;}
-          else if(this.masterModel.tddeftrans.approval_status=='U'){
-            this.getUnapprovedDepTransAskViewEditOption()
-            
-          } if (this.masterModel.tmdepositInv.acc_num !== null) {
+           if (this.masterModel.tmdepositInv.acc_num !== null) {
 
             this.invComServ.getBankName();
             this.invComServ.getBranchName(this.masterModel.tmdepositInv.bank_cd);
@@ -525,26 +528,7 @@ enable(e:any){
         this.accountTypeList = this.accountTypeList.sort((a, b) => (a.acc_type_cd > b.acc_type_cd) ? 1 : -1);
       });
   }
-  getCustomerList() {
-    const cust = new mm_customer();
-    cust.cust_cd = 0;
-    cust.brn_cd = this.sys.BranchCode;
-
-    // cust.ardb_cd = this.sys.ardbCD;
-    if (this.customerList === undefined || this.customerList === null || this.customerList.length === 0) {
-      this.svc.addUpdDel<any>('UCIC/GetCustomerDtls', cust).subscribe(
-        res => {
-          this.isLoading = false;
-          this.customerList = res;
-        },
-        err => {
-          this.isLoading = false;
-
-        }
-      );
-    }
-    else { this.isLoading = false; }
-  }
+  
   private getDenominationList(): void {
     let denoList: tt_denomination[] = [];
     this.svc.addUpdDel<any>('Common/GetDenomination', null).subscribe(
@@ -683,9 +667,12 @@ enable(e:any){
      }
     if(this.masterModel.tddeftrans.trans_mode=='R'){
       this.showTransactionDtlR==true;
+      this.showTransactionDtlC==false;
+      
     }
     else{
       this.showTransactionDtlR==false;
+      this.showTransactionDtlC==true;
       }
   }
 

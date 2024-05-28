@@ -811,7 +811,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   background-color: #34723A;
 }
 
-
+.mat-mdc-raised-button:enabled{
+  background-color: #34723A !important;
+  color:white!important;
+  border-color: #418b48 !important;
+}
 .btn-primary{
   background-color: #34723A !important;
   color:white!important;
@@ -919,10 +923,10 @@ select{
   background-color: #5b8991 !important;
 }
 .input-group-append{
-  height: 38px!important;
+  height: 36px!important;
 }
 .form-control{
-  height: 38px!important;
+  height: 36px!important;
 }
 .cdk-overlay-pane{
   z-index:9000 !important; 

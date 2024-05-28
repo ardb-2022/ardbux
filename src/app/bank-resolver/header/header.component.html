@@ -9,7 +9,7 @@
         <li><strong>User: </strong>{{sys?.UserId}}</li>
         &nbsp; <li class="date"><strong>Operation Date: </strong> {{sys?.CurrentDate | date:'dd-MM-yyyy'}}</li>
         <!-- &nbsp; <li class="date"><strong>Operation Date: </strong> {{sys?.CurrentDate}}</li> -->
-        <li><strong>Current Date: </strong> {{currDt | date:'dd-MM-yyyy' }} {{currTm}}</li> 
+        <li><strong>Current Date & Time: </strong> {{currDt | date:'dd-MM-yyyy' }} {{currTm}}</li> 
       </ul>
     </div>
   </header>
@@ -22,10 +22,10 @@
       <span *ngIf="item.childMenuConfigs && item.childMenuConfigs.length > 0">
         <button [hidden]="item?.permission=='N'" mat-button class="btn" [matMenuTriggerFor]="menu?.childMenu"><mat-icon>{{item?.iconName}}</mat-icon>
           {{item.menu_name}}
-          <mat-icon>expand_more</mat-icon>
         </button>
+         <mat-icon [hidden]="item?.permission=='N'"  style="padding-top: 10px;">expand_more</mat-icon>
         <app-menu-item #menu [items]="item?.childMenuConfigs"></app-menu-item>
-        <label class = "vertical"></label>
+        <label [hidden]="item?.permission=='N'"  class = "vertical"></label>
       </span>
       <!-- Leaf node buttons here -->
       <span *ngIf="!item.childMenuConfigs || item.childMenuConfigs.length === 0">
@@ -44,10 +44,11 @@
       </li>
     </ul>
     <span class="example-spacer"></span>
+    <span><a class="nav-link" (click)="goToHome()">  <mat-icon style="padding-top: 13px;" class="hm">home</mat-icon>Home </a></span>
+    <span> <a class="nav-link"  (click)="openModal(template)">  <mat-icon style="padding-top: 13px;" class="lo">logout</mat-icon>Logout </a></span>
+        
     
-        <a class="nav-link" (click)="goToHome()">  <mat-icon class="hm">home</mat-icon>Home </a>
-    
-        <a class="nav-link"  (click)="openModal(template)">  <mat-icon class="lo">logout</mat-icon>Logout </a>
+       
         <!-- <a class="nav-link"  (click)="openNewTab()">  <mat-icon class="lo">logout</mat-icon>PLLL </a> -->
    </nav>
 </div>

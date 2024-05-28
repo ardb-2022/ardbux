@@ -294,7 +294,7 @@ broFund:any[]=[]
     this.totOutStanding=0;
     this.totPenal=0;
     for(let p=0;p<this.reportData2.length;p++){
-    for(let i=0;i<this.broFund.length;i++){
+     for(let i=0;i<this.broFund.length;i++){
       if(this.reportData2[p].acc_name==this.broFund[i].acc_type_desc)
       this.reportData.push(this.reportData2[p]);
     }
@@ -338,7 +338,11 @@ broFund:any[]=[]
       }
       this.svc.addUpdDel('Loan/PopulateLoanDetailedListAll',dt).subscribe(data=>{console.log(data)
         this.reportData=data
-        this.reportData2=data
+        for(let i=0;i<this.reportData.length;i++){
+          this.reportData[i].list_dt=this.comser.getFormatedDate(this.reportData[i].list_dt);
+          this.reportData[i].computed_till_dt=this.comser.getFormatedDate(this.reportData[i].computed_till_dt);
+          }
+        this.reportData2=this.reportData
         this.itemsPerPage=this.reportData.length % 50 <=0 ? this.reportData.length: this.reportData.length % 50
         this.isLoading=false
         // if(this.reportData.length<50){

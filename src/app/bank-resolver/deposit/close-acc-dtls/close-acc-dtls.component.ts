@@ -1,4 +1,4 @@
-import { isNumeric } from 'rxjs/internal-compatibility';
+// import { isNumeric } from 'rxjs/internal-compatibility';
 import { SystemValues } from './../../Models/SystemValues';
 
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
@@ -360,9 +360,7 @@ debugger
     }
 
 
-    if (this.tm_deposit.standing_instr_flag !== undefined
-      && this.tm_deposit.standing_instr_flag !== null
-      && isNumeric(this.tm_deposit.standing_instr_flag)) {
+    if (this.tm_deposit.standing_instr_flag) {
       this.setStandingInstrAfterMatu(Number(this.tm_deposit.standing_instr_flag));
     }
 

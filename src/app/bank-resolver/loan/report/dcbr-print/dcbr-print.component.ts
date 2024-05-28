@@ -56,7 +56,8 @@ export class DcbrPrintComponent implements OnInit {
   itemsPerPage = 50;
   currentPage = 1;
   pagedItems = [];
-  reportData:any=[]
+  reportData:any=[];
+  reportData2:any=[];
   ardbName=localStorage.getItem('ardb_name')
   branchName=this.sys.BranchName
 
@@ -164,7 +165,7 @@ export class DcbrPrintComponent implements OnInit {
   diff:any;
   constructor(private datePipe:DatePipe,private comSer:CommonServiceService, private svc: RestService, private formBuilder: FormBuilder,private exportAsService: ExportAsService, private cd: ChangeDetectorRef,
     private modalService: BsModalService, private _domSanitizer: DomSanitizer,
-    private router: Router) { }
+    private router: Router, private comser:CommonServiceService) { }
   ngOnInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
@@ -436,6 +437,11 @@ debugger
       this.svc.addUpdDel('Loan/GetDemandList',dt).subscribe(data=>{console.log(data)
         // this.svc.addUpdDel('Loan/GetDemandListMemberwise',dt).subscribe(data=>{console.log(data)
         this.reportData=data
+        this.reportData2=data
+        for(let i=0;i<this.reportData2.length;i++){
+          this.reportData2[i].disb_dt=this.comser.getFormatedDate(this.reportData2[i].disb_dt);
+          
+        }
         this.itemsPerPage=this.reportData.length % 50 <=0 ? this.reportData.length: this.reportData.length % 50
         this.isLoading=false
         this.dataSource.data=this.reportData

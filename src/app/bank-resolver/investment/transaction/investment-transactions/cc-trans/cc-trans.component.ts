@@ -28,6 +28,8 @@ import { InvestmentTransactionsComponent } from '../investment-transactions.comp
   styleUrls: ['./cc-trans.component.css']
 })
 export class CcTransComponent implements OnInit {
+  acc_close_dt:Date;
+  isOpenODT:boolean=false;
   clickSave:Subscription
   isLoading: boolean;
   showIns:boolean=true;
@@ -103,7 +105,13 @@ export class CcTransComponent implements OnInit {
      }
 
   ngOnInit(): void {
-    this.masterModel=this.invComServ.masterModel
+    this.masterModel=this.invComServ.masterModel;
+    if(this.editDeleteMode){
+      this.acc_close_dt = this.masterModel.tddeftrans.instl_start_dt;
+    }
+    else{
+      this.acc_close_dt = this.sys.CurrentDate;
+    }
     if(this.editDeleteMode==true && this.accNoEnteredForTransaction2.trans_mode=='R'){
       this.accNoEnteredForTransaction=this.masterModel.tmdepositrenewInv;
     }
@@ -203,6 +211,7 @@ export class CcTransComponent implements OnInit {
       trans_cd:[''],
       acc_type_cd:[''],
       acc_type_desc:[''],
+      acc_close_dt:[this.acc_close_dt],
       acc_num:[''],
       trans_type:[''],
       trans_mode1:[''],
@@ -410,8 +419,8 @@ export class CcTransComponent implements OnInit {
       acc_type_desc: acc_desc,
       acc_type_cd: this.accNoEnteredForTransaction.acc_type_cd,
       acc_num: this.accNoEnteredForTransaction.acc_num,
-      trans_mode1:this.showTranDtlRe?'Renewal':'Close',
-      trans_mode:this.showTranDtlRe?'R':'C',
+      trans_mode1:'Renewal',
+      trans_mode:'R',
       amount:this.editDeleteMode?this.accNoEnteredForTransaction.prn_amt:this.accNoEnteredForTransaction.prn_amt+this.accNoEnteredForTransaction.intt_amt,
       // amount:this.accNoEnteredForTransaction.prn_amt+this.accNoEnteredForTransaction.intt_amt,
       // trans_type_key:'D',
@@ -614,9 +623,9 @@ if (undefined !== this.accNoEnteredForTransaction && Object.keys(this.accNoEnter
       console.log(this.invComServ.acc_master);
       console.log(this.acc_master);
       this.td_deftranstrfList=this.masterModel.tddeftranstrf;
-      this.td_deftranstrfList[0].gl_acc_code = this.masterModel.tddeftranstrf[0].acc_cd;
-      this.acc_master1= this.acc_master.filter(x => x.acc_cd.toString().includes(this.td_deftranstrfList[0].gl_acc_code));
-      this.td_deftranstrfList[0].gl_acc_desc=this.acc_master1[0].acc_name;
+      this.td_deftranstrfList[0].gl_acc_code = this.masterModel.tddeftranstrf[0]?.acc_cd;
+      this.acc_master1= this.acc_master.filter(x => x.acc_cd.toString().includes(this.td_deftranstrfList[0]?.gl_acc_code));
+      this.td_deftranstrfList[0].gl_acc_desc=this.acc_master1[0]?.acc_name;
       console.log(this.acc_master1);
       this.sumTransfer()
       console.log(this.td_deftranstrfList);
@@ -674,11 +683,11 @@ onAmtChngDuringRenewal(): void {
     return;
   }
   console.log(this.td.amount.value, this.accDtlsFrm.controls.prn_amt.value)
-  if ((this.td.amount.value + Number(this.td.ovd_intt_recov.value>=0?this.td.ovd_intt_recov.value:0) != this.accDtlsFrm.controls.prn_amt.value) && (this.td.amount.value + Number(this.td.ovd_intt_recov.value>=0?this.td.ovd_intt_recov.value:0) != this.accDtlsFrm.controls.mat_amt.value) ) {
-    this.HandleMessage(true, MessageType.Error, 'Amount should be equal to principal or maturity amount');
-    this.td.amount.setValue(this.accDtlsFrm.controls.mat_amt.value);
-    return;
-  }
+  // if ((this.td.amount.value + Number(this.td.ovd_intt_recov.value>=0?this.td.ovd_intt_recov.value:0) != this.accDtlsFrm.controls.prn_amt.value) && (this.td.amount.value + Number(this.td.ovd_intt_recov.value>=0?this.td.ovd_intt_recov.value:0) != this.accDtlsFrm.controls.mat_amt.value) ) {
+  //   this.HandleMessage(true, MessageType.Error, 'Amount should be equal to principal or maturity amount');
+  //   this.td.amount.setValue(this.accDtlsFrm.controls.mat_amt.value);
+  //   return;
+  // }
   if (this.td.trans_type_key.value === 'D' || this.td.trans_type_key.value === 'W') {
     const mat_amt =(this.masterModel.tmdepositInv.prn_amt
       + this.masterModel.tmdepositInv.intt_amt)-Number(this.td.ovd_intt_recov.value>=0?this.td.ovd_intt_recov.value:0)
@@ -1395,7 +1404,10 @@ debugger
     this.showTranDtlCl=this.invComServ.showTranDtlCl
     this.showTranDtlRe=this.invComServ.showTranDtlRe
     console.log(this.tdDefTransFrmC.controls);
-    
+    // if((this.tdDefTransFrmC.controls.trf_type.value == 'T'||this.tdDefTransFrm.controls.trf_type.value == 'T') && this.TrfTotAmt){
+    //   this.HandleMessage(true, MessageType.Error, 'Please Insert Tranaction Amount.');
+    //   return;
+    // }
 
     debugger;
     if (this.editDeleteMode==false) {
@@ -2391,6 +2403,7 @@ debugger
       const accTypeCd = this.accNoEnteredForTransaction.acc_type_cd;
       // toReturn.trans_dt = new Date(this.convertDate(localStorage.getItem('__currentDate')) + ' UTC');
       toReturn.trans_dt = this.sys.CurrentDate;
+      toReturn.instl_start_dt=this.tdDefTransFrmC.controls.acc_close_dt.value;
       toReturn.acc_type_cd = this.tdDefTransFrmC.controls.acc_type_cd.value;
       toReturn.acc_num = this.tdDefTransFrmC.controls.acc_num.value;
       toReturn.trans_type = this.tdDefTransFrmC.controls.trans_type_key.value;
@@ -2413,6 +2426,7 @@ debugger
         // toReturn.curr_intt_rate=this.editDeleteMode?this.tdDefTransFrmC.controls.eff_intt.value:this.accNoEnteredForTransaction3.intt_rt;
         // toReturn.amount =  Number(this.tdDefTransFrmC.controls.amount.value) + Number(this.tdDefTransFrmC.controls.curr_intt_recov.value);
         toReturn.amount = this.tdDefTransFrmC.controls.amount.value;
+        console.log("pppp",this.tdDefTransFrmC.controls.acc_close_dt.value);
         
         console.log( toReturn.amount);
         debugger
@@ -2829,4 +2843,3 @@ debugger
     }
   }
 }
-

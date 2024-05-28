@@ -19,7 +19,7 @@
           <div class="col-6">
             <small for="fromDate" >From Date</small>
             <div class="input-group">
-              <input type="text" placeholder="dd/mm/yyyy" class="form-control" [ngModel]="fromdate" disabled bsDatepicker
+              <input type="text" placeholder="dd/mm/yyyy" class="form-control" [ngModel]="fromdate" [readonly]="true" bsDatepicker
               formControlName="fromDate" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }"
               [isOpen]="isOpenFromDp">
             <div class="input-group-append">
@@ -32,7 +32,7 @@
           <div class="col-6">
             <small for="toDate" >To Date</small>
             <div class="input-group">
-              <input type="text" placeholder="dd/mm/yyyy" class="form-control" [ngModel]="toDate" disabled bsDatepicker
+              <input type="text" placeholder="dd/mm/yyyy" class="form-control" [ngModel]="toDate" [readonly]="true" bsDatepicker
               formControlName="toDate" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }"
               [isOpen]="isOpenToDp">
             <div class="input-group-append">

@@ -38,7 +38,7 @@ export class DefaulterListComponent implements OnInit {
     ignoreBackdropClick: true // disable backdrop click to close the modal
   };
   trailbalance: tt_trial_balance[] = [];
-  displayedColumns: string[] = ['SLNO','block_name','gp_name','vill_name','party_name', 'acc_num', 'list_dt', 'curr_intt_rate','curr_prn','ovd_prn','plus','curr_intt','ovd_intt','penal_intt','total','computed_till_dt'];
+  displayedColumns: string[] = ['SLNO','block_name','gp_name','vill_name','party_name', 'acc_num', 'list_dt', 'curr_intt_rate','curr_prn','ovd_prn','plus','curr_intt','ovd_intt','penal_intt','total','n_d','computed_till_dt'];
   dataSource = new MatTableDataSource()
   AcctTypes: mm_operation[];
   prp = new p_report_param();

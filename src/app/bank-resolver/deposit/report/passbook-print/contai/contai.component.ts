@@ -216,7 +216,12 @@ export class ContaiComponent implements OnInit {
         console.log(data);
         this.reportData=data
         for (let i = 0; i < this.reportData.length; i++) {
-         this.reportData[i].ardb_cd=this.getMY(this.reportData[i].particulars)
+          if(this.reportData[i].particulars=='DEPOSIT'){
+            this.reportData[i].ardb_cd=this.getMY(this.reportData[i].trans_dt)
+          }
+          else{
+            this.reportData[i].ardb_cd=this.getMY(this.reportData[i].particulars)
+          }
          
         }
         
@@ -390,12 +395,12 @@ export class ContaiComponent implements OnInit {
       
       this.printData=this.passBookData.length>1?this.passBookData.slice():this.passBookData;
       // this.printData=this.passBookData.slice();
-      if(this.lastRowNo == 35){
+      if(this.lastRowNo == 30){
         this.modalRef = this.modalService.show(this.fullpageUpdate, this.config);
         console.log( this.printData);
-      if(this.printData.length>16){
-        this.printData.splice(17, 0, o);
-        this.printData.splice(18, 0, o);
+      if(this.printData.length>13){
+        this.printData.splice(14, 0, o);
+        this.printData.splice(15, 0, o);
         // this.printData.splice(22, 0, o);
         // this.printData.splice(16, 0, o);
         console.log( this.printData);
@@ -406,18 +411,18 @@ export class ContaiComponent implements OnInit {
         // this.updateLineNo();
         // this.updatePassbookStatus();
       }
-      if(this.printData.length >37) {
+      if(this.printData.length >32) {
         for(let i = 0; i< this.printData.length ; i ++) 
         {
           this.afterPrint.push(this.printData[i]);
           this.restItem=this.afterPrint.length;
         }
-          this.printData.splice(37,this.printData.length-37);
+          this.printData.splice(32,this.printData.length-32);
           ;
       }
       
       else{
-        if(this.printData.length>16 && this.printData.length<37){
+        if(this.printData.length>13 && this.printData.length<32){
           this.lastRowNo=this.printData.length-2
           // this.updateLineNo();
           // this.updatePassbookStatus();
@@ -431,26 +436,26 @@ export class ContaiComponent implements OnInit {
         this.printData.unshift(o);
       } 
       console.log( this.printData);
-      if(this.printData.length<16){
+      if(this.printData.length<13){
         this.lastRowNo=this.printData.length
       }
-      else if(this.printData.length>16 && this.printData.length<35){
-        this.printData.splice(17, 0, o);
-        this.printData.splice(18, 0, o);
+      else if(this.printData.length>13 && this.printData.length<31){
+        this.printData.splice(14, 0, o);
+        this.printData.splice(15, 0, o);
         this.lastRowNo=this.printData.length-2;
       }
       else{
-        this.printData.splice(17, 0, o);
-        this.printData.splice(18, 0, o);
+        this.printData.splice(14, 0, o);
+        this.printData.splice(15, 0, o);
         this.lastRowNo=this.printData.length-2;
         for(let i = 0; i< this.printData.length ; i ++) 
         {
-          if(i>36){
+          if(i>31){
           this.afterPrint.push(this.printData[i]);
           this.restItem=this.afterPrint.length;
         }
         }
-          this.printData.splice(37,this.printData.length-37);
+          this.printData.splice(32,this.printData.length-32);
       }
       
       console.log(this.lastRowNo);
@@ -716,15 +721,15 @@ export class ContaiComponent implements OnInit {
         }
         
         console.log( this.printData);
-        if(this.printData.length>0 && this.printData.length<16){
+        if(this.printData.length>0 && this.printData.length<13){
           
           this.restItem=0;
           this.restItem=this.printData.length;
   
         }
-        else if(this.printData.length>16 && this.printData.length<35){
-          this.printData.splice(17, 0, o);
-          this.printData.splice(18, 0, o);
+        else if(this.printData.length>13 && this.printData.length<31){
+          this.printData.splice(14, 0, o);
+          this.printData.splice(15, 0, o);
           this.restItem=0;
           this.lastRowNo=this.printData.length-2
           this.restItem=this.printData.length-2;
@@ -732,20 +737,20 @@ export class ContaiComponent implements OnInit {
         }
        
         
-        else if(this.printData.length >36) {
+        else if(this.printData.length >32) {
           this.afterPrint=[];
           this.restItem=0;
-          this.printData.splice(17, 0, o);
-          this.printData.splice(18, 0, o);
+          this.printData.splice(14, 0, o);
+          this.printData.splice(15, 0, o);
           for(let i = 0; i< this.printData.length ; i ++) 
-            { if(i>36){
+            { if(i>31){
               this.afterPrint.push(this.printData[i]);
               this.lastRowNo=this.printData.length-2
               this.restItem=this.printData.length-2
   
             }
             }
-            this.printData.splice(37,this.printData.length-37);
+            this.printData.splice(32,this.printData.length-32);
             ;
         }
         else{

@@ -31,7 +31,7 @@ export class BankResolverComponent implements OnInit,OnDestroy {
 
     this.subscription = this.msg.getisLoggedInShowHeader().subscribe(
       res => {
-        
+        console.log(res);
         if (res === null) {
           this.route.paramMap.subscribe(param => {
             const paramValue = param.get('bankName');
@@ -48,6 +48,7 @@ export class BankResolverComponent implements OnInit,OnDestroy {
             
           });
         } else {
+          debugger
           this.showHeader = res;
           this.showTitle = false;
           this.getBankName();
@@ -59,14 +60,19 @@ export class BankResolverComponent implements OnInit,OnDestroy {
   }
 
   ngOnInit(): void {
-    this.getBankName();
+    // alert("You're being timed out due to inactivity, Please login again after you will logged out automatically.");
+  console.log(this.showHeader,"ffjhhgjh");
+  
     this.idleService.onIdle().subscribe(() => {
       if (this.authService.isLoggedIn()) {
         // this.authService.logout();
         if (this.router.url.includes('/login')) {
-        alert("You have Idle more than 5 Min...")
         }
-        else{this.logoutUser() ;}
+        else{
+        this.logoutUser() ;
+        alert("You're being timed out due to inactivity, Please login again after you will logged out automatically.");
+
+      }
         // Perform additional actions like showing a modal or redirecting to the login page.
       }
     });

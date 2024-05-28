@@ -42,7 +42,8 @@ export class LockerOpeningComponent implements OnInit {
 
   static accTypes: mm_acc_type[] = [];
   @ViewChild('kycContent', { static: true }) kycContent: TemplateRef<any>;
-  L_ACC_TYPE_CD:number=34102;
+  L_ACC_TYPE_CD:number;
+  systemParam:any;
   disablejoinholder:boolean=true;
   transTypeFlg = '';
   agentData:any;
@@ -217,6 +218,7 @@ export class LockerOpeningComponent implements OnInit {
   transferTypeListTemp = this.transferTypeList;
 
   ngOnInit(): void {
+    this.getSystemParam()
     this.getAgentList();
     this.getLockerMaster();
     // console.log(this.td_deftranstrfList);
@@ -256,7 +258,20 @@ export class LockerOpeningComponent implements OnInit {
     this.getRelations();
     // console.log(this.constitutionDtParser('YEAR=1;Month=10;Days=25;'));
   }
-
+  getSystemParam(){
+    this.svc.addUpdDel('Mst/GetSystemParameter', null).subscribe(
+      sysRes => {
+        try {
+          this.systemParam = sysRes;
+          this.L_ACC_TYPE_CD=this.systemParam.find(x => x.param_cd === '910')?.param_value
+          console.log(this.L_ACC_TYPE_CD);
+          
+        }
+        catch(exception){
+          console.log(exception)
+        }
+      })
+  }
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template, { class: 'modal-lg' });
   }
@@ -642,8 +657,12 @@ assignLockerData(){
   }
   getLocType(){
     debugger
-        this.loc_type=this.lockerMaster.filter(e=>e.locker_id.toLowerCase()==this.tm_locker.locker_id.toLowerCase())[0].locker_type;
-        this.loc_status=this.lockerMaster.filter(e=>e.locker_id.toLowerCase()==this.tm_locker.locker_id.toLowerCase())[0].locker_status;
+    console.log(this.lockerMaster,"ppppp");
+    console.log(this.tm_locker.locker_id);
+    
+        this.loc_type=this.lockerMaster.filter(e=>e.locker_id==this.tm_locker.locker_id)[0].locker_type;
+      
+        this.loc_status=this.lockerMaster.filter(e=>e.locker_id==this.tm_locker.locker_id)[0].locker_status;
         debugger
     if( this.lockerMaster){
       this.getLockerRate();
@@ -671,7 +690,9 @@ assignLockerData(){
       
     })
   }
-  
+    gstChange(){
+      this.td_deftrans.amount=this.RentAmount?(+this.RentAmount)+(+this.td_deftrans.ovd_intt_recov):0
+    }
     getLockerMaster(){
       var dt={
         "ardb_cd":this.sys.ardbCD,

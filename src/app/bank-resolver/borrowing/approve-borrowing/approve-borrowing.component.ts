@@ -200,7 +200,7 @@ export class ApproveBorrowingComponent implements OnInit {
             trans_dt: this.loanOpenDm.tddeftrans.trans_dt.toString().substr(0, 10),
             trans_cd: this.loanOpenDm.tddeftrans.trans_cd,
             acc_type_cd: accType.acc_type_desc,
-            party: this.bankData.filter(e=>e.bank_cd==1)[0].bank_name ,
+            party:this.sys.ardbCD=="2"?this.bankData.filter(e=>e.bank_cd==2)[0].bank_name : this.bankData.filter(e=>e.bank_cd==1)[0].bank_name ,
             // curr_prn: this.loanOpenDm.tmloanall.curr_prn,
             // ovd_prn: this.loanOpenDm.tmloanall.ovd_prn,
             curr_intt: this.loanOpenDm.tddeftrans.curr_intt_rate,
@@ -740,8 +740,10 @@ export class ApproveBorrowingComponent implements OnInit {
     // trnParam.flag = this.selectedVm.td_def_trans_trf.trans_type === 'R' ? 'D' : 'W';
     trnParam.gs_user_id = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
     trnParam.ardb_cd = this.sys.ardbCD;
-    trnParam.ad_acc_type_cd = this.selectedVm.loan.tmloanall.acc_cd;
-    trnParam.as_acc_num = this.selectedVm.loan.tmloanall.loan_id;
+    trnParam.ad_acc_type_cd = this.selectedVm.loan.tddeftrans.acc_cd;
+    trnParam.as_acc_num = this.selectedVm.loan.tddeftrans.acc_num;
+    console.log(this.selectedVm,"pppppppp");
+    
     debugger
     this.svc.addUpdDel<any>('Borrowing/ApproveBorrowingTranaction', trnParam).subscribe(
       res => {

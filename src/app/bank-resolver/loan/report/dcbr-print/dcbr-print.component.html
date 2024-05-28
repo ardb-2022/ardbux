@@ -132,7 +132,7 @@
           <!-- ID Column -->
           <ng-container matColumnDef="disb_dt" >
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Disb Date/ intt Rt/ Disb Amt</th>
-            <td mat-cell *matCellDef="let row" style="text-align: center;">{{row.disb_dt.substr(0,10) }}<br>{{row.upto_1}}%<br>{{row.disb_amt| currency:"INR"}}</td>
+            <td mat-cell *matCellDef="let row" style="text-align: center;">{{row.disb_dt}}<br>{{row.upto_1}}%<br>{{row.disb_amt| currency:"INR"}}</td>
           </ng-container>
       
           <!-- ID Column
@@ -487,7 +487,7 @@
           <!-- ID Column -->
           <ng-container matColumnDef="disb_dt" >
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Disb Date</th>
-            <td mat-cell *matCellDef="let row" style="text-align: center;">{{row.disb_dt.substr(0,10) }}</td>
+            <td mat-cell *matCellDef="let row" style="text-align: center;">{{row.disb_dt }}</td>
           </ng-container>
       
           <ng-container matColumnDef="intt_rt" >

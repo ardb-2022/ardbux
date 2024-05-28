@@ -121,7 +121,8 @@ private getDayOpertion ()
   ;
   this.svc.addUpdDel<any>('Sys/GetDayOperation', sdo).subscribe(
     res => {
-      ;
+      console.log(res);
+      
       this.isLoading = false;
       //var a=res.find(x=>x.cls_flg==="N").cls_flg ;
       if (res.findIndex(x=>x.cls_flg==='N')==0)
@@ -150,6 +151,8 @@ private getDayOpertion ()
           // this.reportData.forEach(e=>{e.brn_cd==this.brnDtls[i].brn_cd?this.reportData[e].acc_cd_desc.push(this.brnDtls[i].brn_name)})
         }
         }
+        console.log(this.sdoRet);
+        
     },
     err => { ;  this.isLoading = false;}
   );

@@ -90,8 +90,8 @@ export class YearendDemandRecoveryComponent implements OnInit {
   inttTillDt: any;
   shownoresult=false;
   recov_sum=0;
-  outPrn:Number=0;
-  outIntt:Number=0;
+  outPrn:any;
+  outIntt:any;
   pps:any;
   config = {
     keyboard: false, // ensure esc press doesnt close the modal

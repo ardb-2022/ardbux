@@ -26,8 +26,8 @@ export class OpenCloseregComponent implements OnInit,AfterViewInit {
   // @ViewChild(MatSort) sort2: MatSort;
   dataSource_c = new MatTableDataSource()
   dataSource_o = new MatTableDataSource()
-  displayedColumns_c: string[] = ['trans_dt','cust_name','acc_desc', 'loan_id','sanc_dt','sanc_amt','curr_rt','ovd_rt','closing_amt','closing_intt'];
-  displayedColumns_o: string[] = ['trans_dt','cust_name','acc_desc', 'loan_id','sanc_dt','sanc_amt','disb_amt','instl_no','curr_rt','ovd_rt'];
+  displayedColumns_c: string[] = ['sl_no','trans_dt','cust_name','acc_desc', 'loan_id','sanc_dt','sanc_amt','curr_rt','ovd_rt','closing_amt','closing_intt'];
+  displayedColumns_o: string[] = ['sl_no','trans_dt','cust_name','acc_desc', 'loan_id','sanc_dt','sanc_amt','disb_amt','instl_no','curr_rt','ovd_rt'];
   notvalidate:boolean=false;
   date_msg:any;
   modalRef: BsModalRef;
@@ -142,6 +142,11 @@ export class OpenCloseregComponent implements OnInit,AfterViewInit {
           this.reportData = data;
           if(this.reportData.length==0){
             this.comser.SnackBar_Nodata()
+          }else{
+            for(let i=0;i<this.reportData.length;i++){
+              this.reportData[i].sanc_dt=this.comser.getFormatedDate(this.reportData[i].sanc_dt);
+              this.reportData[i].trans_dt=this.comser.getFormatedDate(this.reportData[i].trans_dt);
+            }
           } 
           this.dataSource_c.data=this.reportData;
           this.dataSource_c.paginator = this.paginator;
@@ -169,6 +174,11 @@ export class OpenCloseregComponent implements OnInit,AfterViewInit {
           this.dataSource_o.data=this.reportData;
           if(this.reportData.length==0){
             this.comser.SnackBar_Nodata()
+          }else{
+            for(let i=0;i<this.reportData.length;i++){
+              this.reportData[i].sanc_dt=this.comser.getFormatedDate(this.reportData[i].sanc_dt);
+              this.reportData[i].trans_dt=this.comser.getFormatedDate(this.reportData[i].trans_dt);
+            }
           } 
           this.dataSource_o.paginator = this.paginator;
            this.dataSource_o.sort = this.sort;

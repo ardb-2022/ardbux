@@ -151,14 +151,14 @@
                 class="form-control"> -->
                 <div class="input-group">
                   <input type="text" class="form-control form-control-sm mkUpper"  autocomplete="chrome-off" formControlName="cust_name"
-                  id="cust_name" placeholder="Name" disabled >
+                  id="cust_name" placeholder="Name" [readonly]="true" >
                
                 </div>
              
               </div>
               <div class="form-group col-2">
                 <small for="cust_type">Customer Type </small>
-                <select disabled id="cust_type" class="form-control form-control-sm" formControlName="cust_type">
+                <select [readonly]="true" id="cust_type" class="form-control form-control-sm" formControlName="cust_type">
                  
                   <option value="M">Member</option>
                   <option value="N">Nominal Member</option>
@@ -167,37 +167,37 @@
               </div>
               <div class="form-group col-2">
                 <small for="old_cust_cd">Member ID </small>
-                <input disabled type="text" class="form-control form-control-sm mkUpper" formControlName="old_cust_cd"
+                <input [readonly]="true" type="text" class="form-control form-control-sm mkUpper" formControlName="old_cust_cd"
                   id="old_cust_cd"  autocomplete="chrome-off">
               </div>
               <div class="form-group col-2" >
                 <small for="created_dt">Openiung Date & Time</small>
-                <input type="text" class="form-control form-control-sm" disabled formControlName="created_dt" id="created_dt">
+                <input type="text" class="form-control form-control-sm" [readonly]="true" formControlName="created_dt" id="created_dt">
               </div>
             </div> <!-- form group row end -->
             <div class="form-row">
               <div class="form-group col-3">
                 <small for="father_name">Father Name </small>
-                <input disabled type="text" class="form-control form-control-sm mkUpper" formControlName="father_name"
+                <input [readonly]="true" type="text" class="form-control form-control-sm mkUpper" formControlName="father_name"
                   id="father_name" placeholder="Father Name">
               </div>
               <div class="form-group col-3">
                 <small for="guardian_name">Guardian Name </small>
-                <input disabled type="text" class="form-control form-control-sm mkUpper" formControlName="guardian_name"
+                <input [readonly]="true" type="text" class="form-control form-control-sm mkUpper" formControlName="guardian_name"
                   id="guardian_name" placeholder="Guardian Name">
               </div>
               <!-- <div class="form-group col-1">
                 <small for="sex">Guardian Relation <span class="text-danger"></span></small>
                 <select id="lbr_status" class="form-control form-control-sm" formControlName="lbr_status">
-                  <option value="" selected disabled>Choose</option>
+                  <option value="" selected [readonly]="true">Choose</option>
                   <option *ngFor="let rel of lbr_status" value="{{rel.val}}">{{rel.val}}</option>
                  
                 </select>
               </div> -->
               <div class="form-group col-1">
                 <small for="lbr_status">Guardian Relation</small>
-                <select disabled id="lbr_status" class="form-control form-control-sm" formControlName="lbr">
-                  <option value="" selected disabled>Choose</option>
+                <select [readonly]="true" id="lbr_status" class="form-control form-control-sm" formControlName="lbr">
+                  <option value="" selected [readonly]="true">Choose</option>
                   <option *ngFor="let lbr of lbr_status" value="{{lbr.val}}">{{lbr.val}}</option>
                  
                 </select>
@@ -207,21 +207,21 @@
                 <!-- <input type="date" class="form-control form-control-sm" (change)="onDobChange()" formControlName="dt_of_birth" id="dt_of_birth"
                   placeholder="Date of Birth"> -->
                 <div class="input-group">
-                  <input disabled type="text"  placeholder="dd/mm/yyyy" class="form-control form-control-sm" bsDatepicker
+                  <input [readonly]="true" type="text"  placeholder="dd/mm/yyyy" class="form-control form-control-sm" bsDatepicker
                     [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }" 
-                     disabled formControlName="dt_of_birth" id="dt_of_birth">
+                     [readonly]="true" formControlName="dt_of_birth" id="dt_of_birth">
                   
                 </div>
               </div>
               <div class="form-group col-1">
                 <small for="age">Age</small>
-                <input disabled type="number" class="form-control form-control-sm" formControlName="age" id="age" disabled
+                <input [readonly]="true" type="number" class="form-control form-control-sm" formControlName="age" id="age" [readonly]="true"
                   placeholder="Age">
               </div>
               <div class="form-group col-1">
                 <small for="sex">Sex </small>
-                <select disabled id="sex" class="form-control form-control-sm" formControlName="sex">
-                  <option selected disabled>Choose...</option>
+                <select [readonly]="true" id="sex" class="form-control form-control-sm" formControlName="sex">
+                  <option selected [readonly]="true">Choose...</option>
                   <option value="M">Male</option>
                   <option value="F">Female</option>
                   <option value="O">Others</option>
@@ -229,8 +229,8 @@
               </div>
               <div class="form-group col-1">
                 <small for="marital_status">Marital Status</small>
-                <select disabled id="marital_status" class="form-control form-control-sm" formControlName="marital_status">
-                  <option selected disabled>Choose...</option>
+                <select [readonly]="true" id="marital_status" class="form-control form-control-sm" formControlName="marital_status">
+                  <option selected [readonly]="true">Choose...</option>
                   <option value="Married">Married</option>
                   <option value="Single">Single</option>
                   <option value="O">Others</option>
@@ -240,8 +240,8 @@
               
               <div class="form-group col-1">
                 <small for="caste">Caste </small>
-                <select disabled id="caste" class="form-control form-control-sm" formControlName="caste">
-                  <option selected disabled>Choose...</option>
+                <select [readonly]="true" id="caste" class="form-control form-control-sm" formControlName="caste">
+                  <option selected [readonly]="true">Choose...</option>
                   <option value="1">Gen</option>
                   <option value="2">SC</option>
                   <option value="3">ST</option>
@@ -250,7 +250,7 @@
               </div>
               <div class="form-group col-2">
                 <small for="occupation">Occupation</small>
-                <select disabled id="occupation" class="form-control form-control-sm" formControlName="occupation">
+                <select [readonly]="true" id="occupation" class="form-control form-control-sm" formControlName="occupation">
                   <option value="Farmer">Farmer</option>
                   <option value="Student">Student</option>
                   <option value="Teacher">Teacher</option>
@@ -264,17 +264,17 @@
               </div>
               <div class="form-group col-2">
                 <small for="phone">Email</small>
-                <input disabled type="email" class="form-control form-control-sm" formControlName="email_id" id="email_id"
+                <input [readonly]="true" type="email" class="form-control form-control-sm" formControlName="email_id" id="email_id"
                   placeholder="Email">
               </div>
               <div class="form-group col-2">
                 <small for="phone">Phone Number  </small>
-                <input disabled type="tel" class="form-control form-control-sm" formControlName="phone" id="phone"
+                <input [readonly]="true" type="tel" class="form-control form-control-sm" formControlName="phone" id="phone"
                   placeholder="Phone Number" maxlength="12">
               </div>
               <div class="form-group col-1 mt-4">
                 <div class="form-check">
-                  <input disabled class="form-check-input" type="checkbox" id="sms_flag" [attr.checked]="this.f.sms_flag.value=='Y'" formControlName="sms_flag">
+                  <input [readonly]="true" class="form-check-input" type="checkbox" id="sms_flag" [attr.checked]="this.f.sms_flag.value=='Y'" formControlName="sms_flag">
                   <small class="form-check-small" for="sms_flag">
                     SMS
                   </small>
@@ -288,14 +288,14 @@
             <div class="form-row">
               <div class="form-group col-12">
                 <small for="present_address">Present Address  </small>
-                <input disabled type="text" class="form-control form-control-sm mkUpper" disabled id="present_address" formControlName="present_address"
+                <input [readonly]="true" type="text" class="form-control form-control-sm mkUpper" [readonly]="true" id="present_address" formControlName="present_address"
                   placeholder="Address">
               </div>
             </div>
             <!-- <div class="form-row">
               <div class="form-group col-12">
                 <small for="present_address">Office Address  </small>
-                <input disabled type="text" class="form-control form-control-sm mkUpper" disabled id="office_address" formControlName="_address"
+                <input [readonly]="true" type="text" class="form-control form-control-sm mkUpper" [readonly]="true" id="office_address" formControlName="_address"
                   placeholder="Address">
               </div>
             </div>  -->
@@ -307,25 +307,25 @@
             <div class="form-row">
               <div class="form-group col-2">
                 <small for="pan">PAN</small>
-                <input disabled type="text" #pan class="form-control form-control-sm " id="pan" formControlName="pan" >
+                <input [readonly]="true" type="text" #pan class="form-control form-control-sm " id="pan" formControlName="pan" >
               </div>
               <div class="form-group col-2">
                 <small for="aadhar">AADHAR</small>
-                <input disabled type="text" #aadhar class="form-control form-control-sm " id="aadhar" formControlName="aadhar"  
+                <input [readonly]="true" type="text" #aadhar class="form-control form-control-sm " id="aadhar" formControlName="aadhar"  
                   placeholder="Aadhar Number" maxlength="12">
               </div>
       
               <div class="form-group col-2">
                 <small for="kyc_photo_type">Photo ID Type</small>
                 <!--  -->
-                <select id="kyc_photo_type" class="form-control form-control-sm" disabled formControlName="kyc_photo_type" >
-                  <!-- <option *ngIf="KYCTypes" disabled>Choose</option> -->
+                <select id="kyc_photo_type" class="form-control form-control-sm" [readonly]="true" formControlName="kyc_photo_type" >
+                  <!-- <option *ngIf="KYCTypes" [readonly]="true">Choose</option> -->
                   <option *ngFor="let KYCType of KYCTypes" [value]="KYCType.kyc_type">{{KYCType.kyc_desc}}</option>
                 </select>
               </div>
               <div class="form-group col-2">
                 <small for="kyc_photo_no">Photo ID Number</small>
-                <input type="text" #kycPhotoNo class="form-control form-control-sm" formControlName="kyc_photo_no" disabled>
+                <input type="text" #kycPhotoNo class="form-control form-control-sm" formControlName="kyc_photo_no" [readonly]="true">
               </div>
               <!-- <div class="form-group col-2">
                 <small for="PhotoId">Upload Photo ID</small>
@@ -334,14 +334,14 @@
               </div> -->
               <div class="form-group col-2">
                 <small for="kyc_address_type">Address ID Type</small>
-                <select disabled id="kyc_address_type" class="form-control form-control-sm" formControlName="kyc_address_type">
-                  <!-- <option *ngIf="KYCTypes" disabled>Choose</option> -->
+                <select [readonly]="true" id="kyc_address_type" class="form-control form-control-sm" formControlName="kyc_address_type">
+                  <!-- <option *ngIf="KYCTypes" [readonly]="true">Choose</option> -->
                   <option *ngFor="let KYCType of KYCTypes" [value]="KYCType.kyc_type">{{KYCType.kyc_desc}}</option>
                 </select>
               </div>
               <div class="form-group col-2">
                 <small for="kyc_address_no">Address ID Number</small>
-                <input type="text" #kycAddressNo class="form-control form-control-sm" formControlName="kyc_address_no" id="kyc_address_no" disabled>
+                <input type="text" #kycAddressNo class="form-control form-control-sm" formControlName="kyc_address_no" id="kyc_address_no" [readonly]="true">
               </div>
               <!-- <div class="form-group col-2">
                 <small for="addressID">Upload Address ID</small>

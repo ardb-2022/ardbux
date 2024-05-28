@@ -57,7 +57,7 @@
           class="form-control"> -->
           <div class="input-group">
             <input type="text" class="form-control form-control-sm mkUpper"  autocomplete="chrome-off" formControlName="cust_name"
-            id="cust_name" placeholder="Name" disabled (input)="onChangeName()">
+            id="cust_name" placeholder="Name" (input)="onChangeName()">
         <div class="input-group-append">
         <button class="btn btn-primary btn-sm" [disabled]="disabledOnNull" style="font-size:x-small" (click)="suggestCustomer()"><i class="fa fa-search"></i></button>
 
@@ -110,7 +110,7 @@
          <strong class="text-danger">" {{this.f.cust_name.value}} " does not match with any customer</strong>
           </div> 
           <!-- <input type="text" class="form-control form-control-sm"  autocomplete="chrome-off" formControlName="cust_name"
-            id="cust_name" placeholder="Name" disabled (input)="suggestCustomer()" (focusout)="hide()">
+            id="cust_name" placeholder="Name" [readonly]="true" (input)="suggestCustomer()" (focusout)="hide()">
           <div class="suggestions border p-2" style="width: 150%;"
             *ngIf="suggestedCustomer && suggestedCustomer.length > 0">
             <strong> [ Customer Cd / Phone ] Name </strong>
@@ -127,7 +127,7 @@
         <div class="form-group col-1">
           <small for="cust_type">Customer Type <span class="text-danger">*</span></small>
           <select id="cust_type" class="form-control form-control-sm" formControlName="cust_type">
-            <option selected disabled>Choose...</option>
+            <option selected [readonly]="true">Choose...</option>
             <option value="M">Member</option>
             <option value="N">Nominal Member</option>
             <option value="C">Customer</option>
@@ -136,7 +136,7 @@
         <div class="form-group col-1">
           <small for="title">Title</small>
           <select id="title" class="form-control form-control-sm" formControlName="title">
-            <option *ngIf="titles" disabled>Choose</option>
+            <option *ngIf="titles" [readonly]="true">Choose</option>
             <option *ngFor="let title of titles" [value]="title.title_code">{{title.title}}</option>
           </select>
         </div>
@@ -175,7 +175,7 @@
         <!-- <div class="form-group col-1">
           <small for="sex">Guardian Relation <span class="text-danger"></span></small>
           <select id="lbr_status" class="form-control form-control-sm" formControlName="lbr_status">
-            <option value="" selected disabled>Choose</option>
+            <option value="" selected [readonly]="true">Choose</option>
             <option *ngFor="let rel of lbr_status" value="{{rel.val}}">{{rel.val}}</option>
            
           </select>
@@ -183,7 +183,7 @@
         <div class="form-group col-1">
           <small for="lbr_status">Guardian Relation</small>
           <select id="lbr_status" class="form-control form-control-sm" formControlName="lbr">
-            <option value="" selected disabled>Choose</option>
+            <option value="" selected [readonly]="true">Choose</option>
             <option *ngFor="let lbr of lbr_status" value="{{lbr.val}}">{{lbr.val}}</option>
            
           </select>
@@ -195,7 +195,7 @@
           <div class="input-group">
             <input type="text" placeholder="dd/mm/yyyy" class="form-control form-control-sm" bsDatepicker
               [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }" [isOpen]="isOpenDOBdp"
-              (bsValueChange)="onDobChange($event)" disabled formControlName="dt_of_birth" id="dt_of_birth">
+              (bsValueChange)="onDobChange($event)" [readonly]="true" formControlName="dt_of_birth" id="dt_of_birth">
             <div class="input-group-append">
               <button mat-raised-button class="btn btn-outline-secondary btn-sm" type="button" (click)="isOpenDOBdp = !isOpenDOBdp">
                 <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -205,13 +205,13 @@
         </div>
         <div class="form-group col-1">
           <small for="age">Age</small>
-          <input type="number" class="form-control form-control-sm" formControlName="age" id="age" disabled
+          <input type="number" class="form-control form-control-sm" formControlName="age" id="age" [readonly]="true"
             placeholder="Age">
         </div>
         <div class="form-group col-1">
           <small for="sex">Sex <span class="text-danger">*</span></small>
           <select id="sex" class="form-control form-control-sm" formControlName="sex">
-            <option selected disabled>Choose...</option>
+            <option selected [readonly]="true">Choose...</option>
             <option value="M">Male</option>
             <option value="F">Female</option>
             <option value="O">Others</option>
@@ -220,7 +220,7 @@
         <div class="form-group col-1">
           <small for="marital_status">Marital Status</small>
           <select id="marital_status" class="form-control form-control-sm" formControlName="marital_status">
-            <option selected disabled>Choose...</option>
+            <option selected [readonly]="true">Choose...</option>
             <option value="Married">Married</option>
             <option value="Single">Single</option>
             <option value="O">Others</option>
@@ -237,7 +237,7 @@
         <div class="form-group col-1">
           <small for="community">Community <span class="text-danger">*</span></small>
           <select id="community" class="form-control form-control-sm" formControlName="community">
-            <option selected disabled>Choose...</option>
+            <option selected [readonly]="true">Choose...</option>
             <option value="1">Hindu</option>
             <option value="2">Muslim</option>
             <option value="3">Others</option>
@@ -246,7 +246,7 @@
         <div class="form-group col-1">
           <small for="caste">Caste <span class="text-danger">*</span></small>
           <select id="caste" class="form-control form-control-sm" formControlName="caste">
-            <option selected disabled>Choose...</option>
+            <option selected [readonly]="true">Choose...</option>
             <option value="1">General</option>
             <option value="2">SC</option>
             <option value="3">ST</option>
@@ -256,7 +256,7 @@
         <div class="form-group col-1">
           <small for="nationality">Nationality <span class="text-danger">*</span></small>
           <select id="nationality" class="form-control form-control-sm" formControlName="nationality">
-            <option selected disabled>Choose...</option>
+            <option selected [readonly]="true">Choose...</option>
             <option value="INDIAN">Indian</option>
             <option value="Chinese">Chinese</option>
             <option value="BANGLADESHI">Bangladeshi</option>
@@ -300,7 +300,7 @@
         <div class="form-group col-2">
           <small for="state">State</small>
           <select id="state" class="form-control form-control-sm"  formControlName="state">
-            <option *ngIf="states" disabled>Choose</option>
+            <option *ngIf="states" [readonly]="true">Choose</option>
             <option *ngFor="let state of states" [value]="state.state_cd">{{state.state_name}}</option>
           </select>
         </div>
@@ -327,7 +327,7 @@
           formControlName="vill_name"   (keyup)="onshow($event)" placeholder="Village">
           <!-- <select id="vill_cd" class="form-control form-control-sm" formControlName="vill_cd"
             (change)="onVillageChnage($event.target.value)">
-            <option *ngIf="villages" disabled>Choose</option>
+            <option *ngIf="villages" [readonly]="true">Choose</option>
             <option *ngFor="let village of villages" [value]="village.vill_cd">{{village.vill_name}}</option>
           </select> -->
         </div>
@@ -342,7 +342,7 @@
                 <th>Block Name</th>
               </tr>
               <tbody *ngFor="let village of villages1" >
-                <tr  (click)="onVillageChnage(village.vill_cd)">
+                <tr  (click)="onVillageChnage(village.vill_cd,village.service_area_cd,village.block_cd)">
                   <td>
                     {{village.vill_name}}
                   </td>
@@ -365,15 +365,15 @@
           </select> -->
           <input  type="text" class="form-control form-control-sm d-none" formControlName="service_area_cd"
             id="service_area_cd">
-          <input disabled type="text" class="form-control form-control-sm" formControlName="service_area_cd_desc"
+          <input [readonly]="true" type="text" class="form-control form-control-sm" formControlName="service_area_cd_desc"
             id="service_area_cd_desc">
         </div>
         <div class="form-group col-2">
           <small for="block_cd">Block <span class="text-danger">*</span> </small>
-          <!-- <select id="block_cd" class="form-control form-control-sm" formControlName="block_cd" disabled>
+          <!-- <select id="block_cd" class="form-control form-control-sm" formControlName="block_cd" [readonly]="true">
           </select> -->
           <input type="text" class="form-control form-control-sm d-none" formControlName="block_cd" id="block_cd">
-          <input type="text" disabled class="form-control form-control-sm" formControlName="block_cd_desc" id="block_cd_desc">
+          <input type="text" [readonly]="true" class="form-control form-control-sm" formControlName="block_cd_desc" id="block_cd_desc">
         </div>
         <div class="form-group col-1">
           <small for="occupation">Occupation</small>
@@ -481,7 +481,7 @@
           <!-- <input type="text" class="form-control form-control-sm text-capitalize" formControlName="nom_relation"
             id="nom_relation" placeholder="Nominee Relation"> -->
             <select id="nom_relation" class="form-control form-control-sm" formControlName="nom_relation">
-              <option value="" selected disabled>Choose</option>
+              <option value="" selected [readonly]="true">Choose</option>
               <option *ngFor="let rel of relStatus" value="{{rel.val}}">{{rel.val}}</option>
              
             </select>
@@ -497,7 +497,7 @@
           <!-- <input type="text" class="form-control form-control-sm text-capitalize" formControlName="nom_relation"
             id="nom_relation" placeholder="Nominee Relation"> -->
             <select id="credit_agency" class="form-control form-control-sm" formControlName="credit_agency">
-              <option value="" selected disabled>Choose</option>
+              <option value="" selected [readonly]="true">Choose</option>
               <option value="Experian">Experian</option>
               <option value="Equifax">Equifax</option>
               <option value="TransUnion CIBIL">TransUnion CIBIL</option>
@@ -551,7 +551,7 @@
           <small for="kyc_photo_type">Photo ID Type</small>
           <!--  -->
           <select id="kyc_photo_type" class="form-control form-control-sm" formControlName="kyc_photo_type" (change)="setNull('PIN')">
-            <option *ngIf="KYCTypes" disabled>Choose</option>
+            <option *ngIf="KYCTypes" [readonly]="true">Choose</option>
             <option *ngFor="let KYCType of KYCTypes" [value]="KYCType.kyc_type">{{KYCType.kyc_desc}}</option>
           </select>
         </div>
@@ -568,7 +568,7 @@
         <div class="form-group col-1">
           <small for="kyc_address_type">Address ID Type</small>
           <select id="kyc_address_type" class="form-control form-control-sm" formControlName="kyc_address_type" (change)="setNull('AIN')">
-            <option *ngIf="KYCTypes" disabled>Choose</option>
+            <option *ngIf="KYCTypes" [readonly]="true">Choose</option>
             <option *ngFor="let KYCType of KYCTypes" [value]="KYCType.kyc_type">{{KYCType.kyc_desc}}</option>
           </select>
         </div>

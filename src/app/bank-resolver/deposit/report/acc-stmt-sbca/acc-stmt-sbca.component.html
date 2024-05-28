@@ -201,7 +201,7 @@ style="background-color: #78c2ad21; min-height: 20vh;">
           <div style="max-width: 40%;margin-left: 30%;" *ngIf="ardbCD=='26'"><h4>{{ardbAddress}}</h4> </div>
           <h4>Run Date & Time : {{today}} </h4>
           <h4> <u>  Account Statement {{accountTypeName}} from {{reportcriteria.controls.fromDate.value?.toDateString() | date: 'dd/MM/yyyy'}} to {{ this.reportcriteria.controls.toDate.value?.toDateString() | date: 'dd/MM/yyyy'}}</u></h4>
-          <h5> A/C No. {{cAcc}} / Name: {{cName}}/Present Address:  {{cAddress}}</h5>
+          <h4> A/C No. <b>{{cAcc}}</b> / Name: <b>{{cName}}</b>/Present Address:  <b>{{cAddress}}</b></h4>
         </div>
       </th>
     </ng-container>

@@ -13,7 +13,7 @@ import { td_accholder } from 'src/app/bank-resolver/Models/deposit/td_accholder'
 import { tm_loan_sanction } from 'src/app/bank-resolver/Models/loan/tm_loan_sanction';
 import { tm_loan_sanction_dtls } from 'src/app/bank-resolver/Models/loan/tm_loan_sanction_dtls';
 import { p_gen_param } from 'src/app/bank-resolver/Models/p_gen_param';
-import { stringify } from '@angular/compiler/src/util';
+ ;
 import { exit } from 'process';
 import { mm_sector } from 'src/app/bank-resolver/Models/loan/mm_sector';
 import { mm_activity } from 'src/app/bank-resolver/Models/loan/mm_activity';

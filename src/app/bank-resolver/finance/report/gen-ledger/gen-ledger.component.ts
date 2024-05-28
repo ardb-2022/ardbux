@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, TemplateRef, ChangeDetectorRef } from '@angular/core';
 import { RestService } from 'src/app/_service';
-import { WebDataRocksPivot } from 'src/app/webdatarocks/webdatarocks.angular4';
+ 
 import {  p_report_param, SystemValues, tt_gl_trans } from 'src/app/bank-resolver/Models';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 // import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
@@ -24,7 +24,6 @@ import { CommonServiceService } from 'src/app/bank-resolver/common-service.servi
 })
 export class GenLedgerComponent implements OnInit {
   @ViewChild('content', { static: true }) content: TemplateRef<any>;
-  @ViewChild('GenLedger') child: WebDataRocksPivot;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   modalRef: BsModalRef;
@@ -151,13 +150,14 @@ export class GenLedgerComponent implements OnInit {
       this.resultLength=this.reportData.length
       if(this.reportData.length==0){
         this.comser.SnackBar_Nodata()
-      } 
-
-      // for(let i=0;i<this.reportData.length;i++){
-      //   this.openbal=this.reportData[i].acctype.acc_name
-      // }
-      // console.log(this.openbal)
-      console.log(this.reportData)
+      }
+      else{
+        // console.log(this.reportData,"ppp")
+        // for(let i=0;i<this.reportData.length;i++){
+        //   for(let j=0;j<this.reportData[i].ttgltrans.length;j++)
+        //   this.reportData[i].ttgltransa[j].voucher_dt=this.comser.getFormatedDate(this.reportData[0].ttgltransa[i].voucher_dt);
+        // }
+        
       this.isLoading=false
       this.pageChange=document.getElementById('chngPage');
       this.pageChange.click()
@@ -180,6 +180,13 @@ export class GenLedgerComponent implements OnInit {
       //   this.clsdrSum+=e.clos_dr;
       //   this.clscrSum+=e.clos_cr;
       })
+      } 
+
+      // for(let i=0;i<this.reportData.length;i++){
+      //   this.openbal=this.reportData[i].acctype.acc_name
+      // }
+      // console.log(this.openbal)
+      
       // this.lastAccCD=this.reportData[this.reportData.length-1].acc_cd
       },
       err => {
@@ -214,184 +221,9 @@ export class GenLedgerComponent implements OnInit {
   public closeAlert() {
     this.showAlert = false;
   }
-  onPivotReady(GenLedger: WebDataRocksPivot): void {
-    console.log('[ready] WebDataRocksPivot', this.child);
-  }
+ 
 
-
-  onReportComplete(): void {
-    ;
-    if (!this.isLoading)return ;
-    this.prp.brn_cd = this.sys.BranchCode;
-    this.prp.from_dt = this.fromdate;
-    this.prp.to_dt = this.todate;
-    this.prp.ad_from_acc_cd = parseInt(this.reportcriteria.value['fromAcc']);
-    this.prp.ad_to_acc_Cd = parseInt (this.reportcriteria.value['toAcc']);
-    const fdate = new Date(this.fromdate);
-    const tdate = new Date(this.todate);
-    this.fd = (('0' + fdate.getDate()).slice(-2)) + '/' + (('0' + (fdate.getMonth() + 1)).slice(-2)) + '/' + (fdate.getFullYear());
-    this.td = (('0' + tdate.getDate()).slice(-2)) + '/' + (('0' + (tdate.getMonth() + 1)).slice(-2)) + '/' + (tdate.getFullYear());
-    this.dt = new Date();
-    this.dt = (('0' + this.dt.getDate()).slice(-2)) + '/' + (('0' + (this.dt.getMonth() + 1)).slice(-2)) + '/' + (this.dt.getFullYear()) + ' ' + this.dt.getHours() + ':' + this.dt.getMinutes();
-    this.child.webDataRocks.off('reportcomplete');
-    this.svc.addUpdDel<any>('Report/GLTD', this.prp).subscribe(
-      (data: tt_gl_trans[]) =>
-      {
-        this.genLdgerTrans = data;
-        ;
-      },
-      error => { console.log(error); },
-      () => {
-        this.isLoading = false;
-        ;
-        this.child.webDataRocks.setReport({
-          dataSource: {
-             data:this.genLdgerTrans
-          },
-          tableSizes: {
-            columns: [
-              {
-                idx: 0,
-                width: 75
-              },
-              {
-                idx: 1,
-                width: 200
-              },
-              {
-                idx: 2,
-                width: 100
-              },
-              {
-                idx: 3,
-                width: 75
-              },
-              {
-                idx: 4,
-                width: 200
-              },
-              {
-                idx: 5,
-                width: 100
-              }
-            ]
-          },
-          "options": {
-            "grid": {
-                "type": "flat",
-                "showTotals": "off",
-                "showGrandTotals": "off"
-            }
-            },
-            "slice": {
-              "rows": [
-                {
-                  "uniqueName": "acc_cd",
-                  "caption": "Account Code",
-                  "sort": "unsorted"
-
-              },
-
-              {
-                  "uniqueName": "dr_amt",
-                  "caption": "Debit Amount",
-                  "sort": "unsorted"
-              },
-              {
-                "uniqueName": "cr_amt",
-                "caption": "Credit Amount",
-                  "sort": "unsorted"
-            },
-            {
-                "uniqueName": "trans_month",
-                "caption": "Month of Transaction",
-                  "sort": "unsorted"
-            },
-            {
-              "uniqueName": "trans_year",
-              "caption": "Year of Transaction",
-                "sort": "unsorted"
-          },
-            {
-                "uniqueName": "opng_bal",
-                "caption": "Opening Balance",
-                  "sort": "unsorted"
-            }
-              ],
-              "measures": [
-                {
-                  uniqueName: "trans_month",
-                  format: "decimal0"
-                },
-                {
-                  uniqueName: "trans_year",
-                  format: "decimal0"
-                },
-                {
-                  uniqueName: "acc_cd",
-                  format: "decimal0"
-                }],
-              "flatOrder": [
-                "Account Code",
-                "Debit Amount",
-                "Credit Amount",
-                "Month of Transaction",
-                "Year of Transaction",
-                "Opening Balance"
-              ]
-          },
-
-            "formats": [{
-              "name": "",
-              "thousandsSeparator": ",",
-              "decimalSeparator": ".",
-              "decimalPlaces": 2,
-              "maxSymbols": 20,
-              "currencySymbol": "",
-              "currencySymbolAlign": "left",
-              "nullValue": " ",
-              "infinityValue": "Infinity",
-              "divideByZeroValue": "Infinity"
-          },
-          {
-            name: "decimal0",
-            decimalPlaces: 0,
-            thousandsSeparator: "",
-            textAlign:"left"
-          }
-        ]
-        });
-        this.modalRef.hide();
-      }
-    );
-  }
-
-  setOption(option, value) {
-    this.child.webDataRocks.setOptions({
-      grid: {
-        [option]: value
-      }
-    });
-    ;
-    this.child.webDataRocks.refresh();
-  }
-
-  exportPDFTitle() {
-    const options = this.child.webDataRocks.getOptions();
-    this.child.webDataRocks.setOptions({
-      grid: {
-        title: 'GL Transaction Details For The Period ' + this.fd + '-' + this.td
-      }
-    }
-    );
-    this.child.webDataRocks.refresh();
-    this.child.webDataRocks.exportTo('pdf', { pageOrientation:'potrait',header:"<div>##CURRENT-DATE##&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Synergic Banking&emsp;&emsp;&emsp;Branch : "+localStorage.getItem('__brnName')+"<br>&nbsp</div>",filename:"GeneralLedgerTransactions"});
-    this.child.webDataRocks.on('exportcomplete', function() {
-      this.child.webDataRocks.off('exportcomplete');
-      this.child.webDataRocks.setOptions(options);
-      this.child.webDataRocks.refresh();
-    });
-  }
+ 
   closeScreen()
   {
     this.router.navigate([localStorage.getItem('__bName') + '/la']);
