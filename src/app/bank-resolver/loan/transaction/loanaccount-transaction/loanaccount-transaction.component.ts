@@ -2333,6 +2333,15 @@ if(this.isDisburs){
       ` doesn\'t match with transaction amount ₹${this.td.paid_amount.value}`);
     return;
   }
+
+  if((this.sancdtls[0].draw_limit)- (+this.td.amount.value)<0){
+    debugger
+    this.HandleMessage(true, MessageType.Error,
+      `Total disbusment amount ₹${this.td.amount.value}, ` +
+      ` can\'t gater than Sanction amount `);
+    this.td.amount.setValue(0);
+    return;
+  }
 }
 this.t_a=null;
 this.c_p=null;
@@ -2946,7 +2955,7 @@ debugger;
               // total_due:this.fd.curr_intt.value + this.fd.ovd_intt.value + this.fd.penal_intt.value + this.fd.ovd_principal.value + this.fd.curr_principal.value - this.td.ovd_prn_recov.value - this.td.curr_prn_recov.value -this.td.curr_intt_recov.value - this.td.ovd_intt_recov.value - this.td.penal_intt_recov.value
               })
             }
-            this.HandleMessage(true, MessageType.Sucess, 'Saved successfully, your transaction code is -' + res);
+            this.HandleMessage(true, MessageType.Sucess, 'Saved successfully, your transaction code is ->' + res);
             
            this.tdDefTransFrm.patchValue({
               trans_cd: res

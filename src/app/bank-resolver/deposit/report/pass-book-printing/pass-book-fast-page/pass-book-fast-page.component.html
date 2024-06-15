@@ -36,10 +36,10 @@
     <button mat-raised-button class="btn btn-primary"  
     printSectionId={{printID}} ngxPrint [useExistingCss]="true">Print FastPage</button> &nbsp;
   </div>
-<div id="fastPage" style="font-family:Arial, Helvetica, ui-sans-serif;font-size:14px;" hidden>
+<div id="fastPage" style="font-family:Arial, Helvetica, ui-sans-serif;font-size:15px;" hidden>
     <div style="margin-top: 53%; " *ngIf="sys.ardbCD!='23'&& sys.ardbCD!='22'">&nbsp;</div>
-    <div style="margin-top: 60%; " *ngIf="sys.ardbCD=='23'">&nbsp;</div>
-    <div style="margin-top: 51%; " *ngIf="sys.ardbCD=='22'">&nbsp;</div>
+    <div style="margin-top: 62%; " *ngIf="sys.ardbCD=='23'">&nbsp;</div>
+    <div style="margin-top: 49%; " *ngIf="sys.ardbCD=='22'">&nbsp;</div>
     <div class="form-row" style="margin-left: 10%;">
       <div style="width: 40%;" *ngIf="sys.ardbCD=='26' || sys.ardbCD=='20'"><b>A/C No:  </b> {{paddingACC}}{{suggestedCustomer[0].acc_num}}</div>
       <div style="width: 40%;" *ngIf="sys.ardbCD!='26'"><b>A/C No:  </b>{{suggestedCustomer[0].acc_num}}</div>

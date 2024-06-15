@@ -26,7 +26,7 @@ export class AccStmtRDComponent implements OnInit,AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource = new MatTableDataSource()
-  displayedColumns: string[] = ['SLNO','paid_date','prn_amt','clr_bal'];
+  displayedColumns: string[] = ['SLNO','particulars','paid_date','prn_amt','clr_bal'];
 
   modalRef: BsModalRef;
   isOpenFromDp = false;
@@ -184,6 +184,13 @@ filteredArray:any=[]
       this.setPage(1)
       this.modalRef.hide();
       this.reportData.forEach(e=>{
+        const monthNames = [
+          "January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December"
+      ];
+      const index = parseInt(e.month, 10) - 1;
+        
+        e.particulars=`Payment for the month of ${monthNames[index]}-${e.year}`
         this.currSum+=e.curr_bal;
         this.clrSum=e.clr_bal
       })

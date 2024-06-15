@@ -91,22 +91,14 @@
         <th style="text-align:center">Farm Loan (Principal)</th>
         <th style="text-align:center">Non Farm  (Principal)</th>
         <th style="text-align:center">Rural Housing  (Principal)</th>
-        <th style="text-align:center"> S.H.G (Principal)</th>
-        <th style="text-align:center"> S.C.C.Y (Principal)</th>
-        <th style="text-align:center"> J.L.G (Principal)</th>
-        <th style="text-align:center"> Others (Principal)</th>
+        <th style="text-align:center"> S.H.G/J.L.G (Principal)</th>
         <th style="text-align:center"> Total demand this year (Principal)</th>
-        <th style="text-align:center"> Total demand previous year (Principal)</th>
       </tr>
       
         <tr>
           <td style="text-align:center">Overdue</td>
           <td style="text-align:center">{{reportData.farm_overdue_prn  }}</td>
           <td style="text-align:center">{{reportData.nonfarm_overdue_prn }}</td>
-          <td style="text-align:center">{{reportData.housing_overdue_prn }}</td>
-          <td style="text-align:center">{{reportData.housing_overdue_prn }}</td>
-          <td style="text-align:center">{{reportData.housing_overdue_prn }}</td>
-          <td style="text-align:center">{{reportData.housing_overdue_prn }}</td>
           <td style="text-align:center">{{reportData.housing_overdue_prn }}</td>
           <td style="text-align:center">{{reportData.shg_overdue_prn }}</td>
           <td style="text-align:center">{{reportData.farm_overdue_prn+reportData.nonfarm_overdue_prn+reportData.housing_overdue_prn+reportData.shg_overdue_prn | number : '1.2-2'}}</td>
@@ -118,10 +110,6 @@
             <td style="text-align:center">{{reportData.farm_current_prn}}</td>
             <td style="text-align:center">{{reportData.nonfarm_current_prn }}</td>
             <td style="text-align:center">{{reportData.housing_current_prn }}</td>
-            <td style="text-align:center">{{reportData.housing_current_prn }}</td>
-            <td style="text-align:center">{{reportData.housing_current_prn }}</td>
-            <td style="text-align:center">{{reportData.housing_current_prn }}</td>
-            <td style="text-align:center">{{reportData.housing_current_prn }}</td>
             <td style="text-align:center">{{reportData.shg_current_prn}}</td>
             <td style="text-align:center">{{reportData.farm_current_prn+reportData.nonfarm_current_prn+reportData.housing_current_prn+reportData.shg_current_prn | number : '1.2-2'}}</td>
             <!-- <td style="text-align:center">{{reportData.ovd_prn}}</td>
@@ -129,10 +117,6 @@
           </tr>
           <tr>
             <td style="text-align:center"><b>Total Principal</b></td>
-            <td style="text-align:center"><b>{{reportData.farm_current_prn + reportData.farm_overdue_prn | number : '1.2-2'}}</b></td>
-            <td style="text-align:center"><b>{{reportData.farm_current_prn + reportData.farm_overdue_prn | number : '1.2-2'}}</b></td>
-            <td style="text-align:center"><b>{{reportData.farm_current_prn + reportData.farm_overdue_prn | number : '1.2-2'}}</b></td>
-            <td style="text-align:center"><b>{{reportData.farm_current_prn + reportData.farm_overdue_prn | number : '1.2-2'}}</b></td>
             <td style="text-align:center"><b>{{reportData.farm_current_prn + reportData.farm_overdue_prn | number : '1.2-2'}}</b></td>
             <td style="text-align:center"><b>{{reportData.nonfarm_current_prn + reportData.nonfarm_overdue_prn | number : '1.2-2'}}</b></td>
             <td style="text-align:center"><b>{{reportData.housing_current_prn + reportData.housing_overdue_prn | number : '1.2-2'}}</b></td>
@@ -149,20 +133,12 @@
         <th style="text-align:center">Farm Loan (Interest)</th>
         <th style="text-align:center">Non Farm  (Interest)</th>
         <th style="text-align:center">Rural Housing  (Interest)</th>
-        <th style="text-align:center"> S.H.G (Interest)</th>
-        <th style="text-align:center"> S.C.C.Y (Interest)</th>
-        <th style="text-align:center"> J.L.G (Interest)</th>
-        <th style="text-align:center"> Others (Interest)</th>
+        <th style="text-align:center"> S.H.G/J.L.G (Interest)</th>
         <th style="text-align:center"> Total demand this year (Interest)</th>
-        <th style="text-align:center"> Total demand previous year (Interest)</th>
       </tr>
       <tr  >
         <td style="text-align:center">Overdue</td>
         <td style="text-align:center">{{reportData.farm_overdue_intt  }}</td>
-        <td style="text-align:center">{{reportData.nonfarm_overdue_intt }}</td>
-        <td style="text-align:center">{{reportData.nonfarm_overdue_intt }}</td>
-        <td style="text-align:center">{{reportData.nonfarm_overdue_intt }}</td>
-        <td style="text-align:center">{{reportData.nonfarm_overdue_intt }}</td>
         <td style="text-align:center">{{reportData.nonfarm_overdue_intt }}</td>
         <td style="text-align:center">{{reportData.housing_overdue_intt }}</td>
         <td style="text-align:center">{{reportData.shg_overdue_intt }}</td>
@@ -173,10 +149,6 @@
       <tr  >
         <td style="text-align:center">Current</td>
         <td style="text-align:center">{{reportData.farm_current_intt}}</td>
-        <td style="text-align:center">{{reportData.farm_current_intt}}</td>
-        <td style="text-align:center">{{reportData.farm_current_intt}}</td>
-        <td style="text-align:center">{{reportData.farm_current_intt}}</td>
-        <td style="text-align:center">{{reportData.farm_current_intt}}</td>
         <td style="text-align:center">{{reportData.nonfarm_current_intt }}</td>
         <td style="text-align:center">{{reportData.housing_current_intt }}</td>
         <td style="text-align:center">{{reportData.shg_current_intt }}</td>
@@ -184,10 +156,6 @@
       </tr>
       <tr  >
         <td style="text-align:center"><b>Total Interest</b></td>
-        <td style="text-align:center"><b>{{reportData.farm_current_intt + reportData.farm_overdue_intt | number : '1.2-2'}}</b></td>
-        <td style="text-align:center"><b>{{reportData.farm_current_intt + reportData.farm_overdue_intt | number : '1.2-2'}}</b></td>
-        <td style="text-align:center"><b>{{reportData.farm_current_intt + reportData.farm_overdue_intt | number : '1.2-2'}}</b></td>
-        <td style="text-align:center"><b>{{reportData.farm_current_intt + reportData.farm_overdue_intt | number : '1.2-2'}}</b></td>
         <td style="text-align:center"><b>{{reportData.farm_current_intt + reportData.farm_overdue_intt | number : '1.2-2'}}</b></td>
         <td style="text-align:center"><b>{{reportData.nonfarm_current_intt +reportData.nonfarm_overdue_intt | number : '1.2-2'}}</b></td>
         <td style="text-align:center"><b>{{reportData.housing_current_intt + reportData.housing_overdue_intt | number : '1.2-2'}}</b></td>
@@ -199,10 +167,6 @@
       </tr>
       <tr  >
         <td style="text-align:center"><b>Grand Total</b></td>
-        <td style="text-align:center"><b>{{reportData.farm_current_intt + reportData.farm_overdue_intt +reportData.farm_current_prn + reportData.farm_overdue_prn | number : '1.2-2'}}</b></td>
-        <td style="text-align:center"><b>{{reportData.farm_current_intt + reportData.farm_overdue_intt +reportData.farm_current_prn + reportData.farm_overdue_prn | number : '1.2-2'}}</b></td>
-        <td style="text-align:center"><b>{{reportData.farm_current_intt + reportData.farm_overdue_intt +reportData.farm_current_prn + reportData.farm_overdue_prn | number : '1.2-2'}}</b></td>
-        <td style="text-align:center"><b>{{reportData.farm_current_intt + reportData.farm_overdue_intt +reportData.farm_current_prn + reportData.farm_overdue_prn | number : '1.2-2'}}</b></td>
         <td style="text-align:center"><b>{{reportData.farm_current_intt + reportData.farm_overdue_intt +reportData.farm_current_prn + reportData.farm_overdue_prn | number : '1.2-2'}}</b></td>
         <td style="text-align:center"><b>{{reportData.nonfarm_current_intt +reportData.nonfarm_overdue_intt + reportData.nonfarm_current_prn + reportData.nonfarm_overdue_prn | number : '1.2-2'}}</b></td>
         <td style="text-align:center"><b>{{reportData.housing_current_intt + reportData.housing_overdue_intt +reportData.housing_current_prn + reportData.housing_overdue_prn | number : '1.2-2'}}</b></td>

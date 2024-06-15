@@ -7,8 +7,8 @@
     </button>
   </div>
   <div class="modal-body">
-    <div class="row print" id="challan" hidden>
-      <div class="col-6 table-container" >
+    <div class="row print" id="challan">
+      <div class="col-12 table-container" >
         <div style="border: 1px solid #b7b4b4;">
           <div>
             <div class="justify-content-center" style="text-align:center" >
@@ -48,6 +48,9 @@
                   <td style="text-align: right;" colspan="2"><b>Total</b></td>
                   <td style="text-align: center;" ><b>{{_voucherTypeName=="Cash Receipt"?_totalCr:_totalDr | currency:'INR'}}</b></td>
                 </tr>
+                <tr>
+                  <td>Narration: {{printData[0].narrationdtl}}</td>
+                </tr>
               </table>
             </div>
           </div>
@@ -75,7 +78,7 @@
           
         </div>
       </div>
-      <div class="col-6 table-container" >
+      <div class="col-12 table-container" >
         <div style="border: 1px solid #b7b4b4;">
           <div>
             <div class="justify-content-center" style="text-align:center" >
@@ -114,6 +117,9 @@
                 <tr style="border-top: 1px solid rgb(223, 220, 210);">
                   <td style="text-align: right;" colspan="2"><b>Total</b></td>
                   <td style="text-align: center;" ><b>{{_voucherTypeName=="Cash Receipt"?_totalCr:_totalDr | currency:'INR'}}</b></td>
+                </tr>
+                <tr>
+                  <td>Narration: {{printData[0].narrationdtl}}</td>
                 </tr>
               </table>
             </div>

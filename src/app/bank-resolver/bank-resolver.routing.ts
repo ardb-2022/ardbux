@@ -203,6 +203,8 @@ import { BankuraComponent } from './deposit/report/passbook-print/bankura/bankur
 import { BankuraFastPageComponent } from './deposit/report/passbook-print/bankura/bankura-fast-page/bankura-fast-page.component';
 import { SendSmsFromDemandComponent } from './loan/report/send-sms-from-demand/send-sms-from-demand.component';
 import { UpdatedDemandListComponent } from './loan/report/demand-list/updated-demand-list/updated-demand-list.component';
+import { CtFortnightNewComponent } from './loan/report/ct-fortnight-new/ct-fortnight-new.component';
+import { CtFortnightNewConsoComponent } from './loan/report/ct-fortnight-new-conso/ct-fortnight-new-conso.component';
 
 const routes: Routes = [
   { path: 'Admin', component: AdminPanelComponent },
@@ -415,6 +417,8 @@ const routes: Routes = [
       { path: 'I_Trns', component: InvestmentTransactionsComponent, canActivate: [AuthGuard] },
       { path: 'IR_Detail_list', component: IDetailListComponent, canActivate: [AuthGuard] },
       { path: 'IR_Near_maturity', component: INearMaturityComponent, canActivate: [AuthGuard] },
+      { path: 'LR_FortNightNew', component: CtFortnightNewComponent, canActivate: [AuthGuard] },
+      { path: 'LR_FortNightNewConso', component: CtFortnightNewConsoComponent, canActivate: [AuthGuard] },
       {
         path: 'locker', component: LockerComponent,
         children: [

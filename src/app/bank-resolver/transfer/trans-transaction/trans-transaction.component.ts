@@ -402,8 +402,9 @@ export class TransTransactionComponent implements OnInit {
     this.isLoading = true;
     this.svc.addUpdDel<any>('Deposit/GetDepositWithChild', temp_deposit).subscribe(
       res => {
-        console.log(res)
-        this.constCdDr=res[0].constitution_cd;
+        if(res){
+          console.log(res)
+        this.constCdDr=res[0]?.constitution_cd;
         console.log(this.constCdDr)
         this.isLoading = false;
         let foundOneUnclosed = false;
@@ -429,6 +430,7 @@ export class TransTransactionComponent implements OnInit {
             tdDefTransTrnsfr.cust_acc_number = null;
             return;
           }
+        }
         }
 
       },
@@ -1026,7 +1028,7 @@ export class TransTransactionComponent implements OnInit {
         tdDefTransAndTranfer.instrument_num = e.instrument_num;
         tdDefTransAndTranfer.acc_cd = e.acc_cd;
         // tdDefTransAndTranfer.remarks = 'D';
-        tdDefTransAndTranfer.remarks = +e.cust_acc_type.length==1?tdDefTrans.trans_type:'X';
+        tdDefTransAndTranfer.remarks = +e.cust_acc_type.length<=2?tdDefTrans.trans_type:'X';
 
         tdDefTransAndTranfer.disb_id = ++i;
         if(this.f.trans_cd.value > 0)
@@ -1048,7 +1050,7 @@ export class TransTransactionComponent implements OnInit {
         tdDefTransAndTranfer.remarks =  tdDefTrans.trans_type
         tdDefTransAndTranfer.disb_id = ++i;
         tdDefTransAndTranfer.trans_type=tdDefTrans.trans_type //marker
-        tdDefTransAndTranfer.remarks = +e.cust_acc_type.length==1?tdDefTrans.trans_type:'X';
+        tdDefTransAndTranfer.remarks = +e.cust_acc_type.length<=2?tdDefTrans.trans_type:'X';
 
         console.log(tdDefTransAndTranfer.trans_type);
         // debugger;
@@ -1093,7 +1095,7 @@ export class TransTransactionComponent implements OnInit {
         // tdDefTransAndTranfer.acc_num = '0000';
         tdDefTransAndTranfer.acc_name = e.cust_name;
         tdDefTransAndTranfer.instrument_num = e.instrument_num;
-        tdDefTransAndTranfer.remarks = +e.cust_acc_type.length==1?tdDefTransAndTranfer.trans_type:'X';
+        tdDefTransAndTranfer.remarks = +e.cust_acc_type.length<=2?tdDefTransAndTranfer.trans_type:'X';
         // console.log(tdDefTransAndTranfer.remarks);
         // debugger;
         // tdDefTransAndTranfer.acc_cd = +e.gl_acc_code;
@@ -1111,7 +1113,7 @@ export class TransTransactionComponent implements OnInit {
       tdDefTransAndTranfer.particulars = 'S';
       tdDefTransAndTranfer.tr_acc_cd = 10000;
       tdDefTransAndTranfer.trf_type = "T";
-      tdDefTransAndTranfer.remarks = +e.cust_acc_type.length==1?tdDefTransAndTranfer.trans_type:'X';
+      tdDefTransAndTranfer.remarks = +e.cust_acc_type.length<=2?tdDefTransAndTranfer.trans_type:'X';
       // console.log(tdDefTransAndTranfer.remarks);
       // debugger;
       tdDefTransAndTranfer.particulars = this.f.particulars.value;

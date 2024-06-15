@@ -135,14 +135,15 @@ style="background-color: #78c2ad21; min-height: 20vh;">
   
 <div  class="col-xs-12 col-sm-12 col-md-8 col-lg-8 shadow-lg mb-4 bg-white p-3">
   <div id="reportcontent" #reportcontent>
- <br>
+   
+<table style="width: 100% " id="_voucher">  
+  <br>
  <div class="justify-content-center" style="text-align:center">
   <br><h4>{{ardbName}} ({{branchName}})</h4>
   
   <h4>Run Date & Time : {{today}} </h4>
 </div>
- <br><br>   
-<table style="width: 100% " id="_voucher">     
+ <br><br>    
 <tr *ngFor="let item of tvn; let i = index;">
   <!-- <p *ngIf="tvn[i].vd.length> 2" style="page-break-after: always;">&nbsp;</p> -->
   <!-- {{item.redFlag}} -->

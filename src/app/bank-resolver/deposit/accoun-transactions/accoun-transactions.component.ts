@@ -4235,11 +4235,17 @@ getjoinholder(){
       return;
     }
     console.log(this.td.amount.value, this.accDtlsFrm.controls.prn_amt.value)
-    if ((this.td.amount.value != this.accDtlsFrm.controls.prn_amt.value) && (this.f.acc_type_cd.value == 2 || this.f.acc_type_cd.value == 4|| this.f.acc_type_cd.value == 5) && (this.td.amount.value != this.accDtlsFrm.controls.mat_amt.value)) {
-      this.HandleMessage(true, MessageType.Error, 'Amount should be equal to principal amount.');
-      this.td.amount.setValue('');
-      return;
+    if(this.matInt>0){
+      //do Nothing
     }
+    else{
+      if ((this.td.amount.value != this.accDtlsFrm.controls.prn_amt.value) && (this.f.acc_type_cd.value == 2 || this.f.acc_type_cd.value == 4|| this.f.acc_type_cd.value == 5) && (this.td.amount.value != this.accDtlsFrm.controls.mat_amt.value)) {
+        this.HandleMessage(true, MessageType.Error, 'Amount should be equal to principal amount.');
+        this.td.amount.setValue('');
+        return;
+      }
+    }
+    
     if (this.td.trans_type_key.value === 'D' || this.td.trans_type_key.value === 'W') {
       if(this.matInt==undefined){
         this.matInt=0

@@ -32,7 +32,7 @@ import { DatePipe } from '@angular/common';
     TestComponent,
     ConfigNewBankComponent,
     MasterMenuConfigComponent,
-    AdminLoginComponent
+    AdminLoginComponent,
   ],
   imports: [
     MatSnackBarModule,

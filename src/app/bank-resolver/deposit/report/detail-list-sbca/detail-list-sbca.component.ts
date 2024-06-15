@@ -204,7 +204,9 @@ export class DetailListSBCAComponent implements OnInit,AfterViewInit {
         // 'const_cd' : this.reportcriteria.controls.constitution_cd.value,
         'from_dt' : this.fromdate.toISOString()
       }
-      this.printedId=this.reportcriteria.controls.acc_type_cd.value=="7"||this.reportcriteria.controls.acc_type_cd.value=="1"||this.reportcriteria.controls.acc_type_cd.value=="8"?"trial777":"trial111"
+      this.printedId=(this.reportcriteria.controls.acc_type_cd.value=="7" && this.reportcriteria.controls.constitution_cd.value!='0')||
+      (this.reportcriteria.controls.acc_type_cd.value=="1"  && this.reportcriteria.controls.constitution_cd.value!='0')||
+      (this.reportcriteria.controls.acc_type_cd.value=="8"  && this.reportcriteria.controls.constitution_cd.value!='0') ?"trial777":"trial111"
       this.svc.addUpdDel('Deposit/PopulateDLSavingsAll',dt).subscribe(data=>{
         this.sendData()
         console.log(data)

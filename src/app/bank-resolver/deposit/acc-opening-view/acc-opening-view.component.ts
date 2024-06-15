@@ -1308,7 +1308,7 @@ debugger
     this.tm_deposit.date_of_birth = temp_mm_cust.dt_of_birth;
 
     this.tm_deposit.sex = temp_mm_cust.sex;
-    this.tm_deposit.sexType = this.sexType.filter(c => c.type.toString() === this.tm_deposit.sex.toString())[0].desc;
+    this.tm_deposit.sexType = this.sexType.filter(c => c.type?.toString() === this.tm_deposit.sex?.toString())[0]?.desc;
 
     this.tm_deposit.phone = temp_mm_cust.phone;
 
@@ -1340,8 +1340,8 @@ debugger
   }
 
   setCategoryDesc(category: number) {
-    this.tm_deposit.category_desc = this.categoryList.filter(x => x.catg_cd.toString()
-      === category.toString())[0].catg_desc;
+    this.tm_deposit.category_desc = this.categoryList.filter(x => x.catg_cd?.toString()
+      === category?.toString())[0]?.catg_desc;
   }
 
   addSignatory() {
@@ -1384,7 +1384,7 @@ debugger
 
   checkSignatory(name: string, idx: number) {
     debugger
-    const x = this.td_accholderList.filter(c => c.acc_holder.toString() === name.toString())[0].cust_cd;
+    const x = this.td_accholderList.filter(c => c.acc_holder?.toString() === name?.toString())[0]?.cust_cd;
 
 
     if (!x) {
@@ -1413,8 +1413,8 @@ debugger
     if (intro_acc_typ_cd != null && intro_acc_typ_cd > 0) {
       this.td_introducerlist[idx].introducer_acc_type = Number(intro_acc_typ_cd);
       this.td_introducerlist[idx].introducer_acc_type_desc = this.introducerAccTypeList
-        .filter(x => x.introducer_acc_type_cd.toString() ===
-          intro_acc_typ_cd.toString())[0].introducer_acc_type_desc;
+        .filter(x => x.introducer_acc_type_cd?.toString() ===
+          intro_acc_typ_cd?.toString())[0].introducer_acc_type_desc;
     }
   }
 
@@ -1476,7 +1476,7 @@ debugger
         temp_mm_cust_list = res;
 
         if (temp_mm_cust_list !== undefined && temp_mm_cust_list != null && temp_mm_cust_list.length > 0) {
-          temp_mm_cust = temp_mm_cust_list.filter(c => c.cust_cd.toString() === cust_cd.toString())[0];
+          temp_mm_cust = temp_mm_cust_list.filter(c => c.cust_cd?.toString() === cust_cd?.toString())[0];
           this.td_introducerlist[idx].introducer_name = temp_mm_cust.cust_name;
         }
         this.isLoading = false;
@@ -1568,7 +1568,7 @@ debugger
         this.td_deftranstrfList[0].gl_acc_code === null ||
         this.td_deftranstrfList[0].gl_acc_code === '') {
         let temp_acc_type = new mm_acc_type();
-        temp_acc_type = this.accountTypeList.filter(x => x.acc_type_cd.toString() === accType.toString())[0];
+        temp_acc_type = this.accountTypeList.filter(x => x.acc_type_cd?.toString() === accType?.toString())[0];
 
         if (temp_acc_type === undefined || temp_acc_type === null) {
           this.td_deftranstrfList[0].cust_acc_type = null;
@@ -1596,14 +1596,14 @@ debugger
         return;
       }
 
-      if (this.td_deftranstrfList[0].gl_acc_code === this.cashAccCd.toString()) {
+      if (this.td_deftranstrfList[0]?.gl_acc_code === this.cashAccCd?.toString()) {
         // this.showAlertMsg('WARNING', 'GL Code can not be Cash Account Code');
         this.HandleMessage(true, MessageType.Warning, 'GL Code can not be Cash Account Code');
         return;
       }
 
 
-      this.td_deftranstrfList[0].acc_cd = Number(this.td_deftranstrfList[0].gl_acc_code);
+      this.td_deftranstrfList[0].acc_cd = Number(this.td_deftranstrfList[0]?.gl_acc_code);
 
       if (this.td_deftranstrfList[0].cust_acc_type === undefined ||
         this.td_deftranstrfList[0].cust_acc_type === null ||
@@ -1616,7 +1616,7 @@ debugger
 
               this.acc_master = res;
               this.isLoading = false;
-              temp_acc_master = this.acc_master.filter(x => x.acc_cd.toString() === this.td_deftranstrfList[0].gl_acc_code)[0];
+              temp_acc_master = this.acc_master.filter(x => x.acc_cd?.toString() === this.td_deftranstrfList[0]?.gl_acc_code)[0];
               if (temp_acc_master === undefined || temp_acc_master === null) {
                 this.td_deftranstrfList[0].gl_acc_desc = null;
                 // this.showAlertMsg('WARNING', 'Invalid GL Code');
@@ -1635,7 +1635,7 @@ debugger
         }
         else {
           let temp_acc_master = new m_acc_master();
-          temp_acc_master = this.acc_master.filter(x => x.acc_cd.toString() === this.td_deftranstrfList[0].gl_acc_code)[0];
+          temp_acc_master = this.acc_master.filter(x => x.acc_cd?.toString() === this.td_deftranstrfList[0]?.gl_acc_code)[0];
           if (temp_acc_master === undefined || temp_acc_master === null) {
             this.td_deftranstrfList[0].gl_acc_desc = null;
             // this.showAlertMsg('WARNING', 'GL Code and Account Type can not have value simultaneously');
@@ -1698,13 +1698,13 @@ debugger
         }
 
         let temp_mm_cust = new mm_customer();
-        temp_mm_cust = this.customerList.filter(c => c.cust_cd.toString() === temp_deposit_list[0].cust_cd.toString())[0];
+        temp_mm_cust = this.customerList.filter(c => c.cust_cd?.toString() === temp_deposit_list[0]?.cust_cd?.toString())[0];
         this.td_deftranstrfList[0].cust_name = temp_mm_cust.cust_name;
 
         this.td_deftranstrfList[0].clr_bal = temp_deposit_list[0].clr_bal;
-        this.td_deftranstrfList[0].acc_cd = this.constitutionList.filter(x => x.acc_type_cd.toString() ===
+        this.td_deftranstrfList[0].acc_cd = this.constitutionList.filter(x => x.acc_type_cd?.toString() ===
           temp_deposit.acc_type_cd.toString()
-          && x.constitution_cd.toString() === temp_deposit_list[0].constitution_cd.toString())[0].acc_cd;
+          && x.constitution_cd?.toString() === temp_deposit_list[0].constitution_cd?.toString())[0].acc_cd;
 
       },
       err => {
@@ -1741,14 +1741,14 @@ debugger
     }
 
     if (this.tm_deposit.acc_type_cd === 6) {
-      if (this.tm_deposit.instl_amt.toString() !== amount.toString()) {
+      if (this.tm_deposit.instl_amt?.toString() !== amount?.toString()) {
         // this.showAlertMsg('WARNING', 'Debit Amount is not matching with Installment Amount');
         this.HandleMessage(true, MessageType.Warning, 'Debit Amount is not matching with Installment Amount');
         exit(0);
       }
     }
     else {
-      if (this.tm_deposit.prn_amt.toString() !== amount.toString()) {
+      if (this.tm_deposit.prn_amt?.toString() !== amount?.toString()) {
         // this.showAlertMsg('WARNING', 'Debit Amount is not matching with Principal Amount');
         this.HandleMessage(true, MessageType.Warning, 'Debit Amount is not matching with Principal Amount');
         exit(0);
@@ -1762,7 +1762,7 @@ debugger
     if (this.td_deftranstrfList[0].gl_acc_code === undefined ||
       this.td_deftranstrfList[0].gl_acc_code === null ||
       this.td_deftranstrfList[0].gl_acc_code === '') {
-      if (parseInt(this.td_deftranstrfList[0].clr_bal.toString()) < parseInt(amount.toString())) {
+      if (parseInt(this.td_deftranstrfList[0].clr_bal?.toString()) < parseInt(amount?.toString())) {
         // this.showAlertMsg('WARNING', 'Insufficient Balance');
         this.HandleMessage(true, MessageType.Warning, 'Insufficient Balance');
         this.td_deftranstrfList[0].amount = null;
@@ -1778,8 +1778,8 @@ debugger
 
   setStandingInstrAfterMatu(val: any) {
 
-    this.tm_deposit.standing_instr_flag = val.toString();
-    this.tm_deposit.standing_instr_dscr = this.standingInstrAfterMaturity.filter(x => x.instr_code === val.toString())[0].instr_dscr;
+    this.tm_deposit.standing_instr_flag = val?.toString();
+    this.tm_deposit.standing_instr_dscr = this.standingInstrAfterMaturity.filter(x => x.instr_code === val?.toString())[0].instr_dscr;
   }
 
   private depositPeriodParser(constitutionText: string) {
