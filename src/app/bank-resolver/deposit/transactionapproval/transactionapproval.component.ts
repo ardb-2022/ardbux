@@ -30,6 +30,7 @@ export class TransactionapprovalComponent implements OnInit {
   static accType: mm_acc_type[] = [];
   static categories: mm_category[] = [];
   @ViewChild('MakerChecker', { static: true }) MakerChecker: TemplateRef<any>;
+  @ViewChild('lockApprove', { static: true }) lockApprove: TemplateRef<any>;
   @ViewChild('content', { static: true }) content: TemplateRef<any>;
   @ViewChild('kycContent', { static: true }) kycContent: TemplateRef<any>;
   selectedAccountType: number;
@@ -59,6 +60,7 @@ export class TransactionapprovalComponent implements OnInit {
   transactionDtlsFrm: FormGroup;
   renewDtlsFrm:FormGroup;
   showDenominationDtl = false;
+  disabledApproved:boolean=false;
   // showTransferDtl = false;
   totalOfDenomination = 0;
   tranferDetails: td_def_trans_trf[] = [];
@@ -75,6 +77,8 @@ export class TransactionapprovalComponent implements OnInit {
   acc_OWNER:any=null;
   joinHold:any=[];
   Totamount:any;
+  lockApproveFlag:number=0;
+  tempData:any=null;
   // cust: mm_customer;
   // tdDepTransRet: td_def_trans_trf[] = [];
 
@@ -581,6 +585,7 @@ export class TransactionapprovalComponent implements OnInit {
     this.modalRef = this.modalService.show(template, { class: 'modal-lg' });
   }
   public onClickRefreshList() {
+    this.unLockTransaction(this.tempData?this.tempData:null);
     this.HandleMessage(false);
     this.refresh = false;
     // this.msg.sendCommonTransactionInfo(null);
@@ -633,6 +638,11 @@ export class TransactionapprovalComponent implements OnInit {
         console.log("No '/' found in the string.");
       }
     }
+    this.tempData=null;
+    this.tempData=vm.td_def_trans_trf;
+    console.log(this.tempData);
+    
+    this.lockTransaction(vm.td_def_trans_trf);
     this.HandleMessage(false);
     console.log(vm.td_def_trans_trf)
     this.typeCd=vm.td_def_trans_trf.acc_type_cd
@@ -651,7 +661,66 @@ export class TransactionapprovalComponent implements OnInit {
     this.getTranAcctInfo(vm.td_def_trans_trf.acc_num);
     this.getDepTrans(vm.td_def_trans_trf);
   }
-
+  private lockTransaction(dt:any){
+    console.log(dt);
+    debugger
+    const data={
+      "ardb_cd":this.sys.ardbCD, 
+      "brn_cd": this.sys.BranchCode,
+      "adt_trans_dt": dt.trans_dt,
+      "ad_trans_cd": dt.trans_cd  
+      }
+      this.svc.addUpdDel<any>('Deposit/TransactionLock', data).subscribe(
+        res => {
+          this.lockApproveFlag=0
+          console.log(res);
+          if(res){
+            this.disabledApproved=false;
+          this.lockApproveFlag=(+res.flag)
+          if(this.lockApproveFlag!=2){
+            this.onClickRefreshList();
+            this.disabledApproved=true;
+            this.modalRef = this.modalService.show(this.lockApprove, { class: 'modal-lg' });
+          }
+          else{
+            this.disabledApproved=false;
+          }
+          debugger;
+          }
+          
+        }
+        )
+  }
+  private unLockTransaction(dt:any){
+    console.log(dt);
+    debugger
+    const data={
+      "ardb_cd":this.sys.ardbCD, 
+      "brn_cd": this.sys.BranchCode,
+      "adt_trans_dt": dt.trans_dt,
+      "ad_trans_cd": dt.trans_cd  
+      }
+      this.svc.addUpdDel<any>('Deposit/TransactionLockReverse', data).subscribe(
+        res => {
+          this.lockApproveFlag=0
+          console.log(res);
+          if(res){
+            this.disabledApproved=false;
+          this.lockApproveFlag=(+res.flag)
+          if(this.lockApproveFlag!=2){
+            // this.onClickRefreshList();
+            this.disabledApproved=true;
+            this.modalRef = this.modalService.show(this.lockApprove, { class: 'modal-lg' });
+          }
+          else{
+            this.disabledApproved=false;
+          }
+          debugger;
+          }
+          
+        }
+        )
+  }
   private getAdditionalInformationForAccount(tmDeposit: tm_deposit): void {
     this.fetchingAddInf = true;
     this.acc_OWNER=tmDeposit.cust_cd;
@@ -853,6 +922,7 @@ export class TransactionapprovalComponent implements OnInit {
     debugger
     if(this.createUser.toLowerCase()==this.logUser.toLowerCase()){
       this.modalRef = this.modalService.show(this.MakerChecker, { class: 'modal-lg' });
+      
     }
     else{
       if (this.selectedVm.td_def_trans_trf.trans_type.toLocaleLowerCase() === 'W') {
@@ -865,6 +935,8 @@ export class TransactionapprovalComponent implements OnInit {
           }
         }
       }
+    //   this.tempData = new TranApprovalVM();
+    // this.tempData=this.selectedVm;
     this.isLoading = true;
     const param = new p_gen_param();
     param.brn_cd = this.sys.BranchCode; // localStorage.getItem('__brnCd');

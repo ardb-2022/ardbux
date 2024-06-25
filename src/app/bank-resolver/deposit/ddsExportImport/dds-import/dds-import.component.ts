@@ -85,7 +85,7 @@ export class DdsImportComponent implements OnInit {
             }
 
           }, error => {
-            this.alertMsg = "Import unsuccessful!!";
+            this.alertMsg = "Import Failed, error from server side!!";
             this.showAlert = true;
             this.flag = 0
           })

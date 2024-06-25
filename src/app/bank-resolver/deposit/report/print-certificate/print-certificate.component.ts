@@ -90,7 +90,7 @@ export class PrintCertificateComponent implements OnInit {
   showTable:boolean=false;
   oprn_instr_desc:any;
   gName:any;
-  joinHold:any;
+  joinHold:String='';
   ShowMIS:boolean=false;
   Header:any;
   ShowCC:boolean=false;
@@ -165,7 +165,7 @@ export class PrintCertificateComponent implements OnInit {
     );
   }
   onLoadScreen(content) {
-    this.joinHold=[];
+    this.joinHold='';
     this.passBookData=[];
     this.printData=[];
     this.afterPrint=[];
@@ -292,13 +292,14 @@ export class PrintCertificateComponent implements OnInit {
         else{this.sbAcc=''}
         debugger
           this.oprn_instr_desc = this.operationalInstrList.filter(x => x.oprn_cd.toString() === this.masterModel.tmdeposit.oprn_instr_cd.toString())[0].oprn_desc;
-          for (let i = 0; i <=  this.masterModel.tdaccholder.length; i++) {
+          for (let i = 0; i <  this.masterModel?.tdaccholder.length; i++) {
+            this.joinHold+=( this.masterModel?.tdaccholder?.length==0?'': this.masterModel?.tdaccholder[i]?.acc_holder+',')
+            debugger
             console.log( this.masterModel);
             
-          this.joinHold+=( this.masterModel.tdaccholder.length==0?'': this.masterModel.tdaccholder[i].acc_holder+',')
           console.log(this.joinHold);
           }
-          if(this.masterModel.tmdeposit.renew_id){
+          if(this.masterModel.tmdeposit){
               this.renew_id=this.masterModel.tmdeposit.renew_id
               this.getPrintFlag();
               this.showAlert = false;
