@@ -31,10 +31,12 @@ export class LoanTransactionApprovalComponent implements OnInit {
     private frmBldr: FormBuilder) { }
 
   static accType: mm_acc_type[] = [];
+  @ViewChild('lockApprove', { static: true }) lockApprove: TemplateRef<any>;
   @ViewChild('MakerChecker', { static: true }) MakerChecker: TemplateRef<any>;
   @ViewChild('content', { static: true }) content: TemplateRef<any>;
   @ViewChild('kycContent', { static: true }) kycContent: TemplateRef<any>;
   selectedAccountType: number;
+  lockApproveFlag:number=0
   selectedTransactionMode: string;
   vm: TranApprovalVM[] = [];
   filteredVm: TranApprovalVM[] = [];
@@ -360,14 +362,45 @@ export class LoanTransactionApprovalComponent implements OnInit {
     }
   }
   public selectTransaction(vm: TranApprovalVM): void {
-    this.disableApprove = false;
+    // this.disableApprove = false;
     this.selectedVm = vm;
     this.selectedTransactionCd = vm.td_def_trans_trf.trans_cd;
     this.selectedAccountType = vm.td_def_trans_trf.acc_type_cd;
     this.selectedTransactionMode = vm.td_def_trans_trf.trans_mode;
     // this.getTranAcctInfo(vm.td_def_trans_trf.acc_num);
+    this.lockTransaction(vm.td_def_trans_trf);
     this.getDepTrans(vm.td_def_trans_trf);
     this.showINSTNO=true;
+  }
+  private lockTransaction(dt:any){
+    console.log(dt);
+    debugger
+    const data={
+      "ardb_cd":this.sys.ardbCD, 
+      "brn_cd": this.sys.BranchCode,
+      "adt_trans_dt": dt.trans_dt,
+      "ad_trans_cd": dt.trans_cd  
+      }
+      this.svc.addUpdDel<any>('Deposit/TransactionLock', data).subscribe(
+        res => {
+          this.lockApproveFlag=0
+          console.log(res);
+          if(res){
+            this.disableApprove=false;
+          this.lockApproveFlag=(+res.flag)
+          if(this.lockApproveFlag!=2){
+            this.onClickRefreshList();
+            this.disableApprove=true;
+            this.modalRef = this.modalService.show(this.lockApprove, { class: 'modal-lg' });
+          }
+          else{
+            this.disableApprove=false;
+          }
+          debugger;
+          }
+          
+        }
+        )
   }
   private getDepTrans(depTras: td_def_trans_trf): void {
     //debugger;

@@ -121,11 +121,7 @@ table{
 .mat-column-SLNO{
   width:15px;
 }
-.mat-column-locker_id{
-  text-align: center;
-  padding-right: 10%;
-  padding-left: 1%;
-}
+
 td,th{
   width:15%;
 }

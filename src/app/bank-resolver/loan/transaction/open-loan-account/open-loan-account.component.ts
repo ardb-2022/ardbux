@@ -1498,6 +1498,7 @@ removeSecurityDtlList()
         }
       }
     }
+    debugger
     if(this.SecaccNum){
       const usr = new tm_deposit();
       usr.ardb_cd=this.sys.ardbCD
@@ -1523,7 +1524,7 @@ removeSecurityDtlList()
           }
           else {
             if (res.tmdeposit.acc_num !== null) {
-              if(res.tmdeposit.lock_mode=='L'){
+              if(res.tmdeposit.lock_mode=='L' && this.operationType == 'N'){
                 for (const i in this.masterModel.tdloansancsetlist) {
                   for (const j in this.masterModel.tdloansancsetlist[i].tdloansancset) {
                     if(this.masterModel.tdloansancsetlist[i].tdloansancset[j].param_cd == '115'){
