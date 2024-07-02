@@ -72,6 +72,7 @@ export class tm_deposit extends baseModel{
   public trans_cd:number;
   public bank_cd:number;
   public branch_cd:number;
+  // public voucher_dt:Date;
   //  End: this below portion is added extra for UX operation only
 
   tm_deposit()

@@ -233,7 +233,7 @@
     </div>
     <div id="hiddenTab" >
       <br><br>
-      <table  class="mkSmall" *ngIf="sys.ardbCD!='22'">
+      <table  class="mkSmall" *ngIf="sys.ardbCD!='22' && sys.ardbCD!='21'">
         <tbody *ngFor="let i of printData; let itr=index;">
           <tr *ngIf="i.trans_type==null">
            <td style="margin-top: 24px;">&nbsp;</td>
@@ -260,6 +260,29 @@
         <tbody *ngFor="let i of printData; let itr=index;">
           <tr *ngIf="i.trans_type==null">
            <td style="margin-top: 24px;">&nbsp;</td>
+          </tr>
+          <tr *ngIf="i.trans_type!==null">
+            <td style="width:16%;">{{i.trans_dt==null?'':i.trans_dt.substr(0,10)}}</td>
+            <td style="max-width: 170px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{i.particulars}}</td>
+            
+            <td  style="width: 6%; text-align: right; padding-right:3%;">
+              {{(i.trans_type=='W'?i.amount:i.trans_type==null?'':'') | number : '1.2-2'}}
+             </td>
+             <td style="text-align: right;">
+             {{(i.trans_type=='D'?i.amount:i.trans_type==null?'':'')| number : '1.2-2'}}
+             </td>
+           <td style="text-align: right; padding-right: 2%;">{{i.balance | number : '1.2-2'}}</td>
+            </tr>
+          
+
+        </tbody>
+        
+
+      </table>
+      <table  class="mkSmallRAM" *ngIf="sys.ardbCD=='21'" >
+        <tbody *ngFor="let i of printData; let itr=index;">
+          <tr *ngIf="i.trans_type==null">
+           <td style="margin-top: 18px;">&nbsp;</td>
           </tr>
           <tr *ngIf="i.trans_type!==null">
             <td style="width:16%;">{{i.trans_dt==null?'':i.trans_dt.substr(0,10)}}</td>

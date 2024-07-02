@@ -237,6 +237,11 @@ export class PrintCertificateComponent implements OnInit {
       this.ShowCC=false;
       this.Header="MIS CERTIFICATE";
     }
+    else if(this.reportcriteria.controls.acc_type_cd.value=='2'){
+      this.ShowMIS=false;
+      this.ShowCC=true;
+      this.Header="FIXED DEPOSIT CERTIFICATE";
+    }
     else{
       this.ShowMIS=false;
       this.ShowCC=true;

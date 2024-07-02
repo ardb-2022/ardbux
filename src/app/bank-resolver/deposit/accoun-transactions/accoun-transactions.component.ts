@@ -3187,13 +3187,15 @@ getjoinholder(){
           // this.HandleMessage(true, MessageType.Warning, msg);//..........PARTHA
           // alert(msg);
         }
-          this.showOnClose = true;
+          if(this.rdInClose){
+            this.showOnClose = true;
           this.tdDefTransFrm.patchValue({
             amount: this.accNoEnteredForTransaction.prn_amt,
             curr_intt_recov: this.rdInClose,
             td_def_mat_amt:Number(this.accNoEnteredForTransaction.prn_amt)+Number(this.rdInClose)//tobe change
 
           })
+          }
           debugger
           // this.showCloseInterest=true;
         }
@@ -3772,6 +3774,7 @@ getjoinholder(){
       debugger
       if(this.f.acc_type_cd.value==11){
         this.isLoading=true;
+        this.showOnClose=true;
         var dt={
           "acc_num":this.accNoEnteredForTransaction.acc_num,
           "ardb_cd":this.sys.ardbCD,
@@ -3785,12 +3788,17 @@ getjoinholder(){
                       && res > 0) {
                         this.isLoading=false
                         this.rdInClose=res
+                        debugger
                       this.tdDefTransFrm.patchValue({
-                        ovd_intt_recov: this.td.ovd_intt_recov.value?this.td.ovd_intt_recov.value:0,
-                        // curr_intt_recov: res.toFixed(2),
-                        curr_intt_recov: this.td.curr_intt_recov.value?this.td.curr_intt_recov.value:0,
-                        td_def_mat_amt: ((+this.accNoEnteredForTransaction.prn_amt)-(+this.td.ovd_intt_recov.value?this.td.ovd_intt_recov.value:0)),
+                        ovd_intt_recov: (+this.td.ovd_intt_recov.value?this.td.ovd_intt_recov.value:0),
+                        amount:+this.accNoEnteredForTransaction.prn_amt,
+                        curr_intt_recov: (+ res.toFixed(2)),
+                        td_def_mat_amt: ((+(+this.accNoEnteredForTransaction.prn_amt)+(+ res.toFixed(2)))-(+this.td.ovd_intt_recov.value?this.td.ovd_intt_recov.value:0)),
                       });
+                      console.log(((+this.accNoEnteredForTransaction.prn_amt)-(+this.td.ovd_intt_recov.value?this.td.ovd_intt_recov.value:0)));
+                      console.log((+this.td.curr_intt_recov.value?this.td.curr_intt_recov.value:0 + res.toFixed(2)));
+                      console.log(((+this.accNoEnteredForTransaction.prn_amt)+(+this.td.curr_intt_recov.value?this.td.curr_intt_recov.value:0 + res.toFixed(2))));
+                      
                       this.isLoading=false;
                     }
                   },

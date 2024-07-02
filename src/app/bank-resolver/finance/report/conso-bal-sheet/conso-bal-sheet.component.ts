@@ -131,11 +131,11 @@ export class ConsoBalSheetComponent implements OnInit {
       this.modalRef.hide();
       for(let i=0;i<this.reportData.length;i++){
         if(this.reportData[i].type=='Liability'){
-          this.opdrSum+=this.reportData[i].curr_bal; this.li++ 
+          this.opcrSum+=this.reportData[i].curr_bal; this.li++ 
           this.lastLi=this.reportData[i].acc_cd
         }
         else{
-          this.opcrSum+=this.reportData[i].curr_bal;; this.ass++
+          this.opdrSum+=this.reportData[i].curr_bal; this.ass++
           this.lastAss=this.reportData[i].acc_cd
 
         }

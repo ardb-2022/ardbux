@@ -68,6 +68,8 @@ export class LoanTransactionApprovalComponent implements OnInit {
   activityName:any
   AllHolder:td_accholder[];
   joinHold:any=[];
+  tempData:any=null;
+
   ngOnInit(): void {
     this.logUser=localStorage.getItem('itemUX');
     this.showINSTNO=false;
@@ -150,6 +152,7 @@ export class LoanTransactionApprovalComponent implements OnInit {
     this.modalRef = this.modalService.show(template, { class: 'modal-lg' });
   }
   public onClickRefreshList() {
+    this.unLockTransaction(this.tempData?this.tempData:null);
     this.HandleMessage(false);
     this.msg.sendCommonTransactionInfo(null);
     this.msg.sendCommonCustInfo(null);
@@ -361,8 +364,40 @@ export class LoanTransactionApprovalComponent implements OnInit {
       );
     }
   }
+  private unLockTransaction(dt:any){
+    console.log(dt);
+    if(dt.trans_cd){
+      debugger
+    const data={
+      "ardb_cd":this.sys.ardbCD, 
+      "brn_cd": this.sys.BranchCode,
+      "adt_trans_dt": dt.trans_dt,
+      "ad_trans_cd": dt.trans_cd  
+      }
+      this.svc.addUpdDel<any>('Deposit/TransactionLockReverse', data).subscribe(
+        res => {
+          this.lockApproveFlag=0
+          console.log(res);
+          if(res){
+            this.disableApprove=true;
+          this.lockApproveFlag=(+res.flag)
+          if(this.lockApproveFlag!=2){
+            // this.onClickRefreshList();
+            this.disableApprove=true;
+            // this.modalRef = this.modalService.show(this.lockApprove, { class: 'modal-lg' });
+          }
+          else{
+            this.disableApprove=true;
+          }
+          debugger;
+          }
+          
+        }
+        )
+    }
+  }
   public selectTransaction(vm: TranApprovalVM): void {
-    // this.disableApprove = false;
+    this.disableApprove = false;
     this.selectedVm = vm;
     this.selectedTransactionCd = vm.td_def_trans_trf.trans_cd;
     this.selectedAccountType = vm.td_def_trans_trf.acc_type_cd;
@@ -371,6 +406,8 @@ export class LoanTransactionApprovalComponent implements OnInit {
     this.lockTransaction(vm.td_def_trans_trf);
     this.getDepTrans(vm.td_def_trans_trf);
     this.showINSTNO=true;
+    this.tempData=null;
+    this.tempData=vm.td_def_trans_trf;
   }
   private lockTransaction(dt:any){
     console.log(dt);
@@ -415,10 +452,10 @@ export class LoanTransactionApprovalComponent implements OnInit {
     this.svc.addUpdDel<any>('Loan/GetLoanData', tmLoanAll).subscribe(
       res => {
         //debugger;
-        
-        loanOpnDm = res;
-        this.AllHolder=loanOpnDm.tdaccholder
-        if(this.AllHolder.length>0){
+        if(res){
+          loanOpnDm = res;
+        this.AllHolder=loanOpnDm?.tdaccholder
+        if(loanOpnDm?.tdaccholder){
           for (let i = 0; i < this.AllHolder.length; i++) {
             console.log(res);
             
@@ -430,14 +467,14 @@ export class LoanTransactionApprovalComponent implements OnInit {
           this.AllHolder=[];
             this.joinHold=[];
         }
-        if (loanOpnDm.tddeftrans){
-          if(loanOpnDm.tddeftrans.activity_cd){
-          this.activityName=this.activityList.filter(e=>e.activity_cd==loanOpnDm.tddeftrans.activity_cd)[0].activity_desc
+        if (loanOpnDm?.tddeftrans){
+          if(loanOpnDm?.tddeftrans.activity_cd){
+          this.activityName=this.activityList.filter(e=>e.activity_cd==loanOpnDm?.tddeftrans?.activity_cd)[0].activity_desc
           }
           else{
             this.activityName='No Activity'
           }
-          const inputString=loanOpnDm.tddeftrans.created_by
+          const inputString=loanOpnDm?.tddeftrans.created_by
           const parts = inputString.split('/');
           if (parts.length > 0) {
             const result = parts[0];
@@ -453,6 +490,12 @@ export class LoanTransactionApprovalComponent implements OnInit {
         this.loanOpenDm = res;
         this.setTransactionDtl();
         this.isLoading = false;
+        }
+        else{
+          this.isLoading = false;
+          console.log("No '/'  DATA found");
+        }
+        
       },
       err => { this.isLoading = false; }
     );

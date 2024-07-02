@@ -18,7 +18,9 @@ import { CommonServiceService } from '../common-service.service';
   providers:[DatePipe]
 })
 export class LoginComponent implements OnInit {
-  private apiUrl = 'https://api64.ipify.org?format=json';
+  
+  private apiUrl = 'https://api.ipify.org/?format=json';
+  // private apiUrl = 'https://api64.ipify.org?format=json';
   // https://api64.ipify.org/?format=json
   // https://api4.ipify.org/?format=json
 
@@ -599,23 +601,23 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('ipAddress',myIP[0])
           this.isLoading = false;
 
-          this.loginForm.enable();
-          resolve(true);
+          // this.loginForm.enable();
+          // resolve(true);
 
-          // let ipMatched = false;
-          // if (e.ip_address.indexOf(myIP[0]) !== -1) {
-          //    ipMatched = true; 
-          //   }
+          let ipMatched = false;
+          if (e.ip_address.indexOf(myIP[0]) !== -1) {
+             ipMatched = true; 
+            }
       
-          // if (!ipMatched) {
-          //   this.showAlert = true;
-          //   this.alertMsg = 'IP not allowed to access, contact support.';
-          //   this.loginForm.disable();
-          //   resolve(false);
-          // } else {
-          //   this.loginForm.enable();
-          //   resolve(true);
-          // }
+          if (!ipMatched) {
+            this.showAlert = true;
+            this.alertMsg = 'IP not allowed to access, contact support.';
+            this.loginForm.disable();
+            resolve(false);
+          } else {
+            this.loginForm.enable();
+            resolve(true);
+          }
         },
         ipErr => {
           this.isLoading = false;

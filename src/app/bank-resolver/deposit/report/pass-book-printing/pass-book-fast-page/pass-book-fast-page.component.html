@@ -37,13 +37,20 @@
     printSectionId={{printID}} ngxPrint [useExistingCss]="true">Print FastPage</button> &nbsp;
   </div>
 <div id="fastPage" style="font-family:Arial, Helvetica, ui-sans-serif;font-size:15px;" hidden>
-    <div style="margin-top: 53%; " *ngIf="sys.ardbCD!='23'&& sys.ardbCD!='22'">&nbsp;</div>
+    <div style="margin-top: 53%; " *ngIf="sys.ardbCD!='23'&& sys.ardbCD!='22'&& sys.ardbCD!='25'">&nbsp;</div>
     <div style="margin-top: 62%; " *ngIf="sys.ardbCD=='23'">&nbsp;</div>
     <div style="margin-top: 49%; " *ngIf="sys.ardbCD=='22'">&nbsp;</div>
+    <div style="margin-top: 47%; " *ngIf="sys.ardbCD=='25'">&nbsp;</div>
+    <div class="form-row" *ngIf="sys.ardbCD=='25'" style="text-align: center;margin-left: 10%;">
+      <h3>Katwa-Kalna Co-op. Agriculture and Rural Development Bank Ltd.<br>
+        Udyag Bhaban K.G.Bose Sarani,Katwa,Purba Bardhaman,W.B-713130<br>
+        Phone:03453255138/9564589358
+      </h3>
+    </div><br><br>
     <div class="form-row" style="margin-left: 10%;">
       <div style="width: 40%;" *ngIf="sys.ardbCD=='26' || sys.ardbCD=='20'"><b>A/C No:  </b> {{paddingACC}}{{suggestedCustomer[0].acc_num}}</div>
       <div style="width: 40%;" *ngIf="sys.ardbCD!='26'"><b>A/C No:  </b>{{suggestedCustomer[0].acc_num}}</div>
-        <div style="text-align: right;width: 20%;"><b *ngIf="sys.ardbCD=='26'||sys.ardbCD=='20'">IFSC: {{IFSC}}</b></div>
+        <div style="text-align: right;width: 20%;"><b *ngIf="sys.ardbCD=='25'||sys.ardbCD=='21'||sys.ardbCD=='26'||sys.ardbCD=='20'">IFSC: {{IFSC}}</b></div>
         <div style="text-align: right;width: 30%;"><b>CIF:  </b>{{masterModel.tmdeposit.cust_cd}}</div>
     </div>
       <div class="form-row" style="margin-left: 10%;padding-top: 5px;">

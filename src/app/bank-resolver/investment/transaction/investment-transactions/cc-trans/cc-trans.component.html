@@ -154,7 +154,21 @@
             <input type="text" [readonly]="true" [value]="showTranDtlRe? 'R':'C'"
               class="form-control form-control-sm" formControlName="trans_mode" id="trans_mode">
           </div>
-          
+          <div class="form-group col-4">
+            <small for="dbs_acc_open_dt">Voucher Date</small>
+            
+          <div class="input-group">
+            <input type="text" placeholder="dd/mm/yyyy" class="form-control form-control-sm" bsDatepicker
+            [ngModel]="voucher_dt" formControlName="voucher_dt"
+              [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }" #VDate [isOpen]="isOpenVDT"
+              >
+            <div class="input-group-append">
+              <button mat-raised-button class="btn btn-outline-secondary btn-sm" type="button" (click)="isOpenVDT = !isOpenVDT">
+                <i class="fa fa-calendar" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+        </div>  
           <!-- (change)="onTransTypeChange()" -->
         <div class="form-group col-2" >
           <small for="trf_type">Transaction  Type <span class="text-danger">*</span></small>
@@ -315,6 +329,21 @@
             </div>
           </div>
         </div>
+        <div class="form-group col-4">
+          <small for="dbs_acc_open_dt">Voucher Date</small>
+          
+        <div class="input-group">
+          <input type="text" placeholder="dd/mm/yyyy" class="form-control form-control-sm" bsDatepicker
+          [ngModel]="voucher_dt" formControlName="voucher_dt"
+            [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }" #VDate [isOpen]="isOpenVDT"
+            >
+          <div class="input-group-append">
+            <button mat-raised-button class="btn btn-outline-secondary btn-sm" type="button" (click)="isOpenVDT = !isOpenVDT">
+              <i class="fa fa-calendar" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+      </div>
           <!-- (change)="onTransTypeChange()" -->
         <div class="form-group col-2" >
           <small for="trf_type">Transaction Type <span class="text-danger">*</span></small>

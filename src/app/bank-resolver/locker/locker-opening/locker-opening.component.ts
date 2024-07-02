@@ -1249,8 +1249,7 @@ debugger
           this.clearData();
           // this.showAlertMsg('INFORMATION', 'Account Record Created Successfully [Account Number:' +
           //   this.DepositModel.tmdeposit.acc_num + '] [Trans Code: ' + this.td_deftrans.trans_cd + ']');
-          this.HandleMessage(true, MessageType.Sucess, 'Account Record Created Successfully [Account Number:' +
-            this.masterModel.tmlocker.acc_num + '] [Trans Code: ' + res + ']');
+          this.HandleMessage(true, MessageType.Sucess, 'Account Record Created Successfully [Trans Code: ' + res + ']');
         }
         else{
           this.isLoading = false;

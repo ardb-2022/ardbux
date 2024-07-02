@@ -1,7 +1,7 @@
 <div class="row d-flex justify-content-center align-items-center"
   style="background-color: #78c2ad21; text-align: center;">
   <div class="col-xs-12 col-sm-12 col-md-11 col-lg-11 mb-2 bg-white p-1">
-    <button mat-raised-button type="button" [disabled]="!selectedVm || disabledApproved" class="btn btn-primary btn-sm ml-1 mr-1"
+    <button mat-raised-button type="button" [disabled]=" disabledApproved" class="btn btn-primary btn-sm ml-1 mr-1"
       (click)="openModal(Appconfirm)">Approve</button>
     <!-- <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1">Set Filter</button>
     <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1">Remove Filter</button> -->
@@ -603,7 +603,7 @@
 <div class="row d-flex justify-content-center align-items-center"
   style="background-color: #78c2ad21; text-align: center;">
   <div class="col-xs-12 col-sm-12 col-md-11 col-lg-11 mb-2 bg-white p-1">
-    <button mat-raised-button type="button" [disabled]="undefined === selectedVm" class="btn btn-primary btn-sm ml-1 mr-1"
+    <button mat-raised-button type="button" [disabled]=" disabledApproved" class="btn btn-primary btn-sm ml-1 mr-1"
       (click)="openModal(Appconfirm)">Approve</button>
     <!-- <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1">Set Filter</button>
     <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1">Remove Filter</button> -->
@@ -643,7 +643,7 @@
 <ng-template #Appconfirm >
   <div class="modal-body text-center" >
     <p>'Are you sure, you want to <b style="color: rgb(8, 148, 55);">APPROVE</b> this Transaction</p>
-    <button mat-raised-button type="button" class="btn btn-light" (click)="this.modalRef.hide()" >No</button>&nbsp;
+    <button mat-raised-button type="button" class="btn btn-light" (click)="ApproveNoClick()" >No</button>&nbsp;
     <button mat-raised-button type="button" class=" btn btn-primary" (click)="onApproveClick()" >Yes</button>
     
   </div>

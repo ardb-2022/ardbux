@@ -78,6 +78,7 @@ export class BlockWiseColLstComponent implements OnInit {
   currPrnSum_recov=0
   totPrn_recov=0;
   penalInttSum_recov=0;
+  advPrnSum_recov=0
   loanNm:any;
   lastLoanID:any
   totalSum=0;
@@ -132,6 +133,7 @@ export class BlockWiseColLstComponent implements OnInit {
       this.totalSum=0
       this.ovdInttSum_recov=0
       this.currInttSum_recov=0
+      this.advPrnSum_recov=0
       this.currPrnSum_recov=0
       this.ovdPrnSum_recov=0
       this.penalInttSum_recov=0
@@ -155,6 +157,7 @@ export class BlockWiseColLstComponent implements OnInit {
       
       this.svc.addUpdDel('Loan/GetDemandCollectionBlockwise',dt).subscribe(data=>{console.log(data)
         this.reportData=data
+        this.reportData = this.reportData.sort((a, b) => (a.block_name < b.block_name ? -1 : 1));
         this.itemsPerPage=this.reportData.length % 50 <=0 ? this.reportData.length: this.reportData.length % 50
         this.isLoading=false
         if(this.reportData.length<50)
@@ -174,11 +177,12 @@ export class BlockWiseColLstComponent implements OnInit {
           this.totalSum+=e.ovd_intt+e.curr_intt+e.curr_prn+e.ovd_prn+e.penal_intt
           this.ovdInttSum_recov+=e.ovd_intt_recov
           this.currInttSum_recov+=e.curr_intt_recov
+          this.advPrnSum_recov+=e.above_1
           this.currPrnSum_recov+=e.curr_prn_recov
           this.ovdPrnSum_recov+=e.ovd_prn_recov
           this.penalInttSum_recov+=e.penal_intt_recov
           this.totOut+=e.outstanding_prn
-          this.totalSum_recov+=e.ovd_intt_recov+e.curr_intt_recov+e.curr_prn_recov+e.ovd_prn_recov+e.penal_intt_recov
+          this.totalSum_recov+=e.ovd_intt_recov+e.curr_intt_recov+e.curr_prn_recov+e.ovd_prn_recov+e.penal_intt_recov+e.above_1
         });
         this.reportData.forEach(e=>{
           this.lastBlock=e.block_name

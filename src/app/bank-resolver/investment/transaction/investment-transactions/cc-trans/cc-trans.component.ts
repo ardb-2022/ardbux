@@ -29,7 +29,9 @@ import { InvestmentTransactionsComponent } from '../investment-transactions.comp
 })
 export class CcTransComponent implements OnInit {
   acc_close_dt:Date;
+  voucher_dt:Date;
   isOpenODT:boolean=false;
+  isOpenVDT:boolean=false;
   clickSave:Subscription
   isLoading: boolean;
   showIns:boolean=true;
@@ -108,9 +110,11 @@ export class CcTransComponent implements OnInit {
     this.masterModel=this.invComServ.masterModel;
     if(this.editDeleteMode){
       this.acc_close_dt = this.masterModel.tddeftrans.instl_start_dt;
+      this.voucher_dt = this.masterModel.tddeftrans.voucher_dt;
     }
     else{
       this.acc_close_dt = this.sys.CurrentDate;
+      this.voucher_dt = this.sys.CurrentDate;
     }
     if(this.editDeleteMode==true && this.accNoEnteredForTransaction2.trans_mode=='R'){
       this.accNoEnteredForTransaction=this.masterModel.tmdepositrenewInv;
@@ -204,7 +208,9 @@ export class CcTransComponent implements OnInit {
       bank_cd:[''],
       branch_cd:[''],
       approval_status: [''],
-      mat_val:['']
+      mat_val:[''],
+      voucher_dt:[this.voucher_dt],
+
     })
     this.tdDefTransFrmC = this.frmBldr.group({
       trans_dt: [''],
@@ -241,7 +247,8 @@ export class CcTransComponent implements OnInit {
       approval_status: [''],
       matVal:[''],
       penal_rt:[''],
-      eff_intt:[0]
+      eff_intt:[0],
+      voucher_dt:[this.voucher_dt],
     })
     this.showMsg = null;
      this.getOperationMaster();
@@ -2000,6 +2007,7 @@ debugger
       toReturn.acc_num = this.td.acc_num.value;
       toReturn.trans_type = this.td.trans_type_key.value;
       toReturn.trans_mode = this.td.trans_mode.value;
+      toReturn.voucher_dt = this.td.voucher_dt.value;
       // toReturn.paid_to = this.td.paid_to.value;
       // toReturn.token_num = this.td.token_num.value;
       toReturn.trf_type = this.td.trf_type.value;
@@ -2210,6 +2218,7 @@ debugger
     // toReturn.paid_to = this.td.paid_to.value;
     // toReturn.token_num = this.td.token_num.value;
     toReturn.trf_type = this.td.trf_type.value;
+    toReturn.voucher_dt = this.td.voucher_dt.value;
 
     
     // switch (selectedOperation.oprn_desc.toLocaleLowerCase()) {
@@ -2408,6 +2417,7 @@ debugger
       toReturn.acc_num = this.tdDefTransFrmC.controls.acc_num.value;
       toReturn.trans_type = this.tdDefTransFrmC.controls.trans_type_key.value;
       toReturn.trans_mode = this.tdDefTransFrmC.controls.trans_mode.value;
+      toReturn.voucher_dt = this.tdDefTransFrmC.controls.voucher_dt.value;
       // toReturn.paid_to = this.td.paid_to.value;
       // toReturn.token_num = this.td.token_num.value;
       toReturn.trf_type = this.tdDefTransFrmC.controls.trf_type.value;

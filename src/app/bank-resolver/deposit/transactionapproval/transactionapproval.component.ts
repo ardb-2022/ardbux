@@ -38,6 +38,8 @@ export class TransactionapprovalComponent implements OnInit {
   vm: TranApprovalVM[] = [];
   filteredVm: TranApprovalVM[] = [];
   selectedVm: TranApprovalVM;
+  selectedVm1: TranApprovalVM;
+  selectedVm2: TranApprovalVM;
   selectedTransactionCd: number;
   isLoading = false;
   showMsg: ShowMessage;
@@ -60,7 +62,7 @@ export class TransactionapprovalComponent implements OnInit {
   transactionDtlsFrm: FormGroup;
   renewDtlsFrm:FormGroup;
   showDenominationDtl = false;
-  disabledApproved:boolean=false;
+  disabledApproved:boolean=true;
   // showTransferDtl = false;
   totalOfDenomination = 0;
   tranferDetails: td_def_trans_trf[] = [];
@@ -93,6 +95,7 @@ export class TransactionapprovalComponent implements OnInit {
     this.resetCustFrom();
     this.resetAccDtlsFrmData();
     this.resetTransactionDtlsFrm();
+    
   }
 
   private resetCustFrom(): void {
@@ -585,6 +588,7 @@ export class TransactionapprovalComponent implements OnInit {
     this.modalRef = this.modalService.show(template, { class: 'modal-lg' });
   }
   public onClickRefreshList() {
+    this.disabledApproved=true;
     this.unLockTransaction(this.tempData?this.tempData:null);
     this.HandleMessage(false);
     this.refresh = false;
@@ -602,7 +606,9 @@ export class TransactionapprovalComponent implements OnInit {
     this.tranferDetails = [];
     this.totalOfDenomination = 0;
     this.AllHolder=[];
-            this.joinHold=[];
+    this.joinHold=[];
+    this.selectedVm1=new TranApprovalVM()
+    this.selectedVm=new TranApprovalVM()
   }
 
   private getAcctTypeMaster(): void {
@@ -642,7 +648,6 @@ export class TransactionapprovalComponent implements OnInit {
     this.tempData=vm.td_def_trans_trf;
     console.log(this.tempData);
     
-    this.lockTransaction(vm.td_def_trans_trf);
     this.HandleMessage(false);
     console.log(vm.td_def_trans_trf)
     this.typeCd=vm.td_def_trans_trf.acc_type_cd
@@ -655,11 +660,15 @@ export class TransactionapprovalComponent implements OnInit {
     debugger
     this.additionalInformation = new AccOpenDM();
     this.selectedVm = vm;
+    // this.selectedVm1 = vm;
+    // this.selectedVm2 = vm;
     this.selectedTransactionCd = vm.td_def_trans_trf.trans_cd;
     this.selectedAccountType = vm.td_def_trans_trf.acc_type_cd;
     this.selectedTransactionMode = vm.td_def_trans_trf.trans_mode;
     this.getTranAcctInfo(vm.td_def_trans_trf.acc_num);
     this.getDepTrans(vm.td_def_trans_trf);
+    this.lockTransaction(vm.td_def_trans_trf);
+
   }
   private lockTransaction(dt:any){
     console.log(dt);
@@ -678,7 +687,11 @@ export class TransactionapprovalComponent implements OnInit {
             this.disabledApproved=false;
           this.lockApproveFlag=(+res.flag)
           if(this.lockApproveFlag!=2){
-            this.onClickRefreshList();
+            this.accDtlsFrm.reset();
+            this.renewDtlsFrm.reset();
+            this.transactionDtlsFrm.reset();
+            this.custMstrFrm.reset();
+            this.tranferDetails=[];
             this.disabledApproved=true;
             this.modalRef = this.modalService.show(this.lockApprove, { class: 'modal-lg' });
           }
@@ -693,7 +706,8 @@ export class TransactionapprovalComponent implements OnInit {
   }
   private unLockTransaction(dt:any){
     console.log(dt);
-    debugger
+    if(dt.trans_cd){
+      debugger
     const data={
       "ardb_cd":this.sys.ardbCD, 
       "brn_cd": this.sys.BranchCode,
@@ -705,21 +719,22 @@ export class TransactionapprovalComponent implements OnInit {
           this.lockApproveFlag=0
           console.log(res);
           if(res){
-            this.disabledApproved=false;
+            this.disabledApproved=true;
           this.lockApproveFlag=(+res.flag)
           if(this.lockApproveFlag!=2){
             // this.onClickRefreshList();
             this.disabledApproved=true;
-            this.modalRef = this.modalService.show(this.lockApprove, { class: 'modal-lg' });
+            // this.modalRef = this.modalService.show(this.lockApprove, { class: 'modal-lg' });
           }
           else{
-            this.disabledApproved=false;
+            this.disabledApproved=true;
           }
           debugger;
           }
           
         }
         )
+    }
   }
   private getAdditionalInformationForAccount(tmDeposit: tm_deposit): void {
     this.fetchingAddInf = true;
@@ -918,6 +933,13 @@ export class TransactionapprovalComponent implements OnInit {
   }
 
   public onApproveClick(): void {
+    this.selectedVm1=new TranApprovalVM();
+    debugger
+    this.selectedVm1=this.selectedVm;
+    debugger
+    this.selectedVm=new TranApprovalVM();
+    this.disabledApproved=true;
+    debugger
     this.modalRef.hide();
     debugger
     if(this.createUser.toLowerCase()==this.logUser.toLowerCase()){
@@ -925,10 +947,10 @@ export class TransactionapprovalComponent implements OnInit {
       
     }
     else{
-      if (this.selectedVm.td_def_trans_trf.trans_type.toLocaleLowerCase() === 'W') {
-        if (this.selectedVm.tm_deposit.acc_type_cd === 1 ||
-          this.selectedVm.tm_deposit.acc_type_cd === 7) {
-          if ((this.selectedVm.tm_deposit.clr_bal - this.selectedVm.td_def_trans_trf.amount) < 0) {
+      if (this.selectedVm1.td_def_trans_trf.trans_type.toLocaleLowerCase() === 'W') {
+        if (this.selectedVm1.tm_deposit.acc_type_cd === 1 ||
+          this.selectedVm1.tm_deposit.acc_type_cd === 7) {
+          if ((this.selectedVm1.tm_deposit.clr_bal - this.selectedVm1.td_def_trans_trf.amount) < 0) {
             this.HandleMessage(true, MessageType.Warning, 'Balance Will Be Negative....So Operation Rejected.' +
               'You First Approve The Deposit Vouchers Then Approve This Voucher.');
             return;
@@ -936,25 +958,26 @@ export class TransactionapprovalComponent implements OnInit {
         }
       }
     //   this.tempData = new TranApprovalVM();
-    // this.tempData=this.selectedVm;
+    // this.tempData=this.selectedVm1;
+    
     this.isLoading = true;
     const param = new p_gen_param();
     param.brn_cd = this.sys.BranchCode; // localStorage.getItem('__brnCd');
-    param.ad_trans_cd =this.transactionDtlsFrm.controls.acc_num.value.length>0? this.selectedVm.td_def_trans_trf.trans_cd:null;
+    param.ad_trans_cd =this.transactionDtlsFrm.controls.acc_num.value.length>0? this.selectedVm1.td_def_trans_trf.trans_cd:null;
     // const dt = this.sys.CurrentDate;
     param.adt_trans_dt = this.sys.CurrentDate;
-    param.ad_acc_type_cd = this.selectedVm.mm_acc_type.acc_type_cd;
-    param.as_acc_num = this.selectedVm.tm_deposit.acc_num;
-    param.flag = this.selectedVm.td_def_trans_trf.trans_type === 'D' ? 'D' : 'W';
+    param.ad_acc_type_cd = this.selectedVm1.mm_acc_type.acc_type_cd;
+    param.as_acc_num = this.selectedVm1.tm_deposit.acc_num;
+    param.flag = this.selectedVm1.td_def_trans_trf.trans_type === 'D' ? 'D' : 'W';
     param.gs_user_id = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
     param.ardb_cd = this.sys.ardbCD
     debugger
     this.svc.addUpdDel<any>('Deposit/ApproveAccountTranaction', param).subscribe(
       res => {
         if (res === 0) {
-          this.selectedVm.td_def_trans_trf.approval_status = 'A';
-          this.HandleMessage(true, MessageType.Sucess, this.selectedVm.tm_deposit.acc_num
-            + '\'s Transaction with Transancation Cd ' + this.selectedVm.td_def_trans_trf.trans_cd
+          this.selectedVm1.td_def_trans_trf.approval_status = 'A';
+          this.HandleMessage(true, MessageType.Sucess, this.selectedVm1.tm_deposit.acc_num
+            + '\'s Transaction with Transancation Cd ' + this.selectedVm1.td_def_trans_trf.trans_cd
             + ' is approved successfully.');
           setTimeout(() => {
             this.onClickRefreshList();
@@ -962,10 +985,13 @@ export class TransactionapprovalComponent implements OnInit {
             
           }, 3000);
         } else {
+          this.onClickRefreshList();
+          this.isLoading = false;
           this.HandleMessage(true, MessageType.Error, JSON.stringify(res));
         }
       },
       err => {
+        this.onClickRefreshList();
         this.isLoading = false;
         const errorMessage=err.error.text;
         if(this.containsSubstring(errorMessage)){
@@ -1000,7 +1026,10 @@ containsSubstring(msg:any): boolean {
       this.filteredVm = this.vm;
     }
   }
-
+  ApproveNoClick(){
+    this.modalRef.hide() ;
+    this.onClickRefreshList();
+  }
   onDeleteClick(): void {
     if (!(confirm('Are you sure you want to Delete Transaction of Acc ' + this.selectedVm.tm_deposit.acc_num
       + ' with Transancation Cd ' + this.selectedVm.td_def_trans_trf.trans_cd))) {

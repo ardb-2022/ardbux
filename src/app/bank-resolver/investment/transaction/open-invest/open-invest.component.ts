@@ -41,7 +41,8 @@ export class OpenInvestComponent implements OnInit {
 
   static accTypes: mm_acc_type[] = [];
   @ViewChild('kycContent', { static: true }) kycContent: TemplateRef<any>;
-  // selectedTransType = '';
+  voucher_dt:Date;
+  isOpenVDT:boolean=false;
   isOpenODT:boolean=false;
   DisTrfTyp:boolean=true
   opeins:boolean=true
@@ -198,6 +199,7 @@ export class OpenInvestComponent implements OnInit {
     this.getAgentList()
      this.getBankName()
     // console.log(this.td_deftranstrfList);
+    this.voucher_dt = this.sys.CurrentDate;
     this.branchCode = this.sys.BranchCode;
     this.createUser = this.sys.UserId +'/'+localStorage.getItem('getIPAddress');
     this.updateUser = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
@@ -242,6 +244,13 @@ export class OpenInvestComponent implements OnInit {
   private convertDate(datestring: string): Date {
     const parts = datestring.match(/(\d+)/g);
     return new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
+  }
+  onVDtChange(dt){
+    console.log(dt);
+    console.log(typeof(dt));
+    this.td_deftrans.voucher_dt=dt;
+    this.voucher_dt=dt;
+    debugger
   }
   onDtChange(opdate){
     debugger
@@ -302,10 +311,11 @@ export class OpenInvestComponent implements OnInit {
     this.masterModel = new AccOpenDM();
   }
   initializeModels() {
-
+    // this.voucher_dt = this.sys.CurrentDate;
     this.tm_deposit = new tm_deposit();
     // this.tm_deposit.opening_dt = this.openDate  ; // this.DateFormatting(this.openDate);
     this.tm_deposit.opening_dt = this.sys.CurrentDate;
+    // this.td_deftrans.voucher_dt = this.sys.CurrentDate;
 
     this.tm_deposit.acc_num = null;
     this.tm_deposit.cheque_facility_flag = 'N';
@@ -738,12 +748,13 @@ this.glcdHide=true
   }
 
   saveData() {
+    console.log(this.td_deftrans);
     console.log(this.td_deftranstrfList);
     
     console.log(this.tm_transferList);
    
     console.log(this.tm_deposit);
-    
+    debugger
     if (this.operationType !== 'I' && this.operationType !== 'U') {
       // this.showAlertMsg('WARNING', 'Record not Created or Updated to Save');
       this.HandleMessage(true, MessageType.Warning, 'Record not Created or Updated to Save');
@@ -802,6 +813,8 @@ this.glcdHide=true
       this.tm_deposit.dep_period = 'Year=' + this.tm_deposit.year + ';Month=' + this.tm_deposit.month + ';Day=' + this.tm_deposit.day;
     }
     console.log(this.td_deftrans.trf_type);
+    console.log(this.td_deftrans.voucher_dt);
+    // console.log(this.td_deftrans.trf_type);
 debugger
     // Populating data for TD_DEP_TRANS_TRF =============================================================
     if (this.td_deftrans.trf_type === 'T') {
@@ -1167,7 +1180,9 @@ debugger
     this.masterModel.tmdepositInv.opening_dt=this.tm_deposit.opening_dt;
     this.masterModel.tmdepositInv.ardb_cd=this.sys.ardbCD;
     this.masterModel.tmdepositInv.brn_cd=this.sys.BranchCode;
-    this.masterModel.tddeftrans.ardb_cd=this.sys.ardbCD;
+    this.masterModel.tddeftrans.ardb_cd=this.sys.ardbCD; 
+    this.masterModel.tddeftrans.voucher_dt=this.voucher_dt;
+
     this.isLoading = true;
     debugger
     if (this.operationType === 'I') // For New Account

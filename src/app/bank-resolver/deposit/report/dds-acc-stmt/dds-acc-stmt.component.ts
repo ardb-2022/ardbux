@@ -180,16 +180,22 @@ export class DdsAccStmtComponent implements OnInit ,AfterViewInit{
       if(this.reportData.length==0){
         this.comser.SnackBar_Nodata()
       } 
-      this.total_bal=this.reportData[0].clr_bal
-      for(let i=0;i<this.reportData.length;i++){
-        if(i==0){
-          this.reportData[i].clr_bal=this.reportData[i].paid_amt
-        }
-        else{
-          this.reportData[i].clr_bal=this.reportData[i-1].clr_bal;
-          this.reportData[i].clr_bal+=this.reportData[i].paid_amt;
-        }
-      }
+
+      let balance = this.reportData[this.reportData.length - 1].clr_bal;
+    for (let i = this.reportData.length - 1; i >= 0; i--) {
+      this.reportData[i]['balance'] = balance;
+      balance -= this.reportData[i].paid_amt;
+    }
+      // this.total_bal=this.reportData[0].clr_bal
+      // for(let i=0;i<this.reportData.length;i++){
+      //   if(i==0){
+      //     this.reportData[i].clr_bal=this.reportData[i].paid_amt
+      //   }
+      //   else{
+      //     this.reportData[i].clr_bal=this.reportData[i-1].clr_bal;
+      //     this.reportData[i].clr_bal+=this.reportData[i].paid_amt;
+      //   }
+      // }
       // this.reportData.forEach(e=>{
       //   if(e==0){
       //     e.clr_bal=e.paid_amt

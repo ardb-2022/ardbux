@@ -277,7 +277,20 @@
         <div *ngIf="accountTypeDiv==23">
 
           <div class="form-row">
-
+            <div class="form-group col-3">
+              <small for="dbs_acc_open_dt">Voucher Date</small>
+              
+            <div class="input-group">
+              <input type="text" placeholder="dd/mm/yyyy" class="form-control form-control-sm" bsDatepicker
+              [ngModel]="voucher_dt" (bsValueChange)="onVDtChange($event)"  [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }" #VDate [isOpen]="isOpenVDT"
+                >
+              <div class="input-group-append">
+                <button mat-raised-button class="btn btn-outline-secondary btn-sm" type="button" (click)="isOpenVDT = !isOpenVDT">
+                  <i class="fa fa-calendar" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+          </div>
             <div class="form-group col-4">
               <small for="term_dep_const">Constitution</small> <br>
               <select
@@ -291,19 +304,7 @@
               </select>
             </div>
 
-            <div class="form-group col-3">
-              <small for="term_dep_oprn_instr">Operational Instr</small> <br>
-              <select
-                style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
-                id="acc_oprn_instr" [(ngModel)]="tm_deposit.oprn_instr_cd" [disabled]='opeins'
-                class="form-control form-control-sm" (change)="setOperationalInstr($event.target.value)">
-                <option [value]="tm_deposit.oprn_instr_cd" selected>
-                  {{tm_deposit.oprn_instr_cd}}-{{tm_deposit.oprn_instr_desc}}</option>
-                <option *ngFor="let l of operationalInstrList" [value]="l.oprn_cd">{{l.oprn_cd}}-{{l.oprn_desc}}
-                </option>
-              </select>
-            </div>
-
+            
             <div class="form-group col-5">
               <div class="container border">
                 <div class="form-row">
@@ -337,8 +338,22 @@
           </div>
           <!-- [(ngModel)]="tm_deposit.intt_trf_type" -->
           <!-- [disabled]='tm_deposit.acc_type_cd==23' -->
+
           <div class="form-row">
-            <div class="form-group col-4">
+            <div class="form-group col-3">
+              <small for="term_dep_oprn_instr">Operational Instr</small> <br>
+              <select
+                style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
+                id="acc_oprn_instr" [(ngModel)]="tm_deposit.oprn_instr_cd" [disabled]='opeins'
+                class="form-control form-control-sm" (change)="setOperationalInstr($event.target.value)">
+                <option [value]="tm_deposit.oprn_instr_cd" selected>
+                  {{tm_deposit.oprn_instr_cd}}-{{tm_deposit.oprn_instr_desc}}</option>
+                <option *ngFor="let l of operationalInstrList" [value]="l.oprn_cd">{{l.oprn_cd}}-{{l.oprn_desc}}
+                </option>
+              </select>
+            </div>
+
+            <div class="form-group col-2">
               <small for="term_dep_int_trans_type">Intt Transfer Type</small> <br>
               <select 
                 style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
@@ -367,7 +382,7 @@
             </div>
 
 
-            <div class="form-group col-3">
+            <div class="form-group col-2">
               <small for="term_dep_interest">Interest</small>
               <input [(ngModel)]="tm_deposit.intt_amt" style="height:25px; text-align-last: right;" [readonly]="true"
                 type="number" min="0" step='any' class="form-control form-control-sm text-capitalize"
