@@ -91,7 +91,7 @@ export class PassBookFastPageComponent implements OnInit {
     public datepipe: DatePipe) { }
   ngOnInit(): void {
     this.getsystemParam();
-    if(this.accType=="6" && this.sys.ardbCD=="26" ){
+    if(this.accType=="6"  ){
       this.printID="fastPageRD"
     }else{
       this.sys.ardbCD=="4"?this.printID="fastPageGhatal":this.printID="fastPage"

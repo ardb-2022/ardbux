@@ -89,6 +89,8 @@ export class CtFortnightNewComponent {
   yearFastDay:any
   constructor(private svc: RestService, private formBuilder: FormBuilder,private exportAsService: ExportAsService, private cd: ChangeDetectorRef, private modalService: BsModalService,private router: Router) { }
   ngOnInit(): void {
+    const nextYear = (+this.currFinYear) + 1;
+    this.currFinYear=`${this.currFinYear} - ${nextYear}`
     this.fromdate = this.sys.CurrentDate;
     this.toDate = this.sys.CurrentDate;
     this.reportcriteria = this.formBuilder.group({

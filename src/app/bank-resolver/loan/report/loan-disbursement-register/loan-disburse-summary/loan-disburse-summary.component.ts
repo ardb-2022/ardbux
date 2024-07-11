@@ -3,36 +3,50 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-import { SystemValues, mm_customer, p_report_param, mm_operation, mm_acc_type } from 'src/app/bank-resolver/Models';
-import { p_gen_param } from 'src/app/bank-resolver/Models/p_gen_param';
+import { SystemValues, mm_customer, p_report_param, mm_operation } from 'src/app/bank-resolver/Models';
 import { tt_trial_balance } from 'src/app/bank-resolver/Models/tt_trial_balance';
 import { RestService } from 'src/app/_service';
-import Utils from 'src/app/_utility/utils';
 import { PageChangedEvent } from "ngx-bootstrap/pagination/public_api";
 import { ExportAsService, ExportAsConfig } from 'ngx-export-as'
-import { DetailListComponent } from '../detail-list/detail-list.component';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import { CommonServiceService } from 'src/app/bank-resolver/common-service.service';
- 
 import html2canvas from 'html2canvas';
 import jspdf from 'jspdf';
 
-import { MatTable } from '@angular/material/table';
+interface GroupedData {
+  group_name: string;
+  loans: AggregatedLoan[];
+  total_disb_amt: number;
+  total_no_of_loans: number;
+}
+
+interface AggregatedLoan {
+  activity_name: string | null;
+  disb_amt: number;
+  no_of_loans: number;
+}
+interface AggregatedLoan {
+  activity_name: string | null;
+  disb_amt: number;
+  no_of_loans: number;
+}
+
 @Component({
-  selector: 'app-npa',
-  templateUrl: './npa.component.html',
-  styleUrls: ['./npa.component.css']
+  selector: 'app-loan-disburse-summary',
+  templateUrl: './loan-disburse-summary.component.html',
+  styleUrls: ['./loan-disburse-summary.component.css']
 })
-export class NpaComponent implements OnInit,AfterViewInit {
+export class LoanDisburseSummaryComponent {
+  groupedData: GroupedData[] = [];
   public static operations: mm_operation[] = [];
+  @ViewChild('mattable') htmlData:ElementRef;
   @ViewChild('content', { static: true }) content: TemplateRef<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatTable) table: MatTable<any>;
   dataSource = new MatTableDataSource()
-  displayedColumns: string[] = ['loan_id','block_name','party_name','activity','case_no','disb_dt','disb_amt', 'prn_due', 'intt_due','npa_dt','ovd_prn','ovd_intt','stan_prn','substan_prn','d1_prn','d2_prn','d3_prn','totalNPA','provision'];
+  displayedColumns: string[] = ['block_name','purpose','fund_type','acc_desc','loan_id','party_name','disb_dt','disb_amt'];
   modalRef: BsModalRef;
   isOpenFromDp = false;
   isOpenToDp = false;
@@ -43,15 +57,14 @@ export class NpaComponent implements OnInit,AfterViewInit {
     ignoreBackdropClick: true // disable backdrop click to close the modal
   };
   trailbalance: tt_trial_balance[] = [];
-  blocks:any[]=[];
-  blocks1:any[]=[];
-  AcctTypes:  mm_acc_type[] = [];
+
+  AcctTypes: mm_operation[];
   prp = new p_report_param();
   reportcriteria: FormGroup;
   closeResult = '';
   showReport = false;
   showAlert = false;
-  isLoading = true;
+  isLoading = false;
   ReportUrl: SafeResourceUrl;
   UrlString = '';
   alertMsg = '';
@@ -60,7 +73,7 @@ export class NpaComponent implements OnInit,AfterViewInit {
   td: any;
   dt: any;
   fromdate: Date;
-  // todate: Date;
+  todate: Date;
   exportAsConfig:ExportAsConfig;
   itemsPerPage = 50;
   currentPage = 1;
@@ -79,7 +92,7 @@ export class NpaComponent implements OnInit,AfterViewInit {
   cAcc:any
   lastAccNum:any
   totIssueSum=0;
-  totPrnDue=0;
+  totCount=0;
   totInttDue=0;
   totPenalIntt=0;
   totOvdPrn=0;
@@ -122,7 +135,14 @@ export class NpaComponent implements OnInit,AfterViewInit {
     value:'Activity',
     name:'Activity'
   },
-  
+  {
+    value:'Loan Type',
+    name:'Loan Type'
+  },
+  {
+    value:'Fund Type',
+    name:'Fund Type'
+  },
   {
     value:'Loan ID',
     name:'Loan ID'
@@ -141,7 +161,14 @@ selectItems1=[
     value:'Activity',
     name:'Activity'
   },
-  
+  {
+    value:'Loan Type',
+    name:'Loan Type'
+  },
+  {
+    value:'Fund Type',
+    name:'Fund Type'
+  },
   {
     value:'Loan ID',
     name:'Loan ID'
@@ -156,16 +183,16 @@ selectItems1=[
     private modalService: BsModalService, private _domSanitizer: DomSanitizer,private exportAsService: ExportAsService, private cd: ChangeDetectorRef,
     private router: Router, private comser:CommonServiceService) { }
   ngOnInit(): void {
-    this.getBlock();
-    this.isLoading=true;
+    
+    // this.isLoading=true;
     this.fromdate = this.sys.CurrentDate;
+    this.todate = this.sys.CurrentDate;
+
     this.reportcriteria = this.formBuilder.group({
-      block: [null, Validators.required],
       fromDate: [null, Validators.required],
-      acc_type_cd: [null, Validators.required],
-      fType: [null, Validators.required]
+      toDate: [null, Validators.required]
     });
-    this.getAccountTypeList();
+    // this.getOperationMaster();
     this.onLoadScreen(this.content);
     var date = new Date();
     var n = date.toDateString();
@@ -175,32 +202,38 @@ selectItems1=[
  onLoadScreen(content) {
     this.modalRef = this.modalService.show(content, this.config);
   }
+  
   setPage(page: number) {
     this.currentPage = page;
     this.cd.detectChanges();
   }
-  
-  getAccountTypeList() {
-
-    if (this.AcctTypes.length > 0) {
-      return;
-    }
-    this.AcctTypes = [];
-
-    this.isLoading = true;
-    this.svc.addUpdDel<any>('Mst/GetAccountTypeMaster', null).subscribe(
-      res => {
-
-        this.isLoading = false;
-        this.AcctTypes = res;
-        this.AcctTypes = this.AcctTypes.filter(c => c.dep_loan_flag === 'L');
-        this.AcctTypes = this.AcctTypes.sort((a, b) => (a.acc_type_cd > b.acc_type_cd) ? 1 : -1);
-      },
-      err => {
-        this.isLoading = false;
-      }
-    );
-  }
+  // private getOperationMaster(): void {
+  //   this.isLoading = true;
+  //   if (undefined !== DetailListComponent.operations &&
+  //     null !== DetailListComponent.operations &&
+  //     DetailListComponent.operations.length > 0) {
+  //     this.isLoading = false;
+  //     this.AcctTypes = DetailListComponent.operations.filter(e => e.module_type === 'LOAN')
+  //       .filter((thing, i, arr) => {
+  //         return arr.indexOf(arr.find(t => t.acc_type_cd === thing.acc_type_cd)) === i;
+  //       });
+  //     this.AcctTypes = this.AcctTypes.sort((a, b) => (a.acc_type_cd > b.acc_type_cd ? 1 : -1));
+  //   } else {
+  //     this.svc.addUpdDel<mm_operation[]>('Mst/GetOperationDtls', null).subscribe(
+  //       res => {
+  //         DetailListComponent.operations = res;
+  //         this.isLoading = false;
+  //         this.AcctTypes = DetailListComponent.operations.filter(e => e.module_type === 'LOAN')
+  //           .filter((thing, i, arr) => {
+  //             return arr.indexOf(arr.find(t => t.acc_type_cd === thing.acc_type_cd)) === i;
+  //           });
+  //         this.AcctTypes = this.AcctTypes.sort((a, b) => (a.acc_type_cd > b.acc_type_cd ? 1 : -1));
+  //         // console.log(this.AcctTypes)
+  //       },
+  //       err => { this.isLoading = false; }
+  //     );
+  //   }
+  // }
   public SubmitReport() {
     if (this.reportcriteria.invalid) {
       this.showAlert = true;
@@ -215,57 +248,28 @@ selectItems1=[
       this.modalRef.hide();
       this.isLoading=true;
       this.totIssueSum=0
-          this.totPrnDue=0
-          this.totInttDue=0
-          this.totPenalIntt=0
-          this.totOvdPrn=0
-          this.totOvdIntt=0
-          this.totStan=0
-          this.totSubStan=0
-          this.totD1=0
-          this.totD2=0
-          this.totD3=0
-          this.totNpaSum=0
-          this.totProvSum=0
-      this.loanNm=this.AcctTypes.filter(e=>e.acc_type_cd==this.reportcriteria.controls.acc_type_cd.value)[0].acc_type_desc
-      this.getBlockName();
-      console.log(this.blocks,this.blocks1,this.reportcriteria.controls.block.value)
-      debugger  
-      console.log(this.loanNm)
+          
+      // this.loanNm=this.AcctTypes.filter(e=>e.acc_type_cd==this.reportcriteria.controls.acc_type_cd.value)[0].acc_type_desc
+      // console.log(this.loanNm)
       this.fromdate = this.reportcriteria.controls.fromDate.value;
+      const todate = this.reportcriteria.controls.toDate.value;
       var dt={
         "ardb_cd":this.sys.ardbCD,
         "brn_cd":this.sys.BranchCode,
-        "acc_cd":this.reportcriteria.controls.acc_type_cd.value,
-        "adt_dt":this.fromdate.toISOString(),
-        "fund_type":this.reportcriteria.controls.fType.value
+        // "acc_cd":this.reportcriteria.controls.acc_type_cd.value,
+        "from_dt": this.fromdate.toISOString(),
+        "to_dt": todate.toISOString()
       }
-      this.svc.addUpdDel('Loan/PopulateNPAList',dt).subscribe(data=>{console.log(data)
+      debugger
+      this.svc.addUpdDel('Loan/PopulateLoanDisburseRegAll',dt).subscribe(data=>{console.log(data)
         // this.reportData=data
          if(!data){
           this.comser.SnackBar_Nodata()
         }
         else{
           this.reportData=data;
-          if(this.reportcriteria.controls.block.value!="0"){
-            this.reportData=this.reportData.filter(e=>e.block_name?.toLowerCase()==this.blocks1[0]?.block_name?.toLowerCase())
-            debugger
-          }
-          else{
-          // this.reportData.filter(e=>e.block_name?.toLowerCase()==this.blocks1[0]?.block_name?.toLowerCase())
-          }
-          for(let i=0;i<this.reportData.length;i++){
-            if(this.reportData[i].npa_dt.substr(0,10)=='01/01/0001'){
-              this.reportData[i].npa_dt='';
-            }
-            else{
-              this.reportData[i].npa_dt=this.comser.getFormatedDate(this.reportData[i].npa_dt);
-            }
-            this.reportData[i].disb_dt=this.comser.getFormatedDate(this.reportData[i].disb_dt);
-            
-          }
+          this.groupLoans();
         }
-        debugger
         this.dataSource.data=this.reportData
         // this.itemsPerPage=this.reportData.length % 50 <=0 ? this.reportData.length: this.reportData.length % 50
         this.isLoading=false
@@ -276,38 +280,35 @@ selectItems1=[
         // this.setPage(2);
         // this.setPage(1)
         this.modalRef.hide();
-        // this.lastAccNum=this.reportData[this.reportData.length-1].loan_id
-        // console.log(this.lastAccNum)
+        this.lastAccNum=this.reportData[this.reportData.length-1].loan_id
+        console.log(this.lastAccNum)
         this.reportData.forEach(e => {
-          if(e.npa_dt=='01/01/0001 00:00'){
-            e.npa_dt=null;
-          }
           this.totIssueSum+=e.disb_amt
-          this.totPrnDue+=e.prn_due
-          this.totInttDue+=e.intt_due
-          this.totPenalIntt+=e.penal_intt
-          this.totOvdPrn+=e.ovd_prn
-          this.totOvdIntt+=e.ovd_intt
-          this.totStan+=e.stan_prn
-          this.totSubStan+=e.substan_prn
-          this.totD1+=e.d1_prn
-          this.totD2+=e.d2_prn
-          this.totD3+=e.d3_prn
-          this.totNpaSum=(+this.totD1)+ (+this.totD2)+(+this.totD3)+(+this.totSubStan)
-          this.totProvSum+=e.provision
-            this.dummytotIssueSum+=e.disb_amt
-            this.dummytotPrnDue+=e.prn_due
-            this.dummytotInttDue+=e.intt_due
-            this.dummytotPenalIntt+=e.penal_intt
-            this.dummytotOvdPrn+=e.ovd_prn
-            this.dummytotOvdIntt+=e.ovd_intt
-            this.dummytotStan+=e.stan_prn
-            this. dummytotSubStan+=e.substan_prn
-            this. dummytotD1+=e.d1_prn
-            this.dummytotD2+=e.d2_prn
-            this.dummytotD3+=e.d3_prn
-            this. dummytotNpaSum+=e.d1_prn+e.d2_prn+e.d3_prn+e.substan_prn
-            this.dummytotProvSum+=e.provision
+          // this.totPrnDue+=e.prn_due
+          // this.totInttDue+=e.intt_due
+          // this.totPenalIntt+=e.penal_intt
+          // this.totOvdPrn+=e.ovd_prn
+          // this.totOvdIntt+=e.ovd_intt
+          // this.totStan+=e.stan_prn
+          // this.totSubStan+=e.substan_prn
+          // this.totD1+=e.d1_prn
+          // this.totD2+=e.d2_prn
+          // this.totD3+=e.d3_prn
+          // this.totNpaSum+=e.d1_prn+e.d2_prn+e.d3_prn+e.stan_prn+e.substan_prn
+          // this.totProvSum+=e.provision
+          //   this.dummytotIssueSum+=e.disb_amt
+          //   this.dummytotPrnDue+=e.prn_due
+          //   this.dummytotInttDue+=e.intt_due
+          //   this.dummytotPenalIntt+=e.penal_intt
+          //   this.dummytotOvdPrn+=e.ovd_prn
+          //   this.dummytotOvdIntt+=e.ovd_intt
+          //   this.dummytotStan+=e.stan_prn
+          //   this. dummytotSubStan+=e.substan_prn
+          //   this. dummytotD1+=e.d1_prn
+          //   this.dummytotD2+=e.d2_prn
+          //   this.dummytotD3+=e.d3_prn
+          //   this. dummytotNpaSum+=e.d1_prn+e.d2_prn+e.d3_prn+e.stan_prn+e.substan_prn
+          //   this.dummytotProvSum+=e.provision
         });
       })
     }
@@ -337,7 +338,7 @@ selectItems1=[
   
     this.cd.detectChanges();
   }
- 
+  
   closeScreen() {
     this.router.navigate([this.sys.BankName + '/la']);
   }
@@ -345,21 +346,17 @@ selectItems1=[
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
-  getBlockName(){
-    const X= this.reportcriteria.controls.block.value
-    debugger
-    this.blocks1=this.blocks.filter(e=>e.block_cd==X)
-    debugger
-    // this.reportcriteria.controls.block.setValue(this.blocks1[0].block_name)
-  }
-  getBlock(){
-    var dt={"ardb_cd":this.sys.ardbCD}
-    this.svc.addUpdDel<any>('Mst/GetBlockMaster', dt).subscribe(
-      res => {
-        this.blocks=res;
-        this.blocks = this.blocks.sort((a, b) => (a.block_name > b.block_name) ? 1 : -1);
-      })
-  }
+
+  // applyFilter(event: Event) {
+  //   const filterValue = (event.target as HTMLInputElement).value;
+  //   this.dataSource.filter = filterValue.trim().toLowerCase();
+
+  //   if (this.dataSource.paginator) {
+  //     this.dataSource.paginator.firstPage();
+  //   }
+  //   this.getTotal()
+    
+  // }
   applyFilter0(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -381,17 +378,27 @@ selectItems1=[
       for(let i=0;i<this.reportData.length;i++){
         this.firstGroup[i]=this.reportData[i].block_name
      }
-      break;
+     break;
+      //  console.log(this.blockNames)
       case "Activity": 
       for(let i=0;i<this.reportData.length;i++){
-        this.firstGroup[i]=this.reportData[i].activity
+        this.firstGroup[i]=this.reportData[i].activity_name
      }
-      
+        break;
+      case "Loan Type": 
+      for(let i=0;i<this.reportData.length;i++){
+        this.firstGroup[i]=this.reportData[i].acc_desc
+     }
+     break;
+     case "Fund Type": 
+     for(let i=0;i<this.reportData.length;i++){
+       this.firstGroup[i]=this.reportData[i].fund_type
+    }
     // this.filteredArray=this.reportData.filter(e=>e.activity_cd?.toLowerCase().includes(filterValue.toLowerCase())==true)
       break;
       case "Party Name":
         for(let i=0;i<this.reportData.length;i++){
-          this.firstGroup[i]=this.reportData[i].party_name
+          this.firstGroup[i]=this.reportData[i].cust_name
        }
     // this.filteredArray=this.reportData.filter(e=>e.party_name?.toLowerCase().includes(filterValue.toLowerCase())==true)
      break;
@@ -416,21 +423,21 @@ selectItems1=[
     switch(this.selectedValue1){
       case "Block": 
       this.filteredArray=this.reportData.filter(e=>e.block_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
+      break;
+      case "Activity": 
+      this.filteredArray=this.reportData.filter(e=>e.activity_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
         break;
-        case "Activity": 
-      this.filteredArray=this.reportData.filter(e=>e.activity?.toLowerCase().includes(this.bName.toLowerCase())==true)
-        break;
-     
+      case "Loan Type": 
+      this.filteredArray=this.reportData.filter(e=>e.acc_desc?.toLowerCase().includes(this.bName.toLowerCase())==true)
+      break;
+      case "Fund Type": 
+      this.filteredArray=this.reportData.filter(e=>e.fund_type?.toLowerCase().includes(this.bName.toLowerCase())==true)
+      break;
+   
       case "Party Name":
-    this.filteredArray=this.reportData.filter(e=>e.party_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
+    this.filteredArray=this.reportData.filter(e=>e.cust_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
      break;
-     case "Interest Upto":
-      this.filteredArray=this.reportData.filter(e=>e.computed_till_dt.includes(this.bName)==true)
-       break;
-       case "Issue DT":
-        this.filteredArray=this.reportData.filter(e=>e.disb_dt.includes(this.bName)==true)
-         break;
-       case "Loan ID":
+      case "Loan ID":
         this.filteredArray=this.reportData.filter(e=>e.loan_id?.toLowerCase().includes(this.bName.toLowerCase())==true)
          break;
 
@@ -447,17 +454,25 @@ selectItems1=[
        case "Block": 
       for(let i=0;i<this.filteredArray1.length;i++){
         this.secondGroup[i]=this.filteredArray1[i].block_name
-     }
-      break;
-      case "Activity": 
+     }break;
+     case "Activity": 
+     for(let i=0;i<this.filteredArray1.length;i++){
+       this.secondGroup[i]=this.filteredArray1[i].activity_name
+    }break;
+      case "Loan Type": 
       for(let i=0;i<this.filteredArray1.length;i++){
-        this.secondGroup[i]=this.filteredArray1[i].activity
+        this.secondGroup[i]=this.filteredArray1[i].acc_desc
      }
+     break;
+      case "Fund Type": 
+      for(let i=0;i<this.filteredArray1.length;i++){
+        this.secondGroup[i]=this.filteredArray1[i].fund_type
+     }
+    // this.filteredArray=this.reportData.filter(e=>e.activity_cd?.toLowerCase().includes(filterValue.toLowerCase())==true)
       break;
-      
       case "Party Name":
         for(let i=0;i<this.filteredArray1.length;i++){
-          this.secondGroup[i]=this.filteredArray1[i].party_name
+          this.secondGroup[i]=this.filteredArray1[i].cust_name
        }
     // this.filteredArray=this.reportData.filter(e=>e.party_name?.toLowerCase().includes(filterValue.toLowerCase())==true)
      break;
@@ -468,12 +483,7 @@ selectItems1=[
        }
         // this.filteredArray=this.reportData.filter(e=>e.loan_id?.toLowerCase().includes(filterValue.toLowerCase())==true)
          break;
-         case "Issue DT":
-          for(let i=0;i<this.filteredArray1.length;i++){
-            this.secondGroup[i]=this.filteredArray1[i].disb_dt
-         }
-          // this.filteredArray=this.reportData.filter(e=>e.loan_id?.toLowerCase().includes(filterValue.toLowerCase())==true)
-           break;
+         
 
     }
     this.secondGroup=Array.from(new Set(this.secondGroup))
@@ -490,16 +500,18 @@ debugger
       this.filteredArray=this.filteredArray1.filter(e=>e.block_name?.toLowerCase().includes(this.bName1.toLowerCase())==true)
         break;
         case "Activity": 
-      this.filteredArray=this.filteredArray1.filter(e=>e.activity?.toLowerCase().includes(this.bName1.toLowerCase())==true)
+      this.filteredArray=this.filteredArray1.filter(e=>e.activity_name?.toLowerCase().includes(this.bName1.toLowerCase())==true)
         break;
-      
+      case "Loan Type": 
+    this.filteredArray=this.filteredArray1.filter(e=>e.acc_desc?.toLowerCase().includes(this.bName1.toLowerCase())==true)
+      break;
+      case "Fund Type": 
+    this.filteredArray=this.filteredArray1.filter(e=>e.fund_type?.toLowerCase().includes(this.bName1.toLowerCase())==true)
+      break;
       case "Party Name":
-    this.filteredArray=this.filteredArray1.filter(e=>e.party_name?.toLowerCase().includes(this.bName1.toLowerCase())==true)
+    this.filteredArray=this.filteredArray1.filter(e=>e.cust_name?.toLowerCase().includes(this.bName1.toLowerCase())==true)
      break;
     
-       case "Issue DT":
-        this.filteredArray=this.filteredArray1.filter(e=>e.disb_dt.includes(this.bName1)==true)
-         break;
        case "Loan ID":
         this.filteredArray=this.filteredArray1.filter(e=>e.loan_id?.toLowerCase().includes(this.bName1.toLowerCase())==true)
          break;
@@ -518,19 +530,22 @@ debugger
       case "Block": 
       this.filteredArray=this.reportData.filter(e=>e.block_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
           break;
-          case "Activity": 
-      this.filteredArray=this.reportData.filter(e=>e.activity?.toLowerCase().includes(this.bName.toLowerCase())==true)
+      case "Activity": 
+      this.filteredArray=this.reportData.filter(e=>e.activity_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
           break;
-      
+      case "Loan Type": 
+      this.filteredArray=this.reportData.filter(e=>e.acc_desc?.toLowerCase().includes(this.bName.toLowerCase())==true)
+          break;
+          case "Fund Type": 
+      this.filteredArray=this.reportData.filter(e=>e.fund_type?.toLowerCase().includes(this.bName.toLowerCase())==true)
+          break;
       case "Party Name":
-      this.filteredArray=this.reportData.filter(e=>e.party_name.toLowerCase().includes(this.bName.toLowerCase())==true)
+      this.filteredArray=this.reportData.filter(e=>e.cust_name.toLowerCase().includes(this.bName.toLowerCase())==true)
          break;
       case "Loan ID":
       this.filteredArray=this.reportData.filter(e=>e.loan_id.toLowerCase().includes(this.bName.toLowerCase())==true)
          break;
-         case "Issue DT":
-        this.filteredArray=this.filteredArray1.filter(e=>e.disb_dt.includes(this.bName1)==true)
-         break;
+         
 
     }
     this.dataSource.data=this.filteredArray
@@ -553,11 +568,16 @@ debugger
       this.filteredArray=this.reportData.filter(e=>e.block_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
         break;
         case "Activity": 
-      this.filteredArray=this.reportData.filter(e=>e.activity?.toLowerCase().includes(this.bName.toLowerCase())==true)
+      this.filteredArray=this.reportData.filter(e=>e.activity_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
         break;
-     
+      case "Loan Type": 
+      this.filteredArray=this.reportData.filter(e=>e.acc_desc?.toLowerCase().includes(this.bName.toLowerCase())==true)
+      break;
+      case "Fund Type": 
+      this.filteredArray=this.reportData.filter(e=>e.fund_type?.toLowerCase().includes(this.bName.toLowerCase())==true)
+      break;
       case "Party Name":
-      this.filteredArray=this.filteredArray.filter(e=>e.party_name.toLowerCase().includes(this.bName.toLowerCase())==true)
+      this.filteredArray=this.filteredArray.filter(e=>e.cust_name.toLowerCase().includes(this.bName.toLowerCase())==true)
       break;
     
        case "Loan ID":
@@ -583,18 +603,6 @@ debugger
     // this.inputEl=document.getElementById('myInput1');
     // this.inputEl.value=''
     this.totIssueSum=this.dummytotIssueSum
-      this.totPrnDue=this.dummytotPrnDue
-      this.totInttDue=this.dummytotInttDue
-      this.totPenalIntt= this.dummytotPenalIntt
-      this.totOvdPrn=this.dummytotOvdPrn
-      this.totOvdIntt=this.dummytotOvdIntt
-      this.totStan=this.dummytotStan
-      this.totSubStan=this.dummytotSubStan
-      this.totD1=this.dummytotD1
-      this.totD2=this.dummytotD2
-      this.totD3=this.dummytotD3
-      this.totNpaSum=this.dummytotNpaSum
-      this.totProvSum=this.dummytotProvSum
     
     this.selectedValue=''
     this.selectedValue1=''
@@ -603,97 +611,97 @@ debugger
     
     
   }
+  // || !loan.block_name
+  // const group_name = `${loan.acc_desc} (${loan.block_name})`;
+
+  groupLoans() {
+    const grouped = this.reportData.reduce((acc: { [key: string]: { [key: string]: AggregatedLoan } }, loan) => {
+      if (!loan.acc_desc|| !loan.block_name || !loan.activity_name) return acc;
+
+      const group_name = `${loan.acc_desc} (${loan.block_name})`;
+      const block = acc[group_name] = acc[group_name] || {};
+      const key = loan.activity_name;
+      const activity = block[key] = block[key] || { activity_name: loan.activity_name, disb_amt: 0, no_of_loans: 0 };
+
+      activity.disb_amt += loan.disb_amt;
+      activity.no_of_loans += 1;
+
+      return acc;
+    }, {});
+
+    this.groupedData = Object.keys(grouped).map(group_name => {
+      const loans:any = Object.values(grouped[group_name]);
+      const total_disb_amt = loans.reduce((sum, loan) => sum + loan?.disb_amt, 0);
+      const total_no_of_loans = loans.reduce((count, loan) => count + loan?.no_of_loans, 0);
+      return {
+        group_name,
+        loans,
+        total_disb_amt,
+        total_no_of_loans
+      };
+    });
+  }
+
+  // groupLoans() {
+  //   const grouped = this.reportData.reduce((acc: { [key: string]: { [key: string]: AggregatedLoan } }, loan) => {
+  //     if (!loan.acc_desc || !loan.activity_name) return acc;
+
+  //     const group_name = `${loan.acc_desc}`;
+  //     const block = acc[group_name] = acc[group_name] || {};
+  //     const key = loan.activity_name;
+  //     const activity = block[key] = block[key] || { activity_name: loan.activity_name, disb_amt: 0, no_of_loans: 0 };
+
+  //     activity.disb_amt += loan.disb_amt;
+  //     activity.no_of_loans += 1;
+
+  //     return acc;
+  //   }, {});
+
+  //   this.groupedData = Object.keys(grouped).map(group_name => ({
+  //     group_name,
+  //     loans: Object.values(grouped[group_name])
+  //   }));
+  // }
   getTotal(){
     this.totIssueSum=0
-    this.totPrnDue=0
-    this.totInttDue=0
-    this.totPenalIntt=0
-    this.totOvdPrn=0
-    this.totOvdIntt=0
-    this.totStan=0
-    this.totSubStan=0
-    this.totD1=0
-    this.totD2=0
-    this.totD3=0
-    this.totNpaSum=0
-    this.totProvSum=0
+    this.totCount=0
     console.log(this.dataSource.filteredData)
     this.filteredArray=this.dataSource.filteredData
     for(let i=0;i<this.filteredArray.length;i++){
       this.totIssueSum+=this.filteredArray[i].disb_amt
-      this.totPrnDue+=this.filteredArray[i].prn_due
-      this.totInttDue+=this.filteredArray[i].intt_due
-      this.totPenalIntt+=this.filteredArray[i].penal_intt
-      this.totOvdPrn+=this.filteredArray[i].ovd_prn
-      this.totOvdIntt+=this.filteredArray[i].ovd_intt
-      this.totStan+=this.filteredArray[i].stan_prn
-      this.totSubStan+=this.filteredArray[i].substan_prn
-      this.totD1+=this.filteredArray[i].d1_prn
-      this.totD2+=this.filteredArray[i].d2_prn
-      this.totD3+=this.filteredArray[i].d3_prn
-      this.totNpaSum=(+this.totD1)+ (+this.totD2)+(+this.totD3)+(+this.totSubStan)
-      this.totProvSum+=this.filteredArray[i].provision
+      this.totCount=this.dataSource.filteredData.length
 
     }
   }
-  // private pdfmake : pdfMake;
-  
-//   exportPDFTitle(){
-//     const doc = new jspdf('landscape', 'pt', 'a4');
-
-//     const table = document.getElementById('mattable');
-//     const rows = table.getElementsByTagName('tr');
-
-//     for (let i = 0; i < rows.length; i++) {
-//       const row = rows[i];
-//       html2canvas(row).then(canvas => {
-//         const imgData = canvas.toDataURL('image/png');
-//         doc.addImage(imgData, 'PNG', 10, 10, 0, 0);
-//         if (i < rows.length - 1) {
-//           doc.addPage();
-//         }
-//         doc.save('my-document.pdf');
-//       });
-//   }
-// }
-//   exportPDFTitle() {
-//     var data = document.getElementById('mattable');
-// html2canvas(data).then(canvas => {
-// // Few necessary setting options
-// var imgWidth = 208;
-// var pageHeight = 295;
-// var imgHeight = canvas.height * imgWidth / canvas.width;
-// var heightLeft = imgHeight;
- 
-// const contentDataURL = canvas.toDataURL('image/png')
-// let pdf = new jspdf('l', 'mm', 'a4'); // A4 size page of PDF
-// var position = 0;
-// pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)
-// pdf.save('MYPdf.pdf'); // Generated PDF
-// });
-    
-// }
-downloadexcel(){
-  this.exportAsConfig = {
-    type: 'xlsx',
-    // elementId: 'hiddenTab', 
-    elementIdOrContent:'mattable'
+  downloadexcel(){
+    this.exportAsConfig = {
+      type: 'xlsx',
+      // elementId: 'hiddenTab', 
+      elementIdOrContent:'mattable'
+    }
+    this.exportAsService.save(this.exportAsConfig, 'LoanDisbursement').subscribe(() => {
+      // save started
+      console.log("hello")
+    });
   }
-  this.exportAsService.save(this.exportAsConfig, 'NPAList').subscribe(() => {
-    // save started
-    console.log("hello")
-  });
-}
-exportPDFTitle() {
-  const doc = new jspdf('landscape');
-
-  const content = document.getElementById('mattable') as HTMLDivElement; // get the HTML content element
-
-  html2canvas(content).then(canvas => { // use html2canvas to convert the HTML content to a canvas
-    const imageData = canvas.toDataURL('image/png', 1.0); // convert the canvas to an image data URL
-    doc.addImage(imageData, 'PNG', 10, 10, doc.internal.pageSize.width, 0); // add the image to the PDF
-    doc.save('sample.pdf'); // save the PDF with a filename
-  });
-}
+  openPDF(): void {
+    const div = document.getElementById('mattable');
+    div.style.width = "fit-content";
+    html2canvas(div, {
+      scale: 2, // Increase the scale to improve the quality
+      scrollX: -window.scrollX, // Fix the position on the x-axis
+      scrollY: -window.scrollY, // Fix the position on the y-axis
+    }).then(canvas => {
+      const pdf = new jspdf('landscape', 'pt');
+      const width = 2000;
+      const height = 1300;
+      const ratio = width / height;
+      const pageWidth =840;
+      // pdf.internal.pageSize.getWidth()
+      const pageHeight = pageWidth / ratio;
+      pdf.addImage(canvas, 'PNG', 0, 0, pageWidth, pageHeight);
+      pdf.save('my-document.pdf');
+    });
+  }
 
 }

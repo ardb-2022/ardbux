@@ -124,7 +124,7 @@
       </button>
     </div>
     <div class="col-xs-12 col-sm-12 shadow-lg mb-4 bg-white p-3 mkScroll">
-     <div id="hiddenTab"  style="font-size: large;" *ngIf="sys.ardbCD!='25'"><br>
+     <div id="hiddenTab"  style="font-size: large;" *ngIf="sys.ardbCD!='25' && sys.ardbCD!='7'"><br>
         <div style="text-align: center;margin-top: 20%;"*ngIf="sys.ardbCD!='25'"><b>{{Header}}</b></div>
         <br><br>
           
@@ -197,7 +197,8 @@
 
        </div>
        <div id="hiddenTab"  style="font-size: large;" *ngIf="sys.ardbCD=='25'"><br>
-        <div style="text-align: center;margin-top: 9%;"><b>{{Header}}</b></div>
+        <h2 style="text-align: center;margin-top: 9%;"><b>K.G.Bose Sarani,Katwa,Purba Bardhaman,W.B-713130</b></h2>
+        <div style="text-align: center;"><b>{{Header}}</b></div>
         <br><br>
           
             <div class="form-row" style="margin-left: 10%;">
@@ -266,6 +267,95 @@
           <div class="form-row"style="margin-left: 5%;"> 
             <div *ngIf="ShowCC" ><b>Mode of Operation:-  {{oprn_instr_desc}}</b></div>
           </div>
+
+       </div>
+       <div id="hiddenTab"  style="font-size: large;" *ngIf="sys.ardbCD=='7'"><br>
+        <div style="text-align: center;margin-top: 19%;"><b>{{Header}}</b></div>
+        <br><br>
+          
+            <div class="form-row" style="margin-left: 10%;">
+              <div style="width: 50%;"><b>Branch:-  {{branchName}}</b> </div>
+              <div *ngIf="showTable" style="text-align: right;width: 40%;"><b>Issue Date:  {{today| date:'dd-MM-yyyy'}}</b></div>
+                
+            </div>
+              <div class="form-row" style="margin-left: 10%;">
+                <div style="width: 50%;"><b>A/C No:-   {{cAcc}}</b></div>
+                <div *ngIf="showTable" style="text-align: right;width: 40%;"><b>CIF:-  {{masterModel.tmdeposit.cust_cd}}</b></div>
+            
+               </div>
+             <div class="form-row" style="margin-left: 10%;" >
+             <div style="width: 60%;"><b>Name:-  {{cName}}</b></div>
+             <div *ngIf="showTable" style="text-align: right;width: 30%;" ><b>Mode of Operation:-  {{oprn_instr_desc}}</b></div>
+            </div>
+            <div class="form-row" style="margin-left: 10%;" >
+              <div style="width: 60%;"><b>Guardian Name:-  {{gName}}</b> </div>
+              <div *ngIf="showTable && ShowMIS" style="text-align: right;width: 30%;"><b>SI Credited To:-  {{this.sbAcc}}</b></div>
+              
+            </div>
+            <div class="form-row"style="margin-left: 10%;"> 
+              <div *ngIf="showTable"><b>Joint Holder's Name:-   {{joinHold}}</b></div>
+            </div>
+            <div class="form-row"style="margin-left: 10%;"> 
+              <div><b>Address:-  {{cAddress}}</b></div>
+            </div>
+            <div class="form-row"style="margin-left: 10%;">
+              <div *ngIf="showTable && ShowMIS"><b>Monthly Installment:-  {{masterModel.tmdeposit.intt_amt|currency:'INR'}}({{masterModel.tmdeposit.intt_amt|amountToWord}})</b></div>
+            </div>
+
+        <table  class="mkSmall" *ngIf="showTable">    
+          <tr>
+            <th style="text-align:center;"><u>Deposit Amount</u></th>
+            <th style="text-align:center;"><u>Deposit Period</u></th>
+            <th style="text-align:center;"><u>Interest Rate</u></th>
+            <th style="text-align:center;"><u>Effective Date</u></th>
+            <th style="text-align:center;"><u>Maturity Date</u></th>
+            <th style="text-align:center;" *ngIf="ShowCC"><u>Maturity Value</u></th>
+    
+    
+          </tr>
+          <tbody>
+           <tr *ngIf="showTable" style="font-weight: 700;">
+              <td style="text-align:center;">{{masterModel.tmdeposit.prn_amt|currency:'INR'}}</td>
+              <td style="text-align:center;">{{Deposit_Period}}</td>
+              <td style="text-align:center;">{{masterModel.tmdeposit.intt_rt}}%</td>
+              <td style="text-align:center;">{{masterModel.tmdeposit.opening_dt.toString().substr(0,10)}}</td>
+              <td style="text-align:center;">{{masterModel.tmdeposit.mat_dt.toString().substr(0,10)}}</td>
+              <td style="text-align: center;" *ngIf="ShowCC">{{masterModel.tmdeposit.prn_amt+masterModel.tmdeposit.intt_amt|currency:'INR'}}</td>
+    
+            </tr>
+          </tbody>
+          </table>
+          <div *ngIf="showTable" class="form-row"style="margin-left: 5%; margin-top:22%"> 
+            <div style="margin-left: 20px"><b>Name:- {{cName}}, </b></div>
+            <div style="margin-left: 20px"><b>A/C No:- {{cAcc}}, </b></div>
+            <div style="margin-left: 20px"><b>Issue Date:- {{today| date:'dd-MM-yyyy'}}, </b></div>
+            <div style="margin-left: 20px"><b>Amount:- {{masterModel?.tmdeposit?.prn_amt|currency:'INR'}}, </b></div>
+            <div style="margin-left: 20px"><b>Deposit Period:- {{Deposit_Period}}</b></div>
+            <div style="margin-left: 20px"><b>ROI:- {{masterModel.tmdeposit.intt_rt}}%, </b></div>
+            <div style="margin-left: 20px"><b>Maturity Date:- {{masterModel.tmdeposit.mat_dt.toString().substr(0,10)}}, </b></div>
+            <div  style="margin-left: 20px" *ngIf="ShowCC"><b>Maturity Value:- {{masterModel?.tmdeposit?.prn_amt+masterModel?.tmdeposit?.intt_amt|currency:'INR'}} </b></div>     
+          </div>
+          <!-- <div class="form-row"style="margin-left: 5%;"> 
+            <div *ngIf="showTable && ShowMIS"><b>Monthly Installment:-  {{masterModel.tmdeposit.intt_amt|currency:'INR'}}({{masterModel.tmdeposit.intt_amt|amountToWord}})</b></div>
+          </div>
+          <div class="form-row"style="margin-left: 5%;"> 
+            <div *ngIf="showTable && ShowMIS"><b>Issue Amount in Words:-  {{masterModel.tmdeposit.prn_amt|amountToWord}}</b></div>
+          </div>
+          <div class="form-row"style="margin-left: 5%;"> 
+            <div *ngIf="ShowMIS" ><b>Mode of Operation:-  {{oprn_instr_desc}}</b></div>
+          </div>
+          <div class="form-row"style="margin-left: 5%;"> 
+            <div *ngIf="showTable && ShowMIS" ><b>SI Credited To:-  {{this.sbAcc}}</b></div>
+          </div>
+          <div class="form-row"style="margin-left: 5%;"> 
+            <div *ngIf="showTable && ShowCC"><b>Issue Amount in Words:-  {{masterModel.tmdeposit.prn_amt|amountToWord}}</b></div>
+          </div>
+          <div class="form-row"style="margin-left: 5%;"> 
+            <div *ngIf="showTable && ShowCC"><b>Mature Amount in Words:-  {{masterModel.tmdeposit.prn_amt+masterModel.tmdeposit.intt_amt|amountToWord}}</b></div>
+          </div>
+          <div class="form-row"style="margin-left: 5%;"> 
+            <div *ngIf="ShowCC" ><b>Mode of Operation:-  {{oprn_instr_desc}}</b></div>
+          </div> -->
 
        </div>
     </div>

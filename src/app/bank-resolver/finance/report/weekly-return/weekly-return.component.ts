@@ -134,10 +134,10 @@ export class WeeklyReturnComponent implements OnInit ,AfterViewInit{
       // this.setPage(1)
       // this.crSum=0;
       // this.drSum=0
-      // this.reportData.forEach(e=>{
-      //   this.crSum+=e.cr_amt;
-      //   this.drSum+=e.dr_amt;
-      // })
+      this.reportData.forEach(e=>{
+        this.crSum+=e.cr_amt;
+        this.drSum+=e.dr_amt;
+      })
       // this.lastcrAccCD=this.reportData[this.reportData.length-1].cr_acc_cd
       // this.lastdrAccCD=this.reportData[this.reportData.length-1].dr_acc_cd
       // this.setPage(1)

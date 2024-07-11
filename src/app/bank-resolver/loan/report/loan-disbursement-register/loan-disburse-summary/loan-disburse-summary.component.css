@@ -120,10 +120,12 @@
     /* padding-left: 20px; */
   }
   .mat-column-disb_amt{
-    border-right: 1px solid rgb(172, 170, 170);
+    text-align: right;
+    /* border-right: 1px solid rgb(172, 170, 170); */
     /* padding-left: 20px; */
   }
-  .mat-column-ovd_intt{
+  .mat-column-penal_intt{
+    text-align: right;
     border-right: 1px solid rgb(172, 170, 170);
     /* padding-left: 20px; */
   }
@@ -133,14 +135,17 @@
     padding-left: 20px;
   }
   .mat-column-intt_due{
+    text-align: right;
     border-right: 1px solid rgb(172, 170, 170);
     /* padding-left: 20px; */
   }
-    .mat-column-d3_prn{
+  .mat-column-d3_prn{
+    text-align: right;
     border-right: 1px solid rgb(172, 170, 170);
     /* padding-left: 20px; */
-  }
+  } 
   .mat-column-provision{
+    text-align: right;
     border-right: 1px solid rgb(172, 170, 170);
     /* padding-left: 20px; */
   }
@@ -202,18 +207,28 @@
   }
   
   
- 
+  table {margin-left: 10%;
+    width: 70%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  th {
+    background-color: #f2f2f2;
+    text-align: left;
+  }
   footer{
     margin-left: 25px ; 
     position:relative; 
     bottom: 0px;
   }
 
-@media print{
-  @page {
-    orientation: landscape !important;
-}
-  footer{
+@media print{footer{
   margin-top: 25px !important; 
   margin-left: 25px !important; 
   position:fixed!important; 

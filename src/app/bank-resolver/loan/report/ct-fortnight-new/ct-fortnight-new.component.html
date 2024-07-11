@@ -83,7 +83,7 @@
         
       </thead>
         <tbody *ngIf="reportData">
-    <th colspan="10"><h4><b>01).DEMAND OF THE FINANCIAL YEAR{{currFinYear}}</b></h4></th>
+    <th colspan="10"><h4><b>01).DEMAND OF THE FINANCIAL YEAR {{currFinYear}}</b></h4></th>
     <tr>
         <th style="text-align:center">Category of Demand (Principal)</th>
         <th style="text-align:center">Farm Loan (Principal)</th>
@@ -140,7 +140,7 @@
         <tbody *ngIf="reportData3">
         <th colspan="10"><h4><b>02).COLLECTION MADE DURING THE FORTNIGHT</b></h4></th>
         <tr>
-            <th style="text-align:center">Category of Demand (Principal)</th>
+            <th style="text-align:center">Category of Collection (Principal)</th>
             <th style="text-align:center">Farm Loan (Principal)</th>
             <th style="text-align:center">Non Farm  (Principal)</th>
             <th style="text-align:center">Rural Housing  (Principal)</th>
@@ -167,7 +167,7 @@
         </tbody>
         <tbody *ngIf="reportData4">
         <tr>
-            <th style="text-align:center">Category of Demand (Interest)</th>
+            <th style="text-align:center">Category of Collection (Interest)</th>
             <th style="text-align:center">Farm Loan (Interest)</th>
             <th style="text-align:center">Non Farm  (Interest)</th>
             <th style="text-align:center">Rural Housing  (Interest)</th>
@@ -195,7 +195,7 @@
         <tbody *ngIf="reportData5">
             <th colspan="10"><h4><b>03).PROGRESSIVE COLLECTION MADE UP TO END OF THE FORTNIGHT</b></h4></th>
             <tr>
-                <th style="text-align:center">Category of Demand (Principal)</th>
+                <th style="text-align:center">Category of Collection (Principal)</th>
                 <th style="text-align:center">Farm Loan (Principal)</th>
                 <th style="text-align:center">Non Farm  (Principal)</th>
                 <th style="text-align:center">Rural Housing  (Principal)</th>
@@ -203,8 +203,8 @@
                 <th style="text-align:center"> S.C.C.Y (Principal)</th>
                 <th style="text-align:center"> J.L.G (Principal)</th>
                 <th style="text-align:center"> Others (Principal)</th>
-                <th style="text-align:center"> Total demand this year (Principal)</th>
-                <th style="text-align:center"> Total demand previous year (Principal)</th>
+                <th style="text-align:center"> Total collection this year (Principal)</th>
+                <th style="text-align:center"> Total collection previous year (Principal)</th>
             </tr>
           
             <tr *ngFor="let row of reportData5">
@@ -222,7 +222,7 @@
         </tbody>
         <tbody *ngIf="reportData6">
            <tr>
-                <th style="text-align:center">Category of Demand (Interest)</th>
+                <th style="text-align:center">Category of Collection (Interest)</th>
                 <th style="text-align:center">Farm Loan (Interest)</th>
                 <th style="text-align:center">Non Farm (Interest)</th>
                 <th style="text-align:center">Rural Housing (Interest)</th>
@@ -230,8 +230,8 @@
                 <th style="text-align:center"> S.C.C.Y (Interest)</th>
                 <th style="text-align:center"> J.L.G (Interest)</th>
                 <th style="text-align:center"> Others (Interest)</th>
-                <th style="text-align:center"> Total demand this year (Interest)</th>
-                <th style="text-align:center"> Total demand previous year (Interest)</th>
+                <th style="text-align:center"> Total collection this year (Interest)</th>
+                <th style="text-align:center"> Total collection previous year (Interest)</th>
             </tr>
           
             <tr *ngFor="let row of reportData6"  [ngClass]="{'bold-row': row.category.includes('GRAND TOTAL')}">
@@ -278,7 +278,7 @@
         <tbody *ngIf="reportData8">
                 <th colspan="10"><h4><b>05).LENDING  MADE DURING THE FORTNIGHT.</b></h4></th>
                 <tr>
-                    <th style="text-align:center">Category of Demand </th>
+                    <th style="text-align:center">Category of Investment </th>
                     <th style="text-align:center">Farm Loan </th>
                     <th style="text-align:center">Non Farm  </th>
                     <th style="text-align:center">Rural Housing  </th>
@@ -306,7 +306,7 @@
         <tbody *ngIf="reportData9">
                 <th colspan="10"><h4><b>06).PROGRSSIVE TOTAL OF THE  LENDING  MADE UPTO THE END OF THE FORTNIGHT</b></h4></th>
                 <tr>
-                    <th style="text-align:center">Category of Demand </th>
+                    <th style="text-align:center">Category of Investment </th>
                     <th style="text-align:center">Farm Loan </th>
                     <th style="text-align:center">Non Farm </th>
                     <th style="text-align:center">Rural Housing  </th>

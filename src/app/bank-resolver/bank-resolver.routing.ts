@@ -205,6 +205,7 @@ import { SendSmsFromDemandComponent } from './loan/report/send-sms-from-demand/s
 import { UpdatedDemandListComponent } from './loan/report/demand-list/updated-demand-list/updated-demand-list.component';
 import { CtFortnightNewComponent } from './loan/report/ct-fortnight-new/ct-fortnight-new.component';
 import { CtFortnightNewConsoComponent } from './loan/report/ct-fortnight-new-conso/ct-fortnight-new-conso.component';
+import { LoanDisburseSummaryComponent } from './loan/report/loan-disbursement-register/loan-disburse-summary/loan-disburse-summary.component';
 
 const routes: Routes = [
   { path: 'Admin', component: AdminPanelComponent },
@@ -317,6 +318,7 @@ const routes: Routes = [
       { path: 'LR_DisReg', component: LoanDisbursementRegisterComponent, canActivate: [AuthGuard] },
       { path: 'LR_DisNorm', component: LoanDisburseNormalComponent, canActivate: [AuthGuard] },
       { path: 'LR_DisAll', component: LoanDisburseActWiseComponent, canActivate: [AuthGuard] },
+      { path: 'LR_DisSum', component: LoanDisburseSummaryComponent, canActivate: [AuthGuard] },
       { path: 'LR_AWISECol', component: ActWiseColLstComponent, canActivate: [AuthGuard] },
       { path: 'LR_BWISECol', component: BlockWiseColLstComponent, canActivate: [AuthGuard] },
       { path: 'LR_AdvRec', component: AdRecStmtComponent, canActivate: [AuthGuard] },

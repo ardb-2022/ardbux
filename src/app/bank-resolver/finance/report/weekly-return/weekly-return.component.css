@@ -22,6 +22,9 @@
     text-align: center;
   }
   
+  .mat-column-disclaimer1 {
+    border-right: 1px solid rgb(172, 170, 170);
+  }
    
   table{
     width: 100%;

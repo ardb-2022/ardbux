@@ -235,17 +235,17 @@ export class PrintCertificateComponent implements OnInit {
    if(this.reportcriteria.controls.acc_type_cd.value=='5'){
       this.ShowMIS=true;
       this.ShowCC=false;
-      this.Header="MIS CERTIFICATE";
+      this.Header="MIS Certificate";
     }
     else if(this.reportcriteria.controls.acc_type_cd.value=='2'){
       this.ShowMIS=false;
       this.ShowCC=true;
-      this.Header="FIXED DEPOSIT CERTIFICATE";
+      this.Header="Fixed Deposit Certificate";
     }
     else{
       this.ShowMIS=false;
       this.ShowCC=true;
-      this.Header="TERM DEPOSIT CERTIFICATE";
+      this.Header="Term Deposit Certificate";
     }
     if (this.reportcriteria.invalid) {
       this.showAlert = true;
@@ -262,9 +262,9 @@ export class PrintCertificateComponent implements OnInit {
           //debugger;
           this.isLoading = false;
           this.masterModel = res;
-          let y=this.masterModel.tmdeposit.dep_period.split(";")[0]
-          let m=this.masterModel.tmdeposit.dep_period.split(";")[1]
-          let d=this.masterModel.tmdeposit.dep_period.split(";")[2]
+          let y=this.masterModel?.tmdeposit?.dep_period.split(";")[0]
+          let m=this.masterModel?.tmdeposit?.dep_period.split(";")[1]
+          let d=this.masterModel?.tmdeposit?.dep_period.split(";")[2]
           d=d.substr(4-d.length)
           console.log(d);
           m=m.substr(6-m.length)

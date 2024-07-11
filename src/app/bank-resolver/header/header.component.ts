@@ -98,12 +98,15 @@ matmenuTrg:any=[];
   passSave:boolean=false;
   Npassword:any;
   Cpassword:any;
+  currFinYear:any='';
   ngOnInit(): void {
     this.PassCH = this.formBuilder.group({
       Npassword:['', Validators.required],
       Cpassword: ['', Validators.required]
     })
     this.currUser=localStorage.getItem('__userId');
+    const nextYear = (+this.sys?.CurrentFinancialYr) + 1;
+    this.currFinYear=`${this.sys?.CurrentFinancialYr} - ${nextYear}`
     this.CheckPasswordValidity();
   // this.getUser()
   this.getLogdUser()

@@ -661,12 +661,7 @@
                     <input type="text" class="form-control form-control-sm text-capitalize" id="Inst_num" [disabled]="!(undefined !== l.cust_acc_type && l.cust_acc_type.length > 0)
                       && !(undefined !== l.gl_acc_code && l.gl_acc_code.length > 0)">
                   </div>
-                  <button mat-raised-button
-                    *ngIf="td_deftranstrfList.length > 1 && (undefined !== l.cust_acc_type || undefined !== l.gl_acc_code  )"
-                    type="button" style="height:22px; padding-top: 0px;" class="btn btn-danger btn-sm mt-4"
-                    (click)="removeTransfer(l)">
-                    <i class="fa fa-minus-circle" aria-hidden="true"></i>
-                  </button>
+                  
                 </div>
                 <div class="form-row">
                   <!-- <div class="form-group col-2">
@@ -758,7 +753,16 @@
                       class="form-control form-control-sm text-capitalize" id="debit_amount">
                         
                   </div>
-
+                  <div class="form-group col-1">
+                    
+                    <button
+                    *ngIf="td_deftranstrfList.length > 1 && (undefined !== l.cust_acc_type || undefined !== l.gl_acc_code  )"
+                    type="button" style="height:22px; padding-top: 0px;" class="btn btn-danger btn-sm mt-4"
+                    (click)="removeTransfer(l)">
+                    <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                  </button>
+                  </div>
+                  
                 </div>
                 
                 <hr />

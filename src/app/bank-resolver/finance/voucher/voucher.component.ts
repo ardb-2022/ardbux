@@ -402,10 +402,10 @@ export class VoucherComponent implements OnInit {
             this.maccmaster1.length=0
       }
       else{
-        this.HandleMessage(true, MessageType.Error, 'Same GL-Head Can not be use in Entry Screen');
-        this.VoucherF.controls[i].get('acc_cd').setValue('');
-        this.VoucherF.controls[i].get('desc').setValue('');
-        this.maccmaster1.length=0 
+        this.HandleMessage(true, MessageType.Warning, 'You have Enter Same GL-Head');
+        this.VoucherF.controls[i].get('desc').setValue(search.acc_name)
+            this.VoucherF.controls[i].get('acc_cd').setValue(search.acc_cd)
+            this.maccmaster1.length=0
       }
         
     }
@@ -498,10 +498,10 @@ debugger
           this.maccmaster1.length=0
     }
     else{
-      this.HandleMessage(true, MessageType.Error, 'Same GL-Head Can not be use in Entry Screen');
-      this.VoucherF.controls[i].get('acc_cd').setValue('');
-      this.VoucherF.controls[i].get('desc').setValue('');
-      this.maccmaster1.length=0 
+      this.HandleMessage(true, MessageType.Warning, 'You have Enter Same GL-Head');
+      this.VoucherF.controls[i].get('desc').setValue(entry.acc_name)
+          this.VoucherF.controls[i].get('acc_cd').setValue(entry.acc_cd)
+          this.maccmaster1.length=0
     }
       
   }

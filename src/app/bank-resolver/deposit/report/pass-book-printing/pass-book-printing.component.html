@@ -198,6 +198,7 @@
     <div id="hiddenTabRD" hidden>
       <br><br>
       <table style="width: 60%;font-size: large;" class="mkSmallRD">
+        <!-- to be change for alipur -->
         <tbody *ngFor="let i of printData; let itr=index;">
           <tr *ngIf="i.balance==null">
             <td style="margin-top: 30px;">&nbsp;</td>
@@ -231,9 +232,9 @@
       <!-- <br><br><br><br>
 <small>This Report Is Generated Through CFS-2022, Kolkata</small> -->
     </div>
-    <div id="hiddenTab" >
+    <div id="hiddenTab" hidden>
       <br><br>
-      <table  class="mkSmall" *ngIf="sys.ardbCD!='22' && sys.ardbCD!='21'">
+      <table  class="mkSmall" *ngIf="sys.ardbCD!='22' && sys.ardbCD!='21' ">
         <tbody *ngFor="let i of printData; let itr=index;">
           <tr *ngIf="i.trans_type==null">
            <td style="margin-top: 24px;">&nbsp;</td>

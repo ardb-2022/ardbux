@@ -93,8 +93,8 @@
         <th style="text-align:center"> S.C.C.Y (Principal)</th>
         <th style="text-align:center"> J.L.G (Principal)</th>
         <th style="text-align:center"> Others (Principal)</th>
-        <th style="text-align:center"> Total demand this year (Principal)</th>
-        <th style="text-align:center"> Total demand previous year (Principal)</th>
+        <th style="text-align:center"> Total demand this F.Y. (Principal)</th>
+        <th style="text-align:center"> Total demand previous F.Y. (Principal)</th>
     </tr>
   
     <tr *ngFor="let row of reportData">
@@ -120,8 +120,8 @@
             <th style="text-align:center"> S.C.C.Y (Interest)</th>
             <th style="text-align:center"> J.L.G (Interest)</th>
             <th style="text-align:center"> Others (Interest)</th>
-            <th style="text-align:center"> Total demand this year (Interest)</th>
-            <th style="text-align:center"> Total demand previous year (Interest)</th>
+            <th style="text-align:center"> Total demand this F.Y. (Interest)</th>
+            <th style="text-align:center"> Total demand previous F.Y. (Interest)</th>
         </tr>
       
         <tr *ngFor="let row of reportData2" [ngClass]="{'bold-row': row.category.includes('GRAND TOTAL')}">
@@ -140,7 +140,7 @@
         <tbody *ngIf="reportData3">
         <th colspan="10"><h4><b>02).COLLECTION MADE DURING THE FORTNIGHT</b></h4></th>
         <tr>
-            <th style="text-align:center">Category of Demand (Principal)</th>
+            <th style="text-align:center">Category of Collection (Principal)</th>
             <th style="text-align:center">Farm Loan (Principal)</th>
             <th style="text-align:center">Non Farm  (Principal)</th>
             <th style="text-align:center">Rural Housing  (Principal)</th>
@@ -149,7 +149,7 @@
             <th style="text-align:center"> J.L.G (Principal)</th>
             <th style="text-align:center"> Others (Principal)</th>
             <th style="text-align:center"> Total collection of principal upto the end of the period </th>
-            <th style="text-align:center"> Total principal collection during the period of previous year </th>
+            <th style="text-align:center"> Total principal collection during the period of previous F.Y. </th>
         </tr>
       
         <tr *ngFor="let row of reportData3">
@@ -167,7 +167,7 @@
         </tbody>
         <tbody *ngIf="reportData4">
         <tr>
-            <th style="text-align:center">Category of Demand (Interest)</th>
+            <th style="text-align:center">Category of Collection (Interest)</th>
             <th style="text-align:center">Farm Loan (Interest)</th>
             <th style="text-align:center">Non Farm  (Interest)</th>
             <th style="text-align:center">Rural Housing  (Interest)</th>
@@ -176,7 +176,7 @@
             <th style="text-align:center"> J.L.G (Interest)</th>
             <th style="text-align:center"> Others (Interest)</th> 
             <th style="text-align:center"> Total collection of Interest during the period</th>
-            <th style="text-align:center"> Total Interest collection during the period of previous year </th>
+            <th style="text-align:center"> Total Interest collection during the period of previous F.Y. </th>
         </tr>
       
         <tr *ngFor="let row of reportData4" [ngClass]="{'bold-row': row.category.includes('GRAND TOTAL')}">
@@ -195,7 +195,7 @@
         <tbody *ngIf="reportData5">
             <th colspan="10"><h4><b>03).PROGRESSIVE COLLECTION MADE UP TO END OF THE FORTNIGHT</b></h4></th>
             <tr>
-                <th style="text-align:center">Category of Demand (Principal)</th>
+                <th style="text-align:center">Category of Collection (Principal)</th>
                 <th style="text-align:center">Farm Loan (Principal)</th>
                 <th style="text-align:center">Non Farm  (Principal)</th>
                 <th style="text-align:center">Rural Housing  (Principal)</th>
@@ -203,8 +203,8 @@
                 <th style="text-align:center"> S.C.C.Y (Principal)</th>
                 <th style="text-align:center"> J.L.G (Principal)</th>
                 <th style="text-align:center"> Others (Principal)</th>
-                <th style="text-align:center"> Total demand this year (Principal)</th>
-                <th style="text-align:center"> Total demand previous year (Principal)</th>
+                <th style="text-align:center"> Total collection this F.Y. (Principal)</th>
+                <th style="text-align:center"> Total collection previous F.Y. (Principal)</th>
             </tr>
           
             <tr *ngFor="let row of reportData5">
@@ -222,7 +222,7 @@
         </tbody>
         <tbody *ngIf="reportData6">
            <tr>
-                <th style="text-align:center">Category of Demand (Interest)</th>
+                <th style="text-align:center">Category of Collection (Interest)</th>
                 <th style="text-align:center">Farm Loan (Interest)</th>
                 <th style="text-align:center">Non Farm (Interest)</th>
                 <th style="text-align:center">Rural Housing (Interest)</th>
@@ -230,8 +230,8 @@
                 <th style="text-align:center"> S.C.C.Y (Interest)</th>
                 <th style="text-align:center"> J.L.G (Interest)</th>
                 <th style="text-align:center"> Others (Interest)</th>
-                <th style="text-align:center"> Total demand this year (Interest)</th>
-                <th style="text-align:center"> Total demand previous year (Interest)</th>
+                <th style="text-align:center"> Total collection this F.Y. (Interest)</th>
+                <th style="text-align:center"> Total collection previous F.Y. (Interest)</th>
             </tr>
           
             <tr *ngFor="let row of reportData6" [ngClass]="{'bold-row': row.category.includes('GRAND TOTAL')}">
@@ -258,8 +258,8 @@
                 <th style="text-align:center"> S.C.C.Y</th>
                 <th style="text-align:center"> J.L.G</th>
                 <th style="text-align:center"> Others</th>
-                <th style="text-align:center"> Total target of investment for the year</th>
-                <th style="text-align:center"> Target of investment in the previous year</th>
+                <th style="text-align:center"> Total target of investment for the F.Y.</th>
+                <th style="text-align:center"> Target of investment in the previous F.Y.</th>
             </tr>
           
             <tr >
@@ -278,7 +278,7 @@
         <tbody *ngIf="reportData8">
                 <th colspan="10"><h4><b>05).LENDING  MADE DURING THE FORTNIGHT.</b></h4></th>
                 <tr>
-                    <th style="text-align:center">Category of Demand </th>
+                    <th style="text-align:center">Category of Investment </th>
                     <th style="text-align:center">Farm Loan </th>
                     <th style="text-align:center">Non Farm  </th>
                     <th style="text-align:center">Rural Housing  </th>
@@ -287,7 +287,7 @@
                     <th style="text-align:center"> J.L.G </th>
                     <th style="text-align:center"> Others </th>
                     <th style="text-align:center"> Total Investment made during the period</th>
-                    <th style="text-align:center"> Investment made during the corresponding period of the previous year.</th>
+                    <th style="text-align:center"> Investment made during the corresponding period of the previous F.Y..</th>
                 </tr>
               
                 <tr *ngFor="let row of reportData8">
@@ -306,7 +306,7 @@
         <tbody *ngIf="reportData9">
                 <th colspan="10"><h4><b>06).PROGRSSIVE TOTAL OF THE  LENDING  MADE UPTO THE END OF THE FORTNIGHT</b></h4></th>
                 <tr>
-                    <th style="text-align:center">Category of Demand </th>
+                    <th style="text-align:center">Category of Investment </th>
                     <th style="text-align:center">Farm Loan </th>
                     <th style="text-align:center">Non Farm </th>
                     <th style="text-align:center">Rural Housing  </th>
@@ -315,7 +315,7 @@
                     <th style="text-align:center"> J.L.G </th>
                     <th style="text-align:center"> Others </th>
                     <th style="text-align:center"> Total Investment made upto the end of the period</th>
-                    <th style="text-align:center"> Total Investment made during the corresponding period of the previous year. </th>
+                    <th style="text-align:center"> Total Investment made during the corresponding period of the previous F.Y. </th>
                 </tr>
               
                 <tr *ngFor="let row of reportData9">

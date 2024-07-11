@@ -112,6 +112,7 @@ export class AccounTransactionsComponent implements OnInit {
   rdInstallamentOption: any[] = [];
   showOnRenewal = false;
   showOnClose = false;
+  rdPenal:Number=0
   mat_val = 0;
   isMat: any;
   afMat: any;
@@ -2577,7 +2578,7 @@ getjoinholder(){
       else{ this.afMat1 = false}
       debugger
        this.aftmatInt=0;
-       if((this.sys.ardbCD!='20'&& this.sys.ardbCD!='26') && ( this.afMat1 == true && (accTypCode === 2 || accTypCode === 4) )) {
+       if((this.sys.ardbCD!='20'&& this.sys.ardbCD!='26'&& this.sys.ardbCD!='25') && ( this.afMat1 == true && (accTypCode === 2 || accTypCode === 4) )) {
          debugger
          if(this.diff1==0){
           this.showOnClose = true;
@@ -3043,8 +3044,10 @@ getjoinholder(){
           acc_num: this.accNoEnteredForTransaction.acc_num,
           ardb_cd: this.sys.ardbCD
         }
+        this.isLoading=true;
         this.svc.addUpdDel<any>('Deposit/GetRDInstallment', rdDt).subscribe(
           rdInstallamentRes => {
+            this.isLoading=false;
             this.rdInstallemntsForSelectedAcc = [];
             this.rdInstallemntsForSelectedAcc = Utils.ChkArrNotEmptyRetrnEmptyArr(rdInstallamentRes);
             let i = 1;
@@ -3063,14 +3066,15 @@ getjoinholder(){
             param.ardb_cd = this.sys.ardbCD;
             param.ai_period = this.diff;
             this.effInt = param.an_intt_rate
-            console.log(this.effInt)
+            console.log(this.effInt);
+            this.isLoading=true;
             this.svc.addUpdDel<any>('Deposit/F_CALCRDINTT_REG', param).subscribe(
               res => {
                 console.log(res)
                 this.rdInClose = res;
                 if (undefined !== res
-                  && null !== res
-                  && res > 0) {
+                  && null !== res ) {
+                  this.isLoading=false;
                   console.log(this.effInt)
                   this.tdDefTransFrm.patchValue({
                     penal_rt: this.sys.PenalInttRtFrAccPreMatureClosing,
@@ -3094,23 +3098,20 @@ getjoinholder(){
                 param = new p_gen_param();
                 param.as_acc_num = this.accNoEnteredForTransaction.acc_num;
                 param.ardb_cd = this.sys.ardbCD;
+                this.isLoading=true;
                 this.svc.addUpdDel<any>('Deposit/F_CAL_RD_PENALTY', param).subscribe(
                   res => {
+                    this.rdPenal=0
                     console.log(res)
                     if (undefined !== res
-                      && null !== res
-                      && res > 0) {
-                      this.tdDefTransFrm.patchValue({
+                      && null !== res) {
+                        this.isLoading=false;
+                        this.rdPenal=res;
+                        this.tdDefTransFrm.patchValue({
                         ovd_intt_recov: res.toFixed(2)
                       });
-                    }
-                    //marker
-                    this.inttCalOnClose()
-                  },
-                  err => { console.log(err); }
-                );
-
-                // if premature closing show warning of how many days month and yr left
+                      this.inttCalOnClose()
+                      // if premature closing show warning of how many days month and yr left
                 if (!isMatured) {
                   const crDt = this.sys.CurrentDate;
                   const matuDt = Utils.convertStringToDt(this.accNoEnteredForTransaction.mat_dt.toString());
@@ -3142,10 +3143,18 @@ getjoinholder(){
                   // const daysDiff = diff / (1000 * 3600 * 24);
                   // const msg = `Account# ${this.accNoEnteredForTransaction.acc_num}, will mature in ${diffYear1} year(s), ${diffMonth} month(s) and ${daysDiff} day(s) .`;
                   // const msg = `Account# ${this.accNoEnteredForTransaction.acc_num}, will mature in ${diff} day(s) .`;
-                  const msg = "It will be a Premature Closing for " + diff + " Days with Interest Accrued : Rs. " + this.rdInClose
+                  const msg = "It will be a Premature Closing for " + diff + " Days with Interest Accrued : Rs. " + this.rdInClose +", and Penalty Accrued: Rs."+this.rdPenal
                   this.HandleMessage(true, MessageType.Warning, msg);
-                  alert(msg);
+                  // alert(msg);
                 }
+                    }
+                    //marker
+                    
+                  },
+                  err => { console.log(err); }
+                );
+
+                
               },
               err => { console.log(err); }
             );
@@ -3530,7 +3539,7 @@ getjoinholder(){
         this.onDepositePeriodChange()
       
       }
-        if((this.sys.ardbCD!='20' && this.sys.ardbCD!='3') && (afterMatured == true && (accTypCode === 2 || accTypCode == 4||accTypCode == 3))) {
+        if((this.sys.ardbCD!='20' && this.sys.ardbCD!='3' && this.sys.ardbCD!='7') && (afterMatured == true && (accTypCode === 2 || accTypCode == 4||accTypCode == 3))) {
 
         //  if(afterMatured == true && (accTypCode === 2 || accTypCode == 4)) {
           this.modalRefClose = this.modalService.show(this.afterMatRenewal,
@@ -3784,8 +3793,7 @@ getjoinholder(){
                   res => {
                     console.log(res)
                     if (undefined !== res
-                      && null !== res
-                      && res > 0) {
+                      && null !== res) {
                         this.isLoading=false
                         this.rdInClose=res
                         debugger
@@ -3829,10 +3837,10 @@ getjoinholder(){
               curr_intt_recov: res.toFixed(2),
               amount: param.ad_instl_amt * this.counter,
               //  curr_intt_recov: res,
-              ovd_intt_recov: 0,
+              ovd_intt_recov: this.rdPenal?this.rdPenal:0,
               bonus_amt: 0,
               curr_prn_recov: 0,
-              td_def_mat_amt: param.ad_instl_amt * this.counter + res
+              td_def_mat_amt: (+param.ad_instl_amt * this.counter + res)-(+this.rdPenal)
             })
             this.isLoading=false;
           }

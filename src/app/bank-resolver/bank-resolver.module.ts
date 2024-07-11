@@ -238,6 +238,7 @@ import { UpdatedDemandListComponent } from './loan/report/demand-list/updated-de
 import { CtFortnightNewComponent } from './loan/report/ct-fortnight-new/ct-fortnight-new.component';
 import { CtFortnightNewConsoComponent } from './loan/report/ct-fortnight-new-conso/ct-fortnight-new-conso.component';
 import { RoundPipe } from '../round.pipe';
+import { LoanDisburseSummaryComponent } from './loan/report/loan-disbursement-register/loan-disburse-summary/loan-disburse-summary.component';
 
 @NgModule({
   declarations: [ 
@@ -292,7 +293,7 @@ import { RoundPipe } from '../round.pipe';
             RecoveryExportComponent, RecoveryImportComponent, RecoveryIndiPostComponent, ContaiComponent, ContaiFastPageComponent, GhatalComponent, 
             GhatalFastPageComponent, GoldLoanReportComponent, GoldLoanAsOnDateComponent, GoldLoanCurrDateComponent, GroupWiseComponent, NpaAllWithGroupComponent, 
             DcbrGroupWiseComponent, TamlukComponent, TamlukFastPageComponent, VillMasterContaiComponent, RecovSummaryComponent, RiskFundComponent, BankuraComponent, 
-            BankuraFastPageComponent, SendSmsFromDemandComponent, UpdatedDemandListComponent, CtFortnightNewComponent, CtFortnightNewConsoComponent
+            BankuraFastPageComponent, SendSmsFromDemandComponent, UpdatedDemandListComponent, CtFortnightNewComponent, CtFortnightNewConsoComponent, LoanDisburseSummaryComponent
   ],
   imports: [
     MatAutocompleteModule,
