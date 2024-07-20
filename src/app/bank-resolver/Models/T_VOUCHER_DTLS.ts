@@ -21,5 +21,7 @@ export class T_VOUCHER_DTLS {
   public acc_name:string;
   public created_by:string;
   public created_dt:any;
+  public debit:any;
+  public credit:any;
 
 }

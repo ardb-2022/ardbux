@@ -269,7 +269,7 @@ export class BMLoanStatementComponent implements OnInit {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         this.resultLength=this.reportData.length
-        this.lastAccNum=this.reportData[this.reportData.length-1].acc_num
+        this.lastAccNum=this.reportData[this.reportData?.length-1]?.acc_num
         this.reportData.forEach(e => {
           this.ovdInttSum+=e.ovd_intt
           this.currInttSum+=e.curr_intt

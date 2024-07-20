@@ -23,12 +23,14 @@ export class DdsImportComponent implements OnInit {
   getImportData: any;;
   agentCD: any;
   agentData: any;
+  allAgent:any;
   myFile: any;
   node: any;
   flag = 1;
   showMsg: ShowMessage;
   totAmt = 0;
   mType: any;
+  showHideAgent:boolean=false;
   constructor(private svc: RestService, private formBuilder: FormBuilder, private modalService: BsModalService, private router: Router) { }
   ngOnInit(): void {
     this.getAgentList()
@@ -45,7 +47,10 @@ export class DdsImportComponent implements OnInit {
       "ardb_cd": this.sys.ardbCD,
       "brn_cd": this.sys.BranchCode
     }
-    this.svc.addUpdDel('Deposit/GetAgentData', dt).subscribe(data => this.agentData = data)
+    this.svc.addUpdDel('Deposit/GetAgentData', dt).subscribe(data => {
+      this.agentData = data;
+      this.allAgent=data;
+    })
   }
   importAsTxt() {
     this.isLoading = true;
@@ -164,4 +169,20 @@ export class DdsImportComponent implements OnInit {
     //   this.showMsg = new ShowMessage();
     // }, 3000);
   }
+  selectAgent(agent_cd:any){
+    this.importEntryForm.controls.agent_id.setValue(agent_cd);
+    this.showHideAgent=false
+    debugger;
+  }
+  onshow(i:any)
+  {
+    if(i.target.value==''){
+      this.showHideAgent=false
+    }
+    else{
+      this.agentData=this.allAgent.filter(e=>e.agent_name.toLowerCase().includes(i.target.value.toLowerCase()) || e.agent_cd.includes(i.target.value.toLowerCase()) ==true)
+      this.showHideAgent=true
+    }
+    debugger
+    }
 }

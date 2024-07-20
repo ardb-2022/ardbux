@@ -194,10 +194,12 @@ export class InterestSubsidyComponent implements OnInit ,AfterViewInit{
   }
   downloadexcel() {
     this.exportAsConfig = {
-      type: 'csv',
-      elementIdOrContent: 'hiddenTab'
+      type: 'xlsx',
+      // elementId: 'hiddenTab', 
+      elementIdOrContent:'trial11'
     }
-    this.exportAsService.save(this.exportAsConfig, 'cashcumtrial').subscribe(() => {
+    this.exportAsService.save(this.exportAsConfig, 'InterestSubsidy').subscribe(() => {
+      // save started
       console.log("hello")
     });
   }

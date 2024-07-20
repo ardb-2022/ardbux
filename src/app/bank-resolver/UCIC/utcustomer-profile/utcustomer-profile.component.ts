@@ -403,10 +403,10 @@ export class UTCustomerProfileComponent implements OnInit {
 
     this.onClearClick();
     this.custMstrFrm.disable();
-   
     this.f.cust_name.enable();
     this.retrieveClicked = true;
     this.selectedClick=false;
+   this.custMstrFrm.controls.catg_cd.enable();
     
     // if (loadingReq) {
 

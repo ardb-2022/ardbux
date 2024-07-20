@@ -9,14 +9,14 @@
   <div class="modal-body">
     <div class="row print" id="challan">
       <div class="col-12 table-container" >
-        <div style="border: 1px solid #b7b4b4;">
+        <div >
           <div>
             <div class="justify-content-center" style="text-align:center" >
-              <br><h5>{{ardbName}} </h5>
-              <h5>{{branchName}}</h5>
-              <h5>Run Date & Time : {{today}} </h5>
-              <h5>{{ardbAddr}}</h5>
-              <h6>Bank's Copy</h6>
+              <br><h4>{{ardbName}} </h4>
+              <h4>{{branchName}}</h4>
+              <h4>Run Date & Time : {{today}} </h4>
+              <h4>{{ardbAddr}}</h4>
+              <h5>Bank's Copy</h5>
           </div>
           </div>
           <hr>
@@ -33,11 +33,40 @@
 
             </div>
           </div><br>
+
           <div class="row" style="padding-left: 5px;">
             <div class="col-12">
               <p style="text-align: center;">Total {{_voucherTypeName}} of <b>Rs.{{_voucherTypeName=="Cash Receipt"?_totalCr:_totalDr | currency:'INR'}}</b> </p>
-
-              <table style="width: 100%;">
+              <table border="1">
+                <thead>
+                  <tr>
+                    <th>Account Code</th>
+                    <th>Account Name</th>
+                    <th>Debit</th>
+                    <th>Credit</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let transaction of printData">
+                    <td>{{ transaction.acc_cd }}</td>
+                    <td>{{ transaction.narration }}</td>
+                    <td style="text-align: right;">{{ transaction.debit_credit_flag === 'D' ? transaction.dr_amount : 0 | number:'1.2-2'}}</td>
+                    <td style="text-align: right;">{{ transaction.debit_credit_flag === 'C' ? transaction.cr_amount : 0 | number:'1.2-2'}}</td>
+                  </tr>
+                  <tr>
+                    <td colspan="2"><strong>Total</strong></td>
+                    <td style="text-align: right;"><strong>{{ totalDebit | number:'1.2-2'}}</strong></td>
+                    <td style="text-align: right;"><strong>{{ totalCredit | number:'1.2-2'}}</strong></td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                 
+                  <tr>
+                    <td colspan="4">Narration:{{ printData[0]?.narrationdtl }}</td>
+                  </tr>
+                </tfoot>
+              </table>
+              <!-- <table style="width: 100%;">
                 <tr *ngFor="let i of printData">
                   <td style="text-align: left;">{{i.acc_cd}}</td>
                   <td style="text-align: left;">{{i.narration}} of Rs. </td>
@@ -51,7 +80,7 @@
                 <tr>
                   <td>Narration: {{printData[0].narrationdtl}}</td>
                 </tr>
-              </table>
+              </table> -->
             </div>
           </div>
           <br><br>
@@ -79,14 +108,14 @@
         </div>
       </div>
       <div class="col-12 table-container" >
-        <div style="border: 1px solid #b7b4b4;">
+        <div >
           <div>
             <div class="justify-content-center" style="text-align:center" >
-              <br><h5>{{ardbName}} </h5>
-              <h5>{{branchName}}</h5>
-              <h5>Run Date & Time : {{today}} </h5>
-              <h5>{{ardbAddr}}</h5>
-              <h6>Receiver's/Payer's Copy </h6>
+              <br><h4>{{ardbName}} </h4>
+              <h4>{{branchName}}</h4>
+              <h4>Run Date & Time : {{today}} </h4>
+              <h4>{{ardbAddr}}</h4>
+              <h5>Receiver's/Payer's Copy </h5>
           </div>
           </div>
           <hr>
@@ -106,8 +135,36 @@
           <div class="row" style="padding-left: 5px;">
             <div class="col-12">
               <p style="text-align: center;">Total {{_voucherTypeName}} of <b>Rs.{{_voucherTypeName=="Cash Receipt"?_totalCr:_totalDr | currency:'INR'}}</b> </p>
-
-              <table style="width: 100%;">
+              <table border="1">
+                <thead>
+                  <tr>
+                    <th>Account Code</th>
+                    <th>Account Name</th>
+                    <th>Debit</th>
+                    <th>Credit</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let transaction of printData">
+                    <td>{{ transaction.acc_cd }}</td>
+                    <td>{{ transaction.narration }}</td>
+                    <td style="text-align: right;">{{ transaction.debit_credit_flag === 'D' ? transaction.dr_amount : 0 | number:'1.2-2'}}</td>
+                    <td style="text-align: right;">{{ transaction.debit_credit_flag === 'C' ? transaction.cr_amount : 0 | number:'1.2-2'}}</td>
+                  </tr>
+                  <tr>
+                    <td colspan="2"><strong>Total</strong></td>
+                    <td style="text-align: right;"><strong>{{ totalDebit | number:'1.2-2'}}</strong></td>
+                    <td style="text-align: right;"><strong>{{ totalCredit | number:'1.2-2'}}</strong></td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                 
+                  <tr>
+                    <td colspan="4">Narration: {{ printData[0]?.narrationdtl }}</td>
+                  </tr>
+                </tfoot>
+              </table>
+              <!-- <table style="width: 100%;">
                 <tr *ngFor="let i of printData">
                   <td style="text-align: left;">{{i.acc_cd}}</td>
                   <td style="text-align: left;">{{i.narration}} of Rs. </td>
@@ -121,7 +178,7 @@
                 <tr>
                   <td>Narration: {{printData[0].narrationdtl}}</td>
                 </tr>
-              </table>
+              </table> -->
             </div>
           </div><br><br>
           <div class="row" style="padding-left: 5px;padding-bottom: 10px;">
@@ -225,14 +282,14 @@
       <!-- Default inline 2-->
       <div class="custom-control custom-radio custom-control-inline">
         <input type="radio" class="custom-control-input" id="A" name="app_flg" [(ngModel)]="app_flg" value="A"
-          (change)="changeAppFlg()" mdbInput>
+          (change)="changeAppFlg()" mdbInput>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <label class="custom-control-label" for="A"><strong class="shiftLabel">Approved</strong></label>
       </div>
     </div>
 
 
 
-    <table class="table table-sm table-hover">
+    <div style="overflow: scroll;">
       <tr>
         <th>ID</th>
         <th>Date</th>
@@ -245,7 +302,9 @@
         <td>{{item.narrationdtl}}</td>
         <td>{{item.transaction_type}}</td>
       </tr>
-    </table>
+    </div>
+      
+    
   </div>
   <div class="modal-footer">
     <button mat-raised-button class="btn btn-primary" (click)="Submit()">Submit</button> &nbsp;
@@ -442,8 +501,18 @@
         </table>
         <div>
           <label><strong>Narration</strong></label>
-          <input name="narr" value="{{_voucherNarration}}" [(ngModel)]="_voucherNarration" type="text"
-            class="form-control form-control-sm">
+          <input name="narr"
+            value="{{_voucherNarration}}" 
+            [(ngModel)]="_voucherNarration" 
+            type="text"
+            class="form-control form-control-sm"
+            #narrCtrl="ngModel"
+            required
+            maxlength="200">
+
+            <div *ngIf="narrCtrl.invalid && (narrCtrl.dirty || narrCtrl.touched)" class="text-danger">
+              <div *ngIf="narrCtrl.errors?.maxlength">Narration must be within 200 characters.</div>
+            </div>
         </div>
         <div>
           <div class="row">

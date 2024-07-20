@@ -206,6 +206,8 @@ import { UpdatedDemandListComponent } from './loan/report/demand-list/updated-de
 import { CtFortnightNewComponent } from './loan/report/ct-fortnight-new/ct-fortnight-new.component';
 import { CtFortnightNewConsoComponent } from './loan/report/ct-fortnight-new-conso/ct-fortnight-new-conso.component';
 import { LoanDisburseSummaryComponent } from './loan/report/loan-disbursement-register/loan-disburse-summary/loan-disburse-summary.component';
+import { DdsAgentTransReportComponent } from './deposit/ddsExportImport/dds-agent-trans-report/dds-agent-trans-report.component';
+import { InterestMasterComponent } from './deposit/masters/interest-master/interest-master.component';
 
 const routes: Routes = [
   { path: 'Admin', component: AdminPanelComponent },
@@ -298,6 +300,7 @@ const routes: Routes = [
       { path: 'DR_ASS', component: AccStmtSBCAComponent, canActivate: [AuthGuard] },
       { path: 'DR_ASR', component: AccStmtRDComponent, canActivate: [AuthGuard] },
       { path: 'DR_ASF', component: AccStmtTDComponent, canActivate: [AuthGuard] },
+      { path: 'DM_Int_Mst', component: InterestMasterComponent, canActivate: [AuthGuard] },
       { path: 'DR_NearMatReport', component: NearMaturityReportComponent, canActivate: [AuthGuard] },
       { path: 'DR_OpenCloseReg', component: OpenClosingRegisterComponent, canActivate: [AuthGuard] },
       { path: 'DR_ACCSTMTDDS', component: DdsAccStmtComponent, canActivate: [AuthGuard] },
@@ -359,6 +362,7 @@ const routes: Routes = [
       { path: 'DT_NEFTPayment', component: NeftOutwardComponent, canActivate: [AuthGuard] },
       { path: 'DT_DDEXPORT', component: DdsExportComponent, canActivate: [AuthGuard] },
       { path: 'DT_DDIMPORT', component: DdsImportComponent, canActivate: [AuthGuard] },
+      { path: 'DR_DDS_COL_REP', component: DdsAgentTransReportComponent, canActivate: [AuthGuard] },
       { path: 'DT_DDINDPOST', component: DdsIndividualPostingComponent, canActivate: [AuthGuard] },
       { path: 'DT_SavingInttPost', component: SavingIntPostComponent, canActivate: [AuthGuard] },
       { path: 'DT_SMSchargeDed', component: SmsChargeDeductionComponent, canActivate: [AuthGuard] },

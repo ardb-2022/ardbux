@@ -19,8 +19,8 @@ import { CommonServiceService } from '../common-service.service';
 })
 export class LoginComponent implements OnInit {
   
-  private apiUrl = 'https://api.ipify.org/?format=json';
-  // private apiUrl = 'https://api64.ipify.org?format=json';
+  // private apiUrl = 'https://api.ipify.org/?format=json';
+  private apiUrl = 'https://api64.ipify.org?format=json';
   // https://api64.ipify.org/?format=json
   // https://api4.ipify.org/?format=json
 

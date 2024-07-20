@@ -19,7 +19,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 export class DdsIndividualPostingComponent implements OnInit {
   brnDtls: m_branch[] = [];
   modalRef: BsModalRef;
-
+  showHideAgent:boolean=false
   isLoading = false;
   agentFrm: FormGroup;
   showMsg: ShowMessage;
@@ -43,6 +43,7 @@ export class DdsIndividualPostingComponent implements OnInit {
   // agentData: { ardb_cd: string; brn_cd: string; };
   agentData: any;
   agentRes:any;
+  allAgent:any;
   retrieveAgentData:any;
   transData:any;
   totSum=0;
@@ -118,6 +119,7 @@ export class DdsIndividualPostingComponent implements OnInit {
     }
     this.svc.addUpdDel('Deposit/GetAgentData', dt).subscribe(res => {
       this.agentRes=res
+      this.allAgent=res
     })
   }
   saveuser() {
@@ -196,6 +198,12 @@ export class DdsIndividualPostingComponent implements OnInit {
     this.disTransBtn=true;
     this.transData=null
     this.agentFrm.controls.trans_dt.setValue(this.sys.CurrentDate)
+  }
+  selectAgent(agent_cd:any){
+    this.agentFrm.controls.agent_cd.setValue(agent_cd);
+    this.showHideAgent=false
+    debugger;
+    this.retrieveData();
   }
   retrieveData(){
     this.custName=[];
@@ -366,4 +374,15 @@ export class DdsIndividualPostingComponent implements OnInit {
       this.isLoading=false;
    })
   }
+  onshow(i:any)
+  {
+    if(i.target.value==''){
+      this.showHideAgent=false
+    }
+    else{
+      this.agentRes=this.allAgent.filter(e=>e.agent_name.toLowerCase().includes(i.target.value.toLowerCase()) || e.agent_cd.includes(i.target.value.toLowerCase()) ==true)
+      this.showHideAgent=true
+    }
+    debugger
+    }
 }

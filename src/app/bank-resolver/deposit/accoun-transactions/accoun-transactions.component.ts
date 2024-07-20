@@ -620,7 +620,7 @@ debugger
           closeIntrest:this.sys.ardbCD=='4'&& this.f.acc_type_cd.value==8? 0:(+data),
         });
   
-        if(this.sys.ardbCD=='26'){
+        if(this.sys.ardbCD!='20'&&this.sys.ardbCD!='4'&&this.sys.ardbCD!='2'){
           this.td.closeIntrest.value
           debugger
           this.tdDefTransFrm.patchValue({
@@ -4266,11 +4266,11 @@ getjoinholder(){
       if(this.matInt==undefined){
         this.matInt=0
       }
-      //to br change line 3956
-      const mat_amt = (accTypeCd==2 && (this.accNoEnteredForTransaction.intt_trf_type != 'O' && this.afterMatRenewal))?this.accNoEnteredForTransaction.prn_amt+this.fdSum:
-      (this.afterMatRenewal && accTypeCd==2 )?this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt+this.matInt:
+      ///partha-19/07/2024 this.afMat
+      const mat_amt =
+      (this.afMat && accTypeCd==2 )?this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt+this.matInt:
       (accTypeCd==5)?this.accNoEnteredForTransaction.prn_amt+this.forB:
-      (this.afterMatRenewal && accTypeCd==4)?this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt+this.matInt
+      (this.afMat && accTypeCd==4)?this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt+this.matInt
       :this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt;
       const balance=mat_amt-Number(this.td.amount.value)
       console.log(mat_amt,this.td.amount.value);

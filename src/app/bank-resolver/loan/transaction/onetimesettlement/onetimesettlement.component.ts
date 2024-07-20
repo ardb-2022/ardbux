@@ -1593,7 +1593,9 @@ export class OnetimesettlementComponent implements OnInit {
     if (this.td.trans_type_key.value === 'R' && (+this.td.amount.value) >
       (Number(this.fd.curr_principal.value) +
         Number(this.fd.curr_intt.value) +
-        Number(this.fd.ovd_principal.value) + Number(this.fd.ovd_intt.value))) {
+        Number(this.fd.ovd_principal.value) + Number(this.fd.ovd_intt.value)+
+        Number(this.fd.penal_intt.value))) {
+          debugger
       this.HandleMessage(true, MessageType.Error, 'Recovery Amount Can Not be greater Than Total Outstanding.');
       this.td.amount.setValue('');
       return;

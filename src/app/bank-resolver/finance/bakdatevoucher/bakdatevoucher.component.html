@@ -158,7 +158,7 @@
                         <!-- <input type="text" style="height:30px;" placeholder="dd/mm/yyyy" class="form-control" 
                         [(ngModel)]="_voucherDt" [readonly]="true"> -->
                       <input type="text" style="height:40px;" placeholder="dd/mm/yyyy" class="form-control" 
-                      bsDatepicker [(ngModel)]="_voucherDt"
+                      bsDatepicker [(ngModel)]="_voucherDt" (ngModelChange)="dateChange($event)"
                       [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }"
                       [isOpen]="isOpenFromDp1">
                       <div class="input-group-append">

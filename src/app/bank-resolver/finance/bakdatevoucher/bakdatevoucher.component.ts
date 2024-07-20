@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { RestService } from 'src/app/_service';
 import { T_VOUCHER_DTLS, m_acc_master, SystemValues, MessageType, ShowMessage } from '../../Models';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import Utils from 'src/app/_utility/utils';
 @Component({
   selector: 'app-bakdatevoucher',
   templateUrl: './bakdatevoucher.component.html',
@@ -70,7 +71,14 @@ export class BakdatevoucherComponent implements OnInit {
   ngOnInit(): void {
     this.getmAccMaster();
     console.log(this._voucherDt)
-    // //debugger;
+    console.log(this.sys.CurrentDate.getFullYear());
+    console.log(this.sys.CurrentFinancialYr);
+    
+    if(this.sys.CurrentDate?.getFullYear()?.toString() == this.sys.CurrentFinancialYr?.toString()){
+      console.log(this.sys.CurrentDate?.getFullYear()?.toString() == this.sys.CurrentFinancialYr?.toString());
+      
+    }
+    debugger;
     // this.fromdate=this.sys.CurrentDate;
    // this.fromdate =  this.sys.prevStatus == 'N' ?this.convertStringToDt(this.sys.lastDt) : '';
     this.reportcriteria = this.formBuilder.group({
@@ -823,7 +831,33 @@ debugger
       return groups[group];
     })
   }
+  dayDiff(d1: any, d2: any) {
+    if(d1&&d2){
+      const date1 = new Date(d1);
+      const date2 = new Date(d2);
+    
+      const diffInMs = date1.getTime() - date2.getTime();
+      const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+      console.log(diffInDays);
+    
+      return diffInDays;
+      
+    }
+    else{
+      return 0
+    }
+    
 
+  }
+  dateChange(dt1:any){
+    console.log(this.dayDiff(dt1, this.sys.CurrentDate));
+    
+    debugger
+    if (this.dayDiff(dt1, this.sys.CurrentDate) >= 0) {
+      this.HandleMessage(true, MessageType.Error, 'Future or same day Voucher can not allow from this screen...');
+      this._voucherDt=null;
+    }
+  }
   private getmAccMaster(): void {
     var dt = {
       "ardb_cd": this.sys.ardbCD

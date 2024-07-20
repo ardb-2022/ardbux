@@ -14,10 +14,40 @@
     </div>
     <form [formGroup]="exportEntryForm">
       <div>
-        <select name="agent_id" id="agent_id" formControlName="agent_id" class="form-control">
+        <div class="form-group col-12" style="margin-bottom: 0%;">
+          <small for="agent_cd">Search Agent.. </small>
+          <input type="text" class="form-control form-control-sm"
+          formControlName="agent_id"   (keyup)="onshow($event)" placeholder="Search by agent name or code..">
+          
+        </div>
+        <ng-container>
+          <div class="suggestions border p-2 " style="width: 91%; top: 92%; left: 6%;"
+          *ngIf="showHideAgent">
+               
+            <table id="customers1">
+              <tr>
+                <th> Agent Code</th>
+                <th>Agent Name</th>
+              </tr>
+              <tbody *ngFor="let agent of agentData" >
+                <tr  (click)="selectAgent(agent.agent_cd)">
+                  <td>
+                    {{agent.agent_cd}}
+                  </td>
+                  <td>
+                    {{agent.agent_name}}
+                  </td>
+                </tr>
+               
+              </tbody>
+              
+            </table>
+            </div>
+        </ng-container>
+        <!-- <select name="agent_id" id="agent_id" formControlName="agent_id" class="form-control">
           <option value="" selected="selectTitle">Choose...</option>
           <option *ngFor="let agent of agentData" [value]="agent.agent_cd">{{agent.agent_cd}}-{{agent.agent_name}}</option>
-        </select>
+        </select> -->
       </div>
     </form>
   </div>
@@ -81,5 +111,8 @@
       </div>
     </div>
   </div>
+  
+<button class="scroll-to-top" (click)="scrollToTop()" > <mat-icon>north</mat-icon></button>
+<button class="scroll-to-bottom" (click)="scrollToBotom()" > <mat-icon>south</mat-icon></button>
 </div>
 <loading *ngIf="isLoading"></loading>

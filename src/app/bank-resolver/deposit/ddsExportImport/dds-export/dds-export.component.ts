@@ -33,7 +33,9 @@ export class DdsExportComponent implements OnInit {
   agentName: any;
   mType:any
   isType:boolean;
+  showHideAgent:boolean=false;
   typeName:any;
+  allAgent:any;
   constructor(private svc: RestService, private formBuilder: FormBuilder, private modalService: BsModalService, private router: Router) { }
   ngOnInit(): void {
     this.getAgentList()
@@ -51,7 +53,10 @@ export class DdsExportComponent implements OnInit {
       "ardb_cd": this.sys.ardbCD,
       "brn_cd": this.sys.BranchCode
     }
-    this.svc.addUpdDel('Deposit/GetAgentData', dt).subscribe(data => this.agentData = data)
+    this.svc.addUpdDel('Deposit/GetAgentData', dt).subscribe(data => 
+      {this.agentData = data;
+      this.allAgent=data;}
+    )
   }
   exportAsTxt() {
     var dt = {
@@ -138,4 +143,27 @@ export class DdsExportComponent implements OnInit {
     this.mType=this.mType.value
     this.isType=false
   }
+  selectAgent(agent_cd:any){
+    this.exportEntryForm.controls.agent_id.setValue(agent_cd);
+    this.showHideAgent=false
+    debugger;
+  }
+  onshow(i:any)
+  {
+    if(i.target.value==''){
+      this.showHideAgent=false
+    }
+    else{
+      this.agentData=this.allAgent.filter(e=>e.agent_name.toLowerCase().includes(i.target.value.toLowerCase()) || e.agent_cd.includes(i.target.value.toLowerCase()) ==true)
+      this.showHideAgent=true
+    }
+    debugger
+    }
+    scrollToBotom(){
+      window.scrollTo({  top:document.body.scrollHeight, behavior: 'smooth' }); // Smooth scroll to top
+  
+    }
+    scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' }); // Smooth scroll to top
+    }
 }

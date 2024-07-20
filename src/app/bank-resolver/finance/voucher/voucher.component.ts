@@ -29,7 +29,9 @@ export class VoucherComponent implements OnInit {
   reportcriteria: FormGroup;
   closeResult = '';
   printData:any[]=[];
-  //alertMsg = '';
+  filteredTransactions: { acc_cd: number; acc_name: string; debit: number | null; credit: number | null; narrationdtl: string | null }[] = [];
+  totalDebit: number = 0;
+  totalCredit: number = 0;//alertMsg = '';
   // showAlert = false;
   showMsg: ShowMessage;
   onVoucherCreation: FormGroup;
@@ -577,9 +579,10 @@ debugger
       }
       else{
         for (let x = 0; x < this.tvdRet.length; x++) {
+          this.printData.push(this.tvdRet[x])
+
           if(this.tvdRet[x].acc_cd!=21101){
           this.tvdRet[x].narration=this.maccmasterRet.filter(e=>e.acc_cd==this.tvdRet[x].acc_cd)[0].acc_name
-          this.printData.push(this.tvdRet[x])
           }
         }
       }
@@ -643,9 +646,10 @@ debugger
       }
       else{
         for (let x = 0; x < this.tvdRet.length; x++) {
+          this.printData.push(this.tvdRet[x])
           if(this.tvdRet[x].acc_cd!=21101){
             this.tvdRet[x].narration=this.maccmasterRet.filter(e=>e.acc_cd==this.tvdRet[x].acc_cd)[0].acc_name
-            this.printData.push(this.tvdRet[x])
+            
           }
           }
       }
@@ -655,6 +659,32 @@ debugger
       err => { this.modalRef.hide(); }
     );
   }
+  // private getDataforPrint(){
+  //   this.filteredTransactions = this.printData.map(transaction => {
+  //     transaction.sort((a, b) => {
+  //     if (a.debit_credit_flag < b.debit_credit_flag) {
+  //       return -1;
+  //     } else if (a.debit_credit_flag > b.debit_credit_flag) {
+  //       return 1;
+  //     } else {
+  //       return 0;
+  //     }
+  //   });
+  //     return {
+  //       acc_cd: transaction.acc_cd,
+  //       acc_name: transaction.acc_name,
+  //       debit: transaction.debit_credit_flag === 'D' && transaction.dr_amount > 0 ? transaction.dr_amount : null,
+  //       credit: transaction.debit_credit_flag === 'C' && transaction.cr_amount > 0 ? transaction.cr_amount : null,
+  //       narrationdtl: transaction.narrationdtl
+  //     };
+  //   });
+  //   this.calculateTotals();
+  // }
+  // calculateTotals(): void {
+  //   this.totalDebit = this.filteredTransactions.reduce((sum, transaction) => sum + (transaction.debit || 0), 0);
+  //   this.totalCredit = this.filteredTransactions.reduce((sum, transaction) => sum + (transaction.credit || 0), 0);
+    
+  // }
   private getVoucherNarration(): void {
     this.tvn.brn_cd = this.sys.BranchCode;
     this.tvn.ardb_cd=this.sys.ardbCD
@@ -679,15 +709,27 @@ debugger
     );
   }
   ShowVPrint(){
-    this.printData.sort((a, b) => {
-      if (a.debit_credit_flag < b.debit_credit_flag) {
-        return -1;
-      } else if (a.debit_credit_flag > b.debit_credit_flag) {
-        return 1;
-      } else {
-        return 0;
-      }
-    });
+    console.log(this.printData);
+    this.totalDebit =0;
+    this.totalCredit =0;
+    for(let i=0; i<this.printData.length; i++){
+      this.totalDebit += this.printData[i].debit_credit_flag=='D'?this.printData[i].dr_amount:0;
+      this.totalCredit += this.printData[i].debit_credit_flag=='C'?this.printData[i].cr_amount:0;
+    }
+    debugger
+    // this.getDataforPrint();
+    // this.printData.sort((a, b) => {
+    //   if (a.debit_credit_flag < b.debit_credit_flag) {
+    //     return -1;
+    //   } else if (a.debit_credit_flag > b.debit_credit_flag) {
+    //     return 1;
+    //   } else {
+    //     return 0;
+    //   }
+    // });
+    console.log(this.filteredTransactions);
+    
+    debugger
     this.modalRef = this.modalService.show(this.print, { class: 'modal-xl' });
   }
   private InsertVoucher(): void {
@@ -757,13 +799,25 @@ debugger
       }
       else{
         for (let x = 0; x < tvdSaveAll.length; x++) {
+          this.printData.push(tvdSaveAll[x])
+
           if(  tvdSaveAll[x].acc_cd!=21101){
           tvdSaveAll[x].narration=this.maccmasterRet.filter(e=>e.acc_cd==tvdSaveAll[x].acc_cd)[0].acc_name
-          this.printData.push(tvdSaveAll[x])
+          }
+          else{
+            tvdSaveAll[x].narration="Cash In Hand";
+            tvdSaveAll[x].cr_amount=tvdSaveAll[x].debit_credit_flag=="C"?tvdSaveAll[x].amount:0;
+            tvdSaveAll[x].dr_amount=tvdSaveAll[x].debit_credit_flag=="D"?tvdSaveAll[x].amount:0;
           }
         }
       }
-      
+      this.totalDebit =0;
+      this.totalCredit =0;
+      for(let i=0; i<tvdSaveAll.length; i++){
+        this.totalDebit += tvdSaveAll[i].debit_credit_flag=='D'?tvdSaveAll[i].dr_amount:0;
+        this.totalCredit += tvdSaveAll[i].debit_credit_flag=='C'?tvdSaveAll[i].cr_amount:0;
+      }
+      debugger
       console.log(tvdSaveAll)
         debugger
       this.svc.addUpdDel<any>('Voucher/InsertTVoucherDtls', tvdSaveAll).subscribe(
@@ -848,9 +902,10 @@ debugger
       }
       else{
         for (let x = 0; x < tvdSaveAll.length; x++) {
+          this.printData.push(tvdSaveAll[x])
+
           if(tvdSaveAll[x].acc_cd!=21101){
           tvdSaveAll[x].narration=this.maccmasterRet.filter(e=>e.acc_cd==tvdSaveAll[x].acc_cd)[0].acc_name
-          this.printData.push(tvdSaveAll[x])
           }
         }
       }
