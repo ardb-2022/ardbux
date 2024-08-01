@@ -765,7 +765,7 @@ debugger
 
         }
         tvdSave.ardb_cd = this.sys.ardbCD;
-        tvdSave.created_by=this.sys.UserId+'/'+localStorage.getItem('getIPAddress')
+        tvdSave.created_by=this.sys.UserId+'/'+localStorage.getItem('ipAddress')
 
         tvdSaveAll.push(tvdSave);
 
@@ -872,7 +872,7 @@ debugger
         this._voucherTyp = this._voucherTypeName == "Cash Receipt" ? "CR" : this._voucherTypeName == "Cash Payment" ? "CP" : this._voucherTypeName == "Clearing" ? "L" : "T";
         tvdSave.voucher_dt = this._voucherDt;//new Date(Date.UTC(this._voucherDt.getFullYear(), this._voucherDt.getMonth(), this._voucherDt.getDate(), this._voucherDt.getHours(), this._voucherDt.getMinutes()));
         //tvdSave.voucher_dt = this._voucherDt;
-        tvdSave.created_by=this.sys.UserId+'/'+localStorage.getItem('getIPAddress')
+        tvdSave.created_by=this.sys.UserId+'/'+localStorage.getItem('ipAddress')
         tvdSave.acc_cd = this.voucherData.value[x].acc_cd;
         // tvdSave.amount = Number(tvdSave.cr_amount == 0 ? tvdSave.dr_amount : tvdSave.cr_amount);
         if (tvdSave.transaction_type == 'C') {

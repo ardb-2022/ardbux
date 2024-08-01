@@ -129,8 +129,9 @@
                 <td mat-cell *matCellDef="let data let i=index"> 
                   <div class="justify-content-center" style="text-align:center;padding-top: 40px;" *ngIf="data">
                     <div  *ngIf="ardbcd!='26'&&ardbcd!='20'&&ardbcd!='4'">
-                      <h4>{{ardbName}} ({{branchName}})</h4>
-                      <h4>Run Date & Time : {{today}} </h4> 
+                      <h4>{{ardbName}}</h4>
+                      <h4>Run Date & Time : {{today}} </h4>
+                      <h4> ({{branchName}}) </h4>
                     </div>
                     <div *ngIf="ardbcd=='26'">
                       <h6> <b>{{getArdb}} {{translatedData?.heading}} </b> </h6>
@@ -169,19 +170,19 @@
                       <!-- <td colspan="6">{{translatedData?.village}} - {{data?.block_name}}, {{translatedData?.block}} - {{this.blocks1[0].block_name}} </td>   -->
                         <td colspan="6" style="text-align: right;">{{translatedData.loan_id}} -{{data?.loan_id}} </td>   
                     </tr>
-                    <tr *ngIf="ardbcd=='26'">  
-                      <td colspan="6" >{{translatedData?.join_holder}} - {{data?.cust_address}}</td> 
+                    <tr *ngIf="this.sys.ardbCD!='2' && this.sys.ardbCD!='4' && this.sys.ardbCD!='3'">  
+                      <td colspan="6" >{{translatedData?.join_holder}} - {{data?.cust_address?data?.cust_address:'N/A'}}</td> 
 
                       <td colspan="6" style="text-align: right;">{{translatedData.member_code}} - {{data?.brn_cd}}</td>   
                   </tr>
                     <tr>  
-                        <td *ngIf="ardbcd!='26'&&ardbcd!='20'&& ardbcd!='11'" colspan="6" >{{translatedData?.village}} - {{data?.ardb_cd}},  {{translatedData?.gp}} - <span *ngIf="this.ardbcd!='26'">{{data?.cust_address}}</span></td> 
-                        <td *ngIf="ardbcd=='26'||ardbcd=='20'||ardbcd=='11'" colspan="6">{{translatedData?.address}} - {{data?.ardb_cd}}</td>
+                        <td *ngIf="this.sys.ardbCD=='2' || this.sys.ardbCD=='4' || this.sys.ardbCD=='3'" colspan="6" >{{translatedData?.village}} - {{data?.ardb_cd}},  {{translatedData?.gp}} - <span *ngIf="this.sys.ardbCD=='2' || this.sys.ardbCD=='4' || this.sys.ardbCD=='3'">{{data?.cust_address}}</span></td> 
+                        <td *ngIf="this.sys.ardbCD!='2' && this.sys.ardbCD!='4' && this.sys.ardbCD!='3'" colspan="6">{{translatedData?.address}} - {{data?.ardb_cd}}</td>
                         <td colspan="6" style="text-align: right;"> {{translatedData.loan_date}} - {{data?.disb_dt.substr(0,10)}}</td>   
                     </tr>
                     <tr>  
                       <td colspan="6" >{{translatedData?.block}} - {{blocks1[0].block_name}}</td> 
-                      <td *ngIf="ardbcd!='26'" colspan="6" style="text-align: right;">{{translatedData.member_code}} - {{data?.brn_cd}}</td>
+                      <td *ngIf="this.sys.ardbCD=='2' || this.sys.ardbCD=='4' || this.sys.ardbCD=='3'" colspan="6" style="text-align: right;">{{translatedData.member_code}} - {{data?.brn_cd}}</td>
                     </tr>
                     
                 </table>
@@ -197,8 +198,8 @@
               </table>
                 <div style="padding:5px;">
                  <p> {{translatedData?.salutation}}, <br> {{translatedData?.salutation_sub}}, <br> {{translatedData?.body_pre}} {{reportData?data?.activity_name:''}} {{translatedData?.body_mid}} 
-                  <span *ngIf="ardbcd!='26'&& ardbcd!='20'">................................</span>
-                  <span *ngIf="ardbcd=='26'||ardbcd=='20'">{{convertDt}}</span>
+                  <span *ngIf="ardbcd!='26'&& ardbcd!='20'  && ardbcd!='21'">................................</span>
+                  <span *ngIf="ardbcd=='26'||ardbcd=='20' || ardbcd=='21'">{{convertDt}}</span>
                   {{translatedData?.body_post}} </p>
                  <br>
                 <div class="row" style="margin-left: 10%; margin-right: 10%;font-weight: 600;">
@@ -216,8 +217,8 @@
                       </div>
                       <div class="row">
                         <div *ngIf="ardbcd=='4'" class="col-6 pull-left">{{translatedData?.G_penal_amt}}: </div>
-                        <div *ngIf="ardbcd!='4'&& ardbcd!='26'" class="col-6 pull-left">{{translatedData?.penal_amt}}: </div>
-                        <div *ngIf="ardbcd=='26'" class="col-6 pull-left">{{translatedData?.BM_penal}}: </div>
+                        <div *ngIf="ardbcd!='4'&& ardbcd!='26' && ardbcd!='21'" class="col-6 pull-left">{{translatedData?.penal_amt}}: </div>
+                        <div *ngIf="ardbcd=='26' || ardbcd=='21'" class="col-6 pull-left">{{translatedData?.BM_penal}}: </div>
                         <div class="col-6 pull-right">{{reportData?data?.penal_intt:0 |currency:"INR"}} </div>
                     </div>
                     </div>
@@ -263,10 +264,12 @@
                       </tr>
                   </table> -->
                   
-               <br>  <span *ngIf="ardbcd!='26'">{{translatedData?.foot_pre}} <br> {{translatedData?.foot_mid}}</span>
-               <span *ngIf="ardbcd=='26'">{{translatedData?.foot_pre_BM}} {{convertDtFrm}} {{translatedData?.foot_mid_BM}}</span>  <br>
-               <span *ngIf="ardbcd!='26'">{{translatedData?.foot_post}}</span>  
-               <span *ngIf="ardbcd=='26'">{{translatedData?.bmardb_post}}</span>
+               <br>  <span *ngIf="ardbcd!='26' && ardbcd!='21'">{{translatedData?.foot_pre}} <br> {{translatedData?.foot_mid}}</span>
+               <span *ngIf="ardbcd=='26' || ardbcd=='21'">{{translatedData?.foot_pre_BM}} {{convertDtFrm}} {{translatedData?.foot_mid_BM}}</span>  <br>
+               <span *ngIf="ardbcd!='26' && ardbcd!='21'">{{translatedData?.foot_post}}</span>  
+               <span *ngIf="ardbcd=='26' || ardbcd=='21'">{{translatedData?.bmardb_post}}</span><br>
+               <span >{{translatedData?.rep_foot}}</span>
+
           
                <div class="pull-right bt-5" style="padding-bottom: 30px;">
                   <p style="text-align: center;">{{translatedData?.regards_pre}}</p><br><br>

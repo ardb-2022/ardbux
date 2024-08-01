@@ -506,7 +506,7 @@ export class YearlyadjustmentvoucherComponent implements OnInit {
         tvdSave.debit_credit_flag = this.voucherData.value[x].dr_cr=='Debit'? 'D' : 'C';
         tvdSave.narrationdtl = this._voucherNarration;
         console.log({"voucher_type":this._voucherTyp});
-        tvdSave.created_by=this.sys.UserId+'/'+localStorage.getItem('getIPAddress')
+        tvdSave.created_by=this.sys.UserId+'/'+localStorage.getItem('ipAddress')
         tvdSave.created_dt=this.sys.CurrentDate
         tvdSave.transaction_type = this._voucherTyp;
         tvdSave.voucher_dt = this.convertDate(this._voucherDt);//new Date(Date.UTC(this._voucherDt.getFullYear(), this._voucherDt.getMonth(), this._voucherDt.getDate(), this._voucherDt.getHours(), this._voucherDt.getMinutes()));
@@ -556,7 +556,7 @@ export class YearlyadjustmentvoucherComponent implements OnInit {
         tvdSave.debit_credit_flag = this.voucherData.value[x].dr_cr=='Debit'? 'D' : 'C';
         tvdSave.narrationdtl = this._voucherNarration;
         tvdSave.transaction_type = this._voucherTyp;
-        tvdSave.created_by=this.sys.UserId+'/'+localStorage.getItem('getIPAddress')
+        tvdSave.created_by=this.sys.UserId+'/'+localStorage.getItem('ipAddress')
         tvdSave.created_dt=this.sys.CurrentDate
         tvdSave.voucher_dt = this.convertDate(this._voucherDt);//new Date(Date.UTC(this._voucherDt.getFullYear(), this._voucherDt.getMonth(), this._voucherDt.getDate(), this._voucherDt.getHours(), this._voucherDt.getMinutes()));
         //tvdSave.voucher_dt = this._voucherDt;
@@ -647,7 +647,7 @@ export class YearlyadjustmentvoucherComponent implements OnInit {
         let tvdSave = new T_VOUCHER_DTLS();
         tvdSave.approval_status = 'A';
         tvdSave.brn_cd =  this.sys.BranchCode;
-        tvdSave.approved_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress')
+        tvdSave.approved_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress')
         tvdSave.approved_dt = new Date();
         //tvdSave.voucher_dt = this._voucherDt;
         tvdSave.voucher_dt = this._voucherDt;//new Date(Date.UTC(this._voucherDt.getFullYear(), this._voucherDt.getMonth(), this._voucherDt.getDate(), this._voucherDt.getHours(), this._voucherDt.getMinutes()));

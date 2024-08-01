@@ -236,7 +236,7 @@ export class UcicMergeComponent implements OnInit {
        this.suggestedCustomer.forEach(e=>{
         if(e.cust_cd==cust.cust_cd){
           // e.merge_flag="Y";
-          e.merged_by=this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+          e.merged_by=this.sys.UserId+'/'+localStorage.getItem('ipAddress');
         }
         debugger
        })

@@ -165,7 +165,7 @@ export class SubsidyEntryComponent implements OnInit {
     subsidyEntry.subsidy = this.f.subsidy.value;
     subsidyEntry.subsidy_type = this.f.subsidy_type.value;
     subsidyEntry.del_flag = 'N'
-    subsidyEntry.modified_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress')
+    subsidyEntry.modified_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress')
     return subsidyEntry
   }
   checkValidity(subsidyEntry: tm_subsidy) {

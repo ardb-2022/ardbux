@@ -287,7 +287,7 @@ export class VillageMasterComponent implements OnInit {
     this.isLoading=true;
     this.showMsg =null;
     let login = new LOGIN_MASTER();
-    login.user_id = this.f.userid.value+'/'+localStorage.getItem('getIPAddress');
+    login.user_id = this.f.userid.value+'/'+localStorage.getItem('ipAddress');
     login.brn_cd = this.f.branch.value;
     ;
     this.svc.addUpdDel('Sys/DeleteUserMaster', login).subscribe(

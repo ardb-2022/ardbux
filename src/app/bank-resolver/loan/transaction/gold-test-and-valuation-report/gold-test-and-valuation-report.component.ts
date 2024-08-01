@@ -521,9 +521,9 @@ saveData(){
   if(this.modifyClicked &&this.f.valuation_no.value>0){
     this.goldDM.tmgoldmasterdtls.forEach(e=>{
       e.valuation_no=Number(this.f.valuation_no.value)
-      e.modified_by=this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+      e.modified_by=this.sys.UserId+'/'+localStorage.getItem('ipAddress');
     })
-    this.goldDM.tmgoldmaster.modified_by=this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+    this.goldDM.tmgoldmaster.modified_by=this.sys.UserId+'/'+localStorage.getItem('ipAddress');
     debugger
     this.svc.addUpdDel<any>('Loan/UpdateLoanValuationData', this.goldDM).subscribe(
       res4 => {

@@ -397,8 +397,8 @@ export class AdduserComponent implements OnInit {
       login.user_type=this.f.utype.value;
       login.password=this.f.password.value;
       login.login_status='N';
-      login.created_by=this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
-      // login.modified_by=this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+      login.created_by=this.sys.UserId+'/'+localStorage.getItem('ipAddress');
+      // login.modified_by=this.sys.UserId+'/'+localStorage.getItem('ipAddress');
       // login.ardb_cd=localStorage.getItem('__bName').toLocaleLowerCase()=="ardbtestux"?"100":this.sys.ardbCD
       login.ardb_cd=this.sys.ardbCD;
       
@@ -457,7 +457,7 @@ export class AdduserComponent implements OnInit {
     login.password=this.f.password.value;
     login.login_status=this.f.logsts.value;
     login.ardb_cd=this.sys.ardbCD;
-    login.modified_by=this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+    login.modified_by=this.sys.UserId+'/'+localStorage.getItem('ipAddress');
     //login.login_status='N';
     ;
     // this.checkPassword();
@@ -498,7 +498,7 @@ export class AdduserComponent implements OnInit {
     login.password=this.defaultPass;
     login.login_status=this.u.logsts.value;
     login.ardb_cd=this.sys.ardbCD;
-    login.modified_by=this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+    login.modified_by=this.sys.UserId+'/'+localStorage.getItem('ipAddress');
     //login.login_status='N';
     ;
     // this.checkPassword();

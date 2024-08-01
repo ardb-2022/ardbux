@@ -25,7 +25,7 @@ export class NeftOutwardReportComponent implements OnInit ,AfterViewInit{
 @ViewChild(MatPaginator) paginator: MatPaginator;
 @ViewChild(MatSort) sort: MatSort;
 dataSource = new MatTableDataSource()
-displayedColumns: string[] = ['trans_dt','trans_cd', 'payment_type', 
+displayedColumns: string[] = ['trans_dt','trans_cd','brn_cd', 'payment_type', 
 'bene_name', 'bene_acc_no','bene_ifsc_code','amount','charge_ded',
 'bank_dr_acc_no','bank_dr_acc_name','payment_ref_no','status','rejection_reason'];
 notvalidate:boolean=false;
@@ -33,6 +33,7 @@ date_msg:any;
 modalRef: BsModalRef;
 isOpenFromDp = false;
 isOpenToDp = false;
+brnDtls:any[];
 sys = new SystemValues();
 config = {
   keyboard: false, // ensure esc press doesnt close the modal
@@ -83,6 +84,7 @@ constructor(private svc: RestService, private formBuilder: FormBuilder,
   private modalService: BsModalService, private _domSanitizer: DomSanitizer,private exportAsService: ExportAsService, private cd: ChangeDetectorRef,
   private router: Router, private comser:CommonServiceService) { }
 ngOnInit(): void {
+  this.GetBranchMaster();
   this.fromdate = this.sys.CurrentDate;
   this.toDate = this.sys.CurrentDate;
   this.reportcriteria = this.formBuilder.group({
@@ -131,7 +133,8 @@ public SubmitReport() {
     this.isLoading=true;
     var dt={
      "ardb_cd": this.sys.ardbCD,
-     "brn_cd":  this.sys.BranchCode,
+    //  "brn_cd":  this.sys.BranchCode,
+     "brn_cd": "",
      "from_dt" : this.fromdate.toISOString(),
      "to_dt" : this.toDate.toISOString()
     }
@@ -156,8 +159,9 @@ public SubmitReport() {
         this.currSum+=e.curr_bal;
         this.clrSum+=e.clr_bal
         this.prnSum+=e.prn_amt;
-        this.penalSum+=e.penal_amt
-        this.inttSum+=e.intt_amt
+        this.penalSum+=e.penal_amt;
+        this.inttSum+=e.intt_amt;
+        e.brn_cd=this.brnDtls.filter(brn=>brn.brn_cd==e.brn_cd)[0]?.brn_name
       })
       },
       err => {
@@ -182,6 +186,23 @@ public SubmitReport() {
     //   this.isLoading = false;
     // }, 10000);
   }
+}
+private GetBranchMaster() {
+  this.isLoading = true;
+  var dt = { "ardb_cd": this.sys.ardbCD };
+  //console.log(dt)
+  // https://cfs2022.in/CTARDBUX/api/Mst/GetBranchMaster
+  this.svc.addUpdDel('Mst/GetBranchMaster', dt).subscribe(
+    (res:any) => {
+      //console.log(res)
+      this.isLoading = false;
+      this.brnDtls = res;
+      this.brnDtls.sort((a, b) => a.brn_cd - b.brn_cd);
+    },
+    err => { 
+      this.isLoading = false;
+     }
+  );
 }
 public oniframeLoad(): void {
   this.counter++

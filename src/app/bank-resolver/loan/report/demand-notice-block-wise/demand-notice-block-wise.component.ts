@@ -430,7 +430,9 @@ export class DemandNoticeBlockWiseComponent implements OnInit {
         
 debugger
         this.reportData.forEach(p => {
-          if(this.sys.ardbCD=="20" ||this.sys.ardbCD=="11" || this.sys.ardbCD=="26"||this.sys.ardbCD=="10"||this.sys.ardbCD=="22"||this.sys.ardbCD=="23"){
+          // if(this.sys.ardbCD=="20" ||this.sys.ardbCD=="21" ||this.sys.ardbCD=="11" || this.sys.ardbCD=="26"||this.sys.ardbCD=="10"||this.sys.ardbCD=="22"||this.sys.ardbCD=="23"){
+          if(this.sys.ardbCD!="2" && this.sys.ardbCD!="4" && this.sys.ardbCD!="3" ){
+            
             // p.brn_cd=this.allServiceArea.filter(e=>e.service_area_cd==p.brn_cd)[0]?.service_area_name;
             const abc = p.activity_name;
             let [cName, cAddress] = abc.split('$');

@@ -1489,7 +1489,7 @@ debugger
         const tmTrnsfr = new tm_transfer();
         tmTrnsfr.brn_cd = this.sys.BranchCode;
         tmTrnsfr.trf_dt = this.sys.CurrentDate;
-        tmTrnsfr.created_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+        tmTrnsfr.created_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
         tmTrnsfr.approval_status = 'U';
 
         if (this.showtransdetails)
@@ -1631,7 +1631,7 @@ debugger
         const tmTrnsfr = new tm_transfer();
         tmTrnsfr.brn_cd = this.sys.BranchCode;
         tmTrnsfr.trf_dt = this.sys.CurrentDate;
-        tmTrnsfr.created_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+        tmTrnsfr.created_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
         tmTrnsfr.approval_status = 'U';
 
         if (this.showtransdetails)
@@ -1942,7 +1942,7 @@ debugger
     toReturn.approval_status = 'A';
     // toReturn.approval_status = this.accNoEnteredForTransaction.approval_status;
     // toReturn.approved_by = this.accNoEnteredForTransaction.approved_by;
-    toReturn.approved_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+    toReturn.approved_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
     // toReturn.approved_dt = this.accNoEnteredForTransaction.approved_dt;
     toReturn.approved_dt = this.sys.CurrentDate;
     // toReturn.user_acc_num = this.accNoEnteredForTransaction.user_acc_num;
@@ -1960,8 +1960,8 @@ debugger
     // toReturn.sex = this.accNoEnteredForTransaction.sex;
     // toReturn.phone = this.accNoEnteredForTransaction.phone;
     // toReturn.occupation = this.accNoEnteredForTransaction.occupation;
-    toReturn.created_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
-    toReturn.modified_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+    toReturn.created_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
+    toReturn.modified_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
     toReturn.constitution_desc = this.accNoEnteredForTransaction.constitution_desc;
     // toReturn.acc_cd = this.accNoEnteredForTransaction.acc_cd;
     toReturn.acc_cd = this.invComServ.selectedconstitution.filter(e=>e.acc_type_cd==this.accNoEnteredForTransaction.acc_type_cd)[0].acc_cd;
@@ -2167,7 +2167,7 @@ debugger
       console.log(toReturn)
       debugger;
     if(this.editDeleteMode==true){
-      toReturn.modified_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+      toReturn.modified_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
       toReturn.modified_dt = this.sys.CurrentDate;
       toReturn.trans_cd=this.td.trans_cd.value;
      }
@@ -2390,7 +2390,7 @@ debugger
       // }
     } //marker
     toReturn.disb_id = 1;
-    toReturn.created_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+    toReturn.created_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
     toReturn.acc_cd = this.invComServ.selectedconstitution[0].acc_cd
     console.log(toReturn.acc_cd)
     debugger
@@ -2487,7 +2487,7 @@ debugger
       console.log(toReturn)
       debugger;
     if(this.editDeleteMode==true){
-      toReturn.modified_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+      toReturn.modified_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
       toReturn.modified_dt = this.sys.CurrentDate;
       toReturn.trans_cd=this.tdDefTransFrmC.controls.trans_cd.value;
 
@@ -2621,7 +2621,7 @@ debugger
       // }
      //marker
     toReturn.disb_id = 1;
-    toReturn.created_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+    toReturn.created_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
     toReturn.acc_cd = this.invComServ.selectedconstitution.filter(e=>e.acc_type_cd==accTypeCd)[0].acc_cd;
 
     console.log(toReturn.acc_cd)

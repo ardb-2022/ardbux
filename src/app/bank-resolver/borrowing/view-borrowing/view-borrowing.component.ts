@@ -146,9 +146,9 @@ this.operationType ='R'
 this.getsystemParam();
 this.logUser=localStorage.getItem('itemUX');
 this.branchCode = this.sys.BranchCode;
-this.createUser = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+this.createUser = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
 // this.sys.CurrentDate = this.sys.CurrentDate;
-this.updateUser = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+this.updateUser = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
 this.updateDate = this.sys.CurrentDate;
 setTimeout(() => {
 // this.getCustomerList();
@@ -740,7 +740,7 @@ this.lienAccount();
 this.tm_loan_all.approval_status = 'A';
 this.masterModel.tmlaonsanction[idx].approval_status = 'A';
 this.masterModel.tmlaonsanction[idx].approved_dt = this.sys.CurrentDate;
-this.masterModel.tmlaonsanction[idx].approved_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+this.masterModel.tmlaonsanction[idx].approved_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
 this.masterModel.tmlaonsanctiondtls[idx].approval_status = 'A';
 this.saveData('A');
 // }

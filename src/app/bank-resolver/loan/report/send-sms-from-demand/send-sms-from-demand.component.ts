@@ -166,6 +166,8 @@ export class SendSmsFromDemandComponent {
   notvalidate:boolean=false;
   date_msg:any;
   private baseUrl: string = 'http://sms.digilexa.in/http-api.php';
+  private HbaseUrl: string = 'http://bulksms.sssplsales.in/api/api_http.php';
+
   private username: string = 'HowrahARD';
   private password: string = 'rt6@HCARDB';
   private senderid: string = 'HCARDB';
@@ -179,6 +181,20 @@ export class SendSmsFromDemandComponent {
     private modalService: BsModalService, private _domSanitizer: DomSanitizer, private comser:CommonServiceService,
     private router: Router,private http: HttpClient) { }
   ngOnInit(): void {
+    if(this.sys.ardbCD=='23'){
+        this.baseUrl='http://sms.digilexa.in/http-api.php';
+        this.username='HowrahARD';
+        this.password='rt6@HCARDB';
+        this.senderid='HCARDB';
+        this.route='7';
+    }
+    else if(this.sys.ardbCD=='26'){
+        this.baseUrl='http://bulksms.sssplsales.in/api/api_http.php';
+        this.username='BCARDB';
+        this.password='BC527ARDB';
+        this.senderid='BCARDB';
+        this.route='7';
+    }
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.fromdate = this.sys.CurrentDate;
@@ -427,9 +443,11 @@ debugger
     console.log(this.adt_to_dt);
     debugger
     const message = `NAME ${ls_name} LOAN_ID ${ls_acc_num1} REPAY YOUR DEMAND UPTO ${this.adt_to_dt} `
-      + `PRINCIPAL ${ld_prn_demand.toFixed(2)} INTEREST ${ld_intt_demand.toFixed(2)} TOTAL ${ld_tot_demand.toFixed(2)}. -HCARDB`;
+      + `PRINCIPAL ${ld_prn_demand.toFixed(2)} INTEREST ${ld_intt_demand.toFixed(2)} TOTAL ${ld_tot_demand.toFixed(2)}. -${this.senderid}`;
 
     const url = `${this.baseUrl}?username=${this.username}&password=${this.password}&senderid=${this.senderid}&route=${this.route}&number=${encodeURIComponent(ls_phone)}&message=${encodeURIComponent(message)}`;
+    //http://bulksms.sssplsales.in/api/api_http.php?username=PSKUSL&password=PS524KUSL&senderid=PASKUS&to=9564416604&text=Your%20Savings%20DepositAccount%20Number:****00003821%20is%20DEBITED%20by%20Rs.11496.Balance%20is%20Rs.766.59.Thanks,Pancharul%20S.K.U.S.%20Ltd.&route=Informative&type=text
+    // ls_arg := 'http://bulksms.sssplsales.in/api/api_http.php?username=BCARDB'||'&'||'password=BC527ARDB'||'&'||'senderid=BCARDB'||'&'||'to='||ls_phone||'&'||'text='|| 'Your%20'||ls_acc_type||'Account Number:'||ls_acc_num1||'%20is%20'||LS_DESCRIPTION||'%20by%20Rs.'||ld_amt||'.Balance%20is%20Rs.'||ld_clr_bal||'.'||'&'||'route=Informative'||'&'||'type=text';	
     console.log(url);
     this.http.get(url)
     return url;

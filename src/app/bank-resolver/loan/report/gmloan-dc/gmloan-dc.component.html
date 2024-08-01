@@ -139,8 +139,8 @@
                            <td mat-cell>{{actiDtls.dc_statement[0].sanction_dt.substr(0,10)}}</td>
                            <td mat-cell>{{actiDtls.dc_statement[0].sanction_amt|currency:"INR"}}</td>
                            <td mat-cell>{{actiDtls.dc_statement[0].own_contribution|currency:"INR"}}</td>
-                           <td mat-cell>{{actiDtls.dc_statement[0].disb_amt|currency:"INR"}}<br>{{actiDtls.dc_statement[1].disb_amt|currency:"INR"}}</td>
-                           <td mat-cell>{{actiDtls.dc_statement[0].disb_dt.substr(0,10)}}<br>{{actiDtls.dc_statement[1].disb_dt.substr(0,10)}}</td>
+                           <td mat-cell>{{actiDtls.dc_statement[0].disb_amt|currency:"INR"}}<br>{{actiDtls.dc_statement[1]?.disb_amt|currency:"INR"}}</td>
+                           <td mat-cell>{{actiDtls.dc_statement[0].disb_dt.substr(0,10)}}<br>{{actiDtls.dc_statement[1]?.disb_dt.substr(0,10)}}</td>
                            <td mat-cell>{{actiDtls.dc_statement[0].lso_no|currency:"INR"}}</td>
                            <td mat-cell>{{actiDtls.dc_statement[0].machine}}<br>{{actiDtls.dc_statement[0].project_cost|currency:"INR"}} </td>
                            <td mat-cell>{{actiDtls.dc_statement[0].net_income_gen |currency:"INR"}}</td>

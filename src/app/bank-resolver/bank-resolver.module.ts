@@ -241,10 +241,13 @@ import { RoundPipe } from '../round.pipe';
 import { LoanDisburseSummaryComponent } from './loan/report/loan-disbursement-register/loan-disburse-summary/loan-disburse-summary.component';
 import { DdsAgentTransReportComponent } from './deposit/ddsExportImport/dds-agent-trans-report/dds-agent-trans-report.component';
 import { InterestMasterComponent } from './deposit/masters/interest-master/interest-master.component';
+import { UppercaseDirective } from '../_utility/uppercase.directive';
+import { MatchAccountNumbersDirective } from '../_utility/match-account-numbers.directive';
+import { NumericOnlyDirective } from '../_utility/numeric-only.directive';
 
 @NgModule({
   declarations: [ 
-    RoundPipe ,
+    RoundPipe ,UppercaseDirective, MatchAccountNumbersDirective, NumericOnlyDirective,
     AmountToWordPipe,UserLoginStatusComponent,OpenInvestComponent,KeyoffDirective,
     BankResolverComponent, LoginComponent, HeaderComponent, LandingComponent, LoadingComponent,
     UTCustomerProfileComponent, UTSelfHelpComponent, DailybookComponent, CashaccountComponent,

@@ -84,7 +84,7 @@
         </div>
         <div class="form-row">
             <div style="width:35%;"><b>Contact No:  {{suggestedCustomer[0]?.phone}}</b></div>
-            <div style="width:30%;"><b>Nominee Status:  {{masterModel?.tdnominee?"YES":"NO"}}</b></div>
+            <div style="width:30%;"><b>Nominee Registered:  {{masterModel?.tdnominee?.length>0?"YES":"NO"}}</b></div>
         </div>
         <div class="form-row">
           <div style="width: 40%;"><b>Date of Opening: {{masterModel?.tmdeposit?.opening_dt?.substr(0,10)}} </b></div>

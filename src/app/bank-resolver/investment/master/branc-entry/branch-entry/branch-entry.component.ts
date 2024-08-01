@@ -212,7 +212,7 @@ export class BranchEntryComponent implements OnInit {
         "branch_name":this.addBranch.controls.branch_nm.value,
         "branch_addr":this.addBranch.controls.branch_addr.value,
         "branch_phone":this.addBranch.controls.branch_ph.value,
-        "modified_by":this.sys.UserId+'/'+localStorage.getItem('getIPAddress')
+        "modified_by":this.sys.UserId+'/'+localStorage.getItem('ipAddress')
       }
       ;
       this.svc.addUpdDel('Mst/UpdateBranchInv',dt).subscribe(
@@ -261,8 +261,8 @@ else{
       "branch_name":this.addBranch.controls.branch_nm.value,
       "branch_addr":this.addBranch.controls.branch_addr.value,
       "branch_phone":this.addBranch.controls.branch_ph.value,
-      "created_by":this.sys.UserId+'/'+localStorage.getItem('getIPAddress'),
-      "modified_by":this.sys.UserId+'/'+localStorage.getItem('getIPAddress')
+      "created_by":this.sys.UserId+'/'+localStorage.getItem('ipAddress'),
+      "modified_by":this.sys.UserId+'/'+localStorage.getItem('ipAddress')
     }
     console.log(this.addBranch.controls)
     this.svc.addUpdDel('Mst/InsertBranchInvMaster', data).subscribe(

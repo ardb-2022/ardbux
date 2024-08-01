@@ -193,6 +193,7 @@ export class AccounTransactionsComponent implements OnInit {
   accOpenDt:any;
   new_acc_status:boolean=false;
   showLockType:boolean=false;
+  interestAmount:number=0;
   // disableIntt:boolean=false;
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template, this.config);
@@ -471,6 +472,21 @@ getRDActiveList(){
       res => {
         //debugger;
         this.td.intt_rate.setValue(Number(res));
+        if(res){
+            const temp_gen_param2 = new p_gen_param();
+          temp_gen_param2.ardb_cd=this.sys.ardbCD;
+          temp_gen_param2.ad_prn_amt=(this.sys.ardbCD=='4'&&(this.f.acc_type_cd.value === 2 || this.f.acc_type_cd.value == 4))?this.accNoEnteredForTransaction.prn_amt:this.accNoEnteredForTransaction.prn_amt+this.accNoEnteredForTransaction.intt_amt;///13
+          temp_gen_param2.ad_acc_type_cd=2;
+          temp_gen_param2.ad_intt_rt = +res;//Need to be change in future
+          temp_gen_param2.as_intt_type = "O" ;
+          const o = Utils.convertStringToDt(this.td.opening_dt.value);
+          const m = Utils.convertStringToDt(this.td.mat_dt.value);
+          const diffDays = Math.ceil((Math.abs(m.getTime() - o.getTime())) / (1000 * 3600 * 24));
+          temp_gen_param2.ai_period = diffDays;
+          debugger
+          this.f_calctdintt_reg(temp_gen_param2);
+          
+        }
       },
       err => {
         console.log(err);
@@ -785,13 +801,56 @@ debugger
       RD_mat_amount:['']
     });
   }
-
+  getFDCCTDintt(val1,val2,val3,val4,val5,val6){
+    const temp_gen_param = new p_gen_param();
+      temp_gen_param.ad_acc_type_cd = +val1;
+      temp_gen_param.ad_prn_amt = val2;
+      temp_gen_param.adt_temp_dt = Utils.convertStringToDt(val3);
+      temp_gen_param.as_intt_type = val5;
+      const o = Utils.convertStringToDt(val3);
+      const m = Utils.convertStringToDt(val4);
+      const diffDays = Math.ceil((Math.abs(m.getTime() - o.getTime())) / (1000 * 3600 * 24));
+      temp_gen_param.ai_period = diffDays;
+      temp_gen_param.ad_intt_rt = +val6;
+      console.log(temp_gen_param);
+      if (val5 === 'O' && (val1== 2 ||val1== 3 ||val1== 4)) {
+        this.isLoading=true;
+      this.svc.addUpdDel<any>('Deposit/F_CALCTDINTT_REG', temp_gen_param).subscribe(
+        res => {
+          if(res){
+            this.interestAmount=+res
+            this.accDtlsFrm.patchValue({
+              intt_amt: +res,//tobechange
+              mat_amt:this.accNoEnteredForTransaction.prn_amt + (this.interestAmount?this.interestAmount:0),
+              });
+              this.isLoading = false;
+          }else{
+            this.isLoading=false;
+          }
+         
+        },
+        err => {
+          this.isLoading = false;
+  
+        }
+      );
+    }
+      
+}
   private setAccDtlsFrmForm(): void {
     // //////////////debugger;
 
     if (undefined !== this.accNoEnteredForTransaction && Object.keys(this.accNoEnteredForTransaction).length !== 0) {
       this.resetAccDtlsFrmFormData();
       this.getShadowBalance();
+      this.getFDCCTDintt(
+        this.accNoEnteredForTransaction.acc_type_cd,
+        this.accNoEnteredForTransaction.prn_amt,
+        this.accNoEnteredForTransaction.opening_dt,
+        this.accNoEnteredForTransaction.mat_dt,
+        this.accNoEnteredForTransaction.intt_trf_type,
+        this.accNoEnteredForTransaction.intt_rt
+      );
       if (this.accNoEnteredForTransaction.acc_type_cd === 2
         || this.accNoEnteredForTransaction.acc_type_cd === 3
         || this.accNoEnteredForTransaction.acc_type_cd === 4) {
@@ -833,6 +892,8 @@ debugger
         intrestType = 'Monthly'; this.interestPeriod=12
       }
       console.log(this.td.amount.value)
+      console.log(this.accNoEnteredForTransaction.prn_amt + this.interestAmount?this.interestAmount:0);
+      debugger
       // console.log(this.accNoEnteredForTransaction.intt_trf_type=='H' || this.accNoEnteredForTransaction.intt_trf_type=='Q'? this.td.amount.value :this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt)
       this.accDtlsFrm.patchValue({
         brn_cd: this.accNoEnteredForTransaction.brn_cd,
@@ -852,7 +913,7 @@ debugger
         prn_amt: this.accNoEnteredForTransaction.prn_amt,
         intt_amt: this.accNoEnteredForTransaction.intt_amt,
         // mat_amt:this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt,
-        mat_amt: this.accNoEnteredForTransaction.intt_trf_type === 'H'  ||this.accNoEnteredForTransaction.intt_trf_type === 'Y'  ||this.accNoEnteredForTransaction.intt_trf_type === 'Q'? this.accNoEnteredForTransaction.prn_amt + this.interestPeriod*this.accNoEnteredForTransaction.intt_amt : this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt,
+        mat_amt: this.accNoEnteredForTransaction.intt_trf_type === 'H'  ||this.accNoEnteredForTransaction.intt_trf_type === 'Y'  ||this.accNoEnteredForTransaction.intt_trf_type === 'Q'? this.accNoEnteredForTransaction.prn_amt + this.interestPeriod*this.accNoEnteredForTransaction.intt_amt : this.accNoEnteredForTransaction.prn_amt + (this.interestAmount?this.interestAmount:0),
         
         
         dep_period_y: null === this.accNoEnteredForTransaction.dep_period ? ''
@@ -3536,8 +3597,10 @@ getjoinholder(){
       else{
         debugger
         this.sys.ardbCD!='20'?this.tdDefTransFrm.controls.opening_dt.setValue(this.accNoEnteredForTransaction.mat_dt.toString().substr(0, 10),):this.tdDefTransFrm.controls.opening_dt.setValue(this.datepipe.transform(this.sys.CurrentDate,"dd/MM/yyyy"))
-        this.onDepositePeriodChange()
-      
+        this.onDepositePeriodChange();
+        debugger
+        
+        
       }
         if((this.sys.ardbCD!='20' && this.sys.ardbCD!='3' && this.sys.ardbCD!='7') && (afterMatured == true && (accTypCode === 2 || accTypCode == 4||accTypCode == 3))) {
 
@@ -3552,7 +3615,7 @@ getjoinholder(){
             temp_gen_param.ai_period=this.diff1-1;//for subtract current date //PARTHA
             temp_gen_param.ad_intt_rt = 4 //Need to be change in future
             temp_gen_param.as_intt_type = "O" 
-
+debugger
             this.svc.addUpdDel<any>('Deposit/F_CALCTDINTT_REG', temp_gen_param).subscribe(
               res => {
                 console.log(res)
@@ -4635,7 +4698,7 @@ getjoinholder(){
         const tmTrnsfr = new tm_transfer();
         tmTrnsfr.brn_cd = this.sys.BranchCode;
         tmTrnsfr.trf_dt = this.sys.CurrentDate;
-        tmTrnsfr.created_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+        tmTrnsfr.created_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
         tmTrnsfr.approval_status = 'U';
 
         if (this.showtransdetails)
@@ -5235,7 +5298,7 @@ getjoinholder(){
     ; //marker1
 
     toReturn.disb_id = 1;
-    toReturn.created_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+    toReturn.created_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
     toReturn.home_brn_cd = this.resBrnCd != this.sys.BranchCode ? this.resBrnCd : this.sys.BranchCode;
     toReturn.intra_branch_trn = this.resBrnCd != this.sys.BranchCode ? 'Y' : 'N'
     ////////////debugger;
@@ -5464,7 +5527,7 @@ getjoinholder(){
       // }
     } //marker
     toReturn.disb_id = 1;
-    toReturn.created_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+    toReturn.created_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
     // console.log( {"toReturn.particulars":toReturn.particulars," this.td.particulars.value": this.td.particulars.value})
     console.log(toReturn)
     return toReturn;
@@ -5513,7 +5576,7 @@ getjoinholder(){
     toReturn.approval_status = 'A';
     // toReturn.approval_status = this.accNoEnteredForTransaction.approval_status;
     // toReturn.approved_by = this.accNoEnteredForTransaction.approved_by;
-    toReturn.approved_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+    toReturn.approved_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
     // toReturn.approved_dt = this.accNoEnteredForTransaction.approved_dt;
     toReturn.approved_dt = this.sys.CurrentDate;
     toReturn.user_acc_num = this.accNoEnteredForTransaction.user_acc_num;
@@ -5531,8 +5594,8 @@ getjoinholder(){
     toReturn.sex = this.accNoEnteredForTransaction.sex;
     toReturn.phone = this.accNoEnteredForTransaction.phone;
     toReturn.occupation = this.accNoEnteredForTransaction.occupation;
-    toReturn.created_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
-    toReturn.modified_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+    toReturn.created_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
+    toReturn.modified_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
     toReturn.constitution_desc = this.accNoEnteredForTransaction.constitution_desc;
     toReturn.acc_cd = this.accNoEnteredForTransaction.acc_cd;
 

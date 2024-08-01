@@ -253,7 +253,7 @@ export class InterestMasterComponent {
               "catg_cd":this.locker.controls.catg_cd.value,
               "no_of_days":this.locker.controls.no_of_days.value,
               "intt_rate":this.locker.controls.int_rate.value,
-              "created_by":this.sys.UserId+'/'+localStorage.getItem('getIPAddress')
+              "created_by":this.sys.UserId+'/'+localStorage.getItem('ipAddress')
           }
     // this.reportData.push(dt);
 

@@ -2450,7 +2450,7 @@ debugger;
               }
               tmTrnsfr.brn_cd = this.sys.BranchCode;
               tmTrnsfr.trf_dt = this.sys.CurrentDate;
-              tmTrnsfr.created_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+              tmTrnsfr.created_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
               tmTrnsfr.approval_status = 'U';
               saveTransaction.tmtransfer.push(tmTrnsfr);
               
@@ -2778,7 +2778,7 @@ debugger;
         }
         tmTrnsfr.brn_cd = this.sys.BranchCode;
         tmTrnsfr.trf_dt = this.sys.CurrentDate;
-        tmTrnsfr.created_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+        tmTrnsfr.created_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
         tmTrnsfr.approval_status = 'U';
         saveTransaction.tmtransfer.push(tmTrnsfr);
       }
@@ -3035,8 +3035,8 @@ debugger;
     toReturn.instrument_num = this.td.instrument_num.value === '' ? 0 : +this.td.instrument_num.value;
     toReturn.paid_to = this.td.paid_to.value;
     toReturn.token_num = this.td.token_num.value;
-    toReturn.created_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
-    toReturn.modified_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+    toReturn.created_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
+    toReturn.modified_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
     toReturn.approval_status = 'U';
      toReturn.particulars = this.td.recov_type.value=='M'? 'M' : 'S';
     if (this.td.trf_type.value === 'T') {
@@ -3137,8 +3137,8 @@ debugger;
     toReturn.instrument_dt = !this.td.instrument_dt.value ? null : this.td.instrument_dt.value;
     toReturn.paid_to = null;
     toReturn.token_num = null;
-    toReturn.created_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
-    toReturn.modified_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+    toReturn.created_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
+    toReturn.modified_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
     toReturn.approval_status = 'U';
     toReturn.trf_type = 'T';
     return toReturn;

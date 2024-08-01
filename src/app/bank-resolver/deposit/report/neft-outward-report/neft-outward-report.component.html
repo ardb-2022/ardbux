@@ -78,7 +78,7 @@ style="background-color: #78c2ad21; min-height: 20vh;">
 <div class="mat-elevation-z8" id="mattable">
 
   <table mat-table [dataSource]="dataSource" matSort >
-    
+    <!-- add branch column -->
     <!-- Progress Column -->
     <ng-container matColumnDef="trans_dt">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Trans. Date </th>
@@ -89,7 +89,10 @@ style="background-color: #78c2ad21; min-height: 20vh;">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Trans. Code </th>
       <td mat-cell *matCellDef="let row" style="text-align: center;"> {{row.trans_cd}} </td>
     </ng-container>
-
+    <ng-container matColumnDef="brn_cd">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Branch Name </th>
+      <td mat-cell *matCellDef="let row" style="text-align: center;"> {{row.brn_cd}} </td>
+    </ng-container>
     <!-- Name Column -->
     <ng-container matColumnDef="payment_type">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Payment Type</th>
@@ -158,7 +161,7 @@ style="background-color: #78c2ad21; min-height: 20vh;">
 </ng-container>
 <!-- Header column -->
 <ng-container matColumnDef="Header">
-  <th mat-header-cell *matHeaderCellDef colspan="14">
+  <th mat-header-cell *matHeaderCellDef colspan="15">
     <div class="justify-content-center" style="text-align:center">
       <br><h4>{{ardbName}} ({{branchName}})</h4>
       

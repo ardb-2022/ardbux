@@ -993,7 +993,7 @@ export class TransTransactionComponent implements OnInit {
     if (this.f.trans_cd.value > 0)
     tdDefTrans.trans_cd = this.f.trans_cd.value;
     tdDefTrans.amount = this.td_deftranstrfList[0].amount;
-    tdDefTrans.created_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+    tdDefTrans.created_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
     tdDefTrans.acc_cd = this.td_deftranstrfList[0].acc_cd;
     if (this.td_deftranstrfList[0].trans_type === 'cust_acc') {
       tdDefTrans.remarks = "D";
@@ -1060,8 +1060,8 @@ export class TransTransactionComponent implements OnInit {
       tdDefTransAndTranfer.trans_dt = this.f.trf_dt.value;
       // tdDefTransAndTranfer.trans_type = "W"; //D/W  //marker
       tdDefTransAndTranfer.trans_mode = "V";
-      tdDefTransAndTranfer.created_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
-      tdDefTransAndTranfer.modified_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+      tdDefTransAndTranfer.created_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
+      tdDefTransAndTranfer.modified_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
       tdDefTransAndTranfer.approval_status = 'U';
       tdDefTransAndTranfer.particulars = 'S';///////
       tdDefTransAndTranfer.tr_acc_cd = 10000;
@@ -1107,8 +1107,8 @@ export class TransTransactionComponent implements OnInit {
       tdDefTransAndTranfer.trans_dt = this.f.trf_dt.value;
       tdDefTransAndTranfer.trans_type = "D";
       tdDefTransAndTranfer.trans_mode = "V";
-      tdDefTransAndTranfer.created_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
-      tdDefTransAndTranfer.modified_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+      tdDefTransAndTranfer.created_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
+      tdDefTransAndTranfer.modified_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
       tdDefTransAndTranfer.approval_status = 'U';
       tdDefTransAndTranfer.particulars = 'S';
       tdDefTransAndTranfer.tr_acc_cd = 10000;
@@ -1131,7 +1131,7 @@ export class TransTransactionComponent implements OnInit {
     }
     tmTrnsfr.brn_cd = this.sys.BranchCode;
     tmTrnsfr.trf_dt = this.sys.CurrentDate;
-    tmTrnsfr.created_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+    tmTrnsfr.created_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
     tmTrnsfr.ardb_cd=this.sys.ardbCD
     tmTrnsfr.approval_status = 'U';
     saveTransaction.tmtransfer = tmTrnsfr;

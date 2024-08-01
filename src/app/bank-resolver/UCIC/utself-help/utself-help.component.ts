@@ -37,7 +37,7 @@ export class UTSelfHelpComponent implements OnInit {
   tempcustname ='';
   ngOnInit(): void {
     this.branchCode = this.sys.BranchCode;
-    this.userName = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+    this.userName = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
     this.getVillageMaster();
     this.shgFrm = this.frmBldr.group({
      shg_id : [],

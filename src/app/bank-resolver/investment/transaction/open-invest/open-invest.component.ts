@@ -201,8 +201,8 @@ export class OpenInvestComponent implements OnInit {
     // console.log(this.td_deftranstrfList);
     this.voucher_dt = this.sys.CurrentDate;
     this.branchCode = this.sys.BranchCode;
-    this.createUser = this.sys.UserId +'/'+localStorage.getItem('getIPAddress');
-    this.updateUser = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+    this.createUser = this.sys.UserId +'/'+localStorage.getItem('ipAddress');
+    this.updateUser = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
     this.createDate = this.sys.CurrentDate;
     this.updateDate = this.sys.CurrentDate;
     this.cashAccountCode = this.sys.CashAccCode;

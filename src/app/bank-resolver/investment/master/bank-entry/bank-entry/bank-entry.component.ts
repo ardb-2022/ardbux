@@ -176,7 +176,7 @@ export class BankEntryComponent implements OnInit {
       "bank_name":this.addBank.controls.bank_nm.value,
       "bank_addr":this.addBank.controls.bank_addr.value,
       "phone_no":this.addBank.controls.bank_phone.value,
-      "modified_by":this.sys.UserId+'/'+localStorage.getItem('getIPAddress')
+      "modified_by":this.sys.UserId+'/'+localStorage.getItem('ipAddress')
     }
     ;
     this.svc.addUpdDel('Mst/UpdateBankInv',dt).subscribe(
@@ -214,8 +214,8 @@ else{
       "bank_name":this.addBank.controls.bank_nm.value,
       "bank_addr":this.addBank.controls.bank_addr.value,
       "phone_no":this.addBank.controls.bank_phone.value,
-      "created_by":this.sys.UserId+'/'+localStorage.getItem('getIPAddress'),
-      "modified_by":this.sys.UserId+'/'+localStorage.getItem('getIPAddress')
+      "created_by":this.sys.UserId+'/'+localStorage.getItem('ipAddress'),
+      "modified_by":this.sys.UserId+'/'+localStorage.getItem('ipAddress')
     }
     console.log(this.addBank.controls)
     this.svc.addUpdDel('Mst/InsertBankInvMaster', data).subscribe(

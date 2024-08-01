@@ -536,7 +536,7 @@ export class VoucherapprovalComponent implements OnInit {
         let tvdSave = new T_VOUCHER_DTLS();
         tvdSave.approval_status = 'A';
         tvdSave.brn_cd =  this.sys.BranchCode;
-        tvdSave.approved_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress')
+        tvdSave.approved_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress')
         tvdSave.approved_dt = new Date();
         tvdSave.ardb_cd=this.sys.ardbCD
         tvdSave.voucher_dt = this.tvd.voucher_dt;

@@ -20,7 +20,7 @@ import { CommonServiceService } from '../common-service.service';
 export class LoginComponent implements OnInit {
   
   // private apiUrl = 'https://api.ipify.org/?format=json';
-  private apiUrl = 'https://api64.ipify.org?format=json';
+  private apiUrl = 'https://api.ipify.org?format=json';
   // https://api64.ipify.org/?format=json
   // https://api4.ipify.org/?format=json
 
@@ -64,7 +64,7 @@ export class LoginComponent implements OnInit {
      }
 
   ngOnInit(): void {
-   
+   this.getMyIp();
     this.wrongAttamt=localStorage.getItem('W_attempt')
     this.encriptPass();
     localStorage.removeItem('ardb_name');
@@ -348,7 +348,7 @@ export class LoginComponent implements OnInit {
           
                 if (response == true) {
                   res[0].login_status = 'Y';
-                  res[0].ip = localStorage.getItem('getIPAddress');
+                  res[0].ip = localStorage.getItem('ipAddress');
                   this.updateUsrStatus(res[0]);
                   this.getSystemParam();
             
@@ -424,16 +424,14 @@ export class LoginComponent implements OnInit {
           // //console.log(this.systemParam.find(x => x.param_cd === '206').param_value)
 
           this.router.navigate([__bName + '/la']);
-          this.http.get<{ ip: string }>(this.apiUrl).subscribe(
-            data => {
-              debugger
-              // //console.log(data)
-              const getIP =  data.ip.split(",");
-             localStorage.setItem('getIPAddress', getIP[0]); // feather
-          // localStorage.setItem('__userId', this.f.username.value +'/'+data.ip); // "101"
+          // this.http.get<{ ip: string }>(this.apiUrl).subscribe(
+          //   data => {
+          //     debugger
+          //     const getIP =  data.ip.split(",");
+          //    localStorage.setItem('ipAddress', getIP[0]);
 
 
-            })
+          //   })
             this.SBaccCD=RestService.bankconfigurationList.filter(e=>e.bank_name==__bName)[0].sms_provider
             localStorage.setItem('sbAccType', this.SBaccCD);
             
@@ -587,18 +585,27 @@ export class LoginComponent implements OnInit {
       this.isLoading=false;
     })
   }
+  getMyIp(){
+    fetch('https://jsonip.com', { mode: 'cors'} ) .then(function (resp) {
+      return resp.json();
+    }) .then((ip) => { console.log(ip); });
+  }
   public getBranchIp(e: any) {
     this.loginForm.disable();
     return new Promise((resolve, reject) => 
      {
-      this.http.get<{ ip: string }>(this.apiUrl).subscribe(
-        data => {
-          ////console.
-          debugger
-          console.log(data)
-          this.ipAddress = data.ip;
+      // this.http.get<{ ip: string }>(this.apiUrl).subscribe(
+      //   data => {
+          fetch('https://jsonip.com', { mode: 'cors'} ) .then(function (resp) {
+            return resp.json();
+          }) .then((ip) => { 
+            this.ipAddress = ip.ip;
+            debugger
+          // console.log(data)
+          
           const myIP =  this.ipAddress.split(",");
-          localStorage.setItem('ipAddress',myIP[0])
+          localStorage.setItem('ipAddress',this.ipAddress)
+          // localStorage.setItem('ipAddress',myIP[0])
           this.isLoading = false;
 
           // this.loginForm.enable();
@@ -618,18 +625,23 @@ export class LoginComponent implements OnInit {
             this.loginForm.enable();
             resolve(true);
           }
-        },
-        ipErr => {
-          this.isLoading = false;
-          this.alertMsg = 'Unable to get IP, contact support.';
-          resolve(false);
-        }
-      );
+            console.log(ip); 
+          });
+          ////console.
+          
+      //   },
+      //   ipErr => {
+      //     this.isLoading = false;
+      //     this.alertMsg = 'Unable to get IP, contact support.';
+      //     resolve(false);
+      //   }
+      // );
 
      }
     )
 
   }
+  
 //   getPrivateIP(){
 //   //   this.rstSvc.addUpdDel('Loan/GetHostName1',null).subscribe(data => {
 //   //     //console.log(data)

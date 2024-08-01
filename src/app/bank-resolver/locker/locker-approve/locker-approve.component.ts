@@ -760,7 +760,7 @@ this.svc.addUpdDel<any>('Locker/GetLockerOpeningData', dt).subscribe(
     param.ad_trans_cd =this.transactionDtlsFrm.controls.acc_num.value.length>0? this.selectedVm.td_def_trans_trf.trans_cd:null;
     param.adt_trans_dt = this.sys.CurrentDate;
     param.as_locker_id = this.tm_locker.locker_id.toLocaleUpperCase();
-    param.gs_user_id = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+    param.gs_user_id = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
     param.ardb_cd = this.sys.ardbCD
     debugger
     this.svc.addUpdDel<any>('Locker/ApproveLockerTranaction', param).subscribe(

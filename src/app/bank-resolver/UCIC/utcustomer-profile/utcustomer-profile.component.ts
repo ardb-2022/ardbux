@@ -631,8 +631,8 @@ export class UTCustomerProfileComponent implements OnInit {
     this.isLoading = true;
     const cust = this.mapFormGrpToCustMaster();
     let newCustomer = false;
-    cust.created_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
-    cust.modified_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+    cust.created_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
+    cust.modified_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
     if (cust.cust_cd === 0) {
       newCustomer = true;
     }
@@ -1002,7 +1002,7 @@ debugger
         img.img_cont = e.target.result; // this.b64toBlob(this.base64Image,"image/jpeg",0)
         img.img_cont = img.img_cont;
         img.img_typ = imgType;
-        img.created_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+        img.created_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
         // img.img_cont_byte = null;
         // ;
         switch (imgType) {

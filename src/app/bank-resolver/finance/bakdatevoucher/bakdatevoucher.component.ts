@@ -538,7 +538,7 @@ debugger
         tvdSave.cr_amount = Number(this.voucherData.value[x].cr_amt == null ? 0 : this.voucherData.value[x].cr_amt);
         tvdSave.dr_amount = Number(this.voucherData.value[x].dr_amt == null ? 0 : this.voucherData.value[x].dr_amt);
         tvdSave.debit_credit_flag = this.voucherData.value[x].dr_cr=='Debit'? 'D' : 'C';
-       tvdSave.created_by=this.sys.UserId +'/'+localStorage.getItem('getIPAddress')
+       tvdSave.created_by=this.sys.UserId +'/'+localStorage.getItem('ipAddress')
        tvdSave.created_dt=this.sys.CurrentDate
         tvdSave.narrationdtl = this._voucherNarration;
         console.log({"voucher_type":this._voucherTyp});
@@ -597,7 +597,7 @@ debugger
         tvdSave.transaction_type = this._voucherTyp;
         tvdSave.voucher_dt = this.convertDate(this._voucherDt);//new Date(Date.UTC(this._voucherDt.getFullYear(), this._voucherDt.getMonth(), this._voucherDt.getDate(), this._voucherDt.getHours(), this._voucherDt.getMinutes()));
         //tvdSave.voucher_dt = this._voucherDt;
-       tvdSave.created_by=this.sys.UserId+'/'+localStorage.getItem('getIPAddress')
+       tvdSave.created_by=this.sys.UserId+'/'+localStorage.getItem('ipAddress')
        tvdSave.created_dt=this.sys.CurrentDate
         tvdSave.acc_cd = this.voucherData.value[x].acc_cd;
         tvdSave.amount = Number(tvdSave.cr_amount == 0 ? tvdSave.dr_amount : tvdSave.cr_amount);
@@ -646,7 +646,7 @@ debugger
         tvdSave.transaction_type =  this._voucherTyp == "Cash" ? "C" : this._voucherTyp == "Clearing" ? "L" : "T";
         tvdSave.voucher_dt = this.convertDate(this._voucherDt);//new Date(Date.UTC(this._voucherDt.getFullYear(), this._voucherDt.getMonth(), this._voucherDt.getDate(), this._voucherDt.getHours(), this._voucherDt.getMinutes()));
         //tvdSave.voucher_dt = this._voucherDt;
-        tvdSave.created_by=this.sys.UserId+'/'+localStorage.getItem('getIPAddress')
+        tvdSave.created_by=this.sys.UserId+'/'+localStorage.getItem('ipAddress')
         tvdSave.created_dt=this.sys.CurrentDate
         tvdSave.acc_cd = this.voucherData.value[x].acc_cd;
         tvdSave.amount = Number(tvdSave.cr_amount == 0 ? tvdSave.dr_amount : tvdSave.cr_amount);
@@ -687,7 +687,7 @@ debugger
         let tvdSave = new T_VOUCHER_DTLS();
         tvdSave.approval_status = 'A';
         tvdSave.brn_cd =  this.sys.BranchCode;
-        tvdSave.approved_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress')
+        tvdSave.approved_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress')
         tvdSave.approved_dt = new Date();
         //tvdSave.voucher_dt = this._voucherDt;
         tvdSave.voucher_dt = this._voucherDt;//new Date(Date.UTC(this._voucherDt.getFullYear(), this._voucherDt.getMonth(), this._voucherDt.getDate(), this._voucherDt.getHours(), this._voucherDt.getMinutes()));

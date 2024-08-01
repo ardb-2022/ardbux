@@ -687,7 +687,7 @@
                 <hr>
               {{c_i+o_i+p_i | number : '1.2-2'}}
               </div>
-              <div class="col-12" style="text-align: center;"  *ngIf="sys.ardbCD=='10' || sys.ardbCD=='21'|| sys.ardbCD=='23'|| sys.ardbCD=='25'|| sys.ardbCD=='7'|| sys.ardbCD=='9'">
+              <div class="col-12" style="text-align: center;"  *ngIf="sys.ardbCD!='2' && sys.ardbCD!='3'&& sys.ardbCD!='4' && sys.ardbCD!='20' && sys.ardbCD!='26' ">
                 <b>Outstanding: {{this.fd.principal.value| number : '1.2-2'}} | Interest: {{this.fd.intt_recev.value| number : '1.2-2'}}</b>
               </div>
             </div>
@@ -788,7 +788,7 @@
                 <hr>
               {{c_i+o_i+p_i| number : '1.2-2'}}
               </div>
-              <div class="col-12" style="text-align: center;" *ngIf="sys.ardbCD=='10' || sys.ardbCD=='21'|| sys.ardbCD=='23'|| sys.ardbCD=='25'|| sys.ardbCD=='7'|| sys.ardbCD=='9'">
+              <div class="col-12" style="text-align: center;" *ngIf="sys.ardbCD!='2' && sys.ardbCD!='3'&& sys.ardbCD!='4' && sys.ardbCD!='20' && sys.ardbCD!='26' ">
                 <b>Outstanding: {{this.fd.principal.value| number : '1.2-2'}} | Interest: {{this.fd.intt_recev.value| number : '1.2-2'}}</b>
               </div>
             </div>

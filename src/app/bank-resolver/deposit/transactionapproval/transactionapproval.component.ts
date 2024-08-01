@@ -969,7 +969,7 @@ export class TransactionapprovalComponent implements OnInit {
     param.ad_acc_type_cd = this.selectedVm1.mm_acc_type.acc_type_cd;
     param.as_acc_num = this.selectedVm1.tm_deposit.acc_num;
     param.flag = this.selectedVm1.td_def_trans_trf.trans_type === 'D' ? 'D' : 'W';
-    param.gs_user_id = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+    param.gs_user_id = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
     param.ardb_cd = this.sys.ardbCD
     debugger
     this.svc.addUpdDel<any>('Deposit/ApproveAccountTranaction', param).subscribe(

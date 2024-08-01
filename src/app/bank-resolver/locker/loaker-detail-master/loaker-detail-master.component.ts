@@ -187,7 +187,7 @@ export class LoakerDetailMasterComponent implements OnInit {
       console.log(event.target.value  ,i)
       const selectedValue = event.target.value;
       this.reportData[i].locker_type = selectedValue;
-      this.reportData[i].modified_by=this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+      this.reportData[i].modified_by=this.sys.UserId+'/'+localStorage.getItem('ipAddress');
       this.reportData[i].modified_dt=this.today;
       debugger
   }
@@ -195,7 +195,7 @@ export class LoakerDetailMasterComponent implements OnInit {
      console.log(event.target.value  ,i)
      const selectedValue = event.target.value;
       this.reportData[i].locker_status = selectedValue;
-      this.reportData[i].modified_by=this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+      this.reportData[i].modified_by=this.sys.UserId+'/'+localStorage.getItem('ipAddress');
       this.reportData[i].modified_dt=this.today;
       debugger
   }
@@ -228,7 +228,7 @@ export class LoakerDetailMasterComponent implements OnInit {
     this.isLoading=true;
     this.modalRef.hide();
     
-      const created_by=this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+      const created_by=this.sys.UserId+'/'+localStorage.getItem('ipAddress');
       const created_dt=this.today;
       var dt={"ardb_cd":"1",
               "brn_cd":"101",

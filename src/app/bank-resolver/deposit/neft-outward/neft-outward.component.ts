@@ -46,7 +46,8 @@ export class NeftOutwardComponent implements OnInit {
   allNEFT:any;
   accountTypeList: mm_acc_type[] = [];
   systemParam: sm_parameter[] = [];
-  iciciACC:any
+  iciciACC:any;
+  confirm_bene_acc_no:any;
   __ifsc = '';
   __ifscbank = '';
   __ifscbranch = '';
@@ -59,12 +60,16 @@ export class NeftOutwardComponent implements OnInit {
     class: 'modal-xl',// disable backdrop click to close the modal
   };
   val:any;
+  isAccountNumber1Masked = false;
+  maskedAccountNumber1 = '';
+
   ngOnInit(): void {
+    this.confirm_bene_acc_no=null;
     this.getsystemParam();
     this.getAccountTypeList();
     this.clearData();
     this.branchCode = this.sys.BranchCode;
-    this.userName = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+    this.userName = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
     this.neftPayRet.brn_cd = this.sys.BranchCode;
     this.neftPayRet.trans_dt = this.sys.CurrentDate;
     
@@ -74,6 +79,16 @@ export class NeftOutwardComponent implements OnInit {
     // this.reportCriteria=this.formBuilder.group({
     //      neftID:['',Validators.required]
     // })
+  }
+  maskAccountNumber1() {
+    if (this.neftPayRet.bene_acc_no) {
+      this.isAccountNumber1Masked = true;
+      this.maskedAccountNumber1 = '*'.repeat(this.neftPayRet.bene_acc_no.length);
+    }
+  }
+
+  unmaskAccountNumber1() {
+    this.isAccountNumber1Masked = false;
   }
   getsystemParam(){
     this.isLoading=true
@@ -230,6 +245,7 @@ export class NeftOutwardComponent implements OnInit {
   }
 
   clearData() {
+    this.confirm_bene_acc_no=null;
     this.disableSave=false;
     this.isRetrieve = true;
     this.neftPayRet = new td_outward_payment();
@@ -249,6 +265,7 @@ export class NeftOutwardComponent implements OnInit {
   }
 
   retrieveData() {
+    this.confirm_bene_acc_no=null;
     this.isRetrieve = false;
     this.neftPayRet = new td_outward_payment();
     this.neftPayRet.brn_cd = this.sys.BranchCode;
@@ -379,7 +396,7 @@ export class NeftOutwardComponent implements OnInit {
     this.isRetrieve = true;
     this.isLoading = true;
     this.neftPayRet.approval_status = 'A';
-    this.neftPayRet.approved_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+    this.neftPayRet.approved_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
     this.neftPayRet.approved_dt = this.sys.CurrentDate;
     this.neftPayRet.ardb_cd=this.sys.ardbCD
     this.svc.addUpdDel<any>('Deposit/ApproveNeftPaymentTrans', this.neftPayRet).subscribe(
@@ -460,8 +477,8 @@ export class NeftOutwardComponent implements OnInit {
     }
     this.isRetrieve = true;
 
-    this.neftPayRet.created_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
-    this.neftPayRet.modified_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+    this.neftPayRet.created_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
+    this.neftPayRet.modified_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
     this.neftPayRet.ardb_cd=this.sys.ardbCD
     if (this.neftPayRet.trans_cd > 0) {
       this.svc.addUpdDel<any>('Deposit/UpdateNeftOutDtls', this.neftPayRet).subscribe(

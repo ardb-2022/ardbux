@@ -738,7 +738,7 @@ export class ApproveBorrowingComponent implements OnInit {
     // trnParam.ad_acc_type_cd = this.selectedVm.mm_acc_type.acc_type_cd;
     // trnParam.as_acc_num = this.selectedVm.td_def_trans_trf.acc_num;
     // trnParam.flag = this.selectedVm.td_def_trans_trf.trans_type === 'R' ? 'D' : 'W';
-    trnParam.gs_user_id = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+    trnParam.gs_user_id = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
     trnParam.ardb_cd = this.sys.ardbCD;
     trnParam.ad_acc_type_cd = this.selectedVm.loan.tddeftrans.acc_cd;
     trnParam.as_acc_num = this.selectedVm.loan.tddeftrans.acc_num;

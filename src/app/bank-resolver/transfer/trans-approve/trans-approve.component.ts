@@ -144,7 +144,7 @@ export class TransApproveComponent implements OnInit {
     else{
     const tddeftranstrf= new p_gen_param();
     tddeftranstrf.ad_trans_cd=this.f.trans_cd.value;
-    tddeftranstrf.gs_user_id=this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+    tddeftranstrf.gs_user_id=this.sys.UserId+'/'+localStorage.getItem('ipAddress');
     tddeftranstrf.adt_trans_dt=this.f.trf_dt.value;
     tddeftranstrf.brn_cd=this.sys.BranchCode;
     tddeftranstrf.ardb_cd=this.sys.ardbCD
@@ -820,7 +820,7 @@ export class TransApproveComponent implements OnInit {
     tdDefTrans.trans_cd = this.f.trans_cd.value;
     //tdDefTrans.acc_num=this.td_deftranstrfList[0].acc_num;
     tdDefTrans.amount=this.td_deftranstrfList[0].amount;
-    tdDefTrans.created_by=this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+    tdDefTrans.created_by=this.sys.UserId+'/'+localStorage.getItem('ipAddress');
     tdDefTrans.acc_cd=this.td_deftranstrfList[0].acc_cd;
     if (this.td_deftranstrfList[0].trans_type==='cust_acc')
     {
@@ -863,8 +863,8 @@ export class TransApproveComponent implements OnInit {
         tdDefTransAndTranfer.trans_dt = this.f.trf_dt.value;
         tdDefTransAndTranfer.trans_type = "W"; //D/W
         tdDefTransAndTranfer.trans_mode = "V";
-        tdDefTransAndTranfer.created_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
-        tdDefTransAndTranfer.modified_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+        tdDefTransAndTranfer.created_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
+        tdDefTransAndTranfer.modified_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
         tdDefTransAndTranfer.approval_status = 'U';
         tdDefTransAndTranfer.particulars = 'S';///////
         tdDefTransAndTranfer.tr_acc_cd = 10000;
@@ -901,8 +901,8 @@ export class TransApproveComponent implements OnInit {
         tdDefTransAndTranfer.trans_dt =this.f.trf_dt.value;
         tdDefTransAndTranfer.trans_type = "D"; 
         tdDefTransAndTranfer.trans_mode = "V";
-        tdDefTransAndTranfer.created_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
-        tdDefTransAndTranfer.modified_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+        tdDefTransAndTranfer.created_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
+        tdDefTransAndTranfer.modified_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
         tdDefTransAndTranfer.approval_status = 'U';
         tdDefTransAndTranfer.particulars = 'S';
         tdDefTransAndTranfer.tr_acc_cd = 10000;
@@ -920,7 +920,7 @@ export class TransApproveComponent implements OnInit {
       }
       tmTrnsfr.brn_cd = this.sys.BranchCode;
       tmTrnsfr.trf_dt = this.sys.CurrentDate;
-      tmTrnsfr.created_by = this.sys.UserId+'/'+localStorage.getItem('getIPAddress');
+      tmTrnsfr.created_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
       tmTrnsfr.approval_status = 'U';
       tmTrnsfr.ardb_cd=this.sys.ardbCD
       saveTransaction.tmtransfer=tmTrnsfr;
