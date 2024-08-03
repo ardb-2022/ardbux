@@ -96,7 +96,7 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Dr Amount
       </th>
    
-      <td mat-cell *matCellDef="let element" style="text-align: right;padding-right: 4%;"> 
+      <td mat-cell *matCellDef="let element" style="text-align: right;"> 
         <ng-container *ngIf="element.dr_acc_desc">
           {{element.dr_amount| currency:'INR'}}
         </ng-container>
@@ -149,7 +149,7 @@
     </ng-container>
     
     <ng-container matColumnDef="disclaimer1" >
-      <td mat-footer-cell *matFooterCellDef colspan="2" style="text-align:right;font-weight: 800;padding-right: 4%;">
+      <td mat-footer-cell *matFooterCellDef colspan="2" style="text-align:right;font-weight: 800;">
         {{crSum| currency:'INR'}}
       </td>
       

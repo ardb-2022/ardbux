@@ -166,7 +166,7 @@ export class SendSmsFromDemandComponent {
   notvalidate:boolean=false;
   date_msg:any;
   private baseUrl: string = 'http://sms.digilexa.in/http-api.php';
-  private HbaseUrl: string = 'http://bulksms.sssplsales.in/api/api_http.php';
+  private HbaseUrl: string = 'https://bulksms.sssplsales.in/api/api_http.php';
 
   private username: string = 'HowrahARD';
   private password: string = 'rt6@HCARDB';
@@ -189,7 +189,7 @@ export class SendSmsFromDemandComponent {
         this.route='7';
     }
     else if(this.sys.ardbCD=='26'){
-        this.baseUrl='http://bulksms.sssplsales.in/api/api_http.php';
+        this.baseUrl='https://bulksms.sssplsales.in/api/api_http.php';
         this.username='BCARDB';
         this.password='BC527ARDB';
         this.senderid='BCARDB';
@@ -434,6 +434,7 @@ debugger
     const ld_prn_demand = loan.curr_prn + loan.ovd_prn;
     const ld_intt_demand = loan.curr_intt + loan.ovd_intt + loan.penal_intt;
     const ld_tot_demand = ld_prn_demand + ld_intt_demand;
+    var url='';
     if (ls_name.length > 30) {
       ls_name = ls_name.substring(0, 30);
     }
@@ -444,10 +445,22 @@ debugger
     debugger
     const message = `NAME ${ls_name} LOAN_ID ${ls_acc_num1} REPAY YOUR DEMAND UPTO ${this.adt_to_dt} `
       + `PRINCIPAL ${ld_prn_demand.toFixed(2)} INTEREST ${ld_intt_demand.toFixed(2)} TOTAL ${ld_tot_demand.toFixed(2)}. -${this.senderid}`;
-
-    const url = `${this.baseUrl}?username=${this.username}&password=${this.password}&senderid=${this.senderid}&route=${this.route}&number=${encodeURIComponent(ls_phone)}&message=${encodeURIComponent(message)}`;
-    //http://bulksms.sssplsales.in/api/api_http.php?username=PSKUSL&password=PS524KUSL&senderid=PASKUS&to=9564416604&text=Your%20Savings%20DepositAccount%20Number:****00003821%20is%20DEBITED%20by%20Rs.11496.Balance%20is%20Rs.766.59.Thanks,Pancharul%20S.K.U.S.%20Ltd.&route=Informative&type=text
+      
+    const message2 = `Dear Member, Demand for your Loan A/c ${ls_acc_num1} is Rs. ${ld_tot_demand.toFixed(2)} as on ${this.adt_to_dt}. Please pay on time to avoid the penalty. -Burdwan CARD Bank&route=Informative&type=text`;
+    if(this.sys.ardbCD=='26'){
+      url = `${this.baseUrl}?username=${this.username}&password=${this.password}&senderid=${this.senderid}&to=${encodeURIComponent(ls_phone)}&text=${message2}`;
+    }
+    else{
+      url = `${this.baseUrl}?username=${this.username}&password=${this.password}&senderid=${this.senderid}&route=${this.route}&number=${encodeURIComponent(ls_phone)}&message=${encodeURIComponent(message)}`;
+    }
+      //const url = `${this.baseUrl}?username=${this.username}&password=${this.password}&senderid=${this.senderid}&route=${this.route}&number=${encodeURIComponent(ls_phone)}&message=${encodeURIComponent(message)}`;
+     // const url2 = `${this.baseUrl}?username=${this.username}&password=${this.password}&senderid=${this.senderid}&to=${encodeURIComponent(ls_phone)}&message=${encodeURIComponent(message2)}`;
     // ls_arg := 'http://bulksms.sssplsales.in/api/api_http.php?username=BCARDB'||'&'||'password=BC527ARDB'||'&'||'senderid=BCARDB'||'&'||'to='||ls_phone||'&'||'text='|| 'Your%20'||ls_acc_type||'Account Number:'||ls_acc_num1||'%20is%20'||LS_DESCRIPTION||'%20by%20Rs.'||ld_amt||'.Balance%20is%20Rs.'||ld_clr_bal||'.'||'&'||'route=Informative'||'&'||'type=text';	
+    //https://bulksms.sssplsales.in/api/api_http.php?username=BCARDB&password=BC527ARDB&senderid=BCARDB&to=9831007506
+    //&text=Dear%20Member,%20Demand%20for%20your%20Loan%20A/c%2012345%20is%20Rs.%20101%20as%20on%2001/08/2024.%20Please%20pay%20on%20time%20to%20avoid%20the%20penalty.%20-Burdwan%20CARD%20Bank&route=Informative&type=text
+    // ${encodeURIComponent(ls_phone)}
+    console.log(encodeURIComponent(ls_phone));
+    
     console.log(url);
     this.http.get(url)
     return url;

@@ -661,8 +661,9 @@ assignLockerData(){
       })
     }
     getSecAccNumber(){
-      
-      this.getLockerAccDtls();
+      if(this.tm_locker.ind_acc_num!=null){
+        this.getLockerAccDtls();
+      }
     }
     getLockerAccDtls(){
       this.isLoading=true;

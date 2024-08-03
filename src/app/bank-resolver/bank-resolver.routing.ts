@@ -208,6 +208,7 @@ import { CtFortnightNewConsoComponent } from './loan/report/ct-fortnight-new-con
 import { LoanDisburseSummaryComponent } from './loan/report/loan-disbursement-register/loan-disburse-summary/loan-disburse-summary.component';
 import { DdsAgentTransReportComponent } from './deposit/ddsExportImport/dds-agent-trans-report/dds-agent-trans-report.component';
 import { InterestMasterComponent } from './deposit/masters/interest-master/interest-master.component';
+import { LockerINOUTComponent } from './locker/locker-inout/locker-inout.component';
 
 const routes: Routes = [
   { path: 'Admin', component: AdminPanelComponent },
@@ -434,6 +435,10 @@ const routes: Routes = [
           },
           {
             path: 'loc_rent',component: LoakerRentMasterComponent,
+            loadChildren: () => import('./locker/locker.module').then(m => m.LockerModule)
+          },
+          {
+            path: 'lock_access',component: LockerINOUTComponent,
             loadChildren: () => import('./locker/locker.module').then(m => m.LockerModule)
           },
           {
