@@ -21,10 +21,12 @@ import { LockerDetailsComponent } from './report/locker-details/locker-details.c
 import { LockerRenewDetailsComponent } from './report/locker-renew-details/locker-renew-details.component';
 import { LockerShouldbeRenewComponent } from './report/locker-shouldbe-renew/locker-shouldbe-renew.component';
 import { NgxPrintModule} from 'ngx-print';
+import { LockerINOUTComponent } from './locker-inout/locker-inout.component';
+import { LockerAccessComponent } from './report/locker-access/locker-access.component';
 @NgModule({
   declarations: [LoakerDetailMasterComponent,LoakerRentMasterComponent, LockerOpeningComponent, 
     LockerTransactionComponent, LockerApproveComponent, LockerViewComponent, 
-    LockerDetailsComponent, LockerRenewDetailsComponent, LockerShouldbeRenewComponent],
+    LockerDetailsComponent, LockerRenewDetailsComponent, LockerShouldbeRenewComponent, LockerINOUTComponent, LockerAccessComponent],
   imports: [
     MatSortModule,
     CommonModule,
