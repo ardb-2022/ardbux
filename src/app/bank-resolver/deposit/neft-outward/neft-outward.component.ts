@@ -72,10 +72,10 @@ export class NeftOutwardComponent implements OnInit {
     this.userName = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
     this.neftPayRet.brn_cd = this.sys.BranchCode;
     this.neftPayRet.trans_dt = this.sys.CurrentDate;
-    
+
     this.neftPayRet.date_of_payment = this.sys.CurrentDate;
     this.neftPayRet.ardb_cd=this.sys.ardbCD
-    
+
     // this.reportCriteria=this.formBuilder.group({
     //      neftID:['',Validators.required]
     // })
@@ -92,7 +92,7 @@ export class NeftOutwardComponent implements OnInit {
   }
   getsystemParam(){
     this.isLoading=true
-    
+
     this.svc.addUpdDel<any>('Mst/GetSystemParameter', null).subscribe(
       sysRes => {
         if(sysRes){
@@ -108,8 +108,8 @@ export class NeftOutwardComponent implements OnInit {
   }
   setCharge(amt : number){
    let param = new p_gen_param();
-  param.ad_prn_amt=amt; 
-  param.ardb_cd=this.sys.ardbCD   
+  param.ad_prn_amt=amt;
+  param.ardb_cd=this.sys.ardbCD
   this.isLoading = true;
     this.svc.addUpdDel<any>('Deposit/GetNeftCharge', param).subscribe(
       res => {
@@ -117,9 +117,9 @@ export class NeftOutwardComponent implements OnInit {
           this.neftPayRet.charge_ded = 0;
         }
         else{
-          this.neftPayRet.charge_ded = res;
+          this.neftPayRet.charge_ded = 0;
         }
-          
+
           this.isLoading = false;
           if(this.neftPayRet.bank_dr_acc_no.length>0 && this.clearBalance-(Number(this.neftPayRet.amount)+Number(this.neftPayRet.charge_ded))<0){
             debugger
@@ -136,7 +136,7 @@ export class NeftOutwardComponent implements OnInit {
           // else{
           //   this.disableSave=false;
           // }
-          
+
       },
       err => {
         this.isLoading = false;
@@ -157,7 +157,9 @@ export class NeftOutwardComponent implements OnInit {
       res => {
         console.log(res)
         if (res.length === 0) {
+          this.clearBalance=0;
           this.neftPayRet.trans_cd = null;
+          this.neftPayRet.bene_acc_no = null;
           this.isLoading = false;
           this.isRetrieve = true;
           this.HandleMessage(true, MessageType.Error, 'No Data Found!!!!');
@@ -169,6 +171,9 @@ export class NeftOutwardComponent implements OnInit {
       err => {
         this.isLoading = false;
         this.isRetrieve = true;
+        this.clearBalance=0;
+          this.neftPayRet.trans_cd = null;
+          this.neftPayRet.bene_acc_no = null;
         this.HandleMessage(true, MessageType.Error, err+'  From Server No Data Found!!!!');
       }
   }
@@ -177,14 +182,15 @@ export class NeftOutwardComponent implements OnInit {
     this.modalRef.hide();
     debugger
     this.isLoading = true;
-    
-          if(i.bank_dr_acc_no=='0000'){
+
+          if(i.bank_dr_acc_no=='0000' && this.sys.ardbCD=='26'){
             this.isLoading=false
             this.HandleMessage(true, MessageType.Error, 'Transaction with GL-CODE could not retrieve!!!');
             this.clearData()
           }
           else{
             this.neftPayRet = i;
+          this.confirm_bene_acc_no= i.bene_acc_no;
           this.isLoading = false;
           this.isRetrieve = true;
           const temp_deposit = new tm_deposit();
@@ -197,37 +203,44 @@ export class NeftOutwardComponent implements OnInit {
           this.isLoading = true;
           this.svc.addUpdDel<any>('Deposit/GetDeposit', temp_deposit).subscribe(
             res => {
-              console.log(res)
-              console.log(res[0].clr_bal);
-              this.clearBalance=res[0].clr_bal;
-              console.log(this.clearBalance);
-              this.isLoading=false
-              console.log(this.clearBalance-(Number(this.neftPayRet.amount)+Number(this.neftPayRet.charge_ded)));
-              this.msg.sendcustomerCodeForKyc(res[0].cust_cd);
+              if(res){
+                console.log(res)
+                console.log(res[0]?.clr_bal);
+                this.clearBalance=res[0]?.clr_bal;
+                console.log(this.clearBalance);
+                this.isLoading=false
+                console.log(this.clearBalance-(Number(this.neftPayRet.amount)+Number(this.neftPayRet.charge_ded)));
+                this.msg.sendcustomerCodeForKyc(res[0].cust_cd);
+              }
+              else{
+                this.clearBalance=0;
+                this.isLoading=false
+              }
+
 
               // if(res=[]){
               //   this.isLoading=false
               // }
               // else{
               //   console.log(res[0].clr_bal);
-              
+
               //   this.clearBalance=res[0].clr_bal;
               //   console.log(this.clearBalance);
-                
+
               //   this.isLoading=false
               // }
-              
+
         },
         err => {
           this.isLoading = false;
           this.isRetrieve = true;
           this.HandleMessage(true, MessageType.Error, 'No Data Found!!!!');
-        }  
+        }
         )
         }
-        
 
-      
+
+
   }
 
 
@@ -245,6 +258,9 @@ export class NeftOutwardComponent implements OnInit {
   }
 
   clearData() {
+    this.clearBalance=0;
+    this.neftPayRet.trans_cd = null;
+    this.neftPayRet.bene_acc_no = null;
     this.confirm_bene_acc_no=null;
     this.disableSave=false;
     this.isRetrieve = true;
@@ -265,6 +281,9 @@ export class NeftOutwardComponent implements OnInit {
   }
 
   retrieveData() {
+    this.clearBalance=0;
+    this.neftPayRet.trans_cd = null;
+    this.neftPayRet.bene_acc_no = null;
     this.confirm_bene_acc_no=null;
     this.isRetrieve = false;
     this.neftPayRet = new td_outward_payment();
@@ -284,13 +303,13 @@ export class NeftOutwardComponent implements OnInit {
     this.neftPayRet.bene_ifsc_code='';
     this.getAllNeftBach();
     this.onLoadScreen(this.content);
-    
+
 
   }
   kyc(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template, this.config);
   }
-  
+
   openModal() {
     if (this.__ifsc === '' && this.neftPayRet.bene_ifsc_code.length > 8) {
       const ifscentred = this.neftPayRet.bene_ifsc_code;
@@ -356,6 +375,11 @@ export class NeftOutwardComponent implements OnInit {
           this.__ifscbranch = '';
           this.__ifscaddress = '';
           this.__ifsccity = '';
+          this.clearBalance=0;
+          this.neftPayRet.trans_cd = null;
+          this.neftPayRet.bene_acc_no = null;
+          this.confirm_bene_acc_no = null;
+
           this.neftPayRet.bene_ifsc_code = '';
           this.neftPayRet.brn_cd = this.sys.BranchCode;
           this.neftPayRet.trans_dt = this.sys.CurrentDate;
@@ -425,7 +449,7 @@ export class NeftOutwardComponent implements OnInit {
     this.neftPayRet.payment_type = accType;
   }
   saveData() {
-    
+
     if (this.neftPayRet.approval_status === 'A' && this.neftPayRet.trans_cd > 0) {
       this.HandleMessage(true, MessageType.Error, 'Already Approved Transaction!!!');
       this.clearData()
@@ -485,7 +509,7 @@ export class NeftOutwardComponent implements OnInit {
         res => {
 
           this.isLoading = false;
-          
+
           this.HandleMessage(true, MessageType.Sucess, 'Transaction Updated Successfully!!!');
           this.clearData()
         },
@@ -505,14 +529,14 @@ export class NeftOutwardComponent implements OnInit {
 
           this.neftPayRet.trans_cd = res;
           console.log();
-          
+
           this.isLoading = false;
           this.HandleMessage(true, MessageType.Sucess,
             'Transaction Saved Successfully. Trans Code : '
             + this.neftPayRet.trans_cd.toString());
             this.clearData()
         },
-        
+
         err => {
           this.isLoading = false;
           this.HandleMessage(true, MessageType.Error, 'Insert Failed!!! from S');
@@ -613,7 +637,7 @@ debugger;
     else if(tfrType.length >=2){
       this.suggestGL(tfrType)
     }
-    
+
 
   }
   setGLCode(acc_cd: string){
@@ -629,7 +653,7 @@ debugger;
               this.isLoading = false;
               this.hidegl=false;
               console.log(this.acc_master);
-              
+
               temp_acc_master = this.acc_master.filter(x => x.acc_cd.toString().includes(acc_cd) )[0];
               console.log(temp_acc_master);
               this.clearBalance=''
@@ -639,9 +663,9 @@ debugger;
             this.neftPayRet.bank_dr_acc_name=temp_acc_master.acc_name;
             this.neftPayRet.credit_narration='TRF FRM '+temp_acc_master.acc_name;
             this.hidegl=true;
-            
+
             })
-    
+
   }
   suggestGL(tfrType){
 
@@ -665,11 +689,11 @@ debugger;
               this.isLoading = false;
               this.hidegl=false;
               console.log(this.acc_master);
-              
+
               this.acc_master2 = this.acc_master.filter(x => x.acc_cd.toString().includes(tfrType.toString()) );
               // this.acc_master2 = this.acc_master.filter(x => x.acc_cd.toString().includes(tfrType) )[0];
               console.log(this.acc_master2);
-              
+
               // if (this.acc_master2 === undefined || this.acc_master2 === null) {
               //   this.HandleMessage(true, MessageType.Error, 'Invalid GL Code');
               //   return;
@@ -685,7 +709,7 @@ debugger;
             err => {
               ;
               this.isLoading = false;
-            }        
+            }
         );
       }
       else {
@@ -712,7 +736,7 @@ debugger;
           // }
         // }
       }
-    
+
   }
   clearFields(id:any){
       if(id=='bank_dr_acc_type'){
