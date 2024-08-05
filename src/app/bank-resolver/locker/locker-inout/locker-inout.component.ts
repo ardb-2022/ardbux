@@ -8,6 +8,22 @@ import { InAppMessageService, RestService } from 'src/app/_service';
 import { LockerOpenDM } from '../../Models/locker/LockerOpenDM';
 import { tm_deposit } from '../../Models/tm_depositInv';
 import { tm_locker } from '../../Models/locker/tm_locker';
+import { DatePipe } from '@angular/common';
+export interface LockerAccess {
+  ardb_cd: string;
+  brn_cd: string;
+  locker_id: string;
+  name: string;
+  trans_dt: Date;
+  access_in_time: string;
+  access_out_time: string;
+  handling_authority: string;
+  remarks: string;
+  created_by: string;
+  created_dt: Date;
+  modified_by: string;
+  modified_dt: Date;
+}
 @Component({
   selector: 'app-locker-inout',
   templateUrl: './locker-inout.component.html',
@@ -22,6 +38,10 @@ export class LockerINOUTComponent {
   isOpenFromDp = false;
   isOpenToDp = false;
   disableAll=false;
+  inTime:any;
+  outTime:any;
+  lockerInOutStatus:any;
+  remarks:any;
   sys = new SystemValues();
   config = {
     keyboard: false, // ensure esc press doesnt close the modal
@@ -75,9 +95,9 @@ export class LockerINOUTComponent {
     {type:"Vacant",id:"V"},
     {type:"Allocated",id:"A"},
   ]
+ lockerAccess:LockerAccess;
 
-  
-  constructor(private svc: RestService, private elementRef: ElementRef,private formBuilder: FormBuilder,
+  constructor(private svc: RestService,private datePipe: DatePipe, private elementRef: ElementRef,private formBuilder: FormBuilder,
     private msg: InAppMessageService, private modalService: BsModalService,
     private router: Router, private comser:CommonServiceService) { }
     accountTypeList: mm_acc_type[]= [];
@@ -90,12 +110,12 @@ export class LockerINOUTComponent {
     console.log(window.location.hostname)
     // this.getAccountTypeList();
     this.asOnDate =this.sys.CurrentDate;
-    
+
     this.locker = this.formBuilder.group({
       l_type: [null, Validators.required],
       l_id: [null, Validators.required],
       l_status: [null, Validators.required]
-      
+
     });
     var date = new Date();
     // get the date as a string
@@ -114,7 +134,7 @@ export class LockerINOUTComponent {
     this.showAlert = false;
   }
    getLockerOpeningTempData() {
-        
+
         var dt={
           "ardb_cd":this.sys.ardbCD,
           "brn_cd":this.sys.BranchCode,
@@ -134,12 +154,12 @@ export class LockerINOUTComponent {
             this.tm_locker.agreement_no=null;
             return
           }
-          
-        
+
+
           else {
           this.tm_locker=this.masterModel.tmlocker;
           this.tm_locker.rented_till = this.setDate(this.tm_locker.rented_till);
-          
+
           }
 
 
@@ -153,21 +173,93 @@ export class LockerINOUTComponent {
       );
 
     }
-  
+
+    updateLockerAccess(isChecked: boolean,i:any) {
+      if(this.tm_locker.agreement_no==null || this.tm_locker.agreement_no== undefined){
+        this.HandleMessage(true, MessageType.Warning, 'Please Enter Agereement No..');
+        this.lockerInOutStatus="N"
+      }
+      else{
+        console.log(i);
+        console.log(isChecked);
+        console.log(this.inTime,this.outTime);
+        if(isChecked){
+          const date = new Date();
+          const formattedDate = this.datePipe.transform(date, 'dd/MM/yyyy HH:mm:ss');
+          console.log(formattedDate);  // Output: 03/08/2024 12:37:32
+          this.inTime=formattedDate;
+          this.lockerInOutStatus="Y";
+          this.UpdateLockerAccess()
+
+        }
+        else{
+          const date = new Date();
+          const formattedDate = this.datePipe.transform(date, 'dd/MM/yyyy HH:mm:ss');
+          console.log(formattedDate);  // Output: 03/08/2024 12:37:32
+          this.outTime=formattedDate;
+          this.lockerInOutStatus="N"
+          this.UpdateLockerAccess();
+        // console.log( this.second);
+      }
+      }
+
+    }
+    UpdateLockerAccess() {
+
+      const dt = {
+        ardb_cd: this.sys.ardbCD,
+        brn_cd: this.sys.BranchCode,
+        locker_id: this.tm_locker.locker_id,
+        name: 'John Doe',
+        trans_dt: new Date(),
+        // access_in_time: this.inTime?this.inTime:null,
+        access_in_time: new Date(),
+
+        // access_out_time: this.outTime?this.outTime:null,
+        access_out_time:  new Date(),
+
+        handling_authority: 'Manager',
+        remarks: this.remarks,
+        created_by: 'admin',
+        created_dt: new Date(),
+        modified_by: '',
+        modified_dt: null
+      };
+
+    this.isLoading = true;
+    this.svc.addUpdDel<any>('Locker/InsertLockerAccess ', dt).subscribe(
+      res => {
+        console.log(res);
+        this.isLoading = false;
+        if(res){
+          debugger
+        }
+
+      },
+      err => {
+        this.isLoading = false;
+        // this.showAlertMsg('ERROR', 'Unable to find record!!');
+        this.HandleMessage(true, MessageType.Warning, 'Unable to find record!!');
+      }
+
+    );
+
+  }
+
     setDate(date:string){
       const [datePart] = date.split(' ');
       const [day, month, year] = datePart.split('/');
-      const outputDate = `${year}-${month}-${day}`; 
+      const outputDate = `${year}-${month}-${day}`;
       return outputDate;
     }
     public SubmitReport() {
-    
+
       this.isLoading=true
-      
+
       var dt={
         "ardb_cd":this.sys.ardbCD,
         "brn_cd":this.sys.BranchCode,
-       
+
       }
       this.svc.addUpdDel('Locker/GetLockerMaster',dt).subscribe(data=>{
         console.log(data);
@@ -175,7 +267,7 @@ export class LockerINOUTComponent {
         this.reportData=data
         if(this.reportData.length==0){
           this.comser.SnackBar_Nodata()
-        } 
+        }
         this.isLoading=false
       })
   }
@@ -198,7 +290,7 @@ export class LockerINOUTComponent {
   // changeTradesByCategory(isChecked: boolean,i:any) {
   //   console.log(i);
   //   console.log(isChecked);
-    
+
   //   if(isChecked){
   //     this.passBookData[i].printed_flag='Y';
 
@@ -207,8 +299,8 @@ export class LockerINOUTComponent {
   //     this.passBookData[i].printed_flag='N';
 
   //   }
-  //   console.log( this.passBookData); 
-    
+  //   console.log( this.passBookData);
+
   // }
 
   // allTrades(event) {
@@ -238,10 +330,10 @@ export class LockerINOUTComponent {
   onUpdateClick()
   {
     this.isLoading=true;
-    
+
     this.reportData
     debugger
-      
+
       this.svc.addUpdDel<any>('Locker/InsertLockerMaster', this.reportData).subscribe(
         res => {
           ;
@@ -263,7 +355,7 @@ export class LockerINOUTComponent {
    SaveLocker(){
     this.isLoading=true;
     this.modalRef.hide();
-    
+
       const created_by=this.sys.UserId+'/'+localStorage.getItem('ipAddress');
       const created_dt=this.today;
       var dt={"ardb_cd":"1",
@@ -283,10 +375,10 @@ export class LockerINOUTComponent {
      this.locker.controls.l_id.value
      this.locker.controls.l_status.value
     debugger
-      
+
       this.svc.addUpdDel<any>('Locker/InsertLockerMaster', this.reportData).subscribe(
         res => {
-          
+
           this.isLoading=false;
           this.HandleMessage(true, MessageType.Sucess, 'New Locker Added Successfull ');
           this.SubmitReport();
