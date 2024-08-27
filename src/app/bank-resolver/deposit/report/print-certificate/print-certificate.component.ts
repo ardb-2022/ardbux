@@ -220,6 +220,7 @@ export class PrintCertificateComponent implements OnInit {
 
   public SelectCustomer(cust: any): void {
     this.tm_deposit.acc_num = cust.acc_num;
+    this.tm_deposit.acc_type_cd = cust.acc_type_cd;
     this.cName=cust.cust_name
     this.cAddress=cust.present_address
     this.cAcc=cust.acc_num
@@ -255,16 +256,17 @@ export class PrintCertificateComponent implements OnInit {
 
     else {
       this.modalRef.hide();
-      
+      this.tm_deposit.acc_type_cd=this.reportcriteria.controls.acc_type_cd.value;
       this.svc.addUpdDel<any>('Deposit/GetAccountOpeningData', this.tm_deposit).subscribe(
         res => {
           this.showTable=true;
           //debugger;
           this.isLoading = false;
           this.masterModel = res;
-          let y=this.masterModel?.tmdeposit?.dep_period.split(";")[0]
-          let m=this.masterModel?.tmdeposit?.dep_period.split(";")[1]
-          let d=this.masterModel?.tmdeposit?.dep_period.split(";")[2]
+          if(this.masterModel?.tmdeposit?.dep_period!=null){
+            let y=this.masterModel?.tmdeposit?.dep_period?.split(";")[0]
+          let m=this.masterModel?.tmdeposit?.dep_period?.split(";")[1]
+          let d=this.masterModel?.tmdeposit?.dep_period?.split(";")[2]
           d=d.substr(4-d.length)
           console.log(d);
           m=m.substr(6-m.length)
@@ -287,6 +289,7 @@ export class PrintCertificateComponent implements OnInit {
           }
           console.log(this.Deposit_Period);
           
+          }
           // this.Deposit_Period =(+y>0)?y+' -Year':''+(+m>0)?m+' -Months':''+(+d>0)?d+' -Days':''
           // else if(+m>0){this.Deposit_Period = m+' -Months'}
           // else if(+d>0){ this.Deposit_Period = d+' -Days'}

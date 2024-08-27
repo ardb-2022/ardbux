@@ -244,7 +244,13 @@ import { InterestMasterComponent } from './deposit/masters/interest-master/inter
 import { UppercaseDirective } from '../_utility/uppercase.directive';
 import { MatchAccountNumbersDirective } from '../_utility/match-account-numbers.directive';
 import { NumericOnlyDirective } from '../_utility/numeric-only.directive';
-
+import { WeeklyReturnNewComponent } from './finance/report/weekly-return-new/weekly-return-new.component';
+import { WeeklyReturnNewConsoComponent } from './finance/report/weekly-return-new-conso/weekly-return-new-conso.component';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { GlWiseVoucherDtlsComponent } from './finance/report/gl-wise-voucher-dtls/gl-wise-voucher-dtls.component';
+import { ConsoLoanDCComponent } from './loan/report/conso-loan-dc/conso-loan-dc.component';
+import { LoanDisburseConsoComponent } from './loan/report/loan-disbursement-register/loan-disburse-conso/loan-disburse-conso.component';
+import { LoanRecoveryConsoComponent } from './loan/report/recovery-register/loan-recovery-conso/loan-recovery-conso.component';
 @NgModule({
   declarations: [ 
     RoundPipe ,UppercaseDirective, MatchAccountNumbersDirective, NumericOnlyDirective,
@@ -298,10 +304,10 @@ import { NumericOnlyDirective } from '../_utility/numeric-only.directive';
             RecoveryExportComponent, RecoveryImportComponent, RecoveryIndiPostComponent, ContaiComponent, ContaiFastPageComponent, GhatalComponent, 
             GhatalFastPageComponent, GoldLoanReportComponent, GoldLoanAsOnDateComponent, GoldLoanCurrDateComponent, GroupWiseComponent, NpaAllWithGroupComponent, 
             DcbrGroupWiseComponent, TamlukComponent, TamlukFastPageComponent, VillMasterContaiComponent, RecovSummaryComponent, RiskFundComponent, BankuraComponent, 
-            BankuraFastPageComponent, SendSmsFromDemandComponent, UpdatedDemandListComponent, CtFortnightNewComponent, CtFortnightNewConsoComponent, LoanDisburseSummaryComponent, DdsAgentTransReportComponent, InterestMasterComponent
+            BankuraFastPageComponent, SendSmsFromDemandComponent, UpdatedDemandListComponent, CtFortnightNewComponent, CtFortnightNewConsoComponent, LoanDisburseSummaryComponent, DdsAgentTransReportComponent, InterestMasterComponent, WeeklyReturnNewComponent, WeeklyReturnNewConsoComponent, GlWiseVoucherDtlsComponent, ConsoLoanDCComponent, LoanDisburseConsoComponent, LoanRecoveryConsoComponent
   ],
   imports: [
-    MatAutocompleteModule,
+    MatAutocompleteModule,MatProgressBarModule,
     NgxPrintModule, MatTableModule, MatFormFieldModule,  MatInputModule, MatSlideToggleModule,MatButtonModule,
     CommonModule, PaginationModule, MatPaginatorModule, MatSortModule, MatMenuModule,MatIconModule,MatCardModule,
     BankResolverRouting, DragDropModule,ScrollingModule,CdkTableModule,CdkTreeModule,A11yModule,MatDialogModule,

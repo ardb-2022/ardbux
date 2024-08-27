@@ -199,9 +199,9 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Block</th>
         <td mat-cell *matCellDef="let row">{{row.block_name}}</td>
     </ng-container>
-    <ng-container matColumnDef="service_area_name" style="text-align:center;" >
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Service Area</th>
-      <td mat-cell *matCellDef="let row">{{row.service_area_name}}</td>
+    <ng-container matColumnDef="brn_cd" style="text-align:center;" >
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Branch Name</th>
+      <td mat-cell *matCellDef="let row">{{row.brn_cd}}</td>
   </ng-container>
      <ng-container matColumnDef="purpose"  style="text-align:center;">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Purpose </th>
@@ -244,7 +244,7 @@
             <br><h4>{{ardbName}} ({{branchName}})</h4>
             
             <h4>Run Date & Time : {{today}} </h4> <br>
-      <h4> <u> Loan Disbursement Register from {{reportcriteria.controls.fromDate.value?.toDateString() | date: 'dd/MM/yyyy'}} to {{reportcriteria.controls.toDate.value?.toDateString() | date: 'dd/MM/yyyy'}}</u></h4>
+      <h4> <u> Loan Disbursement Register Consolidated from {{reportcriteria.controls.fromDate.value?.toDateString() | date: 'dd/MM/yyyy'}} to {{reportcriteria.controls.toDate.value?.toDateString() | date: 'dd/MM/yyyy'}}</u></h4>
             
             <!-- <p>
               <b>

@@ -70,6 +70,7 @@ export class LockerViewComponent implements OnInit {
   selectedCust: any;
   disabledOnNull=true;
   suggestedCustomerCr: mm_customer[];
+  suggestedLockerData: tm_locker[];
   indxsuggestedCustomerCr = 0;
   hidejoin:boolean=false;
   createUser = '';
@@ -735,6 +736,45 @@ assignLockerData(){
 
     );
   
+  }
+  selectLockerData(e){
+    this.suggestedLockerData=null;
+    this.tm_locker.agreement_no=e.agreementNo;
+    debugger
+    if(this.tm_locker.agreement_no){
+      
+      debugger
+      this.getLockerOpeningTempData();
+    }
+  }
+  public suggestLockerCustomer(): void {
+    if (this.tm_locker.agreement_no.length > 2) {
+      const prm = new p_gen_param();
+      this.isLoading=true;
+      prm.as_cust_name = this.tm_locker.agreement_no.toLowerCase();
+      prm.ardb_cd=this.sys.ardbCD
+      if(prm.as_cust_name.length>0){
+      this.svc.addUpdDel<any>('Locker/GetLockerAccDtls', prm).subscribe(
+        res => {
+          this.isLoading=false;
+          if (undefined !== res && null !== res && res.length > 0) {
+            this.showNoResult=false;
+            this.suggestedLockerData = res;
+            console.log(this.suggestedLockerData);
+          } else {
+            this.showNoResult=false;
+
+            this.suggestedLockerData = [];
+          }
+        },
+        err => { this.isLoading = false; }
+      );
+      }
+    } else {
+      this.showNoResult=false;
+
+      this.suggestedLockerData = null;
+    }
   }
     
     setDate(date:string){

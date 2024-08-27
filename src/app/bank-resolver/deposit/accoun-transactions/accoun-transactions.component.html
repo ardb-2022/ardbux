@@ -434,7 +434,7 @@
               <input type="text" (change)="addBonus()" class="form-control form-control-sm" 
                 formControlName="curr_prn_recov" id="curr_prn_recov">
             </div>
-            <div class="form-group col-2" *ngIf="showOnClose  && (this.f.acc_type_cd.value != 11 && this.f.acc_type_cd.value != 5)">
+            <div class="form-group col-2" *ngIf="showOnClose || (showOnRenewal && this.f.acc_type_cd.value == 5) && (this.f.acc_type_cd.value != 11 )">
               <small for="td_def_mat_amt">Maturity Value</small>
               <input type="text" [readonly]="true" class="form-control form-control-sm" formControlName="td_def_mat_amt"
                 id="td_def_mat_amt">

@@ -14,7 +14,7 @@
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
-   
+
     <form [formGroup]="locker">
       <div class="col-12">
         <div class="form-row">
@@ -37,7 +37,7 @@
           </div>
       </div>
     </form>
-    
+
   </div>
   <div class="modal-footer">
     <button mat-raised-button class="btn btn-primary" (click)="SaveLocker()">Save</button> &nbsp;
@@ -48,10 +48,10 @@
 <div class="row d-flex justify-content-center align-items-center"
   style="background-color: #78c2ad21; text-align: center;">
   <div class="col-xs-12 col-sm-12 col-md-11 col-lg-11 mb-2 bg-white p-1">
-    <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="SubmitReport()">Retrive</button>
+    <!-- <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="SubmitReport()">Retrive</button>
     <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="AddLocker()">Add Locker</button>
 
-    <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onUpdateClick()">Update</button>
+    <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onUpdateClick()">Update</button> -->
     <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onBackClick()">Back</button>
   </div>
 </div>
@@ -73,7 +73,7 @@
         <div class="row">
           <div class="col-12 ">
             <h4 class="customHeader">Locker Access Details</h4>
-            
+
             <div class="table-responsive" class="scroll-when-long">
                 <div class="form-row">
                     <div class="form-group col-3">
@@ -84,7 +84,7 @@
                       </div>
                       <div class="form-group col-2">
                         <small for="acc_no">Locker ID</small>
-                        <input style="height:25px"  
+                        <input style="height:25px"
                            [(ngModel)]="tm_locker.locker_id" type="text" disabled
                           class="form-control form-control-sm text-capitalize" id="Locker IDl" placeholder="Locker ID">
                         <!-- <input style="height:25px" disabled
@@ -93,7 +93,7 @@
                       </div>
                       <div class="form-group col-4">
                         <small for="acc_no">Customer Name</small>
-                        <input style="height:25px"  
+                        <input style="height:25px"
                            [(ngModel)]="tm_locker.name" type="text" disabled
                           class="form-control form-control-sm text-capitalize" id="Customer Name" placeholder="Customer Name">
                         <!-- <input style="height:25px" disabled
@@ -102,22 +102,41 @@
                       </div>
                       <div class="form-group col-3">
                         <small for="acc_no">Rented Till</small>
-                        <input style="height:25px"  
+                        <input style="height:25px"
                            [(ngModel)]="tm_locker.rented_till" type="date" disabled
                           class="form-control form-control-sm text-capitalize" id="Rented Till" placeholder="Rented Till">
                       </div>
-                      <div class="form-group col-3">
-                        <small for="acc_no">Locker Access</small>
+                      <div class="form-group col-4">
+                        <small for="acc_no">Handling Authority</small>
+                        <input  class="form-control form-control-sm" type="text" [(ngModel)]="handling_authority">
+                      </div>
+                      <div class="form-group col-8">
+                        <small for="acc_no">Remarks</small>
+                        <input  class="form-control form-control-sm" type="text" [(ngModel)]="remarks">
+                      </div>
+                      <div class="form-group col-4">
+                        <small for="acc_no">Locker In Time</small>
+                        <input  class="form-control form-control-sm" [readOnly]="true" type="text" [(ngModel)]="inTime">
+                      </div>
+                      <div class="form-group col-4">
+                        <small for="acc_no">Locker Out Time</small>
+                        <input  class="form-control form-control-sm" [readOnly]="true" type="text" [(ngModel)]="outTime">
+                      </div>
+                      <div class="form-group col-4">
+                        <small for="acc_no">Locker Access</small><br>
                         <label class="switch switch-green">
-                            <input type="checkbox" class="switch-input" >
+                            <input type="checkbox" class="switch-input" [checked]="lockerInOutStatus=='Y'" (change)="updateLockerAccess($event.target.checked,tm_locker)">
                             <span class="switch-label" data-on="In" data-off="Out"></span>
                             <span class="switch-handle"></span>
                           </label>
                       </div>
+
                   </div>
             </div>
+
+            
           </div>
-         
+
         </div>
       </div>
         </div>
@@ -127,10 +146,10 @@
 <div class="row d-flex justify-content-center align-items-center"
   style="background-color: #78c2ad21; text-align: center;">
   <div class="col-xs-12 col-sm-12 col-md-11 col-lg-11 mb-2 bg-white p-1">
-    <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="SubmitReport()">Retrive</button>
+    <!-- <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="SubmitReport()">Retrive</button>
     <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="AddLocker()">Add Locker</button>
 
-    <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onUpdateClick()">Update</button>
+    <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onUpdateClick()">Update</button> -->
     <button mat-raised-button type="button" class="btn btn-primary btn-sm ml-1 mr-1" (click)="onBackClick()">Back</button>
   </div>
 </div>

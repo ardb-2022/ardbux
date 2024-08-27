@@ -209,6 +209,13 @@ import { LoanDisburseSummaryComponent } from './loan/report/loan-disbursement-re
 import { DdsAgentTransReportComponent } from './deposit/ddsExportImport/dds-agent-trans-report/dds-agent-trans-report.component';
 import { InterestMasterComponent } from './deposit/masters/interest-master/interest-master.component';
 import { LockerINOUTComponent } from './locker/locker-inout/locker-inout.component';
+import { LockerAccessComponent } from './locker/report/locker-access/locker-access.component';
+import { WeeklyReturnNewComponent } from './finance/report/weekly-return-new/weekly-return-new.component';
+import { WeeklyReturnNewConsoComponent } from './finance/report/weekly-return-new-conso/weekly-return-new-conso.component';
+import { GlWiseVoucherDtlsComponent } from './finance/report/gl-wise-voucher-dtls/gl-wise-voucher-dtls.component';
+import { ConsoLoanDCComponent } from './loan/report/conso-loan-dc/conso-loan-dc.component';
+import { LoanRecoveryConsoComponent } from './loan/report/recovery-register/loan-recovery-conso/loan-recovery-conso.component';
+import { LoanDisburseConsoComponent } from './loan/report/loan-disbursement-register/loan-disburse-conso/loan-disburse-conso.component';
 
 const routes: Routes = [
   { path: 'Admin', component: AdminPanelComponent },
@@ -247,6 +254,7 @@ const routes: Routes = [
       { path: 'FT_YearlyVoucher', component:YearlyadjustmentvoucherComponent, canActivate: [AuthGuard] },
       { path: 'FT_BackdateVoucher', component: BakdatevoucherComponent, canActivate: [AuthGuard] },
       { path: 'FR_DayBook', component: DailybookComponent, canActivate: [AuthGuard] },
+      { path: 'FR_GL_Vou_Dtls', component: GlWiseVoucherDtlsComponent, canActivate: [AuthGuard] },
       { path: 'FT_CreateGlHead', component: CreateGLHeadComponent, canActivate: [AuthGuard] },
       { path: 'FR_CashAccount', component: CashaccountComponent, canActivate: [AuthGuard] },
       { path: 'FR_CdDayBook', component: ConsolidatedDayBookComponent, canActivate: [AuthGuard] },
@@ -321,6 +329,7 @@ const routes: Routes = [
       { path: 'LR_RELst', component: RecovListComponent, canActivate: [AuthGuard] },
       { path: 'LR_DisReg', component: LoanDisbursementRegisterComponent, canActivate: [AuthGuard] },
       { path: 'LR_DisNorm', component: LoanDisburseNormalComponent, canActivate: [AuthGuard] },
+      { path: 'LR_DisConso', component: LoanDisburseConsoComponent, canActivate: [AuthGuard] },
       { path: 'LR_DisAll', component: LoanDisburseActWiseComponent, canActivate: [AuthGuard] },
       { path: 'LR_DisSum', component: LoanDisburseSummaryComponent, canActivate: [AuthGuard] },
       { path: 'LR_AWISECol', component: ActWiseColLstComponent, canActivate: [AuthGuard] },
@@ -337,6 +346,7 @@ const routes: Routes = [
       { path: 'LR_GM_Int_Subsidy', component: GmLoanSubsidyComponent, canActivate: [AuthGuard] },
       { path: 'LR_Disb_Cert', component: LoanDisbCertificateComponent, canActivate: [AuthGuard] },
       { path: 'LR_GM_DC', component: GMloanDCComponent, canActivate: [AuthGuard] },
+      { path: 'LR_Conso_DC', component: ConsoLoanDCComponent, canActivate: [AuthGuard] },
       { path: 'LR_CT_DC', component: CTloanDCComponent, canActivate: [AuthGuard] },
       { path: 'LR_NPA_Sum', component: NpaSummaryComponent, canActivate: [AuthGuard] },
       { path: 'LR_FN_Return', component: FortnightlyReturnComponent, canActivate: [AuthGuard] },
@@ -348,6 +358,7 @@ const routes: Routes = [
       { path: 'LR_GOLD_REP_ASON', component: GoldLoanAsOnDateComponent, canActivate: [AuthGuard] },
       { path: 'LR_GOLD_REP_CURR', component: GoldLoanCurrDateComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecReg', component: RecoveryRegisterComponent, canActivate: [AuthGuard] },
+      { path: 'LR_RecRegConso', component: LoanRecoveryConsoComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecRegFund', component: RecovFundComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecRegGP', component: GroupWiseComponent },
       { path: 'LR_RecRegVill', component: RecovVillageComponent, canActivate: [AuthGuard] },
@@ -416,6 +427,8 @@ const routes: Routes = [
       { path: 'FR_ConsoProfitLoss', component: ConsoProfitLossComponent, canActivate: [AuthGuard] },
       { path: 'FR_Trading', component: TradingAccComponent, canActivate: [AuthGuard] },
       { path: 'FR_WeeklyReturn', component: WeeklyReturnComponent, canActivate: [AuthGuard] },
+      { path: 'FR_WeeklyReturn_New', component: WeeklyReturnNewComponent, canActivate: [AuthGuard] },
+      { path: 'FR_WR_New_conso', component: WeeklyReturnNewConsoComponent, canActivate: [AuthGuard] },
       { path: 'I_BankEntry', component: BankEntryComponent, canActivate: [AuthGuard] },
       { path: 'I_BranchEntry', component: BranchEntryComponent, canActivate: [AuthGuard] },
       { path: 'I_Open', component: OpenInvestComponent, canActivate: [AuthGuard] },
@@ -439,6 +452,10 @@ const routes: Routes = [
           },
           {
             path: 'lock_access',component: LockerINOUTComponent,
+            loadChildren: () => import('./locker/locker.module').then(m => m.LockerModule)
+          },
+          {
+            path: 'lock_access_rep',component: LockerAccessComponent,
             loadChildren: () => import('./locker/locker.module').then(m => m.LockerModule)
           },
           {

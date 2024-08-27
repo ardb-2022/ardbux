@@ -205,49 +205,49 @@ export class CashcumtrialComponent implements OnInit,AfterViewInit {
         this.clsdrSum+=e.clos_dr;
         this.clscrSum+=e.clos_cr;
         // console.log(e.acc_cd.toString().charAt(0))
-        if(e.acc_cd.toString().charAt(0)=='1')
-        {
-          this.lastOne=e.acc_cd
-          this.opdrSumOne+=e.opng_dr;
-          this.opcrSumOne+=e.opng_cr;
-          this.crSumOne+=e.cr;
-          this.drSumOne+=e.dr;
-          this.clsdrSumOne+=e.clos_dr;
-          this.clscrSumOne+=e.clos_cr;
-        }
-        if(e.acc_cd.toString().charAt(0)=='2')
-        {
-          this.lastTwo=e.acc_cd
-          this.opdrSumTwo+=e.opng_dr;
-          this.opcrSumTwo+=e.opng_cr;
-          this.crSumTwo+=e.cr;
-          this.drSumTwo+=e.dr;
-          this.clsdrSumTwo+=e.clos_dr;
-          this.clscrSumTwo+=e.clos_cr;
-        }
-        if(e.acc_cd.toString().charAt(0)=='3')
-        {
-          this.lastThree=e.acc_cd
-          this.opdrSumThree+=e.opng_dr;
-          this.opcrSumThree+=e.opng_cr;
-          this.crSumThree+=e.cr;
-          this.drSumThree+=e.dr;
-          this.clsdrSumThree+=e.clos_dr;
-          this.clscrSumThree+=e.clos_cr;
-        }
-        if(e.acc_cd.toString().charAt(0)=='4')
-        {
-          this.lastFour=e.acc_cd
-          this.opdrSumFour+=e.opng_dr;
-          this.opcrSumFour+=e.opng_cr;
-          this.crSumFour+=e.cr;
-          this.drSumFour+=e.dr;
-          this.clsdrSumFour+=e.clos_dr;
-          this.clscrSumFour+=e.clos_cr;
-        }
-         console.log(this.lastOne+" "+this.lastTwo+" "+this.lastThree+" "+this.lastFour)
+      //   if(e.acc_cd.toString().charAt(0)=='1')
+      //   {
+      //     this.lastOne=e.acc_cd
+      //     this.opdrSumOne+=e.opng_dr;
+      //     this.opcrSumOne+=e.opng_cr;
+      //     this.crSumOne+=e.cr;
+      //     this.drSumOne+=e.dr;
+      //     this.clsdrSumOne+=e.clos_dr;
+      //     this.clscrSumOne+=e.clos_cr;
+      //   }
+      //   if(e.acc_cd.toString().charAt(0)=='2')
+      //   {
+      //     this.lastTwo=e.acc_cd
+      //     this.opdrSumTwo+=e.opng_dr;
+      //     this.opcrSumTwo+=e.opng_cr;
+      //     this.crSumTwo+=e.cr;
+      //     this.drSumTwo+=e.dr;
+      //     this.clsdrSumTwo+=e.clos_dr;
+      //     this.clscrSumTwo+=e.clos_cr;
+      //   }
+      //   if(e.acc_cd.toString().charAt(0)=='3')
+      //   {
+      //     this.lastThree=e.acc_cd
+      //     this.opdrSumThree+=e.opng_dr;
+      //     this.opcrSumThree+=e.opng_cr;
+      //     this.crSumThree+=e.cr;
+      //     this.drSumThree+=e.dr;
+      //     this.clsdrSumThree+=e.clos_dr;
+      //     this.clscrSumThree+=e.clos_cr;
+      //   }
+      //   if(e.acc_cd.toString().charAt(0)=='4')
+      //   {
+      //     this.lastFour=e.acc_cd
+      //     this.opdrSumFour+=e.opng_dr;
+      //     this.opcrSumFour+=e.opng_cr;
+      //     this.crSumFour+=e.cr;
+      //     this.drSumFour+=e.dr;
+      //     this.clsdrSumFour+=e.clos_dr;
+      //     this.clscrSumFour+=e.clos_cr;
+      //   }
+      //    console.log(this.lastOne+" "+this.lastTwo+" "+this.lastThree+" "+this.lastFour)
       })
-      this.lastAccCD=this.reportData[this.reportData.length-1].acc_cd
+      // this.lastAccCD=this.reportData[this.reportData.length-1].acc_cd
       },
       err => {
          this.isLoading = false;

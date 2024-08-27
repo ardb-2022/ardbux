@@ -152,6 +152,7 @@ export class LoanaccountTransactionComponent implements OnInit {
   hidegl:boolean=true;
   glHead:any;
   memberCD:any;
+  fnd_typ:string='';
   displayedColumns: string[] = ['trans_dt', 'disb_amt', 'curr_intt_cal', 'ovd_intt_cal','penal_intt_cal','last_intt_calc_dt','prn_trf','intt_trf','curr_intt_recov','ovd_intt_recov','penal_intt_recov','adv_prn_recov','curr_prn_recov','ovd_prn_recov','totalRecov','curr_prn','ovd_prn','curr_intt','ovd_intt','penal_intt'];
   dataSource = new MatTableDataSource()
   opcrSum = 0;
@@ -643,6 +644,7 @@ export class LoanaccountTransactionComponent implements OnInit {
       }
   }
   public SelectCustomer(cust: any): void {
+    this.fnd_typ='';
     console.log(cust);
     if(cust.loan_id){this.showNW=false}
     this.loanID = cust.loan_id;
@@ -782,6 +784,7 @@ export class LoanaccountTransactionComponent implements OnInit {
           console.log(acc.tddeftrans.trans_type)
           debugger
           this.accNoEnteredForTransaction = acc.tmloanall;
+          this.fnd_typ=acc.tmloanall.fund_type=='N'?'Borrowed':'Owned';
           this.outIntt=(+acc.tmloanall.curr_intt) + (+acc.tmloanall.ovd_intt) +(+acc.tmloanall.penal_intt)
           this.outPrn=+(+acc.tmloanall.curr_prn) + (+acc.tmloanall.ovd_prn)
           this.accDtlsFrm.patchValue({
@@ -1454,6 +1457,7 @@ export class LoanaccountTransactionComponent implements OnInit {
           this.GetCustomer();
           this.CurrentDemand();
           debugger
+          this.fnd_typ=acc.tmloanall.fund_type=='N'?'Borrowed':'Owned';
           this.strtDt = acc.tmloanall.instl_start_dt
           this.currRt = acc.tmloanall.curr_intt_rate
           this.ovdRt = acc.tmloanall.ovd_intt_rate
@@ -3149,6 +3153,7 @@ debugger;
   }
 
   onResetClick(): void {
+    this.fnd_typ=''
     this.emiRecovPrn=0;
     this.emiRecovIntt=0;
     this.emiRecovTot=0;

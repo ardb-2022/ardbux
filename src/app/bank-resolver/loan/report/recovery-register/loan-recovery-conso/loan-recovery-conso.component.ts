@@ -15,11 +15,11 @@ import { CommonServiceService } from 'src/app/bank-resolver/common-service.servi
 import html2canvas from 'html2canvas';
 import jspdf from 'jspdf';
 @Component({
-  selector: 'app-loan-disburse-act-wise',
-  templateUrl: './loan-disburse-act-wise.component.html',
-  styleUrls: ['./loan-disburse-act-wise.component.css']
+  selector: 'app-loan-recovery-conso',
+  templateUrl: './loan-recovery-conso.component.html',
+  styleUrls: ['./loan-recovery-conso.component.css']
 })
-export class LoanDisburseActWiseComponent implements OnInit {
+export class LoanRecoveryConsoComponent {
 
   public static operations: mm_operation[] = [];
   @ViewChild('mattable') htmlData:ElementRef;
@@ -27,7 +27,7 @@ export class LoanDisburseActWiseComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource = new MatTableDataSource()
-  displayedColumns: string[] = ['block_name','service_area_name','purpose','fund_type','acc_desc','loan_id','party_name','disb_dt','disb_amt'];
+  displayedColumns: string[] = ['brn_name','block_name','fund_type','loan_type','activity','loan_id','cust_name','trans_dt','curr_prn_recov','ovd_prn_recov','adv_prn_recov','tot_prn_recov','curr_intt_recov','ovd_intt_recov','penal_intt_recov','tot_intt_recov','total_recov_amt','last_intt_calc_dt'];
   modalRef: BsModalRef;
   isOpenFromDp = false;
   isOpenToDp = false;
@@ -109,12 +109,12 @@ export class LoanDisburseActWiseComponent implements OnInit {
  secondGroup:any=[]
  selectItems=[
   {
-    value:'Block',
-    name:'Block'
+    value:'Brach Name',
+    name:'Brach Name'
   },
   {
-    value:'Service Area',
-    name:'Service Area'
+    value:'Block Name',
+    name:'Block Name'
   },
   {
     value:'Activity',
@@ -127,24 +127,16 @@ export class LoanDisburseActWiseComponent implements OnInit {
   {
     value:'Fund Type',
     name:'Fund Type'
-  },
-  {
-    value:'Loan ID',
-    name:'Loan ID'
-  },
-  {
-    value:'Party Name',
-    name:'Party Name'
   }
 ]
 selectItems1=[
   {
-    value:'Block',
-    name:'Block'
+    value:'Brach Name',
+    name:'Brach Name'
   },
   {
-    value:'Service Area',
-    name:'Service Area'
+    value:'Block Name',
+    name:'Block Name'
   },
   {
     value:'Activity',
@@ -157,14 +149,6 @@ selectItems1=[
   {
     value:'Fund Type',
     name:'Fund Type'
-  },
-  {
-    value:'Loan ID',
-    name:'Loan ID'
-  },
-  {
-    value:'Party Name',
-    name:'Party Name'
   }
 ]
   searchfilter= new MatTableDataSource()
@@ -243,13 +227,13 @@ selectItems1=[
       const todate = this.reportcriteria.controls.toDate.value;
       var dt={
         "ardb_cd":this.sys.ardbCD,
-        "brn_cd":this.sys.BranchCode,
+        // "brn_cd":this.sys.BranchCode,
         // "acc_cd":this.reportcriteria.controls.acc_type_cd.value,
         "from_dt": this.fromdate.toISOString(),
         "to_dt": todate.toISOString()
       }
       debugger
-      this.svc.addUpdDel('Loan/PopulateLoanDisburseRegAll',dt).subscribe(data=>{console.log(data)
+      this.svc.addUpdDel('Loan/PopulateRecovRegConso',dt).subscribe(data=>{console.log(data)
         // this.reportData=data
          if(!data){
           this.comser.SnackBar_Nodata()
@@ -267,36 +251,14 @@ selectItems1=[
         // this.setPage(2);
         // this.setPage(1)
         this.modalRef.hide();
-        this.lastAccNum=this.reportData[this.reportData.length-1].loan_id
+        // this.lastAccNum=this.reportData[this.reportData.length-1].loan_id
         console.log(this.lastAccNum)
-        this.reportData.forEach(e => {
-          this.totIssueSum+=e.disb_amt
-          // this.totPrnDue+=e.prn_due
-          // this.totInttDue+=e.intt_due
-          // this.totPenalIntt+=e.penal_intt
-          // this.totOvdPrn+=e.ovd_prn
-          // this.totOvdIntt+=e.ovd_intt
-          // this.totStan+=e.stan_prn
-          // this.totSubStan+=e.substan_prn
-          // this.totD1+=e.d1_prn
-          // this.totD2+=e.d2_prn
-          // this.totD3+=e.d3_prn
-          // this.totNpaSum+=e.d1_prn+e.d2_prn+e.d3_prn+e.stan_prn+e.substan_prn
-          // this.totProvSum+=e.provision
-          //   this.dummytotIssueSum+=e.disb_amt
-          //   this.dummytotPrnDue+=e.prn_due
-          //   this.dummytotInttDue+=e.intt_due
-          //   this.dummytotPenalIntt+=e.penal_intt
-          //   this.dummytotOvdPrn+=e.ovd_prn
-          //   this.dummytotOvdIntt+=e.ovd_intt
-          //   this.dummytotStan+=e.stan_prn
-          //   this. dummytotSubStan+=e.substan_prn
-          //   this. dummytotD1+=e.d1_prn
-          //   this.dummytotD2+=e.d2_prn
-          //   this.dummytotD3+=e.d3_prn
-          //   this. dummytotNpaSum+=e.d1_prn+e.d2_prn+e.d3_prn+e.stan_prn+e.substan_prn
-          //   this.dummytotProvSum+=e.provision
-        });
+        for(let i=0;i<this.reportData.length;i++){
+          this.totIssueSum+=this.reportData[i].total_recov_amt
+          // this.totCount=this.dataSource.filteredData.length
+    
+        }
+        
       })
     }
   }
@@ -361,25 +323,25 @@ selectItems1=[
     this.selectedValue=''
     this.firstGroup.length=0
     switch(this.selectedValue1){
-     case "Block": 
+     case "Brach Name": 
+      for(let i=0;i<this.reportData.length;i++){
+        this.firstGroup[i]=this.reportData[i].brn_name
+     }
+      break;
+      case "Block Name": 
       for(let i=0;i<this.reportData.length;i++){
         this.firstGroup[i]=this.reportData[i].block_name
      }
-     break;
-     case "Service Area": 
-      for(let i=0;i<this.reportData.length;i++){
-        this.firstGroup[i]=this.reportData[i].service_area_name
-     }
-     break;
+      break;
       //  console.log(this.blockNames)
       case "Activity": 
       for(let i=0;i<this.reportData.length;i++){
-        this.firstGroup[i]=this.reportData[i].activity_name
+        this.firstGroup[i]=this.reportData[i].activity
      }
         break;
       case "Loan Type": 
       for(let i=0;i<this.reportData.length;i++){
-        this.firstGroup[i]=this.reportData[i].acc_desc
+        this.firstGroup[i]=this.reportData[i].loan_type
      }
      break;
      case "Fund Type": 
@@ -388,18 +350,7 @@ selectItems1=[
     }
     // this.filteredArray=this.reportData.filter(e=>e.activity_cd?.toLowerCase().includes(filterValue.toLowerCase())==true)
       break;
-      case "Party Name":
-        for(let i=0;i<this.reportData.length;i++){
-          this.firstGroup[i]=this.reportData[i].cust_name
-       }
-    // this.filteredArray=this.reportData.filter(e=>e.party_name?.toLowerCase().includes(filterValue.toLowerCase())==true)
-     break;
-       case "Loan ID":
-        for(let i=0;i<this.reportData.length;i++){
-          this.firstGroup[i]=this.reportData[i].loan_id
-       }
-        // this.filteredArray=this.reportData.filter(e=>e.loan_id?.toLowerCase().includes(filterValue.toLowerCase())==true)
-         break;
+     
         
 
     }
@@ -413,28 +364,21 @@ selectItems1=[
     this.selectedValue=''
     setTimeout(()=>{this.isLoading=false},500)
     switch(this.selectedValue1){
-      case "Block": 
+      case "Brach Name": 
+      this.filteredArray=this.reportData.filter(e=>e.brn_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
+      break;
+      case "Block Name": 
       this.filteredArray=this.reportData.filter(e=>e.block_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
       break;
-      case "Service Area": 
-      this.filteredArray=this.reportData.filter(e=>e.service_area_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
-      break;
       case "Activity": 
-      this.filteredArray=this.reportData.filter(e=>e.activity_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
+      this.filteredArray=this.reportData.filter(e=>e.activity?.toLowerCase().includes(this.bName.toLowerCase())==true)
         break;
       case "Loan Type": 
-      this.filteredArray=this.reportData.filter(e=>e.acc_desc?.toLowerCase().includes(this.bName.toLowerCase())==true)
+      this.filteredArray=this.reportData.filter(e=>e.loan_type?.toLowerCase().includes(this.bName.toLowerCase())==true)
       break;
       case "Fund Type": 
       this.filteredArray=this.reportData.filter(e=>e.fund_type?.toLowerCase().includes(this.bName.toLowerCase())==true)
       break;
-   
-      case "Party Name":
-    this.filteredArray=this.reportData.filter(e=>e.cust_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
-     break;
-      case "Loan ID":
-        this.filteredArray=this.reportData.filter(e=>e.loan_id?.toLowerCase().includes(this.bName.toLowerCase())==true)
-         break;
 
     }
     this.dataSource.data=this.filteredArray
@@ -446,21 +390,22 @@ selectItems1=[
     this.secondGroup.length=0;
     this.bName1=''
     switch(this.selectedValue){
-       case "Block": 
+       case "Brach Name": 
       for(let i=0;i<this.filteredArray1.length;i++){
-        this.secondGroup[i]=this.filteredArray1[i].block_name
+        this.secondGroup[i]=this.filteredArray1[i].brn_name
      }break;
-     case "Service Area": 
-      for(let i=0;i<this.filteredArray1.length;i++){
-        this.secondGroup[i]=this.filteredArray1[i].service_area_name
-     }break;
+     case "Block Name": 
+     for(let i=0;i<this.filteredArray1.length;i++){
+       this.secondGroup[i]=this.filteredArray1[i].block_name
+    }break;
+     
      case "Activity": 
      for(let i=0;i<this.filteredArray1.length;i++){
-       this.secondGroup[i]=this.filteredArray1[i].activity_name
+       this.secondGroup[i]=this.filteredArray1[i].activity
     }break;
       case "Loan Type": 
       for(let i=0;i<this.filteredArray1.length;i++){
-        this.secondGroup[i]=this.filteredArray1[i].acc_desc
+        this.secondGroup[i]=this.filteredArray1[i].loan_type
      }
      break;
       case "Fund Type": 
@@ -469,19 +414,7 @@ selectItems1=[
      }
     // this.filteredArray=this.reportData.filter(e=>e.activity_cd?.toLowerCase().includes(filterValue.toLowerCase())==true)
       break;
-      case "Party Name":
-        for(let i=0;i<this.filteredArray1.length;i++){
-          this.secondGroup[i]=this.filteredArray1[i].cust_name
-       }
-    // this.filteredArray=this.reportData.filter(e=>e.party_name?.toLowerCase().includes(filterValue.toLowerCase())==true)
-     break;
      
-       case "Loan ID":
-        for(let i=0;i<this.filteredArray1.length;i++){
-          this.secondGroup[i]=this.filteredArray1[i].loan_id
-       }
-        // this.filteredArray=this.reportData.filter(e=>e.loan_id?.toLowerCase().includes(filterValue.toLowerCase())==true)
-         break;
          
 
     }
@@ -495,28 +428,22 @@ selectItems1=[
     console.log(this.filteredArray1)
 debugger
     switch(this.selectedValue){
-      case "Block": 
-      this.filteredArray=this.filteredArray1.filter(e=>e.block_name?.toLowerCase().includes(this.bName1.toLowerCase())==true)
+      case "Brach Name": 
+      this.filteredArray=this.filteredArray1.filter(e=>e.brn_name?.toLowerCase().includes(this.bName1.toLowerCase())==true)
         break;
-      case "Service Area": 
-      this.filteredArray=this.filteredArray1.filter(e=>e.service_area_name?.toLowerCase().includes(this.bName1.toLowerCase())==true)
-        break;
+        case "Block Name": 
+        this.filteredArray=this.filteredArray1.filter(e=>e.block_name?.toLowerCase().includes(this.bName1.toLowerCase())==true)
+          break;
         case "Activity": 
-      this.filteredArray=this.filteredArray1.filter(e=>e.activity_name?.toLowerCase().includes(this.bName1.toLowerCase())==true)
+      this.filteredArray=this.filteredArray1.filter(e=>e.activity?.toLowerCase().includes(this.bName1.toLowerCase())==true)
         break;
       case "Loan Type": 
-    this.filteredArray=this.filteredArray1.filter(e=>e.acc_desc?.toLowerCase().includes(this.bName1.toLowerCase())==true)
+    this.filteredArray=this.filteredArray1.filter(e=>e.loan_type?.toLowerCase().includes(this.bName1.toLowerCase())==true)
       break;
       case "Fund Type": 
     this.filteredArray=this.filteredArray1.filter(e=>e.fund_type?.toLowerCase().includes(this.bName1.toLowerCase())==true)
       break;
-      case "Party Name":
-    this.filteredArray=this.filteredArray1.filter(e=>e.cust_name?.toLowerCase().includes(this.bName1.toLowerCase())==true)
-     break;
-    
-       case "Loan ID":
-        this.filteredArray=this.filteredArray1.filter(e=>e.loan_id?.toLowerCase().includes(this.bName1.toLowerCase())==true)
-         break;
+   
 
     }
     debugger;
@@ -529,27 +456,22 @@ debugger
     this.bName=(event.target as HTMLInputElement).value
     this.filteredArray=this.dataSource.data
     switch(this.selectedValue1){
-      case "Block": 
-      this.filteredArray=this.reportData.filter(e=>e.block_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
+      case "Brach Name": 
+      this.filteredArray=this.reportData.filter(e=>e.brn_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
           break;
-      case "Service Area": 
-      this.filteredArray=this.reportData.filter(e=>e.service_area_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
+      case "Block Name": 
+      this.filteredArray=this.reportData.filter(e=>e.block_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
               break;
       case "Activity": 
-      this.filteredArray=this.reportData.filter(e=>e.activity_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
+      this.filteredArray=this.reportData.filter(e=>e.activity?.toLowerCase().includes(this.bName.toLowerCase())==true)
           break;
       case "Loan Type": 
-      this.filteredArray=this.reportData.filter(e=>e.acc_desc?.toLowerCase().includes(this.bName.toLowerCase())==true)
+      this.filteredArray=this.reportData.filter(e=>e.loan_type?.toLowerCase().includes(this.bName.toLowerCase())==true)
           break;
           case "Fund Type": 
       this.filteredArray=this.reportData.filter(e=>e.fund_type?.toLowerCase().includes(this.bName.toLowerCase())==true)
           break;
-      case "Party Name":
-      this.filteredArray=this.reportData.filter(e=>e.cust_name.toLowerCase().includes(this.bName.toLowerCase())==true)
-         break;
-      case "Loan ID":
-      this.filteredArray=this.reportData.filter(e=>e.loan_id.toLowerCase().includes(this.bName.toLowerCase())==true)
-         break;
+      
          
 
     }
@@ -558,7 +480,7 @@ debugger
 
     // this.filteredArray.forEach(e=>
     //   {
-    //    if(e.block_name.includes(filterValue))
+    //    if(e.brn_name.includes(filterValue))
     // this.dataSource.data=this.filteredArray
     // console.log(this.dataSource.data)
 
@@ -569,28 +491,22 @@ debugger
     const filterValue=(event.target as HTMLInputElement).value
     this.filteredArray=this.dataSource.data
     switch(this.selectedValue){
-      case "Block": 
-      this.filteredArray=this.reportData.filter(e=>e.block_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
+      case "Brach Name": 
+      this.filteredArray=this.reportData.filter(e=>e.brn_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
         break;
-        case "Service Area": 
-      this.filteredArray=this.reportData.filter(e=>e.service_area_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
-        break;
+        case "Block Name": 
+        this.filteredArray=this.reportData.filter(e=>e.block_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
+          break;
         case "Activity": 
-      this.filteredArray=this.reportData.filter(e=>e.activity_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
+      this.filteredArray=this.reportData.filter(e=>e.activity?.toLowerCase().includes(this.bName.toLowerCase())==true)
         break;
       case "Loan Type": 
-      this.filteredArray=this.reportData.filter(e=>e.acc_desc?.toLowerCase().includes(this.bName.toLowerCase())==true)
+      this.filteredArray=this.reportData.filter(e=>e.loan_type?.toLowerCase().includes(this.bName.toLowerCase())==true)
       break;
       case "Fund Type": 
       this.filteredArray=this.reportData.filter(e=>e.fund_type?.toLowerCase().includes(this.bName.toLowerCase())==true)
       break;
-      case "Party Name":
-      this.filteredArray=this.filteredArray.filter(e=>e.cust_name.toLowerCase().includes(this.bName.toLowerCase())==true)
-      break;
-    
-       case "Loan ID":
-        this.filteredArray=this.filteredArray.filter(e=>e.loan_id.toLowerCase().includes(this.bName.toLowerCase())==true)
-         break;
+      
 
     }
     this.dataSource.data=this.filteredArray
@@ -625,7 +541,7 @@ debugger
     console.log(this.dataSource.filteredData)
     this.filteredArray=this.dataSource.filteredData
     for(let i=0;i<this.filteredArray.length;i++){
-      this.totIssueSum+=this.filteredArray[i].disb_amt
+      this.totIssueSum+=this.filteredArray[i].total_recov_amt
       this.totCount=this.dataSource.filteredData.length
 
     }
@@ -636,7 +552,7 @@ debugger
       // elementId: 'hiddenTab', 
       elementIdOrContent:'mattable'
     }
-    this.exportAsService.save(this.exportAsConfig, 'LoanDisbursement').subscribe(() => {
+    this.exportAsService.save(this.exportAsConfig, 'Coso_Loan_Recovery').subscribe(() => {
       // save started
       console.log("hello")
     });
