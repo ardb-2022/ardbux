@@ -9,7 +9,7 @@ import { LockerOpenDM } from '../../Models/locker/LockerOpenDM';
 import { tm_deposit } from '../../Models/tm_depositInv';
 import { tm_locker } from '../../Models/locker/tm_locker';
 import { DatePipe } from '@angular/common';
-// import emailjs from '@emailjs/browser';
+
 export interface LockerAccess {
   ardb_cd: string;
   brn_cd: string;
@@ -43,7 +43,9 @@ export class LockerINOUTComponent {
   outTime:any;
   lockerInOutStatus:any;
   remarks:any;
+
   handling_authority:any;
+
   sys = new SystemValues();
   config = {
     keyboard: false, // ensure esc press doesnt close the modal
@@ -162,7 +164,9 @@ export class LockerINOUTComponent {
           else {
           this.tm_locker=this.masterModel.tmlocker;
           this.tm_locker.rented_till = this.setDate(this.tm_locker.rented_till);
+
             this.getLockerInOutDtls()
+
           }
 
 
@@ -176,6 +180,7 @@ export class LockerINOUTComponent {
       );
 
     }
+
     getLockerInOutDtls(){
       const dt = {
         ardb_cd: this.sys.ardbCD,
@@ -215,6 +220,7 @@ export class LockerINOUTComponent {
 
     );
     }
+
     updateLockerAccess(isChecked: boolean,i:any) {
       if(this.tm_locker.agreement_no==null || this.tm_locker.agreement_no== undefined){
         this.HandleMessage(true, MessageType.Warning, 'Please Enter Agereement No..');
@@ -230,7 +236,9 @@ export class LockerINOUTComponent {
           console.log(formattedDate);  // Output: 03/08/2024 12:37:32
           this.inTime=formattedDate;
           this.lockerInOutStatus="Y";
+
           this.InsertLockerAccess()
+
 
         }
         else{
@@ -245,18 +253,22 @@ export class LockerINOUTComponent {
       }
 
     }
+
     InsertLockerAccess() {
+
 
       const dt = {
         ardb_cd: this.sys.ardbCD,
         brn_cd: this.sys.BranchCode,
         locker_id: this.tm_locker.locker_id,
+
         name: this.tm_locker.name,
         handling_authority: this.handling_authority,
         remarks: this.remarks,
         created_by: this.sys.UserId+'/'+localStorage.getItem('ipAddress'),
         modified_by: this.sys.UserId+'/'+localStorage.getItem('ipAddress'),
         trans_dt:this.trans_dt
+
       };
 
     this.isLoading = true;
@@ -264,17 +276,20 @@ export class LockerINOUTComponent {
       res => {
         console.log(res);
         this.isLoading = false;
+
         if(res==0){
             this.HandleMessage(true, MessageType.Sucess, 'Locker In-Time Insertion Successfully');
         }
         else{
           this.HandleMessage(true, MessageType.Error, 'Unable to Save record!!');
+
         }
 
       },
       err => {
         this.isLoading = false;
         // this.showAlertMsg('ERROR', 'Unable to find record!!');
+
         this.HandleMessage(true, MessageType.Warning, 'Unable to Save record!!');
       }
 
@@ -313,6 +328,7 @@ export class LockerINOUTComponent {
       }
     )
   }
+
 
     setDate(date:string){
       const [datePart] = date.split(' ');
