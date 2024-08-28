@@ -9,6 +9,7 @@ import { LockerOpenDM } from '../../Models/locker/LockerOpenDM';
 import { tm_deposit } from '../../Models/tm_depositInv';
 import { tm_locker } from '../../Models/locker/tm_locker';
 import { DatePipe } from '@angular/common';
+
 export interface LockerAccess {
   ardb_cd: string;
   brn_cd: string;
@@ -42,6 +43,9 @@ export class LockerINOUTComponent {
   outTime:any;
   lockerInOutStatus:any;
   remarks:any;
+
+  handling_authority:any;
+
   sys = new SystemValues();
   config = {
     keyboard: false, // ensure esc press doesnt close the modal
@@ -86,6 +90,7 @@ export class LockerINOUTComponent {
   cAddress:any
   cAcc:any
   showWait=false
+  trans_dt:any;
   locker_type=[
     {type:"Small",id:"S"},
     {type:"Large",id:"L"},
@@ -160,6 +165,8 @@ export class LockerINOUTComponent {
           this.tm_locker=this.masterModel.tmlocker;
           this.tm_locker.rented_till = this.setDate(this.tm_locker.rented_till);
 
+            this.getLockerInOutDtls()
+
           }
 
 
@@ -172,6 +179,46 @@ export class LockerINOUTComponent {
 
       );
 
+    }
+
+    getLockerInOutDtls(){
+      const dt = {
+        ardb_cd: this.sys.ardbCD,
+        brn_cd: this.sys.BranchCode,
+        locker_id: this.tm_locker.locker_id,
+      };
+
+    this.isLoading = true;
+    this.svc.addUpdDel<any>('Locker/GetLockerAccess  ', dt).subscribe(
+      res => {
+        console.log(res);
+        this.isLoading = false;
+        if(res.locker_id!=null){
+          console.log(res);
+          this.handling_authority=res.handling_authority;
+          this.remarks=res.remarks;
+          this.inTime=res.access_in_time;
+          this.trans_dt=res.trans_dt;
+          this.lockerInOutStatus='Y'
+          debugger
+        }
+        else{
+          this.trans_dt='';
+          this.handling_authority='';
+          this.remarks='';
+          this.inTime='';
+          this.lockerInOutStatus='N'
+          return;
+        }
+
+      },
+      err => {
+        this.isLoading = false;
+        // this.showAlertMsg('ERROR', 'Unable to find record!!');
+        this.HandleMessage(true, MessageType.Warning, 'Error when geting locker access details,');
+      }
+
+    );
     }
 
     updateLockerAccess(isChecked: boolean,i:any) {
@@ -189,7 +236,9 @@ export class LockerINOUTComponent {
           console.log(formattedDate);  // Output: 03/08/2024 12:37:32
           this.inTime=formattedDate;
           this.lockerInOutStatus="Y";
-          this.UpdateLockerAccess()
+
+          this.InsertLockerAccess()
+
 
         }
         else{
@@ -204,26 +253,22 @@ export class LockerINOUTComponent {
       }
 
     }
-    UpdateLockerAccess() {
+
+    InsertLockerAccess() {
+
 
       const dt = {
         ardb_cd: this.sys.ardbCD,
         brn_cd: this.sys.BranchCode,
         locker_id: this.tm_locker.locker_id,
-        name: 'John Doe',
-        trans_dt: new Date(),
-        // access_in_time: this.inTime?this.inTime:null,
-        access_in_time: new Date(),
 
-        // access_out_time: this.outTime?this.outTime:null,
-        access_out_time:  new Date(),
-
-        handling_authority: 'Manager',
+        name: this.tm_locker.name,
+        handling_authority: this.handling_authority,
         remarks: this.remarks,
-        created_by: 'admin',
-        created_dt: new Date(),
-        modified_by: '',
-        modified_dt: null
+        created_by: this.sys.UserId+'/'+localStorage.getItem('ipAddress'),
+        modified_by: this.sys.UserId+'/'+localStorage.getItem('ipAddress'),
+        trans_dt:this.trans_dt
+
       };
 
     this.isLoading = true;
@@ -231,20 +276,59 @@ export class LockerINOUTComponent {
       res => {
         console.log(res);
         this.isLoading = false;
-        if(res){
-          debugger
+
+        if(res==0){
+            this.HandleMessage(true, MessageType.Sucess, 'Locker In-Time Insertion Successfully');
+        }
+        else{
+          this.HandleMessage(true, MessageType.Error, 'Unable to Save record!!');
+
         }
 
       },
       err => {
         this.isLoading = false;
         // this.showAlertMsg('ERROR', 'Unable to find record!!');
-        this.HandleMessage(true, MessageType.Warning, 'Unable to find record!!');
+
+        this.HandleMessage(true, MessageType.Warning, 'Unable to Save record!!');
       }
 
     );
 
   }
+  UpdateLockerAccess(){
+    debugger
+    const dt = {
+      ardb_cd: this.sys.ardbCD,
+      brn_cd: this.sys.BranchCode,
+      locker_id: this.tm_locker.locker_id,
+      name: this.tm_locker.name,
+      handling_authority: this.handling_authority,
+      remarks: this.remarks,
+      modified_by: this.sys.UserId+'/'+localStorage.getItem('ipAddress'),
+      trans_dt:this.trans_dt
+    };
+    this.isLoading = true;
+    this.svc.addUpdDel<any>('Locker/UpdateLockerAccess', dt).subscribe(
+      res => {
+        console.log(res);
+        this.isLoading = false;
+        if(res==0){
+            this.HandleMessage(true, MessageType.Sucess, 'Locker Out-Time Insertion Successfully');
+        }
+        else{
+          this.HandleMessage(true, MessageType.Error, 'Unable to Save record!!');
+        }
+
+      },
+      err => {
+        this.isLoading = false;
+        // this.showAlertMsg('ERROR', 'Unable to find record!!');
+        this.HandleMessage(true, MessageType.Warning, 'Unable to Save record!!');
+      }
+    )
+  }
+
 
     setDate(date:string){
       const [datePart] = date.split(' ');
@@ -398,4 +482,21 @@ export class LockerINOUTComponent {
     this.showMsg.Type = type;
     this.showMsg.Message = message;
   }
+  // sendEmail(){
+  //   var templateParams = {
+  //     from_name: 'James',
+  //     to_name: 'Check this out!',
+  //     subject: 'Check this out!',
+  //     message: 'Check this out!',
+  //   };
+    
+  //   emailjs.send('service_umhadof', 'template_a67ttmm', templateParams).then(
+  //     (response) => {
+  //       console.log('SUCCESS!', response.status, response.text);
+  //     },
+  //     (error) => {
+  //       console.log('FAILED...', error);
+  //     },
+  //   );
+  // }
 }

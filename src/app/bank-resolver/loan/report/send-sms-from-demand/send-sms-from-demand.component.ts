@@ -55,6 +55,7 @@ export class SendSmsFromDemandComponent {
   inputEl:any;
   fromdate: Date;
   toDate: Date;
+  percentage: number;
   suggestedCustomer: mm_customer[];
   exportAsConfig:ExportAsConfig;
   itemsPerPage = 50;
@@ -87,6 +88,7 @@ export class SendSmsFromDemandComponent {
   loanNm:any;
   lastLoanID:any
   totalSum=0;
+  smsCount=0;
   bName=''
   selectedValue=''
   selectedValue1=''
@@ -259,11 +261,11 @@ export class SendSmsFromDemandComponent {
     this.firstGroup.length=0
     switch(this.selectedValue1){
       case "Account Type": 
-      debugger
+      
       for(let i=0;i<this.reportData.length;i++){
         this.firstGroup[i]=this.reportData[i].acc_name
      }
-       debugger
+       
       break;
       case "Block": 
       for(let i=0;i<this.reportData.length;i++){
@@ -310,9 +312,9 @@ export class SendSmsFromDemandComponent {
     setTimeout(()=>{this.isLoading=false},500)
     switch(this.selectedValue1){
       case "Account Type": 
-      debugger
+      
       this.filteredArray=this.reportData.filter(e=>e.acc_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
-       debugger
+       
       break;
       case "Block": 
       this.filteredArray=this.reportData.filter(e=>e.block_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
@@ -341,11 +343,11 @@ export class SendSmsFromDemandComponent {
     this.secondGroup.length=0;
     switch(this.selectedValue){
       case "Account Type": 
-      debugger
+      
       for(let i=0;i<this.filteredArray1.length;i++){
         this.secondGroup[i]=this.filteredArray1[i].acc_name
      }
-       debugger
+       
       break;
       case "Block": 
       for(let i=0;i<this.filteredArray1.length;i++){
@@ -388,12 +390,12 @@ export class SendSmsFromDemandComponent {
     this.isLoading=true
     setTimeout(()=>{this.isLoading=false},500)
     console.log(this.filteredArray1)
-debugger
+
     switch(this.selectedValue){
       case "Account Type": 
-      // debugger
+      // 
       this.filteredArray=this.filteredArray1.filter(e=>e.acc_name?.toLowerCase().includes(this.bName1.toLowerCase())==true)
-      //  debugger
+      //  
       break;
       case "Block": 
       this.filteredArray=this.filteredArray1.filter(e=>e.block_name?.toLowerCase().includes(this.bName1.toLowerCase())==true)
@@ -412,7 +414,7 @@ debugger
          break;
 
     }
-    debugger;
+    ;
     console.log(this.filteredArray1)
     this.dataSource.data=this.filteredArray
     this.getTotal()
@@ -442,7 +444,7 @@ debugger
     
     console.log(this.toDate.toString());
     console.log(this.adt_to_dt);
-    debugger
+    
     const message = `NAME ${ls_name} LOAN_ID ${ls_acc_num1} REPAY YOUR DEMAND UPTO ${this.adt_to_dt} `
       + `PRINCIPAL ${ld_prn_demand.toFixed(2)} INTEREST ${ld_intt_demand.toFixed(2)} TOTAL ${ld_tot_demand.toFixed(2)}. -${this.senderid}`;
       
@@ -450,6 +452,11 @@ debugger
     if(this.sys.ardbCD=='26'){
       url = `${this.baseUrl}?username=${this.username}&password=${this.password}&senderid=${this.senderid}&to=${encodeURIComponent(ls_phone)}&text=${message2}`;
     }
+    else if(this.sys.ardbCD=='21'){
+      url=`http://sms.synergicapi.in/api.php?username=RAMPURHATARDB&apikey=SHgopMrPOYcL&senderid=RCARDB&route=OTP&mobile=${encodeURIComponent(ls_phone)}&text=
+     Dear Member, Demand for your Loan A/c ${ls_acc_num1} is Rs. ${ld_tot_demand.toFixed(2)} as on ${this.adt_to_dt}. Please pay on time to avoid the penalty. -Rampurhat ARDB Ltd.`
+      }
+    // ${this.username}
     else{
       url = `${this.baseUrl}?username=${this.username}&password=${this.password}&senderid=${this.senderid}&route=${this.route}&number=${encodeURIComponent(ls_phone)}&message=${encodeURIComponent(message)}`;
     }
@@ -465,31 +472,59 @@ debugger
     this.http.get(url)
     return url;
   }
-  generateAndSendUrls() {
-    this.urls = this.smsArray.map(loan => this.generateUrl(loan));
-    const requests = this.urls.map(url => this.sendAllSms(url));
+  convertToPercentage(value: any): number {
+    const numericValue = parseFloat(value); // Convert string to a number
+    const maxValue = 100; // Assuming the value should be within the range of 0 to 100
+    const percentage = (numericValue / maxValue) * 100;
 
-    forkJoin(requests).subscribe(
-      results => {
-        this.responses = results;
-        this.HandleMessage(true, MessageType.Sucess,
-          this.smsArray.length+'Demand SMS Send Successfully...');
-        console.log('SMS responses:', results);
-        this.smsArray=[];
-        this.dataSource.data.forEach((e:any)=>{
-          e.fund_type="N" 
-         })
-      },
-      error => {
-        this.HandleMessage(true, MessageType.Sucess,
-          this.smsArray.length+'Demand SMS Send Successfully...');
-        console.error('Error sending SMS:', error);
-        this.smsArray=[];
-        this.dataSource.data.forEach((e:any)=>{
-          e.fund_type="N" 
-         })
+    // Ensure the percentage is capped between 0 and 100
+    return Math.min(Math.max(percentage, 0), 100);
+  }
+  generateAndSendUrls() {
+    
+    this.isLoading=true;
+    this.dataSource.data.forEach((e:any)=>{
+      if(e.fund_type=="Y") {
+        
+        const abc = this.generateUrl(e);
+        const requests =this.sendAllSms(abc);
+        forkJoin(requests).subscribe(
+          results => {
+            this.smsCount+=1;
+            this.percentage = this.convertToPercentage(this.smsCount);
+            console.log(this.smsCount);
+            
+            this.responses = results;
+            this.HandleMessage(true, MessageType.Sucess,
+              this.smsCount+'Demand SMS Send Successfully...');
+            console.log('SMS responses:', results);
+            // this.smsArray=[];
+            // this.dataSource.data.forEach((e:any)=>{
+            //   e.fund_type="N" 
+            //  })
+          },
+          error => {
+            this.smsCount+=1;
+            this.percentage = this.convertToPercentage(this.smsCount);
+            this.HandleMessage(true, MessageType.Sucess,
+              this.smsCount+'Demand SMS Send Successfully...');
+            console.error('Error sending SMS:', error);
+            // this.smsArray=[];
+            // this.dataSource.data.forEach((e:any)=>{
+              // e.fund_type="N" 
+            //  })
+          }
+        );
+        setTimeout(() => {
+          this.isLoading = false;
+
+        }, 3000);
       }
-    );
+     })
+    // this.urls = this.smsArray.map(loan => this.generateUrl(loan));
+    // const requests = this.urls.map(url => this.sendAllSms(url));
+
+    
   }
   sendAllSms(url: string): Observable<any> {  
     return this.http.get(url);
@@ -497,25 +532,19 @@ debugger
   }
   setUnique( row, event) {
     row.fund_type = event.target.checked ? 'Y' : 'N';
-    debugger
+    
      }
+     checkIfExists(array: any[], key: string, value: any): boolean {
+      return array.some(item => item[key] == value);
+    }
      sendSMS(){
-      this.smsArray=[];
-      this.dataSource.data.forEach((e:any)=>{
-        if(e.fund_type=="Y"){
-          this.smsArray.push(e);
-          // this.generateUrl(e);
-          console.log(this.smsArray);
-          
-        }
-       })//to be continue///
-       if(this.smsArray.length>0){
-          this.generateAndSendUrls()
-       }
-       else{
-        this.HandleMessage(true, MessageType.Error,
-          'Please ckecked at least one SEND SMS CheckBox');
-       }
+      // if(this.checkIfExists(this.dataSource.data,"fund_type","Y")){
+        this.generateAndSendUrls()
+      // }else{
+      //   this.HandleMessage(true, MessageType.Error,
+      //     'Please ckecked at least one SEND SMS CheckBox');
+      //  }
+     
      }
      selectAll(){
       this.checkedAllSMSFlag=!this.checkedAllSMSFlag;
@@ -681,9 +710,9 @@ debugger
     )
     switch(this.selectedValue1){
       case "Account Type": 
-      debugger
+      
       this.filteredArray=this.reportData.filter(e=>e.acc_name?.toLowerCase().includes(filterValue.toLowerCase())==true)
-       debugger
+       
       break;
       case "Block": 
       this.filteredArray=this.reportData.filter(e=>e.block_name?.toLowerCase().includes(filterValue.toLowerCase())==true)

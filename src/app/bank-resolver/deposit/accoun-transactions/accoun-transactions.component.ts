@@ -162,6 +162,7 @@ export class AccounTransactionsComponent implements OnInit {
   accountType: any;
   misSum=0;
   fdSum=0
+  totalDueRD=0;
   hidegl:boolean=true;
   glHead:any;
   interestPeriod=0
@@ -1492,12 +1493,18 @@ getjoinholder(){
             this.rdInstallemntsForSelectedAcc = [];
             this.rdInstallemntsForSelectedAcc = Utils.ChkArrNotEmptyRetrnEmptyArr(rdInstallamentRes);
             let i = 1;
+            // let j = 0;
             this.paidRDinstlNo=0
+            this.totalDueRD=0
             this.rdInstallemntsForSelectedAcc.forEach(e => {
               if (e.status.toLocaleLowerCase() === 'p') {
                 this.paidRDinstlNo=Number(this.paidRDinstlNo)+1;
                 this.rdInstallamentOption.push(acc.instl_amt * i);
                 i = i + 1;
+              }
+              else{
+                // j=j+1
+                this.totalDueRD+=acc.instl_amt;
               }
             });
             if(this.rdInstallemntsForSelectedAcc.length == this.paidRDinstlNo){
@@ -3421,7 +3428,7 @@ getjoinholder(){
                   // trans_mode:'Close'
                 });
                 if (this.accDtlsFrm.controls.intt_amt.value * this.counter1 == 0) {
-                  //  debugger;
+                   debugger;
                   if (accTypCode == 5) {
                     this.transType.key = 'D';
                     this.transType.Description = 'Deposit'
@@ -3461,7 +3468,7 @@ getjoinholder(){
                     
                   }                 
               }
-                // marker
+                debugger
                 console.log(this.resbrnCD1[0])
               if(accTypCode==2 && (this.resbrnCD1[0].intt_trf_type=='H' ||this.resbrnCD1[0].intt_trf_type=='Q'||this.resbrnCD1[0].intt_trf_type=='Y'))
                 {
@@ -3591,28 +3598,27 @@ getjoinholder(){
         this.afMat = afterMatured
         debugger
         console.log(afterMatured)
-        this.sys.ardbCD!='20'?this.tdDefTransFrm.controls.opening_dt.setValue(this.datepipe.transform(this.sys.CurrentDate,"dd/MM/yyyy")):this.tdDefTransFrm.controls.opening_dt.setValue(this.accNoEnteredForTransaction.mat_dt.toString().substr(0, 10))
+        this.sys.ardbCD!='20'&& this.sys.ardbCD!='21'?this.tdDefTransFrm.controls.opening_dt.setValue(this.datepipe.transform(this.sys.CurrentDate,"dd/MM/yyyy")):this.tdDefTransFrm.controls.opening_dt.setValue(this.accNoEnteredForTransaction.mat_dt.toString().substr(0, 10))
         this.onDepositePeriodChange()
       }
       else{
         debugger
-        this.sys.ardbCD!='20'?this.tdDefTransFrm.controls.opening_dt.setValue(this.accNoEnteredForTransaction.mat_dt.toString().substr(0, 10),):this.tdDefTransFrm.controls.opening_dt.setValue(this.datepipe.transform(this.sys.CurrentDate,"dd/MM/yyyy"))
+        this.sys.ardbCD!='20'&& this.sys.ardbCD!='21'?this.tdDefTransFrm.controls.opening_dt.setValue(this.accNoEnteredForTransaction.mat_dt.toString().substr(0, 10),):this.tdDefTransFrm.controls.opening_dt.setValue(this.datepipe.transform(this.sys.CurrentDate,"dd/MM/yyyy"))
         this.onDepositePeriodChange();
         debugger
         
-        
       }
-        if((this.sys.ardbCD!='20' && this.sys.ardbCD!='3' && this.sys.ardbCD!='7') && (afterMatured == true && (accTypCode === 2 || accTypCode == 4||accTypCode == 3))) {
+        if(( this.sys.ardbCD!='21'&& this.sys.ardbCD!='20' && this.sys.ardbCD!='3' && this.sys.ardbCD!='7') && (afterMatured == true && (accTypCode === 2 || accTypCode == 4||accTypCode == 3||accTypCode == 5))) {
 
         //  if(afterMatured == true && (accTypCode === 2 || accTypCode == 4)) {
           this.modalRefClose = this.modalService.show(this.afterMatRenewal,
             { class: 'modal-lg', keyboard: false, backdrop: true, ignoreBackdropClick: true })
         
-        
-        const temp_gen_param = new p_gen_param();
+
+            const temp_gen_param = new p_gen_param();
             temp_gen_param.ad_acc_type_cd=2;//for simple interest calculation like FD //PARTHA
             temp_gen_param.ad_prn_amt=(this.sys.ardbCD=='4'&&(accTypCode === 2 || accTypCode == 4))?this.accNoEnteredForTransaction.prn_amt:this.accNoEnteredForTransaction.prn_amt+this.accNoEnteredForTransaction.intt_amt;///13
-            temp_gen_param.ai_period=this.diff1-1;//for subtract current date //PARTHA
+             temp_gen_param.ai_period=this.diff1-1;//for subtract current date //PARTHA
             temp_gen_param.ad_intt_rt = 4 //Need to be change in future
             temp_gen_param.as_intt_type = "O" 
 debugger
@@ -4263,6 +4269,15 @@ debugger
         return;
       }
     }
+    else if(accTypeCd === 6 && this.selOprn2?.oprn_desc.toLocaleLowerCase() == 'rd installment'){
+      debugger
+      if(this.td.amount.value>this.totalDueRD){
+        this.HandleMessage(true, MessageType.Error,
+          'Amount can not be greater than total due Amount.');
+        this.td.amount.setValue('');
+      }
+     
+    }
       // if (minBal > 0) {     
       //   if ((+this.td.amount.value) < minBal) {
       //     const cnfrm = confirm('Amount is less than minimum balance ' + minBal + '. Press Ok to continue, else Cancel');
@@ -4464,7 +4479,7 @@ debugger
     //   })
     // }
     else if(this.td.trf_type.value === 'T' && (this.accTransFrm.controls.acc_type_cd.value==9||this.accTransFrm.controls.acc_type_cd.value==1||this.accTransFrm.controls.acc_type_cd.value==8||this.accTransFrm.controls.acc_type_cd.value==7)){
-        if(this.td.amount.value!=this.TrfTotAmt){
+        if((Number(this.td.closeIntrest.value)>0?Number(this.td.amount.value)+Number(this.td.closeIntrest.value):Number(this.td.amount.value))!=this.TrfTotAmt){
           this.HandleMessage(true, MessageType.Error, 'Total Amount can not be more than Transaction amount');
           return;
         }
@@ -5111,9 +5126,9 @@ debugger
       else if (selectedOperation.oprn_desc.toLocaleLowerCase() === 'renewal') {
         debugger
         console.log(toReturn)
-        toReturn.curr_prn_recov = accTypeCd === 5 ? this.td.amount.value : ((+this.td.amount.value) + (+this.td.interest.value));
+        toReturn.curr_prn_recov = accTypeCd === 5 ? this.td.td_def_mat_amt.value: ((+this.td.amount.value) + (+this.td.interest.value));
         toReturn.ovd_prn_recov = accTypeCd === 5 ? this.accNoEnteredForTransaction.prn_amt : this.accNoEnteredForTransaction.prn_amt;
-        toReturn.curr_intt_recov = accTypeCd === 5 ? this.misSum: this.accNoEnteredForTransaction.intt_amt;
+        toReturn.curr_intt_recov = accTypeCd === 5 ? (this.afterMatRenewal? +this.misSum+this.matInt:this.misSum): this.accNoEnteredForTransaction.intt_amt;
         toReturn.ovd_intt_recov = 0;
         if(accTypeCd==2)
         console.log(this.accDtlsFrm.controls.intt_trf_type.value.toLowerCase())
@@ -5134,7 +5149,7 @@ debugger
         
         }
         if(accTypeCd===5){
-          toReturn.amount=this.td.trans_type_key.value=='D'?this.misSum:0
+          toReturn.amount=(this.td.trans_type_key.value=='D'&&this.afterMatRenewal)?this.td.curr_intt_recov.value+this.misSum:(this.td.trans_type_key.value=='D')?this.misSum:0
         }
         //to be change (this.sys.ardbCD=='26') && 
         if(accTypeCd === 4 &&  this.afMat==true){
@@ -5553,7 +5568,7 @@ debugger
     toReturn.oprn_instr_cd = this.accNoEnteredForTransaction.oprn_instr_cd;
     toReturn.opening_dt = Utils.convertStringToDt(this.td.opening_dt.value);
     // toReturn.prn_amt = (+this.td.amount.value);
-    toReturn.prn_amt = (+this.f.acc_type_cd.value)==5?(+this.td.amount.value):((+this.td.amount.value) + (+this.td.curr_intt_recov.value)); //PARTHA
+    toReturn.prn_amt = (this.td.acc_type_cd.value==5&& this.afterMatRenewal)?((+this.td.amount.value) + (+this.td.curr_intt_recov.value)):(+this.td.amount.value); //PARTHA
     toReturn.intt_amt = (+this.td.interest.value);
     toReturn.dep_period = depPrd;
     toReturn.instl_amt = this.accNoEnteredForTransaction.instl_amt;

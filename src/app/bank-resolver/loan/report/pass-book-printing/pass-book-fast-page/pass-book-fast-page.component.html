@@ -32,7 +32,14 @@
   </ng-template>
 
 <div id="fastPage" style="font-family:Arial, Helvetica, ui-sans-serif;font-size:14px;" hidden>
-    <div style="margin-top: 52%; ">&nbsp;</div>
+    <div style="margin-top: 52%; " *ngIf="sys.ardbCD!='25'">&nbsp;</div>
+    <div style="margin-top: 47%; " *ngIf="sys.ardbCD=='25'">&nbsp;</div>
+    <div class="form-row" *ngIf="sys.ardbCD=='25'" style="text-align: center;margin-left: 10%;margin-bottom:1%;">
+      <h3>Katwa-Kalna Co-op. Agriculture and Rural Development Bank Ltd.<br>
+        Udyag Bhaban K.G.Bose Sarani,Katwa,Purba Bardhaman,W.B-713130<br>
+        Phone:03453255138/9564589358
+      </h3>
+    </div>
     <div class="form-row" style="padding-left: 10%;">
         <div style="width: 30%;"><b>Loan Id:  </b><b style="font-size: x-large;">{{pServ.accNum}}</b></div>
         <div style="text-align: right;width: 30%;"><b>Branch:  </b> {{branchName}}</div>

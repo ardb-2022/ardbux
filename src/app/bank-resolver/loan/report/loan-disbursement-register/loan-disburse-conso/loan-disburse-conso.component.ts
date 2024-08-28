@@ -15,11 +15,11 @@ import { CommonServiceService } from 'src/app/bank-resolver/common-service.servi
 import html2canvas from 'html2canvas';
 import jspdf from 'jspdf';
 @Component({
-  selector: 'app-loan-disburse-act-wise',
-  templateUrl: './loan-disburse-act-wise.component.html',
-  styleUrls: ['./loan-disburse-act-wise.component.css']
+  selector: 'app-loan-disburse-conso',
+  templateUrl: './loan-disburse-conso.component.html',
+  styleUrls: ['./loan-disburse-conso.component.css']
 })
-export class LoanDisburseActWiseComponent implements OnInit {
+export class LoanDisburseConsoComponent {
 
   public static operations: mm_operation[] = [];
   @ViewChild('mattable') htmlData:ElementRef;
@@ -27,7 +27,7 @@ export class LoanDisburseActWiseComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource = new MatTableDataSource()
-  displayedColumns: string[] = ['block_name','service_area_name','purpose','fund_type','acc_desc','loan_id','party_name','disb_dt','disb_amt'];
+  displayedColumns: string[] = ['block_name','brn_cd','purpose','fund_type','acc_desc','loan_id','party_name','disb_dt','disb_amt'];
   modalRef: BsModalRef;
   isOpenFromDp = false;
   isOpenToDp = false;
@@ -113,8 +113,8 @@ export class LoanDisburseActWiseComponent implements OnInit {
     name:'Block'
   },
   {
-    value:'Service Area',
-    name:'Service Area'
+    value:'Branch Name',
+    name:'Branch Name'
   },
   {
     value:'Activity',
@@ -143,8 +143,8 @@ selectItems1=[
     name:'Block'
   },
   {
-    value:'Service Area',
-    name:'Service Area'
+    value:'Branch Name',
+    name:'Branch Name'
   },
   {
     value:'Activity',
@@ -243,13 +243,13 @@ selectItems1=[
       const todate = this.reportcriteria.controls.toDate.value;
       var dt={
         "ardb_cd":this.sys.ardbCD,
-        "brn_cd":this.sys.BranchCode,
+        // "brn_cd":this.sys.BranchCode,
         // "acc_cd":this.reportcriteria.controls.acc_type_cd.value,
         "from_dt": this.fromdate.toISOString(),
         "to_dt": todate.toISOString()
       }
       debugger
-      this.svc.addUpdDel('Loan/PopulateLoanDisburseRegAll',dt).subscribe(data=>{console.log(data)
+      this.svc.addUpdDel('Loan/PopulateLoanDisburseRegAllConso',dt).subscribe(data=>{console.log(data)
         // this.reportData=data
          if(!data){
           this.comser.SnackBar_Nodata()
@@ -366,9 +366,9 @@ selectItems1=[
         this.firstGroup[i]=this.reportData[i].block_name
      }
      break;
-     case "Service Area": 
+     case "Branch Name": 
       for(let i=0;i<this.reportData.length;i++){
-        this.firstGroup[i]=this.reportData[i].service_area_name
+        this.firstGroup[i]=this.reportData[i].brn_cd
      }
      break;
       //  console.log(this.blockNames)
@@ -416,8 +416,8 @@ selectItems1=[
       case "Block": 
       this.filteredArray=this.reportData.filter(e=>e.block_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
       break;
-      case "Service Area": 
-      this.filteredArray=this.reportData.filter(e=>e.service_area_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
+      case "Branch Name": 
+      this.filteredArray=this.reportData.filter(e=>e.brn_cd?.toLowerCase().includes(this.bName.toLowerCase())==true)
       break;
       case "Activity": 
       this.filteredArray=this.reportData.filter(e=>e.activity_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
@@ -450,9 +450,9 @@ selectItems1=[
       for(let i=0;i<this.filteredArray1.length;i++){
         this.secondGroup[i]=this.filteredArray1[i].block_name
      }break;
-     case "Service Area": 
+     case "Branch Name": 
       for(let i=0;i<this.filteredArray1.length;i++){
-        this.secondGroup[i]=this.filteredArray1[i].service_area_name
+        this.secondGroup[i]=this.filteredArray1[i].brn_cd
      }break;
      case "Activity": 
      for(let i=0;i<this.filteredArray1.length;i++){
@@ -498,8 +498,8 @@ debugger
       case "Block": 
       this.filteredArray=this.filteredArray1.filter(e=>e.block_name?.toLowerCase().includes(this.bName1.toLowerCase())==true)
         break;
-      case "Service Area": 
-      this.filteredArray=this.filteredArray1.filter(e=>e.service_area_name?.toLowerCase().includes(this.bName1.toLowerCase())==true)
+      case "Branch Name": 
+      this.filteredArray=this.filteredArray1.filter(e=>e.brn_cd?.toLowerCase().includes(this.bName1.toLowerCase())==true)
         break;
         case "Activity": 
       this.filteredArray=this.filteredArray1.filter(e=>e.activity_name?.toLowerCase().includes(this.bName1.toLowerCase())==true)
@@ -532,8 +532,8 @@ debugger
       case "Block": 
       this.filteredArray=this.reportData.filter(e=>e.block_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
           break;
-      case "Service Area": 
-      this.filteredArray=this.reportData.filter(e=>e.service_area_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
+      case "Branch Name": 
+      this.filteredArray=this.reportData.filter(e=>e.brn_cd?.toLowerCase().includes(this.bName.toLowerCase())==true)
               break;
       case "Activity": 
       this.filteredArray=this.reportData.filter(e=>e.activity_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
@@ -572,8 +572,8 @@ debugger
       case "Block": 
       this.filteredArray=this.reportData.filter(e=>e.block_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
         break;
-        case "Service Area": 
-      this.filteredArray=this.reportData.filter(e=>e.service_area_name?.toLowerCase().includes(this.bName.toLowerCase())==true)
+        case "Branch Name": 
+      this.filteredArray=this.reportData.filter(e=>e.brn_cd?.toLowerCase().includes(this.bName.toLowerCase())==true)
         break;
         case "Activity": 
       this.filteredArray=this.reportData.filter(e=>e.activity_name?.toLowerCase().includes(this.bName.toLowerCase())==true)

@@ -893,6 +893,7 @@ export class TransactionapprovalComponent implements OnInit {
     this.tdDepTrans.brn_cd = this.sys.BranchCode; // localStorage.getItem('__brnCd');
     this.svc.addUpdDel<any>('Common/GetUnapprovedDepTrans', this.tdDepTrans).subscribe(
       res => {
+        // const filteredTransactions = res.filter(transaction => transaction.acc_type_cd !== 11);
         const tdDepTransRet = res as td_def_trans_trf[];
         this.vm = [];
         tdDepTransRet.forEach(element => {
@@ -927,6 +928,7 @@ export class TransactionapprovalComponent implements OnInit {
         this.filteredVm = this.filteredVm.sort((a, b) => (a.td_def_trans_trf.trans_cd < b.td_def_trans_trf.trans_cd ? -1 : 1));
         // this.tdDepTransGroup = this.groupBy(this.tdDepTransRet, (c) => c.acc_type_cd);
         this.isLoading = false;
+        debugger
       },
       err => { this.isLoading = false; }
     );

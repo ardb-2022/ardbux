@@ -154,7 +154,7 @@
             <input type="text" [readonly]="true" [value]="showTranDtlRe? 'R':'C'"
               class="form-control form-control-sm" formControlName="trans_mode" id="trans_mode">
           </div>
-          <div class="form-group col-4">
+          <div class="form-group col-3">
             <small for="dbs_acc_open_dt">Voucher Date</small>
             
           <div class="input-group">
@@ -179,6 +179,14 @@
             <option  value="T">Transfer</option>
           </select>
         </div>
+        <div class="form-group col-2" >
+          <small for="amount">Prev Principal Amt</small>
+          <input  type="text" class="form-control form-control-sm" [readonly]="true" formControlName="prev_prn_amt" >
+        </div>
+        <div class="form-group col-2" >
+          <small for="amount">Interest Amt</small>
+          <input  type="text" class="form-control form-control-sm" [readonly]="true" (keyup)="ChangeRenewintt($event)" formControlName="prev_intt_amt" >
+        </div>
         <div class="form-group col-2">
           <small for="ovd_intt_recov">TDS</small>
           <input type="text" (change)="applyTDS()" class="form-control form-control-sm"
@@ -186,17 +194,17 @@
         </div>
         <!-- (focusout)="onAmtChngDuringRenewal(); processInterest()" -->
         <div class="form-group col-3">
-          <small for="amount">Principal Amt<span class="text-danger">*</span> </small>
-          <input  type="text" class="form-control form-control-sm" formControlName="amount" id="amount" [readonly]="true"
+          <small for="amount">Total Principal Amt<span class="text-danger">*</span> </small>
+          <input  type="text" class="form-control form-control-sm" formControlName="amount" id="amount" 
           (focusout)="onAmtChngDuringRenewal(); processInterest()" >
         </div>
         <div class="form-group col-2" >
           <small for="curr_intt_recov">Ext Interest</small>
           <!-- (change)="inttCalOnClose()" -->
-          <input type="text"   class="form-control form-control-sm"(keyup)="ChangeRenewintt($event)"
+          <input type="number"   class="form-control form-control-sm"(keyup)="AddExtraIntt($event)"
             [(ngModel)]="exeintt">
         </div>
-        <div class="form-group col-2" [hidden]="!showBalance">
+        <div class="form-group col-2" [hidden]="!showBalance && manualInterestPut">
           <small for="amount">Balance</small>
           <input  type="text" class="form-control form-control-sm" [readonly]="true" formControlName="balance" id="balance" >
         </div>
@@ -402,7 +410,7 @@
     <div class="row" *ngIf="td.trf_type.value !== ''||this.tdDefTransFrmC.controls.trf_type.value!== ''">
       <div class="col-12 col-sm-6 col-md-12 mt-2">
        
-        <div *ngIf="showtransdetails">
+        <div *ngIf="showtransdetails && !manualInterestPut">
           <h4 class="customHeader">Transfer Details</h4>
           <section *ngFor="let l of td_deftranstrfList; let i=index">
             <div class="form-row">

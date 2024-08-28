@@ -141,6 +141,7 @@ export class ConsolidatedCashAccComponent implements OnInit ,AfterViewInit{
       }
       this.svc.addUpdDel('Finance/PopulateDailyCashAccountConso',dt).subscribe(data=>{console.log(data)
       this.reportData=data
+      this.reportData =  this.reportData.sort((a, b) => (a.srl_no > b.srl_no) ? 1 : -1);
       this.dataSource.data=this.reportData
       if(this.reportData.length==0){
         this.comser.SnackBar_Nodata()

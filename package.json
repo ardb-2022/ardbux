@@ -21,6 +21,7 @@
     "@angular/platform-browser": "^16.2.0",
     "@angular/platform-browser-dynamic": "^16.2.0",
     "@angular/router": "^16.2.0",
+    "@emailjs/browser": "^4.4.1",
     "@types/html-to-text": "^9.0.4",
     "angular-ng-autocomplete": "^2.0.12",
     "bootstrap": "^4.6.0",

@@ -33,6 +33,7 @@ export class CcTransComponent implements OnInit {
   isOpenODT:boolean=false;
   isOpenVDT:boolean=false;
   clickSave:Subscription
+  manualInterestPut:boolean=false;
   isLoading: boolean;
   showIns:boolean=true;
   showPTrns:boolean=true;
@@ -93,8 +94,7 @@ export class CcTransComponent implements OnInit {
   ShowHide:boolean=false;
   closeInt: any;
   showOnTDS:boolean=false;
-  exeintt:any=0
-  
+  exeintt:number=0
   constructor(public invComServ:InvTranServService ,private svc: RestService, private msg: InAppMessageService,
     private frmBldr: FormBuilder, public datepipe: DatePipe, private router: Router,
     private modalService: BsModalService, private http:HttpClientModule, public i_trans:InvestmentTransactionsComponent) {
@@ -210,6 +210,8 @@ export class CcTransComponent implements OnInit {
       approval_status: [''],
       mat_val:[''],
       voucher_dt:[this.voucher_dt],
+      prev_prn_amt:[0],
+      prev_intt_amt:[0]
 
     })
     this.tdDefTransFrmC = this.frmBldr.group({
@@ -365,6 +367,9 @@ export class CcTransComponent implements OnInit {
     } 
   }
   public setTrnsDtlsFrmForm() {
+    this.tdDefTransFrm.controls.prev_prn_amt.setValue(this.accNoEnteredForTransaction.prn_amt);
+    this.tdDefTransFrm.controls.prev_intt_amt.setValue(this.accNoEnteredForTransaction.intt_amt);
+    debugger
     // if(this.masterModel.tmdepositInv.acc_status=='O'){
     //   this.editDeleteMode =false;
     // }else{this.editDeleteMode=true}........MARKAR
@@ -2019,7 +2024,7 @@ debugger
         toReturn.curr_prn_recov = Number(this.td.amount.value) + Number(this.td.interest.value);
         toReturn.ovd_prn_recov = this.accNoEnteredForTransaction3.prn_amt;
         // toReturn.curr_intt_recov = Number(this.accDtlsFrm.controls.mat_amt.value)==Number(this.td.amount)?this.accDtlsFrm.controls.intt_amt.value:'';
-        toReturn.curr_intt_recov =this.exeintt?(+this.exeintt):0+(+this.masterModel.tmdepositInv.intt_amt);
+        toReturn.curr_intt_recov =this.exeintt?(this.exeintt):0+(+this.masterModel.tmdepositInv.intt_amt);
         toReturn.ovd_intt_recov = Number(this.td.ovd_intt_recov.value);
         console.log(this.td.amount.value,this.accDtlsFrm.controls.mat_amt.value);
         
@@ -2841,15 +2846,44 @@ debugger
   onBackClick() {
     this.router.navigate([this.sys.BankName + '/la']);
   }
-  ChangeRenewintt(i:any){
+  AddExtraIntt(i:any){
     if(this.td.amount.value){
       this.exeintt=0;
-      this.exeintt=((+i.target.value)+(+this.accNoEnteredForTransaction.intt_amt));
+      if(i<0){
+        this.exeintt=(Number(this.accNoEnteredForTransaction.intt_amt)- Number(i.target.value));
+        this.td.prev_intt_amt.setValue(Number(this.accNoEnteredForTransaction.intt_amt)- Number(i.target.value));
+        this.td.amount.setValue(Number(this.accNoEnteredForTransaction.prn_amt) + (Number(this.accNoEnteredForTransaction.intt_amt))-(i.target.value)-(this.td.ovd_intt_recov.value?this.td.ovd_intt_recov.value:0))
+      }
+      else{
+        this.exeintt=(Number(this.accNoEnteredForTransaction.intt_amt)+ Number(i.target.value));
+        this.td.prev_intt_amt.setValue( Number(this.accNoEnteredForTransaction.intt_amt)+ Number(i.target.value));
+        this.td.amount.setValue(Number(this.accNoEnteredForTransaction.prn_amt)+(Number(this.accNoEnteredForTransaction.intt_amt))+ (Number(i.target.value)) - Number(this.td.ovd_intt_recov.value?this.td.ovd_intt_recov.value:0))
+      }
       // this.td.amount.setValue((this.accNoEnteredForTransaction.prn_amt+this.accNoEnteredForTransaction.intt_amt)-this.td.ovd_intt_recov.value)
       // this.accDtlsFrm.controls.mat_amt.setValue((this.accNoEnteredForTransaction.prn_amt+this.accNoEnteredForTransaction.intt_amt)-this.td.ovd_intt_recov.value)
-      this.td.amount.setValue((this.accNoEnteredForTransaction.prn_amt+this.accNoEnteredForTransaction.intt_amt+(+i.target.value))-(this.td.ovd_intt_recov.value?this.td.ovd_intt_recov.value:0))
       
     debugger
+    }
+  }
+  ChangeRenewintt(i:any){
+    if(this.accNoEnteredForTransaction.intt_amt!=i){
+      this.manualInterestPut=true;
+      debugger
+      this.tdDefTransFrm.patchValue({
+        trans_type: 'Deposit',
+        trans_type_key: 'D',
+        balance:0,
+        amount:((+this.accNoEnteredForTransaction.prn_amt +(+this.tdDefTransFrm.controls.prev_intt_amt.value)))-(this.td.ovd_intt_recov.value?this.td.ovd_intt_recov.value:0)
+      })
+      this.showBalance=false;
+      this.td_deftranstrfList=[];
+      this.showtransdetails=false;
+      // this.td.amount.setValue(((this.accNoEnteredForTransaction.prn_amt+this.accNoEnteredForTransaction.intt_amt)-(+i.target.value))-(this.td.ovd_intt_recov.value?this.td.ovd_intt_recov.value:0))
+      
+    debugger
+    }else{
+      this.manualInterestPut=false;
+      this.td.amount.setValue((this.accNoEnteredForTransaction.prn_amt+this.accNoEnteredForTransaction.intt_amt+(+i.target.value))-(this.td.ovd_intt_recov.value?this.td.ovd_intt_recov.value:0))
     }
   }
 }

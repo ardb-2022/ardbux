@@ -87,7 +87,7 @@ export class LockerOpeningComponent implements OnInit {
   disableCustomerName = true;
   disableAll = true;
   disableAccountTypeAndNo = true;
-
+  selectedLocker:any;
   operationType = '';
   ddsAgent:any;
   showAlert = false;
@@ -120,6 +120,7 @@ export class LockerOpeningComponent implements OnInit {
   customerList: mm_customer[] = [];
   suggestedCustomer: mm_customer[];
   suggestedCustomerSaving: mm_customer[];
+  suggestedLockerData: tm_locker[];
   suggestedCustomerSecurity: mm_customer[];
   suggestedSBCustomer: mm_customer[];
   suggestedCustomerSignatories: mm_customer[];
@@ -659,10 +660,12 @@ assignLockerData(){
     debugger
     console.log(this.lockerMaster,"ppppp");
     console.log(this.tm_locker.locker_id);
-    
-        this.loc_type=this.lockerMaster.filter(e=>e.locker_id==this.tm_locker.locker_id)[0].locker_type;
-      
-        this.loc_status=this.lockerMaster.filter(e=>e.locker_id==this.tm_locker.locker_id)[0].locker_status;
+    console.log(this.lockerMaster.filter(e=>e.locker_id==this.tm_locker.locker_id));
+    const locker = this.lockerMaster.find(l => l.locker_id.toLowerCase() == this.tm_locker.locker_id.toLowerCase());
+    locker ? locker.locker_type : undefined;
+    this.selectedLocker= locker ? locker: undefined;
+        this.loc_type=locker ? locker.locker_type : undefined;
+        this.loc_status=locker ? locker.locker_status : undefined;
         debugger
     if( this.lockerMaster){
       this.getLockerRate();
@@ -680,10 +683,17 @@ assignLockerData(){
       this.RentAmount=0
       this.lockerRent=data
       if(this.lockerRent){
-        this.RentAmount=this.lockerRent.filter(e=>e.locker_type==this.loc_type)[0].rentamt;
+        this.RentAmount=this.lockerRent.filter(e=>e.locker_type==this.loc_type)[0]?.rentamt;
         this.masterModel.tddeftrans.ovd_intt_recov=Math.round((this.RentAmount*18)/100);
         this.masterModel.tddeftrans.amount=Math.round((this.RentAmount*18)/100)+this.RentAmount;
-
+        if(this.RentAmount>0){
+          this.masterModel.tddeftrans.ovd_intt_recov=Math.round((this.RentAmount*18)/100);
+          this.masterModel.tddeftrans.amount=Math.round((this.RentAmount*18)/100)+this.RentAmount;
+        }
+        else{
+          this.masterModel.tddeftrans.ovd_intt_recov=0;
+          this.masterModel.tddeftrans.amount=0;
+        }
         this.td_deftrans=this.masterModel.tddeftrans
         debugger
       }
@@ -1525,6 +1535,35 @@ debugger
     }
   }
 
+  public suggestLockerCustomer(): void {
+    if (this.tm_locker.agreement_no.length > 2) {
+      const prm = new p_gen_param();
+      this.isLoading=true;
+      prm.as_cust_name = this.tm_locker.agreement_no.toLowerCase();
+      prm.ardb_cd=this.sys.ardbCD
+      if(prm.as_cust_name.length>0){
+      this.svc.addUpdDel<any>('Locker/GetLockerAccDtls', prm).subscribe(
+        res => {
+          this.isLoading=false;
+          if (undefined !== res && null !== res && res.length > 0) {
+            this.showNoResult=false;
+            this.suggestedLockerData = res;
+            console.log(this.suggestedLockerData);
+          } else {
+            this.showNoResult=false;
+
+            this.suggestedLockerData = [];
+          }
+        },
+        err => { this.isLoading = false; }
+      );
+      }
+    } else {
+      this.showNoResult=false;
+
+      this.suggestedLockerData = null;
+    }
+  }
 
   // public suggestCustomerSignatories(idx: number): void {
 
@@ -2824,6 +2863,16 @@ debugger
      if(!Utils.preventAlphabet(e.target.value,e.key)){
        e.preventDefault();
      }
+  }
+  selectLockerData(e){
+    this.suggestedLockerData=null;
+    this.tm_locker.agreement_no=e.agreementNo;
+    debugger
+    if(this.tm_locker.agreement_no){
+      
+      debugger
+      this.GetUnapprovedLockerTrans();
+    }
   }
   // getAccountOpeningData(cust: mm_customer) {
 
