@@ -18,7 +18,7 @@ import { CommonServiceService } from '../common-service.service';
   providers:[DatePipe]
 })
 export class LoginComponent implements OnInit {
-  
+
   // private apiUrl = 'https://api.ipify.org/?format=json';
   private apiUrl = 'https://api.ipify.org?format=json';
   // https://api64.ipify.org/?format=json
@@ -60,7 +60,7 @@ export class LoginComponent implements OnInit {
     private cms:CommonServiceService
     // @Inject(WINDOW) private window:Window
     ) {
-     
+
      }
 
   ngOnInit(): void {
@@ -73,7 +73,7 @@ export class LoginComponent implements OnInit {
       // this.getLogdUser();
       //  this.updateLoginStatus();
     }
-   
+
     // alert("hii")
     // const getmac = require('getmac')
     // //console.log(getmac)
@@ -107,13 +107,13 @@ export class LoginComponent implements OnInit {
 
   }
 
-  
+
   encriptPass(){
     const text = "Partha@123";
 
     // Convert the text to hexadecimal
     const hexText = Array.from(text, char => char.charCodeAt(0).toString(16)).join('');
-    
+
     console.log(hexText);
     debugger
     }
@@ -121,47 +121,47 @@ export class LoginComponent implements OnInit {
   getLogdUser(){
     let login = new LOGIN_MASTER();
     login.user_id = localStorage.getItem('itemUX');
-    login.brn_cd = localStorage.getItem('BUX'); 
+    login.brn_cd = localStorage.getItem('BUX');
     login.ardb_cd=this.sys.ardbCD;
-  
+
     this.cms.addUpdDel('Sys/GetUserIDStatus', login).subscribe(
       res => {
-        
-      
+
+
         this.selectalluser=res
         this.filterUser=this.selectalluser.filter(x => x.login_status == 'Y')
-      
+
         //console.log(this.filterUser);
         for(let i=0;i<this.filterUser.length;i++){
           if(this.filterUser[i].user_id ==localStorage.getItem('itemUX')){
             this.filterUser[i].login_status='N';
-          
+
         //console.log(this.filterUser);
-      
+
         this.filterUser.forEach(e => {
           e.ardb_cd=this.sys.ardbCD
           e.brn_cd=localStorage.getItem('BUX')
          });
-    
+
          this.cms.addUpdDel('Sys/UpdateUserIdStatus', this.filterUser).subscribe(
           res => {
             //console.log(res)
-            
+
           },)
-         
+
         localStorage.removeItem('itemUX')
         localStorage.removeItem('BUX')
 
           }
 
        }
-        
-       
-        
-        
+
+
+
+
       })
 
-   
+
  }
   getArdbCode(e: any) {
     this.wrongAttamt=0;
@@ -175,7 +175,7 @@ export class LoginComponent implements OnInit {
       this.ARBD="2";
     }
     else if(this.f.ardbbrMst.value=='200' || this.f.ardbbrMst.value=='300' ||
-     this.f.ardbbrMst.value=='301'|| this.f.ardbbrMst.value=='302'|| 
+     this.f.ardbbrMst.value=='301'|| this.f.ardbbrMst.value=='302'||
      this.f.ardbbrMst.value=='303'||this.f.ardbbrMst.value=='304'||
      this.f.ardbbrMst.value=='305'||this.f.ardbbrMst.value=='306'||
      this.f.ardbbrMst.value=='307'||this.f.ardbbrMst.value=='308'){
@@ -193,14 +193,14 @@ export class LoginComponent implements OnInit {
     else{
       this.ARBD=this.f.ardbbrMst.value;
     }
-    
+
     var dt = {
       "ardb_cd": this.ARBD,
       "user_id": this.f.username.value
     }
     this.isLoading=true;
     this.rstSvc.addUpdDel('Mst/GetUserType', dt).subscribe(data => { //console.log(data)
-       
+
        if(data){
         this.userData = data;
         this.isLoading=false;
@@ -211,7 +211,7 @@ export class LoginComponent implements OnInit {
           this.loginForm.invalid;
           return true;
         }
-        
+
        }
        else{
         this.showAlert=true;
@@ -219,7 +219,7 @@ export class LoginComponent implements OnInit {
         this.isLoading=false;
         return
        }
-       
+
       },
       err => {
         this.isLoading = false;
@@ -231,9 +231,9 @@ export class LoginComponent implements OnInit {
    this.bankFullName=this.ardbBrnMst.filter(x=>x.ardB_CD==this.f.ardbbrMst.value)[0]?.full_name
     // let bankName2=this.ardbBrnMst.filter(x=>x.ardB_CD=='100')[0].bank_name
     debugger
-    
+
     localStorage.setItem('__ardb_cd',this.ARBD);
-    
+
     localStorage.setItem('__bName', bankName);
 
     this.router.navigate([bankName + '/login']);
@@ -264,14 +264,14 @@ export class LoginComponent implements OnInit {
       login.password = hexText;
       login.brn_cd = this.f.branch.value;
       this.nm = this.ardbBrnMst.find(x => x.ardB_CD == this.f.ardbbrMst.value)
-      
+
       // this.nm.name = this.nm.name.substr(0,this.nm.name.length-10)
       // this.nm.name = this.nm.name +' Co-Operative Agriculture & Rural Development Bank Ltd.'
       localStorage.setItem('ardb_name', this.bankFullName)
       localStorage.setItem('report_footer', 'This Report Is Generated Through CFS-2022 ')
-     
+
       if( this.f.ardbbrMst.value=='26'){
-        let ardb_addrs=` H.O.: Old Court Compound, PO+PS- Burdwan, Purba Bardhaman- 713101 
+        let ardb_addrs=` H.O.: Old Court Compound, PO+PS- Burdwan, Purba Bardhaman- 713101
         Contact No: (0342) 2662390/ 9800960007`
         localStorage.setItem('ardb_addr', ardb_addrs)
       }
@@ -283,7 +283,7 @@ export class LoginComponent implements OnInit {
         let ardb_addrs=''
         localStorage.setItem('ardb_addr', ardb_addrs)
       }
-      
+
       localStorage.setItem('itemUX', this.f.username.value)
       localStorage.setItem('BUX', this.f.branch.value)
       this.rstSvc.addUpdDel<any>('Mst/GetUserDtls', login).subscribe(
@@ -295,7 +295,7 @@ export class LoginComponent implements OnInit {
             this.wrongAttamt+=1;
             localStorage.setItem('W_attempt',  this.wrongAttamt);
 
-            
+
             if(this.wrongAttamt==1){
               this.showAlert = true;
               this.isLoading=false;
@@ -325,12 +325,12 @@ export class LoginComponent implements OnInit {
               this.isLoading=false;
               this.alertMsg = `Invalid UserName Or Password,(Wrong Attamt - ${this.wrongAttamt})`;
             }
-  
+
             debugger
           }
           else {
             //console.log(res[0])
-  
+
             if (res[0].login_status === "Y") {
               this.showAlert = true;
               this.isLoading=false;
@@ -345,17 +345,17 @@ export class LoginComponent implements OnInit {
               var dt = this.brnDtls.find(x => x.brn_cd == this.f.branch.value)
               // this.getPrivateIP()
               this.getBranchIp(dt).then(response => {
-          
+
                 if (response == true) {
                   res[0].login_status = 'Y';
                   res[0].ip = localStorage.getItem('ipAddress');
                   this.updateUsrStatus(res[0]);
                   this.getSystemParam();
-            
+
                 }
-                
+
                 else {
-  
+
                 }
                 //  this.isLoading=false;
               })
@@ -371,11 +371,11 @@ export class LoginComponent implements OnInit {
       err => {
         this.isLoading = false;
       };
-      
+
     }
-    
+
   }
-  
+
   closeAlert() {
     this.showAlert = false;
   }
@@ -394,7 +394,7 @@ export class LoginComponent implements OnInit {
 
   private updateUsrStatus(usr: any): void {
     this.rstSvc.addUpdDel('Mst/Updateuserstatus', usr).subscribe(
-      
+
       res => {
         debugger
       },
@@ -406,7 +406,7 @@ export class LoginComponent implements OnInit {
     var dt={
       "ardb_cd":this.ARBD
     }
-   
+
     this.rstSvc.addUpdDel('Mst/GetSystemDate',dt).subscribe(data=>
       {
         //console.log(data)
@@ -414,7 +414,7 @@ export class LoginComponent implements OnInit {
         //console.log(this.dtData.sys_date)
         localStorage.setItem('__currentDate', this.dtData.sys_date); // Day initilaze
         localStorage.setItem('__prevDate',this.dtData.prev_date)
-     
+
     this.rstSvc.addUpdDel('Mst/GetSystemParameter', null).subscribe(
       sysRes => {
         try {
@@ -434,7 +434,7 @@ export class LoginComponent implements OnInit {
           //   })
             this.SBaccCD=RestService.bankconfigurationList.filter(e=>e.bank_name==__bName)[0].sms_provider
             localStorage.setItem('sbAccType', this.SBaccCD);
-            
+
           localStorage.setItem('L2L', 'true');
           // //console.log(localStorage.getItem('ipAddress'))
           // localStorage.setItem('__ardb_cd', this.f.ardbbrMst.value);
@@ -455,15 +455,15 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('__lastDt', this.systemParam.find(x => x.param_cd === '210')?.param_value);
           localStorage.setItem('__PrevStatus', this.systemParam.find(x => x.param_cd === '215')?.param_value);
           localStorage.setItem('__FinYearClose', this.systemParam.find(x => x.param_cd === '214')?.param_value);
-          
+
           this.f.ardbbrMst.value=='26'?localStorage.setItem('__neftPayDrAcc','401101000283' ):localStorage.setItem('__neftPayDrAcc','0' )
-        
+
     //  //console.log(this.dtData.sys_date)
         //  //console.log(localStorage.getItem('__currentDate'))
           this.msg.sendisLoggedInShowHeader(true);
           this.loginForm.disable();
         }
-      
+
         catch (exception) {
           this.isLoading = false;
           this.showAlert = true;
@@ -477,7 +477,7 @@ export class LoginComponent implements OnInit {
     this.isLoading = false;
   }
   )
-    
+
   }
 
   cancel() {
@@ -492,9 +492,9 @@ export class LoginComponent implements OnInit {
     localStorage.removeItem('ardb_name');
     localStorage.removeItem('__ardb_cd');
     localStorage.removeItem('ardb_addr');
-    localStorage.removeItem('L2L');    
+    localStorage.removeItem('L2L');
     localStorage.removeItem('sbAccType');
-    
+
     this.brnDtls.length = 0;
     this.loginForm.reset();
     this.loginForm.enable();
@@ -512,7 +512,7 @@ export class LoginComponent implements OnInit {
         this.brnDtls = res;
         this.brnDtls.sort((a, b) => a.brn_cd - b.brn_cd);
       },
-      err => { 
+      err => {
         this.isLoading = false;
        }
     );
@@ -525,8 +525,8 @@ export class LoginComponent implements OnInit {
     //     //console.log(res)
     //     this.ardbBrnMst = res;
     //   },
-    //   err => { 
-    //     // this.isLoading = false; 
+    //   err => {
+    //     // this.isLoading = false;
     //   }
     // );
     this.rstSvc.getlbr(environment.ardbUrl,null).subscribe(data=>{
@@ -535,7 +535,7 @@ export class LoginComponent implements OnInit {
         console.log(RestService.bankconfigurationList)
         this.ardbBrnMst = data;
       }
-      
+
       // this.menuConfigs=data;
     })
   }
@@ -568,7 +568,7 @@ export class LoginComponent implements OnInit {
       //     branch: this.userData[0].brn_cd
       //   })
       // }
-  
+
       // else{
       //   this.loginForm.patchValue({
       //     branch: ''
@@ -592,43 +592,43 @@ export class LoginComponent implements OnInit {
   }
   public getBranchIp(e: any) {
     this.loginForm.disable();
-    return new Promise((resolve, reject) => 
+    return new Promise((resolve, reject) =>
      {
       // this.http.get<{ ip: string }>(this.apiUrl).subscribe(
       //   data => {
           fetch('https://jsonip.com', { mode: 'cors'} ) .then(function (resp) {
             return resp.json();
-          }) .then((ip) => { 
+          }) .then((ip) => {
             this.ipAddress = ip.ip;
             debugger
           // console.log(data)
-          
+
           const myIP =  this.ipAddress.split(",");
           localStorage.setItem('ipAddress',this.ipAddress)
           // localStorage.setItem('ipAddress',myIP[0])
           this.isLoading = false;
 
-          // this.loginForm.enable();
-          // resolve(true);
+          this.loginForm.enable();
+          resolve(true);
 
-          let ipMatched = false;
-          if (e.ip_address.indexOf(myIP[0]) !== -1) {
-             ipMatched = true; 
-            }
-      
-          if (!ipMatched) {
-            this.showAlert = true;
-            this.alertMsg = 'IP not allowed to access, contact support.';
-            this.loginForm.disable();
-            resolve(false);
-          } else {
-            this.loginForm.enable();
-            resolve(true);
-          }
-            console.log(ip); 
+          // let ipMatched = false;
+          // if (e.ip_address.indexOf(myIP[0]) !== -1) {
+          //    ipMatched = true;
+          //   }
+
+          // if (!ipMatched) {
+          //   this.showAlert = true;
+          //   this.alertMsg = 'IP not allowed to access, contact support.';
+          //   this.loginForm.disable();
+          //   resolve(false);
+          // } else {
+          //   this.loginForm.enable();
+          //   resolve(true);
+          // }
+            console.log(ip);
           });
           ////console.
-          
+
       //   },
       //   ipErr => {
       //     this.isLoading = false;
@@ -641,7 +641,7 @@ export class LoginComponent implements OnInit {
     )
 
   }
-  
+
 //   getPrivateIP(){
 //   //   this.rstSvc.addUpdDel('Loan/GetHostName1',null).subscribe(data => {
 //   //     //console.log(data)
@@ -649,58 +649,58 @@ export class LoginComponent implements OnInit {
 //   this.http.get('http://localhost/api.php').subscribe(data=>//console.log(data))
 // }
 //   getPrivateIP(){
-//     var RTCPeerConnection = window.RTCPeerConnection ;  
-//     if (RTCPeerConnection)(function() {  
-//         var rtc = new RTCPeerConnection({  
-//             iceServers: []  
-//         });  
-//         if (1 || window.RTCPeerConnection) {  
-//             rtc.createDataChannel('', {  
-//                 // reliable: false  
-//             });  
-//         };  
-//         rtc.onicecandidate = function(evt) {  
-//             if (evt.candidate) grepSDP("a=" + evt.candidate.candidate);  
-//         };  
-//         rtc.createOffer(function(offerDesc) {  
-//             grepSDP(offerDesc.sdp);  
-//             rtc.setLocalDescription(offerDesc);  
-//         }, function(e) {  
-//             console.warn("offer failed", e);  
-//         });  
-//         var addrs = Object.create(null);  
-//         addrs["0.0.0.0"] = false;  
-      
-//         function updateDisplay(newAddr) {  
-//             if (newAddr in addrs) return;  
-//             else addrs[newAddr] = true;  
-//             var displayAddrs = Object.keys(addrs).filter(function(k) {  
-//                 return addrs[k];  
-//             });  
-//             // document.getElementById('list').textContent = displayAddrs.join(" or perhaps ") || "n/a"; 
+//     var RTCPeerConnection = window.RTCPeerConnection ;
+//     if (RTCPeerConnection)(function() {
+//         var rtc = new RTCPeerConnection({
+//             iceServers: []
+//         });
+//         if (1 || window.RTCPeerConnection) {
+//             rtc.createDataChannel('', {
+//                 // reliable: false
+//             });
+//         };
+//         rtc.onicecandidate = function(evt) {
+//             if (evt.candidate) grepSDP("a=" + evt.candidate.candidate);
+//         };
+//         rtc.createOffer(function(offerDesc) {
+//             grepSDP(offerDesc.sdp);
+//             rtc.setLocalDescription(offerDesc);
+//         }, function(e) {
+//             console.warn("offer failed", e);
+//         });
+//         var addrs = Object.create(null);
+//         addrs["0.0.0.0"] = false;
+
+//         function updateDisplay(newAddr) {
+//             if (newAddr in addrs) return;
+//             else addrs[newAddr] = true;
+//             var displayAddrs = Object.keys(addrs).filter(function(k) {
+//                 return addrs[k];
+//             });
+//             // document.getElementById('list').textContent = displayAddrs.join(" or perhaps ") || "n/a";
 //             //console.log(displayAddrs)
 //            ;
-//         }  
-      
-//         function grepSDP(sdp) {  
-//             var hosts = [];  
-//             sdp.split('\r\n').forEach(function(line) {  
-//                 if (~line.indexOf("a=candidate")) {  
-//                     var parts = line.split(' '),  
-//                         addr = parts[4],  
-//                         type = parts[7];  
-//                     if (type === 'host') updateDisplay(addr);  
-//                 } else if (~line.indexOf("c=")) {  
-//                     var parts = line.split(' '),  
-//                         addr = parts[2];  
-//                     updateDisplay(addr);  
-//                 }  
-//             });  
-//         }  
-//     })();  
-//     else {  
-//         document.getElementById('list').innerHTML = "<code>ifconfig| grep inet | grep -v inet6 | cut -d\" \" -f2 | tail -n1</code>";  
-//         document.getElementById('list').nextSibling.textContent = "In Chrome and Firefox your IP should display automatically, by the power of WebRTCskull."; 
+//         }
+
+//         function grepSDP(sdp) {
+//             var hosts = [];
+//             sdp.split('\r\n').forEach(function(line) {
+//                 if (~line.indexOf("a=candidate")) {
+//                     var parts = line.split(' '),
+//                         addr = parts[4],
+//                         type = parts[7];
+//                     if (type === 'host') updateDisplay(addr);
+//                 } else if (~line.indexOf("c=")) {
+//                     var parts = line.split(' '),
+//                         addr = parts[2];
+//                     updateDisplay(addr);
+//                 }
+//             });
+//         }
+//     })();
+//     else {
+//         document.getElementById('list').innerHTML = "<code>ifconfig| grep inet | grep -v inet6 | cut -d\" \" -f2 | tail -n1</code>";
+//         document.getElementById('list').nextSibling.textContent = "In Chrome and Firefox your IP should display automatically, by the power of WebRTCskull.";
 //   }
 // }
 }

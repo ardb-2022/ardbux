@@ -106,21 +106,25 @@
                            [(ngModel)]="tm_locker.rented_till" type="date" disabled
                           class="form-control form-control-sm text-capitalize" id="Rented Till" placeholder="Rented Till">
                       </div>
+
                       <div class="form-group col-4">
                         <small for="acc_no">Handling Authority</small>
                         <input  class="form-control form-control-sm" type="text" [(ngModel)]="handling_authority">
                       </div>
                       <div class="form-group col-8">
+
                         <small for="acc_no">Remarks</small>
                         <input  class="form-control form-control-sm" type="text" [(ngModel)]="remarks">
                       </div>
                       <div class="form-group col-4">
                         <small for="acc_no">Locker In Time</small>
+
                         <input  class="form-control form-control-sm" [readOnly]="true" type="text" [(ngModel)]="inTime">
                       </div>
                       <div class="form-group col-4">
                         <small for="acc_no">Locker Out Time</small>
                         <input  class="form-control form-control-sm" [readOnly]="true" type="text" [(ngModel)]="outTime">
+
                       </div>
                       <div class="form-group col-4">
                         <small for="acc_no">Locker Access</small><br>
