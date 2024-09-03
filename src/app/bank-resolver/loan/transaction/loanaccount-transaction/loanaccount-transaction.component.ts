@@ -2541,7 +2541,7 @@ debugger;
                    total_due: (+this.inttRetForUpdate.curr_intt_recov) + (+this.inttRetForUpdate.ovd_intt_recov) + (+this.inttRetForUpdate.penal_intt_recov) - this.td.curr_intt_recov.value - this.td.ovd_intt_recov.value - this.td.penal_intt_recov.value + +this.inttRetForUpdate.curr_prn_recov-(+this.td.curr_prn_recov.value) - (+this.td.adv_prn_recov.value) + this.inttRetForUpdate.ovd_prn_recov-(+this.td.ovd_prn_recov.value) ,
                  
                   })
-                  if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'){
+                  if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'|| this.sys.ardbCD=='25'){
                     this.modalRef = this.modalService.show(this.ContaiLoanChallan, { class: 'modal-xl' });
                   }
                   else{
@@ -2655,7 +2655,7 @@ debugger;
                     //   principal: this.fd.ovd_principal.value + this.fd.curr_principal.value
                     // })
                     debugger
-                    if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'){
+                    if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'|| this.sys.ardbCD=='25'){
                       this.modalRef = this.modalService.show(this.ContaiLoanChallan, { class: 'modal-xl' });
                     }
                     else{
@@ -2935,7 +2935,7 @@ debugger;
                 //   this.accDtlsFrm.controls.principal.setValue(((+this.fd.curr_principal.value)+(+this.fd.ovd_principal.value))-((+this.td.ovd_prn_recov.value)+(+this.td.adv_prn_recov.value)+(+this.td.curr_prn_recov.value)))
                 // }
                 debugger
-                if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'){
+                if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'|| this.sys.ardbCD=='25'){
                   this.modalRef = this.modalService.show(this.ContaiLoanChallan, { class: 'modal-xl' });
                 }
                 else{
@@ -3931,7 +3931,7 @@ debugger;
       return new Date(parseInt(parts[2]), parseInt(parts[1])-1, parseInt(parts[0]));
       }
     printChallan(){
-      if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'){
+      if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'|| this.sys.ardbCD=='25'){
         this.modalRef = this.modalService.show(this.ContaiLoanChallan, { class: 'modal-xl' });
       }
       else{

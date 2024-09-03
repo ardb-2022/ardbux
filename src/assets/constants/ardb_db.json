@@ -269,6 +269,13 @@
     "full_name": "Contai UAT Test",
     "dist_code": 317.0,
     "bank_name": "ARDBTESTUX"
+  },
+  {
+    "ardB_CD": "111",
+    "name": "Katwa-Kalna-UAT Co-Operative Agriculture & Rural Development Bank Ltd.",
+    "full_name": "Katwa-Kalna UAT Test",
+    "dist_code": 317.0,
+    "bank_name": "MUARDBUXUAT"
   }
 ]
 

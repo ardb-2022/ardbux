@@ -216,6 +216,7 @@ import { GlWiseVoucherDtlsComponent } from './finance/report/gl-wise-voucher-dtl
 import { ConsoLoanDCComponent } from './loan/report/conso-loan-dc/conso-loan-dc.component';
 import { LoanRecoveryConsoComponent } from './loan/report/recovery-register/loan-recovery-conso/loan-recovery-conso.component';
 import { LoanDisburseConsoComponent } from './loan/report/loan-disbursement-register/loan-disburse-conso/loan-disburse-conso.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 const routes: Routes = [
   { path: 'Admin', component: AdminPanelComponent },
@@ -243,6 +244,7 @@ const routes: Routes = [
       { path: '', redirectTo: 'login', pathMatch: 'full'},
       { path: 'login', component: LoginComponent },
       { path: 'la', component: LandingComponent, canActivate: [AuthGuard] },
+      { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
       { path: 'UT_Contai_CustomerProfile', component: ContaiUCICprofileComponent, canActivate: [AuthGuard] },
       { path: 'UT_CustomerProfile', component: UTCustomerProfileComponent, canActivate: [AuthGuard] },
       { path: 'UT_UCIC_MRG', component: UcicMergeComponent, canActivate: [AuthGuard] },
@@ -347,6 +349,8 @@ const routes: Routes = [
       { path: 'LR_Disb_Cert', component: LoanDisbCertificateComponent, canActivate: [AuthGuard] },
       { path: 'LR_GM_DC', component: GMloanDCComponent, canActivate: [AuthGuard] },
       { path: 'LR_Conso_DC', component: ConsoLoanDCComponent, canActivate: [AuthGuard] },
+      { path: 'LR_SHG_Conso_DC', component: ConsoLoanDCComponent, canActivate: [AuthGuard] },
+      { path: 'LR_RH_Conso_DC', component: ConsoLoanDCComponent, canActivate: [AuthGuard] },
       { path: 'LR_CT_DC', component: CTloanDCComponent, canActivate: [AuthGuard] },
       { path: 'LR_NPA_Sum', component: NpaSummaryComponent, canActivate: [AuthGuard] },
       { path: 'LR_FN_Return', component: FortnightlyReturnComponent, canActivate: [AuthGuard] },

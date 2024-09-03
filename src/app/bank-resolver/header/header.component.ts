@@ -259,7 +259,7 @@ matmenuTrg:any=[];
 
   goToHome() {
     this.hideMenu();
-    this.router.navigate([this.bankName + '/la']);
+    this.router.navigate([this.bankName + '/dashboard']);
     this.showMenu = true;
     this.showChildMenu = false;
     this.showSubMenu = false;

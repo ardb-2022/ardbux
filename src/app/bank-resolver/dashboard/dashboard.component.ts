@@ -8,11 +8,10 @@ import {trigger, style, animate, transition} from '@angular/animations';
 import { CommonServiceService } from '../common-service.service';
 import { Router } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-
 @Component({
-  selector: 'app-landing',
-  templateUrl: './landing.component.html',
-  styleUrls: ['./landing.component.css'],
+  selector: 'app-dashboard',
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.css'],
   animations: [
     trigger('fade', [ 
       transition('void => *', [
@@ -21,9 +20,8 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
       ]) 
     ])
   ]
-  
 })
-export class LandingComponent implements OnInit {
+export class DashboardComponent implements OnInit{
 
   constructor(private router: Router, private modalService:BsModalService,private msg: InAppMessageService,private svc: RestService, private comsv:CommonServiceService) { }
   sys = new SystemValues();
@@ -31,15 +29,10 @@ export class LandingComponent implements OnInit {
   isLoading = false;
   modalRef?:BsModalRef;
   currUser:any;
-  ardbName:any;
-  brnName:any;
   L2L:any=localStorage.getItem('L2L')
   @ViewChild('template', { static: true }) template: TemplateRef<any>;
 
   ngOnInit(): void {
-    this.ardbName=localStorage.getItem('ardb_name');
-    this.brnName=localStorage.getItem('__brnName');
-    
     this.comsv.accOpen=false
     this.comsv.accClose=false
     this.comsv.loanDis=false

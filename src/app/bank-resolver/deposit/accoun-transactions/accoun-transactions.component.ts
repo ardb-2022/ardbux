@@ -4460,7 +4460,7 @@ debugger
     }
    
     //for FD INTREST PAYMENT
-    if ((accTypeCd !== 1 && accTypeCd !== 7 && accTypeCd !== 8 && accTypeCd !== 9)&&(+this.td.amount.value) <= 0) {
+    if ((accTypeCd !== 1 && accTypeCd !== 7 && accTypeCd !== 8 && accTypeCd !== 9 && accTypeCd !== 11)&&(+this.td.amount.value) <= 0) {
       this.HandleMessage(true, MessageType.Error, 'Amount can not be blank');
       return;
     }

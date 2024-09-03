@@ -251,6 +251,7 @@ import { GlWiseVoucherDtlsComponent } from './finance/report/gl-wise-voucher-dtl
 import { ConsoLoanDCComponent } from './loan/report/conso-loan-dc/conso-loan-dc.component';
 import { LoanDisburseConsoComponent } from './loan/report/loan-disbursement-register/loan-disburse-conso/loan-disburse-conso.component';
 import { LoanRecoveryConsoComponent } from './loan/report/recovery-register/loan-recovery-conso/loan-recovery-conso.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 @NgModule({
   declarations: [ 
     RoundPipe ,UppercaseDirective, MatchAccountNumbersDirective, NumericOnlyDirective,
@@ -304,7 +305,7 @@ import { LoanRecoveryConsoComponent } from './loan/report/recovery-register/loan
             RecoveryExportComponent, RecoveryImportComponent, RecoveryIndiPostComponent, ContaiComponent, ContaiFastPageComponent, GhatalComponent, 
             GhatalFastPageComponent, GoldLoanReportComponent, GoldLoanAsOnDateComponent, GoldLoanCurrDateComponent, GroupWiseComponent, NpaAllWithGroupComponent, 
             DcbrGroupWiseComponent, TamlukComponent, TamlukFastPageComponent, VillMasterContaiComponent, RecovSummaryComponent, RiskFundComponent, BankuraComponent, 
-            BankuraFastPageComponent, SendSmsFromDemandComponent, UpdatedDemandListComponent, CtFortnightNewComponent, CtFortnightNewConsoComponent, LoanDisburseSummaryComponent, DdsAgentTransReportComponent, InterestMasterComponent, WeeklyReturnNewComponent, WeeklyReturnNewConsoComponent, GlWiseVoucherDtlsComponent, ConsoLoanDCComponent, LoanDisburseConsoComponent, LoanRecoveryConsoComponent
+            BankuraFastPageComponent, SendSmsFromDemandComponent, UpdatedDemandListComponent, CtFortnightNewComponent, CtFortnightNewConsoComponent, LoanDisburseSummaryComponent, DdsAgentTransReportComponent, InterestMasterComponent, WeeklyReturnNewComponent, WeeklyReturnNewConsoComponent, GlWiseVoucherDtlsComponent, ConsoLoanDCComponent, LoanDisburseConsoComponent, LoanRecoveryConsoComponent, DashboardComponent
   ],
   imports: [
     MatAutocompleteModule,MatProgressBarModule,

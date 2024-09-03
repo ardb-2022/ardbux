@@ -187,8 +187,8 @@ export class LoginComponent implements OnInit {
     else if(this.f.ardbbrMst.value=='403'||this.f.ardbbrMst.value=='404' ||this.f.ardbbrMst.value=='405'){
       this.ARBD="11";
     }
-    else if(this.f.ardbbrMst.value=='500'){
-      this.ARBD="17";
+    else if(this.f.ardbbrMst.value=='111'){
+      this.ARBD="25";
     }
     else{
       this.ARBD=this.f.ardbbrMst.value;

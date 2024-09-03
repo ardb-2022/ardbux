@@ -70,7 +70,15 @@
         color: pink;
       }
     }
-
+.mainZone{
+  text-align: center;
+    font-size: 35px;
+    font-family: system-ui;
+    line-height: normal;
+    font-weight: 900;
+    color: white;
+    justify-content: center;
+}
 .wrapper{
   margin: 0 auto;
 	/* max-width: 1340px; */

@@ -35,6 +35,8 @@ export class WeeklyReturnNewComponent {
   isOpenToDp = false;
   notvalidate:boolean=false;
   date_msg:any;
+  ibsd:any;
+  surplus_deficit:any;
   exportAsConfig:ExportAsConfig;
   sys = new SystemValues();
   config = {
@@ -94,6 +96,8 @@ export class WeeklyReturnNewComponent {
     private exportAsService: ExportAsService,
     private router: Router,private comser:CommonServiceService) { }
   ngOnInit(): void {
+    this.surplus_deficit=0.00;
+    this.ibsd=0.00;
     this.weekly_Return_Liability= [
               {
                   "ardb_cd": null,
