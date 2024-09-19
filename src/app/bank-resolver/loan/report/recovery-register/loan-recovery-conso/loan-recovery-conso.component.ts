@@ -74,14 +74,15 @@ export class LoanRecoveryConsoComponent {
   lastAccNum:any
   totIssueSum=0;
   totCount=0;
-  totInttDue=0;
+  totCurPrn=0;
+  totCurIntt=0;
   totPenalIntt=0;
   totOvdPrn=0;
   totOvdIntt=0;
-  totStan=0;
-  totSubStan=0;
-  totD1=0;
-  totD2=0
+  totAdvPrn=0;
+  totPRN=0;
+  totINTT=0;
+  totRECOVERY=0
   totD3=0
   totNpaSum=0;
   totProvSum=0
@@ -92,16 +93,16 @@ export class LoanRecoveryConsoComponent {
   selectedValue='';
   selectedValue1='';
  dummytotIssueSum=0
- dummytotPrnDue=0
- dummytotInttDue=0
- dummytotPenalIntt=0
- dummytotOvdPrn=0
- dummytotOvdIntt=0
- dummytotStan=0
- dummytotSubStan=0
- dummytotD1=0
- dummytotD2=0
- dummytotD3=0
+ dummytotCount=0;
+ dummytotCurPrn=0;
+ dummytotCurIntt=0;
+ dummytotPenalIntt=0;
+ dummytotOvdPrn=0;
+ dummytotOvdIntt=0;
+ dummytotAdvPrn=0;
+ dummytotPRN=0;
+ dummytotINTT=0;
+ dummytotRECOVERY=0
  dummytotNpaSum=0
  dummytotProvSum=0
  filteredArray1:any=[]
@@ -219,10 +220,16 @@ selectItems1=[
       // this.pagedItems.length=0;
       this.modalRef.hide();
       this.isLoading=true;
-      this.totIssueSum=0
-          
-      // this.loanNm=this.AcctTypes.filter(e=>e.acc_type_cd==this.reportcriteria.controls.acc_type_cd.value)[0].acc_type_desc
-      // console.log(this.loanNm)
+      this.totCurPrn=0
+      this.totCurIntt=0
+      this.totOvdPrn=0
+      this.totOvdIntt=0
+      this.totAdvPrn=0
+      this.totPenalIntt=0
+      this.totPRN=0
+      this.totINTT=0
+      this.totRECOVERY=0
+
       this.fromdate = this.reportcriteria.controls.fromDate.value;
       const todate = this.reportcriteria.controls.toDate.value;
       var dt={
@@ -254,8 +261,16 @@ selectItems1=[
         // this.lastAccNum=this.reportData[this.reportData.length-1].loan_id
         console.log(this.lastAccNum)
         for(let i=0;i<this.reportData.length;i++){
-          this.totIssueSum+=this.reportData[i].total_recov_amt
-          // this.totCount=this.dataSource.filteredData.length
+          // this.totIssueSum+=this.reportData[i].total_recov_amt
+          this.totCurPrn+=this.reportData[i].curr_prn_recov
+          this.totCurIntt+=this.reportData[i].curr_intt_recov
+          this.totOvdPrn+=this.reportData[i].ovd_prn_recov
+          this.totOvdIntt+=this.reportData[i].ovd_intt_recov
+          this.totAdvPrn+=this.reportData[i].adv_prn_recov
+          this.totPenalIntt+=this.reportData[i].penal_intt_recov
+          this.totPRN+=this.reportData[i].tot_prn_recov
+          this.totINTT+=this.reportData[i].tot_intt_recov
+          this.totRECOVERY+=this.reportData[i].total_recov_amt
     
         }
         
@@ -526,7 +541,16 @@ debugger
     // this.inputEl.value=''
     // this.inputEl=document.getElementById('myInput1');
     // this.inputEl.value=''
-    this.totIssueSum=this.dummytotIssueSum
+    
+    this.totCurPrn=this.dummytotCurPrn
+    this.totCurIntt=this.dummytotCurIntt
+    this.totOvdPrn=this.dummytotOvdPrn
+    this.totOvdIntt=this.dummytotOvdIntt
+    this.totAdvPrn=this.dummytotAdvPrn
+    this.totPenalIntt=this.dummytotPenalIntt
+    this.totPRN=this.dummytotPRN
+    this.totINTT=this.dummytotINTT
+    this.totRECOVERY=this.dummytotRECOVERY
     
     this.selectedValue=''
     this.selectedValue1=''
@@ -536,12 +560,29 @@ debugger
     
   }
   getTotal(){
-    this.totIssueSum=0
+    this.totCurPrn=0
+    this.totCurIntt=0
+    this.totOvdPrn=0
+    this.totOvdIntt=0
+    this.totAdvPrn=0
+    this.totPenalIntt=0
+    this.totPRN=0
+    this.totINTT=0
+    this.totRECOVERY=0
     this.totCount=0
     console.log(this.dataSource.filteredData)
     this.filteredArray=this.dataSource.filteredData
     for(let i=0;i<this.filteredArray.length;i++){
-      this.totIssueSum+=this.filteredArray[i].total_recov_amt
+      this.totCurPrn+=this.filteredArray[i].curr_prn_recov
+      this.totCurIntt+=this.filteredArray[i].curr_intt_recov
+      this.totOvdPrn+=this.filteredArray[i].ovd_prn_recov
+      this.totOvdIntt+=this.filteredArray[i].ovd_intt_recov
+      this.totAdvPrn+=this.filteredArray[i].adv_prn_recov
+      this.totPenalIntt+=this.filteredArray[i].penal_intt_recov
+      this.totPRN+=this.filteredArray[i].tot_prn_recov
+      this.totINTT+=this.filteredArray[i].tot_intt_recov
+      this.totRECOVERY+=this.filteredArray[i].total_recov_amt
+      // this.totIssueSum+=this.filteredArray[i].total_recov_amt
       this.totCount=this.dataSource.filteredData.length
 
     }

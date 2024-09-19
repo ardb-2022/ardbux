@@ -198,6 +198,7 @@ export class LockerINOUTComponent {
           this.handling_authority=res.handling_authority;
           this.remarks=res.remarks;
           this.inTime=res.access_in_time;
+          this.outTime=res.access_out_time;
           this.trans_dt=res.trans_dt;
           this.lockerInOutStatus='Y'
           debugger

@@ -177,6 +177,30 @@
               </div>
             </div>
           <br>
+          <div class="row">
+            <!-- Revenue Table -->
+            <div class="col-6">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Deposit from loanee as IBSD</th>
+                    <th style="width: 24%; text-align: right;">{{ibsd | number: '1.2-2'}}</th>
+                  </tr>
+                </thead>
+                </table>
+            </div>
+            <div class="col-6">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Surplus/ Deficit, if any</th>
+                    <th style="width: 24%; text-align: right;">{{surplus_deficit | number: '1.2-2'}}</th>
+                  </tr>
+                </thead>
+                </table>
+            </div>
+          </div>
+          <br>
             <!-- Revenue and Expense Tables in another row -->
             <div class="row">
               <!-- Revenue Table -->
@@ -248,11 +272,11 @@
           </div>
          <footer>
            <small>
-             This Report Is Generated Through CFS-2022, Kolkata
+             This report is generated through CFS-2022
             </small> 
             <!-- <ng-container matColumnDef="disclaimer">
              <td mat-footer-cell *matFooterCellDef colspan="2">
-               This Report Is Generated Through CFS-2022, Kolkata
+               This report is generated through CFS-2022
            
              </td>
             </ng-container> -->

@@ -2541,7 +2541,7 @@ debugger;
                    total_due: (+this.inttRetForUpdate.curr_intt_recov) + (+this.inttRetForUpdate.ovd_intt_recov) + (+this.inttRetForUpdate.penal_intt_recov) - this.td.curr_intt_recov.value - this.td.ovd_intt_recov.value - this.td.penal_intt_recov.value + +this.inttRetForUpdate.curr_prn_recov-(+this.td.curr_prn_recov.value) - (+this.td.adv_prn_recov.value) + this.inttRetForUpdate.ovd_prn_recov-(+this.td.ovd_prn_recov.value) ,
                  
                   })
-                  if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'){
+                  if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'|| this.sys.ardbCD=='25'){
                     this.modalRef = this.modalService.show(this.ContaiLoanChallan, { class: 'modal-xl' });
                   }
                   else{
@@ -2655,7 +2655,7 @@ debugger;
                     //   principal: this.fd.ovd_principal.value + this.fd.curr_principal.value
                     // })
                     debugger
-                    if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'){
+                    if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'|| this.sys.ardbCD=='25'){
                       this.modalRef = this.modalService.show(this.ContaiLoanChallan, { class: 'modal-xl' });
                     }
                     else{
@@ -2710,7 +2710,7 @@ debugger;
           this.HandleMessage(true, MessageType.Error, 'Interest Can not be calculated, Try again later.');
         }
       );
-    }
+    }//end auto mode
     else {
       // console.log(this.td.curr_prn_recov.value,this.td.curr_intt_recov.value,this.td.ovd_prn_recov.value,this.td.ovd_intt_recov.value)
       // //////debugger;
@@ -2917,6 +2917,20 @@ debugger;
             console.log(this.unApprovedTransactionLst)
             // debugger;
             if(this.isRecovery){
+              this.t_a=(saveTransaction.tddeftrans?.amount)+(saveTransaction.tddeftrans?.ongoing_unit_no);
+                // this.s_a=saveTransaction.tddeftrans?.share_amt;
+                this.c_p=saveTransaction.tddeftrans?.curr_prn_recov;
+                this.c_i=saveTransaction.tddeftrans?.curr_intt_recov;
+                this.o_p=saveTransaction.tddeftrans?.ovd_prn_recov;
+                this.o_i=saveTransaction.tddeftrans?.ovd_intt_recov;
+                this.a_p=saveTransaction.tddeftrans?.adv_prn_recov;
+                this.p_i=saveTransaction.tddeftrans?.penal_intt_recov;
+                // this.i_n_dt=this.td.intt_recov_dt.value;
+                this.i_n_dt=this.td.no_of_day.value!=0? this.dtpipe.transform(this.td.intt_recov_dt.value, 'dd/MM/yyyy hh:mm:ss'):this.td.intt_recov_dt.value;
+                this.l_ch=saveTransaction.tddeftrans?.ongoing_unit_no;
+                
+
+
               this.outIntt=this.fd.curr_intt.value + this.fd.ovd_intt.value + this.fd.penal_intt.value - this.td.curr_intt_recov.value - this.td.ovd_intt_recov.value - this.td.penal_intt_recov.value
               this.outPrn=((+this.fd.curr_principal.value)+(+this.fd.ovd_principal.value))-((+this.td.ovd_prn_recov.value)+(+this.td.adv_prn_recov.value)+(+this.td.curr_prn_recov.value))
                     
@@ -2935,7 +2949,7 @@ debugger;
                 //   this.accDtlsFrm.controls.principal.setValue(((+this.fd.curr_principal.value)+(+this.fd.ovd_principal.value))-((+this.td.ovd_prn_recov.value)+(+this.td.adv_prn_recov.value)+(+this.td.curr_prn_recov.value)))
                 // }
                 debugger
-                if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'){
+                if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'|| this.sys.ardbCD=='25'){
                   this.modalRef = this.modalService.show(this.ContaiLoanChallan, { class: 'modal-xl' });
                 }
                 else{
@@ -3931,7 +3945,7 @@ debugger;
       return new Date(parseInt(parts[2]), parseInt(parts[1])-1, parseInt(parts[0]));
       }
     printChallan(){
-      if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'){
+      if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'|| this.sys.ardbCD=='25'){
         this.modalRef = this.modalService.show(this.ContaiLoanChallan, { class: 'modal-xl' });
       }
       else{

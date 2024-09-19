@@ -31,7 +31,7 @@ export class DetailListFDMISComponent implements OnInit,AfterViewInit {
   public static operations: mm_operation[] = [];
   AcctTypes: mm_operation[];
   // displayedColumns: string[] = ['acc_num','cust_name', 'opening_dt', 'mat_dt','instL_AMT','intT_RT','prN_AMT','proV_INTT_AMT'];
-
+  totprovIntt:number=0;
   modalRef: BsModalRef;
   isOpenFromDp = false;
   isOpenToDp = false;
@@ -196,7 +196,7 @@ public onAccountTypeChange(): void {
       this.opdrSum=0;
       this.insamt=0;
       this.totprnamt=0;
-      this.prvamt=0
+      this.totprovIntt=0
       this.modalRef.hide();
       this.isLoading=true;
       var dt={
@@ -215,8 +215,9 @@ public onAccountTypeChange(): void {
         this.sendData();
 
         for(let i=0;i<this.reportData.length;i++){
-          this.totprnamt+=this.reportData[i].constype.tot_cons_balance
-          this.allconscount+=this.reportData[i].constype.tot_cons_count
+          this.totprnamt+=this.reportData[i].constype.tot_cons_balance;
+          this.allconscount+=this.reportData[i].constype.tot_cons_count;
+          this.totprovIntt+=this.reportData[i].constype.tot_cons_intt_balance;
         }
         this.pageLength=this.reportData.length
         this.dataSource.data=this.reportData

@@ -14,7 +14,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import { CommonServiceService } from 'src/app/bank-resolver/common-service.service';
-import { DatePipe } from '@angular/common';
+import * as XLSX from 'xlsx';
+import 'jspdf-autotable';
 @Component({
   selector: 'app-gen-ledger2',
   templateUrl: './gen-ledger2.component.html',
@@ -24,12 +25,12 @@ import { DatePipe } from '@angular/common';
 })
 export class GenLedger2Component implements OnInit {
   @ViewChild('content', { static: true }) content: TemplateRef<any>;
-   
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   modalRef: BsModalRef;
   isOpenFromDp = false;
   isOpenToDp = false;
+  filteredArray:any=[]
   sys = new SystemValues();
   config = {
     keyboard: false, // ensure esc press doesnt close the modal
@@ -52,36 +53,37 @@ export class GenLedger2Component implements OnInit {
   fromdate: Date;
   todate: Date;
   counter=0;
-  filteredArray:any=[]
-  exportAsConfig:ExportAsConfig;
-  ardbName=localStorage.getItem('ardb_name')
-  branchName=this.sys.BranchName
-  displayedColumns: string[] = ['acc_cd_desc', 'voucher_dt', 'voucher_id', 'narration','voucher_type','dr_amt','cr_amt','cum_bal','cum_bal_type'];
-  dataSource = new MatTableDataSource()
-  firstAccCD:any
-  lastAccCD:any;
-  crSum=0;
-  drSum=0;
+  reportData:any=[]
   itemsPerPage = 2;
   currentPage = 1;
   pageChange: any;
   pagedItems = [];
-  reportData:any=[];
+  exportAsConfig:ExportAsConfig;
+  ardbName=localStorage.getItem('ardb_name')
+  branchName=this.sys.BranchName
+  resultLength=0
+  firstAccCD:any
+  lastAccCD:any;
+  crSum=0;
+  drSum=0;
+  total=0
   today:any
-  opng_bal:any;
-  resultLength=0;
-  LandingCall:boolean;
-  AcctTypes:any[]=[];
-
+  openbal:any;
+  excelData:any[]=[];
+  showExcl:boolean=false;
+  // displayedColumns: string[] = ['acc_cd', 'voucher_dt','dr_amt','cr_amt','cum_bal','cum_bal_type'];
+  displayedColumns: string[] = ['dis_dtls'];
+  dataSource = new MatTableDataSource()
   constructor(private svc: RestService,
-    private formBuilder: FormBuilder,
-    private modalService: BsModalService,
-    private _domSanitizer : DomSanitizer, private cd: ChangeDetectorRef,
-    private exportAsService: ExportAsService, private comser:CommonServiceService,
-    private router: Router,
-    private datePipe: DatePipe) { }
+              private formBuilder: FormBuilder,
+              private modalService: BsModalService,
+              private _domSanitizer : DomSanitizer,
+              private router: Router, private cd: ChangeDetectorRef,
+              private exportAsService: ExportAsService, private comser:CommonServiceService
+              ) { }
 
   ngOnInit(): void {
+    this.resultLength=this.reportData.length
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.fromdate=this.sys.CurrentDate;
@@ -92,14 +94,7 @@ export class GenLedger2Component implements OnInit {
       fromAcc: [null, Validators.required],
       toAcc: [null, Validators.required],
     });
-    this.getAccountTypeList()
-    if(this.comser.openGlTrns){
-      this.SubmitReport()
-      this.LandingCall=this.comser.openGlTrns
-    }
-    else{
     this.onLoadScreen(this.content);
-    }
     var date = new Date();
     // get the date as a string
        var n = date.toDateString();
@@ -107,51 +102,41 @@ export class GenLedger2Component implements OnInit {
        var time = date.toLocaleTimeString();
        this.today= n + " "+ time
   }
+
+
+
+  onLoadScreen(content) {
+    this.modalRef = this.modalService.show(content, this.config);
+  }
+
   setPage(page: number) {
     this.currentPage = page;
     this.cd.detectChanges();
   }
 
-  get r() { return this.reportcriteria.controls; }
-
- onLoadScreen(content) {
-    this.modalRef = this.modalService.show(content, this.config);
-  }
-
-  getAccountTypeList() {
-
-    
-    this.AcctTypes = [];
-
-    this.isLoading = true;
-    var dt={
-      "ardb_cd": this.sys.ardbCD
-    }
-    this.svc.addUpdDel<any>('Mst/GetAccountMaster', dt).subscribe(
-      res => {
-
-        this.isLoading = false;
-        this.AcctTypes = res;
-        debugger
-        // this.AcctTypes = this.AcctTypes.filter(c => c.dep_loan_flag === 'L');
-        // this.AcctTypes = this.AcctTypes.sort((a, b) => (a.acc_type_cd > b.acc_type_cd) ? 1 : -1);
-      },
-      err => {
-        this.isLoading = false;
-      }
-    );
-  }
 
   public SubmitReport() {
-    if(this.comser.openGlTrns){
-      this.isLoading=true;
+    //this.isLoading = true;
+    if (this.reportcriteria.invalid) {
+      this.showAlert = true;
+      this.alertMsg = 'Invalid Input.';
+      return false;
+    }
+    else if (new Date(this.reportcriteria.value['fromDate']) > new Date(this.reportcriteria.value['toDate'])) {
+      this.showAlert = true;
+      this.alertMsg = 'To Date cannot be greater than From Date!';
+      return false;
+    }
+    else {
+      this.showAlert = false;
+      this.fromdate=this.reportcriteria.value['fromDate'];
+      this.todate=this.reportcriteria.value['toDate'];
+      this.modalRef.hide();
+      this.reportData.length=0
+      this.pagedItems.length=0
       this.crSum=0;
       this.drSum=0;
-      this.showAlert = false;
-      this.reportData.length=0;
-      this.pagedItems.length=0;
-      this.fromdate=this.sys.CurrentDate;
-      this.todate=this.sys.CurrentDate;
+      this.total=0
       //this.isLoading=true;
       //this.onReportComplete();
       // this.modalService.dismissAll(this.content);
@@ -160,42 +145,61 @@ export class GenLedger2Component implements OnInit {
         "brn_cd": this.sys.BranchCode,
         "from_dt": this.fromdate.toISOString(),
         "to_dt": this.todate.toISOString(),
-        "ad_from_acc_cd": '21101',
-        "ad_to_acc_cd": '21101'
+        "ad_from_acc_cd": this.reportcriteria.controls.fromAcc.value,
+        "ad_to_acc_cd": this.reportcriteria.controls.toAcc.value
+
+
+       
       }
       this.svc.addUpdDel('Finance/GetGLTransDtls',dt).subscribe(data=>{console.log(data)
       this.reportData=data
+      this.resultLength=this.reportData.length
       if(this.reportData.length==0){
         this.comser.SnackBar_Nodata()
-      } 
-      
-      console.log(this.reportData)
+      }
+      else{
+        // console.log(this.reportData,"ppp")
+        // for(let i=0;i<this.reportData.length;i++){
+        //   for(let j=0;j<this.reportData[i].ttgltrans.length;j++)
+        //   this.reportData[i].ttgltransa[j].voucher_dt=this.comser.getFormatedDate(this.reportData[0].ttgltransa[i].voucher_dt);
+        // }
+       if(this.reportcriteria.controls.fromAcc.value==this.reportcriteria.controls.toAcc.value) {
+        this.showExcl=true;
+        this.excelData=this.reportData[0].ttgltrans;
+       
+       }
       this.isLoading=false
       
-      this.itemsPerPage=this.reportData.length % 50 <=0 ? this.reportData.length: this.reportData.length % 50
-      this.firstAccCD=this.reportData[0].acc_cd;
-      this.lastAccCD=this.reportData[this.reportData.length-1].acc_cd  
-      this.opng_bal=this.reportData[0].opng_bal
+      this.modalRef.hide();
       this.dataSource.data=this.reportData
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-      this.resultLength=this.reportData.length
+      this.itemsPerPage=this.reportData.length % 50 <=0 ? this.reportData.length: this.reportData.length % 50
+      this.firstAccCD=this.reportData[0].acc_cd;
+      this.lastAccCD=this.reportData[this.reportData.length-1].acc_cd  
       this.reportData.forEach(e=>{
-        e.voucher_dt=this.comser.getFormatedDate(e.voucher_dt);
+       
       //   this.opdrSum+=e.opng_dr;
       //   this.opcrSum+=e.opng_cr;
         this.crSum+=e.cr_amt;
         this.drSum+=e.dr_amt;
+        this.total+=e.cum_bal
       //   this.clsdrSum+=e.clos_dr;
       //   this.clscrSum+=e.clos_cr;
       })
+      } 
+
+      // for(let i=0;i<this.reportData.length;i++){
+      //   this.openbal=this.reportData[i].acctype.acc_name
+      // }
+      // console.log(this.openbal)
+      
       // this.lastAccCD=this.reportData[this.reportData.length-1].acc_cd
       },
       err => {
          this.isLoading = false;
          this.comser.SnackBar_Error(); 
-        }
-)
+        })
       
       // this.UrlString=this.svc.getReportUrl()
       // this.UrlString=this.UrlString+"WebForm/Fin/cashcumtrail?" + 'ardb_cd=' + this.sys.ardbCD+"&brn_cd="+this.sys.BranchCode+"&from_dt="+Utils.convertDtToString(this.fromdate)+"&to_dt="+Utils.convertDtToString(this.todate)
@@ -203,98 +207,47 @@ export class GenLedger2Component implements OnInit {
      
       this.isLoading = true;
       this.ReportUrl=this._domSanitizer.bypassSecurityTrustResourceUrl(this.UrlString)
-      
-    }
-    else{
-      if (this.reportcriteria.invalid) {
-        this.showAlert = true;
-        this.alertMsg = 'Invalid Input.';
-        return false;
-      }
-      else if (new Date(this.r.fromDate.value) > new Date(this.r.toDate.value)) {
-        this.showAlert = true;
-        this.alertMsg = 'To Date cannot be greater than From Date!';
-        return false;
-      }
-      else {
-        this.crSum=0;
-        this.drSum=0;
-        this.modalRef.hide()
-        this.showAlert = false;
-        this.reportData.length=0;
-        this.pagedItems.length=0;
-        this.fromdate=this.reportcriteria.value['fromDate'];
-        this.todate=this.reportcriteria.value['toDate'];
-        //this.isLoading=true;
-        //this.onReportComplete();
-        // this.modalService.dismissAll(this.content);
-        var data={
-          "ardb_cd": this.sys.ardbCD,
-          "brn_cd": this.sys.BranchCode,
-          "from_dt": this.fromdate.toISOString(),
-          "to_dt": this.todate.toISOString(),
-          "ad_from_acc_cd": this.reportcriteria.controls.fromAcc.value,
-          "ad_to_acc_cd": this.reportcriteria.controls.toAcc.value
-        }
-        this.svc.addUpdDel('Finance/GetGLTransDtls',data).subscribe(data=>{
-        console.log(data)
-        this.reportData=data
-        if(!this.reportData){
-          this.comser.SnackBar_Nodata()
-        } 
-        else{
-          for(let i=0;i<this.reportData.length;i++){
-            this.reportData[i].voucher_dt=this.comser.getFormatedDate(this.reportData[i].voucher_dt);
-          }
-         
-          debugger
-          console.log(this.reportData)
-          this.isLoading=false
-          this.pageChange=document.getElementById('chngPage');
-          this.pageChange.click()
-          this.setPage(2);
-          this.setPage(1)
-          this.modalRef.hide();
-          
-          this.dataSource.data=this.reportData
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
-          this.resultLength=this.reportData.length
-          this.reportData.forEach(e=>{
-            e.acc_cd_desc=this.AcctTypes.filter(f=>f.acc_cd==e.acc_cd)[0].acc_name;
-            this.crSum+=e.cr_amt;
-            this.drSum+=e.dr_amt;
-          })
-        }
-      },
-        err => {
-           this.isLoading = false;
-           this.comser.SnackBar_Error(); 
-          }
-  )
-        
-        // this.UrlString=this.svc.getReportUrl()
-        // this.UrlString=this.UrlString+"WebForm/Fin/cashcumtrail?" + 'ardb_cd=' + this.sys.ardbCD+"&brn_cd="+this.sys.BranchCode+"&from_dt="+Utils.convertDtToString(this.fromdate)+"&to_dt="+Utils.convertDtToString(this.todate)
-        ;
-       
-        this.isLoading = true;
-        this.ReportUrl=this._domSanitizer.bypassSecurityTrustResourceUrl(this.UrlString)
-        // setTimeout(() => {
-        //   this.isLoading = false;
-        // }, 10000);
-    }
-    
+      // setTimeout(() => {
+      //   this.isLoading = false;
+      // }, 10000);
     }
   }
+exportExcel(): void {
+  // Step 1: Define the custom headers for the columns you want
+  const header = [
+    { voucher_id: 'Voucher ID', voucher_dt: 'Voucher Date', narration: 'Narration', opp_gl: 'Opp GL', dr_amt: 'Debit Amount', cr_amt: 'Credit Amount', cum_bal: 'Cumulative Balance' }
+  ];
 
+  // Step 2: Combine the header and the data array
+  const dataWithHeader = [...header, ...this.excelData.map(item => ({
+    voucher_id: item.voucher_id,
+    voucher_dt: item.voucher_dt,
+    narration: item.narration,
+    opp_gl: item.opp_gl,
+    dr_amt: item.dr_amt,
+    cr_amt: item.cr_amt,
+    cum_bal: item.cum_bal
+  }))];
+
+  // Step 3: Create a new worksheet from the data array with the custom headers
+  const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataWithHeader, { skipHeader: true });
+
+  // Step 4: Create a new workbook and append the worksheet
+  const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'GLTransactions');
+
+  // Step 5: Save to Excel file
+  const fileName = 'GLtransactions.xlsx';
+  XLSX.writeFile(wb, fileName);
+}
   public oniframeLoad(): void {
-    this.counter++;
+    this.counter++
     if(this.counter==2){
-      this.isLoading = false;
-      this.counter=0
+      this.isLoading=false;
+      this.counter=0;
     }
     else{
-      this.isLoading=true;
+      this.isLoading=true
     }
     this.modalRef.hide();
   }
@@ -302,68 +255,51 @@ export class GenLedger2Component implements OnInit {
   public closeAlert() {
     this.showAlert = false;
   }
-  // private pdfmake : pdfMake;
-
-
-
-
-
-
-  closeScreen()
-{
-  this.router.navigate([localStorage.getItem('__bName') + '/la']);
-}
-pageChanged(event: PageChangedEvent): void {
-  const startItem = (event.page - 1) * event.itemsPerPage;
-  const endItem = event.page * event.itemsPerPage;
-  this.pagedItems = this.reportData.slice(startItem, endItem); //Retrieve items for page
-  this.cd.detectChanges();
-}
-downloadexcel(){
-  this.exportAsConfig = {
-    type: 'xlsx',
-    // elementId: 'hiddenTab', 
-    elementIdOrContent:'mattable'
-  }
-  this.exportAsService.save(this.exportAsConfig, 'GenLeagerTrans').subscribe(() => {
-    // save started
-    console.log("hello")
-  });
-}
-
-applyFilter(event: Event) {
-  console.log(event)
-  const filterValue = (event.target as HTMLInputElement).value;
-  this.dataSource.filter = filterValue.trim().toLowerCase();
-  if (this.dataSource.paginator) {
-    this.dataSource.paginator.firstPage();
-  }
-  console.log(this.dataSource)
-  this.getTotalCr();
-  this.getTotalDr();
-}
-getTotalCr() {
-  this.crSum=0;
-  
-  console.log(this.dataSource.filteredData)
-  this.filteredArray=this.dataSource.filteredData
-  for(let i=0;i<this.filteredArray.length;i++){
-    console.log(this.filteredArray[i].cr_amt)
-    this.crSum+=this.filteredArray[i].cr_amt
-  }
-  // for(let i=0;i<this.dataSource.filteredData.length;i++){
-  //   console.log(this.dataSource.filteredData)
-  // }
  
-}
-getTotalDr(){
-  this.drSum=0;
-  
-  console.log(this.dataSource.filteredData)
-  this.filteredArray=this.dataSource.filteredData
-  for(let i=0;i<this.filteredArray.length;i++){
-    console.log(this.filteredArray[i].dr_amt)
-    this.drSum+=this.filteredArray[i].dr_amt
+
+ 
+  closeScreen()
+  {
+    this.router.navigate([localStorage.getItem('__bName') + '/la']);
   }
-}
+  pageChanged(event: PageChangedEvent): void {
+    const startItem = (event.page - 1) * event.itemsPerPage;
+    const endItem = event.page * event.itemsPerPage;
+    this.pagedItems = this.reportData.slice(startItem, endItem); //Retrieve items for page
+    this.cd.detectChanges();
+  }
+  downloadexcel(){
+    this.exportAsConfig = {
+      type: 'xlsx',
+      // elementId: 'hiddenTab', 
+      elementIdOrContent:'mattable'
+    }
+    this.exportAsService.save(this.exportAsConfig, 'GenLedger').subscribe(() => {
+      // save started
+      console.log("hello")
+    });
+  }
+  applyFilter(event: Event) {
+    console.log(event)
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+    this.getTotal()
+  }
+  getTotal(){
+    this.drSum=0;
+    this.crSum=0;
+    this.total=0;
+    
+    console.log(this.dataSource.filteredData)
+    this.filteredArray=this.dataSource.filteredData
+    for(let i=0;i<this.filteredArray.length;i++){
+      // console.log(this.filteredArray[i].dr_amt)
+      this.drSum+=this.filteredArray[i].dr_amt
+      this.crSum+=this.filteredArray[i].cr_amt
+      this.total+=this.filteredArray[i].cum_bal
+    }
+  }
 }

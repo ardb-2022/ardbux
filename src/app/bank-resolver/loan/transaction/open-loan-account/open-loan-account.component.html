@@ -157,7 +157,7 @@
         <small>Fund Type</small><span class="text-danger">*</span>
         <select
           style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
-          [(ngModel)]="tm_loan_all.fund_type" id="fund_type"
+          [(ngModel)]="tm_loan_all.fund_type" id="fund_type" [disabled]="appvSanction"
           class="form-control form-control-sm">
           <option value="" [readonly]="true" selected>Select</option>
           <option *ngFor="let l of fundTypeList" [value]="l.value">{{l.name}}</option>
@@ -184,7 +184,7 @@
       <div class="form-group col-2">
         <small for=curr_int_rate>Current Interest Rate</small><span class="text-danger">*</span>
         <input class="form-control form-control-sm text-capitalize"
-          [disabled]="disableAll == 'Y'" id="curr_int_rate"
+          [disabled]="disableAll == 'Y'|| appvSanction" id="curr_int_rate"
           style="height:25px; text-align: right; float: none;" type="number" min="0" step='any'
           [(ngModel)]="tm_loan_all.curr_intt_rate" (change)="checkAndSetOverdueInterest()" placeholder="Curr Int Rate">
       </div>
@@ -449,7 +449,7 @@
               <small>Sector</small><span class="text-danger">*</span>
               <select
                 style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
-                [disabled]="disableAll == 'Y' " [(ngModel)]="ls.sector_cd"
+                [disabled]="disableAll == 'Y'|| appvSanction" [(ngModel)]="ls.sector_cd"
                 (change)="setSectorType($event.target.value , i)" id="sec_type" 
                 class="form-control form-control-sm">
                 <!-- <option [value]="ls.sector_cd" [readonly]="true" selected>{{ls.sector_desc}}</option> -->
@@ -462,7 +462,7 @@
               <small>Activity</small><span class="text-danger">*</span>
               <select
                 style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
-                [disabled]="disableAll == 'Y' " [(ngModel)]="ls.activity_cd"
+                [disabled]="disableAll == 'Y' || appvSanction" [(ngModel)]="ls.activity_cd"
                 (change)="setActivityType($event.target.value , i)" id="act_type" class="form-control form-control-sm">
                 <!-- <option [value]="ls.activity_cd" [readonly]="true" selected>{{ls.activity_desc}}</option> -->
                 <option >Select Activity</option>
@@ -476,7 +476,7 @@
               <small>Activity Details</small><span class="text-danger">*</span>
               <select
                 style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
-                [disabled]="disableAll == 'Y' " [(ngModel)]="ls.crop_cd" (change)="setCorpType($event.target.value , i)"
+                [disabled]="disableAll == 'Y' ||appvSanction " [(ngModel)]="ls.crop_cd" (change)="setCorpType($event.target.value , i)"
                 id="act_type" class="form-control form-control-sm">
                 <option >Select Activity</option>
                 <!-- <option [value]="ls.crop_cd" [readonly]="true" selected>{{ls.crop_cd}}-{{ls.crop_desc}}</option> -->
