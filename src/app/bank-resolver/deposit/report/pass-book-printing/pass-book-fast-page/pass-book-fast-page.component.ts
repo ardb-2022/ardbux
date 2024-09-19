@@ -87,6 +87,7 @@ export class PassBookFastPageComponent implements OnInit {
   RDmatValue:any;
   standingIns:any;
   standingInsFlg:boolean=false;
+  afterMatInstraction:number;
   constructor(private svc: RestService, private formBuilder: FormBuilder,
     public datepipe: DatePipe) { }
   ngOnInit(): void {
@@ -175,7 +176,10 @@ export class PassBookFastPageComponent implements OnInit {
       this.custCD=this.masterModel.tmdeposit.cust_cd
       debugger
       if(this.accType=="6"){
-        this.calINTT()
+        this.calINTT();
+        this.afterMatInstraction=this.masterModel?.tmdeposit?.standing_instr_flag;
+        this.standingIns=this.masterModel?.tmdeposit?.user_acc_num;
+
         if(this.masterModel.tmdeposit.cheque_facility_flag=='Y')
         {
           this.standingIns=this.masterModel.tmdeposit.user_acc_num;
@@ -211,7 +215,10 @@ export class PassBookFastPageComponent implements OnInit {
       console.log(res);
       this.suggestedCustomer=res;
       console.log(this.suggestedCustomer);
+      debugger
       
+      this.suggestedCustomer=this.suggestedCustomer.filter(e=>e.acc_num==this.accNum)
+      debugger
     })
     
   }

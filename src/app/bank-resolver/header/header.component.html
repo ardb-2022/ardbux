@@ -54,6 +54,15 @@
 </div>
 
 </div>
+<ng-template #Notice >
+  <div  class="text-center"><h2>Happy Bishwakarma Pujo</h2></div>
+  <div class="modal-body text-center" >
+    <p>Hello {{currUser}}....</p>
+    <br><br>
+    <button  type="button" class="btn btn-light" (click)="decline()" >Close</button>&nbsp;
+    
+  </div>
+</ng-template>
 <ng-template #template >
   <div class="modal-body text-center" >
     <p>Hello {{currUser}}, Do you want to logout?</p>

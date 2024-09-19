@@ -29,7 +29,7 @@ th.mat-header-cell:last-of-type, td.mat-cell:last-of-type, td.mat-footer-cell:la
     border-left: 1px solid rgb(172, 170, 170); 
   }
   .mat-column-acc_name{
-    max-width: 100px!important;
+    width: 300px!important;
   }
 .mat-cell {
   /* padding: 8px 8px 8px 0; */

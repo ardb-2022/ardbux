@@ -155,7 +155,7 @@
           id="bene_acc_no" 
           [(ngModel)]="neftPayRet.bene_acc_no" 
           name="bene_acc_no" 
-          [disabled]="!isRetrieve" appNumericOnly required
+          [disabled]="!isRetrieve" required
           class="form-control form-control-sm text-capitalize"
           (blur)="maskAccountNumber1()">
         
@@ -170,7 +170,7 @@
       </div>
       <div class="form-group col-3">
         <small for="bene_acc_no">Confirm Bene Acc No<span class="text-danger">*</span></small>
-        <input   [(ngModel)]="confirm_bene_acc_no" type="text"  [disabled]="!isRetrieve" appNumericOnly required
+        <input   [(ngModel)]="confirm_bene_acc_no" type="text"  [disabled]="!isRetrieve"  required
           class="form-control form-control-sm text-capitalize" id="bene_acc_no2" [appMatchAccountNumbers]="['bene_acc_no', 'bene_acc_no2']" >
           <div *ngIf="neftPayRet.bene_acc_no !== confirm_bene_acc_no">
             <small><span class="text-danger">Confirm Bene Account Numbers must be match.</span></small> 

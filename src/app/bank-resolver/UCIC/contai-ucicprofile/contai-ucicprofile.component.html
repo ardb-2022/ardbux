@@ -111,11 +111,12 @@
         </div>
         <div class="form-group col-1">
           <small for="cust_type">Customer Type <span class="text-danger">*</span></small>
-          <select id="cust_type" class="form-control form-control-sm" formControlName="cust_type">
+          <select id="cust_type" class="form-control form-control-sm" formControlName="cust_type" (change)="changeCustType($event)">
             <option selected [readonly]="true">Choose...</option>
             <option value="M">Member</option>
             <option value="N">Nominal Member</option>
             <option value="J">Joint</option>
+            <option value="O">Organization</option>
           </select>
         </div>
         <div class="form-group col-1">
@@ -147,8 +148,8 @@
         </div>
       </div> <!-- form group row end -->
       <div class="form-row">
-        <div class="form-group col-3">
-          <small for="father_name">Father Name <span class="text-danger">*</span></small>
+        <div class="form-group col-3"  *ngIf="!organizationMode">
+          <small for="father_name" >Father Name <span class="text-danger">*</span></small>
           <input type="text" class="form-control form-control-sm mkUpper" (change)="getGuardian()" formControlName="father_name"
             id="father_name" placeholder="Father Name">
         </div>
@@ -173,7 +174,7 @@
            
           </select>
         </div>
-        <div class="form-group col-2">
+        <div class="form-group col-2"  *ngIf="!organizationMode">
           <small for="dt_of_birth">Date Of Birth <span class="text-danger">*</span></small>
           <!-- <input type="date" class="form-control form-control-sm" (change)="onDobChange()" formControlName="dt_of_birth" id="dt_of_birth"
             placeholder="Date of Birth"> -->
@@ -188,12 +189,12 @@
             </div>
           </div>
         </div>
-        <div class="form-group col-1">
+        <div class="form-group col-1"  *ngIf="!organizationMode">
           <small for="age">Age</small>
           <input type="number" class="form-control form-control-sm" formControlName="age" id="age" [readonly]="true"
             placeholder="Age">
         </div>
-        <div class="form-group col-1">
+        <div class="form-group col-1"  *ngIf="!organizationMode">
           <small for="sex">Sex <span class="text-danger">*</span></small>
           <select id="sex" class="form-control form-control-sm" formControlName="sex">
             <option selected [readonly]="true">Choose...</option>
@@ -202,7 +203,7 @@
             <option value="O">Others</option>
           </select>
         </div>
-        <div class="form-group col-1">
+        <div class="form-group col-1"  *ngIf="!organizationMode">
           <small for="marital_status">Marital Status</small>
           <select id="marital_status" class="form-control form-control-sm" formControlName="marital_status">
             <option selected [readonly]="true">Choose...</option>
@@ -538,20 +539,20 @@
       <!-- form group row end -->
       <!-- <hr>  -->
       <h4 class="customHeader">Customer ID Proof Details</h4>
-      <div class="form-row">
-        <div class="form-group col-2">
+      <div class="form-row"  >
+        <div class="form-group col-2" *ngIf="!organizationMode">
           <small for="pan_status">PAN STATUS<span class="text-danger">*</span></small><br><br>
           <mat-radio-group aria-label="Select an option" formControlName="pan_status">
             <mat-radio-button value="P" style="margin-left: 16px;">PAN</mat-radio-button>
             <mat-radio-button value="F" style="margin-left: 16px;">From 60</mat-radio-button>
           </mat-radio-group>
         </div>
-        <div class="form-group col-2">
+        <div class="form-group col-2" *ngIf="!organizationMode">
           <small for="pan">PAN<span class="text-danger">*</span></small>
           <input type="text" #pan class="form-control form-control-sm " id="pan" formControlName="pan"  (change)="CheckExistance('PAN')"
             placeholder="PAN Number" maxlength="10">
         </div>
-        <div class="form-group col-2">
+        <div class="form-group col-2" *ngIf="!organizationMode">
           <small for="aadhar">AADHAR<span class="text-danger">*</span></small>
           <input type="text" #aadhar class="form-control form-control-sm " id="aadhar" formControlName="aadhar"  (change)="CheckExistance('AAD')"
             placeholder="Aadhar Number" maxlength="12">

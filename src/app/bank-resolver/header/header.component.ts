@@ -37,6 +37,7 @@ export class HeaderComponent implements OnInit,OnDestroy,AfterViewInit {
   @ViewChild('third') public third;
   @ViewChild('foth') public foth;
   @ViewChild('template2', { static: true }) template2: TemplateRef<any>;
+  @ViewChild('Notice', { static: true }) Notice: TemplateRef<any>;
   @ViewChild('PassValidity', { static: true }) PassValidity: TemplateRef<any>;
   @ViewChild(MatMenuTrigger) menuTrigger: MatMenuTrigger;
   @ViewChild(MatMenu) menu: MatMenu;
@@ -124,7 +125,7 @@ matmenuTrg:any=[];
     
     debugger
     this.retrieve();
-
+// this.openModalMessage(this.Notice)
   }
   
   callMenu(){
@@ -218,6 +219,10 @@ matmenuTrg:any=[];
   openModalPassCheck(PassValidity: TemplateRef<any>) {
     // this.expDay=localStorage.getItem('PassExpDay');
     this.modalRef = this.modalService.show(PassValidity, {class: 'modal-lg modal-dialog-centered'});
+  }
+  openModalMessage(Notice: TemplateRef<any>) {
+    // this.expDay=localStorage.getItem('PassExpDay');
+    this.modalRef = this.modalService.show(Notice, {class: 'modal-lg modal-dialog-centered'});
   }
   showPassword() {
     this.show_button = !this.show_button;

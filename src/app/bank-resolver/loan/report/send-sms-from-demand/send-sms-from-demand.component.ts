@@ -168,7 +168,7 @@ export class SendSmsFromDemandComponent {
   notvalidate:boolean=false;
   date_msg:any;
   private baseUrl: string = 'http://sms.digilexa.in/http-api.php';
-  private HbaseUrl: string = 'https://bulksms.sssplsales.in/api/api_http.php';
+  // private HbaseUrl: string = 'https://bulksms.sssplsales.in/api/api_http.php';
 
   private username: string = 'HowrahARD';
   private password: string = 'rt6@HCARDB';
@@ -468,8 +468,6 @@ export class SendSmsFromDemandComponent {
     // ${encodeURIComponent(ls_phone)}
     console.log(encodeURIComponent(ls_phone));
     
-    console.log(url);
-    this.http.get(url)
     return url;
   }
   convertToPercentage(value: any): number {
@@ -481,40 +479,14 @@ export class SendSmsFromDemandComponent {
     return Math.min(Math.max(percentage, 0), 100);
   }
   generateAndSendUrls() {
-    
+    this.smsCount=0;
     this.isLoading=true;
     this.dataSource.data.forEach((e:any)=>{
       if(e.fund_type=="Y") {
+        this.smsCount+=1;
+        const smsURL = this.generateUrl(e);
+        this.sendAllSms(smsURL);
         
-        const abc = this.generateUrl(e);
-        const requests =this.sendAllSms(abc);
-        forkJoin(requests).subscribe(
-          results => {
-            this.smsCount+=1;
-            this.percentage = this.convertToPercentage(this.smsCount);
-            console.log(this.smsCount);
-            
-            this.responses = results;
-            this.HandleMessage(true, MessageType.Sucess,
-              this.smsCount+'Demand SMS Send Successfully...');
-            console.log('SMS responses:', results);
-            // this.smsArray=[];
-            // this.dataSource.data.forEach((e:any)=>{
-            //   e.fund_type="N" 
-            //  })
-          },
-          error => {
-            this.smsCount+=1;
-            this.percentage = this.convertToPercentage(this.smsCount);
-            this.HandleMessage(true, MessageType.Sucess,
-              this.smsCount+'Demand SMS Send Successfully...');
-            console.error('Error sending SMS:', error);
-            // this.smsArray=[];
-            // this.dataSource.data.forEach((e:any)=>{
-              // e.fund_type="N" 
-            //  })
-          }
-        );
         setTimeout(() => {
           this.isLoading = false;
 
@@ -526,8 +498,20 @@ export class SendSmsFromDemandComponent {
 
     
   }
-  sendAllSms(url: string): Observable<any> {  
-    return this.http.get(url);
+  sendAllSms(url: string)  {  
+    this.http.get(url).subscribe(
+      (response) => {
+        console.log('SMS sent successfully:', response);
+        this.HandleMessage(true, MessageType.Sucess,
+          this.smsCount+'Demand SMS Send Successfully...');
+      },
+      (error) => {
+        console.error('Error sending SMS:', error);
+        this.HandleMessage(true, MessageType.Sucess,
+          this.smsCount+'Demand SMS Send Successfully...');
+      }
+    );
+    console.log(url);
     // return;
   }
   setUnique( row, event) {
