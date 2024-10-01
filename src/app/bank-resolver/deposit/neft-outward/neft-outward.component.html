@@ -1,7 +1,7 @@
 <ng-template #ifsc let-modal bd-example-modal-lg>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">IFSC Code Details</h4>
-    <button type="button" class="close" aria-label="Close" data-dismiss="modal" (click)="modal.dismiss('Cross click')">
+    <button type="button" class="close" aria-label="Close" data-dismiss="modal" (click)="modalRef.hide()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -184,9 +184,9 @@
       <div class="form-group col-6">
         <small for="bene_ifsc_code">Search by IFSC#<span class="text-danger">*</span></small>
           <span mat-raised-button type="button" class="badge badge-warning pull-right" *ngIf="neftPayRet.bene_ifsc_code.length > 8"
-            (click)="openModal()">
+            (click)="openModal()" matTooltip="Click here to see full details">
            
-              IFSC Details
+              BANK:{{__ifscbank}},  BRANCH:{{__ifscbranch}}
 
        
           </span>

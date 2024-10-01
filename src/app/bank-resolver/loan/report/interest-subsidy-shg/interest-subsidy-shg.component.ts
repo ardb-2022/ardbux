@@ -25,7 +25,7 @@ export class InterestSubsidySHGComponent {
   // @ViewChild(MatPaginator) paginator2: MatPaginator;
   // @ViewChild(MatSort) sort2: MatSort;
   dataSource= new MatTableDataSource()
-  displayedColumns: string[] = ['SL','sb_acc_num','block_name','service_area_name','fund_type','loan_id','sanction_dt','party_name','address','category','scheme','curr_intt_rate','disb_amt','disb_dt','p_out_balance','curr_intt_recov','c_out_balance','subsidy_amt','subsidy_rate'];
+  displayedColumns: string[] = ['SL','sb_acc_num','block_name','service_area_name','fund_type','loan_id','sanction_dt','party_name','phone','address','category','scheme','curr_intt_rate','disb_amt','disb_dt','p_out_balance','curr_intt_recov','c_out_balance','subsidy_amt','subsidy_rate'];
   notvalidate:boolean=false;
   date_msg:any;
   modalRef: BsModalRef;

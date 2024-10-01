@@ -77,7 +77,7 @@
       </tr>
           <tr>
             <th>Acc CD</th>
-            <th>Account Name</th>
+            <th style="width: 300px!important;">Account Name</th>
             <th style="text-align:right">Balance</th>
             <!-- <th>Type</th> -->
           </tr>
@@ -85,7 +85,7 @@
             <tbody *ngFor="let i of reportData; let itr=index;" >
           <tr *ngIf="i.type=='Liability'">
             <td>{{i.acc_cd}}</td>
-            <td>{{i.acc_name}}</td>
+            <td style="width: 300px!important;">{{i.acc_name}}</td>
             <td style="text-align:right">{{i.curr_bal | number : '1.2-2'}}</td>
             
             <!-- <td>{{i.type}}</td> -->
@@ -117,7 +117,7 @@
         </tr>
         <tr>
           <th>Acc CD</th>
-          <th>Account Name</th>
+          <th style="width: 300px!important;">Account Name</th>
           <th style="text-align:right">Balance</th>
           <!-- <th>Type</th> -->
         </tr>
@@ -125,7 +125,7 @@
           <tbody *ngFor="let i of reportData; let itr=index;"> 
         <tr *ngIf="i.type=='Asset'">
           <td>{{i.acc_cd}}</td>
-          <td>{{i.acc_name}}</td>
+          <td style="width: 300px!important;">{{i.acc_name}}</td>
           <td style="text-align:right">{{i.curr_bal  | number : '1.2-2'}}</td>
           <!-- <td>{{i.type}}</td> -->
         </tr>

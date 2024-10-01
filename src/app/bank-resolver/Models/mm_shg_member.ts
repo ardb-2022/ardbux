@@ -8,6 +8,7 @@ export class mm_shg_member {
   public religion :	         string  ;
   public  date_of_join :      Date     ;
   public education :           string  ;
+  public ardb_cd :              string  ;
   public brn_cd :              string  ;
   public status :              string  ;
   public  date_of_birth :     Date     ;

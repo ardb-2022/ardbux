@@ -16,16 +16,11 @@
     display: table;
   }
   
-  table {
-    border-collapse: collapse;
-    border-spacing: 0;
-    width: 100%;
-    border: 1px solid #ddd;
-  }
+
   
   th, td {
     text-align: left;
-    padding: 16px;
+    padding: 6px;
   }
   
   tr:nth-child(even) {

@@ -666,14 +666,14 @@
               <div class="col-4" style="border-right: 1px solid #808080;text-align: right; padding-right: 10%;">
                 <b>Principal</b>
                 <hr>
-                {{c_p| number : '1.2-2'}}
+                {{c_p | number : '1.2-2'}}
                 <br>
-                {{o_p| number : '1.2-2'}}
+                {{o_p | number : '1.2-2'}}
                 <br>
                 {{a_p| number : '1.2-2'}}
                 <br>
                 <hr>
-                {{c_p+o_p+a_p | number : '1.2-2'}}
+                {{tot_p | number : '1.2-2'}}
               </div>
               <div class="col-4" style="text-align: right; padding-right: 10%;">
                 <b>Interest</b>
@@ -685,7 +685,7 @@
                 {{p_i | number : '1.2-2'}}
                 <br>
                 <hr>
-              {{c_i+o_i+p_i | number : '1.2-2'}}
+              {{tot_i | number : '1.2-2'}}
               </div>
               <div class="col-12" style="text-align: center;"  *ngIf="sys.ardbCD!='2' && sys.ardbCD!='3'&& sys.ardbCD!='4' && sys.ardbCD!='20' && sys.ardbCD!='26' ">
                 <b>Outstanding: {{this.fd.principal.value| number : '1.2-2'}} | Interest: {{this.fd.intt_recev.value| number : '1.2-2'}}</b>
@@ -774,7 +774,7 @@
                 {{a_p| number : '1.2-2'}}
                 <br>
                 <hr>
-                {{c_p+o_p+a_p| number : '1.2-2'}}
+                {{tot_p| number : '1.2-2'}}
               </div>
               <div class="col-4" style="text-align: right; padding-right: 10%;">
                 <b>Interest</b>
@@ -786,7 +786,7 @@
                 {{p_i| number : '1.2-2'}}
                 <br>
                 <hr>
-              {{c_i+o_i+p_i| number : '1.2-2'}}
+              {{tot_i| number : '1.2-2'}}
               </div>
               <div class="col-12" style="text-align: center;" *ngIf="sys.ardbCD!='2' && sys.ardbCD!='3'&& sys.ardbCD!='4' && sys.ardbCD!='20' && sys.ardbCD!='26' ">
                 <b>Outstanding: {{this.fd.principal.value| number : '1.2-2'}} | Interest: {{this.fd.intt_recev.value| number : '1.2-2'}}</b>
@@ -901,8 +901,8 @@
                     </tr>
                     <tr style="border-bottom:1px solid #969494;">
                       <td style="border-right: 1px solid #969494;padding:5px;font-size: larger;text-align: center; width: 35%!important">Total</td>
-                      <td style="border-right: 1px solid #969494;padding:5px;font-size: larger;text-align: right; width: 35%!important"><b> {{c_p+o_p+a_p | number : '1.2-2'}}</b></td>
-                      <td style="padding:5px;font-size: larger;text-align: right;"><b>{{c_i+o_i+p_i | number : '1.2-2'}}</b></td>
+                      <td style="border-right: 1px solid #969494;padding:5px;font-size: larger;text-align: right; width: 35%!important"><b> {{tot_p | number : '1.2-2'}}</b></td>
+                      <td style="padding:5px;font-size: larger;text-align: right;"><b>{{tot_i | number : '1.2-2'}}</b></td>
                       </tr>
               </tbody>
               
@@ -1013,8 +1013,8 @@
                     </tr>
                     <tr style="border-bottom:1px solid #969494;">
                       <td style="border-right: 1px solid #969494;padding:5px;font-size: larger;text-align: center; width: 35%!important"><b>Total</b></td>
-                      <td style="border-right: 1px solid #969494;padding:5px;font-size: larger;text-align: right; width: 35%!important"><b> {{c_p+o_p+a_p | number : '1.2-2'}}</b></td>
-                      <td style="padding:5px;font-size: larger;text-align: right;"><b>{{c_i+o_i+p_i | number : '1.2-2'}}</b></td>
+                      <td style="border-right: 1px solid #969494;padding:5px;font-size: larger;text-align: right; width: 35%!important"><b> {{ tot_p | number : '1.2-2'}}</b></td>
+                      <td style="padding:5px;font-size: larger;text-align: right;"><b>{{tot_i | number : '1.2-2'}}</b></td>
                       </tr>
               </tbody>
               

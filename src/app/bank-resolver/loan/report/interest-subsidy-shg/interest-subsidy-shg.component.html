@@ -108,6 +108,10 @@
               <th mat-header-cell *matHeaderCellDef mat-sort-header > <b>Party Name</b></th>
               <td mat-cell *matCellDef="let row" style="text-align: left;"><b>{{row.party_name}}</b></td>
             </ng-container>
+            <ng-container matColumnDef="phone" >
+              <th mat-header-cell *matHeaderCellDef mat-sort-header > <b>Phone No.</b></th>
+              <td mat-cell *matCellDef="let row" style="text-align: center;"><b>{{row.phone}}</b></td>
+            </ng-container>
             <ng-container matColumnDef="address" >
                 <th mat-header-cell *matHeaderCellDef mat-sort-header > <b>Address</b></th>
                 <td mat-cell *matCellDef="let row" style="text-align: left;"><b>{{row.address}}</b></td>
@@ -196,7 +200,7 @@
                 </td>
                </ng-container> -->
             <ng-container matColumnDef="Header">
-              <th mat-header-cell *matHeaderCellDef colspan="19">
+              <th mat-header-cell *matHeaderCellDef colspan="20">
                 <div class="justify-content-center" style="text-align:center">
                   <br><h4>{{ardbName}} ({{branchName}})</h4>
 

@@ -9,6 +9,7 @@ import { LockerOpenDM } from '../../Models/locker/LockerOpenDM';
 import { tm_deposit } from '../../Models/tm_depositInv';
 import { tm_locker } from '../../Models/locker/tm_locker';
 import { DatePipe } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 
 export interface LockerAccess {
   ardb_cd: string;
@@ -38,7 +39,7 @@ export class LockerINOUTComponent {
   modalRef: BsModalRef;
   isOpenFromDp = false;
   isOpenToDp = false;
-  disableAll=false;
+  disableAll=true;
   inTime:any;
   outTime:any;
   lockerInOutStatus:any;
@@ -102,7 +103,7 @@ export class LockerINOUTComponent {
   ]
  lockerAccess:LockerAccess;
 
-  constructor(private svc: RestService,private datePipe: DatePipe, private elementRef: ElementRef,private formBuilder: FormBuilder,
+  constructor(private svc: RestService,private datePipe: DatePipe,private http: HttpClient, private elementRef: ElementRef,private formBuilder: FormBuilder,
     private msg: InAppMessageService, private modalService: BsModalService,
     private router: Router, private comser:CommonServiceService) { }
     accountTypeList: mm_acc_type[]= [];
@@ -110,8 +111,24 @@ export class LockerINOUTComponent {
     isTrade: boolean = false;
     showMsg: ShowMessage;
     asOnDate : any;
-
+    baseUrl:any;
+    username:any;
+    password:any;
+    senderid:any;
+    route:any;
+    url:any;
+    uerMobileNo:any;
+    name:any;
   ngOnInit(): void {
+
+
+    if(this.sys.ardbCD=='26'){
+      this.baseUrl='https://bulksms.sssplsales.in/api/api_http.php';
+      this.username='BCARDB';
+      this.password='BC527ARDB';
+      this.senderid='BCARDB';
+      this.route='7';
+  }
     console.log(window.location.hostname)
     // this.getAccountTypeList();
     this.asOnDate =this.sys.CurrentDate;
@@ -127,7 +144,46 @@ export class LockerINOUTComponent {
        var n = date.toDateString();
     // get the time as a string
        var time = date.toLocaleTimeString();
-       this.today= n + " "+ time
+       this.today= n + " "+ time;
+  }
+
+  createURL(){
+    const date = new Date(this.sys.CurrentDate);
+          const formattedDate = this.datePipe.transform(date, 'dd/MM/yyyy HH:mm:ss');
+          console.log(formattedDate);
+    const time1=formattedDate.toString()
+    console.log(time1);
+
+       //https://bulksms.sssplsales.in/api/api_http.php?username=BCARDB&password=BC527ARDB&senderid=BCARDB&to=9083537178&text=Dear Member, your locker is accessed by sss  today at 23/09/2024. If not done by you, call 9800960007/03422662390 -Burdwan CARD Bank&route=Informative&type=text
+      let uname1:string=this.tm_locker.cust_name;
+      uname1=uname1.substr(0,25)+'...'
+    // const ls_phone = this.uerMobileNo;
+      const ls_phone = '9083537178';
+
+console.log(uname1,time1);
+
+    const message= `Dear Member, your locker is accessed by ${uname1} today at ${time1}. If not done by you, call 9800960007/03422662390 -Burdwan CARD Bank&route=Informative&type=text`
+    console.log(message);
+
+    this.url = `${this.baseUrl}?username=${this.username}&password=${this.password}&senderid=${this.senderid}&to=${encodeURIComponent(ls_phone)}&text=${encodeURIComponent(message)}`;
+    console.log(this.url);
+      // this.sendAllSms(this.url)
+  }
+  sendAllSms(url: string)  {
+    this.http.get(url).subscribe(
+      (response) => {
+        console.log('SMS sent successfully:', response);
+        // this.HandleMessage(true, MessageType.Sucess,
+        //   'Locker Accessed SMS Send Successfully...');
+      },
+      (error) => {
+        console.error('Error sending SMS:', error);
+        // this.HandleMessage(true, MessageType.Sucess,
+        //   'Locker Accessed SMS Send Successfully..');
+      }
+    );
+    console.log(url);
+    // return;
   }
   onLoadScreen(content) {
     this.modalRef = this.modalService.show(content, this.config);
@@ -137,6 +193,9 @@ export class LockerINOUTComponent {
   }
   public closeAlert() {
     this.showAlert = false;
+  }
+  getLockerAccess(){
+    this.disableAll=false;
   }
    getLockerOpeningTempData() {
 
@@ -152,6 +211,7 @@ export class LockerINOUTComponent {
           this.isLoading = false;
           this.masterModel = res;
           this.tm_locker=this.masterModel.tmlocker;
+
           debugger
           if ( this.masterModel.tmlocker.agreement_no === undefined || this.masterModel.tmlocker.agreement_no === null) {
             // this.showAlertMsg('WARNING', 'No record found!!');
@@ -162,6 +222,7 @@ export class LockerINOUTComponent {
 
 
           else {
+          this.uerMobileNo=this.masterModel.tmlocker.phone?this.masterModel.tmlocker.phone:null;
           this.tm_locker=this.masterModel.tmlocker;
           this.tm_locker.rented_till = this.setDate(this.tm_locker.rented_till);
 
@@ -193,13 +254,13 @@ export class LockerINOUTComponent {
       res => {
         console.log(res);
         this.isLoading = false;
-        if(res.locker_id!=null){
+        if(res.locker_id!=null && res.access_out_time=='01/01/0001 00:00'){
           console.log(res);
           this.handling_authority=res.handling_authority;
           this.remarks=res.remarks;
           this.inTime=res.access_in_time;
-          this.outTime=res.access_out_time;
-          this.trans_dt=res.trans_dt;
+          this.outTime='';
+          this.trans_dt=res.trans_dt?res.trans_dt:this.sys.CurrentDate;
           this.lockerInOutStatus='Y'
           debugger
         }
@@ -222,6 +283,14 @@ export class LockerINOUTComponent {
     );
     }
 
+    clear(){
+      this.trans_dt='';
+          this.handling_authority='';
+          this.remarks='';
+          this.inTime='';
+          this.lockerInOutStatus='N';
+          this.tm_locker=null;
+    }
     updateLockerAccess(isChecked: boolean,i:any) {
       if(this.tm_locker.agreement_no==null || this.tm_locker.agreement_no== undefined){
         this.HandleMessage(true, MessageType.Warning, 'Please Enter Agereement No..');
@@ -268,7 +337,7 @@ export class LockerINOUTComponent {
         remarks: this.remarks,
         created_by: this.sys.UserId+'/'+localStorage.getItem('ipAddress'),
         modified_by: this.sys.UserId+'/'+localStorage.getItem('ipAddress'),
-        trans_dt:this.trans_dt
+        trans_dt:this.trans_dt?this.trans_dt:this.sys.CurrentDate.toISOString(),
 
       };
 
@@ -279,9 +348,14 @@ export class LockerINOUTComponent {
         this.isLoading = false;
 
         if(res==0){
+          this.createURL();
+          this.lockerInOutStatus='Y'
             this.HandleMessage(true, MessageType.Sucess, 'Locker In-Time Insertion Successfully');
         }
         else{
+          this.createURL();
+           this.lockerInOutStatus='N';
+           this.inTime=null;
           this.HandleMessage(true, MessageType.Error, 'Unable to Save record!!');
 
         }
@@ -307,7 +381,7 @@ export class LockerINOUTComponent {
       handling_authority: this.handling_authority,
       remarks: this.remarks,
       modified_by: this.sys.UserId+'/'+localStorage.getItem('ipAddress'),
-      trans_dt:this.trans_dt
+      trans_dt:this.trans_dt?this.trans_dt:this.sys.CurrentDate.toISOString(),
     };
     this.isLoading = true;
     this.svc.addUpdDel<any>('Locker/UpdateLockerAccess', dt).subscribe(
@@ -315,9 +389,13 @@ export class LockerINOUTComponent {
         console.log(res);
         this.isLoading = false;
         if(res==0){
-            this.HandleMessage(true, MessageType.Sucess, 'Locker Out-Time Insertion Successfully');
+          // this.createURL();
+          this.lockerInOutStatus='N';
+          this.HandleMessage(true, MessageType.Sucess, 'Locker Out-Time Insertion Successfully');
         }
         else{
+          this.lockerInOutStatus='Y';
+           this.outTime=null;
           this.HandleMessage(true, MessageType.Error, 'Unable to Save record!!');
         }
 
@@ -490,7 +568,7 @@ export class LockerINOUTComponent {
   //     subject: 'Check this out!',
   //     message: 'Check this out!',
   //   };
-    
+
   //   emailjs.send('service_umhadof', 'template_a67ttmm', templateParams).then(
   //     (response) => {
   //       console.log('SUCCESS!', response.status, response.text);
