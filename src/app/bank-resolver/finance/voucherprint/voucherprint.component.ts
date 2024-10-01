@@ -181,11 +181,11 @@ export class VoucherprintComponent implements OnInit {
           this.tvn[x].vd.forEach(e=>{this.drSum+=e.dr_amount ;  this.crSum+=e.cr_amount})
           
           
-          if(this.crSum!==this.drSum){
+          if(this.crSum.toFixed(2)!==this.drSum.toFixed(2)){
             
             this.tvn[x].redFlag=true
             
-            console.log(this.drSum, this.crSum, this.RedVoucher);
+            console.log(this.drSum.toFixed(2), this.crSum.toFixed(2), this.RedVoucher);
           }
           else{
             this.tvn[x].redFlag=false

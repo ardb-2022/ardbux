@@ -41,6 +41,8 @@ export class UTSelfHelpComponent implements OnInit {
   tempcustname ='';
   reportData2:any=[];
   reportData3:any=[];
+  newOpreation=true;
+  retriveOpreation=false;
   ngOnInit(): void {
     this.branchCode = this.sys.BranchCode;
     this.userName = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
@@ -139,18 +141,17 @@ export class UTSelfHelpComponent implements OnInit {
       this.suggestedCustomer1 = null;
     }
   }
+  newCall(){
+    this.newOpreation=true;
+    this.retriveOpreation=false;
+  }
+  retrieveCall(){
+    this.newOpreation=false;
+    this.retriveOpreation=true;
+  }
   public SelectCustomer(cust: mm_customer): void {
-    //    this.shgFrm.patchValue({
-    //   brn_cd: cust.brn_cd,
-    //   shg_id: cust.cust_cd,
-    //   cust_name: cust.cust_name,
-    //   gruop_sex: cust.sex,
-    //   village: cust.present_address,
-      
-    // });
-    // this.getShgData();
-
-    const dob = (null !== cust.dt_of_birth && '01/01/0001 00:00' === cust.dt_of_birth.toString()) ? null
+    if(this.newOpreation){
+      const dob = (null !== cust.dt_of_birth && '01/01/0001 00:00' === cust.dt_of_birth.toString()) ? null
       : cust.dt_of_birth;
       if(dob){
         this.f.form_dt.disable();
@@ -170,6 +171,21 @@ export class UTSelfHelpComponent implements OnInit {
       
     });
     debugger
+    }
+    if( this.retriveOpreation){
+      this.shgFrm.patchValue({
+        brn_cd: cust.brn_cd,
+        shg_id: cust.cust_cd,
+        cust_name: cust.cust_name,
+        gruop_sex: cust.sex,
+        village: cust.present_address,
+        
+      });
+      this.getShgData();
+    }
+   
+
+
   }
   calculateAge(birthDateString: Date): number {
     if (!birthDateString) {
@@ -493,12 +509,14 @@ export class UTSelfHelpComponent implements OnInit {
         if (res.mmshg.shg_id===0)
         {
           this.isLoading=false;
+          this.suggestedCustomer=null;
           this.shgFrm.enable();
           this.shgFrm.controls.shg_id.disable();
           this.HandleMessage(true, MessageType.Warning, 'No SHG created with this customer!!!');
           return;
         }
         this.shgRet = res;
+        this.suggestedCustomer=null;
         this.shgFrm.patchValue({
           shg_id : this.shgRet.mmshg.shg_id,
           brn_cd : this.shgRet.mmshg.brn_cd,
@@ -526,6 +544,7 @@ export class UTSelfHelpComponent implements OnInit {
       },
       err => { debugger; this.isLoading=false;
         this.shgFrm.disable();
+        this.suggestedCustomer=null;
         this.shgFrm.controls.shg_id.enable();
       }
     );
