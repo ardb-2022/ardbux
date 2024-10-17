@@ -241,7 +241,6 @@ const routes: Routes = [
   { path: 'BankWiseConfig', component: BankWiseConfigComponent },
   { path: 'MasterMenuConfig', component: MasterMenuConfigComponent },
   { path: 'ConfigNewBank', component: ConfigNewBankComponent },
-  { path: 'test', component: TestComponent },
 
   {
     path: ':bankName', component: BankResolverComponent,
@@ -251,6 +250,8 @@ const routes: Routes = [
       // { path: 'la', component: LandingComponent, canActivate: [AuthGuard] },
       { path: 'la', component: LandingComponent, canActivate: [AuthGuard] },
       { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+      { path: 'test', component: TestComponent },
+
       { path: 'UT_Contai_CustomerProfile', component: ContaiUCICprofileComponent, canActivate: [AuthGuard] },
       { path: 'UT_CustomerProfile', component: UTCustomerProfileComponent, canActivate: [AuthGuard] },
       { path: 'UT_UCIC_MRG', component: UcicMergeComponent, canActivate: [AuthGuard] },

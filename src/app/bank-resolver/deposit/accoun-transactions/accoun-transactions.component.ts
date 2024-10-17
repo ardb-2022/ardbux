@@ -4482,8 +4482,9 @@ debugger
       }
       ///partha-19/07/2024 this.afMat
       const mat_amt =
-      (this.afMat && accTypeCd == 2)?(this.resbrnCD1[0].intt_trf_type=='O'?this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt +this.matInt
-      :this.accNoEnteredForTransaction.prn_amt + this.forB +this.matInt):
+      (accTypeCd == 2)?(this.afMat?(this.resbrnCD1[0].intt_trf_type=='O'?this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt +this.matInt
+      :this.accNoEnteredForTransaction.prn_amt + this.forB +this.matInt):(this.resbrnCD1[0].intt_trf_type=='O'?this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt
+      :this.accNoEnteredForTransaction.prn_amt + this.forB)):
       (accTypeCd==5)?this.accNoEnteredForTransaction.prn_amt+this.forB:
       (this.afMat && accTypeCd==4)?this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt+this.matInt
       :this.accNoEnteredForTransaction.prn_amt + this.accNoEnteredForTransaction.intt_amt;
@@ -6387,7 +6388,7 @@ debugger
   }
     sumAmount(i:number){
       let insufbal=this.td_deftranstrfList[i]?.clr_bal < this.td_deftranstrfList[i]?.amount;
-      if(insufbal){
+      if(insufbal && this.td_deftranstrfList[i]?.clr_bal!=null && (this.f.acc_type_cd.value ==1 ||this.f.acc_type_cd.value ==7 ||this.f.acc_type_cd.value ==8)){
         this.HandleMessage(true, MessageType.Error, `Warning! , Insufficient Balance at ${this.td_deftranstrfList[i]?.cust_name} A/C`)
         this.td_deftranstrfList[i].amount=0;
         debugger

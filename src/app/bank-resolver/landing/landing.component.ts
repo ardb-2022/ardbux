@@ -25,7 +25,7 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 })
 export class LandingComponent implements OnInit {
 
-  constructor(private router: Router, private modalService:BsModalService,private msg: InAppMessageService,private svc: RestService, private comsv:CommonServiceService) { 
+  constructor( private cms:CommonServiceService,private router: Router, private modalService:BsModalService,private msg: InAppMessageService,private svc: RestService, private comsv:CommonServiceService) { 
     this.randomNumberColor = this.getRandomColor();
   }
   sys = new SystemValues();
@@ -54,6 +54,7 @@ export class LandingComponent implements OnInit {
     // when ever landing is loaded screen title should be hidden
     this.msg.sendhideTitleOnHeader(true);
     this.getDashboardItem();
+    this.cms.getLocalStorageDataAsJsonArray();
     // if(this.L2L=='true'){
     //   this.openModal(this.template)
     // }
@@ -172,6 +173,7 @@ export class LandingComponent implements OnInit {
     this.router.navigate([this.sys.BankName + '/FR_GLTD']);
 
   }
+ 
   applyRandomColors(): void {
     const marqueeTextElement = document.getElementById('marqueeText');
 

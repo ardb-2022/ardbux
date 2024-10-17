@@ -441,7 +441,7 @@ export class TransTransactionComponent implements OnInit {
   }
 
   checkAndSetDebitAccType(tfrType: string, tdDefTransTrnsfr: td_def_trans_trf) {
-    ////debugger;
+    debugger;
     this.HandleMessage(false);
     if (tfrType === 'cust_acc') {
       if (tdDefTransTrnsfr.cust_acc_type === undefined
@@ -697,6 +697,7 @@ export class TransTransactionComponent implements OnInit {
 
   checkAndSetCreditAccType(tfrType: string, tdDefTransTrnsfr: td_def_trans_trf) {
     this.HandleMessage(false);
+    debugger
     if (tfrType === 'cust_acc') {
       if (tdDefTransTrnsfr.cust_acc_type === undefined
         || tdDefTransTrnsfr.cust_acc_type === null
@@ -1019,6 +1020,7 @@ export class TransTransactionComponent implements OnInit {
     saveTransaction.tddeftrans = tdDefTrans;
     ///Debit Data
     let i = 0;
+    debugger
     this.td_deftranstrfList.forEach(e => {
       const tdDefTransAndTranfer = new td_def_trans_trf();
       if (e.trans_type === 'cust_acc') {
@@ -1076,9 +1078,10 @@ export class TransTransactionComponent implements OnInit {
     });
     ///Credit Data
     let j = 0;
+    debugger
     this.cr_td_deftranstrfList.forEach(e => {
       const tdDefTransAndTranfer = new td_def_trans_trf();
-      if (e.trans_type === 'cust_acc') {
+      if (e.trans_type === 'cust_acc' ) {
         tdDefTransAndTranfer.acc_type_cd = +e.cust_acc_type;
         tdDefTransAndTranfer.acc_num = e.cust_acc_number;
         tdDefTransAndTranfer.acc_name = e.cust_name;
@@ -1162,6 +1165,48 @@ export class TransTransactionComponent implements OnInit {
     }
     else {
       console.log(saveTransaction)
+      console.log(this.cr_td_deftranstrfList);
+      console.log(this.td_deftranstrfList);
+      console.log(this.cr_td_deftranstrfList);
+      console.log(this.cr_td_deftranstrfList);
+      console.log(this.cr_td_deftranstrfList);
+      if(this.cr_td_deftranstrfList[0].amount==this.CrTrfTotAmt){
+        const tdDefTrans = new td_def_trans_trf();
+        tdDefTrans.trans_dt = this.f.trf_dt.value;
+        tdDefTrans.brn_cd = this.sys.BranchCode;
+        tdDefTrans.trf_type = "T";
+        tdDefTrans.trans_type = "D"
+        tdDefTrans.particulars = "BY TRANSFER";
+        tdDefTrans.approval_status = 'U';
+        if (this.f.trans_cd.value > 0)
+        tdDefTrans.trans_cd = this.f.trans_cd.value;
+        tdDefTrans.amount = this.cr_td_deftranstrfList[0].amount;
+        tdDefTrans.created_by = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
+        tdDefTrans.acc_cd = this.cr_td_deftranstrfList[0].acc_cd;
+        if (this.cr_td_deftranstrfList[0].trans_type === 'cust_acc') {
+          tdDefTrans.remarks = "D";
+          tdDefTrans.acc_num = this.cr_td_deftranstrfList[0].cust_acc_number;
+          tdDefTrans.acc_type_cd = +this.cr_td_deftranstrfList[0].cust_acc_type;
+          tdDefTrans.acc_cd = this.cr_td_deftranstrfList[0].acc_cd;
+          debugger;
+        }
+        else {
+          console.log(tdDefTrans.trans_type);
+          debugger;
+          tdDefTrans.remarks = this.cr_td_deftranstrfList[0].cust_acc_type.length==1? tdDefTrans.trans_type: "X";
+          tdDefTrans.acc_num = this.cr_td_deftranstrfList[0].cust_acc_number;
+          tdDefTrans.acc_type_cd = +this.cr_td_deftranstrfList[0].cust_acc_type;
+          tdDefTrans.acc_cd = +this.cr_td_deftranstrfList[0].acc_cd;
+          tdDefTrans.acc_name=this.cr_td_deftranstrfList[0].cust_name
+          if (this.f.trans_cd.value > 0){
+            this.cr_td_deftranstrfList[0].trans_type=tdDefTrans.trans_type;
+            debugger;
+            
+          }
+        }
+        saveTransaction.tddeftrans = tdDefTrans;
+      }
+      
       debugger;
      this.svc.addUpdDel<any>('Common/InsertTransferData', saveTransaction).subscribe(
         res => {

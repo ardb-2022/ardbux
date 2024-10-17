@@ -981,7 +981,13 @@ export class LoanaccountTransactionComponent implements OnInit {
           debugger;
 
           this.sancdtls = acc.tmlaonsanctiondtls;
-          if((this.sys.ardbCD=='26'||this.sys.ardbCD=='2') && acc.tmloanall.acc_cd==20416){
+          const filteredLoans = this.accountTypeList2.filter(loan => loan.cc_flag == 'Y');
+          const exists = filteredLoans.some(loan => loan.acc_type_cd == acc.tmloanall.acc_cd);
+          console.log(filteredLoans);
+          console.log(exists,"xdrfgre");
+
+          // if((this.sys.ardbCD=='26'||this.sys.ardbCD=='2') && acc.tmloanall.acc_cd==20416){
+            if(exists){
             this.sancdtls.forEach(x => x.draw_limit = x.sanc_amt - (acc.tmloanall.curr_prn+acc.tmloanall.ovd_prn));
            }
             else{
@@ -1217,7 +1223,14 @@ export class LoanaccountTransactionComponent implements OnInit {
           });
           console.log(acc.tmloanall.last_intt_calc_dt)
           this.sancdtls = acc.tmlaonsanctiondtls;
-          if((this.sys.ardbCD=='26'||this.sys.ardbCD=='2') && acc.tmloanall.acc_cd==20416){
+        
+          const filteredLoans = this.accountTypeList2.filter(loan => loan.cc_flag == 'Y');
+          const exists = filteredLoans.some(loan => loan.acc_type_cd == acc.tmloanall.acc_cd);
+          console.log(filteredLoans);
+          console.log(exists,"xdrfgre");
+
+          // if((this.sys.ardbCD=='26'||this.sys.ardbCD=='2') && acc.tmloanall.acc_cd==20416){
+            if(exists){
             this.sancdtls.forEach(x => x.draw_limit = x.sanc_amt - (acc.tmloanall.curr_prn+acc.tmloanall.ovd_prn));
            }
             else{
@@ -1578,12 +1591,18 @@ export class LoanaccountTransactionComponent implements OnInit {
             // // console.log(dt)
             // console.log(this.dtpipe.transform(dt,'dd/MM/yyyy hh:mm:ss'))
             this.sancdtls = acc.tmlaonsanctiondtls;
-            if((this.sys.ardbCD=='26'||this.sys.ardbCD=='2') && acc.tmloanall.acc_cd==20416){
-            this.sancdtls.forEach(x => x.draw_limit = x.sanc_amt - (acc.tmloanall.curr_prn+acc.tmloanall.ovd_prn));
-           }
-            else{
-            this.sancdtls.forEach(x => x.draw_limit = x.sanc_amt - acc.tmloanall.disb_amt);
-            }
+            const filteredLoans = this.accountTypeList2.filter(loan => loan.cc_flag == 'Y');
+            const exists = filteredLoans.some(loan => loan.acc_type_cd == acc.tmloanall.acc_cd);
+            console.log(filteredLoans);
+            console.log(exists,"xdrfgre");
+  
+            // if((this.sys.ardbCD=='26'||this.sys.ardbCD=='2') && acc.tmloanall.acc_cd==20416){
+              if(exists){
+              this.sancdtls.forEach(x => x.draw_limit = x.sanc_amt - (acc.tmloanall.curr_prn+acc.tmloanall.ovd_prn));
+             }
+              else{
+              this.sancdtls.forEach(x => x.draw_limit = x.sanc_amt - acc.tmloanall.disb_amt);
+              }
             // for (let x = 0; x < acc.tmlaonsanctiondtls.length; x++) {
             //   this.sancdtls = this.sancDetails.get('sancdtls') as FormArray;
             //   this.sancdtls.push(this.frmBldr.group({

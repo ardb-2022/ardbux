@@ -167,29 +167,31 @@ export class SendSmsFromDemandComponent {
   bName1=''
   notvalidate:boolean=false;
   date_msg:any;
-  private baseUrl: string = 'http://sms.digilexa.in/http-api.php';
+  private baseUrl: string ;
   // private HbaseUrl: string = 'https://bulksms.sssplsales.in/api/api_http.php';
 
-  private username: string = 'HowrahARD';
-  private password: string = 'rt6@HCARDB';
-  private senderid: string = 'HCARDB';
-  private route: string = '7';
+  private username: string ;
+  private password: string ;
+  private senderid: string ;
+  private route: string ;
   private adt_to_dt: string;
   urls: string[] = [];
   responses: any[] = [];
   checkedAllSMSFlag:boolean=false;
   diff:any;
+  apikey:any;
   constructor(private datePipe:DatePipe,private comSer:CommonServiceService, private svc: RestService, private formBuilder: FormBuilder,private exportAsService: ExportAsService, private cd: ChangeDetectorRef,
     private modalService: BsModalService, private _domSanitizer: DomSanitizer, private comser:CommonServiceService,
     private router: Router,private http: HttpClient) { }
   ngOnInit(): void {
     if(this.sys.ardbCD=='23'){
-        this.baseUrl='http://sms.digilexa.in/http-api.php';
-        this.username='HowrahARD';
+        this.baseUrl='http://sms.synergicapi.in/api.php';
+        this.username='HOWRAHARDB';
+        this.apikey='Q83Yu7UUyuLZ';
         this.password='rt6@HCARDB';
         this.senderid='HCARDB';
-        this.route='7';
-    }
+        this.route='OTP';
+       }
     else if(this.sys.ardbCD=='26'){
         this.baseUrl='https://bulksms.sssplsales.in/api/api_http.php';
         this.username='BCARDB';
@@ -197,6 +199,15 @@ export class SendSmsFromDemandComponent {
         this.senderid='BCARDB';
         this.route='7';
     }
+    else if(this.sys.ardbCD=='21'){
+      this.baseUrl='http://sms.synergicapi.in/api.php';
+      this.username='RAMPURHATARDB';
+      this.apikey='SHgopMrPOYcL';
+      this.senderid='RCARDB';
+      this.route='OTP';
+  }
+
+
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.fromdate = this.sys.CurrentDate;
@@ -453,12 +464,12 @@ export class SendSmsFromDemandComponent {
       url = `${this.baseUrl}?username=${this.username}&password=${this.password}&senderid=${this.senderid}&to=${encodeURIComponent(ls_phone)}&text=${message2}`;
     }
     else if(this.sys.ardbCD=='21'){
-      url=`http://sms.synergicapi.in/api.php?username=RAMPURHATARDB&apikey=SHgopMrPOYcL&senderid=RCARDB&route=OTP&mobile=${encodeURIComponent(ls_phone)}&text=
+      url = `${this.baseUrl}?username=${this.username}&apikey=${this.apikey}&senderid=${this.senderid}&route=${this.route}&mobile=${encodeURIComponent(ls_phone)}&text=
      Dear Member, Demand for your Loan A/c ${ls_acc_num1} is Rs. ${ld_tot_demand.toFixed(2)} as on ${this.adt_to_dt}. Please pay on time to avoid the penalty. -Rampurhat ARDB Ltd.`
       }
-    // ${this.username}
-    else{
-      url = `${this.baseUrl}?username=${this.username}&password=${this.password}&senderid=${this.senderid}&route=${this.route}&number=${encodeURIComponent(ls_phone)}&message=${encodeURIComponent(message)}`;
+
+    else if(this.sys.ardbCD=='23'){
+      url = `${this.baseUrl}?username=${this.username}&apikey=${this.apikey}&senderid=${this.senderid}&route=${this.route}&number=${encodeURIComponent(ls_phone)}&message=${encodeURIComponent(message)}`;
     }
       //const url = `${this.baseUrl}?username=${this.username}&password=${this.password}&senderid=${this.senderid}&route=${this.route}&number=${encodeURIComponent(ls_phone)}&message=${encodeURIComponent(message)}`;
      // const url2 = `${this.baseUrl}?username=${this.username}&password=${this.password}&senderid=${this.senderid}&to=${encodeURIComponent(ls_phone)}&message=${encodeURIComponent(message2)}`;

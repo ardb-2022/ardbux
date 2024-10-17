@@ -25,7 +25,7 @@ import jspdf from 'jspdf';
   providers:[ExportAsService]
 })
 export class ConsoCCTrialComponent implements OnInit ,AfterViewInit{
-  displayedColumns: string[] = ['acc_cd', 'acc_name', 'opng_dr', 'dr', 'cr', 'clos_dr'];
+  // displayedColumns: string[] = ['acc_cd', 'acc_name', 'opng_dr', 'dr', 'cr', 'clos_dr'];
   dataSource=new MatTableDataSource();
   dataSource1=new MatTableDataSource();
   dataSource2=new MatTableDataSource();
