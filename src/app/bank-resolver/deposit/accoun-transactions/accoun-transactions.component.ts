@@ -6388,7 +6388,7 @@ debugger
   }
     sumAmount(i:number){
       let insufbal=this.td_deftranstrfList[i]?.clr_bal < this.td_deftranstrfList[i]?.amount;
-      if(insufbal && this.td_deftranstrfList[i]?.clr_bal!=null && (this.f.acc_type_cd.value ==1 ||this.f.acc_type_cd.value ==7 ||this.f.acc_type_cd.value ==8)){
+      if(insufbal && this.td_deftranstrfList[i]?.clr_bal!=null && (this.f.acc_type_cd.value ==1 ||this.f.acc_type_cd.value ==7 ||this.f.acc_type_cd.value ==8) && this.td.trans_mode.value == 'D'){
         this.HandleMessage(true, MessageType.Error, `Warning! , Insufficient Balance at ${this.td_deftranstrfList[i]?.cust_name} A/C`)
         this.td_deftranstrfList[i].amount=0;
         debugger
