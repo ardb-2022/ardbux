@@ -13,7 +13,7 @@ export class RestService {
   // static configuration: BankConfiguration[] = [];
   static bankconfigurationList: BankConfig[] = [];
   static serverIp = 'cfs2022.in';
-
+  public ifscbaseUrl: string = 'https://ifsc.razorpay.com';
 
   constructor(private http: HttpClient, private confSvc: ConfigurationService,
               private router: Router) {

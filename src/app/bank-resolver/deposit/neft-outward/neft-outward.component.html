@@ -96,7 +96,7 @@
       </div>
       <div class="form-group col-4">
         <small for="trans_type">Payment Type<span class="text-danger">*</span></small> <br>
-        <select [disabled]="!isRetrieve"
+        <select  disabled
           style="font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
           [(ngModel)]="neftPayRet.payment_type"   (change)="setPaymentType($event.target.value)"
           id="payment_type" class="form-control form-control-sm">
@@ -183,10 +183,10 @@
       </div> -->
       <div class="form-group col-6">
         <small for="bene_ifsc_code">Search by IFSC#<span class="text-danger">*</span></small>
-          <span mat-raised-button type="button" class="badge badge-warning pull-right" *ngIf="neftPayRet.bene_ifsc_code.length > 8"
+          <span mat-raised-button type="button" class="badge badge-warning pull-right" *ngIf="__ifscbranch||__ifsc"
             (click)="openModal()" matTooltip="Click here to see full details">
            
-              BANK:{{__ifscbank}},  BRANCH:{{__ifscbranch}}
+              BANK:{{__ifscbank}},  BRANCH:{{__ifscbranch}},  CITY:{{__ifsccity}}
 
        
           </span>
@@ -202,7 +202,7 @@
           </div>
         </div>
          
-          <div class="suggestions" *ngIf="suggestedIfsc && suggestedIfsc.length > 0">
+          <div class="suggestions" *ngIf="ifscView">
             <table class="table table-hover table-bordered table-sm w-auto small" id="customers1">
               <!-- <thead> -->
                 <tr>
@@ -214,12 +214,12 @@
                 </tr>
               <!-- </thead> -->
               <tbody>
-                <tr *ngFor="let ifsc of suggestedIfsc" (click)="SelectedIfsc(ifsc)">
-                  <td scope="row">{{ifsc.ifsc}}</td>
-                  <td>{{ifsc.bank}}</td>
-                  <td>{{((null === ifsc.branch) ? '' : ifsc.branch)}}</td>
-                  <td>{{ifsc.address}}</td>
-                  <td>{{ifsc.city}}</td>
+                <tr  (click)="SelectedIfsc(suggestedIfsc)">
+                  <td scope="row">{{suggestedIfsc.IFSC}}</td>
+                  <td>{{suggestedIfsc.BANK}}</td>
+                  <td>{{((null === suggestedIfsc.BRANCH) ? '' : suggestedIfsc.BRANCH)}}</td>
+                  <td>{{suggestedIfsc.ADDRESS}}</td>
+                  <td>{{suggestedIfsc.CITY}}</td>
                 </tr>
               </tbody>
             </table>

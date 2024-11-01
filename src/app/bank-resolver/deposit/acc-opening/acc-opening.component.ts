@@ -2631,7 +2631,7 @@ export class AccOpeningComponent implements OnInit {
     this.tm_deposit.mat_dt.setMonth(this.tm_deposit.mat_dt.getMonth() + this.tm_deposit.month);
     this.tm_deposit.mat_dt.setDate(this.tm_deposit.mat_dt.getDate() + this.tm_deposit.day);
 
-    if (this.operationType === 'I' && (this.tm_deposit.acc_type_cd === 4)||(this.tm_deposit.acc_type_cd === 2)) {
+    if (this.operationType === 'I' && (this.tm_deposit.acc_type_cd === 4)||(this.tm_deposit.acc_type_cd === 2)||(this.tm_deposit.acc_type_cd === 5||(this.tm_deposit.acc_type_cd === 6))){
 
       this.calculateInterestRate();
     }
@@ -2672,13 +2672,13 @@ export class AccOpeningComponent implements OnInit {
   calculateInterestRate() {
     const temp_gen_param2 = new p_gen_param();
     temp_gen_param2.ardb_cd=this.sys.ardbCD;
-    temp_gen_param2.acc_cd = 2;
+    temp_gen_param2.acc_cd = this.tm_deposit.acc_type_cd;
     temp_gen_param2.from_dt = this.sys.CurrentDate;
     temp_gen_param2.ls_catg_cd = this.tm_deposit.category_cd;
     temp_gen_param2.ai_period = Math.floor((Date.UTC(this.tm_deposit.mat_dt.getFullYear(),
       this.tm_deposit.mat_dt.getMonth(), this.tm_deposit.mat_dt.getDate()) -
       (Date.UTC(this.tm_deposit.opening_dt.getFullYear(), this.tm_deposit.opening_dt.getMonth(),
-        this.tm_deposit.opening_dt.getDate()))) / (1000 * 60 * 60 * 24)) - 1;
+        this.tm_deposit.opening_dt.getDate()))) / (1000 * 60 * 60 * 24)) ;
     this.svc.addUpdDel<any>('Deposit/GET_INT_RATE', temp_gen_param2).subscribe(
       // var dt = {
       //   "ardb_cd": this.sys.ardbCD,

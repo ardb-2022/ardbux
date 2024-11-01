@@ -234,28 +234,7 @@
     "dist_code": 317.0,
     "bank_name": "TMARDBUXBR8"
   },
-  {
-    "ardB_CD": "400",
-    "name": "South 24 Parganas Jaynagar Branch.",
-    "full_name": "South 24 Parganas Co-Operative Agriculture & Rural Development Bank Ltd.",
-    "dist_code": 317.0,
-    "bank_name": "TMARDBUXUAT"
-  },
-  {
-    "ardB_CD": "401",
-    "name": "South 24 Parganas Kakdwip Branch.",
-    "full_name": "South 24 Parganas Co-Operative Agriculture & Rural Development Bank Ltd.",
-    "dist_code": 319.0,
-    "bank_name": "MUARDBUXBR1"
-  },
-  {
-    "ardB_CD": "402",
-    "name": "South 24 Parganas Canning Branch.",
-    "full_name": "South 24 Parganas Co-Operative Agriculture & Rural Development Bank Ltd.",
-    "dist_code": 319.0,
-    "bank_name": "MUARDBUXBR2"
-  },
-  
+ 
   {
     "ardB_CD": "99",
     "name": "Burdwan UAT Test.",

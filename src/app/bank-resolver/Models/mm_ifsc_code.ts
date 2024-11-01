@@ -1,11 +1,11 @@
 export class mm_ifsc_code {
   public ardb_cd:any;
-  public bank: string;
+  public BANK: string;
   public ifsc: string;
-  public branch: string;
-  public address: string;
-  public phone: string;
-  public city: string;
-  public dist: string;
-  public state: string;
+  public BRANCH: string;
+  public ADDRESS: string;
+  public BANKCODE: string;
+  public CITY: string;
+  public CONTACT: string;
+  public STATE: string;
 }

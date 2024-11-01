@@ -368,7 +368,7 @@ export class DemandNoticeBlockWiseComponent implements OnInit {
   }
   public SubmitReport() {
     this.getBlockName();
-    if(this.ardbcd=="26"){
+    if(this.ardbcd=="26"||this.ardbcd=="23"){
     this.convertDtFrm=''
     this.convertDtFrm=this.datePipe.transform(this.reportcriteria.controls.fromDate.value, 'dd/MM/yyyy')
       this.toDate = this.reportcriteria.controls.toDate.value;
@@ -432,18 +432,19 @@ debugger
         this.reportData.forEach(p => {
           // if(this.sys.ardbCD=="20" ||this.sys.ardbCD=="21" ||this.sys.ardbCD=="11" || this.sys.ardbCD=="26"||this.sys.ardbCD=="10"||this.sys.ardbCD=="22"||this.sys.ardbCD=="23"){
           if(this.sys.ardbCD!="2" && this.sys.ardbCD!="4" && this.sys.ardbCD!="3" ){
-            
+            if(this.sys.ardbCD=="23"){
+              const abc = p.block_name;
+              let [GName, Phone] = abc.split('$');
+              p.block_name = GName.trim();
+              p.phone_number = Phone.trim();
+            }
             // p.brn_cd=this.allServiceArea.filter(e=>e.service_area_cd==p.brn_cd)[0]?.service_area_name;
             const abc = p.activity_name;
             let [cName, cAddress] = abc.split('$');
-    
-            // Trim any leading or trailing whitespaces in the address
             p.activity_name = cName.trim();
             p.ardb_cd = cAddress.trim();
              
-            // Now cName contains the name and cAddress contains the address
-            console.log("cName:", cName);
-            console.log("cAddress:", cAddress);
+            
           }
           else{
             p.cust_address=this.allServiceArea.filter(e=>e.service_area_cd==p.cust_address)[0]?.service_area_name;

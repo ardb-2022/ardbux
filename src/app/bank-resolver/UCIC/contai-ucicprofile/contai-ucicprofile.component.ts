@@ -440,7 +440,7 @@ export class ContaiUCICprofileComponent implements OnInit {
       console.log(this.po.filter(e => e.po_id ==
         selectedVillage.po_id));
       
-      const add=`Village: ${selectedVillage.vill_name}, Post Office: ${this.selectedPO.po_name}, Pin: ${this.selectedPO.pin}, GP: ${this.selectedServiceArea.service_area_name}, PS: ${this.selectedPS.ps_name}, Block: ${this.selectedBlock.block_name}`
+      const add=`Village:${selectedVillage.vill_name}, Post Office:${this.selectedPO.po_name}, Pin:${this.selectedPO.pin}, GP:${this.selectedServiceArea.service_area_name}, PS:${this.selectedPS.ps_name}, Block:${this.selectedBlock.block_name}`
 debugger
         this.custMstrFrm.patchValue({
       service_area_cd: this.selectedServiceArea.service_area_cd,

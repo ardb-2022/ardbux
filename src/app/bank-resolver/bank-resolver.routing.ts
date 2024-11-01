@@ -222,6 +222,10 @@ import { ConsoLoanDcSHGComponent } from './loan/report/conso-loan-dc-shg/conso-l
 import { ConsoLoanDcRHComponent } from './loan/report/conso-loan-dc-rh/conso-loan-dc-rh.component';
 import { ConsoGenLedgerComponent } from './finance/report/conso-gen-ledger/conso-gen-ledger.component';
 import { InterestSubsidySHGComponent } from './loan/report/interest-subsidy-shg/interest-subsidy-shg.component';
+import { ConsoDtlListFdMisComponent } from './deposit/report/conso-dtl-list-fd-mis/conso-dtl-list-fd-mis.component';
+import { ConsoDtlListSbcaComponent } from './deposit/report/conso-dtl-list-sbca/conso-dtl-list-sbca.component';
+import { ConsoDtlListRdComponent } from './deposit/report/conso-dtl-list-rd/conso-dtl-list-rd.component';
+import { DetailListConsolidatedComponent } from './loan/report/detail-list-consolidated/detail-list-consolidated.component';
 
 const routes: Routes = [
   { path: 'Admin', component: AdminPanelComponent },
@@ -314,6 +318,9 @@ const routes: Routes = [
       { path: 'DR_DLS', component: DetailListSBCAComponent, canActivate: [AuthGuard] },
       { path: 'DR_DLR', component: DetailListRDComponent, canActivate: [AuthGuard] },
       { path: 'DR_DLF', component: DetailListFDMISComponent, canActivate: [AuthGuard] },
+      { path: 'DR_DLFDMS_CONSO', component: ConsoDtlListFdMisComponent, canActivate: [AuthGuard] },
+      { path: 'DR_DLSBCA_CONSO', component: ConsoDtlListSbcaComponent, canActivate: [AuthGuard] },
+      { path: 'DR_DLRD_CONSO', component: ConsoDtlListRdComponent, canActivate: [AuthGuard] },
       { path: 'DR_DLF_CONST', component: DetailListFdmisConstWiseComponent, canActivate: [AuthGuard] },
       { path: 'DR_DL_SBCA_CONST', component: DetailListSbcaConstWiseComponent, canActivate: [AuthGuard] },
       { path: 'DR_ASS', component: AccStmtSBCAComponent, canActivate: [AuthGuard] },
@@ -328,6 +335,7 @@ const routes: Routes = [
       { path: 'LR_DtlLst', component: DetailListComponent, canActivate: [AuthGuard] },
       { path: 'LR_UserWiseTrans', component: UserWiseTransactionLoanComponent, canActivate: [AuthGuard] },
       { path: 'LR_DlistAll', component: DetaillistAllComponent, canActivate: [AuthGuard] },
+      { path: 'LR_DlistConsole', component: DetailListConsolidatedComponent, canActivate: [AuthGuard] },
       { path: 'LR_DflLst', component: DefaulterListComponent, canActivate: [AuthGuard] },
       { path: 'LR_DMLst', component: DemandListComponent, canActivate: [AuthGuard] },
       { path: 'LR_DMLstUpdated', component: UpdatedDemandListComponent, canActivate: [AuthGuard] },

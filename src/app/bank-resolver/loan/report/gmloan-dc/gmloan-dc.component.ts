@@ -88,8 +88,10 @@ export class GMloanDCComponent implements OnInit {
   resultLength=0;
   LandingCall:boolean;
   filterData:any[]=[];
+  ardbcd:any;
   constructor(private comser:CommonServiceService, private svc: RestService, private formBuilder: FormBuilder,private exportAsService: ExportAsService, private cd: ChangeDetectorRef,private modalService: BsModalService, private _domSanitizer: DomSanitizer,private router: Router) { }
   ngOnInit(): void {
+    this.ardbcd=this.sys.ardbCD
     this.getActivityList()
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;

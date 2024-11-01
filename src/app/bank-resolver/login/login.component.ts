@@ -181,9 +181,9 @@ export class LoginComponent implements OnInit {
      this.f.ardbbrMst.value=='307'||this.f.ardbbrMst.value=='308'){
       this.ARBD="3";
     }
-    else if(this.f.ardbbrMst.value=='401'||this.f.ardbbrMst.value=='402'|| this.f.ardbbrMst.value=='400'){
-      this.ARBD="1";
-    }
+    // else if(this.f.ardbbrMst.value=='401'||this.f.ardbbrMst.value=='402'|| this.f.ardbbrMst.value=='400'){
+    //   this.ARBD="1";
+    // }
     else if(this.f.ardbbrMst.value=='403'||this.f.ardbbrMst.value=='404' ||this.f.ardbbrMst.value=='405'){
       this.ARBD="11";
     }
