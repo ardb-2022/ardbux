@@ -91,6 +91,7 @@ export class ContaiUCICprofileComponent implements OnInit {
   custName:Subscription
   operation: string;
   selectedBlock: mm_block;
+  selectedDist:mm_dist;
   selectedServiceArea: mm_service_area;
   isOpenDOBdp = false;
   isOpenDODdp = false;
@@ -419,6 +420,9 @@ export class ContaiUCICprofileComponent implements OnInit {
     this.selectedBlock = this.blocks.filter(e => e.block_cd ===
       selectedVillage.block_cd)[0];
 
+      this.selectedDist = this.districts.filter(e => e.dist_cd.toString() ==
+        selectedVillage.dist_cd)[0];
+
       console.log(this.blocks.filter(e => e.block_cd ===
         selectedVillage.block_cd));
       
@@ -440,7 +444,7 @@ export class ContaiUCICprofileComponent implements OnInit {
       console.log(this.po.filter(e => e.po_id ==
         selectedVillage.po_id));
       
-      const add=`Village:${selectedVillage.vill_name}, Post Office:${this.selectedPO.po_name}, Pin:${this.selectedPO.pin}, GP:${this.selectedServiceArea.service_area_name}, PS:${this.selectedPS.ps_name}, Block:${this.selectedBlock.block_name}`
+      const add=`VILL:${selectedVillage.vill_name}, PO:${this.selectedPO.po_name}, Pin:${this.selectedPO.pin}, GP:${this.selectedServiceArea.service_area_name}, PS:${this.selectedPS.ps_name}, Block:${this.selectedBlock.block_name}, Dist:${this.selectedDist.dist_name}`
 debugger
         this.custMstrFrm.patchValue({
       service_area_cd: this.selectedServiceArea.service_area_cd,

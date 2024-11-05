@@ -93,7 +93,7 @@ style="background-color: #78c2ad21; min-height: 20vh;">
 <table mat-table cdkDropListGroup [dataSource]="dataSource"  class="mat-elevation-z8" matSort>
 
 <ng-container matColumnDef="mainHeader">
-<th mat-header-cell colspan="6" *matHeaderCellDef>
+<th mat-header-cell  *matHeaderCellDef>
 <div class="justify-content-center" style="text-align:center" *ngIf="reportData">
 
   <h4>{{ardbName}} ({{branchName}})</h4>
@@ -124,7 +124,9 @@ style="background-color: #78c2ad21; min-height: 20vh;">
    
         <ng-container style="padding-bottom:17px;">
           <tr mat-cell  style="width:100%; height: 35px;">
+            <th mat-header-cell style="text-align: left;">Branch Name</th>
             <th mat-header-cell style="text-align: center;">Voucher Date</th>
+            <th mat-header-cell style="text-align: center;">Voucher ID</th>
             <th mat-header-cell style="text-align: right;">Dr Amount</th> 
             <th mat-header-cell style="text-align: right;">Cr Amount</th>
             <th mat-header-cell style="width: 30%; text-align: left;">Narration</th>
@@ -134,7 +136,9 @@ style="background-color: #78c2ad21; min-height: 20vh;">
         </tr>
                   <tbody>
                     <tr *ngFor="let i of element.ttgltrans">
+                      <td mat-cell style="text-align: left;">{{i.brn_cd}} </td>
                       <td mat-cell style="text-align: center;">{{i.voucher_dt.substr(0,10)}} </td>
+                      <td mat-cell style="text-align: center;">{{i.voucher_id}} </td>
                       <td mat-cell style="text-align: right;">{{i.dr_amt| currency:'INR'}}</td>
                       <td mat-cell style="text-align: right;">{{i.cr_amt| currency:'INR'}} </td>
                       <td mat-cell style="width: 30%;text-align: left;">{{i.narration}} </td>
@@ -163,7 +167,7 @@ style="background-color: #78c2ad21; min-height: 20vh;">
                     <!-- <td mat-cell>{{e1.ovd_intt_recov+e1.penal_intt_recov+e1.curr_intt_recov+e1.ovd_prn_recov+e1.curr_prn_recov}}</td> -->
                     </tr>
                     <tr mat-cell >
-                      <td mat-cell colspan="3" style=" text-align: right;"><b>Total</b></td>
+                      <td mat-cell colspan="5" style=" text-align: right;"><b>Total</b></td>
                         <td mat-cell style="text-align: right;"><b>{{element.acctype.tot_acc_curr_prn_recov|currency:"INR"}}</b></td>
                         <td mat-cell style=" text-align: right;"><b>{{element.acctype.tot_acc_ovd_prn_recov|currency:"INR"}}</b></td>
                         <td mat-cell  ></td>

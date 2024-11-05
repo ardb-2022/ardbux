@@ -404,6 +404,7 @@ return new Date(parseInt(parts[2]), parseInt(parts[1])-1, parseInt(parts[0]));
 updateLogStatus(){
   if(this.userInfo){
     this.userInfo.login_status='Y';
+    this.userInfo.password=null;
     this.userInfo.ip=localStorage.getItem("ipAddress");
     // this.userInfo.forEach(e => {
     //   e.brn_cd=localStorage.getItem('BUX')

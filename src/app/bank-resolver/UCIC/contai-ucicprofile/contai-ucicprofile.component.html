@@ -296,7 +296,7 @@
         </div>
         <div class="form-group col-2">
           <small for="dist">District</small>
-          <select id="dist" class="form-control form-control-sm" [readonly]="true" formControlName="dist">
+          <select id="dist" class="form-control form-control-sm"  formControlName="dist">
             <option *ngIf="districts" >Choose</option>
             <option *ngFor="let district of districts" [value]="district.dist_cd">{{district.dist_name}}</option>
           </select>

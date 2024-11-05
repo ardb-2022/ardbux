@@ -349,7 +349,7 @@ export class LoginComponent implements OnInit {
                 if (response == true) {
                   res[0].login_status = 'Y';
                   res[0].ip = localStorage.getItem('ipAddress');
-                  this.updateUsrStatus(res[0]);
+                  // this.updateUsrStatus(res[0]);
                   this.getSystemParam();
 
                 }

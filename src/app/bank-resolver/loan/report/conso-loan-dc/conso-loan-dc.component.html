@@ -167,6 +167,15 @@
         <br>
        <table class="t2">
         <tr mat-cell >
+          <td mat-cell style="width:33%;"><b> Purpose Wise Total: </b></td>
+          <td mat-cell style="width:5%"><b>{{sys.ardbCD=='25'?row.tot_sanc:row.tot_sanc/2}}</b></td>
+          <td mat-cell style="width:5%"><b>{{sys.ardbCD=='25'?row.tot_own_contribution:row.tot_own_contribution/2}}</b></td>
+          <td mat-cell style="width:16%;"></td>
+          <td mat-cell style="width:5%"><b>{{row.tot_disb}}</b></td>
+          <td mat-cell style="width:5%"><b>{{sys.ardbCD=='25'?row.tot_project:row.tot_project/2}}</b></td>
+          <td mat-cell style="width:34%;"></td>
+        </tr>
+        <!-- <tr mat-cell >
           <td mat-cell style="width:39%;"><b> Purpose Wise Total: </b></td>
           <td mat-cell style="width:5%"><b>{{row.tot_sanc/2|currency:"INR"}}</b></td>
           <td mat-cell style="width:5%"><b>{{row.tot_own_contribution/2|currency:"INR"}}</b></td>
@@ -174,7 +183,7 @@
           <td mat-cell style="width:5%"><b>{{row.tot_disb|currency:"INR"}}</b></td>
           <td mat-cell style="width:5%"><b>{{row.tot_project/2|currency:"INR"}}</b></td>
           <td mat-cell style="width:34%;"></td>
-        </tr>
+        </tr> -->
         <tr rowspan="5" colspan="7">
           <td colspan="2" style="padding-top: 5%;">
             <p>
