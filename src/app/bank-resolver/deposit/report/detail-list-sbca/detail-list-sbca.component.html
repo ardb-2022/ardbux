@@ -19,8 +19,8 @@
           <small for="acc_type_cd">Account Type</small>
           <select id="acc_type_cd" class="form-control form-control-sm" formControlName="acc_type_cd"
           (change)="onAccountTypeChange()">
-          <option *ngIf="AcctTypes" disabled>Choose</option>
-              <option *ngFor="let acctType of AcctTypes" [value]="acctType.acc_type_cd">
+          <option *ngIf="accountTypeList" disabled>Choose</option>
+              <option *ngFor="let acctType of accountTypeList" [value]="acctType.acc_type_cd">
                 {{acctType.acc_type_cd +' ' + acctType.acc_type_desc}}
               </option>
             <!-- <option disabled>Choose</option>

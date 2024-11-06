@@ -260,6 +260,8 @@ export class NeftOutwardComponent implements OnInit {
   }
 
   clearData() {
+    // this.neftPayRet.payment_type ="N";
+    this.isAccountNumber1Masked=false;
     this.clearBalance=0;
     this.neftPayRet.trans_cd = null;
     this.neftPayRet.bene_acc_no = null;
@@ -279,7 +281,11 @@ export class NeftOutwardComponent implements OnInit {
     this.__ifscbranch='';
     this.__ifscaddress='';
     this.__ifsccity='';
-    this.clearBalance=''
+    this.clearBalance='';
+    this.branchCode = this.sys.BranchCode;
+    this.userName = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
+    this.neftPayRet.payment_type ="N";
+    this.neftPayRet.ardb_cd=this.sys.ardbCD
   }
 
   retrieveData() {

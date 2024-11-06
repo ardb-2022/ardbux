@@ -11,12 +11,12 @@ import { p_gen_param } from 'src/app/bank-resolver/Models/p_gen_param';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
-  selector: 'app-dds-individual-posting',
-  templateUrl: './dds-individual-posting.component.html',
-  styleUrls: ['./dds-individual-posting.component.css'],
+  selector: 'app-flexi-small-saving-posting',
+  templateUrl: './flexi-small-saving-posting.component.html',
+  styleUrls: ['./flexi-small-saving-posting.component.css'],
   providers: [DatePipe]
 })
-export class DdsIndividualPostingComponent implements OnInit {
+export class FlexiSmallSavingPostingComponent implements OnInit {
   brnDtls: m_branch[] = [];
   modalRef: BsModalRef;
   showHideAgent:boolean=false
@@ -133,9 +133,9 @@ export class DdsIndividualPostingComponent implements OnInit {
       "trans_cd":this.f.trans_cd.value,
       "trans_amt":this.f.trans_amt.value
     }
-   this.svc.addUpdDel('Deposit/UpdateUnapprovedAgentTrans',dt).subscribe(data=>{
-      this.svc.addUpdDel('Deposit/UpdateUnapprovedDdsTrans',this.transData).subscribe(d1=>{
-       if(!data && !d1){
+ 
+      this.svc.addUpdDel('Deposit/UpdateUnapprovedFlexiDailyDepositTrans',this.transData).subscribe(d1=>{
+       if(!d1){
           this.HandleMessage(true,MessageType.Sucess,'Updated successfully!!')
         }
         else{
@@ -147,9 +147,7 @@ export class DdsIndividualPostingComponent implements OnInit {
       }
 
       )
-    },error=>{
-      this.HandleMessage(true,MessageType.Error,'An Error occurred while saving!!')
-    })
+    
   }
  deleteuser() {
     this.isLoading = true;
@@ -219,57 +217,46 @@ export class DdsIndividualPostingComponent implements OnInit {
       "trans_dt":this.f.trans_dt.value
     }
     if(this.f.agent_cd.value){
-    this.svc.addUpdDel('Deposit/GetUnapprovedAgentTrans',dt).subscribe(data => {console.log(data)
-    this.retrieveAgentData=data
+    // this.svc.addUpdDel('Deposit/GetUnapprovedSBFLEXITrans',dt).subscribe(data => {console.log(data)
+    // this.retrieveAgentData=data
    
-      if(this.retrieveAgentData.approval_status=='U'){
-        this.isApprove=true;
-        this.agentFrm.patchValue({
-          trans_cd:this.retrieveAgentData.trans_cd,
-          trans_type:this.retrieveAgentData.trans_type=='D'?'Deposit':'Transfer',
-          trans_amt:this.retrieveAgentData.trans_amt,
-          agent_name:this.retrieveAgentData.agent_cd
-        })
-        var req={
-          "ardb_cd":this.sys.ardbCD,
-          "brn_cd":this.sys.BranchCode,
-          "agent_cd":this.f.agent_cd.value,
-          "trans_dt":this.f.trans_dt.value,
-          "trans_cd":this.f.trans_cd.value
-        }
-        this.svc.addUpdDel('Deposit/GetUnapprovedDdsTrans',req).subscribe(dat=>{
-            this.transData=dat
-           
-            this.transData.forEach(resp => {
-              this.totSum+=resp.paid_amt
-              this.totAmt+=resp.paid_amt
-              const prm = new p_gen_param();
-              // prm.ad_acc_type_cd = +this.f.acc_type_cd.value;
-              prm.as_cust_name =resp.acc_num
-              // prm.ad_acc_type_cd =resp.acc_type_cd;
-              prm.ad_acc_type_cd = 11;
-              console.log(prm);
-              this.svc.addUpdDel<any>('Deposit/GetAccDtls', prm).subscribe(
-                res => {
-                  console.log(res)
-                  this.isLoading=false;
-                  this.custName.push(res[0])
-                  console.log(this.custName);
-                  this.isLoading=false;
-                },
-                err => { this.isLoading = false; }
-              );
-             });
-            // this.agentFrm.controls.trans_amt.setValue(this.totSum)
-            this.totAmt=this.totSum
-            console.log(dat)
+    //   if(this.retrieveAgentData.approval_status=='U'){
+    //     this.isApprove=true;
+    //     this.agentFrm.patchValue({
+    //       trans_cd:this.retrieveAgentData.trans_cd,
+    //       trans_type:this.retrieveAgentData.trans_type=='D'?'Deposit':'Transfer',
+    //       trans_amt:this.retrieveAgentData.trans_amt,
+    //       agent_name:this.retrieveAgentData.agent_cd
+    //     })
+        // var req={
+        //   "ardb_cd":this.sys.ardbCD,
+        //   "brn_cd":this.sys.BranchCode,
+        //   "agent_cd":this.f.agent_cd.value,
+        //   "trans_dt":this.f.trans_dt.value,
+        //   "trans_cd":this.f.trans_cd.value
+        // }
+        this.svc.addUpdDel('Deposit/GetUnapprovedSBFLEXITrans',dt).subscribe(dat=>{
+          this.isLoading=false;
+          this.isApprove=true;
+            this.transData=dat;
+              this.transData.forEach(resp => {
+              this.totSum+=resp.amount
+              this.totAmt+=resp.amount
+              this.totAmt=this.totSum
+              console.log(dat)
           })
-      }
-      else{
-        this.isApprove=false
-        this.isLoading=false;
-        this.HandleMessage(true, MessageType.Error, 'The data for this agent has either been approved or hasn\'t been imported yet!');
-      }
+      
+      // else{
+      //   this.isApprove=false
+      //   this.isLoading=false;
+      //   this.HandleMessage(true, MessageType.Error, 'The data for this agent has either been approved or hasn\'t been imported yet!');
+      // }
+    },
+    err => {
+      this.isApprove=false;
+      this.isLoading = false; 
+      this.HandleMessage(true, MessageType.Error, 'No data found');
+      
     })
      
     }
@@ -286,9 +273,9 @@ export class DdsIndividualPostingComponent implements OnInit {
   calcSum(){
     this.totSum=0;
     this.transData.forEach(res => {
-      this.totSum+=(+res.paid_amt)
+      this.totSum+=(+res.amount)
 
-      console.log(this.totSum,+res.paid_amt)
+      console.log(this.totSum,+res.amount)
      });
     this.agentFrm.controls.trans_amt.setValue(this.totSum)
     this.totAmt=this.totSum
@@ -353,12 +340,11 @@ export class DdsIndividualPostingComponent implements OnInit {
       "ardb_cd":this.sys.ardbCD,
       "brn_cd":this.sys.BranchCode,
       "trans_dt":this.f.trans_dt.value,
-      "trans_cd":this.f.trans_cd.value,
+      // "trans_cd":this.f.trans_cd.value,
       "user_id":this.sys.UserId,
-      "agent_cd":this.f.agent_cd.value,
-      "ad_acc_type_cd":10
+      "agent_cd":this.f.agent_cd.value
     }
-    this.svc.addUpdDel('Deposit/ApproveDdsImportData',dt).subscribe(data=>{console.log(data)
+    this.svc.addUpdDel('Deposit/ApproveSBFlexiData',dt).subscribe(data=>{console.log(data)
       
     if(!data){
       this.HandleMessage(true, MessageType.Sucess, 'Approved successfully');

@@ -226,6 +226,7 @@ import { ConsoDtlListFdMisComponent } from './deposit/report/conso-dtl-list-fd-m
 import { ConsoDtlListSbcaComponent } from './deposit/report/conso-dtl-list-sbca/conso-dtl-list-sbca.component';
 import { ConsoDtlListRdComponent } from './deposit/report/conso-dtl-list-rd/conso-dtl-list-rd.component';
 import { DetailListConsolidatedComponent } from './loan/report/detail-list-consolidated/detail-list-consolidated.component';
+import { FlexiSmallSavingPostingComponent } from './deposit/ddsExportImport/flexi-small-saving-posting/flexi-small-saving-posting.component';
 
 const routes: Routes = [
   { path: 'Admin', component: AdminPanelComponent },
@@ -398,6 +399,7 @@ const routes: Routes = [
       { path: 'DT_DDIMPORT', component: DdsImportComponent, canActivate: [AuthGuard] },
       { path: 'DR_DDS_COL_REP', component: DdsAgentTransReportComponent, canActivate: [AuthGuard] },
       { path: 'DT_DDINDPOST', component: DdsIndividualPostingComponent, canActivate: [AuthGuard] },
+      { path: 'DT_FSSINDPOST', component: FlexiSmallSavingPostingComponent, canActivate: [AuthGuard] },
       { path: 'DT_SavingInttPost', component: SavingIntPostComponent, canActivate: [AuthGuard] },
       { path: 'DT_SMSchargeDed', component: SmsChargeDeductionComponent, canActivate: [AuthGuard] },
       { path: 'DT_AgentComPost', component: AgentCommissionComponent, canActivate: [AuthGuard] },

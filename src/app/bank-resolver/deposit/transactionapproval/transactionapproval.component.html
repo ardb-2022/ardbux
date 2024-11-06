@@ -362,17 +362,23 @@
           <form [formGroup]="renewDtlsFrm">
             <h4 class="customHeader">Renewal Details</h4>
             <div class="form-row">
+              
               <div class="form-group col-6">
-                <small for="dep_period">Deposit Period</small>
-                <input type="text" class="form-control form-control-sm" formControlName="dep_period" id="dep_period"
-                   [readonly]="true">
-              </div>
-              <div class="form-group col-3">
                 <small for="opening_dt">Opening Date</small>
                 <input type="text" class="form-control form-control-sm" formControlName="opening_dt" id="opening_dt"
                   [readonly]="true">
               </div>
-              <div class="form-group col-3">
+              <div class="form-group col-6">
+                <small for="opening_dt">Maturity Date</small>
+                <input type="text" class="form-control form-control-sm" formControlName="mat_dt" id="mat_dt"
+                  [readonly]="true">
+              </div>
+              <div class="form-group col-8">
+                <small for="dep_period">Deposit Period</small>
+                <input type="text" class="form-control form-control-sm" formControlName="dep_period" id="dep_period"
+                   [readonly]="true">
+              </div>
+              <div class="form-group col-4">
                 <small for="instl_no">No of Installment</small>
                 <input type="text" class="form-control form-control-sm" formControlName="instl_no" id="instl_no" [readonly]="true">
               </div>
