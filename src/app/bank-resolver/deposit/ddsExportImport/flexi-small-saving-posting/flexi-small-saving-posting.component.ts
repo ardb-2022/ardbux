@@ -133,7 +133,7 @@ export class FlexiSmallSavingPostingComponent implements OnInit {
       "trans_cd":this.f.trans_cd.value,
       "trans_amt":this.f.trans_amt.value
     }
- 
+
       this.svc.addUpdDel('Deposit/UpdateUnapprovedFlexiDailyDepositTrans',this.transData).subscribe(d1=>{
        if(!d1){
           this.HandleMessage(true,MessageType.Sucess,'Updated successfully!!')
@@ -141,13 +141,13 @@ export class FlexiSmallSavingPostingComponent implements OnInit {
         else{
           this.HandleMessage(true,MessageType.Error,'An Error occurred while updating!!')
         }
-         
+
       },error=>{
         this.HandleMessage(true,MessageType.Error,'An Error occurred while saving!!')
       }
 
       )
-    
+
   }
  deleteuser() {
     this.isLoading = true;
@@ -219,7 +219,7 @@ export class FlexiSmallSavingPostingComponent implements OnInit {
     if(this.f.agent_cd.value){
     // this.svc.addUpdDel('Deposit/GetUnapprovedSBFLEXITrans',dt).subscribe(data => {console.log(data)
     // this.retrieveAgentData=data
-   
+
     //   if(this.retrieveAgentData.approval_status=='U'){
     //     this.isApprove=true;
     //     this.agentFrm.patchValue({
@@ -245,7 +245,7 @@ export class FlexiSmallSavingPostingComponent implements OnInit {
               this.totAmt=this.totSum
               console.log(dat)
           })
-      
+
       // else{
       //   this.isApprove=false
       //   this.isLoading=false;
@@ -254,11 +254,11 @@ export class FlexiSmallSavingPostingComponent implements OnInit {
     },
     err => {
       this.isApprove=false;
-      this.isLoading = false; 
+      this.isLoading = false;
       this.HandleMessage(true, MessageType.Error, 'No data found');
-      
+
     })
-     
+
     }
     else{
       this.isLoading=false;
@@ -342,10 +342,11 @@ export class FlexiSmallSavingPostingComponent implements OnInit {
       "trans_dt":this.f.trans_dt.value,
       // "trans_cd":this.f.trans_cd.value,
       "user_id":this.sys.UserId,
-      "agent_cd":this.f.agent_cd.value
+      "agent_cd":this.f.agent_cd.value,
+      "acc_type_cd":10
     }
     this.svc.addUpdDel('Deposit/ApproveSBFlexiData',dt).subscribe(data=>{console.log(data)
-      
+
     if(!data){
       this.HandleMessage(true, MessageType.Sucess, 'Approved successfully');
       this.isApprove=false
