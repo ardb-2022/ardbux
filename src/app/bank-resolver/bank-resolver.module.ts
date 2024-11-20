@@ -264,6 +264,7 @@ import { DetailListConsolidatedComponent } from './loan/report/detail-list-conso
 import { FlexiSmallSavingPostingComponent } from './deposit/ddsExportImport/flexi-small-saving-posting/flexi-small-saving-posting.component';
 import {flexiAgentWiseReportComponent} from './deposit/ddsExportImport/flexi-small-agent-wise-report/flexi-small-agent-wise-report.component'
 import { DetailListFssDepositComponent } from './deposit/report/detail-list-fss-deposit/detail-list-fss-deposit.component';
+import { DetailFlexiSmallSavingComponent } from './deposit/report/detail-flexi-small-saving/detail-flexi-small-saving.component';
 @NgModule({
   declarations: [
     RoundPipe ,UppercaseDirective, MatchAccountNumbersDirective, NumericOnlyDirective,
@@ -321,7 +322,7 @@ import { DetailListFssDepositComponent } from './deposit/report/detail-list-fss-
             DdsAgentTransReportComponent, InterestMasterComponent, WeeklyReturnNewComponent, WeeklyReturnNewConsoComponent, GlWiseVoucherDtlsComponent, ConsoLoanDCComponent,
              LoanDisburseConsoComponent, LoanRecoveryConsoComponent, DashboardComponent, RecovRegAccTypeWiseComponent, ConsoLoanDcSHGComponent, ConsoLoanDcRHComponent,
              ConsoGenLedgerComponent, InterestSubsidySHGComponent, ConsoDtlListSbcaComponent, ConsoDtlListFdMisComponent, ConsoDtlListRdComponent, DetailListConsolidatedComponent,
-             FlexiSmallSavingPostingComponent,flexiAgentWiseReportComponent,DetailListFssDepositComponent
+             FlexiSmallSavingPostingComponent,flexiAgentWiseReportComponent,DetailListFssDepositComponent,DetailFlexiSmallSavingComponent
   ],
   imports: [
     MatAutocompleteModule,MatProgressBarModule,

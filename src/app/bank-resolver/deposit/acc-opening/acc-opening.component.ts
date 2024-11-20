@@ -892,7 +892,7 @@ export class AccOpeningComponent implements OnInit {
 
     this.td_deftrans.approval_status = 'U';
     this.td_deftrans.acc_cd = this.tm_deposit.acc_cd;
-
+    debugger
     if (this.td_deftrans.trf_type === 'T') {
       this.td_deftrans.particulars = 'BY TRANSFER';
       this.td_deftrans.tr_acc_cd = this.suspanceAccCd;

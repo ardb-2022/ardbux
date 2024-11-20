@@ -133,7 +133,7 @@ export class DetailListSBCAComponent implements OnInit,AfterViewInit {
               return arr.indexOf(arr.find(t => t.acc_type_cd === thing.acc_type_cd)) === i;
             });
           this.AcctTypes = this.AcctTypes.sort((a, b) => (a.acc_type_cd > b.acc_type_cd ? 1 : -1));
-          this.AcctTypes =this.AcctTypes.filter(e=>e.trans_way==1 || e.acc_type_cd==8||e.acc_type_cd==7||e.acc_type_cd==9)
+          this.AcctTypes =this.AcctTypes.filter(e=>e.trans_way==1 || e.acc_type_cd==8||e.acc_type_cd==7||e.acc_type_cd==9||e.acc_type_cd==10)
         },
         err => { this.isLoading = false; }
       );
@@ -192,7 +192,7 @@ export class DetailListSBCAComponent implements OnInit,AfterViewInit {
  sendData(){
   console.log(this.accType)
   
-  this.accType=this.AcctTypes.filter(p=>p.acc_type_cd==this.reportcriteria.controls.acc_type_cd.value)[0].acc_type_desc
+  this.accType=this.accountTypeList.filter(p=>p.acc_type_cd==this.reportcriteria.controls.acc_type_cd.value)[0].acc_type_desc
   // this.constType=this.constitutionList.filter(e=>e.constitution_cd==this.reportcriteria.controls.constitution_cd.value)[0].constitution_desc
   // console.log(this.reportcriteria.controls.constitution_cd.value+' '+this.reportcriteria.controls.acc_type_cd.value)
  }
@@ -221,6 +221,7 @@ export class DetailListSBCAComponent implements OnInit,AfterViewInit {
       }
       this.printedId=(this.reportcriteria.controls.acc_type_cd.value=="7" && this.reportcriteria.controls.constitution_cd.value!='0')||
       (this.reportcriteria.controls.acc_type_cd.value=="1"  && this.reportcriteria.controls.constitution_cd.value!='0')||
+      (this.reportcriteria.controls.acc_type_cd.value=="10"  && this.reportcriteria.controls.constitution_cd.value!='0')||
       (this.reportcriteria.controls.acc_type_cd.value=="8"  && this.reportcriteria.controls.constitution_cd.value!='0') ?"trial777":"trial111"
       this.svc.addUpdDel('Deposit/PopulateDLSavingsAll',dt).subscribe(data=>{
         this.sendData()

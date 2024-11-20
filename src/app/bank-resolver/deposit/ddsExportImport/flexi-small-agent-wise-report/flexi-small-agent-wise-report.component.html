@@ -139,6 +139,7 @@
           <th>Transaction Date</th>
           <th style="text-align: right;">Amount</th>
           <th>Customer Name</th>
+          <th>Balance</th>
       </tr>
   </thead>
   <tbody>
@@ -147,7 +148,7 @@
           <tr>
               <td rowspan="{{ group.transactions.length + 1 }}">{{ group.transactions[0]?.agentCd }}</td>
               <td rowspan="{{ group.transactions.length + 1 }}"><b>{{ group.agentName }}</b></td>
-              <td colspan="4"><strong>Transactions</strong></td>
+              <td colspan="5"><strong>Transactions</strong></td>
           </tr>
 
           <!-- Transaction Rows -->
@@ -158,6 +159,7 @@
               <td>{{ item.transDt.substring(0, 10)}}</td>
               <td style="text-align: right;">{{ item.amount | number : '1.2-2'}}</td>
               <td>{{ item.name }}</td>
+              <td style="text-align: right;">{{ item.balance_amt | number : '1.2-2' }}</td>
           </tr>
 
           <!-- Totals Row -->
@@ -165,7 +167,7 @@
             <td></td>
             <td></td>
               <td colspan="2"><strong>Total Collections:</strong> {{ group.totalCollections }}</td>
-              <td colspan="2"><strong>Total Amount Collected:</strong> {{ group.totalAmount | number : '1.2-2'}}</td>
+              <td colspan="3"><strong>Total Amount Collected:</strong> {{ group.totalAmount | number : '1.2-2'}}</td>
           </tr>
 
           <!-- Separator Row -->

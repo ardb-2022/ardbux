@@ -131,7 +131,7 @@ export class ConsoDtlListSbcaComponent {
               return arr.indexOf(arr.find(t => t.acc_type_cd === thing.acc_type_cd)) === i;
             });
           this.AcctTypes = this.AcctTypes.sort((a, b) => (a.acc_type_cd > b.acc_type_cd ? 1 : -1));
-          this.AcctTypes =this.AcctTypes.filter(e=>e.acc_type_cd==1 || e.acc_type_cd==8||e.acc_type_cd==7||e.acc_type_cd==9)
+          this.AcctTypes =this.AcctTypes.filter(e=>e.acc_type_cd==1 || e.acc_type_cd==8||e.acc_type_cd==7||e.acc_type_cd==9||e.acc_type_cd==10)
         },
         err => { this.isLoading = false; }
       );
@@ -205,6 +205,7 @@ export class ConsoDtlListSbcaComponent {
       }
       this.printedId=(this.reportcriteria.controls.acc_type_cd.value=="7" && this.reportcriteria.controls.constitution_cd.value!='0')||
       (this.reportcriteria.controls.acc_type_cd.value=="1"  && this.reportcriteria.controls.constitution_cd.value!='0')||
+      (this.reportcriteria.controls.acc_type_cd.value=="10"  && this.reportcriteria.controls.constitution_cd.value!='0')||
       (this.reportcriteria.controls.acc_type_cd.value=="8"  && this.reportcriteria.controls.constitution_cd.value!='0') ?"trial777":"trial111"
       this.svc.addUpdDel('Deposit/PopulateDLSavingsAllConso',dt).subscribe(data=>{
         this.sendData()

@@ -427,8 +427,10 @@ export class DemandNoticeBlockWiseComponent implements OnInit {
       // this.svc.addUpdDel('Loan/GetDemandList',dt).subscribe(data=>{console.log(data)
         this.svc.addUpdDel('Loan/GetDemandNoticeBlockwise',dt).subscribe(data=>{console.log(data)
         this.reportData=data;
-        
-debugger
+        if(this.reportData?.length==0||this.reportData==null){
+          this.comser.SnackBar_Nodata()
+        }
+        else{debugger
         this.reportData.forEach(p => {
           // if(this.sys.ardbCD=="20" ||this.sys.ardbCD=="21" ||this.sys.ardbCD=="11" || this.sys.ardbCD=="26"||this.sys.ardbCD=="10"||this.sys.ardbCD=="22"||this.sys.ardbCD=="23"){
           if(this.sys.ardbCD!="2" && this.sys.ardbCD!="4" && this.sys.ardbCD!="3" ){
@@ -453,7 +455,14 @@ debugger
              
           }
         })
-          
+        // this.reportData = this.reportData.sort((a, b) => (a.ardb_cd > b.ardb_cd) ? 1 : -1);
+        this.reportData = this.reportData.sort((a, b) => {
+          if (a.ardb_cd > b.ardb_cd) return 1;
+          if (a.ardb_cd < b.ardb_cd) return -1;
+      
+          // If ardb_cd values are equal, sort by cust_name as the secondary condition
+          return (a.cust_name > b.cust_name) ? 1 : -1;
+      });  
     
     if(this.sys.ardbCD=='20'){
       this.reportData.forEach(p => {
@@ -470,14 +479,12 @@ debugger
     
     else{
       
-      if(this.reportData?.length==0||this.reportData==null){
-        this.comser.SnackBar_Nodata()
-      }
+      
       this.dataSource.data=this.reportData;
       this.dataSource.paginator = this.paginator;
       this.isLoading=false;
     }
-        
+  }  
 
       },
       err => {

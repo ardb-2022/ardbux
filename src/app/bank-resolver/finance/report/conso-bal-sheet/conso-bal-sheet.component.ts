@@ -117,7 +117,7 @@ export class ConsoBalSheetComponent implements OnInit {
         "from_dt":this.fromdate.toISOString(),
         // "to_dt":this.todate.toISOString()
       }
-      this.svc.addUpdDel('Finance/PopulateBalanceSheetConso ',dt).subscribe(data=>{console.log(data)
+      this.svc.addUpdDel('Finance/PopulateBalanceSheetConso',dt).subscribe(data=>{console.log(data)
       this.reportData=data
       if(this.reportData.length==0){
         this.comser.SnackBar_Nodata()

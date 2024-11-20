@@ -25,7 +25,7 @@ export class OpenClosingRegisterComponent implements OnInit ,AfterViewInit{
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource = new MatTableDataSource()
-  displayedColumns: string[] = ['SLNO','acc_type_cd', 'acc_num', 'cust_name', 'prn_amt','intt_amt','intt_rt','opn_cls_dt'];
+  displayedColumns: string[] = ['SLNO','acc_type_cd', 'acc_num', 'cust_name','cust_address', 'prn_amt','intt_amt','intt_rt','opn_cls_dt'];
 
   modalRef: BsModalRef;
   isOpenFromDp = false;

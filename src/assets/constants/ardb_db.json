@@ -168,71 +168,13 @@
     "bank_name": "BMARDBUX"
   },
   
-  {
-    "ardB_CD": "200",
-    "name": "Tamluk Main Branch",
-    "full_name": "Tamluk Co-Operative Agriculture & Rural Development Bank Ltd.",
-    "dist_code": 317.0,
-    "bank_name": "GARDBUXBR"
-  },
-  {
-    "ardB_CD": "300",
-    "name": "Tamluk Panskura Branch",
-    "full_name": "Tamluk Co-Operative Agriculture & Rural Development Bank Ltd.",
-    "dist_code": 317.0,
-    "bank_name": "TMARDBUXBR1"
-  }
-  ,
-  {
-    "ardB_CD": "301",
-    "name": "Tamluk Deulia Branch",
-    "full_name": "Tamluk Co-Operative Agriculture & Rural Development Bank Ltd.",
-    "dist_code": 317.0,
-    "bank_name": "TMARDBUXBR2"
-  }
-  ,
-  {
-    "ardB_CD": "302",
-    "name": "Tamluk Moyna Branch",
-    "full_name": "Tamluk Co-Operative Agriculture & Rural Development Bank Ltd.",
-    "dist_code": 317.0,
-    "bank_name": "TMARDBUXBR3"
-  }
-  ,
-  {
-    "ardB_CD": "303",
-    "name": "Tamluk Chandipur Branch",
-    "full_name": "Tamluk Co-Operative Agriculture & Rural Development Bank Ltd.",
-    "dist_code": 317.0,
-    "bank_name": "TMARDBUXBR4"
-  },
-  {
-    "ardB_CD": "304",
-    "name": "Tamluk Khanchi Branch",
-    "full_name": "Tamluk Co-Operative Agriculture & Rural Development Bank Ltd.",
-    "dist_code": 317.0,
-    "bank_name": "TMARDBUXBR5"
-  },
+  
   {
     "ardB_CD": "305",
     "name": "Tamluk Nandigram Branch",
     "full_name": "Tamluk Co-Operative Agriculture & Rural Development Bank Ltd.",
     "dist_code": 317.0,
     "bank_name": "TMARDBUXBR6"
-  },
-  {
-    "ardB_CD": "306",
-    "name": "Tamluk Reapara Branch",
-    "full_name": "Tamluk Co-Operative Agriculture & Rural Development Bank Ltd.",
-    "dist_code": 317.0,
-    "bank_name": "TMARDBUXBR7"
-  },
-  {
-    "ardB_CD": "307",
-    "name": "Tamluk Head Office",
-    "full_name": "Tamluk Co-Operative Agriculture & Rural Development Bank Ltd.",
-    "dist_code": 317.0,
-    "bank_name": "TMARDBUXBR8"
   },
  
   {

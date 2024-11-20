@@ -608,23 +608,23 @@ export class LoginComponent implements OnInit {
           // localStorage.setItem('ipAddress',myIP[0])
           this.isLoading = false;
 
-          this.loginForm.enable();
-          resolve(true);
+          // this.loginForm.enable();
+          // resolve(true);
+``
+          let ipMatched = false;
+          if (e.ip_address.indexOf(myIP[0]) !== -1) {
+             ipMatched = true;
+            }
 
-          // let ipMatched = false;
-          // if (e.ip_address.indexOf(myIP[0]) !== -1) {
-          //    ipMatched = true;
-          //   }
-
-          // if (!ipMatched) {
-          //   this.showAlert = true;
-          //   this.alertMsg = 'IP not allowed to access, contact support.';
-          //   this.loginForm.disable();
-          //   resolve(false);
-          // } else {
-          //   this.loginForm.enable();
-          //   resolve(true);
-          // }
+          if (!ipMatched) {
+            this.showAlert = true;
+            this.alertMsg = 'IP not allowed to access, contact support.';
+            this.loginForm.disable();
+            resolve(false);
+          } else {
+            this.loginForm.enable();
+            resolve(true);
+          }
             console.log(ip);
           });
           ////console.

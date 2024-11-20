@@ -53,7 +53,7 @@ export class LandingComponent implements OnInit {
     this.comsv.openGlTrns=false
     // when ever landing is loaded screen title should be hidden
     this.msg.sendhideTitleOnHeader(true);
-    this.getDashboardItem();
+    // this.getDashboardItem();
     this.cms.getLocalStorageDataAsJsonArray();
     // if(this.L2L=='true'){
     //   this.openModal(this.template)
