@@ -27,6 +27,6 @@ export class tm_locker extends baseModel{
   public modified_by: any;
   public approved_by: any;
   public trans_mode: any;
-
+  public cust_name:any;
   
 }

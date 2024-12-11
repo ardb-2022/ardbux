@@ -251,8 +251,22 @@ import { GlWiseVoucherDtlsComponent } from './finance/report/gl-wise-voucher-dtl
 import { ConsoLoanDCComponent } from './loan/report/conso-loan-dc/conso-loan-dc.component';
 import { LoanDisburseConsoComponent } from './loan/report/loan-disbursement-register/loan-disburse-conso/loan-disburse-conso.component';
 import { LoanRecoveryConsoComponent } from './loan/report/recovery-register/loan-recovery-conso/loan-recovery-conso.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { RecovRegAccTypeWiseComponent } from './loan/report/recovery-register/recov-reg-acc-type-wise/recov-reg-acc-type-wise.component';
+import { ConsoLoanDcSHGComponent } from './loan/report/conso-loan-dc-shg/conso-loan-dc-shg.component';
+import { ConsoLoanDcRHComponent } from './loan/report/conso-loan-dc-rh/conso-loan-dc-rh.component';
+import { ConsoGenLedgerComponent } from './finance/report/conso-gen-ledger/conso-gen-ledger.component';
+import { InterestSubsidySHGComponent } from './loan/report/interest-subsidy-shg/interest-subsidy-shg.component';
+import { ConsoDtlListSbcaComponent } from './deposit/report/conso-dtl-list-sbca/conso-dtl-list-sbca.component';
+import { ConsoDtlListFdMisComponent } from './deposit/report/conso-dtl-list-fd-mis/conso-dtl-list-fd-mis.component';
+import { ConsoDtlListRdComponent } from './deposit/report/conso-dtl-list-rd/conso-dtl-list-rd.component';
+import { DetailListConsolidatedComponent } from './loan/report/detail-list-consolidated/detail-list-consolidated.component';
+import { FlexiSmallSavingPostingComponent } from './deposit/ddsExportImport/flexi-small-saving-posting/flexi-small-saving-posting.component';
+import {flexiAgentWiseReportComponent} from './deposit/ddsExportImport/flexi-small-agent-wise-report/flexi-small-agent-wise-report.component'
+import { DetailListFssDepositComponent } from './deposit/report/detail-list-fss-deposit/detail-list-fss-deposit.component';
+import { DetailFlexiSmallSavingComponent } from './deposit/report/detail-flexi-small-saving/detail-flexi-small-saving.component';
 @NgModule({
-  declarations: [ 
+  declarations: [
     RoundPipe ,UppercaseDirective, MatchAccountNumbersDirective, NumericOnlyDirective,
     AmountToWordPipe,UserLoginStatusComponent,OpenInvestComponent,KeyoffDirective,
     BankResolverComponent, LoginComponent, HeaderComponent, LandingComponent, LoadingComponent,
@@ -279,32 +293,36 @@ import { LoanRecoveryConsoComponent } from './loan/report/recovery-register/loan
     YearopenComponent, BalanaceSheetComponent, ProfitLossAccComponent, TradingAccComponent,
     SubsidyEntryComponent, OnetimesettlementComponent, DdsImportComponent, DdsExportComponent,
      DdsIndividualPostingComponent, DefaulterListComponent, DemandListComponent, RecovListComponent,
-      ActwiseLstComponent, BlockwiseLstComponent, BlockWiseColLstComponent, ActWiseColLstComponent, 
-      AdRecStmtComponent, IntRecStmtComponent, LoanDisburseNormalComponent, RecovNormalComponent, 
-      OpenCloseregComponent, DetailDDSComponent, DdsAccStmtComponent, NpaComponent, 
-      YearlyadjustmentvoucherComponent, BlockMasterComponent, VillageMasterComponent, 
-      ServiceareamasterComponent, DemandNoticeComponent, OverdueNoticeComponent, OverdueTransferComponent, 
-      RecovFundComponent, ConsolidatedCashAccComponent, ConsolidatedDayBookComponent, 
-      ConsolidatedCashCumTrialComponent, ConsolidatedTrialBalanceComponent, 
-      StandingInsActiveSIListComponent, StandingInsTodaySIExecutedComponent, WeeklyReturnComponent, 
-      RecovInterestComponent, BankEntryComponent, BranchEntryComponent, VewInvestmentDtlsComponent, 
+      ActwiseLstComponent, BlockwiseLstComponent, BlockWiseColLstComponent, ActWiseColLstComponent,
+      AdRecStmtComponent, IntRecStmtComponent, LoanDisburseNormalComponent, RecovNormalComponent,
+      OpenCloseregComponent, DetailDDSComponent, DdsAccStmtComponent, NpaComponent,
+      YearlyadjustmentvoucherComponent, BlockMasterComponent, VillageMasterComponent,
+      ServiceareamasterComponent, DemandNoticeComponent, OverdueNoticeComponent, OverdueTransferComponent,
+      RecovFundComponent, ConsolidatedCashAccComponent, ConsolidatedDayBookComponent,
+      ConsolidatedCashCumTrialComponent, ConsolidatedTrialBalanceComponent,
+      StandingInsActiveSIListComponent, StandingInsTodaySIExecutedComponent, WeeklyReturnComponent,
+      RecovInterestComponent, BankEntryComponent, BranchEntryComponent, VewInvestmentDtlsComponent,
       InvTransactionApprovalComponent, InvestmentTransactionsComponent, FdTransComponent, CcTransComponent, MisTransComponent,
        RdTransComponent, CreateGLHeadComponent, DetailListFdmisConstWiseComponent, INearMaturityComponent,
-       IDetailListComponent, AllGLDetailsComponent, UpdatePassbookComponent, BMLoanStatementComponent, SlabwiseDepositComponent, 
+       IDetailListComponent, AllGLDetailsComponent, UpdatePassbookComponent, BMLoanStatementComponent, SlabwiseDepositComponent,
        PassBookFastPageComponent, DetaillistAllComponent, SavingIntPostComponent, AgentCommissionComponent,
        LoanUpdatePassbookComponent,LoanPassBookFastPageComponent,LoanPassBookPrintingComponent, PrintCertificateComponent, NpaALLComponent,
         RecovBlockComponent, InterestCertificateComponent, SmsChargeDeductionComponent, ConsoGLTrnsComponent, ConsoCCTrialComponent,
          InterestSubsidyComponent, ConsoProfitLossComponent, UserPermissionComponent, UserTransferComponent, ConsoBalSheetComponent,
           ConsoCashAccNewComponent, LoanDisbCertificateComponent, CloseAccDtlsComponent, GMloanDCComponent, RecovVillageComponent,
            UserWiseTransactionComponent, UserWiseTransactionLoanComponent, GmLoanSubsidyComponent, LoanDisburseActWiseComponent,
-            YearendDemandRecoveryComponent, DemandNoticeBlockWiseComponent, RecovAdvPrnComponent, RecovAdvPrnVillComponent, 
-            InterestSubsidySummaryComponent, DcbrPrintComponent, NpaSummaryComponent,LockerComponent, MenuItemComponent, 
-            DetailListSbcaConstWiseComponent, FortnightlyReturnComponent, ConsoFortnightlyReturnComponent, BorrowingComponent, DcbrVillWiseComponent, 
-            ContaiUCICprofileComponent, GoldTestAndValuationReportComponent, DemandNoticeContaiComponent, UcicMergeComponent, CTloanDCComponent, 
-            RecoveryExportComponent, RecoveryImportComponent, RecoveryIndiPostComponent, ContaiComponent, ContaiFastPageComponent, GhatalComponent, 
-            GhatalFastPageComponent, GoldLoanReportComponent, GoldLoanAsOnDateComponent, GoldLoanCurrDateComponent, GroupWiseComponent, NpaAllWithGroupComponent, 
-            DcbrGroupWiseComponent, TamlukComponent, TamlukFastPageComponent, VillMasterContaiComponent, RecovSummaryComponent, RiskFundComponent, BankuraComponent, 
-            BankuraFastPageComponent, SendSmsFromDemandComponent, UpdatedDemandListComponent, CtFortnightNewComponent, CtFortnightNewConsoComponent, LoanDisburseSummaryComponent, DdsAgentTransReportComponent, InterestMasterComponent, WeeklyReturnNewComponent, WeeklyReturnNewConsoComponent, GlWiseVoucherDtlsComponent, ConsoLoanDCComponent, LoanDisburseConsoComponent, LoanRecoveryConsoComponent
+            YearendDemandRecoveryComponent, DemandNoticeBlockWiseComponent, RecovAdvPrnComponent, RecovAdvPrnVillComponent,
+            InterestSubsidySummaryComponent, DcbrPrintComponent, NpaSummaryComponent,LockerComponent, MenuItemComponent,
+            DetailListSbcaConstWiseComponent, FortnightlyReturnComponent, ConsoFortnightlyReturnComponent, BorrowingComponent, DcbrVillWiseComponent,
+            ContaiUCICprofileComponent, GoldTestAndValuationReportComponent, DemandNoticeContaiComponent, UcicMergeComponent, CTloanDCComponent,
+            RecoveryExportComponent, RecoveryImportComponent, RecoveryIndiPostComponent, ContaiComponent, ContaiFastPageComponent, GhatalComponent,
+            GhatalFastPageComponent, GoldLoanReportComponent, GoldLoanAsOnDateComponent, GoldLoanCurrDateComponent, GroupWiseComponent, NpaAllWithGroupComponent,
+            DcbrGroupWiseComponent, TamlukComponent, TamlukFastPageComponent, VillMasterContaiComponent, RecovSummaryComponent, RiskFundComponent, BankuraComponent,
+            BankuraFastPageComponent, SendSmsFromDemandComponent, UpdatedDemandListComponent, CtFortnightNewComponent, CtFortnightNewConsoComponent, LoanDisburseSummaryComponent,
+            DdsAgentTransReportComponent, InterestMasterComponent, WeeklyReturnNewComponent, WeeklyReturnNewConsoComponent, GlWiseVoucherDtlsComponent, ConsoLoanDCComponent,
+             LoanDisburseConsoComponent, LoanRecoveryConsoComponent, DashboardComponent, RecovRegAccTypeWiseComponent, ConsoLoanDcSHGComponent, ConsoLoanDcRHComponent,
+             ConsoGenLedgerComponent, InterestSubsidySHGComponent, ConsoDtlListSbcaComponent, ConsoDtlListFdMisComponent, ConsoDtlListRdComponent, DetailListConsolidatedComponent,
+             FlexiSmallSavingPostingComponent,flexiAgentWiseReportComponent,DetailListFssDepositComponent,DetailFlexiSmallSavingComponent
   ],
   imports: [
     MatAutocompleteModule,MatProgressBarModule,
@@ -327,7 +345,7 @@ import { LoanRecoveryConsoComponent } from './loan/report/recovery-register/loan
   exports:[LoadingComponent]
 })
 
-export class BankResolverModule { 
+export class BankResolverModule {
   constructor(){
     console.log('Bankresolver loaded')
 

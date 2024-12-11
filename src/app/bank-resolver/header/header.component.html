@@ -44,7 +44,7 @@
       </li>
     </ul>
     <span class="example-spacer"></span>
-    <span><a class="nav-link" (click)="goToHome()">  <mat-icon style="padding-top: 13px;" class="hm">home</mat-icon>Home </a></span>
+    <span><a class="nav-link" (click)="goToHome()">  <mat-icon style="padding-top: 13px;" class="hm">dashboard</mat-icon>Dashboard </a></span>
     <span> <a class="nav-link"  (click)="openModal(template)">  <mat-icon style="padding-top: 13px;" class="lo">logout</mat-icon>Logout </a></span>
         
     
@@ -54,6 +54,15 @@
 </div>
 
 </div>
+<ng-template #Notice >
+  <div  class="text-center"><h2>Happy Bishwakarma Pujo</h2></div>
+  <div class="modal-body text-center" >
+    <p>Hello {{currUser}}....</p>
+    <br><br>
+    <button  type="button" class="btn btn-light" (click)="decline()" >Close</button>&nbsp;
+    
+  </div>
+</ng-template>
 <ng-template #template >
   <div class="modal-body text-center" >
     <p>Hello {{currUser}}, Do you want to logout?</p>

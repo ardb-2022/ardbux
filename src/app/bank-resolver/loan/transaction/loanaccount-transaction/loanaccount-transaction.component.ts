@@ -220,12 +220,14 @@ export class LoanaccountTransactionComponent implements OnInit {
   c_int:any;
   o_int:any;
   i_r_t:any;
-  c_p:any;
-  c_i:any;
-  o_p:any;
-  o_i:any;
-  a_p:any;
-  p_i:any;
+  tot_p:number;
+  tot_i:number;
+  c_p:number;
+  c_i:number;
+  o_p:number;
+  o_i:number;
+  a_p:number;
+  p_i:number;
   t_cd:any;
   i_n_dt:any;
   l_ch:any;
@@ -837,13 +839,16 @@ export class LoanaccountTransactionComponent implements OnInit {
           //Challan Value set Retrive time
           this.t_cd=acc.tddeftrans.trans_cd;
           this.t_a=(+acc.tddeftrans?.amount)+(acc.tddeftrans?.ongoing_unit_no);
+          this.tot_p=Number(acc.tddeftrans?.curr_prn_recov)+Number(acc.tddeftrans?.ovd_prn_recov)+Number(acc.tddeftrans?.adv_prn_recov)
+          this.tot_i=Number(acc.tddeftrans?.curr_intt_recov)+Number(acc.tddeftrans?.ovd_intt_recov)+Number(acc.tddeftrans?.penal_intt_recov)
+          
                 // this.s_a=saveTransaction.tddeftrans?.share_amt;
                 this.c_p=acc.tddeftrans?.curr_prn_recov;
                 this.c_i=acc.tddeftrans?.curr_intt_recov;
                 this.o_p=acc.tddeftrans?.ovd_prn_recov;
                 this.o_i=acc.tddeftrans?.ovd_intt_recov;
-                this.a_p=acc.tddeftrans?.adv_prn_recov;
-                this.p_i=acc.tddeftrans?.penal_intt_recov;
+                this.a_p=Number(acc.tddeftrans?.adv_prn_recov);
+                this.p_i=Number(acc.tddeftrans?.penal_intt_recov);
                 this.i_n_dt=acc.tddeftrans?.intt_till_dt;
                 this.trns_type=acc.tddeftrans?.trf_type;
                 this.ln_id=acc.tddeftrans?.acc_num;
@@ -976,7 +981,13 @@ export class LoanaccountTransactionComponent implements OnInit {
           debugger;
 
           this.sancdtls = acc.tmlaonsanctiondtls;
-          if((this.sys.ardbCD=='26'||this.sys.ardbCD=='2') && acc.tmloanall.acc_cd==20416){
+          const filteredLoans = this.accountTypeList2.filter(loan => loan.cc_flag == 'Y');
+          const exists = filteredLoans.some(loan => loan.acc_type_cd == acc.tmloanall.acc_cd);
+          console.log(filteredLoans);
+          console.log(exists,"xdrfgre");
+
+          // if((this.sys.ardbCD=='26'||this.sys.ardbCD=='2') && acc.tmloanall.acc_cd==20416){
+            if(exists){
             this.sancdtls.forEach(x => x.draw_limit = x.sanc_amt - (acc.tmloanall.curr_prn+acc.tmloanall.ovd_prn));
            }
             else{
@@ -1212,7 +1223,14 @@ export class LoanaccountTransactionComponent implements OnInit {
           });
           console.log(acc.tmloanall.last_intt_calc_dt)
           this.sancdtls = acc.tmlaonsanctiondtls;
-          if((this.sys.ardbCD=='26'||this.sys.ardbCD=='2') && acc.tmloanall.acc_cd==20416){
+        
+          const filteredLoans = this.accountTypeList2.filter(loan => loan.cc_flag == 'Y');
+          const exists = filteredLoans.some(loan => loan.acc_type_cd == acc.tmloanall.acc_cd);
+          console.log(filteredLoans);
+          console.log(exists,"xdrfgre");
+
+          // if((this.sys.ardbCD=='26'||this.sys.ardbCD=='2') && acc.tmloanall.acc_cd==20416){
+            if(exists){
             this.sancdtls.forEach(x => x.draw_limit = x.sanc_amt - (acc.tmloanall.curr_prn+acc.tmloanall.ovd_prn));
            }
             else{
@@ -1573,12 +1591,18 @@ export class LoanaccountTransactionComponent implements OnInit {
             // // console.log(dt)
             // console.log(this.dtpipe.transform(dt,'dd/MM/yyyy hh:mm:ss'))
             this.sancdtls = acc.tmlaonsanctiondtls;
-            if((this.sys.ardbCD=='26'||this.sys.ardbCD=='2') && acc.tmloanall.acc_cd==20416){
-            this.sancdtls.forEach(x => x.draw_limit = x.sanc_amt - (acc.tmloanall.curr_prn+acc.tmloanall.ovd_prn));
-           }
-            else{
-            this.sancdtls.forEach(x => x.draw_limit = x.sanc_amt - acc.tmloanall.disb_amt);
-            }
+            const filteredLoans = this.accountTypeList2.filter(loan => loan.cc_flag == 'Y');
+            const exists = filteredLoans.some(loan => loan.acc_type_cd == acc.tmloanall.acc_cd);
+            console.log(filteredLoans);
+            console.log(exists,"xdrfgre");
+  
+            // if((this.sys.ardbCD=='26'||this.sys.ardbCD=='2') && acc.tmloanall.acc_cd==20416){
+              if(exists){
+              this.sancdtls.forEach(x => x.draw_limit = x.sanc_amt - (acc.tmloanall.curr_prn+acc.tmloanall.ovd_prn));
+             }
+              else{
+              this.sancdtls.forEach(x => x.draw_limit = x.sanc_amt - acc.tmloanall.disb_amt);
+              }
             // for (let x = 0; x < acc.tmlaonsanctiondtls.length; x++) {
             //   this.sancdtls = this.sancDetails.get('sancdtls') as FormArray;
             //   this.sancdtls.push(this.frmBldr.group({
@@ -2347,16 +2371,18 @@ if(this.isDisburs){
     return;
   }
 }
-this.t_a=null;
-this.c_p=null;
-this.c_i=null;
-this.o_p=null;
-this.o_i=null;
-this.a_p=null;
-this.p_i=null;
-this.l_ch=null
+this.tot_p=0;
+this.tot_i=0;
+this.t_a=0;
+this.c_p=0;
+this.c_i=0;
+this.o_p=0;
+this.o_i=0;
+this.a_p=0;
+this.p_i=0;
+this.l_ch=0
 // this.i_n_dt=this.td.intt_recov_dt.value;
-this.i_n_dt=null;
+this.i_n_dt=0;
 
 // debugger
 console.log(this.td.recov_type.value)
@@ -2463,14 +2489,17 @@ debugger;
             ////////debugger;
           
             if (this.td.trans_cd.value > 0) {
+              this.tot_p=Number(saveTransaction.tddeftrans?.curr_prn_recov)+Number(saveTransaction.tddeftrans?.ovd_prn_recov)+Number(saveTransaction.tddeftrans?.adv_prn_recov)
+              this.tot_i=Number(saveTransaction.tddeftrans?.curr_intt_recov)+Number(saveTransaction.tddeftrans?.ovd_intt_recov)+Number(saveTransaction.tddeftrans?.penal_intt_recov)
+              
               this.t_a=(saveTransaction.tddeftrans?.amount)+(saveTransaction.tddeftrans?.ongoing_unit_no);
                 // this.s_a=saveTransaction.tddeftrans?.share_amt;
                 this.c_p=saveTransaction.tddeftrans?.curr_prn_recov;
                 this.c_i=saveTransaction.tddeftrans?.curr_intt_recov;
                 this.o_p=saveTransaction.tddeftrans?.ovd_prn_recov;
                 this.o_i=saveTransaction.tddeftrans?.ovd_intt_recov;
-                this.a_p=saveTransaction.tddeftrans?.adv_prn_recov;
-                this.p_i=saveTransaction.tddeftrans?.penal_intt_recov;
+                this.a_p=Number(saveTransaction.tddeftrans?.adv_prn_recov);
+                this.p_i=Number(saveTransaction.tddeftrans?.penal_intt_recov);
                 // this.i_n_dt=this.td.intt_recov_dt.value;
                 this.i_n_dt=this.td.no_of_day.value!=0? this.dtpipe.transform(this.td.intt_recov_dt.value, 'dd/MM/yyyy hh:mm:ss'):this.td.intt_recov_dt.value;
                   this.l_ch=saveTransaction.tddeftrans?.ongoing_unit_no;
@@ -2541,7 +2570,7 @@ debugger;
                    total_due: (+this.inttRetForUpdate.curr_intt_recov) + (+this.inttRetForUpdate.ovd_intt_recov) + (+this.inttRetForUpdate.penal_intt_recov) - this.td.curr_intt_recov.value - this.td.ovd_intt_recov.value - this.td.penal_intt_recov.value + +this.inttRetForUpdate.curr_prn_recov-(+this.td.curr_prn_recov.value) - (+this.td.adv_prn_recov.value) + this.inttRetForUpdate.ovd_prn_recov-(+this.td.ovd_prn_recov.value) ,
                  
                   })
-                  if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'){
+                  if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'|| this.sys.ardbCD=='25'){
                     this.modalRef = this.modalService.show(this.ContaiLoanChallan, { class: 'modal-xl' });
                   }
                   else{
@@ -2586,14 +2615,17 @@ debugger;
               );
             }
             else {
+              this.tot_p=Number(saveTransaction.tddeftrans?.curr_prn_recov)+Number(saveTransaction.tddeftrans?.ovd_prn_recov)+Number(saveTransaction.tddeftrans?.adv_prn_recov)
+              this.tot_i=Number(saveTransaction.tddeftrans?.curr_intt_recov)+Number(saveTransaction.tddeftrans?.ovd_intt_recov)+Number(saveTransaction.tddeftrans?.penal_intt_recov)
+              
               this.t_a=(saveTransaction.tddeftrans?.amount)+(saveTransaction.tddeftrans?.ongoing_unit_no);
                 // this.s_a=saveTransaction.tddeftrans?.share_amt;
                 this.c_p=saveTransaction.tddeftrans?.curr_prn_recov;
                 this.c_i=saveTransaction.tddeftrans?.curr_intt_recov;
                 this.o_p=saveTransaction.tddeftrans?.ovd_prn_recov;
                 this.o_i=saveTransaction.tddeftrans?.ovd_intt_recov;
-                this.a_p=saveTransaction.tddeftrans?.adv_prn_recov;
-                this.p_i=saveTransaction.tddeftrans?.penal_intt_recov;
+                this.a_p=Number(saveTransaction.tddeftrans?.adv_prn_recov);
+                this.p_i=Number(saveTransaction.tddeftrans?.penal_intt_recov);
                 // this.i_n_dt=this.td.intt_recov_dt.value;
                 this.i_n_dt=this.td.no_of_day.value!=0? this.dtpipe.transform(this.td.intt_recov_dt.value, 'dd/MM/yyyy hh:mm:ss'):this.td.intt_recov_dt.value;
                 this.l_ch=saveTransaction.tddeftrans?.ongoing_unit_no;
@@ -2655,7 +2687,7 @@ debugger;
                     //   principal: this.fd.ovd_principal.value + this.fd.curr_principal.value
                     // })
                     debugger
-                    if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'){
+                    if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'|| this.sys.ardbCD=='25'){
                       this.modalRef = this.modalService.show(this.ContaiLoanChallan, { class: 'modal-xl' });
                     }
                     else{
@@ -2710,7 +2742,7 @@ debugger;
           this.HandleMessage(true, MessageType.Error, 'Interest Can not be calculated, Try again later.');
         }
       );
-    }
+    }//end auto mode
     else {
       // console.log(this.td.curr_prn_recov.value,this.td.curr_intt_recov.value,this.td.ovd_prn_recov.value,this.td.ovd_intt_recov.value)
       // //////debugger;
@@ -2917,6 +2949,23 @@ debugger;
             console.log(this.unApprovedTransactionLst)
             // debugger;
             if(this.isRecovery){
+              this.tot_p=Number(saveTransaction.tddeftrans?.curr_prn_recov)+Number(saveTransaction.tddeftrans?.ovd_prn_recov)+Number(saveTransaction.tddeftrans?.adv_prn_recov)
+              this.tot_i=Number(saveTransaction.tddeftrans?.curr_intt_recov)+Number(saveTransaction.tddeftrans?.ovd_intt_recov)+Number(saveTransaction.tddeftrans?.penal_intt_recov)
+              
+              this.t_a=(saveTransaction.tddeftrans?.amount)+(saveTransaction.tddeftrans?.ongoing_unit_no);
+                // this.s_a=saveTransaction.tddeftrans?.share_amt;
+                this.c_p=saveTransaction.tddeftrans?.curr_prn_recov;
+                this.c_i=saveTransaction.tddeftrans?.curr_intt_recov;
+                this.o_p=saveTransaction.tddeftrans?.ovd_prn_recov;
+                this.o_i=saveTransaction.tddeftrans?.ovd_intt_recov;
+                this.a_p=+(saveTransaction.tddeftrans?.adv_prn_recov);
+                this.p_i=+(saveTransaction.tddeftrans?.penal_intt_recov);
+                // this.i_n_dt=this.td.intt_recov_dt.value;
+                this.i_n_dt=this.td.no_of_day.value!=0? this.dtpipe.transform(this.td.intt_recov_dt.value, 'dd/MM/yyyy hh:mm:ss'):this.td.intt_recov_dt.value;
+                this.l_ch=saveTransaction.tddeftrans?.ongoing_unit_no;
+                
+
+
               this.outIntt=this.fd.curr_intt.value + this.fd.ovd_intt.value + this.fd.penal_intt.value - this.td.curr_intt_recov.value - this.td.ovd_intt_recov.value - this.td.penal_intt_recov.value
               this.outPrn=((+this.fd.curr_principal.value)+(+this.fd.ovd_principal.value))-((+this.td.ovd_prn_recov.value)+(+this.td.adv_prn_recov.value)+(+this.td.curr_prn_recov.value))
                     
@@ -2935,7 +2984,7 @@ debugger;
                 //   this.accDtlsFrm.controls.principal.setValue(((+this.fd.curr_principal.value)+(+this.fd.ovd_principal.value))-((+this.td.ovd_prn_recov.value)+(+this.td.adv_prn_recov.value)+(+this.td.curr_prn_recov.value)))
                 // }
                 debugger
-                if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'){
+                if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'|| this.sys.ardbCD=='25'){
                   this.modalRef = this.modalService.show(this.ContaiLoanChallan, { class: 'modal-xl' });
                 }
                 else{
@@ -3931,7 +3980,7 @@ debugger;
       return new Date(parseInt(parts[2]), parseInt(parts[1])-1, parseInt(parts[0]));
       }
     printChallan(){
-      if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'){
+      if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'|| this.sys.ardbCD=='25'){
         this.modalRef = this.modalService.show(this.ContaiLoanChallan, { class: 'modal-xl' });
       }
       else{

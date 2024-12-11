@@ -216,6 +216,20 @@ import { GlWiseVoucherDtlsComponent } from './finance/report/gl-wise-voucher-dtl
 import { ConsoLoanDCComponent } from './loan/report/conso-loan-dc/conso-loan-dc.component';
 import { LoanRecoveryConsoComponent } from './loan/report/recovery-register/loan-recovery-conso/loan-recovery-conso.component';
 import { LoanDisburseConsoComponent } from './loan/report/loan-disbursement-register/loan-disburse-conso/loan-disburse-conso.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { RecovRegAccTypeWiseComponent } from './loan/report/recovery-register/recov-reg-acc-type-wise/recov-reg-acc-type-wise.component';
+import { ConsoLoanDcSHGComponent } from './loan/report/conso-loan-dc-shg/conso-loan-dc-shg.component';
+import { ConsoLoanDcRHComponent } from './loan/report/conso-loan-dc-rh/conso-loan-dc-rh.component';
+import { ConsoGenLedgerComponent } from './finance/report/conso-gen-ledger/conso-gen-ledger.component';
+import { InterestSubsidySHGComponent } from './loan/report/interest-subsidy-shg/interest-subsidy-shg.component';
+import { ConsoDtlListFdMisComponent } from './deposit/report/conso-dtl-list-fd-mis/conso-dtl-list-fd-mis.component';
+import { ConsoDtlListSbcaComponent } from './deposit/report/conso-dtl-list-sbca/conso-dtl-list-sbca.component';
+import { ConsoDtlListRdComponent } from './deposit/report/conso-dtl-list-rd/conso-dtl-list-rd.component';
+import { DetailListConsolidatedComponent } from './loan/report/detail-list-consolidated/detail-list-consolidated.component';
+import { FlexiSmallSavingPostingComponent } from './deposit/ddsExportImport/flexi-small-saving-posting/flexi-small-saving-posting.component';
+import { flexiAgentWiseReportComponent } from './deposit/ddsExportImport/flexi-small-agent-wise-report/flexi-small-agent-wise-report.component';
+import { DetailListFssDepositComponent } from './deposit/report/detail-list-fss-deposit/detail-list-fss-deposit.component';
+import { DetailFlexiSmallSavingComponent } from './deposit/report/detail-flexi-small-saving/detail-flexi-small-saving.component';
 
 const routes: Routes = [
   { path: 'Admin', component: AdminPanelComponent },
@@ -235,14 +249,17 @@ const routes: Routes = [
   { path: 'BankWiseConfig', component: BankWiseConfigComponent },
   { path: 'MasterMenuConfig', component: MasterMenuConfigComponent },
   { path: 'ConfigNewBank', component: ConfigNewBankComponent },
-  { path: 'test', component: TestComponent },
 
   {
     path: ':bankName', component: BankResolverComponent,
     children: [
       { path: '', redirectTo: 'login', pathMatch: 'full'},
       { path: 'login', component: LoginComponent },
+      // { path: 'la', component: LandingComponent, canActivate: [AuthGuard] },
       { path: 'la', component: LandingComponent, canActivate: [AuthGuard] },
+      { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+      { path: 'test', component: TestComponent },
+
       { path: 'UT_Contai_CustomerProfile', component: ContaiUCICprofileComponent, canActivate: [AuthGuard] },
       { path: 'UT_CustomerProfile', component: UTCustomerProfileComponent, canActivate: [AuthGuard] },
       { path: 'UT_UCIC_MRG', component: UcicMergeComponent, canActivate: [AuthGuard] },
@@ -265,13 +282,14 @@ const routes: Routes = [
       { path: 'FR_CashCumTrial', component: CashcumtrialComponent, canActivate: [AuthGuard] },
       { path: 'FR_TrialBalance', component: TrialbalanceComponent, canActivate: [AuthGuard] },
       { path: 'FR_GeneralLadger', component: GenLedgerComponent, canActivate: [AuthGuard] },
+      { path: 'FR_GeneralLadger_conso', component: ConsoGenLedgerComponent, canActivate: [AuthGuard] },
       { path: 'FR_DayScrollBook', component: ScrollbookComponent, canActivate: [AuthGuard] },
       { path: 'FR_allGLHead', component: AllGLDetailsComponent, canActivate: [AuthGuard] },
       { path: 'FR_CdBalanceSheet', component: ConsoBalSheetComponent, canActivate: [AuthGuard] },
       { path: 'FR_CdCashAccNew', component: ConsoCashAccNewComponent, canActivate: [AuthGuard] },
-      
+
       { path: 'UM_UTransfer', component: UserTransferComponent, canActivate: [AuthGuard] },
-      
+
       { path: 'FR_GLTD', component: GenLedger2Component, canActivate: [AuthGuard] },
       { path: 'FR_CdGlTrns', component: ConsoGLTrnsComponent, canActivate: [AuthGuard] },
       { path: 'DT_ApproveTran', component: TransactionapprovalComponent, canActivate: [AuthGuard] },
@@ -283,7 +301,7 @@ const routes: Routes = [
       { path: 'UM_AddUsr', component: AdduserComponent, canActivate: [AuthGuard] },
       { path: 'UM_UpLogStatus', component: UserLoginStatusComponent, canActivate: [AuthGuard] },
       { path: 'UM_UPermission', component: UserPermissionComponent, canActivate: [AuthGuard] },
-      
+
       { path: 'LT_demandSMS', component: SendSmsFromDemandComponent, canActivate: [AuthGuard] },
       { path: 'LT_GoldTest', component: GoldTestAndValuationReportComponent, canActivate: [AuthGuard] },
       { path: 'LT_OpenLoanAcc', component: OpenLoanAccountComponent, canActivate: [AuthGuard] },
@@ -304,6 +322,9 @@ const routes: Routes = [
       { path: 'DR_DLS', component: DetailListSBCAComponent, canActivate: [AuthGuard] },
       { path: 'DR_DLR', component: DetailListRDComponent, canActivate: [AuthGuard] },
       { path: 'DR_DLF', component: DetailListFDMISComponent, canActivate: [AuthGuard] },
+      { path: 'DR_DLFDMS_CONSO', component: ConsoDtlListFdMisComponent, canActivate: [AuthGuard] },
+      { path: 'DR_DLSBCA_CONSO', component: ConsoDtlListSbcaComponent, canActivate: [AuthGuard] },
+      { path: 'DR_DLRD_CONSO', component: ConsoDtlListRdComponent, canActivate: [AuthGuard] },
       { path: 'DR_DLF_CONST', component: DetailListFdmisConstWiseComponent, canActivate: [AuthGuard] },
       { path: 'DR_DL_SBCA_CONST', component: DetailListSbcaConstWiseComponent, canActivate: [AuthGuard] },
       { path: 'DR_ASS', component: AccStmtSBCAComponent, canActivate: [AuthGuard] },
@@ -318,6 +339,7 @@ const routes: Routes = [
       { path: 'LR_DtlLst', component: DetailListComponent, canActivate: [AuthGuard] },
       { path: 'LR_UserWiseTrans', component: UserWiseTransactionLoanComponent, canActivate: [AuthGuard] },
       { path: 'LR_DlistAll', component: DetaillistAllComponent, canActivate: [AuthGuard] },
+      { path: 'LR_DlistConsole', component: DetailListConsolidatedComponent, canActivate: [AuthGuard] },
       { path: 'LR_DflLst', component: DefaulterListComponent, canActivate: [AuthGuard] },
       { path: 'LR_DMLst', component: DemandListComponent, canActivate: [AuthGuard] },
       { path: 'LR_DMLstUpdated', component: UpdatedDemandListComponent, canActivate: [AuthGuard] },
@@ -347,6 +369,8 @@ const routes: Routes = [
       { path: 'LR_Disb_Cert', component: LoanDisbCertificateComponent, canActivate: [AuthGuard] },
       { path: 'LR_GM_DC', component: GMloanDCComponent, canActivate: [AuthGuard] },
       { path: 'LR_Conso_DC', component: ConsoLoanDCComponent, canActivate: [AuthGuard] },
+      { path: 'LR_SHG_Conso_DC', component: ConsoLoanDcSHGComponent, canActivate: [AuthGuard] },
+      { path: 'LR_RH_Conso_DC', component: ConsoLoanDcRHComponent, canActivate: [AuthGuard] },
       { path: 'LR_CT_DC', component: CTloanDCComponent, canActivate: [AuthGuard] },
       { path: 'LR_NPA_Sum', component: NpaSummaryComponent, canActivate: [AuthGuard] },
       { path: 'LR_FN_Return', component: FortnightlyReturnComponent, canActivate: [AuthGuard] },
@@ -358,6 +382,7 @@ const routes: Routes = [
       { path: 'LR_GOLD_REP_ASON', component: GoldLoanAsOnDateComponent, canActivate: [AuthGuard] },
       { path: 'LR_GOLD_REP_CURR', component: GoldLoanCurrDateComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecReg', component: RecoveryRegisterComponent, canActivate: [AuthGuard] },
+      { path: 'LR_RecRegACCTYPE', component: RecovRegAccTypeWiseComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecRegConso', component: LoanRecoveryConsoComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecRegFund', component: RecovFundComponent, canActivate: [AuthGuard] },
       { path: 'LR_RecRegGP', component: GroupWiseComponent },
@@ -370,12 +395,14 @@ const routes: Routes = [
       { path: 'LR_RecInterest', component: RecovInterestComponent, canActivate: [AuthGuard] },
       { path: 'LR_openClose', component: OpenCloseregComponent, canActivate: [AuthGuard] },
       { path: 'LR_SubCashBk', component: LoanSubCashBookComponent, canActivate: [AuthGuard] },
+      { path: 'LR_Int_Subsidy_SHG', component: InterestSubsidySHGComponent, canActivate: [AuthGuard] },
       { path: 'DT_OpenAccView', component: AccOpeningViewComponent, canActivate: [AuthGuard] },
       { path: 'DT_NEFTPayment', component: NeftOutwardComponent, canActivate: [AuthGuard] },
       { path: 'DT_DDEXPORT', component: DdsExportComponent, canActivate: [AuthGuard] },
       { path: 'DT_DDIMPORT', component: DdsImportComponent, canActivate: [AuthGuard] },
       { path: 'DR_DDS_COL_REP', component: DdsAgentTransReportComponent, canActivate: [AuthGuard] },
       { path: 'DT_DDINDPOST', component: DdsIndividualPostingComponent, canActivate: [AuthGuard] },
+      { path: 'DT_FSSINDPOST', component: FlexiSmallSavingPostingComponent, canActivate: [AuthGuard] },
       { path: 'DT_SavingInttPost', component: SavingIntPostComponent, canActivate: [AuthGuard] },
       { path: 'DT_SMSchargeDed', component: SmsChargeDeductionComponent, canActivate: [AuthGuard] },
       { path: 'DT_AgentComPost', component: AgentCommissionComponent, canActivate: [AuthGuard] },
@@ -383,22 +410,22 @@ const routes: Routes = [
       { path: 'DR_NeftOut', component: NeftOutwardReportComponent, canActivate: [AuthGuard] },
       { path: 'DR_PCertificate', component: PrintCertificateComponent, canActivate: [AuthGuard] },
       { path: 'DR_InttCertificate', component: InterestCertificateComponent, canActivate: [AuthGuard] },
-      
+
       { path: 'DR_PbkPrn', component: PassBookPrintingComponent,
         children: [{ path: 'DR_PassBookFastPage', component: PassBookFastPageComponent},], canActivate: [AuthGuard] },
       { path: 'DR_contai_PbkPrn', component: ContaiComponent,
         children: [{ path: 'DR_contai_PassBookFastPage', component: ContaiFastPageComponent},], canActivate: [AuthGuard] },
-      
+
       { path: 'DR_tamluk_PbkPrn', component: TamlukComponent,
         children: [{ path: 'DR_tamluk_PassBookFastPage', component: TamlukFastPageComponent},], canActivate: [AuthGuard] },
-        
+
       { path: 'DR_bankura_PbkPrn', component: BankuraComponent,
         children: [{ path: 'DR_bankura_PassBookFastPage', component: BankuraFastPageComponent},], canActivate: [AuthGuard] },
-      
+
       { path: 'DR_ghatal_PbkPrn', component: GhatalComponent,
           children: [{ path: 'DR_ghatal_PassBookFastPage', component: GhatalFastPageComponent},], canActivate: [AuthGuard] },
-      
-      
+
+
       { path: 'DR_UpbkPrnSts', component: UpdatePassbookComponent, canActivate: [AuthGuard]},
 
 
@@ -411,6 +438,8 @@ const routes: Routes = [
       { path: 'DR_Act_SI_List', component: StandingInsActiveSIListComponent, canActivate: [AuthGuard] },
       { path: 'DR_Today_SI_Exec', component: StandingInsTodaySIExecutedComponent, canActivate: [AuthGuard] },
       { path: 'DR_DDS', component: DetailDDSComponent, canActivate: [AuthGuard] },
+      { path: 'DR_FSS_DTLST', component: DetailFlexiSmallSavingComponent, canActivate: [AuthGuard] },
+      { path: 'DR_FSS_COL_REP', component: flexiAgentWiseReportComponent, canActivate: [AuthGuard] },
       { path: 'DR_SlbWisDeposit', component: SlabwiseDepositComponent, canActivate: [AuthGuard] },
       { path: 'SP_Update', component: SystemParameterUpdateComponent, canActivate: [AuthGuard] },
       { path: 'DA_YearOpn', component: YearopenComponent, canActivate: [AuthGuard] },
@@ -439,6 +468,7 @@ const routes: Routes = [
       { path: 'IR_Near_maturity', component: INearMaturityComponent, canActivate: [AuthGuard] },
       { path: 'LR_FortNightNew', component: CtFortnightNewComponent, canActivate: [AuthGuard] },
       { path: 'LR_FortNightNewConso', component: CtFortnightNewConsoComponent, canActivate: [AuthGuard] },
+      { path: 'DR_Fss_Rep', component: DetailListFssDepositComponent, canActivate: [AuthGuard] },
       {
         path: 'locker', component: LockerComponent,
         children: [

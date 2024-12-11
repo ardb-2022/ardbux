@@ -64,13 +64,13 @@ table {
     height: 0px!important;
   }
   #mattable{
-    font-size:large
+    font-size:x-large
   }
   .noticeLogo{
     
     position: absolute!important;
     opacity: 40%!important;
-    left: 30%!important;
+    left: 32%!important;
     /* margin-left: 26%;
     margin-top: 10%; */
   }

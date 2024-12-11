@@ -128,7 +128,7 @@
               <input  [(ngModel)]="l.signatory_name" type="text" style="height:25px" [disabled]='disableAll'
                 class="form-control form-control-sm text-capitalize" id="auth_sig" (ngModelChange)="l.signatory_name"
                 (input)="suggestCustomerSignatories(i)" placeholder="Name of Authorised Signatories">
-                
+
                 <div class="suggestions border p-2"
                 *ngIf="suggestedCustomerSignatories && i==suggestedCustomerSignatoriesIdx">
                 <table id="joinholder" >
@@ -143,18 +143,18 @@
                       </td>
                       <td>
                         {{cust.cust_name }}
-            
+
                       </td>
                     </tr>
-                   
+
                   </tbody>
-                  
+
                 </table>
-                
+
               </div>
 
               <!-- <input  [(ngModel)]="l.signatory_name" type="text" style="height:25px"
-                class="form-control form-control-sm text-capitalize" id="auth_sig" 
+                class="form-control form-control-sm text-capitalize" id="auth_sig"
                 placeholder="Name of Authorised Signatories"> -->
 
 
@@ -165,7 +165,7 @@
                 <i class="fa fa-minus-circle" aria-hidden="true"></i>
               </button>
             </div>
-            
+
           </div>
         </section>
         <div class="text-right mb-3">
@@ -174,9 +174,9 @@
             <i class="fa fa-plus-circle" aria-hidden="true"></i>
           </button>
 
-          
+
         </div>
-        
+
         <!-- -------------------------------------- -->
 
 
@@ -212,12 +212,12 @@
                       </td>
                       <td>
                         {{cust.cust_name +'/'+ cust.guardian_name}}
-            
+
                       </td>
                     </tr>
-                   
+
                   </tbody>
-                  
+
                 </table> -->
                 <!-- </div> -->
 
@@ -234,7 +234,7 @@
             </div>
             <div class="suggestions border p-2" [hidden]="hidejoin"
                 *ngIf="suggestedCustomerJointHolder && i==suggestedCustomerJointHolderIdx">
-                
+
                 <table id="joinholder" >
                   <tr>
                     <th> Customer Code / Phone</th>
@@ -247,15 +247,15 @@
                       </td>
                       <td>
                         {{cust.cust_name +'/'+ cust.guardian_name}}
-            
+
                       </td>
                     </tr>
-                   
+
                   </tbody>
-                  
+
                 </table>
               </div>
-              
+
           </div>
             <div class="form-group col-3">
               <small for="trans_type">Relation</small> <br>
@@ -314,7 +314,7 @@
               class="form-control form-control-sm text-capitalize" id="acc_no" placeholder="Account Number"> -->
              <div class="input-group">
 
-            
+
               <input type="text" [disabled]='disableAccountTypeAndNo' class="form-control form-control-sm "
               id="acct_num" placeholder="Enter Acc# / Cust Name / Phone number" style="height:25px"
               [(ngModel)]="tm_deposit.acc_num" (input)="onChangeNull()" autocomplete="new-field-1">
@@ -348,7 +348,7 @@
             <div class="suggestions border p-2" style="width: 200%; font-size: small;"
             *ngIf="showNoResult">
            <strong class="text-danger">" {{tm_deposit.acc_num}} " does not match with any account</strong>
-            </div> 
+            </div>
           </div>
 
           <div class="form-group col-3">
@@ -449,7 +449,7 @@
                   <small for="ext_instl_tot">Set Minimum A/C Balance</small>
                   <input [disabled]='disableAll' [(ngModel)]="tm_deposit.ext_instl_tot" style="height:25px; text-align-last: right;" type="number" min="0" step='any'
                   class="form-control form-control-sm text-capitalize" id="ext_instl_tot" placeholder="Minimum A/C Balance">
-          
+
               </div>
           </div>
         </div>
@@ -762,7 +762,7 @@
                 </div>
             </div>
             </div>
-           
+
           </div>
 
         </div>
@@ -781,7 +781,7 @@
                 id="trans_type" class="form-control form-control-sm">
                 <option [value]="tm_deposit.constitution_cd" [readonly]="true" selected>
                   {{tm_deposit.constitution_cd}}-{{tm_deposit.constitution_desc}}</option>
-                  
+
               </select>
             </div>
 
@@ -916,7 +916,7 @@
                 </div>
             </div>
             </div>
-           
+
           </div>
 
         </div>
@@ -1052,7 +1052,7 @@
               </select>
             </div>
 
-            
+
             <div class="form-group col-3">
               <small for="dep_cert_no">S/B Account No</small>
               <div class="input-group">
@@ -1201,7 +1201,7 @@
                 </div>
             </div>
             </div>
-            
+
 
             <div class="form-group col-2">
               <br>
@@ -1218,7 +1218,7 @@
               <small for="mis_cert_no">Cert. No. / LF No.</small>
               <input [(ngModel)]="tm_deposit.cert_no" [disabled]='disableAll' style="height:25px" type="text"
                 class="form-control form-control-sm text-capitalize" id="mis_cert_no" placeholder="Cert. No. / LF No.">
-            </div> 
+            </div>
           </div>
 
         </div>
@@ -1399,7 +1399,7 @@
                   <small for="ext_instl_tot">Set Minimum A/C Balance</small>
                   <input [disabled]='disableAll' [(ngModel)]="tm_deposit.ext_instl_tot" style="height:25px; text-align-last: right;" type="number" min="0" step='any'
                   class="form-control form-control-sm text-capitalize" id="ext_instl_tot" placeholder="Minimum A/C Balance">
-          
+
                 </div>
 
           </div>
@@ -1490,7 +1490,76 @@
           </div>
         </div>
         <!-- <-----------End: Guaranty Fund-------------->
+        <div *ngIf="accountTypeDiv==10">
 
+          <div class="form-row">
+            <div class="form-group col-5">
+              <small for="rec_dep_const">Constitution</small> <br>
+              <select [readonly]="true"
+                style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
+                id="trans_type" class="form-control form-control-sm">
+                <option [value]="tm_deposit.constitution_cd" [readonly]="true" selected>
+                  {{tm_deposit.constitution_cd}}-{{tm_deposit.constitution_desc}}</option>
+              </select>
+            </div>
+
+            <div class="form-group col-3">
+              <small for="rec_dep_intt_rate">Period (Month)</small>
+              <input [ngModel]="this.tm_deposit.month" [readonly]="true" style="height:25px; text-align-last: right;"
+                type="number" min="0" step='any' class="form-control form-control-sm text-capitalize"
+                id="rec_dep_intt_rate">
+            </div>
+
+            <div class="form-group col-4">
+              <small for="rec_dep_oprn_instr">Operated By</small> <br>
+              <select
+                style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
+                id="acc_oprn_instr" [disabled]='disableAll' class="form-control form-control-sm"
+                (change)="setOperationalInstr($event.target.value)">
+                <option [value]="tm_deposit.oprn_instr_cd" selected>
+                  {{tm_deposit.oprn_instr_cd}}-{{tm_deposit.oprn_instr_desc}}
+                </option>
+                <option *ngFor="let l of operationalInstrList" [value]="l.oprn_cd">{{l.oprn_cd}}-{{l.oprn_desc}}
+                </option>
+              </select>
+            </div>
+
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-4">
+              <small for="rec_dep_intt_rate">Interest Rate</small>
+              <input [ngModel]="tm_deposit.intt_rt" [readonly]="true" style="height:25px; text-align-last: right;"
+                type="number" min="0" value='.00' (focusout)="processInterest()" step='any'
+                class="form-control form-control-sm text-capitalize" id="rec_dep_intt_rate">
+            </div>
+
+            <div class="form-group col-4">
+              <small for="rec_dep_principal">Principal</small>
+              <input [ngModel]="tm_deposit.prn_amt" [readonly]="true" style="height:25px; text-align-last: right;"
+                type="number" min="0" value='.00' step='any' class="form-control form-control-sm text-capitalize"
+                id="rec_dep_principal">
+            </div>
+
+            <div class="form-group col-4">
+              <small for="rec_dep_mat_dt">Maturity Date</small>
+
+              <input [readonly]="true" class="form-control form-control-sm text-capitalize" type="text" placeholder="dd/mm/yyyy"
+                [(ngModel)]="tm_deposit.mat_dt" bsDatepicker
+                [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }">
+
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-12">
+              <small for="dbs_cert_no">Agent Name</small>
+              <input [readonly]="true" [(ngModel)]="agentName" style="height:25px" type="text"
+                class="form-control form-control-sm text-capitalize" id="dbs_cert_no">
+            </div>
+
+          </div>
+        </div>
         <!-- <-----------Start: Savings Deposit Special -------------->
         <div *ngIf="accountTypeDiv==11">
 
@@ -1546,7 +1615,7 @@
             <div class="form-group col-4">
               <small for="rec_dep_mat_dt">Maturity Date</small>
 
-              <input [readonly]="true" style="height:25px; width: 150px" type="text" placeholder="dd/mm/yyyy"
+              <input [readonly]="true" class="form-control form-control-sm text-capitalize" type="text" placeholder="dd/mm/yyyy"
                 [(ngModel)]="tm_deposit.mat_dt" bsDatepicker
                 [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }">
 
@@ -1589,7 +1658,7 @@
           <strong class="text-danger">" {{tm_deposit.user_acc_num}} " does not match with any customer</strong>
           <!-- <strong class="text-danger" *ngIf="!resetClicked">" {{this.f.acct_num.value}} " does not match with any customer</strong> -->
         </div>
-        
+
         <!-- <-----------End: Savings Deposit Special -------------->
       </div>
 

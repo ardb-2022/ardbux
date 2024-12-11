@@ -42,6 +42,7 @@ export class AccOpeningViewComponent implements OnInit {
   static accTypes: mm_acc_type[] = [];
   @ViewChild('kycContent', { static: true }) kycContent: TemplateRef<any>;
   // selectedTransType = '';
+  allAgent:any;
   transTypeFlg = '';
   accountTypeDiv = 1;
   branchCode = '0';
@@ -80,7 +81,7 @@ export class AccOpeningViewComponent implements OnInit {
   disableAccountTypeAndNo = true;
 
   operationType = '';
-
+  agentName: string = '';
   showAlert = false;
   alertMsg: string;
   alertMsgType: string;
@@ -190,7 +191,7 @@ export class AccOpeningViewComponent implements OnInit {
   ngOnInit(): void {
 
 
-
+    this.getAgentList();
     this.branchCode = this.sys.BranchCode;
     this.createUser = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
     this.updateUser = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
@@ -606,6 +607,11 @@ export class AccOpeningViewComponent implements OnInit {
         }
         else {
           if (this.masterModel.tmdeposit.acc_num !== null) {
+            this.agentName=''
+            if(this.masterModel.tmdeposit.acc_type_cd==10){
+              const agent = this.allAgent.find(a => a.agent_cd === this.masterModel.tmdeposit.agent_cd);
+              this.agentName = agent ? agent.agent_name : '';
+            }
             this.disableAccountTypeAndNo = true;
             this.assignModelsFromMasterData();
             if(this.tm_deposit.acc_type_cd==6){
@@ -2238,7 +2244,16 @@ debugger
       this.disableAccountTypeAndNo = false;
     }
   }
-
+  getAgentList() {
+    var dt = {
+      "ardb_cd": this.sys.ardbCD,
+      "brn_cd": this.sys.BranchCode
+    }
+    this.svc.addUpdDel('Deposit/GetAgentData', dt).subscribe(res => {
+      // this.agentRes=res
+      this.allAgent=res
+    })
+  }
   private HandleMessage(show: boolean, type: MessageType = null, message: string = null) {
     this.showMsg = new ShowMessage();
     this.showMsg.Show = show;

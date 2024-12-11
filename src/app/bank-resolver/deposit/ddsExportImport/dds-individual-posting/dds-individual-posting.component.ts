@@ -355,7 +355,8 @@ export class DdsIndividualPostingComponent implements OnInit {
       "trans_dt":this.f.trans_dt.value,
       "trans_cd":this.f.trans_cd.value,
       "user_id":this.sys.UserId,
-      "agent_cd":this.f.agent_cd.value
+      "agent_cd":this.f.agent_cd.value,
+      "ad_acc_type_cd":10
     }
     this.svc.addUpdDel('Deposit/ApproveDdsImportData',dt).subscribe(data=>{console.log(data)
       

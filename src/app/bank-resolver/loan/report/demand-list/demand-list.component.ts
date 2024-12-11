@@ -605,8 +605,10 @@ debugger
     this.ovdPrnSum=0
     this.penalInttSum=0
     this.totalSum=0
+    this.resultLength=0;
     console.log(this.dataSource.filteredData)
-    this.filteredArray=this.dataSource.filteredData
+    this.filteredArray=this.dataSource.filteredData;
+    this.resultLength=this.filteredArray.length
     for(let i=0;i<this.filteredArray.length;i++){
       this.totOutstanding+=this.filteredArray[i].outstanding_prn
       this.ovdInttSum+=this.filteredArray[i].ovd_intt
@@ -616,7 +618,6 @@ debugger
       this.penalInttSum+=this.filteredArray[i].penal_intt
       this.totalSum+=this.filteredArray[i].ovd_intt+this.filteredArray[i].curr_intt+this.filteredArray[i].curr_prn+this.filteredArray[i].ovd_prn+this.filteredArray[i].penal_intt
       // console.log(this.filteredArray[i].dr_amt)
-    
       // this.crSum+=this.filteredArray[i].cr_amount
     }
   }

@@ -25,16 +25,26 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 })
 export class LandingComponent implements OnInit {
 
-  constructor(private router: Router, private modalService:BsModalService,private msg: InAppMessageService,private svc: RestService, private comsv:CommonServiceService) { }
+  constructor( private cms:CommonServiceService,private router: Router, private modalService:BsModalService,private msg: InAppMessageService,private svc: RestService, private comsv:CommonServiceService) { 
+    this.randomNumberColor = this.getRandomColor();
+  }
   sys = new SystemValues();
   dashboardItem = new mm_dashboard();
   isLoading = false;
   modalRef?:BsModalRef;
   currUser:any;
+  ardbName:any;
+  brnName:any;
+  marqueeText:any;
+  randomNumberColor: string;
+  private intervalId: any;
   L2L:any=localStorage.getItem('L2L')
   @ViewChild('template', { static: true }) template: TemplateRef<any>;
 
   ngOnInit(): void {
+    this.ardbName=localStorage.getItem('ardb_name');
+    this.brnName=localStorage.getItem('__brnName');
+    this.marqueeText = `${this.ardbName}`;
     this.comsv.accOpen=false
     this.comsv.accClose=false
     this.comsv.loanDis=false
@@ -43,11 +53,15 @@ export class LandingComponent implements OnInit {
     this.comsv.openGlTrns=false
     // when ever landing is loaded screen title should be hidden
     this.msg.sendhideTitleOnHeader(true);
-    this.getDashboardItem();
+    // this.getDashboardItem();
+    this.cms.getLocalStorageDataAsJsonArray();
     // if(this.L2L=='true'){
     //   this.openModal(this.template)
     // }
     // this.getCustomerList()
+    this.intervalId = setInterval(() => {
+      this.randomNumberColor = this.getRandomColor();
+    }, 400); // 1000 milliseconds = 1 second
 }
     openModal(template: TemplateRef<any>) {
       this.currUser=localStorage.getItem('__userId');
@@ -56,6 +70,14 @@ export class LandingComponent implements OnInit {
     closeL2L(){
     localStorage.removeItem('L2L');
     this.modalRef?.hide()
+    }
+    getRandomColor(): string {
+      const letters = '0123456789ABCDEF';
+      let color = '#';
+      for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
     }
   getDashboardItem() {
     const param = new p_gen_param();
@@ -150,6 +172,29 @@ export class LandingComponent implements OnInit {
     this.comsv.openGlTrns=true
     this.router.navigate([this.sys.BankName + '/FR_GLTD']);
 
+  }
+ 
+  applyRandomColors(): void {
+    const marqueeTextElement = document.getElementById('marqueeText');
+
+    if (marqueeTextElement) {
+      const text = this.marqueeText;
+      marqueeTextElement.innerHTML = ''; // Clear existing content
+
+      // Split text into individual letters and wrap them in spans
+      text.split('').forEach((letter) => {
+        const span = document.createElement('span');
+        span.textContent = letter;
+        span.classList.add('colorful'); // Add class for color change
+        marqueeTextElement.appendChild(span);
+      });
+    }
+  } 
+  ngOnDestroy(): void {
+    // Clear the interval when the component is destroyed to prevent memory leaks
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
   }
   
   }

@@ -35,6 +35,8 @@ export class WeeklyReturnNewComponent {
   isOpenToDp = false;
   notvalidate:boolean=false;
   date_msg:any;
+  ibsd:any;
+  surplus_deficit:any;
   exportAsConfig:ExportAsConfig;
   sys = new SystemValues();
   config = {
@@ -94,6 +96,8 @@ export class WeeklyReturnNewComponent {
     private exportAsService: ExportAsService,
     private router: Router,private comser:CommonServiceService) { }
   ngOnInit(): void {
+    this.surplus_deficit=0.00;
+    this.ibsd=0.00;
     this.weekly_Return_Liability= [
               {
                   "ardb_cd": null,
@@ -502,6 +506,8 @@ export class WeeklyReturnNewComponent {
 
 
   public SubmitReport() {
+    this.ibsd=0;
+      this.surplus_deficit=0;
       this.showAlert = false;
       this.isLoading=true;
       debugger
@@ -520,7 +526,10 @@ export class WeeklyReturnNewComponent {
       this.svc.addUpdDel('Loan/WeeklyReturnNew',dt).subscribe(data=>{
       console.log(data)
       this.reportData=data
+      
       if(this.reportData.length>0){
+        this.ibsd=this.reportData[0]?.ibsd;
+      this.surplus_deficit=this.reportData[0]?.surplus_deficit;
         this.weekly_Return_Liability=this.reportData[0]?.weekly_Return_Liability;
         this.weekly_Return_Asset=this.reportData[0]?.weekly_Return_Asset;
         this.weekly_Return_Revenue=this.reportData[0]?.weekly_Return_Revenue;
@@ -532,12 +541,12 @@ export class WeeklyReturnNewComponent {
    this.totalLiabilityAmount = this.calculateTotalAmount(this.groupedLiabilityData);
         // this.groupedLiabilityData.data
         for(let i=0;i<=7;i++){
-          this.tot1to7+=this.groupedLiabilityData[i].subTotal
+          this.tot1to7+=this.groupedLiabilityData[i]?.subTotal
         }
    this.groupedAssetData = this.groupBySrlNo(this.weekly_Return_Asset);
    this.totalAssetAmount = this.calculateTotalAmount(this.groupedAssetData);
         for(let i=0;i<=4;i++){
-          this.tot1to4+=this.groupedAssetData[i].subTotal
+          this.tot1to4+=this.groupedAssetData[i]?.subTotal
         }
    this.groupedRevenueData = this.groupBySrlNo(this.weekly_Return_Revenue);
    this.totalRevenueAmount = this.calculateTotalAmount(this.groupedRevenueData);

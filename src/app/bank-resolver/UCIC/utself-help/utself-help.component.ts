@@ -8,6 +8,7 @@ import { mm_shg } from '../../Models/mm_shg';
 import { mm_shg_member } from '../../Models/mm_shg_member';
 import { p_gen_param } from '../../Models/p_gen_param';
 import { ShgDM } from '../../Models/ShgDM';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-utself-help',
@@ -22,6 +23,8 @@ export class UTSelfHelpComponent implements OnInit {
   shgFrm: FormGroup;
   branchCode = '0';
   userName = '';
+  disabledOnNull=true;
+  showNoResult=false;
   sys = new SystemValues();
   isLoading = false;
   showMsg: ShowMessage;
@@ -31,10 +34,15 @@ export class UTSelfHelpComponent implements OnInit {
   shgRet = new ShgDM();
   isRetrieve = true;
   customerList: mm_customer[] = [];
+  selectedCustomer: mm_customer;
   suggestedCustomer: mm_customer[];
   suggestedCustomer1: mm_customer[];
   indxsuggestedCustomer1=0;
   tempcustname ='';
+  reportData2:any=[];
+  reportData3:any=[];
+  newOpreation=true;
+  retriveOpreation=false;
   ngOnInit(): void {
     this.branchCode = this.sys.BranchCode;
     this.userName = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
@@ -43,8 +51,9 @@ export class UTSelfHelpComponent implements OnInit {
      shg_id : [],
      brn_cd : [],
      cust_name : [],
-     chairman_name : [],
-     secretary_name : [],
+     president_name : [],
+     vice_president_name : [],
+     cashier_name : [],
      village : [],
      gruop_sex : [],
       monthly_subcription : [],
@@ -59,29 +68,57 @@ export class UTSelfHelpComponent implements OnInit {
      sb_accno : []
     });
     this.shgFrm.controls.shg_id.disable();
+    this.addShgMember()
+
   }
 
-  public suggestCustomer(): void {
-    if (this.f.cust_name.value.length > 2) {
-      const prm = new p_gen_param();
-      prm.ardb_cd=this.sys.ardbCD
-      // prm.ad_acc_type_cd = +this.f.acc_type_cd.value;
-      prm.as_cust_name = this.f.cust_name.value.toLowerCase();
-      this.svc.addUpdDel<any>('Deposit/GetCustDtls', prm).subscribe(
-        res => {
-          debugger;
-          res=res.filter(x=>x.catg_cd===11);
-          if (undefined !== res && null !== res && res.length > 0) {
-            this.suggestedCustomer = res.slice(0, 20);
-          } else {
-            this.suggestedCustomer = [];
-          }
-        },
-        err => { this.isLoading = false; }
-      );
-    } else {
-      this.suggestedCustomer = null;
+  onChangeName(){
+    this.suggestedCustomer = null;
+    this.showNoResult=false
+    if (this.f.cust_name.value.length > 0) {
+      this.disabledOnNull=false
     }
+    else{
+      this.disabledOnNull=true
+    }
+  }
+  public suggestCustomer(): Observable<mm_customer> {
+    // this.f.status.disable();
+    this.isLoading=true;
+    console.log(this.f.cust_name.value)
+    // console.log(this.f.cust_name.value.length)
+    if (this.f.cust_name.value != null ) {
+     
+      if (this.f.cust_name.value.length > 0) {
+        const prm = new p_gen_param();
+        prm.as_cust_name = this.f.cust_name.value.toLowerCase();
+        prm.ardb_cd = this.sys.ardbCD;
+        this.svc.addUpdDel<any>('Deposit/GetCustDtls', prm).subscribe(
+          res => {
+            console.log(res)
+            this.isLoading=false;
+            if (undefined !== res && null !== res && res.length > 0) {
+              this.suggestedCustomer = res
+              this.showNoResult=false
+              return res
+            } else {
+              this.suggestedCustomer = [];
+              this.showNoResult=true;
+              return [];
+            }
+          },
+          err => { this.isLoading = false; }
+        );
+      } else {
+
+        this.suggestedCustomer = null;
+        // this.suggestedCustomer.length=0
+        // this.suggestedCustomer=[];
+        return null;
+      }
+    }
+    return null
+
   }
   public suggestCustomer1(i:number): void {
     if (this.mmshgmember[i].shg_member_name.length > 2) {
@@ -104,28 +141,103 @@ export class UTSelfHelpComponent implements OnInit {
       this.suggestedCustomer1 = null;
     }
   }
+  newCall(){
+    this.newOpreation=true;
+    this.retriveOpreation=false;
+  }
+  retrieveCall(){
+    this.newOpreation=false;
+    this.retriveOpreation=true;
+  }
+  public SelectCustomer(cust: mm_customer): void {
+    if(this.newOpreation){
+      const dob = (null !== cust.dt_of_birth && '01/01/0001 00:00' === cust.dt_of_birth.toString()) ? null
+      : cust.dt_of_birth;
+      if(dob){
+        this.f.form_dt.disable();
+      }
+    this.selectedCustomer = cust;
+    this.clearData();
+   
+  debugger
+    this.suggestedCustomer = null;
+    this.shgFrm.patchValue({
+      brn_cd: cust.brn_cd,
+      shg_id: cust.cust_cd,
+      cust_name: cust.cust_name,
+      form_dt: dob, 
+      gruop_sex: cust.sex,
+      village: cust.present_address,
+      
+    });
+    debugger
+    }
+    if( this.retriveOpreation){
+      this.shgFrm.patchValue({
+        brn_cd: cust.brn_cd,
+        shg_id: cust.cust_cd,
+        cust_name: cust.cust_name,
+        gruop_sex: cust.sex,
+        village: cust.present_address,
+        
+      });
+      this.getShgData();
+    }
+   
+
+
+  }
+  calculateAge(birthDateString: Date): number {
+    if (!birthDateString) {
+      return null; // Return null or any default value (e.g., 0) if the birth date is not provided
+    }
+    debugger
+    // Convert the input string to a Date object
+    const birthDate = new Date(birthDateString);
+    const currentDate = new Date();
+  
+    // Calculate the difference in years
+    let age = currentDate.getFullYear() - birthDate.getFullYear();
+  
+    // Check if the birthday has not occurred yet in the current year
+    const monthDifference = currentDate.getMonth() - birthDate.getMonth();
+    const dayDifference = currentDate.getDate() - birthDate.getDate();
+  
+    if (monthDifference < 0 || (monthDifference === 0 && dayDifference < 0)) {
+      age--;
+    }
+    debugger
+    return age;
+  }
   
   populateCustDtls(temp_mm_cust: mm_customer,section :number,indx:number) {
-    if (section==1)
-    {
-    this.f.shg_id.setValue(temp_mm_cust.cust_cd);  
-    this.f.cust_name.setValue(temp_mm_cust.cust_name);
-    this.f.village.setValue(temp_mm_cust.vill_cd);
-    this.f.gruop_sex.setValue(temp_mm_cust.sex);
-    this.tempcustname=temp_mm_cust.cust_name;
-    }
-    else
-    {
+    console.log(temp_mm_cust);
+    const dob = (null !== temp_mm_cust.dt_of_birth && '01/01/0001 00:00' === temp_mm_cust.dt_of_birth?.toString()) ? null
+      : temp_mm_cust.dt_of_birth;
+    console.log(dob);
+    
+      this.mmshgmember[indx].ardb_cd=this.sys.ardbCD;
       this.mmshgmember[indx].brn_cd=this.sys.BranchCode;
       this.mmshgmember[indx].shg_member_sex=temp_mm_cust.sex;
       this.mmshgmember[indx].shg_member_caste=temp_mm_cust.caste==1?"GENERAL":temp_mm_cust.caste==2?"SC":temp_mm_cust.caste==3?"ST":temp_mm_cust.caste==4?"OBC":"OTHER";
       this.mmshgmember[indx].pan=temp_mm_cust.pan;
-      this.mmshgmember[indx].age=temp_mm_cust.age;
+      this.mmshgmember[indx].adhar_no=+temp_mm_cust.aadhar;
+      this.mmshgmember[indx].age=this.calculateAge(dob);
       this.mmshgmember[indx].shg_member_name=temp_mm_cust.cust_name;
       this.mmshgmember[indx].guardian_name=temp_mm_cust.guardian_name;
       this.mmshgmember[indx].mobile=+temp_mm_cust.phone;
-      this.mmshgmember[indx].date_of_birth=temp_mm_cust.dt_of_birth;
+      this.mmshgmember[indx].date_of_birth=dob;
       this.mmshgmember[indx].shg_member_id=temp_mm_cust.cust_cd;
+    
+  }
+  public onDobChange(value: Date,i:number) {
+    // ;
+    if (null !== value) {
+      const timeDiff = Math.abs(Date.now() - value?.getTime());
+      const age = Math.floor((timeDiff / (1000 * 3600 * 24)) / 365.25)
+      this.mmshgmember[i].age=age
+      console.log(age);
+      
     }
   }
   setCustDtls(cust_cd: number,section :number,indx:number) {
@@ -248,6 +360,8 @@ export class UTSelfHelpComponent implements OnInit {
   // }
   clearData(){
     debugger;
+    this.disabledOnNull=true;
+    this.showNoResult=false;
     this.shgFrm.reset();
     this.shgFrm.enable();
     this.shgFrm.controls.shg_id.disable();
@@ -260,16 +374,20 @@ export class UTSelfHelpComponent implements OnInit {
   }
   saveData(){
     debugger;
-    if (this.f.chairman_name.value == null || this.f.chairman_name.value === 'undefined') {
+    if (this.f.cashier_name.value == null || this.f.cashier_name.value === 'undefined') {
       this.HandleMessage(true, MessageType.Error, 'Chairman Name not be Blank');
       return;
     }
-    else if (this.f.secretary_name.value == null || this.f.secretary_name.value === 'undefined') {
-      this.HandleMessage(true, MessageType.Error, 'Secretary Name Can not be Blank');
+    if (this.f.president_name.value == null || this.f.president_name.value === 'undefined') {
+      this.HandleMessage(true, MessageType.Error, 'President Name not be Blank');
+      return;
+    }
+    else if (this.f.vice_president_name.value == null || this.f.vice_president_name.value === 'undefined') {
+      this.HandleMessage(true, MessageType.Error, 'Vice President Name Can not be Blank');
       return;
     }
     else if (this.f.village.value == null || this.f.village.value === 'undefined') {
-      this.HandleMessage(true, MessageType.Error, 'Village Name Can not be Blank');
+      this.HandleMessage(true, MessageType.Error, 'Address Name Can not be Blank');
       return;
     }
     else if (this.f.gruop_sex.value == null || this.f.gruop_sex.value === 'undefined') {
@@ -328,7 +446,7 @@ export class UTSelfHelpComponent implements OnInit {
     }
   }
   deleteData(){
-    if (this.f.chairman_name.value == null || this.f.chairman_name.value === 'undefined') {
+    if (this.f.president_name.value == null || this.f.president_name.value === 'undefined') {
       this.HandleMessage(true, MessageType.Error, 'Please Retrieve a group first !!!');
       return;
     }
@@ -391,18 +509,21 @@ export class UTSelfHelpComponent implements OnInit {
         if (res.mmshg.shg_id===0)
         {
           this.isLoading=false;
+          this.suggestedCustomer=null;
           this.shgFrm.enable();
           this.shgFrm.controls.shg_id.disable();
           this.HandleMessage(true, MessageType.Warning, 'No SHG created with this customer!!!');
           return;
         }
         this.shgRet = res;
+        this.suggestedCustomer=null;
         this.shgFrm.patchValue({
           shg_id : this.shgRet.mmshg.shg_id,
           brn_cd : this.shgRet.mmshg.brn_cd,
           cust_name : this.tempcustname,
-          chairman_name : this.shgRet.mmshg.chairman_name,
-          secretary_name : this.shgRet.mmshg.secretary_name,
+          president_name : this.shgRet.mmshg.president_name,
+          vice_president_name : this.shgRet.mmshg.vice_president_name,
+          cashier_name : this.shgRet.mmshg.cashier_name,
           village : this.shgRet.mmshg.village,
           gruop_sex : this.shgRet.mmshg.gruop_sex,
            monthly_subcription : this.shgRet.mmshg.monthly_subcription,
@@ -423,6 +544,7 @@ export class UTSelfHelpComponent implements OnInit {
       },
       err => { debugger; this.isLoading=false;
         this.shgFrm.disable();
+        this.suggestedCustomer=null;
         this.shgFrm.controls.shg_id.enable();
       }
     );
@@ -444,8 +566,9 @@ export class UTSelfHelpComponent implements OnInit {
           shg_id : this.shgRet.mmshg.shg_id,
           brn_cd : this.shgRet.mmshg.brn_cd,
           cust_name : this.tempcustname,
-          chairman_name : this.shgRet.mmshg.chairman_name,
-          secretary_name : this.shgRet.mmshg.secretary_name,
+          president_name : this.shgRet.mmshg.president_name,
+          vice_president_name : this.shgRet.mmshg.vice_president_name,
+          cashier_name : this.shgRet.mmshg.cashier_name,
           village : this.shgRet.mmshg.village,
           gruop_sex : this.shgRet.mmshg.gruop_sex,
            monthly_subcription : this.shgRet.mmshg.monthly_subcription,
@@ -475,8 +598,9 @@ export class UTSelfHelpComponent implements OnInit {
     _mmshg.ardb_cd=this.sys.ardbCD
     _mmshg.shg_id              =this.f.shg_id.value;              
     _mmshg.brn_cd              =this.sys.BranchCode;              
-    _mmshg.chairman_name       =this.f.chairman_name.value;       
-    _mmshg.secretary_name      =this.f.secretary_name.value;      
+    _mmshg.president_name       =this.f.president_name.value;       
+    _mmshg.vice_president_name       =this.f.vice_president_name.value;       
+    _mmshg.cashier_name      =this.f.cashier_name.value;      
     _mmshg.village             =this.f.village.value;             
     _mmshg.gruop_sex           =this.f.gruop_sex.value;           
     _mmshg.monthly_subcription =this.f.monthly_subcription.value; 
@@ -489,7 +613,10 @@ export class UTSelfHelpComponent implements OnInit {
     _mmshg.caste_muslim        =this.f.caste_muslim.value==null?0:+this.f.caste_muslim.value;        
     _mmshg.form_dt             =this.f.form_dt.value;             
     _mmshg.sb_accno            =this.f.sb_accno.value;
-    this.mmshgmember.forEach(x=>x.brn_cd=this.sys.BranchCode );
+    this.mmshgmember.forEach(x=>{
+      x.brn_cd=this.sys.BranchCode,
+      x.ardb_cd=this.sys.ardbCD
+    } );
     _mmshgmember =this.mmshgmember;            
     _shgDM.mmshg=_mmshg;
     _shgDM.mmshgmember=_mmshgmember;

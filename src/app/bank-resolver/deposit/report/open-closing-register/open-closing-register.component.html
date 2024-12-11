@@ -130,7 +130,10 @@ style="background-color: #78c2ad21; min-height: 20vh;">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
       <td mat-cell *matCellDef="let row" > {{row.cust_name }} </td>
     </ng-container>
-
+    <ng-container matColumnDef="cust_address">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Address</th>
+      <td mat-cell *matCellDef="let row" > {{row.agent_cd }} </td>
+    </ng-container>
     <!-- Fruit Column -->
     <ng-container matColumnDef="prn_amt" >
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Prn Amount </th>
@@ -153,7 +156,7 @@ style="background-color: #78c2ad21; min-height: 20vh;">
     </ng-container>
     <!-- Header column -->
     <ng-container matColumnDef="Header">
-      <th mat-header-cell *matHeaderCellDef colspan="12">
+      <th mat-header-cell *matHeaderCellDef colspan="9">
         <div class="justify-content-center" style="text-align:center">
           <br><h4>{{ardbName}} ({{branchName}})</h4>
           
@@ -163,7 +166,7 @@ style="background-color: #78c2ad21; min-height: 20vh;">
       </th>
     </ng-container>
     <ng-container matColumnDef="Total">
-      <td mat-footer-cell *matFooterCellDef colspan="4" style="text-align: left;">
+      <td mat-footer-cell *matFooterCellDef colspan="5" style="text-align: center;">
         <b>Total</b>
       </td>
     </ng-container>
@@ -197,7 +200,7 @@ style="background-color: #78c2ad21; min-height: 20vh;">
    
   </table>
   <footer><small>
-    This Report Is Generated Through CFS-2022, Kolkata
+    This report is generated through CFS-2022
    </small></footer>
 </div>
 <!-- <mat-paginator showFirstLastButtons [pageSizeOptions]="[5, 10, 25, 100, this.reportData.length]" aria-label="Select page of users"></mat-paginator> -->
@@ -263,7 +266,7 @@ name="currentPage"
   <tfoot>
     <tr>
       <td colspan="5"> <small>
-        This Report Is Generated Through CFS-2022, Kolkata
+        This report is generated through CFS-2022
        </small> </td>
     </tr>
     
@@ -333,11 +336,11 @@ name="currentPage"
 </table>
 <footer>
   <small>
-    This Report Is Generated Through CFS-2022, Kolkata
+    This report is generated through CFS-2022
    </small> 
  </footer>
 <!-- <br><br><br><br>
-<small>This Report Is Generated Through CFS-2022, Kolkata</small> -->
+<small>This report is generated through CFS-2022</small> -->
  </div>
 <button mat-raised-button hidden id="chngPage" (click)="setPage(1)"></button>
 </div>

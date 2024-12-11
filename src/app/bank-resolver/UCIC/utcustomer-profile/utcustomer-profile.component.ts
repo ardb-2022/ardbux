@@ -67,6 +67,7 @@ export class UTCustomerProfileComponent implements OnInit {
   reportData2:any=[];
   reportData3:any=[];
   vill:any;
+  organizationMode:boolean=false;
   showHideVill:boolean=false
   comType=[{val:1,name:'Hindu'},{val:2,name:'Muslim'},{val:3,name:'Others'}]
   castType=[{val:1,name:'General'},{val:2,name:'SC'},{val:3,name:'ST'},{val:4,name:'OBC'}]
@@ -553,6 +554,7 @@ export class UTCustomerProfileComponent implements OnInit {
     // this.custName.unsubscribe()
     this.enableModifyAndDel = true;
     this.suggestedCustomer = null;
+    this.organizationMode=cust.cust_type=='O'?true:false;
     this.selectedBlock = this.blocks.filter(e => e.block_cd === cust.block_cd)[0];
     this.selectedServiceArea = this.serviceAreas.filter(e => e.service_area_cd === cust.service_area_cd)[0];
     this.custMstrFrm.patchValue({
@@ -712,104 +714,169 @@ export class UTCustomerProfileComponent implements OnInit {
     debugger
     this.showMsgs = [];
     let trReturn = true;
-    if (null !== this.f.pan.value && this.f.pan.value.length > 0) {
-      if (!Utils.ValidatePAN(this.f.pan.value)) {
-        this.HandleMessage(true, MessageType.Error, 'PAN is not valid');
+    if(this.organizationMode){
+      if(this.retrieveClicked==true && this.f.cust_name.value==null){
+        this.HandleMessage(true,MessageType.Error,'Empty search field')
+      }
+      if (null !== this.f.phone.value && this.f.phone.value.length > 0) {
+        if (!Utils.ValidatePhone(this.f.phone.value)) {
+          this.HandleMessage(true, MessageType.Error, 'Phone number is not valid');
+          trReturn = false;
+        }
+      } else {
+        if(!this.retrieveClicked)
+        this.HandleMessage(true, MessageType.Error, 'Phone number is mandatory');
         trReturn = false;
       }
-    }
-    if(this.f.kyc_photo_type.value == 'P' || this.f.kyc_photo_type.value == 'G'){
-
-      this.f.kyc_photo_type.value == 'P' && this.f.kyc_photo_no.value.length != 10 ? 
-      this.HandleMessage(true,MessageType.Error,'Pan No is Invalid') : 
-      this.f.kyc_photo_type.value == 'G' && this.f.kyc_photo_no.value.length != 12 ? 
-      this.HandleMessage(true,MessageType.Error,'Adhar No is Invalid') : '';
-
-      trReturn =  this.f.kyc_photo_type.value == 'P' && this.f.kyc_photo_no.value.length != 10 ?  
-      false : this.f.kyc_photo_type.value == 'G' && this.f.kyc_photo_no.value.length != 12 ? 
-      false: true;  
-    }
-    if(this.f.kyc_address_type.value == 'P' || this.f.kyc_address_type.value == 'G'){
-      this.f.kyc_address_type.value == 'P' && this.f.kyc_address_no.value.length != 10 ? 
-      this.HandleMessage(true,MessageType.Error,'Pan No is Invalid') : 
-      this.f.kyc_address_type.value == 'G' && this.f.kyc_address_no.value.length != 12 ? 
-      this.HandleMessage(true,MessageType.Error,'Adhar No is Invalid') : '';
-
-
-      trReturn =   this.f.kyc_address_type.value == 'P' && this.f.kyc_address_no.value.length != 10 ?  
-      false : this.f.kyc_address_type.value == 'G' && this.f.kyc_address_no.value.length != 12 ? 
-      false: true;  
-    }
-    // // ;
-    if(this.retrieveClicked==true && this.f.cust_name.value==null){
-      this.HandleMessage(true,MessageType.Error,'Empty search field')
-    }
-    if (null !== this.f.phone.value && this.f.phone.value.length > 0) {
-      if (!Utils.ValidatePhone(this.f.phone.value)) {
-        this.HandleMessage(true, MessageType.Error, 'Phone number is not valid');
-        trReturn = false;
-      }
-    } else {
-      if(!this.retrieveClicked)
-      this.HandleMessage(true, MessageType.Error, 'Phone number is mandatory');
-      trReturn = false;
-    }
-debugger
-    for (const name in this.custMstrFrm.controls) {
-      debugger
-      if (this.custMstrFrm.controls[name].invalid) {
+      for (const name in this.custMstrFrm.controls) {
         debugger
-        switch (name) {
-          case 'dt_of_birth':
-            this.HandleMessage(true, MessageType.Error, 'Date of Birth is Mandatory');
-            break;
-          case 'cust_type':
-            this.HandleMessage(true, MessageType.Error, 'Customer Type is Mandatory');
-            break;
-          case 'first_name':
-            this.HandleMessage(true, MessageType.Error, 'First Name is Mandatory');
-            break;
-          case 'last_name':
-            this.HandleMessage(true, MessageType.Error, 'Last Name is Mandatory');
-            break;
-          case 'guardian_name':
-            this.HandleMessage(true, MessageType.Error, 'Guardian\'s Name is Mandatory');
-            break;
-          case 'sex':
-            this.HandleMessage(true, MessageType.Error, 'Sex of customer is Mandatory');
-            break;
-          case ' catg_cd':
-            this.HandleMessage(true, MessageType.Error, 'Category of customer is Mandatory');
-            break;
-          case 'community':
-            this.HandleMessage(true, MessageType.Error, 'Community of customer is Mandatory');
-            break;
-          case 'caste':
-            this.HandleMessage(true, MessageType.Error, 'Caste of customer is Mandatory');
-            break;
-          case 'block_cd':
-            this.HandleMessage(true, MessageType.Error, 'Block of customer Mandatory');
-            break;
-          case 'service_area_cd':
-            this.HandleMessage(true, MessageType.Error, 'Service are of customer is Mandatory');
-            break;
-          // case 'phone':
-          //   this.HandleMessage(true, MessageType.Error, 'Phone number is mandatory in correct format');
-          //   break;
-          case 'present_address':
-            this.HandleMessage(true, MessageType.Error, 'present address is Mandatory');
-            break;
+        if (this.custMstrFrm.controls[name].invalid) {
+          debugger
+          switch (name) {
+            
+            case 'cust_type':
+              this.HandleMessage(true, MessageType.Error, 'Customer Type is Mandatory');
+              break;
+            case 'first_name':
+              this.HandleMessage(true, MessageType.Error, 'First Name is Mandatory');
+              break;
+            case 'last_name':
+              this.HandleMessage(true, MessageType.Error, 'Last Name is Mandatory');
+              break;
+            
+            case ' catg_cd':
+              this.HandleMessage(true, MessageType.Error, 'Category of customer is Mandatory');
+              break;
+            case 'community':
+              this.HandleMessage(true, MessageType.Error, 'Community of customer is Mandatory');
+              break;
+            case 'caste':
+              this.HandleMessage(true, MessageType.Error, 'Caste of customer is Mandatory');
+              break;
+              case 'guardian_name':
+                this.HandleMessage(true, MessageType.Error, 'Guardian\'s Name is Mandatory');
+                break;
+            case 'block_cd':
+              this.HandleMessage(true, MessageType.Error, 'Block of customer Mandatory');
+              break;
+            case 'service_area_cd':
+              this.HandleMessage(true, MessageType.Error, 'Service are of customer is Mandatory');
+              break;
+            // case 'phone':
+            //   this.HandleMessage(true, MessageType.Error, 'Phone number is mandatory in correct format');
+            //   break;
+            case 'present_address':
+              this.HandleMessage(true, MessageType.Error, 'present address is Mandatory');
+              break;
+          }
         }
       }
+      if(this.custMstrFrm.controls.catg_cd.value==null){
+        debugger
+        this.HandleMessage(true, MessageType.Error, 'Category of customer is Mandatory');
+        trReturn = true;
+      }
     }
-    if(this.custMstrFrm.controls.catg_cd.value==null){
-      debugger
-      this.HandleMessage(true, MessageType.Error, 'Category of customer is Mandatory');
-      trReturn = true;
-    }
-    
-    if (this.showMsgs.length > 0) {
-      trReturn = false;
+    else{
+      if (null !== this.f.pan.value && this.f.pan.value.length > 0) {
+        if (!Utils.ValidatePAN(this.f.pan.value)) {
+          this.HandleMessage(true, MessageType.Error, 'PAN is not valid');
+          trReturn = false;
+        }
+      }
+      if(this.f.kyc_photo_type.value == 'P' || this.f.kyc_photo_type.value == 'G'){
+  
+        this.f.kyc_photo_type.value == 'P' && this.f.kyc_photo_no.value.length != 10 ? 
+        this.HandleMessage(true,MessageType.Error,'Pan No is Invalid') : 
+        this.f.kyc_photo_type.value == 'G' && this.f.kyc_photo_no.value.length != 12 ? 
+        this.HandleMessage(true,MessageType.Error,'Adhar No is Invalid') : '';
+  
+        trReturn =  this.f.kyc_photo_type.value == 'P' && this.f.kyc_photo_no.value.length != 10 ?  
+        false : this.f.kyc_photo_type.value == 'G' && this.f.kyc_photo_no.value.length != 12 ? 
+        false: true;  
+      }
+      if(this.f.kyc_address_type.value == 'P' || this.f.kyc_address_type.value == 'G'){
+        this.f.kyc_address_type.value == 'P' && this.f.kyc_address_no.value.length != 10 ? 
+        this.HandleMessage(true,MessageType.Error,'Pan No is Invalid') : 
+        this.f.kyc_address_type.value == 'G' && this.f.kyc_address_no.value.length != 12 ? 
+        this.HandleMessage(true,MessageType.Error,'Adhar No is Invalid') : '';
+  
+  
+        trReturn =   this.f.kyc_address_type.value == 'P' && this.f.kyc_address_no.value.length != 10 ?  
+        false : this.f.kyc_address_type.value == 'G' && this.f.kyc_address_no.value.length != 12 ? 
+        false: true;  
+      }
+      // // ;
+      if(this.retrieveClicked==true && this.f.cust_name.value==null){
+        this.HandleMessage(true,MessageType.Error,'Empty search field')
+      }
+      if (null !== this.f.phone.value && this.f.phone.value.length > 0) {
+        if (!Utils.ValidatePhone(this.f.phone.value)) {
+          this.HandleMessage(true, MessageType.Error, 'Phone number is not valid');
+          trReturn = false;
+        }
+      } else {
+        if(!this.retrieveClicked)
+        this.HandleMessage(true, MessageType.Error, 'Phone number is mandatory');
+        trReturn = false;
+      }
+  debugger
+      for (const name in this.custMstrFrm.controls) {
+        debugger
+        if (this.custMstrFrm.controls[name].invalid) {
+          debugger
+          switch (name) {
+            case 'dt_of_birth':
+              this.HandleMessage(true, MessageType.Error, 'Date of Birth is Mandatory');
+              break;
+            case 'cust_type':
+              this.HandleMessage(true, MessageType.Error, 'Customer Type is Mandatory');
+              break;
+            case 'first_name':
+              this.HandleMessage(true, MessageType.Error, 'First Name is Mandatory');
+              break;
+            case 'last_name':
+              this.HandleMessage(true, MessageType.Error, 'Last Name is Mandatory');
+              break;
+            case 'guardian_name':
+              this.HandleMessage(true, MessageType.Error, 'Guardian\'s Name is Mandatory');
+              break;
+            case 'sex':
+              this.HandleMessage(true, MessageType.Error, 'Sex of customer is Mandatory');
+              break;
+            case ' catg_cd':
+              this.HandleMessage(true, MessageType.Error, 'Category of customer is Mandatory');
+              break;
+            case 'community':
+              this.HandleMessage(true, MessageType.Error, 'Community of customer is Mandatory');
+              break;
+            case 'caste':
+              this.HandleMessage(true, MessageType.Error, 'Caste of customer is Mandatory');
+              break;
+            case 'block_cd':
+              this.HandleMessage(true, MessageType.Error, 'Block of customer Mandatory');
+              break;
+            case 'service_area_cd':
+              this.HandleMessage(true, MessageType.Error, 'Service are of customer is Mandatory');
+              break;
+            // case 'phone':
+            //   this.HandleMessage(true, MessageType.Error, 'Phone number is mandatory in correct format');
+            //   break;
+            case 'present_address':
+              this.HandleMessage(true, MessageType.Error, 'present address is Mandatory');
+              break;
+          }
+        }
+      }
+      if(this.custMstrFrm.controls.catg_cd.value==null){
+        debugger
+        this.HandleMessage(true, MessageType.Error, 'Category of customer is Mandatory');
+        trReturn = true;
+      }
+      
+      if (this.showMsgs.length > 0) {
+        trReturn = false;
+      }
     }
    console.log(trReturn)
     return trReturn;
@@ -888,17 +955,17 @@ debugger
         ? 0 : +this.f.cust_cd.value;
       cust.cust_type = this.f.cust_type.value;
       cust.title = this.f.title.value;
-      cust.first_name = this.f.first_name.value.toUpperCase();
-      cust.middle_name = this.f.middle_name.value === null ? '' : this.f.middle_name.value.toUpperCase();
-      cust.last_name = this.f.last_name.value.toUpperCase();
-      cust.cust_name = this.f.cust_name.value.toUpperCase();
-      cust.guardian_name = this.f.guardian_name.value.toUpperCase();
+      cust.first_name = this.f.first_name.value?.toUpperCase();
+      cust.middle_name = this.f.middle_name.value === null ? '' : this.f.middle_name.value?.toUpperCase();
+      cust.last_name = this.f.last_name.value?.toUpperCase();
+      cust.cust_name = this.f.cust_name.value?.toUpperCase();
+      cust.guardian_name = this.f.guardian_name.value?.toUpperCase();
       // cust.cust_dt = ('' === this.f.cust_dt.value
       //   || '0001-01-01T00:00:00' === this.f.cust_dt.value) ? null : this.f.cust_dt.value;
       cust.cust_dt = this.sys.CurrentDate;
       cust.old_cust_cd = this.f.old_cust_cd.value;
       cust.dt_of_birth = this.f.dt_of_birth.value;
-      cust.age = +this.f.age.value;
+      cust.age = this.f.age.value==null?0:this.f.age.value;
       cust.sex = this.f.sex.value;
       cust.marital_status = this.f.marital_status.value;
       cust.catg_cd = +this.f.catg_cd.value;
@@ -941,8 +1008,8 @@ debugger
       cust.org_reg_no = +this.f.org_reg_no.value;
       cust.ardb_cd = this.sys.ardbCD;
       
-      cust.father_name = this.f.father_name.value?this.f.father_name.value.toUpperCase():this.f.father_name.value;
-      cust.nationality=this.f.nationality.value.toUpperCase();
+      cust.father_name = this.f.father_name.value?this.f.father_name.value?.toUpperCase():this.f.father_name.value;
+      cust.nationality=this.f.nationality.value?.toUpperCase();
       cust.email_id=this.f.email_id.value;
       cust.aadhar=this.f.aadhar.value;
       cust.pan_status=this.f.pan_status.value;
@@ -1160,7 +1227,7 @@ debugger
                 this.isLoading = false;
                 if(res > 0){
                       this.showMsgs.length = 0;
-                     _mode == 'PIN' ? this.kycPhotoNo.nativeElement.focus() : this.kycAddressNo.nativeElement.focus()
+                    //  _mode == 'PIN' ? this.kycPhotoNo.nativeElement.focus() : this.kycAddressNo.nativeElement.focus()
                      this.HandleMessage(true, MessageType.Error, _type == 'P' ? `This pan card number is already exist for another customer, UCIC is ${res}}` 
                      :`This Aadhar number is already exist for another customerUCIC is ${res}`);  
                      this._isDisabled= true;              
@@ -1200,7 +1267,7 @@ debugger
                 this.isLoading = false;
                 if(res > 0){
                       this.showMsgs.length = 0;
-                      _FLAG == 'PAN' ? this.pan.nativeElement.focus() : this.aadhar.nativeElement.focus()
+                      // _FLAG == 'PAN' ? this.pan.nativeElement.focus() : this.aadhar.nativeElement.focus()
                      this.HandleMessage(true, MessageType.Error, _FLAG == 'PAN' ? `This pan card number is already exist for another customer, UCIC is ${res}`
                      :`This Aadhar number is already exist for another customer, UCIC is ${res}`);  
                      this._isDisabled= true;
@@ -1228,6 +1295,15 @@ debugger
       
 
 
+  }
+  changeCustType(event:any){
+    console.log(event.target.value)
+    if(event.target.value=='O'){
+      this.organizationMode=true;
+    }
+    else{
+      this.organizationMode=false;
+    }
   }
 }
 

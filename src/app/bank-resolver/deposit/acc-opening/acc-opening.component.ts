@@ -207,8 +207,8 @@ export class AccOpeningComponent implements OnInit {
     this.suspanceAccCd = this.sys.SuspanceAccCode;
     this.cashAccCd = this.sys.CashAccCode;
 
-    // this.createDate = this.convertDate(Date.UTC( new Date().getDate() , new Date().getMonth(),  new Date().getFullYear()).toString());
-    // this.updateDate = this.convertDate(Date.UTC( new Date().getDate() , new Date().getMonth(),  new Date().getFullYear()).toString());
+    // this.createDate = this.convertDate(Date.UTC( new Date().getDate() , new Date().getMonth(),  new Date().getFullYear())?.toString());
+    // this.updateDate = this.convertDate(Date.UTC( new Date().getDate() , new Date().getMonth(),  new Date().getFullYear())?.toString());
 
     this.openDate = this.sys.CurrentDate;
 
@@ -415,12 +415,12 @@ export class AccOpeningComponent implements OnInit {
     if (this.td_deftrans.trf_type === 'T') {
 
       if (this.td_deftranstrfList[0].acc_num === '0000') {
-        this.td_deftranstrfList[0].gl_acc_code = this.td_deftranstrfList[0].acc_type_cd.toString();
+        this.td_deftranstrfList[0].gl_acc_code = this.td_deftranstrfList[0].acc_type_cd?.toString();
         this.checkAndSetDebitAccType('gl_acc', this.td_deftranstrfList[0].gl_acc_code);
 
       }
       else {
-        this.td_deftranstrfList[0].cust_acc_type = this.td_deftranstrfList[0].acc_type_cd.toString();
+        this.td_deftranstrfList[0].cust_acc_type = this.td_deftranstrfList[0].acc_type_cd?.toString();
         this.td_deftranstrfList[0].cust_acc_number = this.td_deftranstrfList[0].acc_num;
         this.checkAndSetDebitAccType('cust_acc', this.td_deftranstrfList[0].cust_acc_type);
         this.setDebitAccDtls(this.td_deftranstrfList[0].acc_num);
@@ -892,7 +892,7 @@ export class AccOpeningComponent implements OnInit {
 
     this.td_deftrans.approval_status = 'U';
     this.td_deftrans.acc_cd = this.tm_deposit.acc_cd;
-
+    debugger
     if (this.td_deftrans.trf_type === 'T') {
       this.td_deftrans.particulars = 'BY TRANSFER';
       this.td_deftrans.tr_acc_cd = this.suspanceAccCd;
@@ -919,7 +919,7 @@ export class AccOpeningComponent implements OnInit {
 
       if (this.tm_deposit.acc_type_cd === 6) {
         if (this.td_deftranstrfList[0].amount === undefined || this.td_deftranstrfList[0].amount === null ||
-          (this.tm_deposit.instl_amt.toString() !== this.td_deftranstrfList[0].amount.toString())) {
+          (this.tm_deposit.instl_amt?.toString() !== this.td_deftranstrfList[0].amount?.toString())) {
           // this.showAlertMsg('WARNING', 'Debit Amount is not matching with Installment Amount');
           this.HandleMessage(true, MessageType.Warning, 'Debit Amount is not matching with Installment Amount');
           // this.td_deftranstrfList[0].amount = null;
@@ -928,7 +928,7 @@ export class AccOpeningComponent implements OnInit {
       }
       else {
         if (this.td_deftranstrfList[0].amount === undefined || this.td_deftranstrfList[0].amount === null ||
-          (this.tm_deposit.prn_amt.toString() !== this.td_deftranstrfList[0].amount.toString())) {
+          (this.tm_deposit.prn_amt?.toString() !== this.td_deftranstrfList[0].amount?.toString())) {
           // this.showAlertMsg('WARNING', 'Debit Amount is not matching with Principal Amount');
           this.HandleMessage(true, MessageType.Warning, 'Debit Amount is not matching with Principal Amount');
           // this.td_deftranstrfList[0].amount = null;
@@ -1140,7 +1140,7 @@ export class AccOpeningComponent implements OnInit {
     //     let val = '0';
     //     this.isLoading = false;
     //     // val = res;
-    //     this.masterModel.tmdeposit.acc_num = res.toString();
+    //     this.masterModel.tmdeposit.acc_num = res?.toString();
     //     this.masterModel.tmdeposit.brn_cd = this.branchCode;
     //     debugger
 
@@ -1253,10 +1253,10 @@ export class AccOpeningComponent implements OnInit {
     this.accountTypeDiv = Number(accType);
     console.log(accType)
     this.tm_deposit.acc_type_cd = Number(accType);
-    this.tm_deposit.acc_type_desc = this.accountTypeList.filter(x => x.acc_type_cd.toString() === accType.toString())[0].acc_type_desc;
+    this.tm_deposit.acc_type_desc = this.accountTypeList.filter(x => x.acc_type_cd?.toString() === accType?.toString())[0].acc_type_desc;
 
     // this.selectedConstitutionList = null;
-    this.selectedConstitutionList = this.constitutionList.filter(x => x.acc_type_cd.toString() === accType.toString());
+    this.selectedConstitutionList = this.constitutionList.filter(x => x.acc_type_cd?.toString() === accType?.toString());
 
 
     if (this.operationType === 'I' && this.tm_deposit.acc_type_cd === 11) {
@@ -1413,7 +1413,7 @@ export class AccOpeningComponent implements OnInit {
     }
 
     this.td_deftrans.trf_type = tt;
-    this.td_deftrans.trf_type_desc = this.transferTypeList.filter(x => x.trf_type.toString() === tt)[0].trf_type_desc;
+    this.td_deftrans.trf_type_desc = this.transferTypeList.filter(x => x.trf_type?.toString() === tt)[0].trf_type_desc;
      console.log(this.td_deftranstrfList);
   }
 
@@ -1422,7 +1422,7 @@ export class AccOpeningComponent implements OnInit {
 
     this.td_accholderList[idx].cust_cd = Number(this.td_accholderList[idx].cust_cd);
     this.td_accholderList[idx].relation = relation;
-    this.td_accholderList[idx].relationId = this.relationship.filter(x => x.val.toString() === relation)[0].id;
+    this.td_accholderList[idx].relationId = this.relationship.filter(x => x.val?.toString() === relation)[0].id;
 
   }
 
@@ -1434,17 +1434,17 @@ export class AccOpeningComponent implements OnInit {
     }
 
     this.tm_deposit.intt_trf_type = tfr_type;
-    this.tm_deposit.intt_tfr_type_dscr = this.intTransferType.filter(x => x.tfr_type.toString()
-      === tfr_type.toString())[0].tfr_desc;
+    this.tm_deposit.intt_tfr_type_dscr = this.intTransferType.filter(x => x.tfr_type?.toString()
+      === tfr_type?.toString())[0].tfr_desc;
   }
 
   setConstitutionType(val: number) {
     console.log(this.constitutionList,this.tm_deposit.acc_type_cd)
     this.tm_deposit.constitution_cd = Number(val);
     this.tm_deposit.constitution_desc = this.constitutionList.
-      filter(x => x.constitution_cd.toString() === val.toString() && this.tm_deposit.acc_type_cd === x.acc_type_cd)[0].constitution_desc;
+      filter(x => x.constitution_cd?.toString() === val?.toString() && this.tm_deposit.acc_type_cd === x.acc_type_cd)[0].constitution_desc;
     this.tm_deposit.acc_cd = this.constitutionList.
-      filter(x => x.constitution_cd.toString() === val.toString() && this.tm_deposit.acc_type_cd === x.acc_type_cd)[0].acc_cd;
+      filter(x => x.constitution_cd?.toString() === val?.toString() && this.tm_deposit.acc_type_cd === x.acc_type_cd)[0].acc_cd;
       console.log(this.tm_deposit.constitution_desc,this.tm_deposit.acc_cd)
   }
 
@@ -1452,7 +1452,7 @@ export class AccOpeningComponent implements OnInit {
     debugger
     if(val>0){
       this.tm_deposit.oprn_instr_cd = Number(val);
-      this.tm_deposit.oprn_instr_desc = this.operationalInstrList.filter(x => x.oprn_cd.toString() === val.toString())[0].oprn_desc;
+      this.tm_deposit.oprn_instr_desc = this.operationalInstrList.filter(x => x.oprn_cd?.toString() === val?.toString())[0].oprn_desc;
     }
     else {return;}
     
@@ -1479,7 +1479,7 @@ export class AccOpeningComponent implements OnInit {
   // public suggestCustomer(): void {
   //   this.suggestedCustomer = this.customerList
   //     .filter(c => c.cust_name.toLowerCase().startsWith(this.tm_deposit.cust_name.toLowerCase())
-  //       || c.cust_cd.toString().startsWith(this.tm_deposit.cust_name)
+  //       || c.cust_cd?.toString().startsWith(this.tm_deposit.cust_name)
   //       || (c.phone !== null && c.phone.startsWith(this.tm_deposit.cust_name)))
   //     .slice(0, 20);
   // }
@@ -1524,16 +1524,16 @@ export class AccOpeningComponent implements OnInit {
   //   this.suggestedCustomerSignatoriesIdx = idx;
   //   this.suggestedCustomerSignatories = this.customerList
   //     .filter(c => c.cust_name.toLowerCase().startsWith(this.td_signatoryList[idx].signatory_name.toLowerCase())
-  //       || c.cust_cd.toString().startsWith(this.td_signatoryList[idx].signatory_name)
+  //       || c.cust_cd?.toString().startsWith(this.td_signatoryList[idx].signatory_name)
   //       || (c.phone !== null && c.phone.startsWith(this.td_signatoryList[idx].signatory_name)))
   //     .slice(0, 10);
   // }
 
   public suggestCustomerSignatories(idx: number): void {  
     this.suggestedCustomerSignatoriesIdx = idx;
-    if (this.td_signatoryList[idx].signatory_name.toString().length > 2) {
+    if (this.td_signatoryList[idx].signatory_name?.toString().length > 2) {
       const prm = new p_gen_param();
-      prm.as_cust_name = this.td_signatoryList[idx].signatory_name.toString().toLowerCase();
+      prm.as_cust_name = this.td_signatoryList[idx].signatory_name?.toString().toLowerCase();
       prm.ardb_cd=this.sys.ardbCD
       this.isLoading = true;
       this.svc.addUpdDel<any>('Deposit/GetCustDtls', prm).subscribe(
@@ -1557,24 +1557,24 @@ export class AccOpeningComponent implements OnInit {
   public setCustDtlsSignatories(cust_cd: number, idx: number): void {
     console.log({"Cust_cd":cust_cd,"Index":idx,"suggestedCustomerSignatories":this.suggestedCustomerSignatories});
     
-    this.td_signatoryList[idx].signatory_name = this.suggestedCustomerSignatories.filter(c => c.cust_cd.toString() === cust_cd.toString())[0].cust_name;
+    this.td_signatoryList[idx].signatory_name = this.suggestedCustomerSignatories.filter(c => c.cust_cd?.toString() === cust_cd?.toString())[0].cust_name;
     this.suggestedCustomerSignatories = null;
   }
 
   // public suggestCustomerJointHolder(idx: number): void {
   //   this.suggestedCustomerJointHolderIdx = idx;
   //   this.suggestedCustomerJointHolder = this.customerList
-  //     .filter(c => c.cust_name.toLowerCase().startsWith(this.td_accholderList[idx].cust_cd.toString())
-  //       || c.cust_cd.toString().startsWith(this.td_accholderList[idx].cust_cd.toString())
-  //       || (c.phone !== null && c.phone.startsWith(this.td_accholderList[idx].cust_cd.toString())))
+  //     .filter(c => c.cust_name.toLowerCase().startsWith(this.td_accholderList[idx].cust_cd?.toString())
+  //       || c.cust_cd?.toString().startsWith(this.td_accholderList[idx].cust_cd?.toString())
+  //       || (c.phone !== null && c.phone.startsWith(this.td_accholderList[idx].cust_cd?.toString())))
   //     .slice(0, 10);
   // }
   enableSearch(idx: number){
-    if(this.td_accholderList[idx].acc_holder.toString().length>2){
+    if(this.td_accholderList[idx].acc_holder?.toString().length>2){
       this.disablejoinholder=false
 
     }
-    else if(this.td_accholderList[idx].acc_holder.toString().length==0){
+    else if(this.td_accholderList[idx].acc_holder?.toString().length==0){
       this.suggestedCustomerJointHolder = null;
       this.disablejoinholder=true
       this.hidejoin=true;
@@ -1587,9 +1587,9 @@ export class AccOpeningComponent implements OnInit {
   public suggestCustomerJointHolder(idx: number): void {
     this.suggestedCustomerJointHolderIdx = idx;
 
-    if (this.td_accholderList[idx].acc_holder.toString().length > 2) {
+    if (this.td_accholderList[idx].acc_holder?.toString().length > 2) {
       const prm = new p_gen_param();
-      prm.as_cust_name = this.td_accholderList[idx].acc_holder.toString().toLowerCase();
+      prm.as_cust_name = this.td_accholderList[idx].acc_holder?.toString().toLowerCase();
       prm.ardb_cd=this.sys.ardbCD
        this.isLoading = true;
       this.svc.addUpdDel<any>('Deposit/GetCustDtls', prm).subscribe(
@@ -1633,7 +1633,7 @@ export class AccOpeningComponent implements OnInit {
 
   // getSetJointHolderName(idx: number) {
   //   let temp_mm_cust = new mm_customer();
-  //   temp_mm_cust = this.customerList.filter(c => c.cust_cd.toString() === this.td_accholderList[idx].cust_cd.toString())[0];
+  //   temp_mm_cust = this.customerList.filter(c => c.cust_cd?.toString() === this.td_accholderList[idx].cust_cd?.toString())[0];
 
   //   if (!temp_mm_cust) {
   //     this.td_accholderList[idx].cust_cd = null;
@@ -1661,7 +1661,7 @@ export class AccOpeningComponent implements OnInit {
 
     if (this.suggestedCustomerJointHolder != undefined && this.suggestedCustomerJointHolder != null && this.suggestedCustomerJointHolder.length > 0) {
       this.hidejoin=false;
-      temp_mm_cust = this.suggestedCustomerJointHolder.filter(c => c.cust_cd.toString() === this.td_accholderList[idx].cust_cd.toString())[0];
+      temp_mm_cust = this.suggestedCustomerJointHolder.filter(c => c.cust_cd?.toString() === this.td_accholderList[idx].cust_cd?.toString())[0];
     }
 
     if (!temp_mm_cust) {
@@ -1705,7 +1705,7 @@ export class AccOpeningComponent implements OnInit {
     temp_tm_deposit.cust_cd = cust_cd;
     temp_tm_deposit.ardb_cd=this.sys.ardbCD
     if (this.suggestedCustomer != undefined && this.suggestedCustomer != null && this.suggestedCustomer.length > 0) {
-      temp_mm_cust = this.suggestedCustomer.filter(c => c.cust_cd.toString() === cust_cd.toString())[0];
+      temp_mm_cust = this.suggestedCustomer.filter(c => c.cust_cd?.toString() === cust_cd?.toString())[0];
       this.suggestedCustomer = null;
       this.populateCustDtls(temp_mm_cust);
     }
@@ -1721,7 +1721,7 @@ export class AccOpeningComponent implements OnInit {
           this.suggestedCustomer = res;
 
           if (this.suggestedCustomer != undefined && this.suggestedCustomer != null && this.suggestedCustomer.length > 0) {
-            temp_mm_cust = this.suggestedCustomer.filter(c => c.cust_cd.toString() === cust_cd.toString())[0];
+            temp_mm_cust = this.suggestedCustomer.filter(c => c.cust_cd?.toString() === cust_cd?.toString())[0];
             this.suggestedCustomer = null;
             this.populateCustDtls(temp_mm_cust);
           }
@@ -1731,7 +1731,7 @@ export class AccOpeningComponent implements OnInit {
       );
     }
 
-    // temp_mm_cust = this.customerList.filter(c => c.cust_cd.toString() === cust_cd.toString())[0];
+    // temp_mm_cust = this.customerList.filter(c => c.cust_cd?.toString() === cust_cd?.toString())[0];
 
     // if (this.operationType === 'I') {
     //   console.log("asdasdasd")
@@ -1740,7 +1740,7 @@ export class AccOpeningComponent implements OnInit {
     //     res => {
     //       this.isLoading = false;
     //       const x = res;
-    //       this.tm_deposit.user_acc_num = x.toString();
+    //       this.tm_deposit.user_acc_num = x?.toString();
     //       console.log(this.tm_deposit)
     //     },
     //     err => {
@@ -1765,7 +1765,7 @@ export class AccOpeningComponent implements OnInit {
     this.tm_deposit.date_of_birth = temp_mm_cust.dt_of_birth;
 
     this.tm_deposit.sex = temp_mm_cust.sex;
-    this.tm_deposit.sexType = this.sexType.filter(c => c.type.toString() === this.tm_deposit.sex.toString())[0].desc;
+    this.tm_deposit.sexType = this.sexType.filter(c => c.type?.toString() === this.tm_deposit.sex?.toString())[0]?.desc;
 
     this.tm_deposit.phone = temp_mm_cust.phone;
     this.tm_deposit.ardb_cd=this.sys.ardbCD
@@ -1788,8 +1788,8 @@ export class AccOpeningComponent implements OnInit {
     debugger
   }
   setCategoryDesc(category: number) {
-    this.tm_deposit.category_desc = this.categoryList.filter(x => x.catg_cd.toString()
-      === category.toString())[0].catg_desc;
+    this.tm_deposit.category_desc = this.categoryList.filter(x => x.catg_cd?.toString()
+      === category?.toString())[0]?.catg_desc;
   }
 
   addSignatory() {
@@ -1823,7 +1823,7 @@ export class AccOpeningComponent implements OnInit {
 
 
   checkSignatory(name: string, idx: number) {
-    const x = this.td_accholderList.filter(c => c.acc_holder.toString() === name.toString())[0].cust_cd;
+    const x = this.td_accholderList.filter(c => c.acc_holder?.toString() === name?.toString())[0]?.cust_cd;
 
 
     if (!x) {
@@ -1852,8 +1852,8 @@ export class AccOpeningComponent implements OnInit {
     if (intro_acc_typ_cd != null && intro_acc_typ_cd > 0) {
       this.td_introducerlist[idx].introducer_acc_type = Number(intro_acc_typ_cd);
       this.td_introducerlist[idx].introducer_acc_type_desc = this.introducerAccTypeList
-        .filter(x => x.introducer_acc_type_cd.toString() ===
-          intro_acc_typ_cd.toString())[0].introducer_acc_type_desc;
+        .filter(x => x.introducer_acc_type_cd?.toString() ===
+          intro_acc_typ_cd?.toString())[0].introducer_acc_type_desc;
     }
   }
 
@@ -1893,7 +1893,7 @@ export class AccOpeningComponent implements OnInit {
         this.getIntroducerName(temp_deposit_list[0].cust_cd, idx);
 
         // let temp_mm_cust = new mm_customer();
-        // temp_mm_cust = this.customerList.filter(c => c.cust_cd.toString() === temp_deposit_list[0].cust_cd.toString())[0];
+        // temp_mm_cust = this.customerList.filter(c => c.cust_cd?.toString() === temp_deposit_list[0].cust_cd?.toString())[0];
         // this.td_introducerlist[idx].introducer_name = temp_mm_cust.cust_name;
       },
       err => {
@@ -1916,7 +1916,7 @@ export class AccOpeningComponent implements OnInit {
         temp_mm_cust_list = res;
 
         if (temp_mm_cust_list != undefined && temp_mm_cust_list != null && temp_mm_cust_list.length > 0) {
-          temp_mm_cust = temp_mm_cust_list.filter(c => c.cust_cd.toString() === cust_cd.toString())[0];
+          temp_mm_cust = temp_mm_cust_list.filter(c => c.cust_cd?.toString() === cust_cd?.toString())[0];
           this.td_introducerlist[idx].introducer_name = temp_mm_cust.cust_name;
         }
         this.isLoading = false;
@@ -1950,8 +1950,8 @@ export class AccOpeningComponent implements OnInit {
   setDenomination(val: number, idx: number) {
 
     // this.tm_denominationList[idx].rupees = Number(val);
-    // this.tm_denominationList[idx].rupees_desc = this.denominationList.filter(x => x.value.toString()
-    //   === val.toString())[0].rupees;
+    // this.tm_denominationList[idx].rupees_desc = this.denominationList.filter(x => x.value?.toString()
+    //   === val?.toString())[0].rupees;
     // this.calculateTotalDenomination(idx);
   }
 
@@ -2017,7 +2017,7 @@ export class AccOpeningComponent implements OnInit {
         this.td_deftranstrfList[0].gl_acc_code === null ||
         this.td_deftranstrfList[0].gl_acc_code === '') {
         let temp_acc_type = new mm_acc_type();
-        temp_acc_type = this.accountTypeList.filter(x => x.acc_type_cd.toString() === accType.toString())[0];
+        temp_acc_type = this.accountTypeList?.filter(x => x.acc_type_cd?.toString() === accType?.toString())[0];
 
         if (temp_acc_type === undefined || temp_acc_type === null) {
           this.td_deftranstrfList[0].cust_acc_type = null;
@@ -2045,7 +2045,7 @@ export class AccOpeningComponent implements OnInit {
         return;
       }
 
-      if (this.td_deftranstrfList[0].gl_acc_code === this.cashAccCd.toString()) {
+      if (this.td_deftranstrfList[0].gl_acc_code === this.cashAccCd?.toString()) {
         // this.showAlertMsg('WARNING', 'GL Code can not be Cash Account Code');
         this.HandleMessage(true, MessageType.Warning, 'GL Code can not be Cash Account Code');
         return;
@@ -2068,7 +2068,7 @@ export class AccOpeningComponent implements OnInit {
 
               this.acc_master = res;
               this.isLoading = false;
-              temp_acc_master = this.acc_master.filter(x => x.acc_cd.toString() === this.td_deftranstrfList[0].gl_acc_code)[0];
+              temp_acc_master = this.acc_master?.filter(x => x.acc_cd?.toString() === this.td_deftranstrfList[0]?.gl_acc_code)[0];
               if (temp_acc_master === undefined || temp_acc_master === null) {
                 this.td_deftranstrfList[0].gl_acc_desc = null;
                 // this.showAlertMsg('WARNING', 'Invalid GL Code');
@@ -2087,7 +2087,7 @@ export class AccOpeningComponent implements OnInit {
         }
         else {
           let temp_acc_master = new m_acc_master();
-          temp_acc_master = this.acc_master.filter(x => x.acc_cd.toString() === this.td_deftranstrfList[0].gl_acc_code)[0];
+          temp_acc_master = this.acc_master.filter(x => x.acc_cd?.toString() === this.td_deftranstrfList[0]?.gl_acc_code)[0];
           if (temp_acc_master === undefined || temp_acc_master === null) {
             this.td_deftranstrfList[0].gl_acc_desc = null;
             // this.showAlertMsg('WARNING', 'GL Code and Account Type can not have value simultaneously');
@@ -2152,13 +2152,13 @@ export class AccOpeningComponent implements OnInit {
         }
 
         // let temp_mm_cust = new mm_customer();
-        // temp_mm_cust = this.customerList.filter(c => c.cust_cd.toString() === temp_deposit_list[0].cust_cd.toString())[0];
+        // temp_mm_cust = this.customerList.filter(c => c.cust_cd?.toString() === temp_deposit_list[0].cust_cd?.toString())[0];
         // this.td_deftranstrfList[0].cust_name = temp_mm_cust.cust_name;
            
         this.td_deftranstrfList[0].clr_bal = temp_deposit_list[0].clr_bal;
-        this.td_deftranstrfList[0].acc_cd = this.constitutionList.filter(x => x.acc_type_cd.toString() ===
-          temp_deposit.acc_type_cd.toString()
-          && x.constitution_cd.toString() === temp_deposit_list[0].constitution_cd.toString())[0].acc_cd;
+        this.td_deftranstrfList[0].acc_cd = this.constitutionList.filter(x => x.acc_type_cd?.toString() ===
+          temp_deposit.acc_type_cd?.toString()
+          && x.constitution_cd?.toString() === temp_deposit_list[0].constitution_cd?.toString())[0].acc_cd;
           console.log(this.td_deftranstrfList[0].acc_cd);     
         let temp_mm_cust = new mm_customer();
         temp_mm_cust.cust_cd = temp_deposit_list[0].cust_cd;
@@ -2215,14 +2215,14 @@ export class AccOpeningComponent implements OnInit {
     }
 
     if (this.tm_deposit.acc_type_cd === 6) {
-      if (this.tm_deposit.instl_amt.toString() !== amount.toString()) {
+      if (this.tm_deposit.instl_amt?.toString() !== amount?.toString()) {
         // this.showAlertMsg('WARNING', 'Debit Amount is not matching with Installment Amount');
         this.HandleMessage(true, MessageType.Warning, 'Debit Amount is not matching with Installment Amount');
         exit(0);
       }
     }
     else {
-      if (this.tm_deposit.prn_amt.toString() !== amount.toString()) {
+      if (this.tm_deposit.prn_amt?.toString() !== amount?.toString()) {
         // this.showAlertMsg('WARNING', 'Debit Amount is not matching with Principal Amount');
         this.HandleMessage(true, MessageType.Warning, 'Debit Amount is not matching with Principal Amount');
         exit(0);
@@ -2236,9 +2236,9 @@ export class AccOpeningComponent implements OnInit {
     if (this.td_deftranstrfList[0].gl_acc_code === undefined ||
       this.td_deftranstrfList[0].gl_acc_code === null ||
       this.td_deftranstrfList[0].gl_acc_code === '') {
-        console.log({"CLR_BAL":this.td_deftranstrfList[0].clr_bal.toString(),"Amount":amount.toString()});
+        console.log({"CLR_BAL":this.td_deftranstrfList[0].clr_bal?.toString(),"Amount":amount?.toString()});
         
-      if (parseInt(this.td_deftranstrfList[0].clr_bal.toString()) < parseInt(amount.toString())) {
+      if (parseInt(this.td_deftranstrfList[0].clr_bal?.toString()) < parseInt(amount?.toString())) {
         // this.showAlertMsg('WARNING', 'Insufficient Balance');
         this.HandleMessage(true, MessageType.Warning, 'Insufficient Balance');
         this.td_deftranstrfList[0].amount = null;
@@ -2289,10 +2289,10 @@ export class AccOpeningComponent implements OnInit {
   }
 
   setStandingInstrAfterMatu(val: number) {
-    this.tm_deposit.standing_instr_flag = val.toString();
-    console.log({"arr":this.standingInstrAfterMaturity,"checked":val.toString()});
+    this.tm_deposit.standing_instr_flag = val?.toString();
+    console.log({"arr":this.standingInstrAfterMaturity,"checked":val?.toString()});
     
-    this.tm_deposit.standing_instr_dscr = this.standingInstrAfterMaturity.filter(x => x.instr_code === val.toString())[0].instr_dscr;
+    this.tm_deposit.standing_instr_dscr = this.standingInstrAfterMaturity.filter(x => x.instr_code === val?.toString())[0].instr_dscr;
   }
 
   private depositPeriodParser(constitutionText: string) {
@@ -2631,7 +2631,7 @@ export class AccOpeningComponent implements OnInit {
     this.tm_deposit.mat_dt.setMonth(this.tm_deposit.mat_dt.getMonth() + this.tm_deposit.month);
     this.tm_deposit.mat_dt.setDate(this.tm_deposit.mat_dt.getDate() + this.tm_deposit.day);
 
-    if (this.operationType === 'I' && (this.tm_deposit.acc_type_cd === 4)||(this.tm_deposit.acc_type_cd === 2)) {
+    if (this.operationType === 'I' && (this.tm_deposit.acc_type_cd === 4)||(this.tm_deposit.acc_type_cd === 2)||(this.tm_deposit.acc_type_cd === 5||(this.tm_deposit.acc_type_cd === 6))){
 
       this.calculateInterestRate();
     }
@@ -2672,13 +2672,13 @@ export class AccOpeningComponent implements OnInit {
   calculateInterestRate() {
     const temp_gen_param2 = new p_gen_param();
     temp_gen_param2.ardb_cd=this.sys.ardbCD;
-    temp_gen_param2.acc_cd = 2;
+    temp_gen_param2.acc_cd = this.tm_deposit.acc_type_cd;
     temp_gen_param2.from_dt = this.sys.CurrentDate;
     temp_gen_param2.ls_catg_cd = this.tm_deposit.category_cd;
     temp_gen_param2.ai_period = Math.floor((Date.UTC(this.tm_deposit.mat_dt.getFullYear(),
       this.tm_deposit.mat_dt.getMonth(), this.tm_deposit.mat_dt.getDate()) -
       (Date.UTC(this.tm_deposit.opening_dt.getFullYear(), this.tm_deposit.opening_dt.getMonth(),
-        this.tm_deposit.opening_dt.getDate()))) / (1000 * 60 * 60 * 24)) - 1;
+        this.tm_deposit.opening_dt.getDate()))) / (1000 * 60 * 60 * 24)) ;
     this.svc.addUpdDel<any>('Deposit/GET_INT_RATE', temp_gen_param2).subscribe(
       // var dt = {
       //   "ardb_cd": this.sys.ardbCD,

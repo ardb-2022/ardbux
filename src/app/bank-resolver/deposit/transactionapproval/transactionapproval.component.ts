@@ -207,6 +207,7 @@ export class TransactionapprovalComponent implements OnInit {
     this.renewDtlsFrm = this.frmBldr.group({
       dep_period: [''],
       opening_dt: [''],
+      mat_dt: [''],
       instl_no: [''],
       prn_amt: [''],
       curr_intt_recov: [''],
@@ -826,7 +827,8 @@ export class TransactionapprovalComponent implements OnInit {
           debugger
           this.renewDtlsFrm.patchValue({
             dep_period:renewData.dep_period,
-            opening_dt:renewData.created_dt.substr(0,10),
+            mat_dt:renewData.mat_dt?.substr(0,10),
+            opening_dt:renewData.created_dt?.substr(0,10),
             intt_rt:renewData.intt_rt,
             prn_amt:renewData.prn_amt,
             curr_intt_recov:renewData.intt_amt,

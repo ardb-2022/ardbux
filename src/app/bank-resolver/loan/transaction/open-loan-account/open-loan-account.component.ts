@@ -55,6 +55,7 @@ export class OpenLoanAccountComponent implements OnInit {
   updateUser = '';
   operationType = '';
   disableAll = 'N';
+  appvSanction:boolean=false;
   // disablePersonal ='Y';
   custNameForAcc:any;
   createDate: Date;
@@ -913,12 +914,18 @@ removeSecurityDtlList()
 
 
   modifyData() {
+    if(this.masterModel?.tmlaonsanctiondtls[0]?.approval_status=='A'){
+      this.appvSanction=true;
+    }else{
+      this.appvSanction=false;
+    }
     debugger
     console.log(this.operationType)
     if (this.operationType !== 'Q') {
       this.HandleMessage(true, MessageType.Warning, 'Record not retrived to modify');
       return;
     }
+    
     this.operationType = 'U';
     this.disableAll = 'N';
 

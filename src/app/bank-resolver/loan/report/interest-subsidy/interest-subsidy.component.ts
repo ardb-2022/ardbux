@@ -24,7 +24,7 @@ export class InterestSubsidyComponent implements OnInit ,AfterViewInit{
   // @ViewChild(MatPaginator) paginator2: MatPaginator;
   // @ViewChild(MatSort) sort2: MatSort;
   dataSource= new MatTableDataSource()
-  displayedColumns: string[] = ['block_name','loan_id','party_name', 'disb_amt','loan_balance','curr_intt_rate','prn_recov','intt_recov','subsidy_amt'];
+  displayedColumns: string[] = ['SL','block_name','loan_id','party_name', 'disb_amt','loan_balance','curr_intt_rate','prn_recov','intt_recov','subsidy_amt'];
   notvalidate:boolean=false;
   date_msg:any;
   modalRef: BsModalRef;
@@ -92,6 +92,7 @@ export class InterestSubsidyComponent implements OnInit ,AfterViewInit{
     this.notvalidate=false
     this.modalRef = this.modalService.show(content, this.config);
   }
+ 
   setPage(page: number) {
     this.currentPage = page;
     this.cd.detectChanges();

@@ -39,9 +39,10 @@
 <div id="fastPage" style="font-family:Arial, Helvetica, ui-sans-serif;font-size:14px;" hidden>
     <div style="margin-top: 53%; ">&nbsp;</div>
     <div class="form-row" style="margin-left: 3%;">
-        <div style="width: 70%;"><b>A/C No:  </b> {{suggestedCustomer[0]?.acc_num}}</div>
+        <div style="width: 40%;"><b>A/C No:  </b>  {{paddingACC}}{{suggestedCustomer[0]?.acc_num?.substr(1,suggestedCustomer[0]?.acc_num.length)}}</div>
         <!-- <div style="text-align: right;width: 20%;"><b *ngIf="sys.ardbCD!='4'">IFSC: {{IFSC}}</b></div> -->
-        <div style="text-align: right;width: 20%;"><b>CIF:  </b>{{masterModel.tmdeposit.cust_cd}}</div>
+        <div style="text-align: right;width: 20%;"><b>IFSC:  </b>{{IFSC}}</div>
+        <div style="text-align: right;width: 30%;"><b>CIF:  </b>{{masterModel.tmdeposit.cust_cd}}</div>
     </div>
       <div class="form-row" style="margin-left: 3%;padding-top: 5px;">
           <div style="width: 70%;"><b>Name:  </b>{{suggestedCustomer[0]?.cust_name}}</div>

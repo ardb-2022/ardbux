@@ -1,7 +1,8 @@
 export class mm_shg {
   public  shg_id :              number ;
-public chairman_name :        string  ;
-public secretary_name :       string  ;
+public president_name :        string  ;
+public vice_president_name :   string  ;
+public cashier_name :         string  ;
 public village :              string  ;
 public gruop_sex :            string  ;
 public  monthly_subcription : number ;

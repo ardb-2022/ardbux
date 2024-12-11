@@ -34,8 +34,8 @@ export class DetailListSBCAComponent implements OnInit,AfterViewInit {
   // displayedColumns7: string[] = ['constitution7'];
   // displayedColumns: string[] = ['acc_num','cust_name/guardian_name', 'opening_dt', 'balance'];
   public static operations: mm_operation[] = [];
-  AcctTypes: mm_operation[];
-
+  AcctTypes: any[];
+  accountTypeList:any[]=[];
   modalRef: BsModalRef;
   isOpenFromDp = false;
   isOpenToDp = false;
@@ -98,6 +98,7 @@ export class DetailListSBCAComponent implements OnInit,AfterViewInit {
       acc_type_cd: [null, Validators.required],
       constitution_cd: [{ disabled: true }]
     });
+    this.getAccountTypeList();
     this.getOperationMaster();
     this.getConstitutionList();
     this.onLoadScreen(this.content);
@@ -132,13 +133,27 @@ export class DetailListSBCAComponent implements OnInit,AfterViewInit {
               return arr.indexOf(arr.find(t => t.acc_type_cd === thing.acc_type_cd)) === i;
             });
           this.AcctTypes = this.AcctTypes.sort((a, b) => (a.acc_type_cd > b.acc_type_cd ? 1 : -1));
-          this.AcctTypes =this.AcctTypes.filter(e=>e.acc_type_cd==1 || e.acc_type_cd==8||e.acc_type_cd==7||e.acc_type_cd==9)
+          this.AcctTypes =this.AcctTypes.filter(e=>e.trans_way==1 || e.acc_type_cd==8||e.acc_type_cd==7||e.acc_type_cd==9||e.acc_type_cd==10)
         },
         err => { this.isLoading = false; }
       );
     }
     console.log(this.AcctTypes);
 
+  }
+  getAccountTypeList() {
+    
+    this.accountTypeList = [];
+
+    this.svc.addUpdDel<any>('Mst/GetAccountTypeMaster', null).subscribe(
+      res => {
+
+        this.accountTypeList = res;
+        this.accountTypeList = this.accountTypeList.filter(c => c.trans_way === 'B' && c.dep_loan_flag === 'D');
+        this.accountTypeList = this.accountTypeList.sort((a, b) => (a.acc_type_cd > b.acc_type_cd) ? 1 : -1);
+       
+       
+      });
   }
   onLoadScreen(content) {
     this.modalRef = this.modalService.show(content, this.config);
@@ -177,7 +192,7 @@ export class DetailListSBCAComponent implements OnInit,AfterViewInit {
  sendData(){
   console.log(this.accType)
   
-  this.accType=this.AcctTypes.filter(p=>p.acc_type_cd==this.reportcriteria.controls.acc_type_cd.value)[0].acc_type_desc
+  this.accType=this.accountTypeList.filter(p=>p.acc_type_cd==this.reportcriteria.controls.acc_type_cd.value)[0].acc_type_desc
   // this.constType=this.constitutionList.filter(e=>e.constitution_cd==this.reportcriteria.controls.constitution_cd.value)[0].constitution_desc
   // console.log(this.reportcriteria.controls.constitution_cd.value+' '+this.reportcriteria.controls.acc_type_cd.value)
  }
@@ -206,6 +221,7 @@ export class DetailListSBCAComponent implements OnInit,AfterViewInit {
       }
       this.printedId=(this.reportcriteria.controls.acc_type_cd.value=="7" && this.reportcriteria.controls.constitution_cd.value!='0')||
       (this.reportcriteria.controls.acc_type_cd.value=="1"  && this.reportcriteria.controls.constitution_cd.value!='0')||
+      (this.reportcriteria.controls.acc_type_cd.value=="10"  && this.reportcriteria.controls.constitution_cd.value!='0')||
       (this.reportcriteria.controls.acc_type_cd.value=="8"  && this.reportcriteria.controls.constitution_cd.value!='0') ?"trial777":"trial111"
       this.svc.addUpdDel('Deposit/PopulateDLSavingsAll',dt).subscribe(data=>{
         this.sendData()

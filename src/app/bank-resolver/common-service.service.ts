@@ -29,6 +29,7 @@ export class CommonServiceService {
   openDayBook:boolean=false;
   openGlTrns:boolean=false;
   diff:any;
+  localStorageArray:any[]=[];
   date_msg="FROM-DATE should be lower than TO-DATE"
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
@@ -37,7 +38,33 @@ export class CommonServiceService {
     private router: Router) { 
       this.getConfiginSysn();
     }
+    getLocalStorageDataAsJsonArray(){
+      // Loop through all keys in local storage
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i); // Get the key
+        const value = localStorage.getItem(key); // Get the corresponding value
     
+        // Push each key-value pair as an object to the array
+        this.localStorageArray.push({ [key]: value });
+      }
+      console.log(this.localStorageArray);
+      
+    
+    }
+    resetLocalStorageFromArray(): void {
+      // Clear the existing local storage
+      localStorage.clear(); // or set it to null: localStorage = null;
+    
+      // Loop through the array to set each key-value pair
+      this.localStorageArray.forEach(item => {
+        // Assuming each item is an object with one key-value pair
+        const key = Object.keys(item)[0]; // Get the key
+        const value = item[key];          // Get the corresponding value
+    
+        // Set the key-value pair back into local storage
+        localStorage.setItem(key, value);
+      });
+    } 
   SnackBar_Error() {
     this._snackBar.open('Error!!!', 'Close', {
       horizontalPosition: this.horizontalPosition,

@@ -37,6 +37,7 @@ export class HeaderComponent implements OnInit,OnDestroy,AfterViewInit {
   @ViewChild('third') public third;
   @ViewChild('foth') public foth;
   @ViewChild('template2', { static: true }) template2: TemplateRef<any>;
+  @ViewChild('Notice', { static: true }) Notice: TemplateRef<any>;
   @ViewChild('PassValidity', { static: true }) PassValidity: TemplateRef<any>;
   @ViewChild(MatMenuTrigger) menuTrigger: MatMenuTrigger;
   @ViewChild(MatMenu) menu: MatMenu;
@@ -124,7 +125,7 @@ matmenuTrg:any=[];
     
     debugger
     this.retrieve();
-
+// this.openModalMessage(this.Notice)
   }
   
   callMenu(){
@@ -219,6 +220,10 @@ matmenuTrg:any=[];
     // this.expDay=localStorage.getItem('PassExpDay');
     this.modalRef = this.modalService.show(PassValidity, {class: 'modal-lg modal-dialog-centered'});
   }
+  openModalMessage(Notice: TemplateRef<any>) {
+    // this.expDay=localStorage.getItem('PassExpDay');
+    this.modalRef = this.modalService.show(Notice, {class: 'modal-lg modal-dialog-centered'});
+  }
   showPassword() {
     this.show_button = !this.show_button;
     this.show_eye = !this.show_eye;
@@ -259,7 +264,7 @@ matmenuTrg:any=[];
 
   goToHome() {
     this.hideMenu();
-    this.router.navigate([this.bankName + '/la']);
+    this.router.navigate([this.bankName + '/dashboard']);
     this.showMenu = true;
     this.showChildMenu = false;
     this.showSubMenu = false;
@@ -399,6 +404,7 @@ return new Date(parseInt(parts[2]), parseInt(parts[1])-1, parseInt(parts[0]));
 updateLogStatus(){
   if(this.userInfo){
     this.userInfo.login_status='Y';
+    this.userInfo.password=null;
     this.userInfo.ip=localStorage.getItem("ipAddress");
     // this.userInfo.forEach(e => {
     //   e.brn_cd=localStorage.getItem('BUX')

@@ -6,6 +6,7 @@ import { InAppMessageService, RestService } from 'src/app/_service';
 import { MessageType, ShowMessage, SystemValues, mm_ifsc_code, td_outward_payment, m_acc_master, mm_acc_type, mm_customer, tm_deposit } from '../../Models';
 import { p_gen_param } from '../../Models/p_gen_param';
 import { sm_parameter } from '../../Models/sm_parameter';
+import { IfscService } from 'src/app/_service/IfscService.service';
 
 @Component({
   selector: 'app-neft-outward',
@@ -14,7 +15,7 @@ import { sm_parameter } from '../../Models/sm_parameter';
 })
 export class NeftOutwardComponent implements OnInit {
 
-  constructor(private svc: RestService, private router: Router, private msg: InAppMessageService, private modalService: BsModalService, private formBuilder: FormBuilder
+  constructor(private svc: RestService,private ifscService: IfscService, private router: Router, private msg: InAppMessageService, private modalService: BsModalService, private formBuilder: FormBuilder
   ) { }
   @ViewChild('ifsc', { static: true }) ifsc: TemplateRef<any>;
   @ViewChild('content', { static: true }) content: TemplateRef<any>;
@@ -34,7 +35,7 @@ export class NeftOutwardComponent implements OnInit {
   userName = '';
   sys = new SystemValues();
   isRetrieve = true;
-  suggestedIfsc: mm_ifsc_code[];
+  suggestedIfsc: any
   isOpenFromDp = false;
   suggestedCustomer: mm_customer[];
  clearBalance:any;
@@ -48,6 +49,7 @@ export class NeftOutwardComponent implements OnInit {
   systemParam: sm_parameter[] = [];
   iciciACC:any;
   confirm_bene_acc_no:any;
+  ifscView:boolean=false;
   __ifsc = '';
   __ifscbank = '';
   __ifscbranch = '';
@@ -72,7 +74,7 @@ export class NeftOutwardComponent implements OnInit {
     this.userName = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
     this.neftPayRet.brn_cd = this.sys.BranchCode;
     this.neftPayRet.trans_dt = this.sys.CurrentDate;
-
+    this.neftPayRet.payment_type ="N";
     this.neftPayRet.date_of_payment = this.sys.CurrentDate;
     this.neftPayRet.ardb_cd=this.sys.ardbCD
 
@@ -258,6 +260,8 @@ export class NeftOutwardComponent implements OnInit {
   }
 
   clearData() {
+    // this.neftPayRet.payment_type ="N";
+    this.isAccountNumber1Masked=false;
     this.clearBalance=0;
     this.neftPayRet.trans_cd = null;
     this.neftPayRet.bene_acc_no = null;
@@ -277,7 +281,11 @@ export class NeftOutwardComponent implements OnInit {
     this.__ifscbranch='';
     this.__ifscaddress='';
     this.__ifsccity='';
-    this.clearBalance=''
+    this.clearBalance='';
+    this.branchCode = this.sys.BranchCode;
+    this.userName = this.sys.UserId+'/'+localStorage.getItem('ipAddress');
+    this.neftPayRet.payment_type ="N";
+    this.neftPayRet.ardb_cd=this.sys.ardbCD
   }
 
   retrieveData() {
@@ -549,42 +557,62 @@ export class NeftOutwardComponent implements OnInit {
   suggestIfsc(ifscent : string): void {
 debugger;
 
-    if (ifscent.length > 3) {
+    // if (ifscent.length > 3) {
       const ifscentred = ifscent;
       let neftPaySearch = new td_outward_payment();
       neftPaySearch.bene_ifsc_code = ifscentred.toUpperCase();
       neftPaySearch.ardb_cd=this.sys.ardbCD
       this.isLoading = true;
-      this.svc.addUpdDel<any>('Deposit/GetIfscCode', neftPaySearch).subscribe(
-        res => {
-debugger;
+      this.ifscService.getIfscDetails(ifscent).subscribe(
+        (data) => {
+          this.ifscView=true;
+          this.suggestedIfsc = data;
+          console.log(this.suggestedIfsc);
           this.isLoading = false;
-          if (undefined !== res && null !== res && res.length > 0) {
-            this.suggestedIfsc = res;
-          } else {
-            this.suggestedIfsc = [];
-          }
         },
-        err => { this.isLoading = false; }
+        (error) => {
+          this.isLoading = false;
+          this.suggestedIfsc = null;
+          console.error('Error fetching IFSC details:', error);
+        }
       );
-    } else {
-      this.suggestedIfsc = null;
-      this.isLoading = false;
-    }
+      // this.svc.addUpdDel<any>('Deposit/GetIfscCode', neftPaySearch).subscribe(
+      //   res => {
+      //   debugger;
+      //     this.isLoading = false;
+      //     if (undefined !== res && null !== res && res.length > 0) {
+      //       this.suggestedIfsc = res;
+      //     } else {
+      //       this.suggestedIfsc = [];
+      //     }
+      //   },
+      //   err => { this.isLoading = false; }
+      // );
+
+
+
+    // } else {
+    //   this.suggestedIfsc = null;
+    //   this.isLoading = false;
+    // }
   }
   public SelectedIfsc(cust: any): void {
+    console.log(cust);
+    
+    this.ifscView=false;
     this.__ifsc = '';
     this.__ifscbank = '';
     this.__ifscbranch = '';
     this.__ifscaddress = '';
     this.__ifsccity = '';
-    this.neftPayRet.bene_ifsc_code = (cust.ifsc);
-    this.__ifsc = cust.ifsc;
-    this.__ifscbank = cust.bank;
-    this.__ifscbranch = cust.branch;
-    this.__ifscaddress = cust.address;
-    this.__ifsccity = cust.city;
+    this.neftPayRet.bene_ifsc_code = (cust.IFSC);
+    this.__ifsc = cust.IFSC;
+    this.__ifscbank = cust.BANK;
+    this.__ifscbranch = cust.BRANCH;
+    this.__ifscaddress = cust.ADDRESS
+    this.__ifsccity = cust.CITY;
     this.suggestedIfsc = null;
+    debugger
   }
 
 
