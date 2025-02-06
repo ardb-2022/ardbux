@@ -241,7 +241,51 @@
   <!-- <mat-paginator showFirstLastButtons [pageSizeOptions]="[20, 30, 50, 100,pageLength]" aria-label="Select page of users"></mat-paginator> -->
   
    
-  
+  <div class="mat-elevation-z8" id="trial000" hidden>
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr colspan="8">
+          <div class="justify-content-center" style="text-align:center">
+            <br><h4>{{ardbName}} ({{branchName}})</h4>
+            
+            <h4>Run Date & Time : {{today}} </h4>
+            <h4> <u> Detail List FD / MIS / CC as on {{fromdate.toDateString()| date: 'dd/MM/yyyy'}}</u></h4>
+            <h4> <u> Account Type: {{accType}} </u></h4>
+          </div>
+        </tr>
+        <tr>
+          
+          <th>Branch Code</th>
+          <th>Account Number</th>
+          <th>Customer Name</th>
+          <th>Opening Date</th>
+          <th>Maturity Date</th>
+          <!-- <th>Installment Amount</th> -->
+          <th>Principal Amount</th>
+          <th>Interest Rate</th>
+          <th>Provision Interest Amount</th>
+          <!-- <th>Guardian Name</th>
+          <th>Present Address</th> -->
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of mergedArray">
+          <td>{{ item.brn_cd }}</td>
+          <td>{{ item.acc_num }}</td>
+          <td>{{ item.cust_name }}</td>
+          <td>{{ item.opening_dt.substr(0,10) }}</td>
+          <td>{{ item.mat_dt.substr(0,10)}}</td>
+          <td>{{ item.prN_AMT }}</td>
+          <td>{{ item.intT_RT }}</td>
+          <td>{{ item.proV_INTT_AMT }}</td>
+        </tr>
+      </tbody>
+    </table> 
+    
+    <footer><small>
+      This report is generated through CFS-2022
+     </small></footer>
+  </div>
    <!-- <pagination style="float:right;"
   [totalItems]="reportData?.length"  
   [itemsPerPage]="itemsPerPage"

@@ -831,6 +831,15 @@ debugger
       return groups[group];
     })
   }
+  convertToDate(dateString: string): Date {
+    // Split the string into parts [day, month, year]
+    const [day, month, year] = dateString.split('/').map(Number);
+  
+    // Create a Date object (month is zero-based, subtract 1)
+    const date = new Date(year, month - 1, day);
+  
+    return date;
+  }
   dayDiff(d1: any, d2: any) {
     if(d1&&d2){
       const date1 = new Date(d1);
@@ -851,11 +860,25 @@ debugger
   }
   dateChange(dt1:any){
     console.log(this.dayDiff(dt1, this.sys.CurrentDate));
+    const convertedDate = this.convertToDate(this.sys.FinYearClose);
     
-    debugger
-    if (this.dayDiff(dt1, this.sys.CurrentDate) >= 0) {
+    if ((this.dayDiff(dt1, this.sys.CurrentDate)>= 0) && this.sys.prevStatus=='Y') {
       this.HandleMessage(true, MessageType.Error, 'Future or same day Voucher can not allow from this screen...');
       this._voucherDt=null;
+      this.isSave=true;
+      this.isAddNew=true;
+    }
+    else if((this.dayDiff(dt1, convertedDate)<= 0)&& this.sys.prevStatus=='Y'){
+      this.HandleMessage(true, MessageType.Error, 'Previous Financial Year already close...');
+      this._voucherDt=null;
+      this.isSave=true;
+      this.isAddNew=true;
+
+    }
+    else{
+      this.isSave=false;
+      this.isAddNew=false;
+
     }
   }
   private getmAccMaster(): void {

@@ -49,7 +49,7 @@
               <select id="activity_cd" class="form-control form-control-sm" formControlName="activity_cd">
                 <option *ngIf="activityList" disabled>Choose</option>
                 <option *ngFor="let acti of activityList" [value]="acti.activity_desc">
-                  {{acti.activity_cd +' ' + acti.activity_desc}}
+                  {{acti.activity_desc}} ({{acti.activity_cd}})
                 </option>
               </select>
            </div>
@@ -97,7 +97,7 @@
 <table mat-table cdkDropListGroup [dataSource]="dataSource" class="mat-elevation-z8" matSort>
   
   <ng-container matColumnDef="mainHeader">
-  <th mat-header-cell colspan="15" *matHeaderCellDef>
+  <th mat-header-cell colspan="16" *matHeaderCellDef>
     <div class="justify-content-center" style="text-align:center"><br>
       <h4>{{ardbName}} {{branchName}}</h4>
       <h4>Run Date & Time : {{today}} </h4>
@@ -123,10 +123,11 @@
         <th mat-header-cell>1st & 2nd Disb Amt</th>
         <th mat-header-cell>1st & 2nd Disb Dt</th>
         <th mat-header-cell>Total Disb Amount</th>
+        <th mat-header-cell>IBSD</th>
         <th mat-header-cell>Unit & Total Project Cost</th>
         <th mat-header-cell>Net Income Out of Loan Disbus</th>
         <th mat-header-cell>Land Security Area and Value</th>
-        <th mat-header-cell>Cultivated Area and Value</th>
+        <th mat-header-cell>Cultivated Area</th>
         <th mat-header-cell>Total Valuation of Hypotheca Value</th>
         <th mat-header-cell>No & Date of Reg M.Bond</th>
       </tr>
@@ -144,10 +145,11 @@
                            <td mat-cell>{{actiDtls.dc_statement[0].disb_amt|currency:"INR"}}<br>{{actiDtls.dc_statement[1]?.disb_amt|currency:"INR"}}</td>
                            <td mat-cell>{{actiDtls.dc_statement[0].disb_dt.substr(0,10)}}<br>{{actiDtls.dc_statement[1]?.disb_dt.substr(0,10)}}</td>
                            <td mat-cell>{{actiDtls.dc_statement[0].lso_no|currency:"INR"}}</td>
+                           <td mat-cell>{{actiDtls.dc_statement[0].deposit_amt|currency:"INR"}}</td>
                            <td mat-cell>{{actiDtls.dc_statement[0].machine}}<br>{{actiDtls.dc_statement[0].project_cost|currency:"INR"}} </td>
                            <td mat-cell>{{actiDtls.dc_statement[0].net_income_gen |currency:"INR"}}</td>
                            <td mat-cell>{{actiDtls.dc_statement[0].land_area}}<br>{{actiDtls.dc_statement[0].land_value |currency:"INR"}}</td>
-                           <td mat-cell>{{actiDtls.dc_statement[0].culti_area}}<br>{{actiDtls.dc_statement[0].culti_val |currency:"INR"}}</td>
+                           <td mat-cell>{{(+actiDtls.dc_statement[0].land_area)+(+actiDtls.dc_statement[0].addl_land_area)| number : '1.2-2'}}</td>
                            <td mat-cell>{{actiDtls.dc_statement[0].project_cost + actiDtls.dc_statement[0].land_value |currency:"INR"}}</td>
                            <td mat-cell>{{actiDtls.dc_statement[0].bond_no}}<br>{{actiDtls.dc_statement[0].bond_dt.substr(0,10)}}</td>
                        
@@ -167,12 +169,12 @@
         <br>
        <table class="t2">
         <tr mat-cell >
-          <td mat-cell style="width:33%;"><b> Purpose Wise Total: </b></td>
-          <td mat-cell style="width:5%"><b>{{sys.ardbCD=='25'?row.tot_sanc:row.tot_sanc/2}}</b></td>
-          <td mat-cell style="width:5%"><b>{{sys.ardbCD=='25'?row.tot_own_contribution:row.tot_own_contribution/2}}</b></td>
-          <td mat-cell style="width:16%;"></td>
-          <td mat-cell style="width:5%"><b>{{row.tot_disb}}</b></td>
-          <td mat-cell style="width:5%"><b>{{sys.ardbCD=='25'?row.tot_project:row.tot_project/2}}</b></td>
+          <td mat-cell style="width:30%;"><b> Purpose Wise Total: </b></td>
+          <td mat-cell style="width:5%"><b>{{(sys.ardbCD=='25'||sys.ardbCD=='26'?row.tot_sanc:row.tot_sanc/2) |currency:"INR"}}</b></td>
+          <td mat-cell style="width:5%"><b>{{(sys.ardbCD=='25'||sys.ardbCD=='26'?row.tot_own_contribution:row.tot_own_contribution/2) |currency:"INR"}}</b></td>
+          <td mat-cell style="width:12%;"></td>
+          <td mat-cell style="width:5%"><b>{{row.tot_disb |currency:"INR"}}</b></td>
+          <td mat-cell style="width:5%"><b>{{(sys.ardbCD=='25'||sys.ardbCD=='26'?row.tot_project:row.tot_project/2) |currency:"INR"}}</b></td>
           <td mat-cell style="width:34%;"></td>
         </tr>
         <!-- <tr mat-cell >
@@ -384,6 +386,7 @@
    class="btn btn-rounded btn-primary m-1" 
    [useExistingCss]="true"
    printSectionId="mattable" 
+   [printStyle]="{ '@page': { size: 'landscape !important' } }"
    ngxPrint>Print</button>
  <button mat-raised-button type="button" [hidden]="LandingCall" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
  <!-- <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadexcel()">Export as EXCEL</button> -->

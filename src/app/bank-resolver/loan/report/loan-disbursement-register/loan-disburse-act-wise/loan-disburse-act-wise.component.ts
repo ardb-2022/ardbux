@@ -27,7 +27,7 @@ export class LoanDisburseActWiseComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource = new MatTableDataSource()
-  displayedColumns: string[] = ['block_name','service_area_name','purpose','fund_type','acc_desc','loan_id','party_name','disb_dt','disb_amt'];
+  displayedColumns: string[] = ['block_name','service_area_name','vill_name','purpose','fund_type','acc_desc','loan_id','party_name','guardian_name','phone','disb_dt','disb_amt'];
   modalRef: BsModalRef;
   isOpenFromDp = false;
   isOpenToDp = false;

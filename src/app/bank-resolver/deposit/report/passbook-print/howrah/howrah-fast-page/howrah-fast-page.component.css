@@ -1,0 +1,12 @@
+@media print{
+    #fastPage{
+        font-weight: 600!important;
+        font-size: 17px;
+    }
+    
+    #fastPage,p{font-weight: 600!important;}
+}
+p{
+    font-size:17px!important;
+    
+}

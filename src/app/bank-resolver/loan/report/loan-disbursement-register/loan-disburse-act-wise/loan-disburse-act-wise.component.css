@@ -144,9 +144,21 @@
     border-right: 1px solid rgb(172, 170, 170);
     /* padding-left: 20px; */
   } 
-  .mat-column-provision{
-    text-align: right;
-    border-right: 1px solid rgb(172, 170, 170);
+  .mat-column-acc_desc{
+    width: 150px!important;
+    /* padding-left: 20px; */
+  }
+
+  .mat-column-vill_name{
+    width: 100px!important;
+    /* padding-left: 20px; */
+  }
+  .mat-column-block_name{
+    width: 100px!important;
+    /* padding-left: 20px; */
+  }
+  .mat-column-service_area_name{
+    width: 100px!important;
     /* padding-left: 20px; */
   }
   .mat-column-disclaimer0{

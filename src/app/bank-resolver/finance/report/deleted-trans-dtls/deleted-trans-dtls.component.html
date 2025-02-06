@@ -1,0 +1,261 @@
+<ng-template #content let-modal data-keyboard="false" data-backdrop="false">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Report Criteria</h4>
+    <button  type="button" class="close text-danger" aria-label="Close" data-dismiss="modal" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div *ngIf="showAlert" class="alert alert-danger alert-dismissible fade show" role="alert">
+      <strong>Error! </strong> {{alertMsg}}
+      <button  type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="closeAlert()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <form [formGroup]="reportcriteria">
+      <span [hidden]="!notvalidate" style="color:red;">{{date_msg}}</span>
+      <div class="form-row">
+        <div class="form-group col-6">
+          <label for="fromDate">From Date</label>
+          <div class="input-group">
+            <!-- <input id="fromDate" class="form-control" placeholder="yyyy-mm-dd" name="fd"  [ngModel]="fromdate
+                      | date:'yyyy-dd-MM' "   formControlName="fromDate" id="fd" type="date" > -->
+            <input style="height: 38px;" type="text" placeholder="dd/mm/yyyy" class="form-control form-control-sm" [ngModel]="fromdate"
+              disabled bsDatepicker formControlName="fromDate"
+              [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }" [isOpen]="isOpenFromDp">
+            <div class="input-group-append">
+              <button mat-raised-button  class="btn btn-outline-secondary btn-sm" type="button" (click)="isOpenFromDp = !isOpenFromDp">
+                <i class="fa fa-calendar" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group col-6">
+          <label for="toDate">To Date</label>
+          <div class="input-group">
+            <!-- <input id="toDate" class="form-control" placeholder="yyyy-mm-dd" name="td"
+                      [ngModel]="todate  | date:'yyyy-dd-MM'"  formControlName="toDate" id="td" type="date"> -->
+            <input style="height: 38px;" type="text" placeholder="dd/mm/yyyy" class="form-control form-control-sm" [ngModel]="todate" disabled
+              bsDatepicker formControlName="toDate"
+              [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }" [isOpen]="isOpenToDp">
+            <div class="input-group-append">
+              <button mat-raised-button class="btn btn-outline-secondary btn-sm" type="button" (click)="isOpenToDp = !isOpenToDp">
+                <i class="fa fa-calendar" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </form>
+
+    <!-- <form [formGroup]="reportcriteria">
+        <div>
+          <label for="fromDate">From Date</label>
+          <div class="input-group">
+            <input type="text" placeholder="dd/mm/yyyy" class="form-control" [ngModel]="fromdate" disabled bsDatepicker
+            formControlName="fromDate" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }"
+            [isOpen]="isOpenFromDp">
+          <div class="input-group-append">
+            <button mat-raised-button class="btn btn-outline-secondary" type="button" (click)="isOpenFromDp = !isOpenFromDp">
+              <i class="fa fa-calendar" aria-hidden="true"></i>
+            </button>
+          </div>
+          </div>
+        </div>
+        <div >
+            <label for="toDate">To Date</label>
+            <div class="input-group">
+              <input type="text" placeholder="dd/mm/yyyy" class="form-control" [ngModel]="todate" disabled bsDatepicker
+            formControlName="toDate" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }"
+            [isOpen]="isOpenToDp">
+          <div class="input-group-append">
+            <button mat-raised-button class="btn btn-outline-secondary" type="button" (click)="isOpenToDp = !isOpenToDp">
+              <i class="fa fa-calendar" aria-hidden="true"></i>
+            </button>
+          </div>
+            </div>
+          </div>
+      </form> -->
+  </div>
+  <div class="modal-footer">
+    <button mat-raised-button class="btn btn-primary" (click)="SubmitReport()">Submit</button> &nbsp;
+    <button mat-raised-button class="btn btn-light" (click)="modalRef.hide()">Close</button>
+    <!-- <button mat-raised-button type="button" class="btn btn-outline-dark" data-dismiss="modal">Submit</button> -->
+  </div>
+</ng-template>
+
+<div class="row d-flex justify-content-center align-items-center pt-4"
+  style="background-color: #78c2ad21; min-height: 20vh;">
+
+  <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 shadow-sm mb-4 bg-white p-3">
+    <div>
+      <!-- <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1"  (click)="exportPDFTitle()">Download PDF</button> -->
+      <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="closeScreen()">Close</button>
+      <!-- <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadexcel()">Export as CSV</button> -->
+      <button mat-raised-button type="button" 
+      class="btn btn-rounded btn-primary m-1" 
+      [useExistingCss]="true"
+      printSectionId="trial111" 
+      ngxPrint (click)="print()">Print</button>
+      <!-- <button mat-raised-button type="button" 
+      class="btn btn-rounded btn-primary m-1" 
+      (click)="print">Print</button> -->
+   <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
+   <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadexcel()">Export as EXCEL</button>
+
+    </div>
+  </div>
+
+  <div class="col-xs-12 col-sm-12 shadow-lg mb-4 bg-white p-3 mkScroll">
+    
+   <mat-form-field appearance="outline" >
+    <mat-label>Search Deleted Transaction</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+  </mat-form-field>
+  
+  <div class="mat-elevation-z8" id="trial111">
+    
+    <mat-table [dataSource]="dataSource" class="mat-elevation-z8" multiTemplateDataRows>
+      <ng-container matColumnDef="Header">
+        <mat-header-cell *matHeaderCellDef colspan="12">
+          <div class="justify-content-center" style="text-align:center">
+            <br><h4>{{ardbName}} ({{branchName}})</h4>
+            
+            <h4>Run Date & Time : {{today}} </h4>
+            <h4> <u> Deleted Transaction from {{fromdate.toDateString()| date: 'dd/MM/yyyy'}} to  {{todate.toDateString()| date: 'dd/MM/yyyy'}} </u></h4>
+         </div>
+        </mat-header-cell>
+      </ng-container>
+      <!-- Transaction Date Column -->
+      <ng-container matColumnDef="tranS_DT">
+        <mat-header-cell *matHeaderCellDef> Transaction Date </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          {{ element.tranS_DT.substr(0,10)}}
+        </mat-cell>
+      </ng-container>
+    
+      <!-- Transaction Code Column -->
+      <ng-container matColumnDef="tranS_CD">
+        <mat-header-cell *matHeaderCellDef> Transaction Code </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          {{ element.tranS_CD }}
+        </mat-cell>
+      </ng-container>
+    
+      <!-- Voucher ID Column -->
+      <ng-container matColumnDef="voucheR_ID">
+        <mat-header-cell *matHeaderCellDef> Voucher ID </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          {{ element.voucheR_ID }}
+        </mat-cell>
+      </ng-container>
+    
+      <!-- Transaction Amount Column -->
+      <ng-container matColumnDef="tranS_AMT">
+        <mat-header-cell *matHeaderCellDef> Amount </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="right-align">
+          {{ element.tranS_AMT | number:'1.2-2' }}
+        </mat-cell>
+      </ng-container>
+    
+      <!-- Debit/Credit Flag Column -->
+      <ng-container matColumnDef="dR_CR_FLAG">
+        <mat-header-cell *matHeaderCellDef> Dr/Cr </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          {{ element.dR_CR_FLAG }}
+        </mat-cell>
+      </ng-container>
+    
+      <!-- Transaction Mode Column -->
+      <ng-container matColumnDef="tranS_MODE">
+        <mat-header-cell *matHeaderCellDef> Transaction Mode </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          {{ element.tranS_MODE || '-' }}
+        </mat-cell>
+      </ng-container>
+    
+      <!-- Transfer Type Column -->
+      <ng-container matColumnDef="trF_TYPE">
+        <mat-header-cell *matHeaderCellDef> Transfer Type </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          {{ element.trF_TYPE }}
+        </mat-cell>
+      </ng-container>
+    
+      <!-- Account Type Column -->
+      <ng-container matColumnDef="acC_TYPE">
+        <mat-header-cell *matHeaderCellDef> Account Type </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          {{ element.acC_TYPE }}
+        </mat-cell>
+      </ng-container>
+    
+      <!-- Account Number Column -->
+      <ng-container matColumnDef="acC_NUM">
+        <mat-header-cell *matHeaderCellDef> Account Number </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          {{ element.acC_NUM }}
+        </mat-cell>
+      </ng-container>
+    
+      <!-- Customer Name Column -->
+      <ng-container matColumnDef="cusT_NAME">
+        <mat-header-cell *matHeaderCellDef> Customer Name </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          {{ element.cusT_NAME }}
+        </mat-cell>
+      </ng-container>
+    
+      <!-- Narration Column -->
+      <ng-container matColumnDef="narration">
+        <mat-header-cell *matHeaderCellDef> Narration </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          {{ element.narration || '-' }}
+        </mat-cell>
+      </ng-container>
+    
+      <!-- Created By Column -->
+      <ng-container matColumnDef="createD_BY">
+        <mat-header-cell *matHeaderCellDef> Created By </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          {{ element.createD_BY?.split('/')[0] || '-' }}
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="['Header']"
+       class="example-second-header-row">
+      </mat-header-row>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table><br>
+      <small>
+        This report is generated through CFS-2022
+     </small> 
+       
+  </div>
+  <!-- <mat-paginator showFirstLastButtons [pageSizeOptions]="[5, 10, 25, 100, this.reportData.length]" aria-label="Select page of users"></mat-paginator> -->
+   
+</div>
+
+  <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 shadow-sm mb-4 bg-white p-3">
+    <div>
+      <!-- <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1"  (click)="exportPDFTitle()">Download PDF</button> -->
+      <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="closeScreen()">Close</button>
+      <!-- <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadexcel()">Export as CSV</button> -->
+      <button mat-raised-button type="button" 
+      class="btn btn-rounded btn-primary m-1" 
+      [useExistingCss]="true"
+      printSectionId="trial111" 
+      ngxPrint>Print</button>
+   <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
+   <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="downloadexcel()">Export as EXCEL</button>
+
+    </div>
+  </div>
+</div>
+<loading *ngIf="isLoading"></loading>
+
+

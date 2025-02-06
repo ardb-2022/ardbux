@@ -115,7 +115,7 @@ export class TransTransactionComponent implements OnInit {
   getTypeValDr(e:any,indx:any){
     console.log(e.target.value+" "+indx)
     this.setDebitAccDtls(this.td_deftranstrfList[indx])
-    if(e.target.value >= 1 && e.target.value <=11){
+    if(e.target.value >= 1 && e.target.value <= 99){
       this.showGlHeadDr=false;
       this.td_deftranstrfList[indx].cust_name =''
       this.td_deftranstrfList[indx].cust_acc_number = ''
@@ -171,7 +171,7 @@ export class TransTransactionComponent implements OnInit {
     console.log(e.target.value+" "+indx)
     // this.setDebitAccDtls()
     this.setCreditAccDtls( this.cr_td_deftranstrfList[indx])
-    if(e.target.value >= 1 && e.target.value <= 11){
+    if(e.target.value >= 1 && e.target.value <= 99){
       this.showGlHeadCr=false;
       this.cr_td_deftranstrfList[indx].cust_name =''
       this.cr_td_deftranstrfList[indx].cust_acc_number = ''
@@ -998,18 +998,24 @@ export class TransTransactionComponent implements OnInit {
     tdDefTrans.acc_cd = this.td_deftranstrfList[0].acc_cd;
     if (this.td_deftranstrfList[0].trans_type === 'cust_acc') {
       tdDefTrans.remarks = "D";
-      tdDefTrans.acc_num = this.td_deftranstrfList[0].cust_acc_number;
-      tdDefTrans.acc_type_cd = +this.td_deftranstrfList[0].cust_acc_type;
-      tdDefTrans.acc_cd = this.td_deftranstrfList[0].acc_cd;
+      // tdDefTrans.acc_num = this.td_deftranstrfList[0].cust_acc_number;
+      // tdDefTrans.acc_type_cd = +this.td_deftranstrfList[0].cust_acc_type;
+      // tdDefTrans.acc_cd = this.td_deftranstrfList[0].acc_cd;
       debugger;
+      tdDefTrans.acc_num = '0000';
+      tdDefTrans.acc_type_cd = 10000;
+      tdDefTrans.acc_cd = 0;
     }
     else {
       console.log(tdDefTrans.trans_type);
       debugger;
       tdDefTrans.remarks = this.td_deftranstrfList[0].cust_acc_type.length==1? tdDefTrans.trans_type: "X";
-      tdDefTrans.acc_num = this.td_deftranstrfList[0].cust_acc_number;
-      tdDefTrans.acc_type_cd = +this.td_deftranstrfList[0].cust_acc_type;
-      tdDefTrans.acc_cd = +this.td_deftranstrfList[0].acc_cd;
+      // tdDefTrans.acc_num = this.td_deftranstrfList[0].cust_acc_number;
+      // tdDefTrans.acc_type_cd = +this.td_deftranstrfList[0].cust_acc_type;
+      // tdDefTrans.acc_cd = +this.td_deftranstrfList[0].acc_cd;
+      tdDefTrans.acc_num = '0000';
+      tdDefTrans.acc_type_cd = 10000;
+      tdDefTrans.acc_cd = 0;
       tdDefTrans.acc_name=this.td_deftranstrfList[0].cust_name
       if (this.f.trans_cd.value > 0){
         this.td_deftranstrfList[0].trans_type=tdDefTrans.trans_type;
@@ -1185,19 +1191,22 @@ export class TransTransactionComponent implements OnInit {
         tdDefTrans.acc_cd = this.cr_td_deftranstrfList[0].acc_cd;
         if (this.cr_td_deftranstrfList[0].trans_type === 'cust_acc') {
           tdDefTrans.remarks = "D";
-          tdDefTrans.acc_num = this.cr_td_deftranstrfList[0].cust_acc_number;
-          tdDefTrans.acc_type_cd = +this.cr_td_deftranstrfList[0].cust_acc_type;
-          tdDefTrans.acc_cd = this.cr_td_deftranstrfList[0].acc_cd;
-          debugger;
+          
+          tdDefTrans.acc_num = '0000';
+          tdDefTrans.acc_type_cd = 10000;
+          tdDefTrans.acc_cd = 0;
         }
         else {
           console.log(tdDefTrans.trans_type);
           debugger;
+          tdDefTrans.acc_num = '0000';
+          tdDefTrans.acc_type_cd = 10000;
+          tdDefTrans.acc_cd = 0;
           tdDefTrans.remarks = this.cr_td_deftranstrfList[0].cust_acc_type.length==1? tdDefTrans.trans_type: "X";
-          tdDefTrans.acc_num = this.cr_td_deftranstrfList[0].cust_acc_number;
-          tdDefTrans.acc_type_cd = +this.cr_td_deftranstrfList[0].cust_acc_type;
-          tdDefTrans.acc_cd = +this.cr_td_deftranstrfList[0].acc_cd;
-          tdDefTrans.acc_name=this.cr_td_deftranstrfList[0].cust_name
+          // tdDefTrans.acc_num = this.cr_td_deftranstrfList[0].cust_acc_number;
+          // tdDefTrans.acc_type_cd = +this.cr_td_deftranstrfList[0].cust_acc_type;
+          // tdDefTrans.acc_cd = +this.cr_td_deftranstrfList[0].acc_cd;
+          tdDefTrans.acc_name=this.cr_td_deftranstrfList[0].cust_name;
           if (this.f.trans_cd.value > 0){
             this.cr_td_deftranstrfList[0].trans_type=tdDefTrans.trans_type;
             debugger;

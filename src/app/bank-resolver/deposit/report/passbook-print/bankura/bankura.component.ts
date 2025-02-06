@@ -118,6 +118,7 @@ export class BankuraComponent {
       }
   }
   onLoadScreen(content) {
+    this.shoFastPage=false;
     this.passBookData=[];
     this.printData=[];
     this.printDataGhatal=[];

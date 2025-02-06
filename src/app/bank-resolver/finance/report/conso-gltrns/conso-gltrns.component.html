@@ -127,26 +127,28 @@ style="background-color: #78c2ad21; min-height: 20vh;">
             <th mat-header-cell style="text-align: left;">Branch Name</th>
             <th mat-header-cell style="text-align: center;">Voucher Date</th>
             <th mat-header-cell style="text-align: center;">Voucher ID</th>
-            <th mat-header-cell style="text-align: right;">Dr Amount</th> 
-            <th mat-header-cell style="text-align: right;">Cr Amount</th>
             <th mat-header-cell style="width: 30%; text-align: left;">Narration</th>
             <th mat-header-cell style="width: 30%; text-align: left;">Opposite GL</th>
+            
+            <th mat-header-cell style="text-align: right;">Dr Amount</th> 
+            <th mat-header-cell style="text-align: right;">Cr Amount</th>
             <th mat-header-cell style="text-align: right;">Balance</th>
-            <!-- <th mat-header-cell> Type</th> -->
+            <th mat-header-cell> Type</th>
         </tr>
                   <tbody>
                     <tr *ngFor="let i of element.ttgltrans">
                       <td mat-cell style="text-align: left;">{{i.brn_cd}} </td>
                       <td mat-cell style="text-align: center;">{{i.voucher_dt.substr(0,10)}} </td>
                       <td mat-cell style="text-align: center;">{{i.voucher_id}} </td>
-                      <td mat-cell style="text-align: right;">{{i.dr_amt| currency:'INR'}}</td>
-                      <td mat-cell style="text-align: right;">{{i.cr_amt| currency:'INR'}} </td>
                       <td mat-cell style="width: 30%;text-align: left;">{{i.narration}} </td>
                       <td mat-cell style="width: 30%; text-align: left;">
                         <div *ngFor="let gl of i.opp_gl.split('||')">
                           {{ gl.trim() }}
                         </div>
                       </td>
+                      
+                      <td mat-cell style="text-align: right;">{{i.dr_amt| currency:'INR'}}</td>
+                      <td mat-cell style="text-align: right;">{{i.cr_amt| currency:'INR'}} </td>
                       <td mat-cell class="showSum" style="text-align: right;">
           
                         <ng-container *ngIf="i.cum_bal>=0">
@@ -156,20 +158,21 @@ style="background-color: #78c2ad21; min-height: 20vh;">
                           {{-i.cum_bal| currency:'INR'}}
                          </ng-container>
                       </td>
-                      <!-- <td mat-cell class="showSum">
+                      <td mat-cell class="showSum">
                           <ng-container *ngIf="i.cum_bal>=0">
                            Debit
                           </ng-container>
                           <ng-container *ngIf="i.cum_bal<0">
                             Credit
                            </ng-container>
-                      </td> -->
+                      </td>
                     <!-- <td mat-cell>{{e1.ovd_intt_recov+e1.penal_intt_recov+e1.curr_intt_recov+e1.ovd_prn_recov+e1.curr_prn_recov}}</td> -->
                     </tr>
                     <tr mat-cell >
                       <td mat-cell colspan="5" style=" text-align: right;"><b>Total</b></td>
                         <td mat-cell style="text-align: right;"><b>{{element.acctype.tot_acc_curr_prn_recov|currency:"INR"}}</b></td>
                         <td mat-cell style=" text-align: right;"><b>{{element.acctype.tot_acc_ovd_prn_recov|currency:"INR"}}</b></td>
+                        <td mat-cell  ></td>
                         <td mat-cell  ></td>
                      </tr>
                 </tbody>

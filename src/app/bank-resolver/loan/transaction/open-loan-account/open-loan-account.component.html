@@ -155,9 +155,11 @@
       </div> -->
       <div class="form-group col-1">
         <small>Fund Type</small><span class="text-danger">*</span>
-        <select
+        <select 
           style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
-          [(ngModel)]="tm_loan_all.fund_type" id="fund_type" [disabled]="appvSanction"
+          [(ngModel)]="tm_loan_all.fund_type"
+          (change)="setFundType($event.target.value)"
+          id="fund_type" [disabled]="appvSanction"
           class="form-control form-control-sm">
           <option value="" [readonly]="true" selected>Select</option>
           <option *ngFor="let l of fundTypeList" [value]="l.value">{{l.name}}</option>
@@ -168,7 +170,7 @@
         <small for=due_date>Inst. Start Date </small><span class="text-danger">*</span>
         <div class="input-group">
           <input class="form-control form-control-sm text-capitalize" id="due_date" 
-            [disabled]="tm_loan_all.loan_id != undefined || operationType == '' || disableAll == 'Y' "
+            [disabled]=" disableAll == 'Y' ||appvSanction || duedateSetting"
             style="height:25px; text-align: right;" bsDatepicker 
             [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }"
             [(ngModel)]="tm_loan_all.instl_start_dt" type="text" placeholder="DD/MM/YYYY" (ngModelChange)="rep_stDT()">
@@ -192,7 +194,7 @@
       <div class="form-group col-2">
         <small>Overdue Interest Rate</small><span class="text-danger">*</span>
         <input class="form-control form-control-sm text-capitalize"
-          [disabled]="tm_loan_all.loan_id != undefined || operationType == '' || disableAll == 'Y'" id="ovd_int_rate"
+          [disabled]="disableAll == 'Y' ||appvSanction" id="ovd_int_rate"
           style="height:25px; text-align: right;" type="number" min="0" step='any' [(ngModel)]="tm_loan_all.ovd_intt_rate"
           placeholder="Customer Phone" placeholder="Overdue Interest Rate">
       </div>
@@ -200,7 +202,7 @@
       <div class="form-group col-2">
         <small>Instalment No</small><span class="text-danger">*</span>
         <input class="form-control form-control-sm text-capitalize"
-          [disabled]="tm_loan_all.loan_id != undefined || operationType == '' || disableAll == 'Y'" id="instl_no"
+          [disabled]="appvSanction || duedateSetting" id="instl_no"
           style="height:25px; text-align: right;" type="number" min="0" step='any' [(ngModel)]="tm_loan_all.instl_no"
           placeholder="Instalment No">
       </div>
@@ -209,7 +211,7 @@
         <small>Installment Type</small><span class="text-danger">*</span>
         <select
           style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
-          [disabled]="tm_loan_all.loan_id != undefined || operationType == '' || disableAll == 'Y' "
+          [disabled]=" disableAll == 'Y'||appvSanction || duedateSetting"
           (change)="setInstalPeriod($event.target.value)" [(ngModel)]="tm_loan_all.piriodicity" id="loan_type"
           class="form-control form-control-sm">
           <option [value]="tm_loan_all.piriodicity" [readonly]="true" selected>
@@ -222,7 +224,7 @@
         <small>Repayment Formula</small><span class="text-danger">*</span>
         <select 
           style="height:25px; font-size: small; align-content:center; padding-top: 0px; background-color: whitesmoke;"
-          [disabled]="tm_loan_all.loan_id != undefined || operationType == '' || disableAll == 'Y' "
+          [disabled]=" disableAll == 'Y'||appvSanction "
           (change)="setRepaymentFormula($event.target.value)" [(ngModel)]="tm_loan_all.emi_formula_no" id="loan_type"
           class="form-control form-control-sm">
           <option  selected>Select</option>
@@ -496,7 +498,7 @@
             <div class="form-group col-2">
               <small for=due_date>Validity Date</small><span class="text-danger">*</span>
               <div class="input-group">
-                <input class="form-control form-control-sm text-capitalize" id="validity_date" [disabled]="disableAll == 'Y' || ls.approval_status == 'A'"
+                <input class="form-control form-control-sm text-capitalize" id="validity_date" [disabled]="disableAll == 'Y' || ls.approval_status == 'A' || duedateSetting"
                   style="height:25px; text-align: right;" bsDatepicker
                   [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:'theme-dark-blue' }" type="text" 
                   [(ngModel)]="ls.due_dt" type="text" placeholder="DD/MM/YYYY">
@@ -562,7 +564,8 @@
         </div>
 
         
-        <div class="text-right mb-3" *ngIf="tm_loan_all.acc_cd==23314 || tm_loan_all.acc_cd==23315 || tm_loan_all.acc_cd==20419 || tm_loan_all.acc_cd==20441|| tm_loan_all.acc_cd==20416">
+        <!-- <div class="text-right mb-3" *ngIf="tm_loan_all.acc_cd==23314 || tm_loan_all.acc_cd==23315 || tm_loan_all.acc_cd==20419 || tm_loan_all.acc_cd==20441|| tm_loan_all.acc_cd==20416"> -->
+          <div class="text-right mb-3" >
           <button  type="button" style="height:22px; padding-top: 0px;"  [disabled]="disableAll == 'Y' "
            class="btn btn-primary btn-sm" (click)="createSecurityDtlList()">
             <i class="fa fa-plus-circle" aria-hidden="true"></i>

@@ -65,7 +65,7 @@ export class AgentCommissionComponent implements OnInit {
   pageChange: any;
   total_comm=0;
   total_dep=0;
- 
+  apiurl:any;
   lastAccCD:any;
   today:any
   
@@ -80,7 +80,7 @@ export class AgentCommissionComponent implements OnInit {
       fromDate: [null, Validators.required],
       toDate: [null, Validators.required]
     });
-    
+  
     var date = new Date();
     // get the date as a string
        var n = date.toDateString();
@@ -127,6 +127,7 @@ export class AgentCommissionComponent implements OnInit {
        "from_dt" : this.fromdate.toISOString(),
        "to_dt" : this.toDate.toISOString()
       }
+      
       this.svc.addUpdDel('Deposit/GetAgentCommission',dt).subscribe(data=>{console.log(data)
         this.reportData=data;
         if(this.reportData.length==0){

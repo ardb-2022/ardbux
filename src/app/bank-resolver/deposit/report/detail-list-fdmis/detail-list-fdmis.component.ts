@@ -87,7 +87,8 @@ export class DetailListFDMISComponent implements OnInit,AfterViewInit {
   lastOne:any
   lastTwo:any
   lastThree:any
-  lastFour:any
+  lastFour:any;
+  mergedArray:any[]=[];
   constructor(private comSer:CommonServiceService,private svc: RestService, private formBuilder: FormBuilder,private exportAsService: ExportAsService,
               private modalService: BsModalService, private _domSanitizer: DomSanitizer,private cd: ChangeDetectorRef,
               private router: Router) { }
@@ -208,7 +209,8 @@ public onAccountTypeChange(): void {
       }
       this.svc.addUpdDel('Deposit/PopulateDLFixedDepositAll',dt).subscribe(data=>{
         console.log(data)
-        this.reportData=data
+        this.reportData=data;
+        this.mergedArray = this.mergeTtsbcadtllist(this.reportData);
         if(this.reportData.length==0){
           this.comSer.SnackBar_Nodata()
         } 
@@ -263,13 +265,24 @@ public onAccountTypeChange(): void {
     this.exportAsConfig = {
       type: 'xlsx',
       // elementId: 'hiddenTab', 
-      elementIdOrContent:'trial111'
+      elementIdOrContent:'trial000'
     }
     this.exportAsService.save(this.exportAsConfig, 'Detail_List_FDMIS').subscribe(() => {
       // save started
       console.log("hello")
     });
   }
+  mergeTtsbcadtllist(reportdata: any[]): any[] {
+    // Use reduce to iterate through the main array and merge ttsbcadtllist into a single array
+    const mergedArr = reportdata.reduce((accumulator, current) => {
+        if (current.ttsbcadtllist) {
+            // Concatenate the current ttsbcadtllist with the accumulator
+            return accumulator.concat(current.ttsbcadtllist);
+        }
+        return accumulator;
+    }, []); // Start with an empty array
+    return mergedArr;
+}
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;

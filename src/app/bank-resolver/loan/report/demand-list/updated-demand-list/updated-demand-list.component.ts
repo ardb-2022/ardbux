@@ -85,7 +85,7 @@ export class UpdatedDemandListComponent {
   bName=''
   selectedValue=''
   selectedValue1=''
-  displayedColumns: string[] = ['acc_name','block_name','vill_name','loan_id','lf_no','party_name','disb_dt','activity_cd','outstanding_prn','curr_prn','ovd_prn','curr_intt','ovd_intt','penal_intt','total'];
+  displayedColumns: string[] = ['acc_name','block_name','service_area_name','vill_name','loan_id','lf_no','party_name','phone','guardian_name','disb_dt','activity_cd','outstanding_prn','curr_prn','ovd_prn','curr_intt','ovd_intt','penal_intt','total'];
   displayedColumns1: string[] = ['acc_cd', 'dr','cr'];
   dataSource = new MatTableDataSource()
   resultLength=0;

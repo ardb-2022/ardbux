@@ -152,7 +152,7 @@ import { FdTransComponent } from './investment/transaction/investment-transactio
 import { CcTransComponent } from './investment/transaction/investment-transactions/cc-trans/cc-trans.component';
 import { MisTransComponent } from './investment/transaction/investment-transactions/mis-trans/mis-trans.component';
 import { RdTransComponent } from './investment/transaction/investment-transactions/rd-trans/rd-trans.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientJsonpModule, HttpClientModule } from '@angular/common/http';
 import { CreateGLHeadComponent } from './finance/create-glhead/create-glhead.component';
 import { DetailListFdmisConstWiseComponent } from './deposit/report/detail-list-fdmis-const-wise/detail-list-fdmis-const-wise.component';
 import { INearMaturityComponent } from './investment/report/near-maturity/near-maturity.component';
@@ -265,6 +265,13 @@ import { FlexiSmallSavingPostingComponent } from './deposit/ddsExportImport/flex
 import {flexiAgentWiseReportComponent} from './deposit/ddsExportImport/flexi-small-agent-wise-report/flexi-small-agent-wise-report.component'
 import { DetailListFssDepositComponent } from './deposit/report/detail-list-fss-deposit/detail-list-fss-deposit.component';
 import { DetailFlexiSmallSavingComponent } from './deposit/report/detail-flexi-small-saving/detail-flexi-small-saving.component';
+import { AllAgentDetailsComponent } from './deposit/ddsExportImport/all-agent-details/all-agent-details.component';
+import { AgentCommitionFSSComponent } from './deposit/agent-commition-fss/agent-commition-fss.component';
+import { DeletedTransDtlsComponent } from './finance/report/deleted-trans-dtls/deleted-trans-dtls.component';
+import { GovRepComponent } from './finance/report/GOV_Rep/gov_rep.component';
+import { ActivityDetailMasterComponent } from './loan/masters/activity-detail-master/activity-detail-master.component';
+import { HowrahComponent } from './deposit/report/passbook-print/howrah/howrah.component';
+import { HowrahFastPageComponent } from './deposit/report/passbook-print/howrah/howrah-fast-page/howrah-fast-page.component';
 @NgModule({
   declarations: [
     RoundPipe ,UppercaseDirective, MatchAccountNumbersDirective, NumericOnlyDirective,
@@ -284,7 +291,7 @@ import { DetailFlexiSmallSavingComponent } from './deposit/report/detail-flexi-s
     NetworthStatementComponent, SubCashBookComponent, DetailListSBCAComponent, DetailListRDComponent,
     DetailListFDMISComponent, AccStmtSBCAComponent, AccStmtRDComponent, AccStmtTDComponent,
     NearMaturityReportComponent, OpenClosingRegisterComponent,
-    LoanStatementComponent, DetailListComponent,
+    LoanStatementComponent, DetailListComponent,DeletedTransDtlsComponent,
     LoanDisbursementRegisterComponent, RecoveryRegisterComponent,
     LoanSubCashBookComponent, AccOpeningViewComponent, NeftOutwardComponent,
     NeftInwardReportComponent, NeftOutwardReportComponent, PassBookPrintingComponent,
@@ -322,7 +329,8 @@ import { DetailFlexiSmallSavingComponent } from './deposit/report/detail-flexi-s
             DdsAgentTransReportComponent, InterestMasterComponent, WeeklyReturnNewComponent, WeeklyReturnNewConsoComponent, GlWiseVoucherDtlsComponent, ConsoLoanDCComponent,
              LoanDisburseConsoComponent, LoanRecoveryConsoComponent, DashboardComponent, RecovRegAccTypeWiseComponent, ConsoLoanDcSHGComponent, ConsoLoanDcRHComponent,
              ConsoGenLedgerComponent, InterestSubsidySHGComponent, ConsoDtlListSbcaComponent, ConsoDtlListFdMisComponent, ConsoDtlListRdComponent, DetailListConsolidatedComponent,
-             FlexiSmallSavingPostingComponent,flexiAgentWiseReportComponent,DetailListFssDepositComponent,DetailFlexiSmallSavingComponent
+             FlexiSmallSavingPostingComponent,flexiAgentWiseReportComponent,DetailListFssDepositComponent,DetailFlexiSmallSavingComponent, AllAgentDetailsComponent, AgentCommitionFSSComponent,
+             GovRepComponent,ActivityDetailMasterComponent,HowrahComponent,HowrahFastPageComponent
   ],
   imports: [
     MatAutocompleteModule,MatProgressBarModule,
@@ -331,7 +339,7 @@ import { DetailFlexiSmallSavingComponent } from './deposit/report/detail-flexi-s
     BankResolverRouting, DragDropModule,ScrollingModule,CdkTableModule,CdkTreeModule,A11yModule,MatDialogModule,
     ReactiveFormsModule, FormsModule, AutocompleteLibModule, MatExpansionModule, MatSelectModule,MatListModule,
     BsDatepickerModule.forRoot(), AccordionModule.forRoot(), MatSnackBarModule, MatTooltipModule,
-    TypeaheadModule.forRoot(),
+    TypeaheadModule.forRoot(),HttpClientJsonpModule,
     ExportAsModule,HttpClientModule,MatRadioModule
   ],
   providers: [

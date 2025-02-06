@@ -230,6 +230,13 @@ import { FlexiSmallSavingPostingComponent } from './deposit/ddsExportImport/flex
 import { flexiAgentWiseReportComponent } from './deposit/ddsExportImport/flexi-small-agent-wise-report/flexi-small-agent-wise-report.component';
 import { DetailListFssDepositComponent } from './deposit/report/detail-list-fss-deposit/detail-list-fss-deposit.component';
 import { DetailFlexiSmallSavingComponent } from './deposit/report/detail-flexi-small-saving/detail-flexi-small-saving.component';
+import { AllAgentDetailsComponent } from './deposit/ddsExportImport/all-agent-details/all-agent-details.component';
+import { AgentCommitionFSSComponent } from './deposit/agent-commition-fss/agent-commition-fss.component';
+import { DeletedTransDtlsComponent } from './finance/report/deleted-trans-dtls/deleted-trans-dtls.component';
+import { GovRepComponent } from './finance/report/GOV_Rep/gov_rep.component';
+import { ActivityDetailMasterComponent } from './loan/masters/activity-detail-master/activity-detail-master.component';
+import { HowrahComponent } from './deposit/report/passbook-print/howrah/howrah.component';
+import { HowrahFastPageComponent } from './deposit/report/passbook-print/howrah/howrah-fast-page/howrah-fast-page.component';
 
 const routes: Routes = [
   { path: 'Admin', component: AdminPanelComponent },
@@ -287,6 +294,7 @@ const routes: Routes = [
       { path: 'FR_allGLHead', component: AllGLDetailsComponent, canActivate: [AuthGuard] },
       { path: 'FR_CdBalanceSheet', component: ConsoBalSheetComponent, canActivate: [AuthGuard] },
       { path: 'FR_CdCashAccNew', component: ConsoCashAccNewComponent, canActivate: [AuthGuard] },
+      { path: 'FR_DELT_RANS', component: DeletedTransDtlsComponent, canActivate: [AuthGuard] },
 
       { path: 'UM_UTransfer', component: UserTransferComponent, canActivate: [AuthGuard] },
 
@@ -322,7 +330,7 @@ const routes: Routes = [
       { path: 'DR_DLS', component: DetailListSBCAComponent, canActivate: [AuthGuard] },
       { path: 'DR_DLR', component: DetailListRDComponent, canActivate: [AuthGuard] },
       { path: 'DR_DLF', component: DetailListFDMISComponent, canActivate: [AuthGuard] },
-      { path: 'DR_DLFDMS_CONSO', component: ConsoDtlListFdMisComponent, canActivate: [AuthGuard] },
+      { path: 'DR_DLFDMIS_CONSO', component: ConsoDtlListFdMisComponent, canActivate: [AuthGuard] },
       { path: 'DR_DLSBCA_CONSO', component: ConsoDtlListSbcaComponent, canActivate: [AuthGuard] },
       { path: 'DR_DLRD_CONSO', component: ConsoDtlListRdComponent, canActivate: [AuthGuard] },
       { path: 'DR_DLF_CONST', component: DetailListFdmisConstWiseComponent, canActivate: [AuthGuard] },
@@ -400,12 +408,14 @@ const routes: Routes = [
       { path: 'DT_NEFTPayment', component: NeftOutwardComponent, canActivate: [AuthGuard] },
       { path: 'DT_DDEXPORT', component: DdsExportComponent, canActivate: [AuthGuard] },
       { path: 'DT_DDIMPORT', component: DdsImportComponent, canActivate: [AuthGuard] },
+      { path: 'DR_FSS_AGNT_DTLS', component: AllAgentDetailsComponent, canActivate: [AuthGuard] },
       { path: 'DR_DDS_COL_REP', component: DdsAgentTransReportComponent, canActivate: [AuthGuard] },
       { path: 'DT_DDINDPOST', component: DdsIndividualPostingComponent, canActivate: [AuthGuard] },
       { path: 'DT_FSSINDPOST', component: FlexiSmallSavingPostingComponent, canActivate: [AuthGuard] },
       { path: 'DT_SavingInttPost', component: SavingIntPostComponent, canActivate: [AuthGuard] },
       { path: 'DT_SMSchargeDed', component: SmsChargeDeductionComponent, canActivate: [AuthGuard] },
       { path: 'DT_AgentComPost', component: AgentCommissionComponent, canActivate: [AuthGuard] },
+      { path: 'DT_AgentComPostFSS', component: AgentCommitionFSSComponent, canActivate: [AuthGuard] },
       { path: 'DR_NeftIn', component: NeftInwardReportComponent, canActivate: [AuthGuard] },
       { path: 'DR_NeftOut', component: NeftOutwardReportComponent, canActivate: [AuthGuard] },
       { path: 'DR_PCertificate', component: PrintCertificateComponent, canActivate: [AuthGuard] },
@@ -425,6 +435,8 @@ const routes: Routes = [
       { path: 'DR_ghatal_PbkPrn', component: GhatalComponent,
           children: [{ path: 'DR_ghatal_PassBookFastPage', component: GhatalFastPageComponent},], canActivate: [AuthGuard] },
 
+      { path: 'DR_hwh_PbkPrn', component: HowrahComponent,
+          children: [{ path: 'DR_hwh_PassBookFastPage', component: HowrahFastPageComponent},], canActivate: [AuthGuard] },    
 
       { path: 'DR_UpbkPrnSts', component: UpdatePassbookComponent, canActivate: [AuthGuard]},
 
@@ -469,6 +481,9 @@ const routes: Routes = [
       { path: 'LR_FortNightNew', component: CtFortnightNewComponent, canActivate: [AuthGuard] },
       { path: 'LR_FortNightNewConso', component: CtFortnightNewConsoComponent, canActivate: [AuthGuard] },
       { path: 'DR_Fss_Rep', component: DetailListFssDepositComponent, canActivate: [AuthGuard] },
+      { path: 'GOV_REP', component: GovRepComponent, canActivate: [AuthGuard] },
+      { path: 'LM_ACT_DTLS', component: ActivityDetailMasterComponent, canActivate: [AuthGuard] },
+      
       {
         path: 'locker', component: LockerComponent,
         children: [

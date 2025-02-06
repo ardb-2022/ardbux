@@ -38,7 +38,7 @@
   </div>
 <div id="fastPage" style="font-family:Arial, Helvetica, ui-sans-serif;font-size:15px;" hidden>
     <div style="margin-top: 53%; " *ngIf="sys.ardbCD!='23'&& sys.ardbCD!='22'&& sys.ardbCD!='25'&& sys.ardbCD!='7'&& sys.ardbCD!='9'">&nbsp;</div>
-    <div style="margin-top: 62%; " *ngIf="sys.ardbCD=='23'">&nbsp;</div>
+    <div style="margin-top: 64%; " *ngIf="sys.ardbCD=='23'">&nbsp;</div>
     <div style="margin-top: 49%; " *ngIf="sys.ardbCD=='22'">&nbsp;</div>
     <div style="margin-top: 50%; " *ngIf="sys.ardbCD=='9'">&nbsp;</div>
     <div style="margin-top: 47%; " *ngIf="sys.ardbCD=='25' || sys.ardbCD=='7'">&nbsp;</div>
@@ -58,10 +58,9 @@
       <h3><b>Coochbehar Co-op. Agriculture and Rural Development Bank Ltd.<br>Savings Passbook</b></h3>
     </div><br>
     <div class="form-row" style="margin-left: 10%;">
-      <div style="width: 40%;" *ngIf="sys.ardbCD=='26' || sys.ardbCD=='20'"><b>A/C No:  {{paddingACC}}{{suggestedCustomer[0]?.acc_num}}</b> </div>
+      <div style="width: 40%;" *ngIf="sys.ardbCD!='25'"><b>A/C No:  {{paddingACC?paddingACC:''}}{{suggestedCustomer[0]?.acc_num}}</b> </div>
       <div style="width: 40%;" *ngIf="sys.ardbCD=='25'"><b>A/C No:  {{paddingACC}}{{suggestedCustomer[0]?.acc_num.substr(2,suggestedCustomer[0]?.acc_num?.length)}}</b> </div>
-      <div style="width: 40%;" *ngIf="sys.ardbCD!='26'&& sys.ardbCD!='20'&& sys.ardbCD!='25'"><b>A/C No:  {{suggestedCustomer[0]?.acc_num}}</b> </div>
-        <div style="text-align: right;width: 20%;"><b *ngIf="sys.ardbCD=='25'||sys.ardbCD=='21'||sys.ardbCD=='26'||sys.ardbCD=='20'">IFSC: {{IFSC}}</b></div>
+      <div style="text-align: right;width: 20%;"><b *ngIf="IFSC">IFSC: {{IFSC}}</b></div>
         <div style="text-align: right;width: 30%;"><b>CIF:  {{masterModel?.tmdeposit.cust_cd}}</b></div>
     </div>
       <div class="form-row" style="margin-left: 10%;padding-top: 5px;">
@@ -134,7 +133,7 @@
         </div>
     </div>
   </div>
-  <div id="fastPageRD" *ngIf="sys.ardbCD!='7'" style="width: 60%;padding-left: 3% " >
+  <div id="fastPageRD" *ngIf="sys.ardbCD!='7'" style="width: 60%;padding-left: 3% " hidden>
     <div style="padding: 10px;">
       <div style="margin-top: 58%; ">&nbsp;</div>
       <div class="form-row">
@@ -184,7 +183,7 @@
       </div>
     
   </div>
-  <div id="fastPageRD" *ngIf="sys.ardbCD=='7'" style="width: 100%;padding-left: 3% " >
+  <div id="fastPageRD" *ngIf="sys.ardbCD=='7'" style="width: 100%;padding-left: 3% " hidden>
     <div style="padding: 10px;">
       <div style="margin-top: 15%; ">&nbsp;</div>
       <div class="form-row">

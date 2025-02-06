@@ -64,7 +64,7 @@ export class VoucherComponent implements OnInit {
   crInput = false;
   tableId:any
   today: any
-
+  ardbcd:any;
   sys = new SystemValues();
   branchName=this.sys.BranchName;
 
@@ -82,6 +82,7 @@ export class VoucherComponent implements OnInit {
     ignoreBackdropClick: true // disable backdrop click to close the modal
   };
   ngOnInit(): void {
+    this.ardbcd=this.sys.ardbCD
     var date = new Date();
     var n = date.toDateString();
     var time = date.toLocaleTimeString();

@@ -216,6 +216,11 @@ export class LienAccLockUnlockComponent implements OnInit {
       return;
     }
     else {
+      if(this.sys.BranchCode!=this.tm_depositall.brn_cd){
+        this.isLoading=false
+        this.showAlertMsg('WARNING', 'Only the home branch performed the lock-unlock process.');
+        return;
+      }
       // //debugger;
       this.tm_deposit.brn_cd = this.branchCode;
       this.tm_deposit.acc_num = this.tm_depositall.acc_num;

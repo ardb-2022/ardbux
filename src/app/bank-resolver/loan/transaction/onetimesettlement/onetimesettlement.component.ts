@@ -360,6 +360,8 @@ export class OnetimesettlementComponent implements OnInit {
       this.GetUnapprovedDepTrans();
       this.getDenominationList();
       this.getInstallmentType();
+      this.f.acc_type_cd.disable();
+
     }, 150);
     // this.td.trf_type.setValue('T')
     // this.onTransTypeChange()
@@ -635,9 +637,9 @@ export class OnetimesettlementComponent implements OnInit {
     this.isLoading = true;
     if (this.f.acct_num.value.length > 0) {
       const prm = new p_gen_param();
-      prm.ad_acc_type_cd = +this.f.acc_type_cd.value;
+      prm.brn_cd=this.sys.BranchCode
       prm.as_cust_name = this.f.acct_num.value.toLowerCase();
-      this.svc.addUpdDel<any>('Loan/GetLoanDtls', prm).subscribe(
+      this.svc.addUpdDel<any>('Loan/GetLoanDtls1', prm).subscribe(
         res => {
           this.isLoading = false;
           if (undefined !== res && null !== res && res.length > 0) {
@@ -675,15 +677,17 @@ export class OnetimesettlementComponent implements OnInit {
     this.loanID = cust.loan_id;
     console.log(this.loanID)
     this.shownoresult = false;
-    
+    this.f.acc_type_cd.setValue(cust.acc_cd)
     this.f.acct_num.setValue(cust.loan_id);
     this.td.trf_type.setValue('O');
     this.onTransTypeChange()
     this.onAccountNumTabOff();
+    this.onAcctTypeChange();
     this.suggestedCustomer = [];
     // this.td.trf_type.setValue('T');
-    this.onTransTypeChange()
+    // this.onTransTypeChange()
     //debugger;
+    console.log(this.operations);
   }
   private getOperationMaster(): void {
     this.isLoading = true;
@@ -714,7 +718,7 @@ export class OnetimesettlementComponent implements OnInit {
   }
 
   public onAcctTypeChange(): void {
-    this.f.acct_num.reset();
+    // this.f.acct_num.reset();
     const acctTypCdTofilter = +this.f.acc_type_cd.value;
     const acctTypeDesription = AccounTransactionsComponent.operations
       .filter(e => e.acc_type_cd === acctTypCdTofilter)[0].acc_type_desc;
@@ -2239,7 +2243,7 @@ export class OnetimesettlementComponent implements OnInit {
                       
                     })
               debugger
-                    if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'){
+                    if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'|| this.sys.ardbCD=='25'|| this.sys.ardbCD=='26'){
                       this.modalRef = this.modalService.show(this.ContaiLoanChallan, { class: 'modal-xl' });
                     }
                     else{
@@ -2446,7 +2450,7 @@ export class OnetimesettlementComponent implements OnInit {
     this.suggestedCustomer = null
     // this.getOperationMaster();
     this.f.oprn_cd.disable();
-    this.f.acct_num.disable();
+    // this.f.acct_num.disable();
     this.msg.sendCommonTmLoanAll(null);
     this.tm_denominationList = [];
     this.td_deftranstrfList = [];

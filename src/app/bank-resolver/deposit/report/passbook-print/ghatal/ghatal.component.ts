@@ -119,6 +119,7 @@ export class GhatalComponent implements OnInit {
       }
   }
   onLoadScreen(content) {
+    this.shoFastPage=false;
     this.passBookData=[];
     this.printData=[];
     this.printDataGhatal=[];

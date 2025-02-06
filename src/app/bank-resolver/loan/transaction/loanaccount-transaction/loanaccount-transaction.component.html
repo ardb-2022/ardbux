@@ -8,6 +8,14 @@
     
   </div>
 </ng-template>
+<ng-template #currentDemandNew >
+  <div class="modal-body text-center" >
+    <p>Total Demand Upto <b style="color: red;">{{formatDateToDDMMYYYY(this.td.intt_recov_dt.value)}}: </b> {{newCurrDemand | currency:'INR'}}</p>
+    <button mat-raised-button type="button" class="btn btn-primary" (click)="this.modalRef.hide()" >OK</button>&nbsp;
+    <!-- <button mat-raised-button type="button" class=" btn btn-primary" (click)="onDeleteClick()" >Yes</button> -->
+    
+  </div>
+</ng-template>
 <ng-template #currDemand let-modal bd-example-modal-lg>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">Current Demand ({{fdt}} to {{tdt}})</h4>
@@ -606,9 +614,10 @@
             <div class="justify-content-center" style="text-align:center" *ngIf="reportData">
               <br><h5>{{ardbName}} </h5>
               <h5>{{branchName}}</h5>
-              <h5>Run Date & Time : {{today}} </h5>
+              <h5 *ngIf="sys.ardbCD=='26'">Contact no: (0342)2662390/ 9800960007</h5>
+              <h6>Run Date & Time : {{today}} </h6>
               <h5>{{ardbAddr}}</h5>
-          <br>
+          
           </div>
           </div>
           <hr>
@@ -623,9 +632,10 @@
           </div>
           <div class="row" style="padding-left: 10px;">
             <div class="col-12">
-              <b>Loan Account:</b> {{acDesc}}, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Fund Type:</b>{{fnd_typ}}
+              <b>Loan Account:</b> {{acDesc}}, 
+             &nbsp;&nbsp;&nbsp;<b>Fund Type:</b>{{fnd_typ}}
               <br>
-              <b>Loanee Name:</b> {{partyName}}
+              <b>Name:</b> {{partyName}}
               <br>
               <b>Address:</b> {{present_address}}
             </div>
@@ -647,7 +657,7 @@
             </div>
           </div>
           <br>
-          <b style="font-size: large; padding-left: 2%;">Total:{{t_a| number : '1.2-2'}}({{t_a| amountToWord}})</b> 
+          <b style="font-size:2vw; padding-left: 2%;">Total:{{t_a| number : '1.2-2'}}({{t_a| amountToWord}})</b> 
           <hr>
           <div>
             <div class="row" style="padding-left: 10px;">
@@ -695,8 +705,9 @@
           </div>
         </div>
         <div class="row" style="padding-top: 80px;">
-          <div class="col-6"><b>Customer Signature</b></div>
-          <div class="col-6" style="padding-left: 40px;"><b>Authorized Signatory</b></div>
+          <div class="col-4"><b>Depositor<br> Signature</b></div>
+          <div class="col-4"><b>Cashier/<br>Entered by</b></div>
+          <div class="col-4" style="padding-left: 40px;"><b>Manager/<br>Approved by</b></div>
         </div>
       </div>
 
@@ -706,9 +717,9 @@
             <div class="justify-content-center" style="text-align:center" *ngIf="reportData">
               <br><h5>{{ardbName}} </h5>
               <h5>{{branchName}}</h5>
-              <h5>Run Date & Time : {{today}} </h5>
-              <h5> {{ardbAddr}}</h5>
-              <br>
+              <h5 *ngIf="sys.ardbCD=='26'">Contact no: (0342)2662390/ 9800960007</h5>
+              <h6>Run Date & Time : {{today}} </h6>
+              <h5>{{ardbAddr}}</h5>
           </div>
           </div>
           <hr>
@@ -723,9 +734,9 @@
           </div>
           <div class="row" style="padding-left: 10px;">
             <div class="col-12">
-              <b>Loan Account:</b> {{acDesc}}, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Fund Type:</b>{{fnd_typ}}
+              <b>Loan Account:</b> {{acDesc}}, &nbsp;&nbsp;&nbsp;<b>Fund Type:</b>{{fnd_typ}}
               <br>
-              <b>Loanee Name:</b> {{partyName}}
+              <b>Name:</b> {{partyName}}
               <br>
               <b>Address:</b> {{present_address}}
             </div>
@@ -748,7 +759,7 @@
               <b>Intt Recov Till:</b> {{i_n_dt?.substr(0,10)}}
             </div>
           </div><br>
-          <b style="font-size: large; padding-left:2%;">Total:{{t_a| number : '1.2-2'}}({{t_a| amountToWord}})</b> 
+          <b style="font-size:2vw; padding-left:2%;">Total:{{t_a| number : '1.2-2'}}({{t_a| amountToWord}})</b> 
           <hr>
           <div>
             <div class="row" style="padding-left: 10px;">
@@ -796,8 +807,9 @@
           </div>
         </div>
         <div class="row" style="padding-top: 80px;">
-          <div class="col-6"><b>Customer Signature</b></div>
-          <div class="col-6" style="padding-left: 40px;"><b>Authorized Signatory</b></div>
+          <div class="col-4"></div>
+          <div class="col-4"></div>
+          <div class="col-4" style="padding-left: 20px;"><b>Cashier/Accountant</b></div>
         </div>
       </div>
     </div>
@@ -825,7 +837,7 @@
         <div style="border: 1px solid #b7b4b4;">
           <div>
             <div class="justify-content-center" style="text-align:center" *ngIf="reportData">
-              <h4>Receipt</h4>
+              <h4>Customer Receipt</h4>
               <h5>{{ardbName}} </h5>
               <h5 *ngIf="sys.ardbCD=='2'">Contai * Purba Medinipur &nbsp;&nbsp;&nbsp;REGD NO. 10 CONT. DATE 01/02/1967</h5>
               <h5>Run Date & Time : {{today}} </h5>             
@@ -846,15 +858,18 @@
             <div class="col-8">
               <b>Loan Account:</b> {{acDesc}}
               <br>
-              <b>Loanee Name:</b> {{partyName}}
-              <br>
-              <b>Address:</b> {{present_address}}
+              <b>Name:</b> {{partyName}}
             </div>
             <div class="col-4 text-right">
               <b>Loan Case No:</b> {{l_case_no}}
               <br>
               <b>Ledger No:</b> {{acc_lfNo}}
               
+            </div>
+          </div>
+          <div class="row" style="padding-left: 10px;padding-right: 10px; font-size: larger;">
+            <div class="col-12">
+              <b>Address:</b> {{present_address}}
             </div>
           </div>
           <div class="row" style="padding-left: 10px;padding-bottom: 10px;padding-right: 10px; font-size: larger;">
@@ -877,7 +892,7 @@
             </div>
           </div>
           <div>
-            <table style="margin:2%; padding:5%; width: 95%;border: 1px solid gray;">
+            <table style="width: 95%;border: 1px solid gray;">
               <thead><tr style="border-bottom:1px solid #969494;">
                 <td style="border-right: 1px solid #969494;padding:5px;font-size: larger;text-align: center; width: 35%!important"><b>Prn / Intt Typ</b></td>
                 <td style="border-right: 1px solid #969494;padding:5px;font-size: larger; width: 35%!important;text-align: right; "><b>Principal</b></td>
@@ -908,9 +923,11 @@
               
             </table>
             
-            <div class="row" style="margin-left:20%; font-size: larger;">
-              <b style="text-align: center;">Total Amount:{{t_a| number : '1.2-2'}}</b> &nbsp;&nbsp;(<b class="amountToWord">{{t_a | amountToWord}} ONLY</b>)
-             
+            <div class="row" style="margin-left:2%; font-size: larger;">
+              <b style="text-align: left;">Total Amount:{{t_a| number : '1.2-2'}}</b> 
+             </div>
+             <div class="row" style="margin-left:2%;font-size:2vw;">
+              <b class="amountToWord">{{t_a | amountToWord}} ONLY</b>
              </div>
              <br>
             <table style="margin-left:20%; width: 60%;border: 1px solid gray;">
@@ -923,21 +940,21 @@
             </table>
             <br><br><br>
             <div class="row" >
-              <div class="col-4" style="text-align: center;font-size: large; "><b>CASHIER</b> </div>
-              <div class="col-4" style="text-align: center;font-size: large; "><b>J.O.(ACCTS.)</b></div>
-              <div class="col-4" style="text-align: center;font-size: large; "><b>MANAGER</b></div>
-
+              <div class="col-3" style="text-align: center;font-size: large; "><b>DEPOSITOR</b> </div>
+              <div class="col-3" style="text-align: center;font-size: large; "><b>CASHIER</b> </div>
+              <div class="col-3" style="text-align: center;font-size: large; "><b>J.O.(ACCTS.)</b></div>
+              <div class="col-3" style="text-align: center;font-size: large; "><b>MANAGER</b></div>
             </div>
             <br>
           </div>
         </div>
       </div>
-      <br><br><br><br>
+      
       <div class="col-12 container" >
         <div style="border: 1px solid #b7b4b4;">
           <div>
             <div class="justify-content-center" style="text-align:center" *ngIf="reportData">
-              <h4>Receipt</h4>
+              <h4>Bank Receipt</h4>
               <h5>{{ardbName}} </h5>
               <h5 *ngIf="sys.ardbCD=='2'">Contai * Purba Medinipur &nbsp;&nbsp;&nbsp;REGD NO. 10 CONT. DATE 01/02/1967</h5>
               <h5>Run Date & Time : {{today}} </h5>             
@@ -958,15 +975,18 @@
             <div class="col-8">
               <b>Loan Account:</b> {{acDesc}}
               <br>
-              <b>Loanee Name:</b> {{partyName}}
-              <br>
-              <b>Address:</b> {{present_address}}
+              <b>Name:</b> {{partyName}}
             </div>
             <div class="col-4 text-right">
               <b>Loan Case No:</b> {{l_case_no}}
               <br>
               <b>Ledger No:</b> {{acc_lfNo}}
               
+            </div>
+          </div>
+          <div class="row" style="padding-left: 10px;padding-right: 10px; font-size: larger;">
+            <div class="col-12">
+              <b>Address:</b> {{present_address}}
             </div>
           </div>
           <div class="row" style="padding-left: 10px;padding-bottom: 10px;padding-right: 10px; font-size: larger;">
@@ -989,7 +1009,7 @@
             </div>
           </div>
           <div>
-            <table style="margin:2%; padding:5%; width: 95%;border: 1px solid gray;">
+            <table style="width: 95%;border: 1px solid gray;">
               <thead><tr style="border-bottom:1px solid #969494;">
                 <td style="border-right: 1px solid #969494;padding:5px;font-size: larger;text-align: center; width: 35%!important"><b>Prn / Intt Typ</b></td>
                 <td style="border-right: 1px solid #969494;padding:5px;font-size: larger; width: 35%!important;text-align: right; "><b>Principal</b></td>
@@ -1020,9 +1040,11 @@
               
             </table>
             
-            <div class="row" style="margin-left:20%; font-size: larger;">
-              <b style="text-align: center;">Total Amount:{{t_a| number : '1.2-2'}}</b> &nbsp;&nbsp;(<b class="amountToWord">{{t_a | amountToWord}} ONLY</b>)
-             
+            <div class="row" style="margin-left:2%; font-size: larger;">
+              <b style="text-align: left;">Total Amount:{{t_a| number : '1.2-2'}}</b> 
+             </div>
+             <div class="row" style="margin-left:2%;font-size:2vw;">
+              <b class="amountToWord">{{t_a | amountToWord}} ONLY</b>
              </div>
              <br>
             <table style="margin-left:20%; width: 60%;border: 1px solid gray;">
@@ -1035,9 +1057,10 @@
             </table>
             <br><br><br>
             <div class="row" >
-              <div class="col-4" style="text-align: center;font-size: large; "><b>CASHIER</b> </div>
-              <div class="col-4" style="text-align: center;font-size: large; "><b>J.O.(ACCTS.)</b></div>
-              <div class="col-4" style="text-align: center;font-size: large; "><b>MANAGER</b></div>
+              <div class="col-3" style="text-align: center;font-size: large; "><b>DEPOSITOR</b> </div>
+              <div class="col-3" style="text-align: center;font-size: large; "><b>CASHIER</b> </div>
+              <div class="col-3" style="text-align: center;font-size: large; "><b>J.O.(ACCTS.)</b></div>
+              <div class="col-3" style="text-align: center;font-size: large; "><b>MANAGER</b></div>
 
             </div>
             <br>

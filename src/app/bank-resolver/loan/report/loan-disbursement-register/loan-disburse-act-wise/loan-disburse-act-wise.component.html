@@ -203,6 +203,10 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Service Area</th>
       <td mat-cell *matCellDef="let row">{{row.service_area_name}}</td>
   </ng-container>
+  <ng-container matColumnDef="vill_name" style="text-align:center;" >
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Village</th>
+    <td mat-cell *matCellDef="let row">{{row.vill_name}}</td>
+</ng-container>
      <ng-container matColumnDef="purpose"  style="text-align:center;">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Purpose </th>
         <td mat-cell *matCellDef="let row">{{row.activity_name}}</td>
@@ -225,6 +229,14 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Party Name </th>
         <td mat-cell *matCellDef="let row"> {{row.cust_name}} </td>
       </ng-container>
+      <ng-container matColumnDef="guardian_name" >
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Guardian Name </th>
+        <td mat-cell *matCellDef="let row"> {{row.guardian_name}} </td>
+      </ng-container>
+      <ng-container matColumnDef="phone" >
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Phone No </th>
+        <td mat-cell *matCellDef="let row"> {{row.phone}} </td>
+      </ng-container>
       <!-- Fruit Column -->
       <ng-container matColumnDef="disb_dt" >
         <th mat-header-cell *matHeaderCellDef mat-sort-header >Trans DT </th>
@@ -239,7 +251,7 @@
   
       <!-- Header column -->
       <ng-container matColumnDef="Header">
-        <th mat-header-cell *matHeaderCellDef colspan="9">
+        <th mat-header-cell *matHeaderCellDef colspan="12">
           <div class="justify-content-center" style="text-align:center">
             <br><h4>{{ardbName}} ({{branchName}})</h4>
             
@@ -259,7 +271,7 @@
       
       <!-- Footer column -->
       <ng-container matColumnDef="Total">
-        <td mat-footer-cell *matFooterCellDef colspan="8" style="text-align:center;">
+        <td mat-footer-cell *matFooterCellDef colspan="11" style="text-align:center;">
             <div *ngIf="totCount!=0"><b>Total Count: {{totCount}}</b></div>
             <div *ngIf="totCount==0"><b>Total Count: {{this.reportData?.length}}</b></div>
         </td>

@@ -49,7 +49,7 @@
               <select id="activity_cd" class="form-control form-control-sm" formControlName="activity_cd">
                 <option *ngIf="activityList" disabled>Choose</option>
                 <option *ngFor="let acti of activityList" [value]="acti.activity_desc">
-                  {{acti.activity_cd +' ' + acti.activity_desc}}
+                  {{acti.activity_desc}} ({{acti.activity_cd}})
                 </option>
               </select>
            </div>

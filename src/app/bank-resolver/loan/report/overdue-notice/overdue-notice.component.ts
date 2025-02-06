@@ -459,46 +459,51 @@ export class OverdueNoticeComponent implements OnInit {
         this.reportData2=data;
         debugger
         const acti=this.reportcriteria.controls.activity_cd.value;
-        this.reportData2.forEach(p => {
-          
-          if(this.sys.ardbCD=="20"){
-            // p.brn_cd=this.allServiceArea.filter(e=>e.service_area_cd==p.brn_cd)[0]?.service_area_name;
-            const abc = p.activity_name;
-            let [cName, cAddress] = abc.split('$');
-    
-            // Trim any leading or trailing whitespaces in the address
-            p.activity_name = cName.trim();
-            p.ardb_cd = cAddress.trim();
-            const ab = p.ovd_intt+p.ovd_prn;
+        if(this.reportData2){
+          this.reportData2.forEach(p => {
             debugger
-            if((+ab)>0 ){
+            if(this.sys.ardbCD=="20" || this.sys.ardbCD=="3"){
+              // p.brn_cd=this.allServiceArea.filter(e=>e.service_area_cd==p.brn_cd)[0]?.service_area_name;
+              const abc = p.activity_name;
+              let [cName, cAddress] = abc.split('$');
+      
+              // Trim any leading or trailing whitespaces in the address
+              p.activity_name = cName.trim();
+              p.ardb_cd = cAddress.trim();
+              const ab = p.ovd_intt+p.ovd_prn;
               debugger
-              this.reportData.push(p)
+              if((+ab)>0 ){
+                debugger
+                this.reportData.push(p)
+              }
+            }
+            else{
+            if(this.sys.ardbCD=="2"){
+              const ab = p.ovd_intt+p.ovd_prn;
+              if((+ab)>0 && p.activity_name==acti){
+                debugger
+                this.reportData.push(p)
+              }
+            }
+            else{
+              const ab = p.ovd_intt+p.ovd_prn;
+              if((+ab)>0 && p.activity_name==acti){
+                debugger
+                this.reportData.push(p)
+              }
+               p.cust_address=this.allServiceArea.filter(e=>e.service_area_cd==p.cust_address)[0]?.service_area_name;
+            
             }
           }
-          else{
-          if(this.sys.ardbCD=="2"){
-            const ab = p.ovd_intt+p.ovd_prn;
-            if((+ab)>0 && p.activity_name==acti){
-              debugger
-              this.reportData.push(p)
-            }
-          }
-          else{
-            const ab = p.ovd_intt+p.ovd_prn;
-            if((+ab)>0 && p.activity_name==acti){
-              debugger
-              this.reportData.push(p)
-            }
-             p.cust_address=this.allServiceArea.filter(e=>e.service_area_cd==p.cust_address)[0]?.service_area_name;
-          
-          }
-        }
-          
-        })
-        debugger
+            
+          })
         this.isLoading=false;
+
+        }
+        debugger
         if(this.reportData?.length==0||this.reportData==null){
+        this.isLoading=false;
+
           this.comser.SnackBar_Nodata()
         }
         this.dataSource.data=this.reportData;

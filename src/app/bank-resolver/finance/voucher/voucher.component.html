@@ -8,202 +8,211 @@
   </div>
   <div class="modal-body">
     <div class="row print" id="challan">
-      <div class="col-12 table-container" >
-        <div >
-          <div>
-            <div class="justify-content-center" style="text-align:center" >
-              <br><h4>{{ardbName}} </h4>
-              <h4>{{branchName}}</h4>
-              <h4>Run Date & Time : {{today}} </h4>
-              <h4>{{ardbAddr}}</h4>
-              <h5>Bank's Copy</h5>
-          </div>
-          </div>
-          <hr>
-          <div class="row" style="padding-left: 5px;" >
-            <div class="col-6">
-            <b>Voucher Date:</b> {{_cDt.substr(0,10)}}<br>
-            <b>Name:</b> {{_cName}}<br>
-            <b>Address:</b> {{_cAddress}}
+      <div class="row" style="padding-top: 20px;">
+        <div class="col-12">
+          <div class="col-12 table-container" >
+            <div >
+              <div>
+                <div class="justify-content-center" style="text-align:center" >
+                  <br><h5>{{ardbName}} </h5>
+                  <!-- <h4 *ngIf="ardbcd=='26'">{{branchName}}</h4> -->
+                  <h6>Branch : {{branchName}}</h6>
 
+                  <h6 *ngIf="ardbcd=='26'">Contact no: (0342)2662390/ 9800960007<br>
+                    GSTIN: 19AACAB0468Q1ZB
+                  </h6>
+                  <h6>Run Date & Time : {{today}} </h6>
+                  <!-- <h5>{{ardbAddr}}</h5> -->
+                  <h6>Bank's Copy</h6>
+              </div>
+              </div>
+              <hr>
+              <div class="row" style="padding-left: 5px;" >
+                <div class="col-6">
+                <b>Voucher Date:</b> {{_cDt.substr(0,10)}}<br>
+                <b>Name:</b> {{_cName}}<br>
+                <b>Address:</b> {{_cAddress}}
+    
+                </div>
+                <div class="col-6">
+                  <b>Voucher ID:</b> {{_voucherId}}<br>
+                <b>Voucher Type:</b> {{_voucherTypeName}}
+    
+                </div>
+              </div><br>
+    
+              <div class="row" style="padding-left: 5px;">
+                <div class="col-12">
+                  <p style="text-align: center;">Total {{_voucherTypeName}} of <b>Rs.{{_voucherTypeName=="Cash Receipt"?_totalCr:_totalDr | currency:'INR'}}</b> </p>
+                  <table border="1">
+                    <thead>
+                      <tr>
+                        <th>Account Code</th>
+                        <th>Account Name</th>
+                        <th>Debit</th>
+                        <th>Credit</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let transaction of printData">
+                        <td>{{ transaction.acc_cd }}</td>
+                        <td>{{ transaction.narration }}</td>
+                        <td style="text-align: right;">{{ transaction.debit_credit_flag === 'D' ? transaction.dr_amount : 0 | number:'1.2-2'}}</td>
+                        <td style="text-align: right;">{{ transaction.debit_credit_flag === 'C' ? transaction.cr_amount : 0 | number:'1.2-2'}}</td>
+                      </tr>
+                      <tr>
+                        <td colspan="2"><strong>Total</strong></td>
+                        <td style="text-align: right;"><strong>{{ totalDebit | number:'1.2-2'}}</strong></td>
+                        <td style="text-align: right;"><strong>{{ totalCredit | number:'1.2-2'}}</strong></td>
+                      </tr>
+                    </tbody>
+                    <tfoot>
+                     
+                      <tr>
+                        <td colspan="4">Narration:{{ printData[0]?.narrationdtl }}</td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                  <!-- <table style="width: 100%;">
+                    <tr *ngFor="let i of printData">
+                      <td style="text-align: left;">{{i.acc_cd}}</td>
+                      <td style="text-align: left;">{{i.narration}} of Rs. </td>
+                      <td style="text-align: right;padding-right: 10px;"><b>{{i.amount| currency:'INR'}}({{i.debit_credit_flag=='D'?'Dr':'Cr'}})</b></td>
+                    </tr>
+                    
+                    <tr style="border-top: 1px solid rgb(223, 220, 210);">
+                      <td style="text-align: right;" colspan="2"><b>Total</b></td>
+                      <td style="text-align: center;" ><b>{{_voucherTypeName=="Cash Receipt"?_totalCr:_totalDr | currency:'INR'}}</b></td>
+                    </tr>
+                    <tr>
+                      <td>Narration: {{printData[0].narrationdtl}}</td>
+                    </tr>
+                  </table> -->
+                </div>
+              </div>
+              <br><br>
+              <div class="row" style="padding-left: 5px;padding-bottom: 10px;">
+                <div class="col-4">
+                  <b>Depositor <br>Signature</b>
+                </div>
+                <div class="col-4">
+                  <b>Cashier/<br>Entered By</b>
+                </div>
+                <div class="col-4">
+                  <b>Manager/Accountant/<br>Approved By</b>
+                </div>
+              </div>
+              <br><br>
+              <!-- <div class="row" style="padding-left: 5px;padding-bottom: 10px;">
+                <div class="col-6">
+                  <b>Receiver's/Payer's Signature</b>
+                </div>
+                <div class="col-6" style="padding-right: 85px;text-align: right;">
+                  <b>Manager/CEO</b>
+                </div>
+              </div> -->
+              
             </div>
-            <div class="col-6">
-              <b>Voucher ID:</b> {{_voucherId}}<br>
-            <b>Voucher Type:</b> {{_voucherTypeName}}
-
-            </div>
-          </div><br>
-
-          <div class="row" style="padding-left: 5px;">
-            <div class="col-12">
-              <p style="text-align: center;">Total {{_voucherTypeName}} of <b>Rs.{{_voucherTypeName=="Cash Receipt"?_totalCr:_totalDr | currency:'INR'}}</b> </p>
-              <table border="1">
-                <thead>
-                  <tr>
-                    <th>Account Code</th>
-                    <th>Account Name</th>
-                    <th>Debit</th>
-                    <th>Credit</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let transaction of printData">
-                    <td>{{ transaction.acc_cd }}</td>
-                    <td>{{ transaction.narration }}</td>
-                    <td style="text-align: right;">{{ transaction.debit_credit_flag === 'D' ? transaction.dr_amount : 0 | number:'1.2-2'}}</td>
-                    <td style="text-align: right;">{{ transaction.debit_credit_flag === 'C' ? transaction.cr_amount : 0 | number:'1.2-2'}}</td>
-                  </tr>
-                  <tr>
-                    <td colspan="2"><strong>Total</strong></td>
-                    <td style="text-align: right;"><strong>{{ totalDebit | number:'1.2-2'}}</strong></td>
-                    <td style="text-align: right;"><strong>{{ totalCredit | number:'1.2-2'}}</strong></td>
-                  </tr>
-                </tbody>
-                <tfoot>
+          </div>
+        </div>
+        <br>
+        <br>
+        <br>
+        <div class="col-12">
+          <div class="col-12 table-container" >
+            <div >
+              <div>
+                <div class="justify-content-center" style="text-align:center" >
+                  <br><h5>{{ardbName}} </h5>
+                  
+                  <h6>Branch : {{branchName}}</h6>
+                  <h6 *ngIf="ardbcd=='26'">Contact no: (0342)2662390/ 9800960007<br>
+                    GSTIN: 19AACAB0468Q1ZB
+                  </h6>
+                  <h6>Run Date & Time : {{today}}</h6>
+                  <h6>Receiver's/Payer's Copy </h6>
+              </div>
+              </div>
+              <hr>
+              <div class="row" style="padding-left: 5px;" >
+                <div class="col-6">
+                <b>Voucher Date:</b> {{_cDt.substr(0,10)}}<br>
+                <b>Name:</b> {{_cName}}<br>
+                <b>Address:</b> {{_cAddress}}
+    
+                </div>
+                <div class="col-6">
+                  <b>Voucher ID:</b> {{_voucherId}}<br>
+                <b>Voucher Type:</b> {{_voucherTypeName}}
+    
+                </div>
+              </div><br>
+              <div class="row" style="padding-left: 5px;">
+                <div class="col-12">
+                  <p style="text-align: center;">Total {{_voucherTypeName}} of <b>Rs.{{_voucherTypeName=="Cash Receipt"?_totalCr:_totalDr | currency:'INR'}}</b> </p>
+                  <table border="1">
+                    <thead>
+                      <tr>
+                        <th>Account Code</th>
+                        <th>Account Name</th>
+                        <th>Debit</th>
+                        <th>Credit</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let transaction of printData">
+                        <td>{{ transaction.acc_cd }}</td>
+                        <td>{{ transaction.narration }}</td>
+                        <td style="text-align: right;">{{ transaction.debit_credit_flag === 'D' ? transaction.dr_amount : 0 | number:'1.2-2'}}</td>
+                        <td style="text-align: right;">{{ transaction.debit_credit_flag === 'C' ? transaction.cr_amount : 0 | number:'1.2-2'}}</td>
+                      </tr>
+                      <tr>
+                        <td colspan="2"><strong>Total</strong></td>
+                        <td style="text-align: right;"><strong>{{ totalDebit | number:'1.2-2'}}</strong></td>
+                        <td style="text-align: right;"><strong>{{ totalCredit | number:'1.2-2'}}</strong></td>
+                      </tr>
+                    </tbody>
+                    <tfoot>
+                     
+                      <tr>
+                        <td colspan="4">Narration: {{ printData[0]?.narrationdtl }}</td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                  <!-- <table style="width: 100%;">
+                    <tr *ngFor="let i of printData">
+                      <td style="text-align: left;">{{i.acc_cd}}</td>
+                      <td style="text-align: left;">{{i.narration}} of Rs. </td>
+                      <td style="text-align: right;padding-right: 10px;"><b>{{i.amount| currency:'INR'}}({{i.debit_credit_flag=='D'?'Dr':'Cr'}})</b></td>
+                    </tr>
+                    
+                    <tr style="border-top: 1px solid rgb(223, 220, 210);">
+                      <td style="text-align: right;" colspan="2"><b>Total</b></td>
+                      <td style="text-align: center;" ><b>{{_voucherTypeName=="Cash Receipt"?_totalCr:_totalDr | currency:'INR'}}</b></td>
+                    </tr>
+                    <tr>
+                      <td>Narration: {{printData[0].narrationdtl}}</td>
+                    </tr>
+                  </table> -->
+                </div>
+              </div><br><br>
+              <div class="row" style="padding-left: 5px;padding-bottom: 10px;">
+                <div class="col-4">
                  
-                  <tr>
-                    <td colspan="4">Narration:{{ printData[0]?.narrationdtl }}</td>
-                  </tr>
-                </tfoot>
-              </table>
-              <!-- <table style="width: 100%;">
-                <tr *ngFor="let i of printData">
-                  <td style="text-align: left;">{{i.acc_cd}}</td>
-                  <td style="text-align: left;">{{i.narration}} of Rs. </td>
-                  <td style="text-align: right;padding-right: 10px;"><b>{{i.amount| currency:'INR'}}({{i.debit_credit_flag=='D'?'Dr':'Cr'}})</b></td>
-                </tr>
-                
-                <tr style="border-top: 1px solid rgb(223, 220, 210);">
-                  <td style="text-align: right;" colspan="2"><b>Total</b></td>
-                  <td style="text-align: center;" ><b>{{_voucherTypeName=="Cash Receipt"?_totalCr:_totalDr | currency:'INR'}}</b></td>
-                </tr>
-                <tr>
-                  <td>Narration: {{printData[0].narrationdtl}}</td>
-                </tr>
-              </table> -->
+                </div>
+                <div class="col-4">
+                  
+                </div>
+                <div class="col-4">
+                  <b>Cashier/<br>Accountant</b>
+                </div>
+              </div>
+              
             </div>
           </div>
-          <br><br>
-          <div class="row" style="padding-left: 5px;padding-bottom: 10px;">
-            <div class="col-4">
-              <b>Details</b>
-            </div>
-            <div class="col-4">
-              <b>Accountant</b>
-            </div>
-            <div class="col-4">
-              <b>Cashier</b>
-            </div>
-          </div>
-          <br><br>
-          <div class="row" style="padding-left: 5px;padding-bottom: 10px;">
-            <div class="col-6">
-              <b>Receiver's/Payer's Signature</b>
-            </div>
-            <div class="col-6" style="padding-right: 85px;text-align: right;">
-              <b>Manager/CEO</b>
-            </div>
-          </div>
-          
         </div>
       </div>
-      <div class="col-12 table-container" >
-        <div >
-          <div>
-            <div class="justify-content-center" style="text-align:center" >
-              <br><h4>{{ardbName}} </h4>
-              <h4>{{branchName}}</h4>
-              <h4>Run Date & Time : {{today}} </h4>
-              <h4>{{ardbAddr}}</h4>
-              <h5>Receiver's/Payer's Copy </h5>
-          </div>
-          </div>
-          <hr>
-          <div class="row" style="padding-left: 5px;" >
-            <div class="col-6">
-            <b>Voucher Date:</b> {{_cDt.substr(0,10)}}<br>
-            <b>Name:</b> {{_cName}}<br>
-            <b>Address:</b> {{_cAddress}}
-
-            </div>
-            <div class="col-6">
-              <b>Voucher ID:</b> {{_voucherId}}<br>
-            <b>Voucher Type:</b> {{_voucherTypeName}}
-
-            </div>
-          </div><br>
-          <div class="row" style="padding-left: 5px;">
-            <div class="col-12">
-              <p style="text-align: center;">Total {{_voucherTypeName}} of <b>Rs.{{_voucherTypeName=="Cash Receipt"?_totalCr:_totalDr | currency:'INR'}}</b> </p>
-              <table border="1">
-                <thead>
-                  <tr>
-                    <th>Account Code</th>
-                    <th>Account Name</th>
-                    <th>Debit</th>
-                    <th>Credit</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let transaction of printData">
-                    <td>{{ transaction.acc_cd }}</td>
-                    <td>{{ transaction.narration }}</td>
-                    <td style="text-align: right;">{{ transaction.debit_credit_flag === 'D' ? transaction.dr_amount : 0 | number:'1.2-2'}}</td>
-                    <td style="text-align: right;">{{ transaction.debit_credit_flag === 'C' ? transaction.cr_amount : 0 | number:'1.2-2'}}</td>
-                  </tr>
-                  <tr>
-                    <td colspan="2"><strong>Total</strong></td>
-                    <td style="text-align: right;"><strong>{{ totalDebit | number:'1.2-2'}}</strong></td>
-                    <td style="text-align: right;"><strong>{{ totalCredit | number:'1.2-2'}}</strong></td>
-                  </tr>
-                </tbody>
-                <tfoot>
-                 
-                  <tr>
-                    <td colspan="4">Narration: {{ printData[0]?.narrationdtl }}</td>
-                  </tr>
-                </tfoot>
-              </table>
-              <!-- <table style="width: 100%;">
-                <tr *ngFor="let i of printData">
-                  <td style="text-align: left;">{{i.acc_cd}}</td>
-                  <td style="text-align: left;">{{i.narration}} of Rs. </td>
-                  <td style="text-align: right;padding-right: 10px;"><b>{{i.amount| currency:'INR'}}({{i.debit_credit_flag=='D'?'Dr':'Cr'}})</b></td>
-                </tr>
-                
-                <tr style="border-top: 1px solid rgb(223, 220, 210);">
-                  <td style="text-align: right;" colspan="2"><b>Total</b></td>
-                  <td style="text-align: center;" ><b>{{_voucherTypeName=="Cash Receipt"?_totalCr:_totalDr | currency:'INR'}}</b></td>
-                </tr>
-                <tr>
-                  <td>Narration: {{printData[0].narrationdtl}}</td>
-                </tr>
-              </table> -->
-            </div>
-          </div><br><br>
-          <div class="row" style="padding-left: 5px;padding-bottom: 10px;">
-            <div class="col-4">
-              <b>Details</b>
-            </div>
-            <div class="col-4">
-              <b>Accountant</b>
-            </div>
-            <div class="col-4">
-              <b>Cashier</b>
-            </div>
-          </div>
-          <br><br>
-          <div class="row" style="padding-left: 5px;padding-bottom: 10px;">
-            <div class="col-6">
-              <b>Receiver's/Payer's Signature</b>
-            </div>
-            <div class="col-6" style="padding-right: 85px;text-align: right;">
-              <b>Manager/CEO</b>
-            </div>
-          </div>
-          
-        </div>
-      </div>
+      
      
     </div>
     <h4>Are you want to print this Voucher?</h4>

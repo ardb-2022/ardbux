@@ -28,6 +28,7 @@ export class LandingComponent implements OnInit {
   constructor( private cms:CommonServiceService,private router: Router, private modalService:BsModalService,private msg: InAppMessageService,private svc: RestService, private comsv:CommonServiceService) { 
     this.randomNumberColor = this.getRandomColor();
   }
+  backgroundColor: string = 'rgb(250, 250, 250)'; 
   sys = new SystemValues();
   dashboardItem = new mm_dashboard();
   isLoading = false;
@@ -42,6 +43,9 @@ export class LandingComponent implements OnInit {
   @ViewChild('template', { static: true }) template: TemplateRef<any>;
 
   ngOnInit(): void {
+    // setInterval(() => {
+    //   this.backgroundColor = this.getRandomLightColor();
+    // }, 2000);
     this.ardbName=localStorage.getItem('ardb_name');
     this.brnName=localStorage.getItem('__brnName');
     this.marqueeText = `${this.ardbName}`;
@@ -70,6 +74,12 @@ export class LandingComponent implements OnInit {
     closeL2L(){
     localStorage.removeItem('L2L');
     this.modalRef?.hide()
+    }
+    getRandomLightColor(): string {
+      const r = Math.floor(Math.random() * 56) + 200; // Ranges between 200-255
+      const g = Math.floor(Math.random() * 56) + 200; // Ranges between 200-255
+      const b = Math.floor(Math.random() * 56) + 200; // Ranges between 200-255
+      return `rgb(${r}, ${g}, ${b})`;
     }
     getRandomColor(): string {
       const letters = '0123456789ABCDEF';
@@ -152,6 +162,9 @@ export class LandingComponent implements OnInit {
     this.comsv.openGlTrns=false
     this.router.navigate([this.sys.BankName + '/LR_RecRegNorm']);
 
+  }
+  gov_rep(){
+    this.router.navigate([this.sys.BankName + '/GOV_REP']);
   }
   openDayBook(){
     this.comsv.accOpen=false

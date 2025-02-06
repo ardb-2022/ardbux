@@ -14,6 +14,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import { CommonServiceService } from 'src/app/bank-resolver/common-service.service';
+import * as XLSX from 'xlsx';
 @Component({
   selector: 'app-conso-dtl-list-fd-mis',
   templateUrl: './conso-dtl-list-fd-mis.component.html',
@@ -86,7 +87,8 @@ export class ConsoDtlListFdMisComponent {
   lastOne:any
   lastTwo:any
   lastThree:any
-  lastFour:any
+  lastFour:any;
+  mergedArray:any[]=[];
   constructor(private comSer:CommonServiceService,private svc: RestService, private formBuilder: FormBuilder,private exportAsService: ExportAsService,
               private modalService: BsModalService, private _domSanitizer: DomSanitizer,private cd: ChangeDetectorRef,
               private router: Router) { }
@@ -207,7 +209,8 @@ public onAccountTypeChange(): void {
       }
       this.svc.addUpdDel('Deposit/PopulateDLFixedDepositAllConso',dt).subscribe(data=>{
         console.log(data)
-        this.reportData=data
+        this.reportData=data;
+        this.mergedArray = this.mergeTtsbcadtllist(this.reportData);
         if(this.reportData.length==0){
           this.comSer.SnackBar_Nodata()
         } 
@@ -258,17 +261,28 @@ public onAccountTypeChange(): void {
   
     this.cd.detectChanges();
   }
+
   downloadexcel(){
+    
     this.exportAsConfig = {
-      type: 'xlsx',
-      // elementId: 'hiddenTab', 
-      elementIdOrContent:'trial111'
+      type: 'xlsx', 
+      elementIdOrContent:'trial000'
     }
-    this.exportAsService.save(this.exportAsConfig, 'Detail_List_FDMIS').subscribe(() => {
-      // save started
-      console.log("hello")
+    this.exportAsService.save(this.exportAsConfig, 'Detail_List_FDMIS_Conso').subscribe(() => {
+     console.log("hello")
     });
   }
+  mergeTtsbcadtllist(reportdata: any[]): any[] {
+    // Use reduce to iterate through the main array and merge ttsbcadtllist into a single array
+    const mergedArr = reportdata.reduce((accumulator, current) => {
+        if (current.ttsbcadtllist) {
+            // Concatenate the current ttsbcadtllist with the accumulator
+            return accumulator.concat(current.ttsbcadtllist);
+        }
+        return accumulator;
+    }, []); // Start with an empty array
+    return mergedArr;
+}
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;

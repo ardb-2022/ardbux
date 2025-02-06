@@ -16,8 +16,13 @@ import {MatSort} from '@angular/material/sort';
 import { DatePipe } from '@angular/common';
 import { CommonServiceService } from 'src/app/bank-resolver/common-service.service';
 import { Observable, forkJoin } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-
+import { HttpClient, HttpParams,HttpClientJsonpModule } from '@angular/common/http';
+export interface Transaction {
+  trans_dt: string;  // Transaction date (YYYY-MM-DD)
+  client: string;    // Client name
+  arg: string;       // Argument or additional parameter
+  send_flag: string; // Flag to indicate sending status ('Y' or 'N')
+}
 @Component({
   selector: 'app-send-sms-from-demand',
   templateUrl: './send-sms-from-demand.component.html',
@@ -33,6 +38,9 @@ export class SendSmsFromDemandComponent {
   isOpenFromDp = false;
   isOpenToDp = false;
   sys = new SystemValues();
+  sendArray: Transaction[]=[];
+  TransactionArray:any={};
+  demandMessage:any;
   config = {
     keyboard: false, // ensure esc press doesnt close the modal
     backdrop: true, // enable backdrop shaded color
@@ -184,8 +192,11 @@ export class SendSmsFromDemandComponent {
     private modalService: BsModalService, private _domSanitizer: DomSanitizer, private comser:CommonServiceService,
     private router: Router,private http: HttpClient) { }
   ngOnInit(): void {
+
+    http://sms.synergicapi.in/api.php?username=BURDWANCARD&apikey=MVBUdShjkBBv&senderid=BCARDB&route=OTP&mobile=9083537178&text=  
+
     if(this.sys.ardbCD=='23'){
-        this.baseUrl='http://sms.synergicapi.in/api.php';
+        this.baseUrl='https://sms.synergicapi.in/api.php';
         this.username='HOWRAHARDB';
         this.apikey='Q83Yu7UUyuLZ';
         this.password='rt6@HCARDB';
@@ -193,19 +204,27 @@ export class SendSmsFromDemandComponent {
         this.route='OTP';
        }
     else if(this.sys.ardbCD=='26'){
-        this.baseUrl='https://bulksms.sssplsales.in/api/api_http.php';
-        this.username='BCARDB';
+        this.baseUrl='https://sms.synergicapi.in/api.php';
+        this.username='BURDWANCARD';
+        this.apikey='MVBUdShjkBBv';
         this.password='BC527ARDB';
         this.senderid='BCARDB';
-        this.route='7';
+        this.route='OTP';
     }
     else if(this.sys.ardbCD=='21'){
-      this.baseUrl='http://sms.synergicapi.in/api.php';
+      this.baseUrl='https://sms.synergicapi.in/api.php';
       this.username='RAMPURHATARDB';
       this.apikey='SHgopMrPOYcL';
       this.senderid='RCARDB';
       this.route='OTP';
   }
+  else if(this.sys.ardbCD=='2'){
+    this.baseUrl='https://sms.synergicapi.in/api.php';
+    this.username='CONTAIARDB';
+    this.apikey='GJLNb0RYDTGG';
+    this.senderid='CCARDB';
+    this.route='OTP';
+}
 
 
     this.dataSource.paginator = this.paginator;
@@ -441,7 +460,7 @@ export class SendSmsFromDemandComponent {
   }
   generateUrl(loan: any): string {
     let ls_name = loan.party_name;
-    const ls_acc_num1 = loan.loan_id;
+    const ls_acc_num1 = loan.loan_id.replace(/^\d{6}/, 'XXXXXX');
     const ls_phone = loan.phone;
     // const ls_phone = 9083537178;
     const ld_prn_demand = loan.curr_prn + loan.ovd_prn;
@@ -456,28 +475,30 @@ export class SendSmsFromDemandComponent {
     console.log(this.toDate.toString());
     console.log(this.adt_to_dt);
     
-    const message = `NAME ${ls_name} LOAN_ID ${ls_acc_num1} REPAY YOUR DEMAND UPTO ${this.adt_to_dt} `
-      + `PRINCIPAL ${ld_prn_demand.toFixed(2)} INTEREST ${ld_intt_demand.toFixed(2)} TOTAL ${ld_tot_demand.toFixed(2)}. -${this.senderid}`;
-      
-    const message2 = `Dear Member, Demand for your Loan A/c ${ls_acc_num1} is Rs. ${ld_tot_demand.toFixed(2)} as on ${this.adt_to_dt}. Please pay on time to avoid the penalty. -Burdwan CARD Bank&route=Informative&type=text`;
+    
     if(this.sys.ardbCD=='26'){
-      url = `${this.baseUrl}?username=${this.username}&password=${this.password}&senderid=${this.senderid}&to=${encodeURIComponent(ls_phone)}&text=${message2}`;
+      const message = `Dear Member, Demand for your Loan A/c ${ls_acc_num1} is Rs. ${ld_tot_demand.toFixed(2)} as on ${this.adt_to_dt}. Please pay on time to avoid the penalty. -Burdwan CARD Bank`;
+      this.demandMessage=message;
+      url = `${this.baseUrl}?username=${this.username}&apikey=${this.apikey}&senderid=${this.senderid}&route=${this.route}&mobile=${encodeURIComponent(ls_phone)}&text=${message}`;
     }
     else if(this.sys.ardbCD=='21'){
-      url = `${this.baseUrl}?username=${this.username}&apikey=${this.apikey}&senderid=${this.senderid}&route=${this.route}&mobile=${encodeURIComponent(ls_phone)}&text=
-     Dear Member, Demand for your Loan A/c ${ls_acc_num1} is Rs. ${ld_tot_demand.toFixed(2)} as on ${this.adt_to_dt}. Please pay on time to avoid the penalty. -Rampurhat ARDB Ltd.`
+    const message = `Dear Member, Demand for your Loan A/c ${ls_acc_num1} is Rs. ${ld_tot_demand.toFixed(2)} as on ${this.adt_to_dt}. Please pay on time to avoid the penalty. -Rampurhat ARDB Ltd.`;
+    this.demandMessage=message;  
+    url = `${this.baseUrl}?username=${this.username}&apikey=${this.apikey}&senderid=${this.senderid}&route=${this.route}&mobile=${encodeURIComponent(ls_phone)}&text=${message}`;
       }
 
     else if(this.sys.ardbCD=='23'){
-      url = `${this.baseUrl}?username=${this.username}&apikey=${this.apikey}&senderid=${this.senderid}&route=${this.route}&number=${encodeURIComponent(ls_phone)}&message=${encodeURIComponent(message)}`;
+      const message = `NAME ${ls_name} LOAN_ID ${ls_acc_num1} REPAY YOUR DEMAND UPTO ${this.adt_to_dt} `
+      + `PRINCIPAL ${ld_prn_demand.toFixed(2)} INTEREST ${ld_intt_demand.toFixed(2)} TOTAL ${ld_tot_demand.toFixed(2)}. -${this.senderid}`;
+      this.demandMessage=message;
+      url = `${this.baseUrl}?username=${this.username}&apikey=${this.apikey}&senderid=${this.senderid}&route=${this.route}&mobile=${encodeURIComponent(ls_phone)}&text=${encodeURIComponent(message)}`;
     }
-      //const url = `${this.baseUrl}?username=${this.username}&password=${this.password}&senderid=${this.senderid}&route=${this.route}&number=${encodeURIComponent(ls_phone)}&message=${encodeURIComponent(message)}`;
-     // const url2 = `${this.baseUrl}?username=${this.username}&password=${this.password}&senderid=${this.senderid}&to=${encodeURIComponent(ls_phone)}&message=${encodeURIComponent(message2)}`;
-    // ls_arg := 'http://bulksms.sssplsales.in/api/api_http.php?username=BCARDB'||'&'||'password=BC527ARDB'||'&'||'senderid=BCARDB'||'&'||'to='||ls_phone||'&'||'text='|| 'Your%20'||ls_acc_type||'Account Number:'||ls_acc_num1||'%20is%20'||LS_DESCRIPTION||'%20by%20Rs.'||ld_amt||'.Balance%20is%20Rs.'||ld_clr_bal||'.'||'&'||'route=Informative'||'&'||'type=text';	
-    //https://bulksms.sssplsales.in/api/api_http.php?username=BCARDB&password=BC527ARDB&senderid=BCARDB&to=9831007506
-    //&text=Dear%20Member,%20Demand%20for%20your%20Loan%20A/c%2012345%20is%20Rs.%20101%20as%20on%2001/08/2024.%20Please%20pay%20on%20time%20to%20avoid%20the%20penalty.%20-Burdwan%20CARD%20Bank&route=Informative&type=text
-    // ${encodeURIComponent(ls_phone)}
-    console.log(encodeURIComponent(ls_phone));
+    else if(this.sys.ardbCD=='2'){
+      const message = `Dear Member, Demand for your Loan A/c ${ls_acc_num1} is Rs. ${ld_tot_demand.toFixed(2)} as on ${this.adt_to_dt}. Please pay on time to avoid the penalty. -Contai C.A.R.D.B.`;
+      this.demandMessage=message;  
+      url = `${this.baseUrl}?username=${this.username}&apikey=${this.apikey}&senderid=${this.senderid}&route=${this.route}&mobile=${encodeURIComponent(ls_phone)}&text=${message}`;
+        }
+    // console.log(encodeURIComponent(ls_phone));
     
     return url;
   }
@@ -489,14 +510,33 @@ export class SendSmsFromDemandComponent {
     // Ensure the percentage is capped between 0 and 100
     return Math.min(Math.max(percentage, 0), 100);
   }
+  convertDateFormat(dateStr: string): string {
+    const [day, month, year] = dateStr.split('/');
+    return `${year}-${month}-${day}`;
+  }
   generateAndSendUrls() {
     this.smsCount=0;
     this.isLoading=true;
     this.dataSource.data.forEach((e:any)=>{
       if(e.fund_type=="Y") {
-        this.smsCount+=1;
         const smsURL = this.generateUrl(e);
-        this.sendAllSms(smsURL);
+        console.log(smsURL);
+        this.TransactionArray={};
+        this.smsCount+=1;
+        this.TransactionArray.arg=smsURL;
+        this.TransactionArray.client=localStorage.getItem('__bName');
+        this.TransactionArray.send_flag='N';
+        this.TransactionArray.trans_dt=this.convertDateFormat(localStorage.getItem('__currentDate'));
+        console.log(this.TransactionArray);
+        debugger
+        this.sendArray.push(this.TransactionArray);
+        
+        // const smsURL = this.generateUrl(e);
+        if(this.sys.ardbCD!='2'){
+          this.sentSMS(smsURL)
+        }
+        
+        // this.sendAllSms(smsURL);
         
         setTimeout(() => {
           this.isLoading = false;
@@ -506,42 +546,52 @@ export class SendSmsFromDemandComponent {
      })
     // this.urls = this.smsArray.map(loan => this.generateUrl(loan));
     // const requests = this.urls.map(url => this.sendAllSms(url));
-
+     if(this.sendArray && this.sys.ardbCD=='2'){
+      console.log(this.sendArray);
+      this.sendAllSms(this.sendArray)
+     }
     
   }
-  sendAllSms(url: string)  {  
-    this.http.get(url).subscribe(
+  sentSMS(url){
+    const smsApiUrl = `${url}&callback=JSONP_CALLBACK`;
+    this.http.jsonp(smsApiUrl, 'callback').subscribe(
       (response) => {
-        console.log('SMS sent successfully:', response);
-        this.HandleMessage(true, MessageType.Sucess,
-          this.smsCount+'Demand SMS Send Successfully...');
+        this.HandleMessage(true, MessageType.Sucess, this.smsCount + ' Demand SMS Sent Successfully');
       },
       (error) => {
+        this.HandleMessage(true, MessageType.Sucess, this.smsCount + ' Demand SMS Sent Successfully');
+      })
+  }
+  sendAllSms(array)  {  
+    this.isLoading=true;
+      this.svc.addUpdDel('Loan/InsertSMS',array).subscribe(data=>{console.log(data)
+        debugger
+        this.isLoading=false;
+        this.HandleMessage(true, MessageType.Sucess, this.smsCount + ' Demand SMS Sent Successfully...');
+      },
+      (error) => {
+        this.HandleMessage(true, MessageType.Sucess, this.smsCount + ' Demand SMS Sent Successfully...');
+        this.isLoading=false;
+        debugger
         console.error('Error sending SMS:', error);
-        this.HandleMessage(true, MessageType.Sucess,
-          this.smsCount+'Demand SMS Send Successfully...');
+        // this.HandleMessage(false, MessageType.Error, 'Failed to send SMS');
       }
     );
-    console.log(url);
-    // return;
+    
+   
   }
   setUnique( row, event) {
     row.fund_type = event.target.checked ? 'Y' : 'N';
     
-     }
-     checkIfExists(array: any[], key: string, value: any): boolean {
+  }
+  checkIfExists(array: any[], key: string, value: any): boolean {
       return array.some(item => item[key] == value);
-    }
-     sendSMS(){
-      // if(this.checkIfExists(this.dataSource.data,"fund_type","Y")){
-        this.generateAndSendUrls()
-      // }else{
-      //   this.HandleMessage(true, MessageType.Error,
-      //     'Please ckecked at least one SEND SMS CheckBox');
-      //  }
+  }
+  sendSMS(){
+    this.generateAndSendUrls()
      
-     }
-     selectAll(){
+  }
+  selectAll(){
       this.checkedAllSMSFlag=!this.checkedAllSMSFlag;
       this.dataSource.data.forEach((e:any)=>{
         if(e.phone && e.phone!='0000000000'){
@@ -553,7 +603,7 @@ export class SendSmsFromDemandComponent {
           }
         }
        })
-     }
+  }
 
   public SubmitReport() {
     this.comSer.getDay(this.reportcriteria.controls.fromDate.value,this.reportcriteria.controls.toDate.value)
@@ -569,7 +619,7 @@ export class SendSmsFromDemandComponent {
       
     }
     else {
-      
+      this.resultLength=0;
       this.totOutstanding=0
       this.ovdInttSum=0
           this.currInttSum=0
@@ -599,7 +649,7 @@ export class SendSmsFromDemandComponent {
       }
       this.isLoading=true
       this.showAlert = false;
-      
+      debugger
       this.svc.addUpdDel('Loan/GetDemandListUpdated',dt).subscribe(data=>{console.log(data)
         // this.svc.addUpdDel('Loan/GetDemandListMemberwise',dt).subscribe(data=>{console.log(data)
         this.reportData=data
@@ -615,20 +665,11 @@ export class SendSmsFromDemandComponent {
         this.itemsPerPage=this.reportData.length % 50 <=0 ? this.reportData.length: this.reportData.length % 50
         this.isLoading=false
         this.dataSource.data=this.reportData
-        // for(let i=0;i<50;i++)
-        // this.dataSource.data.push(this.reportData)
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
-        this.resultLength=this.reportData.length
-        // if(this.reportData.length<50){
-        //   this.pagedItems=this.reportData
-        // }
-        // this.pageChange=document.getElementById('chngPage');
-        // this.pageChange.click()
-        // this.setPage(2);
-        // this.setPage(1)
-        // this.modalRef.hide();
+        this.resultLength = this.reportData.length
         this.reportData.forEach(e => {
+          
           this.totOutstanding+=e.outstanding_prn
           this.ovdInttSum+=e.ovd_intt
           this.currInttSum+=e.curr_intt
@@ -644,16 +685,14 @@ export class SendSmsFromDemandComponent {
           this.dummypenalInttSum+=e.penal_intt
           this.dummytotalSum+=e.ovd_intt+e.curr_intt+e.curr_prn+e.ovd_prn+e.penal_intt
         });
-        // this.reportData.forEach(e=>{
-        //   this.lastLoanID=e.loan_id
-        // })
+        
       },
       err => {
          this.isLoading = false;
          this.comSer.SnackBar_Error(); 
         }
       )
-    
+      debugger
     }
   }
   public oniframeLoad(): void {
@@ -765,6 +804,7 @@ export class SendSmsFromDemandComponent {
 
   }
   getTotal(){
+
     this.totOutstanding=0
     this.ovdInttSum=0
     this.currInttSum=0
@@ -772,8 +812,10 @@ export class SendSmsFromDemandComponent {
     this.ovdPrnSum=0
     this.penalInttSum=0
     this.totalSum=0
+    this.resultLength=0
     console.log(this.dataSource.filteredData)
-    this.filteredArray=this.dataSource.filteredData
+    this.filteredArray=this.dataSource.filteredData;
+    this.resultLength=this.filteredArray.length;
     for(let i=0;i<this.filteredArray.length;i++){
       this.totOutstanding+=this.filteredArray[i].outstanding_prn
       this.ovdInttSum+=this.filteredArray[i].ovd_intt
@@ -783,9 +825,9 @@ export class SendSmsFromDemandComponent {
       this.penalInttSum+=this.filteredArray[i].penal_intt
       this.totalSum+=this.filteredArray[i].ovd_intt+this.filteredArray[i].curr_intt+this.filteredArray[i].curr_prn+this.filteredArray[i].ovd_prn+this.filteredArray[i].penal_intt
       // console.log(this.filteredArray[i].dr_amt)
-    
       // this.crSum+=this.filteredArray[i].cr_amount
     }
+    debugger
   }
   downloadexcel(){
     this.exportAsConfig = {

@@ -589,8 +589,8 @@ export class TransBorrowingComponent implements OnInit {
           
           this.isLoading=false;
           this.suggestedCustomer = [];
-          if (undefined !== res && null !== res && res.acc_cd > 0) {
-            this.suggestedCustomer.push(res);
+          if (res) {
+            this.suggestedCustomer=res;
           } else {
             this.shownoresult=true;
             this.suggestedCustomer = [];

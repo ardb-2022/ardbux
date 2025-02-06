@@ -47,6 +47,7 @@ export class LoanaccountTransactionComponent implements OnInit {
   static constitutionList: mm_constitution[] = [];
   private static operations: mm_operation[] = [];
   @ViewChild('content', { static: true }) content: TemplateRef<any>;
+  @ViewChild('currentDemandNew', { static: true }) currentDemandNew: TemplateRef<any>;
   @ViewChild('contentbatch', { static: true }) contentbatch: TemplateRef<any>;
   @ViewChild('contentLoanRep', { static: true }) contentLoanRep: TemplateRef<any>;
   @ViewChild('contentLoanRepEMI', { static: true }) contentLoanRepEMI: TemplateRef<any>;
@@ -59,6 +60,7 @@ export class LoanaccountTransactionComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   cust_acc_type:any;
+  newCurrDemand:number=0;
   blocks: mm_block[] = [];
   selectedBlock:any[]=[];
   selectAllChecked:any
@@ -743,7 +745,9 @@ export class LoanaccountTransactionComponent implements OnInit {
         ////////debugger;
         acc = res;
         this.acc2=res;
-        this.GetCustomer();
+        if(this.acc2){
+          this.GetCustomer();
+        }
         this.CurrentDemand();
         console.log(res)
         if (undefined === acc || acc.tmloanall.loan_id == null) {
@@ -1469,10 +1473,9 @@ export class LoanaccountTransactionComponent implements OnInit {
           ////////debugger;
           acc = res;
           this.acc2 = res;
-          if(this.acc2.tdloansancsetlist.length>0){
-
+          if(this.acc2){
+            this.GetCustomer();
           }
-          this.GetCustomer();
           this.CurrentDemand();
           debugger
           this.fnd_typ=acc.tmloanall.fund_type=='N'?'Borrowed':'Owned';
@@ -2083,10 +2086,12 @@ export class LoanaccountTransactionComponent implements OnInit {
     // this.svc.addUpdDel<any>('Loan/CalculateLoanInterest', tmDep).subscribe(
       res => {
         console.log(res)
+        this.newCurrDemand=0;
         if (undefined !== res) {
           inttRet = res;
           this.inttRetForUpdate=res
-          console.log(inttRet)
+          console.log(inttRet?.curr_intt_recov,inttRet?.ovd_intt_recov,inttRet?.penal_intt_recov);
+          
           // this.tdDefTransFrm.patchValue({
           //   curr_prn_recov: inttRet.curr_prn_recov,
           //   curr_intt_recov: inttRet.curr_intt_recov,
@@ -2223,7 +2228,16 @@ export class LoanaccountTransactionComponent implements OnInit {
             this.accDtlsFrm.controls.total_due.setValue((+this.fd.intt_recev.value) + (+this.fd.principal.value))
             debugger
           }
-         
+          if(this.acc2.tmloanall?.emi_formula_no==2 && this.sys.ardbCD=='3'){
+            debugger
+            if(this.CurrentYearDemand.length>0){
+              console.log(this.CurrentYearDemand[0]?.curr_prn,this.CurrentYearDemand[0]?.ovd_prn);
+              this.newCurrDemand=((+inttRet?.curr_intt_recov)+(+inttRet?.ovd_intt_recov)+(+inttRet?.penal_intt_recov)+(+this.CurrentYearDemand[0]?.curr_prn)+(+this.CurrentYearDemand[0]?.ovd_prn))
+              this.modalRef = this.modalService.show(this.currentDemandNew, this.config);
+            }
+            console.log(this.CurrentYearDemand)
+            
+          }
           
         }
         }
@@ -2235,6 +2249,17 @@ export class LoanaccountTransactionComponent implements OnInit {
     );
     
   }
+  formatDateToDDMMYYYY(date) {
+    if (!(date instanceof Date)) {
+        throw new Error('Input must be a Date object');
+    }
+
+    const day = String(date.getDate()).padStart(2, '0'); // Get day with leading zero
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Get month (0-indexed, so +1) with leading zero
+    const year = date.getFullYear(); // Get full year
+
+    return `${day}/${month}/${year}`;
+}
   geteffectiveinttrt(): void {
     debugger;
     const tmDep = new p_loan_param();
@@ -2570,7 +2595,7 @@ debugger;
                    total_due: (+this.inttRetForUpdate.curr_intt_recov) + (+this.inttRetForUpdate.ovd_intt_recov) + (+this.inttRetForUpdate.penal_intt_recov) - this.td.curr_intt_recov.value - this.td.ovd_intt_recov.value - this.td.penal_intt_recov.value + +this.inttRetForUpdate.curr_prn_recov-(+this.td.curr_prn_recov.value) - (+this.td.adv_prn_recov.value) + this.inttRetForUpdate.ovd_prn_recov-(+this.td.ovd_prn_recov.value) ,
                  
                   })
-                  if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'|| this.sys.ardbCD=='25'){
+                  if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'|| this.sys.ardbCD=='25'|| this.sys.ardbCD=='26'){
                     this.modalRef = this.modalService.show(this.ContaiLoanChallan, { class: 'modal-xl' });
                   }
                   else{
@@ -2687,7 +2712,7 @@ debugger;
                     //   principal: this.fd.ovd_principal.value + this.fd.curr_principal.value
                     // })
                     debugger
-                    if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'|| this.sys.ardbCD=='25'){
+                    if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'|| this.sys.ardbCD=='25'|| this.sys.ardbCD=='26'){
                       this.modalRef = this.modalService.show(this.ContaiLoanChallan, { class: 'modal-xl' });
                     }
                     else{
@@ -2984,7 +3009,7 @@ debugger;
                 //   this.accDtlsFrm.controls.principal.setValue(((+this.fd.curr_principal.value)+(+this.fd.ovd_principal.value))-((+this.td.ovd_prn_recov.value)+(+this.td.adv_prn_recov.value)+(+this.td.curr_prn_recov.value)))
                 // }
                 debugger
-                if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'|| this.sys.ardbCD=='25'){
+                if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'|| this.sys.ardbCD=='25'|| this.sys.ardbCD=='26'){
                   this.modalRef = this.modalService.show(this.ContaiLoanChallan, { class: 'modal-xl' });
                 }
                 else{
@@ -3328,7 +3353,7 @@ debugger;
 
         this.accountTypeList = res;
         this.accountTypeList2 = res;
-        this.accountTypeList = this.accountTypeList.filter(c => c.dep_loan_flag === 'D');
+        this.accountTypeList = this.accountTypeList.filter(c => c.trans_way === 'B' && c.dep_loan_flag==='D');
         this.accountTypeList = this.accountTypeList.sort((a, b) => (a.acc_type_cd > b.acc_type_cd) ? 1 : -1);
       },
       err => {
@@ -3883,7 +3908,7 @@ debugger;
               this.partyName=this.suggestedCustomer1[0].cust_name;
               this.acc_block=this.selectedBlock[0].block_name;
               this.acc_phone=this.suggestedCustomer1[0].phone;
-              this.present_address=this.suggestedCustomer1[0].present_address;
+              this.present_address =this.sys.ardbCD=='26'? this.getFirst85Characters(this.suggestedCustomer1[0]?.present_address):this.suggestedCustomer1[0]?.present_address;
               this.member_id=this.suggestedCustomer1[0].old_cust_cd;
               this.m_id=this.member_id;
               this.pps=this.activityList.filter(e=>e.activity_cd==this.acc2.tmloanall.activity_cd)[0].activity_desc
@@ -3937,6 +3962,20 @@ debugger;
     return null
 
   }
+  getFirst85Characters(inputString) {
+    // Ensure the input is a string
+    if (typeof inputString !== 'string') {
+        throw new Error('Input must be a string');
+    }
+
+    // Check the length and truncate if necessary
+    if (inputString.length > 85) {
+        return inputString.slice(0, 85) + '...';
+    }
+
+    // Return the string as-is if it's 80 characters or shorter
+    return inputString;
+}
   getSubsidy() {
     let subsidyEntry = new tm_subsidy();
     subsidyEntry.brn_cd = this.sys.BranchCode;
@@ -3980,7 +4019,7 @@ debugger;
       return new Date(parseInt(parts[2]), parseInt(parts[1])-1, parseInt(parts[0]));
       }
     printChallan(){
-      if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'|| this.sys.ardbCD=='25'){
+      if(this.sys.ardbCD=='2' || this.sys.ardbCD=='3'|| this.sys.ardbCD=='17'|| this.sys.ardbCD=='25'|| this.sys.ardbCD=='26'){
         this.modalRef = this.modalService.show(this.ContaiLoanChallan, { class: 'modal-xl' });
       }
       else{

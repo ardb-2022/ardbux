@@ -49,7 +49,7 @@
               <select id="activity_cd" class="form-control form-control-sm" formControlName="activity_cd">
                 <option *ngIf="activityList" disabled>Choose</option>
                 <option *ngFor="let acti of activityList" [value]="acti.activity_desc">
-                  {{acti.activity_cd +' ' + acti.activity_desc}}
+                  {{ acti.activity_desc}} ({{acti.activity_cd}})
                 </option>
               </select>
            </div>
@@ -93,6 +93,14 @@
     <mat-label>Search Loan Statement</mat-label>
     <input matInput (keyup)="applyFilter($event)" placeholder="Ex. abc / 123">
   </mat-form-field> -->
+  <mat-form-field appearance="fill" *ngIf="sys.ardbCD=='4'">
+    <mat-label>Select sanctio date to be hide</mat-label>
+    <mat-select [formControl]="toppings" multiple>
+      <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <button  *ngIf="sys.ardbCD=='4'" mat-raised-button type="button"  class="btn btn-rounded btn-primary m-1" (click)="hideSactionDt()">Hide</button>
+
   <div class="mat-elevation-z8" id="mattable">
 <table mat-table cdkDropListGroup [dataSource]="dataSource" class="mat-elevation-z8" matSort>
   
@@ -166,12 +174,12 @@
        <table class="t2">
         <tr mat-cell >
           <td mat-cell style="width:33%;"><b> Purpose Wise Total: </b></td>
-          <td mat-cell style="width:5%"><b>{{sys.ardbCD=='25'?row.tot_sanc:row.tot_sanc/2}}</b></td>
-          <td mat-cell style="width:5%"><b>{{sys.ardbCD=='25'?row.tot_own_contribution:row.tot_own_contribution/2}}</b></td>
-          <td mat-cell style="width:16%;"></td>
-          <td mat-cell style="width:5%"><b>{{row.tot_disb}}</b></td>
-          <td mat-cell style="width:5%"><b>{{sys.ardbCD=='25'?row.tot_project:row.tot_project/2}}</b></td>
-          <td mat-cell style="width:34%;"></td>
+          <td mat-cell ><b>Total sanc amount: {{row.tot_sanc}}</b></td>
+          <td mat-cell ><b>Total own contribution: {{row.tot_own_contribution}}</b></td>
+         
+          <td mat-cell ><b>Total disbursement: {{row.tot_disb}}</b></td>
+          <td mat-cell ><b>Total project cost: {{row.tot_project}}</b></td>
+          <td mat-cell style="width:37%;"></td>
         </tr>
         <tr rowspan="5" colspan="7">
           <td colspan="2" style="padding-top: 5%;">

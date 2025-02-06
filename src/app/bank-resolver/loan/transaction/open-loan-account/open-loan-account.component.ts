@@ -50,6 +50,7 @@ export class OpenLoanAccountComponent implements OnInit {
   actDesc:any;
   SecaccNum:any;
   SecaccCD:any;
+  duedateSetting:boolean=false;
   branchCode = '0';
   createUser = '';
   updateUser = '';
@@ -785,7 +786,19 @@ removeSecurityDtlList()
   }
 
   public setActivityType(act: string, idx: number): void {
+    if(this.tm_loan_all.fund_type){
+      if(this.tm_loan_all.fund_type=='N'){
+        this.dueDateChange(act);
+      }
+      else{
+        this.duedateSetting=false;
+      }
+    }
+    else{
+      this.HandleMessage(true, MessageType.Error, 'Please Select The FundType !!!');
 
+    }
+    
     this.tm_loan_sanction_dtls[idx].activity_cd = act;
     this.tm_loan_sanction_dtls[idx].activity_desc =
       this.activityList.filter(x => x.activity_cd.toString() === 
@@ -867,7 +880,90 @@ removeSecurityDtlList()
     }
 
   }
+  dueDateChange(act){
+    var data = {
+      "ardb_cd": this.sys.ardbCD,
+      "activity_cd": act
+    }
+      var ret = 0;
+    this.isLoading=true;
+      this.svc.addUpdDel<any>('Loan/GetActivitywiseDetails', data).subscribe(
+        res => {
+          if(res.periodicity!=null){
+            const dueData=res;
+            this.duedateSetting=true;
+            this.tm_loan_all.instl_start_dt=dueData.due_dt;
+            this.tm_loan_all.piriodicity=dueData.periodicity;
+            this.tm_loan_all.instalmentTypeDesc = this.instalmentTypeList.filter(x => x.desc_type.toString() === dueData.periodicity)[0].ins_desc;
+            this.tm_loan_all.instl_no=dueData.instl_no;
+            this.tm_loan_sanction_dtls[0].due_dt=dueData.validity_dt;
+            this.isLoading=false;
 
+          }
+          else{
+            this.duedateSetting=true;
+            this.tm_loan_all.instl_start_dt=null;
+            this.tm_loan_all.piriodicity=null;
+            this.tm_loan_all.instalmentTypeDesc = null;
+            this.tm_loan_all.instl_no=null;
+            this.tm_loan_sanction_dtls[0].due_dt=null;
+            this.tm_loan_sanction_dtls[0].sector_cd=null;
+            this.tm_loan_sanction_dtls[0].activity_cd=null;
+            this.HandleMessage(true, MessageType.Sucess, 'No Master Data Found For This Activity, Please Contact to Support.... ');
+            this.isLoading=false;
+
+          }
+          console.log(res);
+          
+          // this.HandleMessage(true, MessageType.Sucess, 'Due date settings fatch Successfully');
+
+        },
+        err => {
+          this.duedateSetting=false;
+
+          // this.tm_loan_all.instl_start_dt=null;
+            // this.tm_loan_all.piriodicity=null;
+            // this.tm_loan_all.instalmentTypeDesc = null;
+            // this.tm_loan_all.instl_no=null;
+            // this.tm_loan_sanction_dtls[0].due_dt=null;
+            // this.tm_loan_sanction_dtls[0].sector_cd=null;
+            // this.tm_loan_sanction_dtls[0].activity_cd=null;
+          this.isLoading = false;
+          // this.HandleMessage(true, MessageType.Sucess, 'No Master Data Found For This Activity, Please Contact to Support.... ');
+
+        }
+      );
+  }
+  setFundType(event:any){
+    console.log(event);
+    
+    if(event=='N' && this.sys.ardbCD=='26'){
+      this.duedateSetting=true;
+      this.tm_loan_all.instl_start_dt=null;
+      this.tm_loan_all.piriodicity=null;
+      this.tm_loan_all.instalmentTypeDesc = null;
+      this.tm_loan_all.instl_no=null;
+      this.tm_loan_sanction_dtls[0].due_dt=null;
+      this.tm_loan_sanction_dtls[0].sector_cd=null;
+      this.tm_loan_sanction_dtls[0].activity_cd=null;
+      this.tm_loan_sanction_dtls[0].crop_cd=null;
+      this.tm_loan_sanction_dtls[0].sanc_amt=0;
+    }
+    else{
+      this.duedateSetting=false;
+    this.tm_loan_all.instl_start_dt=null;
+    this.tm_loan_all.piriodicity=null;
+    this.tm_loan_all.instalmentTypeDesc = null;
+    this.tm_loan_all.instl_no=null;
+    this.tm_loan_sanction_dtls[0].due_dt=null;
+    this.tm_loan_sanction_dtls[0].sector_cd=null;
+    this.tm_loan_sanction_dtls[0].activity_cd=null;
+    this.tm_loan_sanction_dtls[0].crop_cd=null;
+    this.tm_loan_sanction_dtls[0].sanc_amt=0;
+    }
+    
+    // this.isLoading=false;
+  }
   newAccount() {
 
     this.clearData();
@@ -1428,14 +1524,14 @@ removeSecurityDtlList()
   }
 
   setValidityDate(idx: number) {
-
-    const dt = this.sys.CurrentDate;
-    dt.setMonth(dt.getMonth() + 2);
-    dt.setDate(0);
-
-    // var dt= new Date( this.sys.CurrentDate.getFullYear() , this.sys.CurrentDate.getMonth() + 2 , 0);
-
-    this.masterModel.tmlaonsanctiondtls[idx].due_dt = dt;
+    if(this.tm_loan_all.fund_type=='O'){
+      const dt = this.sys.CurrentDate;
+      dt.setMonth(dt.getMonth() + 2);
+      dt.setDate(0);
+  
+      this.masterModel.tmlaonsanctiondtls[idx].due_dt = dt;
+    }
+    
   }
 
   checkAndSetOverdueInterest() {

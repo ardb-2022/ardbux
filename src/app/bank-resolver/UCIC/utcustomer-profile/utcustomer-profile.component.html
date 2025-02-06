@@ -652,7 +652,7 @@
       </div>
       <div class="col-6">
         <figure class="figure" *ngIf="PHOTO">
-          <img src="{{PHOTO.img_cont}}" class="figure-img img-fluid img-thumbnail rounded mx-auto d-block">
+          <img src="{{PHOTO?.img_cont}}" class="figure-img img-fluid img-thumbnail rounded mx-auto d-block">
           <figcaption class="figure-caption">Picture</figcaption>
         </figure>
         <div class="form-group">
@@ -664,7 +664,8 @@
       </div>
       <div class="col-6">
         <figure class="figure" *ngIf="SIGNATURE">
-          <img src="{{SIGNATURE.img_cont}}" class="figure-img img-fluid img-thumbnail rounded mx-auto d-block">
+          <!-- <img src="{{SIGNATURE}}" class="figure-img img-fluid img-thumbnail rounded mx-auto d-block"> -->
+          <img src="{{SIGNATURE?.img_cont}}" class="figure-img img-fluid img-thumbnail rounded mx-auto d-block">
           <figcaption class="figure-caption">Signature</figcaption>
         </figure>
         <div class="form-group">
@@ -677,7 +678,8 @@
       <hr>
       <div class="col-6">
         <figure class="figure" *ngIf="ADDRESS">
-          <img src="{{ADDRESS.img_cont}}" class="figure-img img-fluid img-thumbnail rounded mx-auto d-block">
+          <!-- <img src="{{ADDRESS}}" class="figure-img img-fluid img-thumbnail rounded mx-auto d-block"> -->
+          <img src="{{ADDRESS?.img_cont}}" class="figure-img img-fluid img-thumbnail rounded mx-auto d-block">
           <figcaption class="figure-caption">Photo ID</figcaption>
         </figure>
         <div class="form-group">
@@ -689,7 +691,8 @@
       </div>
       <div class="col-6">
         <figure class="figure" *ngIf="KYC">
-          <img src="{{KYC.img_cont}}" class="figure-img img-fluid img-thumbnail rounded mx-auto d-block">
+          <!-- <img src="{{KYC}}" class="figure-img img-fluid img-thumbnail rounded mx-auto d-block"> -->
+          <img src="{{KYC?.img_cont}}" class="figure-img img-fluid img-thumbnail rounded mx-auto d-block">
           <figcaption class="figure-caption">Address ID</figcaption>
         </figure>
         <div class="form-group">

@@ -1032,7 +1032,9 @@ export class AccOpeningComponent implements OnInit {
       this.tm_deposit.user_acc_num = null;
     }
 
-
+    if ((this.operationType != 'I') && (this.tm_deposit.acc_type_cd === 1 || this.tm_deposit.acc_type_cd === 8 )) {
+      this.tm_deposit.mat_dt = null;
+    }
 
     for (const l in this.tm_denominationList) {
 

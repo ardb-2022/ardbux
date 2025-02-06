@@ -95,6 +95,14 @@ font-size: 12px!important;
     border-top: 1px solid rgb(202, 199, 199);
     border-right: 1px solid rgb(202, 199, 199);
   }
+  .mat-column-service_area_name{
+    /* max-width: 90px!important; */
+    text-align: center;
+    padding-right: 3px;
+    padding-left: 3px;
+    border-top: 1px solid rgb(202, 199, 199);
+    border-right: 1px solid rgb(202, 199, 199);
+  }
   .mat-column-phone{
     /* max-width: 90px!important; */
     text-align: center;

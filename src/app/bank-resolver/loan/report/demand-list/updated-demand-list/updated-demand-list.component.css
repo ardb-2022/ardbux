@@ -47,6 +47,27 @@ table{
       border-top: 1px solid rgb(202, 199, 199);
       border-right: 1px solid rgb(202, 199, 199);
     }
+    .mat-column-guardian_name{
+      max-width: 170px!important;
+      text-align: left;
+      padding-right: 3px;
+      border-top: 1px solid rgb(202, 199, 199);
+      border-right: 1px solid rgb(202, 199, 199);
+    }
+    .mat-column-phone{
+      max-width: 170px!important;
+      text-align: left;
+      padding-right: 3px;
+      border-top: 1px solid rgb(202, 199, 199);
+      border-right: 1px solid rgb(202, 199, 199);
+    }
+    .mat-column-service_area_name{
+      max-width: 170px!important;
+      text-align: left;
+      padding-right: 3px;
+      border-top: 1px solid rgb(202, 199, 199);
+      border-right: 1px solid rgb(202, 199, 199);
+    }
     .mat-column-block_name{
       max-width: 100px!important;
       text-align: center;

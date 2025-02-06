@@ -35,7 +35,6 @@ export class DemandNoticeContaiComponent implements OnInit {
   isOpenFromDp = false;
   isOpenToDp = false;
   systemParam: sm_parameter[] = [];
-
   sys = new SystemValues();
   config = {
     keyboard: false, // ensure esc press doesnt close the modal
@@ -117,6 +116,7 @@ export class DemandNoticeContaiComponent implements OnInit {
   villages1:any[]=[];
   allServiceArea:any[]=[];
   lastDate:any
+  allServiceArea2:any;
   filteredOptions: Observable<string[]>;
   constructor(private svc: RestService, private formBuilder: FormBuilder,private exportAsService: ExportAsService, private cd: ChangeDetectorRef,
     private modalService: BsModalService, private _domSanitizer: DomSanitizer, private rstSvc:RestService, private datePipe:DatePipe,
@@ -159,7 +159,8 @@ export class DemandNoticeContaiComponent implements OnInit {
       acc_cd: [null, Validators.required],
       fromDate: [null, Validators.required],
       toDate: [null, Validators.required],
-      block: [null, Validators.required]
+      block: [null, Validators.required],
+      service_area_name:[null]
     });
     this.onLoadScreen(this.content);
     var date = new Date();
@@ -263,6 +264,11 @@ export class DemandNoticeContaiComponent implements OnInit {
     }
     )
   
+  }
+  getServiceArea(){
+    this.allServiceArea2=this.allServiceArea.filter(e=>e.block_cd==this.reportcriteria.controls.block.value)
+    console.log(this.allServiceArea2);
+    
   }
   cancelOnNull() {
     this.suggestedCustomer = null;
@@ -401,6 +407,9 @@ export class DemandNoticeContaiComponent implements OnInit {
       // this.svc.addUpdDel('Loan/GetDemandList',dt).subscribe(data=>{console.log(data)
         this.svc.addUpdDel('Loan/GetDemandNoticeBlockwise',dt).subscribe(data=>{console.log(data)
         this.reportData=data;
+        const selectedGP=this.reportcriteria.controls.service_area_name.value
+        this.reportData = this.reportData.filter(item => item.cust_address.includes(selectedGP));
+        // this.reportData=this.reportData.;
         // this.reportData.forEach(p => {
           // p.ardb_cd=this.villages.filter(e=>e.vill_cd==p.ardb_cd)[0]?.vill_name;
           // if(this.sys.ardbCD=="26"){
@@ -464,13 +473,38 @@ export class DemandNoticeContaiComponent implements OnInit {
     this.router.navigate([this.sys.BankName + '/la']);
   }
   applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    // const filterValue = (event.target as HTMLInputElement).value;
+    // this.dataSource.filter = filterValue.trim().toLowerCase();
 
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
+    // if (this.dataSource.paginator) {
+    //   this.dataSource.paginator.firstPage();
+    // }
+    if((event.target as HTMLInputElement).value){
+      debugger
+      const filterValue = (event.target as HTMLInputElement).value;
+      const filterInput = filterValue.trim().toLowerCase();
+      const searchTerms = filterInput.split(" ").filter(term => term); // Split into words
+    console.log(searchTerms);
+    debugger
+      const filteredData = this.reportData.filter(item => {
+        const address = item.cust_address?.toLowerCase();
+        const loan_id = item.loan_id;
+        return searchTerms.every(term => address?.includes(term) || loan_id?.includes(term)); // Check all terms
+      });
+    console.log(filteredData);
+    debugger
+      this.dataSource.data=filteredData; // Repopulate table with filtered data
+      if (this.dataSource.paginator) {
+        this.dataSource.paginator.firstPage();
+      }
     }
+    else{
+      this.dataSource.data=this.reportData
+    }
+    
   }
+  
+  
 }
 
 

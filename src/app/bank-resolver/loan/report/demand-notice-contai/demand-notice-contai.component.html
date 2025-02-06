@@ -28,12 +28,21 @@
             </div>
             <div class="col-12">
               <small for="block">Block</small>
-             <select id="block" class="form-control form-control-sm" formControlName="block">
+             <select id="block" class="form-control form-control-sm" formControlName="block" (change)="getServiceArea()">
                <option *ngIf="blocks" disabled>Choose</option>
                <option  *ngFor="let block of blocks" [value]="block.block_cd">
                  {{block.block_cd +' ' + block.block_name}}
                </option>
                <option  value="0">ALl Blocks</option>
+             </select>
+            </div>
+            <div class="col-12">
+              <small for="service_area_name">Service Area</small>
+             <select id="service_area_name"  class="form-control form-control-sm" formControlName="service_area_name">
+               <option *ngIf="blocks" disabled>Choose</option>
+               <option  *ngFor="let block of allServiceArea2" [value]="block.service_area_name">
+                 {{block.service_area_name}}
+               </option>
              </select>
             </div>
             <!-- <div class="col-4">
@@ -107,7 +116,7 @@
       <div class="col-xs-12 col-sm-12 shadow-lg mb-4 bg-white p-3 mkScroll">
         <mat-form-field appearance="outline" >
           <mat-label>Search....</mat-label>
-          <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Abc/123" #input>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Loan ID & Village" #input>
         </mat-form-field>
         
         <div id="mattable">

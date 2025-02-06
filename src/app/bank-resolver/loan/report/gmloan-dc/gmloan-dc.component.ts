@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -89,6 +89,8 @@ export class GMloanDCComponent implements OnInit {
   LandingCall:boolean;
   filterData:any[]=[];
   ardbcd:any;
+  toppings = new FormControl(['']);
+  toppingList: string[] = [];
   constructor(private comser:CommonServiceService, private svc: RestService, private formBuilder: FormBuilder,private exportAsService: ExportAsService, private cd: ChangeDetectorRef,private modalService: BsModalService, private _domSanitizer: DomSanitizer,private router: Router) { }
   ngOnInit(): void {
     this.ardbcd=this.sys.ardbCD
@@ -128,7 +130,7 @@ export class GMloanDCComponent implements OnInit {
       res => {
 
         this.activityList = res;
-        this.activityList = this.activityList.sort((a, b) => (a.activity_cd > b.activity_cd) ? 1 : -1);
+        this.activityList = this.activityList.sort((a, b) => (a.activity_desc > b.activity_desc) ? 1 : -1);
         debugger
       },
       err => {
@@ -191,7 +193,7 @@ export class GMloanDCComponent implements OnInit {
                 for(let k=0;k<this.reportData[i].dclist[j].dc_statement.length;k++){
                     this.totDisAmt+=this.reportData[i].dclist[j].dc_statement[k].disb_amt;
                     this.reportData[i].dclist[j].dc_statement[0].lso_no=this.totDisAmt;
-                    
+                    this.toppingList.push(this.reportData[i].dclist[j].dc_statement[0].sanction_dt.substr(0,10))
                 }
               }
               if(this.reportcriteria.controls.sex.value=='M')
@@ -206,7 +208,7 @@ export class GMloanDCComponent implements OnInit {
         this.isLoading=false
         this.dataSource.data=this.reportData
         console.log(this.dataSource.data);
-        
+        this.toppingList = this.getUniqueArray(this.toppingList);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
        
@@ -216,6 +218,27 @@ export class GMloanDCComponent implements OnInit {
          this.comser.SnackBar_Error(); 
         }
       
+  }
+  getUniqueArray(array: string[]): string[] {
+    return array.filter((value, index, self) => self.indexOf(value) === index);
+  }
+  hideSactionDt(){
+    this.reportData=this.filterDcStatements(this.reportData,this.toppings.value)
+    this.dataSource.data=this.reportData;
+  }
+  filterDcStatements(data: any[], datesToRemove: string[]): any[] {
+    debugger
+    return data.map(activity => ({
+      ...activity,
+      dclist: activity.dclist
+        .map(dcItem => ({
+          ...dcItem,
+          dc_statement: dcItem.dc_statement.filter(
+            statement => !datesToRemove.includes(statement.sanction_dt.split(' ')[0])
+          )
+        }))
+        .filter(dcItem => dcItem.dc_statement.length > 0)
+    })).filter(activity => activity.dclist.length > 0);
   }
   public oniframeLoad(): void {
     this.counter++;

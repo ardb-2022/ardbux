@@ -9,6 +9,14 @@
   <!-- <img src="./assets/images/cfsgreen.png"  class="log4"> -->
   <!-- <img src="./assets/images/bgCus1.jpg" > -->
   <marquee behavior="scroll" direction="left" scrollamount="12"><h1 >{{ marqueeText }}</h1></marquee>
+  <a [ngStyle]="{'background-color': 'rgb(214, 3, 3)', 
+  'font-size': 'x-large', 
+  'color': backgroundColor, 
+  'text-align': 'center', 
+  'font-weight': '500',
+  'cursor': 'pointer'}" (click)="gov_rep()">
+WBSCARDB NOTICE: Click to show the report for dormant accounts 
+</a>
   <!-- <h1 [style.color]="randomNumberColor"> -->
   <div class="row" style="margin:10px;">
     <div class="col-12">

@@ -64,7 +64,7 @@ export class LoginComponent implements OnInit {
      }
 
   ngOnInit(): void {
-   this.getMyIp();
+  //  this.getMyIp();
     this.wrongAttamt=localStorage.getItem('W_attempt')
     this.encriptPass();
     localStorage.removeItem('ardb_name');
@@ -174,16 +174,6 @@ export class LoginComponent implements OnInit {
     else if(this.f.ardbbrMst.value=='100'){
       this.ARBD="2";
     }
-    else if(this.f.ardbbrMst.value=='200' || this.f.ardbbrMst.value=='300' ||
-     this.f.ardbbrMst.value=='301'|| this.f.ardbbrMst.value=='302'||
-     this.f.ardbbrMst.value=='303'||this.f.ardbbrMst.value=='304'||
-     this.f.ardbbrMst.value=='305'||this.f.ardbbrMst.value=='306'||
-     this.f.ardbbrMst.value=='307'||this.f.ardbbrMst.value=='308'){
-      this.ARBD="3";
-    }
-    // else if(this.f.ardbbrMst.value=='401'||this.f.ardbbrMst.value=='402'|| this.f.ardbbrMst.value=='400'){
-    //   this.ARBD="1";
-    // }
     else if(this.f.ardbbrMst.value=='403'||this.f.ardbbrMst.value=='404' ||this.f.ardbbrMst.value=='405'){
       this.ARBD="11";
     }
@@ -335,21 +325,20 @@ export class LoginComponent implements OnInit {
               this.showAlert = true;
               this.isLoading=false;
               this.alertMsg = 'User id already logged in another machine;';
-              // this.showUnlockUsr = true;
-              // alert(this.showUnlockUsr)
+            
               this.usrToUnlock = res[0];
               return;
             }
             else {
               // this.isLoading=true;
               var dt = this.brnDtls.find(x => x.brn_cd == this.f.branch.value)
-              // this.getPrivateIP()
+             console.log(dt);
+             
               this.getBranchIp(dt).then(response => {
 
                 if (response == true) {
                   res[0].login_status = 'Y';
                   res[0].ip = localStorage.getItem('ipAddress');
-                  // this.updateUsrStatus(res[0]);
                   this.getSystemParam();
 
                 }
@@ -357,7 +346,6 @@ export class LoginComponent implements OnInit {
                 else {
 
                 }
-                //  this.isLoading=false;
               })
             }
           }
@@ -424,14 +412,12 @@ export class LoginComponent implements OnInit {
           // //console.log(this.systemParam.find(x => x.param_cd === '206').param_value)
 
           this.router.navigate([__bName + '/la']);
-          // this.http.get<{ ip: string }>(this.apiUrl).subscribe(
-          //   data => {
-          //     debugger
-          //     const getIP =  data.ip.split(",");
-          //    localStorage.setItem('ipAddress', getIP[0]);
-
-
-          //   })
+          this.http.get<{ ip: string }>(this.apiUrl).subscribe(
+            data => {
+              debugger
+              const getIP =  data.ip;
+             localStorage.setItem('ipAddress', getIP);
+            })
             this.SBaccCD=RestService.bankconfigurationList.filter(e=>e.bank_name==__bName)[0].sms_provider
             localStorage.setItem('sbAccType', this.SBaccCD);
 
@@ -519,16 +505,6 @@ export class LoginComponent implements OnInit {
   }
 
   private GetARDBMaster() {
-    // this.isLoading = true;
-    // this.rstSvc.addUpdDel('Mst/GetARDBMaster', null).subscribe(
-    //   res => {
-    //     //console.log(res)
-    //     this.ardbBrnMst = res;
-    //   },
-    //   err => {
-    //     // this.isLoading = false;
-    //   }
-    // );
     this.rstSvc.getlbr(environment.ardbUrl,null).subscribe(data=>{
       // //console.log(data
       if(data){
@@ -536,7 +512,6 @@ export class LoginComponent implements OnInit {
         this.ardbBrnMst = data;
       }
 
-      // this.menuConfigs=data;
     })
   }
   onfocusOut(e: any) {
@@ -585,21 +560,16 @@ export class LoginComponent implements OnInit {
       this.isLoading=false;
     })
   }
-  getMyIp(){
-    fetch('https://jsonip.com', { mode: 'cors'} ) .then(function (resp) {
-      return resp.json();
-    }) .then((ip) => { console.log(ip); });
-  }
+  
   public getBranchIp(e: any) {
     this.loginForm.disable();
     return new Promise((resolve, reject) =>
      {
-      // this.http.get<{ ip: string }>(this.apiUrl).subscribe(
-      //   data => {
-          fetch('https://jsonip.com', { mode: 'cors'} ) .then(function (resp) {
-            return resp.json();
-          }) .then((ip) => {
-            this.ipAddress = ip.ip;
+      fetch("https://ipinfo.io/json?token=033f76199faab6").then(
+            (response) => response.json()
+          ).then(
+            (data) => {
+            this.ipAddress = data.ip;
             debugger
           // console.log(data)
 
@@ -610,7 +580,7 @@ export class LoginComponent implements OnInit {
 
           // this.loginForm.enable();
           // resolve(true);
-``
+
           let ipMatched = false;
           if (e.ip_address.indexOf(myIP[0]) !== -1) {
              ipMatched = true;
@@ -625,82 +595,12 @@ export class LoginComponent implements OnInit {
             this.loginForm.enable();
             resolve(true);
           }
-            console.log(ip);
           });
-          ////console.
-
-      //   },
-      //   ipErr => {
-      //     this.isLoading = false;
-      //     this.alertMsg = 'Unable to get IP, contact support.';
-      //     resolve(false);
-      //   }
-      // );
-
+        
      }
     )
 
   }
 
-//   getPrivateIP(){
-//   //   this.rstSvc.addUpdDel('Loan/GetHostName1',null).subscribe(data => {
-//   //     //console.log(data)
-//   // })
-//   this.http.get('http://localhost/api.php').subscribe(data=>//console.log(data))
-// }
-//   getPrivateIP(){
-//     var RTCPeerConnection = window.RTCPeerConnection ;
-//     if (RTCPeerConnection)(function() {
-//         var rtc = new RTCPeerConnection({
-//             iceServers: []
-//         });
-//         if (1 || window.RTCPeerConnection) {
-//             rtc.createDataChannel('', {
-//                 // reliable: false
-//             });
-//         };
-//         rtc.onicecandidate = function(evt) {
-//             if (evt.candidate) grepSDP("a=" + evt.candidate.candidate);
-//         };
-//         rtc.createOffer(function(offerDesc) {
-//             grepSDP(offerDesc.sdp);
-//             rtc.setLocalDescription(offerDesc);
-//         }, function(e) {
-//             console.warn("offer failed", e);
-//         });
-//         var addrs = Object.create(null);
-//         addrs["0.0.0.0"] = false;
 
-//         function updateDisplay(newAddr) {
-//             if (newAddr in addrs) return;
-//             else addrs[newAddr] = true;
-//             var displayAddrs = Object.keys(addrs).filter(function(k) {
-//                 return addrs[k];
-//             });
-//             // document.getElementById('list').textContent = displayAddrs.join(" or perhaps ") || "n/a";
-//             //console.log(displayAddrs)
-//            ;
-//         }
-
-//         function grepSDP(sdp) {
-//             var hosts = [];
-//             sdp.split('\r\n').forEach(function(line) {
-//                 if (~line.indexOf("a=candidate")) {
-//                     var parts = line.split(' '),
-//                         addr = parts[4],
-//                         type = parts[7];
-//                     if (type === 'host') updateDisplay(addr);
-//                 } else if (~line.indexOf("c=")) {
-//                     var parts = line.split(' '),
-//                         addr = parts[2];
-//                     updateDisplay(addr);
-//                 }
-//             });
-//         }
-//     })();
-//     else {
-//         document.getElementById('list').innerHTML = "<code>ifconfig| grep inet | grep -v inet6 | cut -d\" \" -f2 | tail -n1</code>";
-//         document.getElementById('list').nextSibling.textContent = "In Chrome and Firefox your IP should display automatically, by the power of WebRTCskull.";
-//   }
-// }
 }

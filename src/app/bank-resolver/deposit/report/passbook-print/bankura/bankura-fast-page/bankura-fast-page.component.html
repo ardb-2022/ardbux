@@ -3,24 +3,19 @@
   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 shadow-sm mb-4 bg-white p-3" style="text-align: center;">
     <p>Click print button for print passbook fastpage</p>
     <button mat-raised-button class="btn btn-primary"  
-    printSectionId="fastPage" ngxPrint >Print FastPage</button> &nbsp;
+    printSectionId="fastPage" ngxPrint [useExistingCss]="true">Print FastPage</button> &nbsp;
   </div>
-
-<div id="fastPage" style="font-family:Arial, Helvetica, ui-sans-serif;font-size:16px;" >
-    <div style="margin-top: 51%; " >&nbsp;</div>
+<!-- 
+<div id="fastPage" style="font-family:Arial, Helvetica, ui-sans-serif;font-size:14px;" >
+    <div style="margin-top: 50%; " >&nbsp;</div>
     <div class="form-row" style="margin-left: 3%;">
-      <div ><b>A/C No:  </b>{{suggestedCustomer[0].acc_num}}</div>     
+      <div class="form-group col-6"><b>A/C No:  </b>{{suggestedCustomer[0].acc_num}}</div>     
+      <div class="form-group col-6"><b>CIF:  </b>{{masterModel.tmdeposit.cust_cd}}</div>     
     </div>
-      <div class="form-row" style="margin-left: 3%;padding-top: 5px;">
-        <div ><b>CIF:  </b>{{masterModel.tmdeposit.cust_cd}}</div>
-     </div>
      <div class="form-row" style="margin-left: 3%;padding-top: 5px;" >
-        <div ><b>Name:  </b>{{suggestedCustomer[0].cust_name}}</div>
-          
-      </div>
-      <div class="form-row" style="margin-left: 3%;padding-top: 5px;" >
-        <div ><b>Branch:  </b> {{branchName}}</div>
-      </div>
+      <div class="form-group col-6"><b>Name:  </b>{{suggestedCustomer[0].cust_name}}</div>
+      <div class="form-group col-6"><b>Branch:  </b> {{branchName}}</div>
+    </div>
       <div class="form-row" style="margin-left: 3%;padding-top: 5px;" >
       <div><b>Guardian Name:  </b>{{suggestedCustomer[0].guardian_name}} </div>
     </div>
@@ -30,7 +25,7 @@
     <div class="form-row"style="margin-left: 3%;padding-top: 5px;"> 
       <div><b>Address:  </b>{{suggestedCustomer[0].present_address}}</div>
     </div>
-    <div style="border:1px solid grey; padding: 10px;">
+    <div>
         <div class="form-row" style="padding-left: 3%;">
             <div style="width: 90%;"><b>Occupation:  </b>{{custDtls.occupation}} </div>
         </div>
@@ -45,8 +40,45 @@
           <div style="text-align: right;width: 100%;"><b>Branch Manager / Authorised Signatory</b></div>
         </div>
     </div>
-  </div>
- 
+  </div> -->
  
 
+  <div id="fastPage" style="font-family:Arial, Helvetica, ui-sans-serif;font-size:18px;" hidden>
+    <div style="margin-top: 50%; ">&nbsp;</div>
+    
+    <div class="form-row" style="padding-left: 10%;">
+        <div style="width: 30%;"><b>A/C No:  </b>{{suggestedCustomer[0].acc_num}}</div>
+        <div style="text-align: right;width: 30%;"><b>Branch:  </b> {{branchName}}</div>
+        <div style="text-align: right;width: 30%;"><b>CIF:  </b>{{custCD}}</div>
+    </div>
+      <div class="form-row" style="padding-left: 10%;padding-top: 5px;">
+          <div style="width: 60%;"><b>Name:  </b>{{this.custDtls?.cust_name}}</div>
+          <div style="width: 30%;text-align: right;"><b>Phone No:  </b>{{custDtls?.phone?custDtls.phone:'N/A'}}</div>
+     </div>
+     <div class="form-row" style="padding-left: 10%;padding-top: 5px;">
+      <div style="width: 50%;"><b>Mode of Operation:</b>{{oprn_instr_desc?oprn_instr_desc:'N/A'}}</div>
+      <div style="width: 40%;text-align: right;"><b>Occupation:  </b>{{custDtls?.occupation?custDtls.occupation:'N/A'}} </div>
+     </div>
+     <div class="form-row" style="padding-left: 10%;padding-top: 5px;" >
+      <div><b>Joint Holder's Name:  </b> {{joinHold?joinHold:'N/A'}}</div>
+    </div>
+      <div class="form-row" style="padding-left: 10%;padding-top: 5px;" >
+      <div><b>Guardian Name:  </b>{{custDtls?.guardian_name?custDtls.guardian_name:'N/A'}}</div>
+    </div>
+    
+    <div class="form-row"style="padding-left: 10%;padding-top: 5px;"> 
+      <div><b>Address:  </b>{{this.custDtls?.present_address}}</div>
+    </div>
+    
+    
+    <div class="form-row" style="padding-left: 10%;padding-top: 5px;">
+      <div style="width: 40%;"><b>Issue Date:  </b>{{curDay}}</div>
+      <div style="width: 50%;text-align: right;"><b>Branch Manager / Authorised Signatory</b></div>
+    </div>
+    
+   
+    </div>
+ 
+ 
+  
 

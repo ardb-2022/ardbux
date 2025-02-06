@@ -126,7 +126,7 @@ export class ConsoLoanDCComponent {
       res => {
 
         this.activityList = res;
-        this.activityList = this.activityList.sort((a, b) => (a.activity_cd > b.activity_cd) ? 1 : -1);
+        this.activityList = this.activityList.sort((a, b) => (a.activity_desc > b.activity_desc) ? 1 : -1);
         debugger
       },
       err => {

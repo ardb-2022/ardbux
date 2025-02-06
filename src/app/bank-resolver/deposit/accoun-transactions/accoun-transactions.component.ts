@@ -44,6 +44,7 @@ export class AccounTransactionsComponent implements OnInit {
   @ViewChild('saveBtn', { static: true }) saveBtn: ElementRef;
   @ViewChild('unappconfirm', { static: true }) unappconfirm: TemplateRef<any>;
   @ViewChild('getalltrans', { static: true }) getalltrans: TemplateRef<any>;
+  @ViewChild('HWHsbClose', { static: true }) HWHsbClose: TemplateRef<any>;
   @ViewChild('preClose', { static: true }) preClose: TemplateRef<any>;
   @ViewChild('preClose', { static: true }) preCloseMIS: TemplateRef<any>;
   @ViewChild('preCloseDbs', { static: true }) preCloseDbs: TemplateRef<any>;
@@ -69,6 +70,7 @@ export class AccounTransactionsComponent implements OnInit {
   matInt: any;
   Formatamount:any;
   selOprn2:any;
+  sbCloseInterestHWH=0;
   sys = new SystemValues();
   accTransFrm: FormGroup;
   tdDefTransFrm: FormGroup;
@@ -626,17 +628,31 @@ debugger
     prm.ad_acc_type_cd = this.f.acc_type_cd.value;
     debugger
     this.isLoading=true;
+    this.sbCloseInterestHWH=0;
     const data = await this.svc.addUpdDel<any>('Deposit/F_CALC_SB_INTT', prm).toPromise()
     debugger
     if(data>=0){
       debugger
+      this.sbCloseInterestHWH=(+data)
       this.isLoading=false;
         this.showCloseInterest = this.f.acc_type_cd.value==1 || this.f.acc_type_cd.value==8 ? true : false;
-  
+      if(this.sys.ardbCD=="23"){
+        this.modalRef = this.modalService.show(this.HWHsbClose,
+          { class: 'modal-sm', keyboard: false, backdrop: true, ignoreBackdropClick: false })
+      
+        this.tdDefTransFrm.patchValue({
+          closeIntrest:0,
+          amount: this.accNoEnteredForTransaction.curr_bal ,
+          td_def_mat_amt:this.accNoEnteredForTransaction.curr_bal ,
+          paid_to: 'SELF',
+          particulars: 'To Closing',
+        });
+        this.tdDefTransFrm.controls.closeIntrest.disable()
+      }
+      else{
         this.tdDefTransFrm.patchValue({
           closeIntrest:this.sys.ardbCD=='4'&& this.f.acc_type_cd.value==8? 0:(+data),
         });
-  
         if(this.sys.ardbCD!='20'&&this.sys.ardbCD!='4'&&this.sys.ardbCD!='2'){
           this.td.closeIntrest.value
           debugger
@@ -657,6 +673,10 @@ debugger
           })
           
         }
+      }
+        
+  
+        
       }
     
     
@@ -4378,9 +4398,11 @@ debugger
         tmDep.acc_type_cd = accTypeCd;
         tmDep.brn_cd = this.sys.BranchCode;
         tmDep.acc_num = this.f.acct_num.value;
+        this.isLoading=true;
         this.svc.addUpdDel<any>('Deposit/GetShadowBalance', tmDep).subscribe(
           res => {
             if (undefined !== res && null !== res && !isNaN(+res)) {
+              this.isLoading = false;
               shadowBalance = res;
               if (shadowBalance - (+this.td.amount.value) < 0) {
                 this.HandleMessage(true, MessageType.Error, 'Amount can not be withdrawn more than balanace amount in Account.');
@@ -4440,7 +4462,7 @@ debugger
           },
           err => {
             this.isLoading = false; console.log(err);
-            this.HandleMessage(true, MessageType.Error, 'Balance in account can not be determined, Try again later.');
+            this.HandleMessage(true, MessageType.Warning, 'Account shadow balance can not be determined');
           }
         );
       } else {
@@ -5343,7 +5365,7 @@ debugger
         console.log(toReturn)
         toReturn.curr_prn_recov = accTypeCd === 5 ? this.td.td_def_mat_amt.value: ((+this.td.amount.value) + (+this.td.interest.value));
         toReturn.ovd_prn_recov = accTypeCd === 5 ? this.accNoEnteredForTransaction.prn_amt : this.accNoEnteredForTransaction.prn_amt;
-        toReturn.curr_intt_recov = accTypeCd === 5 ? (this.afterMatRenewal? +this.misSum+this.matInt:this.misSum): this.accNoEnteredForTransaction.intt_amt;
+        toReturn.curr_intt_recov = accTypeCd === 5 ? (this.matInt>0? +this.misSum+this.matInt:this.misSum): this.accNoEnteredForTransaction.intt_amt;
         toReturn.ovd_intt_recov = 0;
         if(accTypeCd==2 && this.accDtlsFrm.controls.intt_trf_type.value.toLowerCase()=='on maturity'){
           console.log(this.accDtlsFrm.controls.intt_trf_type.value.toLowerCase())

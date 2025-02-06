@@ -123,6 +123,7 @@ export class PassBookPrintingComponent implements OnInit {
     this.printDataGhatal=[];
     this.afterPrint=[];
     this.modalRef = this.modalService.show(content, this.config);
+    this.shoFastPage=false;
   }
   FastpageScreen() {
     this.shoFastPage=true;

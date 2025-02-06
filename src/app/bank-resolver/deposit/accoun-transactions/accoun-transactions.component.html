@@ -1182,6 +1182,19 @@
     
   </div>
 </ng-template>
+<ng-template #HWHsbClose>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left"><span style="color: rgb(6, 129, 2); font-size: large;font-weight: 600;">{{sbCloseInterestHWH}} </span>, Interest occured for account {{this.accNoEnteredForTransaction.acc_num}}. </h4>
+    
+    <!-- <button mat-raised-button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button> -->
+  </div>
+  <div class="modal-body">
+    <button mat-raised-button type="button" class="btn btn-primary float-right" (click)="this.modalRef.hide()">close</button> 
+    
+  </div>
+</ng-template>
 <ng-template #Delconfirm >
   <div class="modal-body text-center" >
     <p>'Are you sure you want to <b style="color: red;">Delete</b> Transaction of Acc {{this.accNoEnteredForTransaction.acc_num}}

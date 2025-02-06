@@ -109,7 +109,7 @@
     style="background-color: #78c2ad21; min-height: 20vh;">
     <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 shadow-sm mb-4 bg-white p-3">
       <div>
-            <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="closeScreen()">Close</button>
+            <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="closeScreen()">Back</button>
             <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" [useExistingCss]="true"
             printSectionId="{{printID}}" ngxPrint (click)="printCall()">Print</button>
             <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
@@ -236,7 +236,7 @@
         <table  class="mkSmallBK" *ngIf="sys.ardbCD=='22'" >
           <tbody *ngFor="let i of printData; let itr=index;">
             <tr *ngIf="i.trans_type==null">
-             <td style="margin-top: 24px;">&nbsp;</td>
+             <td style="margin-top: 28px;">&nbsp;</td>
             </tr>
             <tr *ngIf="i.trans_type!==null">
               <td style="width:16%;">{{i.trans_dt==null?'':i.trans_dt.substr(0,10)}}</td>
@@ -265,7 +265,7 @@
   
     <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 shadow-sm mb-4 bg-white p-3">
       <div>
-        <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="closeScreen()">Close</button>
+        <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="closeScreen()">Back</button>
         <button #print mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" [useExistingCss]="true"
         printSectionId="{{printID}}" ngxPrint (click)="printCall()">Print</button>
    <button mat-raised-button type="button" class="btn btn-rounded btn-primary m-1" (click)="onLoadScreen(content)">Retrieve</button>
