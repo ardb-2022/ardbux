@@ -209,7 +209,7 @@
       </ng-container>
     <ng-container matColumnDef="fund_type"  style="text-align:center;">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Fund Type </th>
-        <td mat-cell *matCellDef="let row">{{row.fund_type=='N'?'Borrowed Fund':row.fund_type=='O'?'Deposit Scheme Fund':''}}</td>
+        <td mat-cell *matCellDef="let row">{{row.fund_type}}</td>
       </ng-container>
       <ng-container matColumnDef="acc_desc"  style="text-align:center;">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Loan Type </th>

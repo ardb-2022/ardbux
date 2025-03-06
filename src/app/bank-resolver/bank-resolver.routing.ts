@@ -237,6 +237,9 @@ import { GovRepComponent } from './finance/report/GOV_Rep/gov_rep.component';
 import { ActivityDetailMasterComponent } from './loan/masters/activity-detail-master/activity-detail-master.component';
 import { HowrahComponent } from './deposit/report/passbook-print/howrah/howrah.component';
 import { HowrahFastPageComponent } from './deposit/report/passbook-print/howrah/howrah-fast-page/howrah-fast-page.component';
+import { BorrowerInsuranceReportComponent } from './loan/report/borrower-insurance_report/borrower-insurance_report.component';
+import { DcNonfarmComponent } from './loan/report/dc-nonfarm/dc-nonfarm.component';
+import { ConsoLoanDCNonfarmComponent } from './loan/report/conso-loan-dc-nonfarm/conso-loan-dc-nonfarm.component';
 
 const routes: Routes = [
   { path: 'Admin', component: AdminPanelComponent },
@@ -376,6 +379,8 @@ const routes: Routes = [
       { path: 'LR_GM_Int_Subsidy', component: GmLoanSubsidyComponent, canActivate: [AuthGuard] },
       { path: 'LR_Disb_Cert', component: LoanDisbCertificateComponent, canActivate: [AuthGuard] },
       { path: 'LR_GM_DC', component: GMloanDCComponent, canActivate: [AuthGuard] },
+      { path: 'LR_NONFARM_DC', component: DcNonfarmComponent, canActivate: [AuthGuard] },
+      { path: 'LR_CONSO_NONFARM_DC', component: ConsoLoanDCNonfarmComponent, canActivate: [AuthGuard] },
       { path: 'LR_Conso_DC', component: ConsoLoanDCComponent, canActivate: [AuthGuard] },
       { path: 'LR_SHG_Conso_DC', component: ConsoLoanDcSHGComponent, canActivate: [AuthGuard] },
       { path: 'LR_RH_Conso_DC', component: ConsoLoanDcRHComponent, canActivate: [AuthGuard] },
@@ -403,6 +408,7 @@ const routes: Routes = [
       { path: 'LR_RecInterest', component: RecovInterestComponent, canActivate: [AuthGuard] },
       { path: 'LR_openClose', component: OpenCloseregComponent, canActivate: [AuthGuard] },
       { path: 'LR_SubCashBk', component: LoanSubCashBookComponent, canActivate: [AuthGuard] },
+      { path: 'LR_BORRO_INS_REP', component: BorrowerInsuranceReportComponent, canActivate: [AuthGuard] },
       { path: 'LR_Int_Subsidy_SHG', component: InterestSubsidySHGComponent, canActivate: [AuthGuard] },
       { path: 'DT_OpenAccView', component: AccOpeningViewComponent, canActivate: [AuthGuard] },
       { path: 'DT_NEFTPayment', component: NeftOutwardComponent, canActivate: [AuthGuard] },

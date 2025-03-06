@@ -787,7 +787,7 @@ removeSecurityDtlList()
 
   public setActivityType(act: string, idx: number): void {
     if(this.tm_loan_all.fund_type){
-      if(this.tm_loan_all.fund_type=='N'){
+      if(this.tm_loan_all.fund_type=='N' && this.sys.ardbCD=="26"){
         this.dueDateChange(act);
       }
       else{
@@ -889,31 +889,36 @@ removeSecurityDtlList()
     this.isLoading=true;
       this.svc.addUpdDel<any>('Loan/GetActivitywiseDetails', data).subscribe(
         res => {
-          if(res.periodicity!=null){
-            const dueData=res;
-            this.duedateSetting=true;
-            this.tm_loan_all.instl_start_dt=dueData.due_dt;
-            this.tm_loan_all.piriodicity=dueData.periodicity;
-            this.tm_loan_all.instalmentTypeDesc = this.instalmentTypeList.filter(x => x.desc_type.toString() === dueData.periodicity)[0].ins_desc;
-            this.tm_loan_all.instl_no=dueData.instl_no;
-            this.tm_loan_sanction_dtls[0].due_dt=dueData.validity_dt;
-            this.isLoading=false;
-
+          if(res){
+            if(res.periodicity!=null){
+              const dueData=res;
+              this.duedateSetting=true;
+              this.tm_loan_all.instl_start_dt=dueData.due_dt;
+              this.tm_loan_all.piriodicity=dueData.periodicity;
+              this.tm_loan_all.instalmentTypeDesc = this.instalmentTypeList.filter(x => x.desc_type.toString() === dueData.periodicity)[0].ins_desc;
+              this.tm_loan_all.instl_no=dueData.instl_no;
+              this.tm_loan_sanction_dtls[0].due_dt=dueData.validity_dt;
+              this.isLoading=false;
+  
+            }
+            else{
+              this.duedateSetting=true;
+              this.tm_loan_all.instl_start_dt=null;
+              this.tm_loan_all.piriodicity=null;
+              this.tm_loan_all.instalmentTypeDesc = null;
+              this.tm_loan_all.instl_no=null;
+              this.tm_loan_sanction_dtls[0].due_dt=null;
+              this.tm_loan_sanction_dtls[0].sector_cd=null;
+              this.tm_loan_sanction_dtls[0].activity_cd=null;
+              this.HandleMessage(true, MessageType.Sucess, 'No Master Data Found For This Activity, Please Contact to Support.... ');
+              this.isLoading=false;
+  
+            }
+            console.log(res);
           }
           else{
-            this.duedateSetting=true;
-            this.tm_loan_all.instl_start_dt=null;
-            this.tm_loan_all.piriodicity=null;
-            this.tm_loan_all.instalmentTypeDesc = null;
-            this.tm_loan_all.instl_no=null;
-            this.tm_loan_sanction_dtls[0].due_dt=null;
-            this.tm_loan_sanction_dtls[0].sector_cd=null;
-            this.tm_loan_sanction_dtls[0].activity_cd=null;
-            this.HandleMessage(true, MessageType.Sucess, 'No Master Data Found For This Activity, Please Contact to Support.... ');
-            this.isLoading=false;
-
+            return;
           }
-          console.log(res);
           
           // this.HandleMessage(true, MessageType.Sucess, 'Due date settings fatch Successfully');
 

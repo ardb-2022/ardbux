@@ -16,21 +16,18 @@ import html2canvas from 'html2canvas';
 import jspdf from 'jspdf';
 
 interface GroupedData {
-  group_name: string;
-  loans: AggregatedLoan[];
-  total_disb_amt: number;
-  total_no_of_loans: number;
+  group_name?: string;
+  loans?: AggregatedLoan[];
+  total_disb_amt?: number;
+  total_no_of_loans?: number;
+  total_no_of_cust?: number; // Added total unique customers
 }
 
 interface AggregatedLoan {
-  activity_name: string | null;
-  disb_amt: number;
-  no_of_loans: number;
-}
-interface AggregatedLoan {
-  activity_name: string | null;
-  disb_amt: number;
-  no_of_loans: number;
+  activity_name?: string | null;
+  disb_amt?: number;
+  no_of_loans?: number;
+  no_of_cust?: number; // Added field to track unique customers
 }
 
 @Component({
@@ -268,6 +265,8 @@ selectItems1=[
         }
         else{
           this.reportData=data;
+          console.log(this.groupLoans());
+          
           this.groupLoans();
         }
         this.dataSource.data=this.reportData
@@ -614,42 +613,14 @@ debugger
   // || !loan.block_name
   // const group_name = `${loan.acc_desc} (${loan.block_name})`;
 
-  groupLoans() {
-    const grouped = this.reportData.reduce((acc: { [key: string]: { [key: string]: AggregatedLoan } }, loan) => {
-      if (!loan.acc_desc|| !loan.block_name || !loan.activity_name) return acc;
-
-      const group_name = `${loan.acc_desc} (${loan.block_name})`;
-      const block = acc[group_name] = acc[group_name] || {};
-      const key = loan.activity_name;
-      const activity = block[key] = block[key] || { activity_name: loan.activity_name, disb_amt: 0, no_of_loans: 0 };
-
-      activity.disb_amt += loan.disb_amt;
-      activity.no_of_loans += 1;
-
-      return acc;
-    }, {});
-
-    this.groupedData = Object.keys(grouped).map(group_name => {
-      const loans:any = Object.values(grouped[group_name]);
-      const total_disb_amt = loans.reduce((sum, loan) => sum + loan?.disb_amt, 0);
-      const total_no_of_loans = loans.reduce((count, loan) => count + loan?.no_of_loans, 0);
-      return {
-        group_name,
-        loans,
-        total_disb_amt,
-        total_no_of_loans
-      };
-    });
-  }
-
   // groupLoans() {
   //   const grouped = this.reportData.reduce((acc: { [key: string]: { [key: string]: AggregatedLoan } }, loan) => {
-  //     if (!loan.acc_desc || !loan.activity_name) return acc;
+  //     if (!loan.acc_desc|| !loan.block_name || !loan.activity_name) return acc;
 
-  //     const group_name = `${loan.acc_desc}`;
+  //     const group_name = `${loan.acc_desc} (${loan.block_name})`;
   //     const block = acc[group_name] = acc[group_name] || {};
   //     const key = loan.activity_name;
-  //     const activity = block[key] = block[key] || { activity_name: loan.activity_name, disb_amt: 0, no_of_loans: 0 };
+  //     const activity = block[key] = block[key] || { activity_name: loan.activity_name, disb_amt: 0, no_of_loans: 0,  no_of_cust: 0 };
 
   //     activity.disb_amt += loan.disb_amt;
   //     activity.no_of_loans += 1;
@@ -657,11 +628,63 @@ debugger
   //     return acc;
   //   }, {});
 
-  //   this.groupedData = Object.keys(grouped).map(group_name => ({
-  //     group_name,
-  //     loans: Object.values(grouped[group_name])
-  //   }));
+  //   this.groupedData = Object.keys(grouped).map(group_name => {
+  //     const loans:any = Object.values(grouped[group_name]);
+  //     const total_disb_amt = loans.reduce((sum, loan) => sum + loan?.disb_amt, 0);
+  //     const total_no_of_loans = loans.reduce((count, loan) => count + loan?.no_of_loans, 0);
+  //     return {
+  //       group_name,
+  //       loans,
+  //       total_disb_amt,
+  //       total_no_of_loans
+  //     };
+  //   });
   // }
+  groupLoans() {
+    const grouped = this.reportData.reduce(
+        (acc: { [key: string]: { [key: string]: AggregatedLoan & { unique_parties: Set<number> } } }, loan) => {
+            if (!loan.acc_desc || !loan.block_name || !loan.activity_name || !loan.party_cd) return acc;
+
+            const group_name = `${loan.acc_desc} (${loan.block_name})`;
+            if (!acc[group_name]) acc[group_name] = {};
+
+            const key = loan.activity_name;
+            if (!acc[group_name][key]) {
+                acc[group_name][key] = {
+                    activity_name: loan.activity_name,
+                    disb_amt: 0,
+                    no_of_loans: 0,
+                    no_of_cust: 0,
+                    unique_parties: new Set<number>(), // To track unique customers
+                };
+            }
+
+            const activity = acc[group_name][key];
+            activity.disb_amt += loan.disb_amt;
+            activity.no_of_loans += 1;
+            activity.unique_parties.add(loan.party_cd); // Track unique party_cd
+
+            return acc;
+        },
+        {}
+    );
+
+    this.groupedData = Object.keys(grouped).map(group_name => {
+        const loans = Object.values(grouped[group_name]).map(({ unique_parties, ...loan }) => ({
+            ...loan,
+            no_of_cust: unique_parties.size, // Assign unique customer count
+        }));
+
+        return {
+            group_name,
+            loans,
+            total_disb_amt: loans.reduce((sum,loan:any) => sum + loan?.disb_amt, 0),
+            total_no_of_loans: loans.reduce((count, loan:any) => count + loan?.no_of_loans, 0),
+            total_no_of_cust: loans.reduce((count, loan) => count + loan.no_of_cust, 0),
+        };
+    });
+}
+
   getTotal(){
     this.totIssueSum=0
     this.totCount=0

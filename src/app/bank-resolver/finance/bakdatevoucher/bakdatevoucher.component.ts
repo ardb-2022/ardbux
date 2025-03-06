@@ -97,7 +97,7 @@ export class BakdatevoucherComponent implements OnInit {
     this.isNew = false;
     this.Clear();
 
-    // this.New();
+    this.New();
   }
   Initialize() {
     this.RemoveItem(0);

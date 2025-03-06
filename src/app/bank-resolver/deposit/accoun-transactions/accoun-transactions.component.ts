@@ -2650,7 +2650,7 @@ getjoinholder(){
           amount: this.accNoEnteredForTransaction.instl_amt
           });
           this.hideOnClose = true;
-          this.showAmtDrpDn = true;
+          // this.showAmtDrpDn = true;
         debugger
         }
       }
@@ -4470,6 +4470,9 @@ debugger
         this.msg.sendShdowBalance((+this.td.amount.value));
       }
     } else {
+      const selectedOperation2 = this.operations.filter
+      (e => e.oprn_cd === +this.f.oprn_cd.value)[0];
+    this.selOprn2 = selectedOperation2;
       debugger
       /** if amount is debited less than the min balance then a confirmation need to be shown */
       let minBal = 0;

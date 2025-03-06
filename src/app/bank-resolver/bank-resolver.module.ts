@@ -272,6 +272,9 @@ import { GovRepComponent } from './finance/report/GOV_Rep/gov_rep.component';
 import { ActivityDetailMasterComponent } from './loan/masters/activity-detail-master/activity-detail-master.component';
 import { HowrahComponent } from './deposit/report/passbook-print/howrah/howrah.component';
 import { HowrahFastPageComponent } from './deposit/report/passbook-print/howrah/howrah-fast-page/howrah-fast-page.component';
+import { BorrowerInsuranceReportComponent } from './loan/report/borrower-insurance_report/borrower-insurance_report.component';
+import { ConsoLoanDCNonfarmComponent } from './loan/report/conso-loan-dc-nonfarm/conso-loan-dc-nonfarm.component';
+import { DcNonfarmComponent } from './loan/report/dc-nonfarm/dc-nonfarm.component';
 @NgModule({
   declarations: [
     RoundPipe ,UppercaseDirective, MatchAccountNumbersDirective, NumericOnlyDirective,
@@ -330,7 +333,7 @@ import { HowrahFastPageComponent } from './deposit/report/passbook-print/howrah/
              LoanDisburseConsoComponent, LoanRecoveryConsoComponent, DashboardComponent, RecovRegAccTypeWiseComponent, ConsoLoanDcSHGComponent, ConsoLoanDcRHComponent,
              ConsoGenLedgerComponent, InterestSubsidySHGComponent, ConsoDtlListSbcaComponent, ConsoDtlListFdMisComponent, ConsoDtlListRdComponent, DetailListConsolidatedComponent,
              FlexiSmallSavingPostingComponent,flexiAgentWiseReportComponent,DetailListFssDepositComponent,DetailFlexiSmallSavingComponent, AllAgentDetailsComponent, AgentCommitionFSSComponent,
-             GovRepComponent,ActivityDetailMasterComponent,HowrahComponent,HowrahFastPageComponent
+             GovRepComponent,ActivityDetailMasterComponent,HowrahComponent,HowrahFastPageComponent,BorrowerInsuranceReportComponent,DcNonfarmComponent,ConsoLoanDCNonfarmComponent
   ],
   imports: [
     MatAutocompleteModule,MatProgressBarModule,

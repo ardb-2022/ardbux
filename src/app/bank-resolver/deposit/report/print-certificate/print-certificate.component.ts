@@ -102,6 +102,7 @@ export class PrintCertificateComponent implements OnInit {
   month:number;
   day:number;
   sbAcc:any;
+  fdMatVal:number;
   constructor(private svc: RestService, private formBuilder: FormBuilder,private http: HttpClient,
     private modalService: BsModalService, private _domSanitizer: DomSanitizer,private exportAsService: ExportAsService, private cd: ChangeDetectorRef,
     private router: Router) { }
@@ -288,7 +289,24 @@ export class PrintCertificateComponent implements OnInit {
             this.Deposit_Period += d + "-Day";
           }
           console.log(this.Deposit_Period);
+          this.fdMatVal=0;
           
+          if(this.masterModel?.tmdeposit?.intt_trf_type=='Y'){
+            this.fdMatVal=((this.masterModel?.tmdeposit?.intt_amt*1)*(+y) )
+          }
+          else if(this.masterModel?.tmdeposit?.intt_trf_type=='H'){
+            this.fdMatVal=((this.masterModel?.tmdeposit?.intt_amt*2)*(+y) )
+          }
+          else if(this.masterModel?.tmdeposit?.intt_trf_type=='Q'){
+            this.fdMatVal=((this.masterModel?.tmdeposit?.intt_amt*4)*(+y) )
+          }
+          else if(this.masterModel?.tmdeposit?.intt_trf_type=='M'){
+            this.fdMatVal=((this.masterModel?.tmdeposit?.intt_amt*12)*(+y) )
+          }
+          else{
+            this.fdMatVal=this.masterModel?.tmdeposit?.intt_amt;
+          }
+          debugger
           }
           // this.Deposit_Period =(+y>0)?y+' -Year':''+(+m>0)?m+' -Months':''+(+d>0)?d+' -Days':''
           // else if(+m>0){this.Deposit_Period = m+' -Months'}

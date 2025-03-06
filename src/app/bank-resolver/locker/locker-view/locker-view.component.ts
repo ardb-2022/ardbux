@@ -360,6 +360,7 @@ export class LockerViewComponent implements OnInit {
     this.tm_deposit.month = Number(retDepositPeriodArr[1]);
     this.tm_deposit.day = Number(retDepositPeriodArr[2]);
   }
+  this.isLoading=false;
 }  
 assignLockerData(){
     
@@ -739,7 +740,7 @@ assignLockerData(){
   }
   selectLockerData(e){
     this.suggestedLockerData=null;
-    this.tm_locker.agreement_no=e.agreementNo;
+    this.tm_locker.agreement_no=e.agreement_no;
     debugger
     if(this.tm_locker.agreement_no){
       
@@ -747,16 +748,22 @@ assignLockerData(){
       this.getLockerOpeningTempData();
     }
   }
-  public suggestLockerCustomer(): void {
-    if (this.tm_locker.agreement_no.length > 2) {
-      const prm = new p_gen_param();
-      this.isLoading=true;
-      prm.as_cust_name = this.tm_locker.agreement_no.toLowerCase();
-      prm.ardb_cd=this.sys.ardbCD
-      if(prm.as_cust_name.length>0){
-      this.svc.addUpdDel<any>('Locker/GetLockerAccDtls', prm).subscribe(
-        res => {
-          this.isLoading=false;
+  public suggestLockerCustomer(): Observable<tm_locker> {
+      this.isLoading = true;
+      console.log("here")
+      // console.log(this.f.acct_num.value.length)
+      //  console.log(this.accDtlsFrm.get('home_brn_cd').value)
+      if (this.tm_locker.agreement_no.length > 0) {
+        const prm = new p_gen_param();
+        prm.ardb_cd = this.sys.ardbCD;
+        prm.brn_cd = this.sys.BranchCode;
+        prm.as_cust_name = this.tm_locker.agreement_no.toLowerCase();
+        console.log(prm.ardb_cd);
+  
+        this.svc.addUpdDel<any>('Locker/GetlockerDtlsSearch', prm).subscribe(
+          res => {
+            console.log(res)
+            this.isLoading=false;
           if (undefined !== res && null !== res && res.length > 0) {
             this.showNoResult=false;
             this.suggestedLockerData = res;
@@ -766,16 +773,23 @@ assignLockerData(){
 
             this.suggestedLockerData = [];
           }
-        },
-        err => { this.isLoading = false; }
-      );
-      }
-    } else {
-      this.showNoResult=false;
+          },
+          err => {
+            this.showNoResult = true;
+            this.isLoading = false;
+          }
+        );
+  
+  
+      } else {
+        this.showNoResult=false;
 
-      this.suggestedLockerData = null;
+        this.suggestedLockerData = null;
+        return null;
+      }
+      // console.log(this.suggestedCustomer)
     }
-  }
+  
     
     setDate(date:string){
       const [datePart] = date.split(' ');
@@ -1325,9 +1339,9 @@ debugger
     console.log(this.constitutionList,this.tm_deposit.acc_type_cd)
     this.tm_deposit.constitution_cd = Number(val);
     this.tm_deposit.constitution_desc = this.constitutionList.
-      filter(x => x.constitution_cd.toString() === val.toString() && this.tm_deposit.acc_type_cd === x.acc_type_cd)[0].constitution_desc;
+      filter(x => x.constitution_cd.toString() === val.toString() && this.tm_deposit.acc_type_cd === x.acc_type_cd)[0]?.constitution_desc;
     this.tm_deposit.acc_cd = this.constitutionList.
-      filter(x => x.constitution_cd.toString() === val.toString() && this.tm_deposit.acc_type_cd === x.acc_type_cd)[0].acc_cd;
+      filter(x => x.constitution_cd.toString() === val.toString() && this.tm_deposit.acc_type_cd === x.acc_type_cd)[0]?.acc_cd;
       console.log(this.tm_deposit.constitution_desc,this.tm_deposit.acc_cd)
   }
 

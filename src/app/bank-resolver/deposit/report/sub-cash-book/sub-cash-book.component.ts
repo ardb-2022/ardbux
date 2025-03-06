@@ -138,7 +138,7 @@ export class SubCashBookComponent implements OnInit,AfterViewInit {
         if(this.reportData.length==0){
           this.comser.SnackBar_Nodata()
         } 
-        this.dataSource.data=this.reportData.filter(x => x.acctype.acc_type_cd<=11 && x.ttdepsubcashbook.length!=0)
+        this.dataSource.data=this.reportData.filter(x => x.acctype.acc_type_cd<=20 && x.ttdepsubcashbook.length!=0)
         console.log(this.dataSource.data);
 
         for(let i=0;i<this.reportData.length;i++){

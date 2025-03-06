@@ -25,6 +25,7 @@ import { Observable } from 'rxjs/internal/Observable';
 import { tm_locker } from '../../Models/locker/tm_locker';
 import { AccOpenDM } from '../../Models/deposit/AccOpenDM';
 import { FormBuilder, FormGroup } from '@angular/forms';
+
 @Component({
   selector: 'app-locker-transaction',
   templateUrl: './locker-transaction.component.html',
@@ -134,7 +135,7 @@ export class LockerTransactionComponent implements OnInit {
   getLocker: FormGroup;
   lockerDefTransFrm: FormGroup;
   selectedCustomer = new mm_customer();
-
+  clearBalance:any;
   categoryList: mm_category[] = [];
   accountTypeList: mm_acc_type[] = [];
   constitutionList: mm_constitution[] = [];
@@ -949,14 +950,35 @@ assignLockerData(){
         this.td_deftrans=this.masterModel.tddeftrans
         this.tm_locker=this.masterModel.tmlocker;
         this.tm_transferList=this.masterModel.tmtransfer;
+        if(this.tm_locker.acc_num){
+          const temp_deposit = new tm_deposit();
+          temp_deposit.brn_cd = this.branchCode;
+          temp_deposit.acc_num = this.tm_locker.acc_num;
+          temp_deposit.acc_type_cd =  this.tm_locker.acc_type_cd;
+          temp_deposit.ardb_cd=this.sys.ardbCD
+          // //debugger;
+          this.isLoading = true;
+          this.svc.addUpdDel<any>('Deposit/GetDeposit', temp_deposit).subscribe(
+            res => {
+              console.log(res)
+              this.clearBalance=res[0].clr_bal;
+              this.isLoading=false
+            },
+            err=>{
+              console.log(err);              
+              this.isLoading=false;
+            }
+          )
+        }else{
+          this.clearBalance=0;
+        }
         if ( this.masterModel.tmlocker.agreement_no === undefined || this.masterModel.tmlocker.agreement_no === null) {
           // this.showAlertMsg('WARNING', 'No record found!!');
           this.HandleMessage(true, MessageType.Warning, 'No record found!!');
           this.tm_locker.agreement_no=null;
           this.getLocker.controls.oprn_cd.disable();
           return
-        }
-        
+        }   
        
         else {
           if(this.masterModel.tddeftrans.trans_cd>0){

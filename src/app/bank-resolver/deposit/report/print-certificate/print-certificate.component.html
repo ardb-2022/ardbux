@@ -124,10 +124,12 @@
       </button>
     </div>
     <div class="col-xs-12 col-sm-12 shadow-lg mb-4 bg-white p-3 mkScroll">
-     <div id="hiddenTab"  style="font-size: large;" *ngIf="sys.ardbCD!='25' && sys.ardbCD!='7' "><br>
+     <div id="hiddenTab"   *ngIf="sys.ardbCD!='25' && sys.ardbCD!='7' "><br>
         <div style="text-align: center;margin-top: 20%;"*ngIf="sys.ardbCD!='25' && sys.ardbCD!='15'"><b>{{Header}}</b></div>
-        <div style="text-align: center;margin-top: 5%;"*ngIf="sys.ardbCD=='15'"><b>{{ardbName}}</b></div>
-        <div style="text-align: center;margin-top: 1%;"*ngIf="sys.ardbCD=='15'"><b>{{Header}}</b></div>
+        <div style="text-align: center;font-size: x-large;margin-top: 5%;"*ngIf="sys.ardbCD=='15'"><b>{{ardbName}}</b></div>
+        <div style="text-align: center;font-size: large;margin-top: 1%;"*ngIf="sys.ardbCD=='15'"><b>{{Header}}</b></div>
+        <img *ngIf="sys.ardbCD=='15'" src="./assets/images/npardb.png"  class="log3">
+        <!-- <div style="text-align: center;font-size: large;margin-top: 1%;"*ngIf="sys.ardbCD=='15'"><b>{{Header}}</b></div> -->
         <br><br>
           
           <div class="form-row" style="margin-left: 10%;">
@@ -163,7 +165,7 @@
             <th style="text-align:center;"><u>Effective Date</u></th>
             <th style="text-align:center;"><u>Maturity Date</u></th>
             <th style="text-align:center;" *ngIf="ShowCC"><u>Maturity Value</u></th>
-    
+           
     
           </tr>
           <tbody>
@@ -173,8 +175,8 @@
               <td style="text-align:center;">{{masterModel.tmdeposit.intt_rt}}%</td>
               <td style="text-align:center;">{{masterModel.tmdeposit.opening_dt.toString().substr(0,10)}}</td>
               <td style="text-align:center;">{{masterModel.tmdeposit.mat_dt.toString().substr(0,10)}}</td>
-              <td style="text-align: center;" *ngIf="ShowCC">{{masterModel.tmdeposit.prn_amt+masterModel.tmdeposit.intt_amt|currency:'INR'}}</td>
-    
+              <td style="text-align: center;" *ngIf="ShowCC">{{(masterModel.tmdeposit.prn_amt + masterModel.tmdeposit.intt_amt)|currency:'INR'}}</td>
+  
             </tr>
           </tbody>
           </table>
@@ -239,7 +241,8 @@
             <th style="text-align:center;"><u>Interest Rate</u></th>
             <th style="text-align:center;"><u>Effective Date</u></th>
             <th style="text-align:center;"><u>Maturity Date</u></th>
-            <th style="text-align:center;" *ngIf="ShowCC"><u>Maturity Value</u></th>
+            <th style="text-align:center;" *ngIf="ShowCC && this.tm_deposit.acc_type_cd!='2'"><u>Maturity Value</u></th>
+            <th style="text-align: center;" *ngIf="this.tm_deposit.acc_type_cd=='2'"><u>Interest / Frequency</u></th>
     
     
           </tr>
@@ -250,7 +253,8 @@
               <td style="text-align:center;">{{masterModel.tmdeposit.intt_rt}}%</td>
               <td style="text-align:center;">{{masterModel.tmdeposit.opening_dt.toString().substr(0,10)}}</td>
               <td style="text-align:center;">{{masterModel.tmdeposit.mat_dt.toString().substr(0,10)}}</td>
-              <td style="text-align: center;" *ngIf="ShowCC">{{masterModel.tmdeposit.prn_amt+masterModel.tmdeposit.intt_amt|currency:'INR'}}</td>
+              <td style="text-align: center;" *ngIf="ShowCC && this.tm_deposit.acc_type_cd!='2'">{{masterModel.tmdeposit.prn_amt+masterModel.tmdeposit.intt_amt|currency:'INR'}}</td>
+              <td style="text-align: center;" *ngIf="this.tm_deposit.acc_type_cd=='2'">{{masterModel.tmdeposit.intt_amt|currency:'INR'}}/{{masterModel.tmdeposit.intt_trf_type=='O'?'On-Maturity':masterModel.tmdeposit.intt_trf_type=='Y'?'Yearly':masterModel.tmdeposit.intt_trf_type=='H'?'Haf-Yearly':masterModel.tmdeposit.intt_trf_type=='Q'?'Quaterly':'Monthly' }}</td>
     
             </tr>
           </tbody>

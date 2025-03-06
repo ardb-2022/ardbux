@@ -414,37 +414,33 @@ export class ContaiUCICprofileComponent implements OnInit {
     vill_cd=this.f.vill_cd.value;
     debugger
     const selectedVillage = this.villages.filter(e => e.vill_cd === vill_cd)[0];
-    console.log(this.villages);
+    console.log(selectedVillage);
     console.log(this.villages2);
     debugger
     this.selectedBlock = this.blocks.filter(e => e.block_cd ===
       selectedVillage.block_cd)[0];
 
-      this.selectedDist = this.districts.filter(e => e.dist_cd.toString() ==
-        selectedVillage.dist_cd)[0];
-
       console.log(this.blocks.filter(e => e.block_cd ===
         selectedVillage.block_cd));
       
     this.selectedServiceArea = this.serviceAreas.filter(e => e.service_area_cd ===
-      selectedVillage.service_area_cd )[0];
+      selectedVillage.service_area_cd && e.block_cd== selectedVillage.block_cd)[0];
 
       console.log(this.serviceAreas.filter(e => e.service_area_cd ===
-        selectedVillage.service_area_cd ))
+        selectedVillage.service_area_cd  && e.block_cd== selectedVillage.block_cd))
 
       this.selectedPS = this.ps.filter(e => e.ps_id ==
-        selectedVillage.ps_id)[0];
+        selectedVillage.ps_id && e.block_cd== selectedVillage.block_cd )[0];
 
         console.log(this.ps.filter(e => e.ps_id ==
-          selectedVillage.ps_id));
+          selectedVillage.ps_id && e.block_cd== selectedVillage.block_cd ));
         
-      this.selectedPO = this.po.filter(e => e.po_id ==
-      selectedVillage.po_id)[0];
-
-      console.log(this.po.filter(e => e.po_id ==
-        selectedVillage.po_id));
-      
-      const add=`VILL:${selectedVillage.vill_name}, PO:${this.selectedPO.po_name}, Pin:${this.selectedPO.pin}, GP:${this.selectedServiceArea.service_area_name}, PS:${this.selectedPS.ps_name}, Block:${this.selectedBlock.block_name}, Dist:${this.selectedDist.dist_name}`
+      this.selectedPO = this.po.filter(e => e.po_id === selectedVillage.po_id )[0];
+      debugger
+      // console.log(this.po.filter(e => e.po_id ==
+      //   selectedVillage.po_id && e.block_cd== selectedVillage.block_cd && e.service_area_cd==selectedVillage.service_area_cd));
+      // const add=`Village:`
+      const add=`Village: ${selectedVillage?.vill_name}, Post Office: ${this.selectedPO?.po_name}, Pin: ${this.selectedPO?.pin}, GP: ${this.selectedServiceArea?.service_area_name}, PS: ${this.selectedPS?.ps_name}, Block: ${this.selectedBlock?.block_name}`
 debugger
         this.custMstrFrm.patchValue({
       service_area_cd: this.selectedServiceArea.service_area_cd,
@@ -458,7 +454,6 @@ debugger
       permanent_address:add
     });
   }
-
   private getBlockMster(): void {
     var dt = {
       "ardb_cd": this.sys.ardbCD,
@@ -1612,4 +1607,5 @@ debugger
     debugger
     return this.villages2.filter(option => option.vill_name.toLowerCase().includes(filterValue));
   }
+  
 }

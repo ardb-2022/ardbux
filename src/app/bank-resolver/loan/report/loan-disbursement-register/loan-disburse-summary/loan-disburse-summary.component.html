@@ -121,7 +121,8 @@
       <tr>
         <th>Activity Name</th>
         <th>Disbursed Amount</th>
-        <th>No. of Loans</th>
+        <th>No. of Disbursement</th>
+        <th>No. of party</th>
       </tr>
     </thead>
     <tbody>
@@ -129,11 +130,13 @@
         <td>{{ loan.activity_name }}</td>
         <td style="text-align: right;">{{ loan.disb_amt | INRCurrency}}</td>
         <td>{{ loan.no_of_loans }}</td>
+        <td>{{ loan.no_of_cust }}</td>
       </tr>
       <tr>
         <td><strong>Total</strong></td>
         <td style="text-align: right;"><strong>{{ group.total_disb_amt | INRCurrency}}</strong></td>
         <td><strong>{{ group.total_no_of_loans }}</strong></td>
+        <td><strong>{{ group.total_no_of_cust }}</strong></td>
       </tr>
     </tbody>
   </table>

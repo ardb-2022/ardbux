@@ -24,7 +24,17 @@
   /* th,td{
     padding: 1%;
   }  */
-  
+  #hiddenTab{
+    font-size: large;
+  }
+  .log3{
+    position: absolute!important;
+    opacity: 40%!important;
+    left: 36%!important;
+    width: 26%!important;
+    height: 17%!important;
+    top: 13%!important;
+}
   #trial {
     font-family: Arial, Helvetica, sans-serif;
     border-collapse: collapse;

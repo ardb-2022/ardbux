@@ -143,11 +143,11 @@
                   <tbody>
                     
                     <tr *ngFor="let cust of suggestedLockerData" (click)="selectLockerData(cust)">
-                      <td scope="row">{{cust.lockerId}}</td>
-                      <td>{{cust.agreementNo}}</td>
+                      <td scope="row">{{cust.locker_id}}</td>
+                      <td>{{cust.agreement_no}}</td>
                       <td>{{((null === cust.phone) ? '' : cust.phone)}}</td>
                       <td>{{cust.name}}</td>
-                      <td>{{cust.keyNo}}</td>
+                      <td>{{cust.key_no}}</td>
                     </tr>
                   </tbody>
                 </table>

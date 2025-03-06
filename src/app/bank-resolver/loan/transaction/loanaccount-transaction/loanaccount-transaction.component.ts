@@ -3748,10 +3748,10 @@ debugger;
     this.currInttRecovSum=0
     this.currPrnRecovSum=0
     this.ovdPrnRecovSum=0
-    this.penalInttSum+=0
-    this.penalInttCalSum+=0
-    this.ovdInttCalSum+=0
-    this.currInttCalSum+=0
+    this.penalInttSum=0
+    this.penalInttCalSum=0
+    this.ovdInttCalSum=0
+    this.currInttCalSum=0
     this.penalInttRecovSum=0
     this.advPrnRecovSum=0
     // this.totPrn+=e.ovd_prn+e.curr_prn

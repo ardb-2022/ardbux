@@ -58,7 +58,7 @@ table {
     text-align: left;
     background-color: #34723A;
     color: white;
-    font-size:small
+    font-size:small;
   }
   tr.mat-header-row {
     height: 0px!important;

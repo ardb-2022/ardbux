@@ -59,6 +59,7 @@
                 <option disabled>Choose</option>
                 <option value="M">Male</option>
                 <option value="F">Female</option>
+                <option value="O">Others</option>
               </select>
            </div>
          
@@ -109,7 +110,7 @@
     
     <th mat-header-cell *matHeaderCellDef mat-sort-header>
     <td mat-cell *matCellDef="let row" >
-      <div style="font-size:18px;"><u>ACTIVITY:  {{row.activity_cd}},  GENDER:  {{row.sex=="M"?"MALE":"FEMALE"}}</u></div>
+      <div style="font-size:18px;"><u>ACTIVITY:  {{row.activity_cd}},  GENDER:  {{row.sex=="M"?"MALE":row.sex=="F"?"FEMALE":"Others"}}</u></div>
       <table style="margin-top: 6px;">
       <tr mat-cell >
         <!-- <th mat-header-cell>#</th> -->

@@ -43,37 +43,37 @@
   </div> -->
  
 
-  <div id="fastPage" style="font-family:Arial, Helvetica, ui-sans-serif;font-size:18px;" hidden>
+  <div id="fastPage" style="font-family:Arial, Helvetica, ui-sans-serif;font-size:22px;" hidden>
     <div style="margin-top: 50%; ">&nbsp;</div>
     
     <div class="form-row" style="padding-left: 10%;">
-        <div style="width: 30%;"><b>A/C No:  </b>{{suggestedCustomer[0].acc_num}}</div>
-        <div style="text-align: right;width: 30%;"><b>Branch:  </b> {{branchName}}</div>
-        <div style="text-align: right;width: 30%;"><b>CIF:  </b>{{custCD}}</div>
+        <div style="width: 30%;"><b style="font-size: x-large;">A/C No: {{suggestedCustomer[0].acc_num}} </b></div>
+        <div style="text-align: right;width: 30%;"><b style="font-size: x-large;">Branch: {{branchName}} </b> </div>
+        <div style="text-align: right;width: 30%;"><b style="font-size: x-large;">CIF:  {{custCD}}</b></div>
     </div>
       <div class="form-row" style="padding-left: 10%;padding-top: 5px;">
-          <div style="width: 60%;"><b>Name:  </b>{{this.custDtls?.cust_name}}</div>
-          <div style="width: 30%;text-align: right;"><b>Phone No:  </b>{{custDtls?.phone?custDtls.phone:'N/A'}}</div>
+          <div style="width: 60%;"><b style="font-size: x-large;">Name:  {{this.custDtls?.cust_name}}</b></div>
+          <div style="width: 30%;text-align: right;"><b style="font-size: x-large;">Phone No:  {{custDtls?.phone?custDtls.phone:'N/A'}}</b></div>
      </div>
      <div class="form-row" style="padding-left: 10%;padding-top: 5px;">
-      <div style="width: 50%;"><b>Mode of Operation:</b>{{oprn_instr_desc?oprn_instr_desc:'N/A'}}</div>
-      <div style="width: 40%;text-align: right;"><b>Occupation:  </b>{{custDtls?.occupation?custDtls.occupation:'N/A'}} </div>
+      <div style="width: 50%;"><b style="font-size: x-large;">Mode of Operation: {{oprn_instr_desc?oprn_instr_desc:'N/A'}}</b></div>
+      <div style="width: 40%;text-align: right;"><b style="font-size: x-large;">Occupation:  {{custDtls?.occupation?custDtls.occupation:'N/A'}} </b></div>
      </div>
      <div class="form-row" style="padding-left: 10%;padding-top: 5px;" >
-      <div><b>Joint Holder's Name:  </b> {{joinHold?joinHold:'N/A'}}</div>
+      <div><b style="font-size: x-large;">Joint Holder's Name:  {{joinHold?joinHold:'N/A'}}</b> </div>
     </div>
       <div class="form-row" style="padding-left: 10%;padding-top: 5px;" >
-      <div><b>Guardian Name:  </b>{{custDtls?.guardian_name?custDtls.guardian_name:'N/A'}}</div>
+      <div><b style="font-size: x-large;">Guardian Name:  {{custDtls?.guardian_name?custDtls.guardian_name:'N/A'}}</b></div>
     </div>
     
     <div class="form-row"style="padding-left: 10%;padding-top: 5px;"> 
-      <div><b>Address:  </b>{{this.custDtls?.present_address}}</div>
+      <div><b style="font-size: x-large;">Address:  {{this.custDtls?.present_address}}</b></div>
     </div>
     
     
     <div class="form-row" style="padding-left: 10%;padding-top: 5px;">
-      <div style="width: 40%;"><b>Issue Date:  </b>{{curDay}}</div>
-      <div style="width: 50%;text-align: right;"><b>Branch Manager / Authorised Signatory</b></div>
+      <div style="width: 40%;"><b style="font-size: x-large;">Issue Date: {{curDay}} </b></div>
+      <div style="width: 50%;text-align: right;"><b style="font-size: x-large;">Branch Manager / Authorised Signatory</b></div>
     </div>
     
    

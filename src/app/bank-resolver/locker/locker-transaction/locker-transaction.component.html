@@ -217,6 +217,9 @@
   
             <div class="form-group col-3">
               <small for="acc_no">Acc Number</small>
+              <span class="badge badge-warning pull-right" *ngIf="clearBalance"> 
+                Balance:  {{clearBalance  | number : '1.2-2'}}
+                </span>
               <input style="height:25px" disabled
                  [(ngModel)]="tm_locker.acc_num" type="text"
                 class="form-control form-control-sm text-capitalize" id="acc_no" placeholder="Account Number">
